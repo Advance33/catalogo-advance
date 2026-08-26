@@ -1,0 +1,5 @@
+# Catálogo de uso interno: no queremos que los buscadores lo indexen todavía.
+# Cuando el catálogo salga al público, borrá este archivo y también la línea
+# <meta name="robots" content="noindex, nofollow"> del index.html.
+User-agent: *
+Disallow: /

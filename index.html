@@ -1,0 +1,2821 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catálogo Advance — Stock y precios en vivo</title>
+<meta name="description" content="Catálogo con stock y precios actualizados en tiempo real. Consultá por WhatsApp desde cualquier producto.">
+<link rel="icon" href="assets/logo-mark.png">
+<meta name="theme-color" content="#0A0710">
+
+<!-- Mientras el catálogo sea de uso interno: le pide a Google y demás buscadores
+     que NO lo indexen. El link sigue andando para cualquiera que lo tenga, pero
+     no aparece en las búsquedas. Cuando salga al público, borrá esta línea
+     (y también el robots.txt que está al lado del index). -->
+<meta name="robots" content="noindex, nofollow">
+
+<!-- Cómo se ve el link cuando lo mandás por WhatsApp, Instagram o Facebook.
+     ⚠️ Esto solo funciona con el catálogo publicado en una dirección de internet:
+     WhatsApp no puede entrar a un localhost. Al publicarlo, cambiá las dos
+     líneas marcadas abajo por la dirección real y queda andando. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Advance Tecno">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="Catálogo Advance Tecno — Stock y precios en vivo">
+<meta property="og:description" content="Todo lo que tenemos disponible, actualizado al momento. Consultá por WhatsApp desde cualquier producto.">
+<meta property="og:image" content="https://catalogo-advance.pages.dev/assets/preview.png">          <!-- ← si el proyecto en Cloudflare NO se llama catalogo-advance, corregi esta direccion -->
+<meta property="og:url" content="https://catalogo-advance.pages.dev/">                            <!-- ← si el proyecto en Cloudflare NO se llama catalogo-advance, corregi esta direccion -->
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Catálogo Advance Tecno: stock y precios en tiempo real">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Catálogo Advance Tecno — Stock y precios en vivo">
+<meta name="twitter:description" content="Todo lo que tenemos disponible, actualizado al momento.">
+<meta name="twitter:image" content="https://catalogo-advance.pages.dev/assets/preview.png">         <!-- ← si el proyecto en Cloudflare NO se llama catalogo-advance, corregi esta direccion -->
+
+<style>
+  /* ==========================================================================
+     Sistema de diseño tomado de advancegrouparg.com
+     Los colores y tipografías son los mismos que usa tu sitio.
+     ========================================================================== */
+  /* Lilita One: la redonda pesada tipo Brawl Stars. Dos archivos porque
+     Google la parte por subconjuntos; el "latin" trae tildes y ñ. */
+  @font-face{
+    font-family:"Lilita One";
+    src:url(assets/lilita-latin.woff2) format("woff2");
+    font-weight:400; font-style:normal; font-display:swap;
+    unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+  }
+  @font-face{
+    font-family:"Lilita One";
+    src:url(assets/lilita-latin-ext.woff2) format("woff2");
+    font-weight:400; font-style:normal; font-display:swap;
+    unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+  }
+  @font-face{
+    font-family:"Halagar";
+    src:url(assets/halagar.woff2);   /* el archivo es OpenType pese al nombre;
+                                        sin format() el navegador lo detecta solo */
+    font-weight:100 900; font-style:normal; font-display:swap;
+  }
+
+  :root{
+    --display:"Lilita One","Halagar","Futura","Avenir Next",system-ui,sans-serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,monospace;
+
+    /* Paleta Ultravioleta. El diseño está comprometido con el modo oscuro:
+       no cambia con el tema del celular del cliente, se ve siempre igual. */
+    --paper:#0A0710;      /* fondo, negro casi puro con tinte violeta */
+    --surface:#17102A;    /* tarjetas */
+    --surface-2:#211738;  /* controles */
+    --line:#2E1F52;       /* bordes */
+    --ink:#F3EEFF;        /* texto principal */
+    --muted:#B3A6D0;      /* texto secundario */
+    --faint:#7D6FA0;      /* texto tenue */
+    --acento:#A855F7;     /* el morado: botones, chip activo */
+    --glow:#C084FC;       /* resplandor y hover */
+    --ok:#5EE9A4;
+    --ok-soft:rgba(94,233,164,.12);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 14px 44px rgba(10,7,16,.7);
+    --foto-bg:#F5F5F7;    /* gris muy claro: los productos blancos (Pencil, AirTag, AirPods) desaparecen sobre fondo blanco */
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+
+  /* Etiqueta chiquita en monoespaciada con el punto, como en tu sitio */
+  .eyebrow{
+    font:600 10.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+
+  /* ---------- Encabezado ---------- */
+  header{
+    color:#fff;position:relative;overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 15% -20%, rgba(168,85,247,.30), transparent 60%),
+      radial-gradient(90% 80% at 95% 0%, rgba(192,132,252,.16), transparent 55%),
+      #0A0710;
+    border-bottom:1px solid var(--line);
+  }
+  .head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:20px 0 6px}
+  .logo{display:flex;align-items:center;gap:10px}
+  /* El PNG es línea oscura sobre transparente: hay que invertirlo para que se
+     vea blanco sobre el fondo negro, igual que en advancegrouparg.com */
+  .marca-btn{
+    background:transparent;border:0;padding:0;cursor:pointer;line-height:0;
+    border-radius:8px;transition:filter .2s, transform .12s;
+  }
+  .marca-btn img{height:24px;width:auto;display:block;filter:invert(1);opacity:.95}
+  .marca-btn:hover img{filter:invert(1) drop-shadow(0 0 7px var(--glow))}
+  .marca-btn:active{transform:scale(.92)}
+  .logo a{text-decoration:none;color:#fff}
+  .logo b{font:400 17px/1 var(--display);text-transform:uppercase;letter-spacing:.06em}
+  .logo b span{color:var(--glow)}
+  .head .eyebrow{color:rgba(255,255,255,.55)}
+  .stamp{margin-left:auto;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+         color:rgba(255,255,255,.6);display:flex;align-items:center;gap:8px;white-space:nowrap}
+  .dot{width:7px;height:7px;border-radius:50%;background:#5ED79B;flex:none}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+  .dot.live{animation:pulse 2.4s ease-in-out infinite}
+
+  .titulo-h{
+    font:400 clamp(1.9rem,4.6vw,3.1rem)/0.98 var(--display);
+    text-transform:uppercase;letter-spacing:-.005em;margin:14px 0 6px;
+  }
+
+  /* Entrada del encabezado, escalonada de arriba hacia abajo */
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes subir{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+    .head, .titulo-h, .bajada, .search{animation:subir .6s cubic-bezier(.22,.7,.3,1) both}
+    .titulo-h{animation-delay:.06s}
+    .bajada  {animation-delay:.13s}
+    .search  {animation-delay:.19s}
+    /* El resplandor del fondo respira despacio */
+    @keyframes respirar{0%,100%{opacity:1}50%{opacity:.72}}
+    header::before{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(120% 90% at 15% -20%, rgba(168,85,247,.22), transparent 60%);
+      animation:respirar 9s ease-in-out infinite;
+    }
+    header > *{position:relative;z-index:1}
+    /* La barra de filtros se despega cuando arrancás a bajar */
+    .toolbar{transition:box-shadow .25s, background .25s}
+    .toolbar.pegada{box-shadow:0 6px 26px rgba(0,0,0,.45)}
+  }
+  .bajada{color:rgba(255,255,255,.62);font-size:14.5px;margin:0 0 20px;max-width:52ch}
+
+  .search{position:relative;display:flex;align-items:center;max-width:660px;padding-bottom:22px}
+  .search svg{position:absolute;left:16px;width:18px;height:18px;color:var(--faint);pointer-events:none}
+  #q{
+    width:100%;padding:14px 15px 14px 45px;font:16px var(--sans);
+    background:rgba(255,255,255,.06);color:#fff;
+    border:1px solid rgba(192,132,252,.28);border-radius:999px;outline:none;
+    transition:border-color .18s, box-shadow .18s, background .18s;
+  }
+  #q::placeholder{color:#8E7FB4}
+  #q:focus{border-color:var(--glow);background:rgba(255,255,255,.09);
+           box-shadow:0 0 0 4px rgba(168,85,247,.18), 0 0 26px rgba(168,85,247,.22)}
+  .clear{position:absolute;right:6px;border:0;background:transparent;cursor:pointer;
+         color:#8E7FB4;font-size:20px;line-height:1;padding:7px 13px;border-radius:999px}
+  .clear:hover{background:rgba(255,255,255,.09);color:#fff}
+
+  /* ---------- Filtros ---------- */
+  .toolbar{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+  /* La cinta de categorías se desliza: con el dedo, con la rueda del mouse,
+     arrastrándola, o con las flechas de los costados. */
+  .chips-wrap{position:relative}
+  .chips{
+    display:flex;gap:8px;overflow-x:auto;padding:12px 0 10px;scrollbar-width:none;
+    cursor:grab;overscroll-behavior-x:contain;
+    /* Sin esto, el arrastre a mano pelearía contra la animación del navegador */
+    scroll-behavior:auto;
+  }
+  .chips::-webkit-scrollbar{display:none}
+  .chips.arrastrando{cursor:grabbing;user-select:none;scroll-snap-type:none}
+  .chips.arrastrando .chip{pointer-events:none}
+
+  /* Degradés en las puntas: avisan que hay más para el costado */
+  .chips-wrap::before,.chips-wrap::after{
+    content:"";position:absolute;top:0;bottom:0;width:54px;z-index:2;
+    pointer-events:none;opacity:0;transition:opacity .2s;
+  }
+  .chips-wrap::before{left:0;background:linear-gradient(90deg,var(--surface) 30%,transparent)}
+  .chips-wrap::after{right:0;background:linear-gradient(270deg,var(--surface) 30%,transparent)}
+  .chips-wrap.hay-izq::before,.chips-wrap.hay-der::after{opacity:1}
+
+  .chip-nav{
+    position:absolute;top:50%;transform:translateY(-50%) scale(.85);z-index:3;
+    width:30px;height:30px;padding:0;border-radius:50%;cursor:pointer;
+    display:grid;place-items:center;
+    background:var(--surface-2);color:var(--muted);border:1px solid var(--line);
+    box-shadow:0 4px 14px rgba(0,0,0,.45);
+    opacity:0;pointer-events:none;transition:opacity .2s, transform .2s, color .16s, border-color .16s;
+  }
+  .chip-nav svg{width:15px;height:15px;display:block}
+  .chip-nav.izq{left:-6px}
+  .chip-nav.der{right:-6px}
+  .chip-nav:hover{color:var(--ink);border-color:var(--glow)}
+  .chip-nav:active{transform:translateY(-50%) scale(.95)}
+  .chips-wrap.hay-izq .chip-nav.izq,
+  .chips-wrap.hay-der .chip-nav.der{opacity:1;pointer-events:auto;transform:translateY(-50%) scale(1)}
+  /* En pantallas táctiles las flechas sobran: se desliza con el dedo */
+  @media (hover:none){ .chip-nav{display:none} .chips{cursor:auto} }
+  .chip{
+    flex:none;padding:8px 15px;border-radius:999px;cursor:pointer;
+    font:600 10.5px/1.6 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+    background:transparent;color:var(--muted);border:1px solid var(--line);white-space:nowrap;
+  }
+  .chip:hover{color:var(--ink);border-color:var(--glow)}
+  .chip[aria-pressed="true"]{
+    background:var(--acento);color:#fff;border-color:var(--acento);
+    box-shadow:0 0 18px rgba(168,85,247,.45);
+  }
+
+  .row2{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:0 0 12px}
+  select{
+    padding:9px 13px;font:13px var(--sans);border-radius:999px;cursor:pointer;
+    background:var(--surface);color:var(--ink);border:1px solid var(--line);
+  }
+  select[hidden]{display:none}
+  .toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+  .toggle input{width:16px;height:16px;accent-color:var(--acento);cursor:pointer}
+  .count{margin-left:auto;font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+
+  /* ---------- Grilla ---------- */
+  .grid{display:grid;gap:14px;padding:22px 0 64px;grid-template-columns:repeat(auto-fill,minmax(216px,1fr))}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow);
+    transition:transform .16s, box-shadow .16s;
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:0 2px 6px rgba(0,0,0,.3),0 18px 48px rgba(168,85,247,.16);border-color:rgba(168,85,247,.35)}
+
+  /* Aparición al entrar en pantalla. Solo se anima lo que estás mirando:
+     con 483 tarjetas, animarlas todas de una vez trabaría el scroll. */
+  @media (prefers-reduced-motion: no-preference){
+    .card{opacity:0;transform:translateY(14px) scale(.98)}
+    .card.vis{opacity:1;transform:none}
+    .card{transition:opacity .42s cubic-bezier(.22,.7,.3,1),
+                     transform .42s cubic-bezier(.22,.7,.3,1),
+                     box-shadow .18s, border-color .18s}
+    .card.vis:hover{transform:translateY(-3px)}
+    /* La foto entra con un fundido cuando termina de bajar */
+    .foto img{opacity:0;transition:opacity .45s ease}
+    .foto img.ok{opacity:1}
+  }
+
+  .foto{position:relative;aspect-ratio:1/1;background:var(--foto-bg);
+        display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .foto img{width:100%;height:100%;object-fit:contain;padding:14px;display:block}
+  .sinfoto{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+    /* Oscuro a propósito: el fondo claro de .foto es para las fotos reales
+       (los productos blancos se pierden sobre blanco). Donde no hay foto no
+       hay nada que proteger, y un bloque blanco gigante le roba la atención
+       al producto. */
+    width:100%;height:100%;background:repeating-linear-gradient(45deg,#1B1330 0 10px,#161029 10px 20px);
+  }
+  .sinfoto b{font:400 15px/1.2 var(--display);text-transform:uppercase;letter-spacing:.05em;
+             color:#6E6091;text-align:center;padding:0 10px}
+  .sinfoto i{font:500 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#4C4270;font-style:normal}
+
+  .badge{font:600 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+         padding:5px 9px;border-radius:999px;white-space:nowrap;flex:none}
+  /* Sobre la foto va flotando; en modo compacto va al lado de la marca */
+  .foto .badge{position:absolute;top:10px;left:10px;z-index:2}
+  .badge.si{background:var(--ok-soft);color:var(--ok)}
+  .badge.no{background:var(--surface-2);color:var(--faint)}
+
+  .cuerpo{padding:13px 14px 14px;display:flex;flex-direction:column;gap:7px;flex:1}
+  .marca{
+    font:600 9.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--faint);
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+  }
+  .nombre{
+    font:400 15px/1.28 var(--display);text-transform:uppercase;letter-spacing:.005em;margin:0;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.56em;
+    /* "(BLACK/WHITE/PINK/ULTRAMARINE/TEAL)" es un solo token: sin esto se
+       desborda de la tarjeta y el line-clamp corta a mitad de palabra. */
+    overflow-wrap:anywhere;
+  }
+  .meta{font:11.5px/1.4 var(--sans);color:var(--faint);margin:0;
+        display:flex;align-items:center;gap:7px;flex-wrap:wrap;overflow-wrap:anywhere}
+  /* Los colores en los que viene el producto. La foto muestra uno solo,
+     así que estos puntitos son lo único que cuenta la historia completa. */
+  .pintas{display:inline-flex;gap:4px;flex:none}
+  .pintas i{
+    width:12px;height:12px;border-radius:50%;display:block;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.22), 0 1px 2px rgba(0,0,0,.5);
+  }
+  .fi-tabla .pintas i{width:14px;height:14px}
+  .fi-tabla dd .pintas{vertical-align:-3px;margin-right:7px}
+  .incluye{font:600 11px/1.35 var(--sans);color:var(--ok);background:var(--ok-soft);padding:6px 9px;border-radius:8px}
+  /* Las capacidades en las que viene el modelo. Una línea sola: si no entra se
+     corta, porque el detalle completo está en la ficha. */
+  .opciones{font:500 10.5px/1.4 var(--mono);color:var(--glow);margin:0;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .pie{margin-top:auto;padding-top:11px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+  .usd{font:400 23px/1 var(--display);letter-spacing:.01em}
+  /* El "desde" no compite con el número: es una aclaración, no el precio */
+  .usd .desde{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+              color:var(--faint);font-style:normal;display:block;margin-bottom:5px}
+  .ars{font:500 12px/1 var(--mono);letter-spacing:.03em;color:var(--muted);margin-top:5px}
+  /* EL CTA. Es la acción que da plata, así que manda visualmente sobre todo lo
+     demás de la tarjeta: más alto, más contraste, con el ícono de WhatsApp para
+     que se entienda a dónde lleva antes de leer. */
+  .wa{
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    text-align:center;text-decoration:none;
+    font:700 11.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    padding:14px 12px;border-radius:999px;color:#fff;
+    background:linear-gradient(135deg,var(--acento),#8B3FE0);
+    box-shadow:0 0 0 1px rgba(192,132,252,.45), 0 6px 22px rgba(168,85,247,.42);
+    transition:box-shadow .18s, transform .12s, filter .18s;
+  }
+  .wa svg{width:15px;height:15px;flex:none;display:block}
+  .wa:hover{box-shadow:0 0 0 1px var(--glow), 0 10px 34px rgba(168,85,247,.7);filter:brightness(1.08)}
+  .wa:active{transform:translateY(1px)}
+  /* La tarjeta entera empuja hacia el CTA al pasar el mouse */
+  .card:hover .wa{box-shadow:0 0 0 1px var(--glow), 0 10px 30px rgba(168,85,247,.55)}
+
+  /* En la ficha el CTA va primero, ocupa todo el ancho y es el doble de alto
+     que "Agregar al pedido". No compiten: uno manda y el otro acompaña. */
+  .fi-botones{flex-direction:column;gap:9px}
+  .fi-botones .cta{
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    text-decoration:none;padding:15px 16px;font-size:11.5px;letter-spacing:.1em;
+    box-shadow:0 0 0 1px rgba(192,132,252,.45), 0 8px 26px rgba(168,85,247,.45);
+  }
+  .fi-botones .cta svg{width:17px;height:17px;flex:none;display:block}
+  .fi-botones .cta:hover{filter:brightness(1.08);box-shadow:0 0 0 1px var(--glow), 0 12px 36px rgba(168,85,247,.7)}
+  .fi-botones .sec{padding:11px 14px;font-size:10px;opacity:.85}
+  .fi-botones .sec:hover{opacity:1}
+  /* El contador de unidades y el "quitar" son una sola pieza dentro de la columna */
+  #fi-pedido-caja{display:flex;flex-direction:column;gap:9px}
+  .card.agotado .foto img{filter:grayscale(1);opacity:.5}
+  .card.agotado .usd,.card.agotado .ars{color:var(--faint)}
+
+  /* Modo compacto: mientras no haya NINGUNA foto cargada en el catálogo.
+     Evita dibujar cientos de recuadros vacíos. Vuelve solo al cargar la primera. */
+  .card.compacta .cuerpo{padding:15px 16px 16px}
+  .card.compacta .nombre{min-height:0}
+
+  /* ---------- Estados ---------- */
+  .msg{padding:64px 20px;text-align:center;color:var(--muted)}
+  .msg h2{color:var(--ink);font:400 20px/1.2 var(--display);text-transform:uppercase;margin:0 0 12px}
+  .msg code{background:var(--surface-2);padding:3px 8px;border-radius:6px;font:12px var(--mono);word-break:break-all}
+  .msg ol{text-align:left;max-width:520px;margin:16px auto 0;line-height:1.95}
+  .skeleton{height:300px;border-radius:var(--radius);
+    background:linear-gradient(90deg,var(--surface) 25%,var(--surface-2) 50%,var(--surface) 75%);
+    background-size:200% 100%;animation:sk 1.4s linear infinite}
+  @keyframes sk{to{background-position:-200% 0}}
+
+  /* ---------- Botón flotante de WhatsApp ----------
+     Blanco a propósito: sobre el fondo violeta oscuro es lo único claro de la
+     pantalla, así que se encuentra sin buscarlo. */
+  .wa-flotante{
+    position:fixed;right:20px;bottom:20px;z-index:500;
+    display:flex;align-items:center;gap:9px;
+    padding:12px 20px 12px 16px;border-radius:999px;
+    background:#fff;color:#0A0710;text-decoration:none;
+    box-shadow:0 6px 22px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.12);
+    transition:transform .16s cubic-bezier(.22,.7,.3,1), box-shadow .2s;
+  }
+  /* El display:flex de arriba le gana al hidden del navegador: hay que repetirlo */
+  .wa-flotante[hidden]{display:none}
+  .wa-flotante svg{width:22px;height:22px;display:block;flex:none}
+  .wa-flotante b{font:600 13px/1 var(--sans);letter-spacing:.01em}
+  .wa-flotante:hover{transform:translateY(-2px);
+    box-shadow:0 10px 30px rgba(0,0,0,.6), 0 0 0 1px rgba(192,132,252,.6), 0 0 26px rgba(168,85,247,.35)}
+  .wa-flotante:active{transform:translateY(0) scale(.97)}
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes waEntra{from{opacity:0;transform:translateY(20px) scale(.9)}to{opacity:1;transform:none}}
+    .wa-flotante{animation:waEntra .5s .8s cubic-bezier(.22,.7,.3,1) both}
+  }
+  /* En el celular queda solo el ícono: el texto se comería media pantalla */
+  @media (max-width:560px){
+    .wa-flotante{right:14px;bottom:14px;padding:13px;gap:0}
+    .wa-flotante b{display:none}
+  }
+
+  /* El 96 de abajo es el lugar que ocupa el botón flotante */
+  footer{border-top:1px solid var(--line);padding:26px 0 96px;color:var(--faint);
+         font:11px/1.7 var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:center}
+
+  /* ---------- Panel de cotización ---------- */
+  #cfg-btn{
+    background:transparent;border:1px solid rgba(255,255,255,.22);border-radius:999px;
+    color:rgba(255,255,255,.75);cursor:pointer;padding:5px;line-height:0;margin-left:2px;
+    transition:border-color .16s, color .16s, transform .3s;
+  }
+  #cfg-btn svg{width:15px;height:15px;display:block}
+  #cfg-btn:hover{border-color:var(--glow);color:#fff;transform:rotate(60deg)}
+
+  /* Todas las ventanas (cotización, ficha de producto, pedido) comparten esto */
+  .modal{
+    position:fixed;inset:0;z-index:900;display:grid;place-items:center;padding:20px;
+    background:rgba(10,7,16,.72);backdrop-filter:blur(4px);
+  }
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes modalIn{from{opacity:0}to{opacity:1}}
+    @keyframes cajaIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+    .modal{animation:modalIn .2s ease-out}
+    .modal .caja{animation:cajaIn .3s cubic-bezier(.22,.7,.3,1) both}
+  }
+  /* Con una ventana abierta, el fondo no se mueve */
+  body.modal-abierto{overflow:hidden}
+  .caja:focus{outline:none}
+  .caja{
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:22px;width:min(400px,100%);box-shadow:0 24px 70px rgba(0,0,0,.6);
+  }
+  .modal h3{font:400 20px/1 var(--display);text-transform:uppercase;margin:0 0 18px;letter-spacing:.02em}
+  #panel .op{display:flex;gap:11px;align-items:flex-start;cursor:pointer;padding:9px 0}
+  #panel .op input{margin-top:3px;accent-color:var(--acento);width:16px;height:16px;flex:none}
+  #panel .op b{display:block;font:600 13px/1.3 var(--sans)}
+  #panel .op i{display:block;font-style:normal;font-size:11.5px;color:var(--faint);margin-top:2px}
+  #panel select,#panel input[type=number]{
+    background:var(--surface-2);color:var(--ink);border:1px solid var(--line);
+    border-radius:10px;padding:9px 11px;font:14px var(--sans);width:100%;
+  }
+  #panel select{margin:0 0 4px 27px;width:calc(100% - 27px)}
+  #panel select:disabled,#panel input:disabled{opacity:.4}
+  #panel .campo{display:flex;align-items:center;gap:8px;margin:0 0 6px 27px}
+  #panel .campo span{font:600 12px/1 var(--mono);color:var(--faint);flex:none}
+  #panel .campo.recargo{margin:14px 0 4px 0;padding-top:14px;border-top:1px solid var(--line)}
+  #panel .aviso{font-size:11.5px;line-height:1.5;color:var(--faint);margin:16px 0 0}
+  #panel .aviso b{color:var(--muted)}
+  .modal .botones{display:flex;gap:9px;margin-top:18px}
+  .modal .botones button,.modal .botones a{
+    flex:1;padding:12px;border-radius:999px;cursor:pointer;text-align:center;text-decoration:none;
+    font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+  }
+  .modal .pri{background:var(--acento);color:#fff;border:0}
+  .modal .pri:hover{background:var(--glow)}
+  .modal .sec{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  .modal .sec:hover{color:var(--ink);border-color:var(--faint)}
+
+  /* ---------- Ficha de producto ---------- */
+  #ficha .caja{
+    width:min(760px,100%);max-height:calc(100vh - 40px);overflow:auto;padding:0;
+    display:flex;flex-direction:column;
+  }
+  .fi-cerrar{
+    position:absolute;top:14px;right:14px;z-index:4;width:34px;height:34px;padding:0;
+    border-radius:50%;cursor:pointer;display:grid;place-items:center;
+    background:rgba(10,7,16,.6);color:#fff;border:1px solid rgba(255,255,255,.2);
+    backdrop-filter:blur(6px);font-size:20px;line-height:1;
+  }
+  .fi-cerrar:hover{background:var(--acento);border-color:var(--acento)}
+  #ficha .caja{position:relative}
+  .fi-cols{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr)}
+  /* Sin aspect-ratio fijo: es un item del grid, asi que se estira solo hasta
+     la altura de la columna de datos. Con 1/1 quedaba clavado en 320px y
+     dejaba un hueco muerto abajo, que es lo que pasa casi siempre porque los
+     datos son mas altos. El min-height cubre el caso inverso: ficha corta. */
+  .fi-foto{position:relative;background:var(--foto-bg);min-height:320px;
+           display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .fi-foto img{width:100%;height:100%;object-fit:contain;padding:22px;display:block}
+  .fi-foto .badge{position:absolute;top:12px;left:12px}
+  .fi-datos{padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
+  .fi-marca{font:600 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--glow)}
+  .modal .fi-nombre{font:400 clamp(1.15rem,2.6vw,1.6rem)/1.15 var(--display);
+                    text-transform:uppercase;margin:0;letter-spacing:.005em;padding-right:38px}
+  .fi-marca{padding-right:38px}
+  .fi-detalle{font-size:12.5px;line-height:1.5;color:var(--muted);margin:0;white-space:pre-line}
+  .fi-tabla{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;margin:0;
+            font-size:12.5px;border-top:1px solid var(--line);padding-top:13px}
+  .fi-tabla dt{font:600 9.5px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .fi-tabla dd{margin:0;color:var(--ink);word-break:break-word}
+  .fi-precio{border-top:1px solid var(--line);padding-top:14px;margin-top:2px}
+  .fi-precio .usd{font:400 30px/1 var(--display)}
+  .fi-precio .ars{font:500 13px/1 var(--mono);color:var(--muted);margin-top:6px}
+  .fi-nota{font-size:11px;color:var(--faint);margin:0}
+
+  /* ---------- Elegir color en la ficha ----------
+     En la grilla los puntitos son decorativos. Acá el cliente está decidiendo,
+     así que son botones: tocás uno y ese color queda elegido para el pedido y
+     para el mensaje de WhatsApp. Si existe la foto de ese color, la foto cambia. */
+  .fi-pintas{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:5px}
+  .fi-pintas button{
+    width:20px;height:20px;padding:0;border-radius:50%;cursor:pointer;display:block;
+    border:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22), 0 1px 2px rgba(0,0,0,.5);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .fi-pintas button:hover{transform:scale(1.12)}
+  /* El anillo va por fuera del puntito para no taparle el color */
+  .fi-pintas button[aria-pressed="true"]{
+    transform:scale(1.06);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.3), 0 0 0 2px var(--surface), 0 0 0 4px var(--glow);
+  }
+  /* Color que no está en la lista de hex: no inventamos el tono, se marca con rayas */
+  .fi-pintas button.sinhex{
+    background:repeating-linear-gradient(45deg,var(--line),var(--line) 3px,transparent 3px,transparent 6px);
+    box-shadow:inset 0 0 0 1px var(--faint);
+  }
+  .fi-color-elegido{color:var(--ink)}
+  .fi-color-elegido b{font-weight:600;color:var(--glow)}
+  .fi-tabla dd .fi-hint{display:block;font-size:10.5px;color:var(--faint);margin-top:3px}
+  /* El display:block de arriba le gana al hidden si no se dice esto */
+  .fi-tabla dd .fi-hint[hidden]{display:none}
+
+  /* ---------- Elegir versión (capacidad, medida, color) ----------
+     Cada botón lleva su propio precio: el cliente compara sin tener que ir
+     tocando uno por uno. */
+  .fi-ops-caja{border-top:1px solid var(--line);padding-top:13px;display:flex;
+               flex-direction:column;gap:8px}
+  .fi-ops-lbl{font:600 9.5px/1.5 var(--mono);letter-spacing:.14em;
+              text-transform:uppercase;color:var(--faint)}
+  .fi-ops{display:flex;flex-wrap:wrap;gap:7px}
+  .fi-op{
+    display:flex;flex-direction:column;gap:3px;align-items:flex-start;
+    padding:8px 12px;border-radius:11px;cursor:pointer;text-align:left;
+    background:var(--surface-2);border:1px solid var(--line);color:var(--ink);
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .fi-op b{font:500 12px/1.2 var(--sans);letter-spacing:.01em}
+  .fi-op i{font:500 10.5px/1 var(--mono);color:var(--muted);font-style:normal}
+  .fi-op:hover{border-color:var(--faint)}
+  .fi-op[aria-pressed="true"]{
+    border-color:var(--acento);background:rgba(168,85,247,.16);
+    box-shadow:0 0 0 1px var(--acento);
+  }
+  .fi-op[aria-pressed="true"] i{color:var(--glow)}
+  /* Sin stock se puede elegir igual (el cliente quiere ver el precio), pero se
+     nota de una que no está disponible */
+  .fi-op.agotada{opacity:.5}
+  .fi-op.agotada b{text-decoration:line-through}
+
+  /* ---------- Cuántas unidades ---------- */
+  .fi-cant{display:flex;align-items:center;gap:10px;justify-content:space-between;
+           border:1px solid var(--line);border-radius:999px;padding:5px 6px}
+  .fi-cant .lbl{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+                color:var(--faint);padding-left:10px}
+  .stepper{display:flex;align-items:center;gap:2px}
+  .stepper button{
+    width:30px;height:30px;flex:none;border-radius:50%;cursor:pointer;
+    background:transparent;border:1px solid var(--line);color:var(--ink);
+    font:400 17px/1 var(--sans);display:grid;place-items:center;padding:0;
+  }
+  .stepper button:hover:not(:disabled){border-color:var(--glow);color:var(--glow)}
+  .stepper button:disabled{opacity:.35;cursor:default}
+  .stepper .n{min-width:30px;text-align:center;font:500 14px/1 var(--mono);color:var(--ink)}
+  /* El x2 al lado del precio: sin esto el total del pedido no se explica solo */
+  .fi-precio .sub{font:500 12px/1 var(--mono);color:var(--glow);margin-top:7px}
+
+  @media (max-width:640px){
+    .fi-cols{grid-template-columns:1fr}
+    .fi-foto{aspect-ratio:4/3;min-height:0}
+    .fi-datos{padding:18px}
+  }
+
+  /* ---------- Especificaciones deducidas ---------- */
+  .specs{display:flex;flex-wrap:wrap;gap:5px}
+  .specs span{
+    font:600 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    padding:5px 8px;border-radius:6px;background:var(--surface-2);color:var(--muted);
+    border:1px solid var(--line);white-space:nowrap;
+  }
+  .fi-datos .specs span{font-size:10px;padding:6px 10px}
+
+  /* ---------- Botones de la tarjeta ---------- */
+  .acciones{display:flex;gap:8px}
+  .acciones .wa{flex:1;min-width:0}
+  /* Secundario a propósito: más angosto y apagado que el CTA, para que la vista
+     caiga primero en "Consultar". Sube el contraste solo al pasarle el mouse. */
+  .mas{
+    flex:none;width:38px;border-radius:999px;cursor:pointer;display:grid;place-items:center;
+    background:transparent;color:var(--faint);border:1px solid var(--line);
+    transition:background .16s, color .16s, border-color .16s, transform .12s;
+  }
+  .mas svg{width:16px;height:16px;display:block;grid-area:1/1}
+  .mas .i-ok{display:none}
+  .mas[aria-pressed="true"] .i-mas{display:none}
+  .mas[aria-pressed="true"] .i-ok{display:block}
+  .mas:hover{color:var(--ink);border-color:var(--glow)}
+  .mas:active{transform:scale(.92)}
+  .mas[aria-pressed="true"]{background:var(--ok-soft);color:var(--ok);border-color:rgba(94,233,164,.4)}
+  .card{cursor:pointer}
+  .card:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
+
+  /* ---------- Barra del pedido ---------- */
+  .barra-pedido{
+    position:fixed;left:0;right:0;bottom:0;z-index:600;
+    background:var(--surface);border-top:1px solid var(--line);
+    box-shadow:0 -8px 30px rgba(0,0,0,.5);
+    padding:11px 20px;display:flex;align-items:center;gap:14px;
+  }
+  .barra-pedido[hidden]{display:none}
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes bpEntra{from{transform:translateY(100%)}to{transform:none}}
+    .barra-pedido{animation:bpEntra .28s cubic-bezier(.22,.7,.3,1)}
+  }
+  .bp-ver{
+    background:transparent;border:1px solid var(--line);color:var(--ink);cursor:pointer;
+    border-radius:999px;padding:9px 15px;font:600 10.5px/1 var(--mono);
+    letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+  }
+  .bp-ver:hover{border-color:var(--glow)}
+  .bp-total{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .bp-total b{font:400 19px/1 var(--display);letter-spacing:.01em}
+  .bp-total i{font:500 11px/1 var(--mono);color:var(--faint);font-style:normal}
+  .bp-enviar{
+    margin-left:auto;flex:none;text-decoration:none;color:#fff;
+    background:linear-gradient(135deg,var(--acento),#8B3FE0);
+    border-radius:999px;padding:13px 22px;font:600 10.5px/1 var(--mono);
+    letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;
+    box-shadow:0 0 0 1px rgba(192,132,252,.35), 0 6px 20px rgba(168,85,247,.3);
+  }
+  .bp-enviar:hover{box-shadow:0 0 0 1px var(--glow), 0 8px 30px rgba(168,85,247,.5)}
+  /* Con la barra abajo, el botón flotante sube para no taparla */
+  body.con-pedido .wa-flotante{bottom:86px}
+  body.con-pedido footer{padding-bottom:120px}
+  @media (max-width:560px){
+    .barra-pedido{padding:10px 14px;gap:10px}
+    .bp-ver{padding:9px 12px}
+    .bp-enviar{padding:12px 16px}
+    .bp-total b{font-size:17px}
+  }
+
+  /* Lista del pedido */
+  #pedido .caja{width:min(520px,100%);max-height:calc(100vh - 40px);overflow:auto}
+  .pd-item{display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+  .pd-item:first-of-type{border-top:0}
+  .pd-foto{width:46px;height:46px;flex:none;border-radius:9px;background:var(--foto-bg);
+           object-fit:contain;padding:4px}
+  .pd-txt{flex:1;min-width:0}
+  .pd-txt b{display:block;font:400 13px/1.25 var(--display);text-transform:uppercase;letter-spacing:.01em}
+  .pd-txt i{display:block;font:500 10px/1.4 var(--mono);color:var(--faint);font-style:normal;margin-top:3px}
+  .pd-txt .pd-color{display:block;font:500 10px/1.4 var(--mono);color:var(--glow);margin-top:3px}
+  .pd-precio{font:500 13px/1 var(--mono);color:var(--ink);white-space:nowrap;text-align:right}
+  /* El precio unitario solo aparece cuando hay más de una unidad: con una sola
+     repetiría el número de arriba. */
+  .pd-precio i{display:block;font:500 10px/1.4 var(--mono);color:var(--faint);font-style:normal;margin-top:3px}
+  .pd-item .stepper{flex:none}
+  .pd-item .stepper button{width:26px;height:26px;font-size:15px}
+  .pd-item .stepper .n{min-width:22px;font-size:13px}
+  @media (max-width:520px){
+    .pd-item{flex-wrap:wrap}
+    .pd-txt{flex:1 1 100%;order:-1}
+  }
+  .pd-quitar{background:transparent;border:0;color:var(--faint);cursor:pointer;font-size:19px;
+             line-height:1;padding:5px 8px;border-radius:8px;flex:none}
+  .pd-quitar:hover{color:#FF8A8A;background:rgba(255,138,138,.1)}
+  .pd-total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+            border-top:1px solid var(--line);margin-top:6px;padding-top:14px}
+  .pd-total span{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .pd-total b{font:400 24px/1 var(--display)}
+  .pd-total i{display:block;font:500 12px/1 var(--mono);color:var(--muted);font-style:normal;margin-top:6px;text-align:right}
+  .pd-vacio{color:var(--faint);font-size:13px;text-align:center;padding:22px 0}
+
+  /* Cargando la tanda siguiente */
+  .centinela{grid-column:1/-1;height:1px}
+
+  /* ---------- Easter egg: 7 clics en el triángulo del logo ---------- */
+  #egg{
+    position:fixed;inset:0;z-index:999;display:grid;place-items:center;
+    background:radial-gradient(circle at 50% 45%, rgba(88,28,135,.94), rgba(10,7,16,.985));
+    cursor:pointer;animation:eggIn .45s ease-out;text-align:center;padding:24px;
+    backdrop-filter:blur(3px);
+  }
+  @keyframes eggIn{from{opacity:0}to{opacity:1}}
+  #egg .saludo{
+    font:400 clamp(1rem,3.2vw,1.9rem)/1.2 var(--display);
+    text-transform:uppercase;color:rgba(255,255,255,.82);margin:0 0 4px;letter-spacing:.04em;
+    animation:entra .5s .05s ease-out both;
+  }
+  #egg .frase{
+    font:400 clamp(2.6rem,11vw,7rem)/0.92 var(--display);
+    text-transform:uppercase;color:#fff;margin:0;letter-spacing:.005em;
+    text-shadow:0 0 18px #A855F7, 0 0 46px #A855F7, 0 0 90px rgba(168,85,247,.75);
+    /* Una sola animación por elemento: dos sobre el mismo se pisan y el texto
+       queda congelado en opacidad 0. El latido va en el span de adentro. */
+    animation:entra .5s .12s ease-out both;
+  }
+  #egg .frase span{display:inline-block;animation:latir 1.3s .8s ease-in-out infinite}
+  #egg .gameplay{
+    font:400 clamp(.95rem,2.7vw,1.55rem)/1.35 var(--display);
+    text-transform:uppercase;color:rgba(255,255,255,.9);margin:16px auto 0;
+    max-width:22ch;letter-spacing:.03em;
+    animation:entra .5s .22s ease-out both;
+  }
+  #egg .gameplay b{color:var(--glow);font-weight:400;text-shadow:0 0 22px #A855F7}
+  @keyframes entra{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes latir{50%{transform:scale(1.03)}}
+
+  /* ---------- Variante El Primo: naranja de luchador ---------- */
+  #egg.primo{background:radial-gradient(circle at 50% 45%, rgba(180,45,10,.95), rgba(18,6,2,.985))}
+  #egg.primo .saludo{color:rgba(255,224,150,.9)}
+  #egg.primo .frase{text-shadow:0 0 18px #FF7A18, 0 0 46px #FF4D00, 0 0 92px rgba(255,77,0,.75)}
+  /* Entra de golpe, como un topetazo, en vez de subir suave.
+     Una sola animación por elemento: dos se pisan y el texto no aparece. */
+  #egg.primo .frase span{animation:topetazo .55s cubic-bezier(.2,1.5,.4,1) both}
+  @keyframes topetazo{
+    0%{transform:scale(2.4) rotate(-7deg);opacity:0}
+    55%{transform:scale(.92) rotate(2deg);opacity:1}
+    100%{transform:none;opacity:1}
+  }
+  #egg.primo .gameplay b{color:#FFB34D;text-shadow:0 0 22px #FF7A18}
+  #egg.primo .sub{color:#FFB34D}
+  body.egg-on.primo-on header{filter:hue-rotate(-118deg) saturate(2) brightness(1.1)}
+  #egg .sub{
+    font:600 10.5px/1.9 var(--mono);letter-spacing:.28em;text-transform:uppercase;
+    color:var(--glow);margin-top:20px;
+  }
+  #egg .cerrar{font:500 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;
+                color:rgba(243,238,255,.45);margin-top:34px}
+  /* Mientras dura el egg, el resto de la página late en morado */
+  body.egg-on header{filter:hue-rotate(-12deg) saturate(1.8) brightness(1.15)}
+  @media (prefers-reduced-motion: reduce){
+    #egg,#egg .saludo,#egg .frase,#egg .frase span,#egg .gameplay{animation:none}
+  }
+
+  /* ---------- El Primo, bailando ----------
+     El personaje es el render oficial del juego (assets/el-primo.webp, con
+     fondo transparente): dibujado a mano nunca iba a verse realista. Como es
+     una sola imagen no se le mueven los brazos por separado, así que el baile
+     sale del conjunto — rebote con squash y balanceo. Cada capa lleva UNA
+     animación, dos sobre el mismo elemento se pisan. Todo cuelga de --beat:
+     cambiando ese número baila más rápido o más lento. */
+  #egg.primo,#egg.vegetta{--beat:.46s;overflow:hidden;align-items:end}
+
+  .egg-escena{
+    position:absolute;inset:auto -24px -24px;display:flex;justify-content:center;
+    pointer-events:none;
+    animation:eggEntra calc(var(--beat)*1.6) cubic-bezier(.25,.9,.3,1.2) both;
+  }
+  /* Se levanta desde abajo, como entrando al ring */
+  @keyframes eggEntra{
+    0%{transform:translateY(42%) scale(.93);opacity:0}
+    45%{opacity:1}
+    72%{transform:translateY(0) scale(1);opacity:1}
+    84%{transform:translateY(0) scale(1.03,.95)}
+    100%{transform:none;opacity:1}
+  }
+  .egg-sway{transform-origin:50% 100%;animation:eggSway calc(var(--beat)*4) ease-in-out infinite}
+  @keyframes eggSway{
+    0%,100%{transform:translateX(-1.2%) rotate(-2.6deg)}
+    50%{transform:translateX(1.2%) rotate(2.6deg)}
+  }
+  /* Apenas atenuado y con sombra propia: el render es muy saturado y el texto
+     se le pierde encima. */
+  .egg-fig{
+    /* Los dos límites en unidades de pantalla, no en %: el div del balanceo
+       se ajusta a la imagen, así que un max-width:100% se mediría contra ella
+       misma y no limitaría nada. Con height/width auto nunca se deforma. */
+    max-height:88vh;max-width:94vw;height:auto;width:auto;display:block;
+    transform-origin:50% 100%;
+    animation:eggBote calc(var(--beat)*2) ease-in-out infinite;
+  }
+  @keyframes eggBote{
+    0%,100%{transform:translateY(0) scale(1,1)}
+    25%{transform:translateY(-2.4%) scale(.985,1.03)}
+    50%{transform:translateY(0) scale(1.03,.965)}
+    75%{transform:translateY(-1.3%) scale(.99,1.015)}
+  }
+  /* El Primo es un render 3D muy saturado: se atenúa para que el texto se
+     lea encima. El skin de Vegetta es pixel art, y sin image-rendering el
+     navegador lo interpola y queda borroso al agrandarlo. */
+  #egg.primo .egg-fig{
+    filter:brightness(.84) saturate(1.04) drop-shadow(0 16px 32px rgba(0,0,0,.6));
+  }
+  #egg.vegetta .egg-fig{
+    max-height:78vh;image-rendering:pixelated;
+    filter:brightness(.9) drop-shadow(0 16px 32px rgba(0,0,0,.65));
+  }
+  #egg.vegetta .frase{text-shadow:
+    0 0 18px #A855F7, 0 0 46px #A855F7, 0 0 90px rgba(168,85,247,.75),
+    0 6px 26px rgba(0,0,0,.85)}
+  #egg.vegetta .saludo,#egg.vegetta .gameplay,#egg.vegetta .sub,
+  #egg.vegetta .cerrar{text-shadow:0 2px 14px rgba(0,0,0,.9), 0 0 34px rgba(0,0,0,.7)}
+  #egg.vegetta .saludo,#egg.vegetta .frase,#egg.vegetta .gameplay,
+  #egg.vegetta .sub,#egg.vegetta .cerrar{position:relative}
+  #egg.vegetta .saludo{animation-delay:calc(var(--beat)*1.3)}
+  #egg.vegetta .frase{animation-delay:calc(var(--beat)*1.45)}
+  #egg.vegetta .frase span{animation-delay:calc(var(--beat)*1.45)}
+  #egg.vegetta .gameplay{animation-delay:calc(var(--beat)*1.7)}
+
+  /* El texto se apoya sobre el cuerpo: necesita sombra para no perderse.
+     Va en capa posicionada para quedar por encima del render. */
+  #egg.primo .frase{
+    font-size:clamp(1.9rem,7.6vw,4.6rem);line-height:.96;
+    text-shadow:
+      0 0 18px #FF7A18, 0 0 46px #FF4D00, 0 0 92px rgba(255,77,0,.75),
+      0 6px 26px rgba(0,0,0,.85);
+  }
+  #egg.primo .saludo,#egg.primo .gameplay,#egg.primo .sub,#egg.primo .cerrar{
+    text-shadow:0 2px 14px rgba(0,0,0,.9), 0 0 34px rgba(0,0,0,.7)}
+  #egg.primo .saludo,#egg.primo .frase,#egg.primo .gameplay,
+  #egg.primo .sub,#egg.primo .cerrar{position:relative}
+  /* El aterrizaje sacude toda la pantalla del egg */
+  #egg.primo>div,#egg.vegetta>div{padding-bottom:5vh;
+    animation:eggImpacto .5s calc(var(--beat)*1.15) ease-out both}
+  @keyframes eggImpacto{
+    0%,100%{transform:none}
+    12%{transform:translate(8px,-7px)}
+    30%{transform:translate(-9px,6px)}
+    48%{transform:translate(7px,4px)}
+    66%{transform:translate(-5px,-3px)}
+    84%{transform:translate(3px,1px)}
+  }
+  /* El texto espera a que entre, si no le habla a un escenario vacío */
+  #egg.primo .saludo{animation-delay:calc(var(--beat)*1.3)}
+  #egg.primo .frase{animation-delay:calc(var(--beat)*1.45)}
+  #egg.primo .frase span{animation-delay:calc(var(--beat)*1.45)}
+  #egg.primo .gameplay{animation-delay:calc(var(--beat)*1.7)}
+
+  /* En el celular el Primo entero se come la pantalla y el dedo toca el
+     borde: baja un escalón para que respire y le quede lugar al texto. */
+  @media (max-width:560px){
+    .egg-fig{max-height:70vh}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .egg-escena,.egg-sway,.egg-fig,#egg.primo>div,#egg.vegetta>div{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="head">
+      <span class="logo">
+        <!-- El triángulo NO navega: es el disparador del easter egg (7 clics).
+             El texto sí lleva al sitio, para no perder el link. -->
+        <button class="marca-btn" id="marca-btn" type="button" aria-label="Advance Tecno">
+          <img src="assets/logo-mark.png" alt="">
+        </button>
+        <a href="https://advancegrouparg.com/" target="_blank" rel="noopener">
+          <b>Advance <span>Tecno</span></b>
+        </a>
+      </span>
+      <span class="eyebrow">Catálogo</span>
+      <div class="stamp">
+        <span class="dot live"></span><span id="stamp">Cargando…</span>
+        <button id="cfg-btn" type="button" title="Cambiar la cotización del dólar" aria-label="Cambiar la cotización del dólar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+            <circle cx="12" cy="12" r="3.2"/>
+            <path d="M12 2.5v2.2M12 19.3v2.2M21.5 12h-2.2M4.7 12H2.5M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6M18.7 18.7l-1.6-1.6M6.9 6.9L5.3 5.3"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <h1 class="titulo-h">Stock y precios<br>en tiempo real.</h1>
+    <p class="bajada">Todo lo que tenemos disponible, actualizado al momento. Consultá por WhatsApp desde cualquier producto.</p>
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+      </svg>
+      <input id="q" type="search" placeholder="Buscar: iphone 17, macbook, canon r6…" autocomplete="off">
+      <button class="clear" id="clear" hidden aria-label="Limpiar búsqueda">&times;</button>
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <div class="chips-wrap" id="cats-wrap">
+      <button class="chip-nav izq" id="cats-izq" type="button" tabindex="-1" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <div class="chips" id="cats"></div>
+      <button class="chip-nav der" id="cats-der" type="button" tabindex="-1" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <div class="row2">
+      <select id="marca"><option value="">Todas las marcas</option></select>
+      <select id="precio"><option value="">Cualquier precio</option></select>
+      <!-- Montura y apertura solo tienen sentido en lentes: el script los
+           muestra al elegir esa categoría y los esconde al salir. -->
+      <select id="montura" hidden><option value="">Cualquier montura</option></select>
+      <select id="apertura" hidden>
+        <option value="">Cualquier apertura</option>
+        <option value="luminoso">Luminoso · f/2.8 o menor</option>
+        <option value="cerrado">Estándar · más de f/2.8</option>
+      </select>
+      <select id="orden">
+        <option value="sheet">Orden de la planilla</option>
+        <option value="cat">Agrupado por categoría</option>
+        <option value="asc">Precio: menor a mayor</option>
+        <option value="desc">Precio: mayor a menor</option>
+        <option value="az">Nombre A-Z</option>
+      </select>
+      <label class="toggle"><input type="checkbox" id="soloStock"> Solo con stock</label>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+  </div>
+</div>
+
+<main class="wrap"><div class="grid" id="grid"></div></main>
+
+<!-- Barra del pedido. Aparece sola cuando hay algo cargado. -->
+<div class="barra-pedido" id="barra-pedido" hidden>
+  <button class="bp-ver" id="bp-ver" type="button">0 productos</button>
+  <div class="bp-total"><b id="bp-usd">USD 0</b><i id="bp-ars"></i></div>
+  <a class="bp-enviar" id="bp-enviar" target="_blank" rel="noopener">Enviar pedido</a>
+</div>
+
+<!-- Botón flotante de WhatsApp. El link lo arma el script con el número
+     de la configuración, así no hay dos lugares donde cambiarlo. -->
+<a id="wa-flotante" class="wa-flotante" target="_blank" rel="noopener" hidden
+   aria-label="Escribinos por WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.24-1.47-1.38-1.72-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.42.09-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.16 0-.43.06-.65.31-.22.25-.85.84-.85 2.03 0 1.2.87 2.35.99 2.51.12.17 1.71 2.62 4.15 3.67.58.25 1.03.4 1.39.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29Z"/>
+  </svg>
+  <b>WhatsApp</b>
+</a>
+
+<footer class="wrap">
+  <span id="pie-cotiz"></span>
+  Precios sujetos a cambio sin previo aviso · Consultá disponibilidad antes de comprar
+</footer>
+
+<script>
+/* ==========================================================================
+   CONFIGURACIÓN — lo único que tenés que tocar
+   ========================================================================== */
+
+// ID de tu planilla (lo que va entre /d/ y /edit en la URL)
+const SHEET_ID  = '1pXNtSTiHeyQYM-gyzMbmL-76YwQZNrOGm4ujy4xRElk';
+// gid de la pestaña (el número al final de la URL, después de #gid=)
+const SHEET_GID = '705084569';
+
+// Tu WhatsApp con código de país, solo números
+const WHATSAPP = '5491122620770';   // +54 9 11 2262-0770
+
+// ---------- PRECIOS EN PESOS ----------
+//
+// true  = muestra "USD 815" y abajo "$ 1.271.400"
+// false = solo dólares
+const MOSTRAR_PESOS = true;
+
+// A qué cotización convertís. Dos opciones:
+//   'auto'  → la trae sola de dolarapi.com, se actualiza sin que hagas nada
+//   1600    → un número fijo que ponés vos y no cambia hasta que lo edites
+const COTIZACION = 'auto';
+
+// Solo si COTIZACION es 'auto'. Cuál de las cotizaciones usar:
+//   'blue' · 'oficial' · 'bolsa' · 'cripto' · 'mayorista' · 'tarjeta' · 'contadoconliqui'
+const COTIZACION_TIPO = 'blue';
+
+// Recargo sobre la cotización, si vendés arriba del dólar de referencia.
+// Se aplican los dos: primero el porcentaje, después los pesos fijos.
+//   RECARGO_PCT = 5  → un 5% más caro que la cotización
+//   RECARGO_FIJO = 20 → veinte pesos más por cada dólar
+// Con blue en 1565 y estos valores: 1565 + 20 = 1585 por dólar.
+const RECARGO_PCT  = 0;
+const RECARGO_FIJO = 20;
+
+// ---------- FOTOS ----------
+//
+// A) Columna "Imagen" en el Sheet con el link completo. Tiene prioridad.
+// B) Por carpeta (menos trabajo): subís las fotos nombradas con el ID del
+//    producto (CEL-APP-004.jpg) y poné acá la carpeta, terminada en barra.
+//    Vacío = desactivado.
+const CARPETA_FOTOS = 'fotos/';
+const EXT_FOTOS = '.jpg';
+
+// ⚠️ Solo aplica si la planilla trae "Costo USD" en vez de "Precio USD".
+// Con null la web NO muestra ningún número (pone "Consultar"), para que no se
+// te escape un costo por accidente.
+const MARGEN_PCT = null;
+
+// Cada cuántos minutos se refresca solo el catálogo
+const REFRESCO_MIN = 5;
+
+/* ========================================================================== */
+
+// Dos formas de leer el mismo Sheet. Si la primera falla, se prueba la segunda.
+// El "headers=1" es obligatorio: sin eso Google adivina mal dónde termina el
+// encabezado y devuelve todo el catálogo aplastado en una sola celda.
+const FUENTES = [
+  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&headers=1&gid=${SHEET_GID}`,
+  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`
+];
+
+const $ = id => document.getElementById(id);
+const grid = $('grid');
+
+let PRODUCTOS = [];         // una entrada por fila de la planilla (las variantes)
+let MODELOS   = [];         // una entrada por modelo: lo que se dibuja en la grilla
+let CON_FOTOS = false;
+let TC = null;              // cotización efectiva (número) o null si no hay
+const filtros = { q:'', cat:'', marca:'', orden:'sheet', soloStock:false,
+                  rango:'', montura:'', apertura:'' };
+
+// Tramos de precio. Los cortes salen de cómo está repartido el catálogo, no de
+// números redondos porque sí: hasta 200 entran los accesorios, entre 500 y 2000
+// vive más de la mitad de la lista, y arriba de 5000 quedan seis productos.
+const RANGOS = [
+  ['0-200',     'Hasta USD 200',           0,      200],
+  ['200-500',   'USD 200 a 500',         200,      500],
+  ['500-1000',  'USD 500 a 1.000',       500,     1000],
+  ['1000-2000', 'USD 1.000 a 2.000',    1000,     2000],
+  ['2000-5000', 'USD 2.000 a 5.000',    2000,     5000],
+  ['5000+',     'Más de USD 5.000',     5000, Infinity],
+];
+
+/* ---------- Utilidades ---------- */
+
+// Saca acentos y pasa a minúsculas: buscás "camara" y encuentra "Cámara"
+const norm = s => (s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+// Los campos vacíos en la planilla vienen como "—" o "-"
+const limpio = s => { const v=(s||'').trim(); return (v==='—'||v==='-'||v==='–') ? '' : v; };
+const esSi = s => norm(s).startsWith('s');
+const plata = n => n.toLocaleString('es-AR',{maximumFractionDigits:0});
+const esc = s => (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// Solo http(s): evita que un texto raro en la columna Imagen genere un src peligroso
+function urlFoto(u){
+  if(!u) return '';
+  try{ const p = new URL(u.trim(), location.href);
+       return (p.protocol==='http:'||p.protocol==='https:') ? p.href : ''; }
+  catch{ return ''; }
+}
+
+// Parser de CSV que respeta comillas — las descripciones tienen comas
+// y comillas de pulgadas (ej: 13.6")
+function parseCSV(txt){
+  const filas=[]; let fila=[], campo='', enComillas=false;
+  for(let i=0;i<txt.length;i++){
+    const c=txt[i];
+    if(enComillas){
+      if(c==='"'){ if(txt[i+1]==='"'){campo+='"';i++;} else enComillas=false; }
+      else campo+=c;
+    }else{
+      if(c==='"') enComillas=true;
+      else if(c===','){ fila.push(campo); campo=''; }
+      else if(c==='\n'){ fila.push(campo); filas.push(fila); fila=[]; campo=''; }
+      else if(c!=='\r') campo+=c;
+    }
+  }
+  if(campo!=='' || fila.length){ fila.push(campo); filas.push(fila); }
+  return filas;
+}
+
+/* ---------- Cotización del dólar ---------- */
+
+/* La configuración de arriba son los valores POR DEFECTO. El botón ⚙ del
+   encabezado los pisa y guarda tu elección en este navegador. */
+const CFG_KEY = 'advtecno.cotizacion';
+
+function cfgPorDefecto(){
+  return {
+    modo:    typeof COTIZACION === 'number' ? 'manual' : 'auto',
+    valor:   typeof COTIZACION === 'number' ? COTIZACION : null,
+    tipo:    COTIZACION_TIPO,
+    recargo: RECARGO_PCT,
+    recargoFijo: RECARGO_FIJO
+  };
+}
+function leerCfg(){
+  try{ return { ...cfgPorDefecto(), ...JSON.parse(localStorage.getItem(CFG_KEY) || '{}') }; }
+  catch{ return cfgPorDefecto(); }   // navegador con el almacenamiento bloqueado
+}
+function guardarCfg(c){ try{ localStorage.setItem(CFG_KEY, JSON.stringify(c)); }catch{} }
+function borrarCfg(){ try{ localStorage.removeItem(CFG_KEY); }catch{} }
+
+let CFG = leerCfg();
+
+// Aplica los recargos y deja escrito en el pie con qué número se calculó,
+// para que el cliente pueda hacer la cuenta y no haya sorpresas.
+function aplicarRecargo(base, etiqueta){
+  const pct  = Number(CFG.recargo) || 0;
+  const fijo = Number(CFG.recargoFijo) || 0;
+  const final = base * (1 + pct/100) + fijo;
+  const extra = (pct ? ` +${pct}%` : '') + (fijo ? ` +$${plata(fijo)}` : '');
+  $('pie-cotiz').textContent = extra
+    ? `${etiqueta}: $${plata(base)}${extra} = $${plata(Math.round(final))} · `
+    : `${etiqueta}: $${plata(base)} · `;
+  return final;
+}
+
+async function traerCotizacion(){
+  if(!MOSTRAR_PESOS) return null;
+
+  // Cotización fija puesta a mano
+  if(CFG.modo === 'manual'){
+    const v = Number(CFG.valor);
+    if(!v || v <= 0){ $('pie-cotiz').textContent = ''; return null; }
+    return aplicarRecargo(v, 'Cotización usada');
+  }
+  // Automática
+  try{
+    const r = await fetch(`https://dolarapi.com/v1/dolares/${CFG.tipo}`);
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    const venta = Number(d.venta);
+    if(!venta) throw new Error('sin valor de venta');
+    return aplicarRecargo(venta, `Dólar ${d.nombre || CFG.tipo}`);
+  }catch(e){
+    // Si falla, se muestran solo los dólares. Nunca un precio en pesos inventado.
+    console.warn('No se pudo traer la cotización:', e);
+    $('pie-cotiz').textContent = '';
+    return null;
+  }
+}
+
+/* ---------- Panel de cotización (botón ⚙) ---------- */
+
+/* Todo lo que se abre encima de la página pasa por acá: se cierra con Escape,
+   tocando afuera o con su botón, no deja escapar el tabulador fuera de la
+   ventana y devuelve el foco a donde estaba. */
+function montarModal(d, alCerrar){
+  const previo = document.activeElement;
+  document.body.appendChild(d);
+  document.body.classList.add('modal-abierto');
+
+  const cerrar = () => {
+    if(!d.isConnected) return;
+    d.remove();
+    if(!document.querySelector('.modal')) document.body.classList.remove('modal-abierto');
+    document.removeEventListener('keydown', porTecla);
+    try{ previo?.focus({preventScroll:true}); }catch{}
+    alCerrar?.();
+  };
+
+  const focusables = () => [...d.querySelectorAll(
+      'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])')]
+    .filter(x => x.offsetParent !== null);
+
+  const porTecla = e => {
+    if(e.key === 'Escape'){ e.preventDefault(); cerrar(); return; }
+    if(e.key !== 'Tab') return;
+    const f = focusables();
+    if(f.length < 2) return;
+    const pri = f[0], ult = f[f.length-1];
+    const caja = d.querySelector('.caja') || d;
+    // Shift+Tab parado en la ventana misma: va al último, no se escapa afuera
+    if(e.shiftKey && document.activeElement === caja){ e.preventDefault(); ult.focus(); }
+    else if(e.shiftKey && document.activeElement === pri){ e.preventDefault(); ult.focus(); }
+    else if(!e.shiftKey && document.activeElement === ult){ e.preventDefault(); pri.focus(); }
+  };
+  document.addEventListener('keydown', porTecla);
+  d.addEventListener('click', e => { if(e.target === d) cerrar(); });
+
+  // El foco va a la ventana, no al primer botón: en la lista del pedido el
+  // primero es la ✕ de borrar, y un Enter sin querer te vaciaba un producto.
+  const caja = d.querySelector('.caja') || d;
+  caja.tabIndex = -1;
+  requestAnimationFrame(() => caja.focus({preventScroll:true}));
+  return cerrar;
+}
+
+function abrirPanel(){
+  if($('panel')) return;
+  const c = CFG;
+  const d = document.createElement('div');
+  d.id = 'panel'; d.className = 'modal';
+  d.innerHTML = `
+    <div class="caja" role="dialog" aria-label="Cotización del dólar">
+      <h3>Cotización del dólar</h3>
+      <label class="op"><input type="radio" name="modo" value="auto" ${c.modo==='auto'?'checked':''}>
+        <span><b>Automática</b><i>Se actualiza sola desde dolarapi.com</i></span></label>
+      <select id="p-tipo" ${c.modo==='auto'?'':'disabled'}>
+        ${['blue','oficial','bolsa','cripto','mayorista','tarjeta','contadoconliqui']
+          .map(t=>`<option value="${t}" ${c.tipo===t?'selected':''}>Dólar ${t}</option>`).join('')}
+      </select>
+      <label class="op"><input type="radio" name="modo" value="manual" ${c.modo==='manual'?'checked':''}>
+        <span><b>La pongo yo</b><i>Un valor fijo que no cambia</i></span></label>
+      <div class="campo"><span>$</span>
+        <input id="p-valor" type="number" min="0" step="1" placeholder="1600"
+               value="${c.valor ?? ''}" ${c.modo==='manual'?'':'disabled'}></div>
+      <div class="campo recargo"><span>Recargo</span>
+        <input id="p-recargo" type="number" min="0" max="200" step="0.5" value="${c.recargo||0}"><span>%</span></div>
+      <div class="campo"><span>y sumar</span>
+        <input id="p-fijo" type="number" min="0" step="1" value="${c.recargoFijo||0}"><span>$ por dólar</span></div>
+      <p class="aviso">Este cambio vale <b>solo en este dispositivo</b>. Para que lo vean tus clientes hay que cambiarlo en el código.</p>
+      <div class="botones">
+        <button id="p-reset" type="button" class="sec">Volver al original</button>
+        <button id="p-ok" type="button" class="pri">Guardar</button>
+      </div>
+    </div>`;
+  const cerrar = montarModal(d);   // esto ya lo agrega a la página
+
+  const sync = () => {
+    const manual = d.querySelector('input[name=modo][value=manual]').checked;
+    $('p-valor').disabled = !manual;
+    $('p-tipo').disabled  = manual;
+  };
+  d.querySelectorAll('input[name=modo]').forEach(r => r.addEventListener('change', sync));
+
+  $('p-ok').onclick = () => {
+    CFG = {
+      modo:    d.querySelector('input[name=modo]:checked').value,
+      valor:   Number($('p-valor').value) || null,
+      tipo:    $('p-tipo').value,
+      recargo: Number($('p-recargo').value) || 0,
+      recargoFijo: Number($('p-fijo').value) || 0
+    };
+    guardarCfg(CFG); cerrar(); actualizar(false);
+  };
+  $('p-reset').onclick = () => { borrarCfg(); CFG = leerCfg(); cerrar(); actualizar(false); };
+}
+
+/* ---------- ¿Hay fotos de verdad en la carpeta? ----------
+   En modo carpeta la web no sabe de antemano qué archivos existen: arma la URL
+   con el ID y listo. Si diéramos por hecho que todas existen, con la carpeta
+   vacía saldrían cientos de recuadros grises. Así que probamos a cargar las
+   primeras: alcanza con que UNA ande para pasar al diseño con imágenes.
+   Por eso conviene cargar las fotos empezando por arriba de la planilla.      */
+
+function probarFotos(prods, cuantas = 40, esperaMax = 4000){
+  const muestra = prods.slice(0, cuantas).filter(p => p.imagen);
+  if(!muestra.length) return Promise.resolve(false);
+
+  return new Promise(resolve => {
+    let pendientes = muestra.length, resuelto = false;
+    const fin = ok => {
+      if(resuelto) return;
+      if(ok){ resuelto = true; resolve(true); return; }
+      if(--pendientes === 0){ resuelto = true; resolve(false); }
+    };
+    // Si la red se cuelga, no dejamos la página esperando para siempre
+    setTimeout(() => { if(!resuelto){ resuelto = true; resolve(false); } }, esperaMax);
+    muestra.forEach(p => {
+      const im = new Image();
+      im.onload  = () => fin(true);
+      im.onerror = () => fin(false);
+      im.src = p.imagen;
+    });
+  });
+}
+
+/* ---------- Carga de datos ---------- */
+
+async function bajarCSV(){
+  let ultimoError;
+  for(const url of FUENTES){
+    try{
+      // El &_= evita que el navegador devuelva una copia vieja en caché
+      const res = await fetch(url + '&_=' + Date.now());
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const txt = await res.text();
+      // Si Google devolvió HTML en vez de CSV, la planilla no es pública
+      if(/^\s*</.test(txt)) throw new Error('la planilla no es pública');
+      return txt;
+    }catch(e){ ultimoError = e; }
+  }
+  throw ultimoError;
+}
+
+async function cargar(){
+  const filas = parseCSV(await bajarCSV()).filter(f => f.some(c => c.trim()));
+  if(filas.length < 2) throw new Error('la planilla vino vacía');
+
+  // Ubico cada columna por su nombre, así no se rompe si reordenás la planilla
+  const cab = filas[0].map(norm);
+  const col = (...nombres) => {
+    for(const n of nombres){
+      const i = cab.findIndex(h => h === norm(n) || h.startsWith(norm(n)));
+      if(i !== -1) return i;
+    }
+    return -1;
+  };
+  const C = {
+    id:col('id'), cat:col('categoria'), marca:col('marca'), modelo:col('modelo'),
+    desc:col('descripcion completa','descripcion'),
+    precio:col('precio usd','precio'), costo:col('costo usd','costo'),
+    color:col('color'), stock:col('stock'), busq:col('terminos de busqueda'),
+    fecha:col('ultima actualizacion'), activo:col('activo'), incluye:col('incluye'),
+    imagen:col('imagen','foto','image','url imagen'),
+    // Columnas opcionales: si algún día las agregás a la planilla, aparecen
+    // solas en la ficha del producto. Si no están, no pasa nada.
+    detalle:col('detalle','especificaciones','specs','ficha'),
+    garantia:col('garantia'),
+    condicion:col('condicion','estado'),
+    // Si dos filas llevan el mismo texto acá, van juntas en la misma tarjeta.
+    // Es la forma de corregir a mano lo que el agrupado automático no acierte.
+    grupo:col('grupo','familia')
+  };
+
+  const esCosto = C.precio === -1 && C.costo !== -1;
+  const iPrecio = C.precio !== -1 ? C.precio : C.costo;
+  const val = (f,i) => i === -1 ? '' : limpio(f[i]);
+  const num = s => parseFloat(String(s).replace(/[^\d.,-]/g,'').replace(',','.')) || 0;
+
+  return filas.slice(1)
+    // Fuera las filas separadoras decorativas ("━━━ CELULAR · IPHONE 📱 ━━━"):
+    // se reconocen porque solo tienen contenido en la primera celda
+    .filter(f => f.slice(1).some(c => c.trim()))
+    .map((f,i) => {
+      const base = num(val(f, iPrecio));
+      const id = val(f,C.id);
+      return {
+        idx:i, id,
+        cat:    categoriaReal(val(f,C.cat), val(f,C.marca), val(f,C.desc)),
+        grupo:  val(f,C.grupo),
+        marca:  val(f,C.marca),
+        modelo: val(f,C.modelo),
+        desc:   val(f,C.desc) || val(f,C.modelo),
+        precio: !esCosto ? base
+              : (MARGEN_PCT === null || MARGEN_PCT === undefined) ? null
+              : Math.round(base * (1 + MARGEN_PCT/100)),
+        color:  val(f,C.color),
+        stock:  esSi(val(f,C.stock)),
+        busq:   val(f,C.busq),
+        fecha:  val(f,C.fecha),
+        incluye:val(f,C.incluye),
+        detalle:  val(f,C.detalle),
+        garantia: val(f,C.garantia),
+        condicion:val(f,C.condicion),
+        // Primero la columna Imagen; si está vacía, se prueba con la carpeta
+        // usando el ID. Si el archivo no existe, el onerror muestra el placeholder.
+        imagen: urlFoto(val(f,C.imagen)) ||
+                (CARPETA_FOTOS && id ? urlFoto(CARPETA_FOTOS + encodeURIComponent(id) + EXT_FOTOS) : ''),
+        activo: C.activo === -1 || val(f,C.activo) === '' || esSi(val(f,C.activo))
+      };
+    })
+    .filter(p => p.activo && p.desc)
+    // Se deducen una vez al cargar, no en cada tecla del buscador: son dos
+    // expresiones regulares por producto sobre una lista de 472.
+    .map(p => { p.montura = monturaDe(p); p.apertura = aperturaDe(p); return p; });
+  // Si la planilla tuviera "Proveedor" o "Costo USD", esos campos nunca se copian
+  // acá. Lo que no existe en este objeto no puede filtrarse a la web.
+}
+
+/* ---------- Filtrado ---------- */
+
+function filtrar(){
+  const palabras = norm(filtros.q) ? norm(filtros.q).split(/\s+/) : [];
+
+  const out = MODELOS.filter(p => {
+    if(filtros.cat   && p.cat   !== filtros.cat)   return false;
+    if(filtros.marca && p.marca !== filtros.marca) return false;
+    // Con que UNA variante tenga stock, el modelo se muestra
+    if(filtros.soloStock && !p.stock)              return false;
+    if(filtros.montura  && p.montura  !== filtros.montura)  return false;
+    if(filtros.apertura && p.apertura !== filtros.apertura) return false;
+    if(filtros.rango){
+      const r = RANGOS.find(x => x[0] === filtros.rango);
+      // El modelo entra si CUALQUIERA de sus variantes cae en el tramo: un iPad
+      // de 510 a 760 tiene que aparecer tanto en "hasta 200-500" como arriba.
+      // Los "Consultar" no tienen precio, así que no caen en ningún tramo.
+      if(r && !p.variantes.some(v => v.precio !== null && v.precio >= r[2] && v.precio < r[3]))
+        return false;
+    }
+    if(!palabras.length) return true;
+    const heno = norm([p.desc,p.marca,p.modelo,p.cat,p.busq,p.color,p.id].join(' '));
+    return palabras.every(w => heno.includes(w));
+  });
+
+  const porNombre = (a,b) => a.desc.localeCompare(b.desc,'es');
+  // Los precios en null ("Consultar") van al final. El x===y evita
+  // Infinity - Infinity, que da NaN y rompe el sort.
+  const pr = p => p.precio === null ? Infinity : p.precio;
+  const porPrecio = (a,b) => { const x=pr(a), y=pr(b); return x===y ? 0 : x-y; };
+  const orden = {
+    // Por defecto respetamos el orden de la planilla: ya está curada
+    sheet:(a,b) => a.idx - b.idx,
+    asc:  (a,b) => porPrecio(a,b) || porNombre(a,b),
+    desc: (a,b) => porPrecio(b,a) || porNombre(a,b),
+    az:   porNombre,
+    cat:  (a,b) => a.cat.localeCompare(b.cat,'es') || porPrecio(a,b) || porNombre(a,b)
+  }[filtros.orden];
+
+  return out.sort((a,b) => (b.stock - a.stock) || orden(a,b));
+}
+
+/* ---------- Datos derivados de cada producto ---------- */
+
+/* La planilla mete cosas distintas en la misma categoría: en "Tablet" conviven
+   los iPad con las Samsung, y "Notebook" y "Smartwatch" hoy son 100% Apple.
+   En vez de renombrar la categoría de una (que quedaría mintiendo el día que
+   entre una notebook Asus), se parte por marca: lo de Apple va a su categoría
+   propia y el resto se queda en la genérica. Si mañana la planilla trae una
+   tablet Lenovo, cae sola en "Tablet" sin tocar nada acá. */
+const CATS_APPLE = { tablet:'iPad', notebook:'MacBook', smartwatch:'Apple Watch' };
+
+function categoriaReal(cat, marca, desc){
+  const propia = CATS_APPLE[norm(cat)];
+  if(!propia) return cat;
+  // El iPad se reconoce por el nombre aunque la marca venga vacía o mal escrita
+  const esApple = norm(marca) === 'apple' || /\bipad|macbook|apple watch\b/i.test(desc || '');
+  return esApple ? propia : cat;
+}
+
+/* Los chips de la barra van en plural, pero SOLO ahí: el dato sigue en singular
+   porque es lo que corresponde en la ficha de un producto ("Categoría: Celular")
+   y porque es lo que viaja en el link (?cat=Celular). Las que no están en la
+   lista se pluralizan con la regla de siempre. */
+const CATS_PLURAL = {
+  'Celular':'Celulares', 'Cámara':'Cámaras', 'Cámara de Acción':'Cámaras de Acción',
+  'Lente':'Lentes', 'Tablet':'Tablets', 'iPad':'iPads', 'MacBook':'MacBooks',
+  'Consola':'Consolas', 'Filmadora':'Filmadoras', 'Drone':'Drones', 'Desktop':'Desktops',
+  'Accesorio Apple':'Accesorios Apple', 'Accesorio Cámara':'Accesorios Cámara',
+  'Accesorio Drone':'Accesorios Drone', 'Accesorio Gaming':'Accesorios Gaming',
+  // Estas ya funcionan como plural: "Apple Watchs" y "Auducularess" no existen
+  'Apple Watch':'Apple Watch', 'Auriculares':'Auriculares'
+};
+
+function plural(cat){
+  if(CATS_PLURAL[cat]) return CATS_PLURAL[cat];
+  if(!cat) return cat;
+  return /[aeiouáéíóú]$/i.test(cat) ? cat + 's' : cat + 'es';
+}
+
+/* La montura es LA pregunta del que compra un lente: "¿me entra en mi cámara?".
+   No hay columna para eso, pero el nombre la trae casi siempre, en dos formatos
+   según quién fabrique:
+     · Canon, Sony y Nikon la ponen de prefijo   → "RF 50 F1,8", "FE 85 F/1.4"
+     · Sigma y Tamron, de sufijo                 → "18-50 F/2.8 CONTEMPORARY CANON RF"
+   Se prueba primero el sufijo porque es más específico: un Sigma "… CANON RF"
+   empieza con el foco (18-50), no con la montura, y el prefijo no lo agarraría.
+   Cubre 182 de los 195 lentes. Los que quedan afuera dicen solo "CANON", sin
+   aclarar si es RF o EF: eso se arregla en la planilla, no acá. */
+const MONTURAS_SUFIJO = [
+  [/CANON\s+RF-?S/, 'Canon RF-S'], [/CANON\s+RF/,       'Canon RF'],
+  [/CANON\s+EF-?M/, 'Canon EF-M'], [/CANON\s+EF-?S/,    'Canon EF-S'],
+  [/CANON\s+(?:EF|AF)\b/, 'Canon EF'],
+  [/SONY\s+FE/,     'Sony E'],     [/SONY\s+E\b/,       'Sony E'],  [/\bSONY\b/,  'Sony E'],
+  [/NIKON\s+Z/,     'Nikon Z'],    [/\bNIKON\b/,        'Nikon F'],
+  [/\bFUJI/,        'Fujifilm X'], [/\bL-?MOUNT\b/,     'L-Mount'],
+];
+const MONTURAS_PREFIJO = [
+  [/^RF-?S\b/, 'Canon RF-S'], [/^RF\b/,        'Canon RF'],
+  [/^EF-?M\b/, 'Canon EF-M'], [/^EF[\s-]?S\b/, 'Canon EF-S'], [/^EF\b/, 'Canon EF'],
+  [/^FE\b/,    'Sony E'],     [/^E\b/,         'Sony E'],
+  [/^Z\b/,     'Nikon Z'],    [/^AF-?S?\b/,    'Nikon F'],
+];
+
+const esLente = p => norm(p.cat) === 'lente';
+
+function monturaDe(p){
+  if(!esLente(p)) return '';
+  // Los puntos y comas de "F/2,8" romperían los \b de las expresiones
+  const t = (p.modelo || p.desc || '').toUpperCase().replace(/[.,]/g,' ').trim();
+  for(const [re,m] of MONTURAS_SUFIJO)  if(re.test(t)) return m;
+  for(const [re,m] of MONTURAS_PREFIJO) if(re.test(t)) return m;
+  return '';
+}
+
+/* El eje "profesional vs básico" de la fotografía no es una opinión: es la
+   apertura. De f/2.8 para abajo es vidrio luminoso, el que se usa para trabajar;
+   de ahí para arriba es el de kit. Está en el nombre de 192 de los 195 lentes. */
+function aperturaDe(p){
+  if(!esLente(p)) return '';
+  const m = /F\s*\/?\s*(\d+(?:[.,]\d+)?)/i.exec(p.modelo || p.desc || '');
+  if(!m) return '';
+  return parseFloat(m[1].replace(',','.')) <= 2.8 ? 'luminoso' : 'cerrado';
+}
+
+// Cómo lo identificamos en el pedido y en el link compartido. Casi todos
+// tienen ID; si alguna fila viniera sin él, usamos su posición en la planilla.
+const clave = p => p.id || ('#' + p.idx);
+const buscarProducto = k => PRODUCTOS.find(p => clave(p) === k);
+
+const precioUSD = p => p.precio === null ? 'Consultar' : 'USD ' + plata(p.precio);
+const precioARS = p => (TC && p.precio) ? '$ ' + plata(Math.round(p.precio * TC)) : '';
+
+// El mensaje sale igual desde la tarjeta, la ficha y el pedido
+// El mensaje que el cliente manda al tocar Consultar. Sin código interno y sin
+// precio: tiene que sonar a una persona escribiendo, no a un formulario. Termina
+// en pregunta, que es lo que invita a contestar.
+function mensajeWA(p, color){
+  return `Hola! Me interesa el ${p.desc}${color ? ` en ${color}` : ''}. ¿Me pasás info?`;
+}
+const linkWA = texto => WHATSAPP ? `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}` : '';
+
+/* Especificaciones deducidas del nombre del producto.
+   La planilla no tiene columnas de specs, pero la descripción sí las trae
+   escritas ("SAMSUNG A56 12/256GB 5G"). En vez de pedirte que cargues 483
+   fichas a mano, las leemos de ahí. Si algún día agregás una columna
+   "Detalle" a la planilla, esa manda y se muestra completa en la ficha. */
+function specs(p){
+  const txt = [p.desc, p.modelo].filter(Boolean).join(' ');
+  const out = [];
+  const add = v => { if(v && !out.includes(v)) out.push(v); };
+
+  // "12/256GB" = memoria RAM / almacenamiento, como lo escriben los fabricantes
+  const dual = /(\d{1,2})\s*\/\s*(\d{3,4})\s*GB\b/i.exec(txt);
+  if(dual){ add(dual[1] + 'GB RAM'); add(dual[2] + 'GB'); }
+  else{
+    const tb = /(\d(?:[.,]\d)?)\s*TB\b/i.exec(txt);
+    const gb = /(?:^|[\s(/])(\d{2,4})\s*GB\b/i.exec(txt);
+    if(tb)      add(tb[1].replace(',','.') + 'TB');
+    else if(gb) add(gb[1] + 'GB');
+  }
+  const chip = /\b(M\d(?:\s+(?:PRO|MAX|ULTRA))?)\b/i.exec(txt);      // chips Apple
+  if(chip) add('Chip ' + chip[1].toUpperCase());
+  const pulg = /(\d{1,2}(?:[.,]\d)?)\s*(?:"|''|pulgadas)/i.exec(txt);
+  if(pulg) add(pulg[1].replace(',','.') + '"');
+  if(/\be-?sim\b/i.test(txt)) add('eSIM');
+  if(/\b5G\b/i.test(txt))     add('5G');
+  const mp = /\b(\d{1,3})\s*MP\b/i.exec(txt);
+  if(mp) add(mp[1] + ' MP');
+  const w = /\b(\d{2,3})\s*W\b/.exec(txt);
+  if(w) add(w[1] + 'W');
+  return out;
+}
+
+// La <img> con su reemplazo por si el archivo no existe. Si el link está roto
+// se cambia SOLO la <img>: usar parentNode.innerHTML borraría también el badge
+// de stock, que es su hermano.
+function htmlFoto(p, clase){
+  const sinFoto = `<div class="sinfoto"><b>${esc(p.marca || 'Sin foto')}</b><i>sin imagen</i></div>`;
+  if(!p.imagen) return sinFoto;
+  return `<img src="${esc(p.imagen)}" alt="${esc(p.desc)}" ${clase || ''} decoding="async"
+               onload="this.classList.add('ok')"
+               onerror="this.outerHTML=this.dataset.alt" data-alt="${esc(sinFoto)}">`;
+}
+// En la grilla el badge solo aparece cuando FALTA stock: con 472 productos
+// disponibles, "En stock" repetido 472 veces no distingue nada. En la ficha
+// sí se muestra siempre, porque ahí el cliente está decidiendo la compra.
+const htmlBadge = (p, siempre = false) =>
+  (!p.stock || siempre)
+    ? `<span class="badge ${p.stock?'si':'no'}">${p.stock?'En stock':'Sin stock'}</span>`
+    : '';
+
+/* ---------- Muestras de color ----------
+   Muchos productos vienen en varios colores en una sola fila
+   ("Midnight/Blue/Orange"), y la foto solo puede mostrar uno. Los puntitos
+   dejan ver de un vistazo en qué colores viene, sin necesitar una foto por
+   cada uno. Los colores que no están en esta lista salen solo como texto:
+   preferimos no mostrar nada antes que inventar un color equivocado. */
+const COLORES = {
+  black:'#1D1D1F', bla:'#1D1D1F', 'jet black':'#0B0B0D', 'space black':'#2B2A2E',
+  white:'#F5F5F7', whi:'#F5F5F7', cream:'#F3E9D8', pearl:'#EFE9E4',
+  silver:'#D8DADC', whitesilver:'#E6E8EA', titanium:'#C6C2BC',
+  'natural titanium':'#C7C0B6', 'white titanium':'#E8E6E1', 'desert titanium':'#C4A88A',
+  natural:'#CFC7BA', gray:'#8E8E93', grey:'#8E8E93', 'space gray':'#6E6E73',
+  graphite:'#5B5B5F', charcoal:'#3E3E42', graygreen:'#7E8A7C',
+  blue:'#2C6BED', blu:'#2C6BED', 'light blue':'#8FC7F0', lightblue:'#8FC7F0',
+  'sky blue':'#9DC3DE', skyblue:'#9DC3DE', silverblue:'#B6C6D4',
+  'dark blue':'#1B3A6B', navy:'#22304C', 'anchor blue':'#38506B',
+  ultramarine:'#3E4CD8', indigo:'#4B4B8F', 'rhythm blue':'#3F5C99',
+  teal:'#4C9E9E', green:'#37A05A', gre:'#37A05A', 'dark green':'#1F5B37',
+  'remix green':'#5FBF7A', sage:'#B2BFA5', olive:'#7A7F46',
+  'laurel oak':'#6E7A5A', citrus:'#E8C55A', gold:'#E3C08D', 'light gold':'#EBD9B8',
+  'rose gold':'#E0BFB4', orange:'#F07A24', pink:'#F2A9C0', pin:'#F2A9C0',
+  'cherry pink':'#D94A6E', purple:'#8A4FD0', pur:'#8A4FD0', violet:'#8E6FE0',
+  lavender:'#C3B2E8', 'techno red':'#C6303A', red:'#D8352E', brown:'#6B4A34',
+  midnight:'#1E2434', astrobot:'#5A6B8C'
+};
+
+// "Midnight/Blue/Orange" → tres puntitos. Si el nombre no está en la lista,
+// probamos con la última palabra ("cherry pink" → "pink").
+function pintas(txt){
+  return (txt||'').split('/').map(s => s.trim()).filter(Boolean).map(n => {
+    const k = norm(n);
+    const hex = COLORES[k] || COLORES[k.split(/\s+/).pop()] || null;
+    return { nombre:n, hex };
+  });
+}
+function htmlColores(txt){
+  const lista = pintas(txt).filter(c => c.hex);
+  if(!lista.length) return '';
+  return `<span class="pintas">${lista.map(c =>
+    `<i style="background:${c.hex}" title="${esc(c.nombre)}"></i>`).join('')}</span>`;
+}
+
+/* En la ficha los puntitos dejan de ser decoración y pasan a ser botones: el
+   cliente elige el color, queda marcado, viaja al pedido y al mensaje de
+   WhatsApp. Acá se muestran TODOS los colores de la fila, también los que no
+   están en la lista de hex (esos van rayados): que no sepamos pintarlos no es
+   motivo para que no se puedan elegir. */
+function htmlColorFicha(p){
+  const lista = pintas(p.color);
+  // Con un solo color no hay nada que elegir: queda como estaba
+  if(lista.length < 2) return htmlColores(p.color) + esc(p.color);
+
+  const eleg = colorDe(clave(p));
+  const puntos = lista.map(c =>
+    `<button type="button" data-color="${esc(c.nombre)}"${c.hex ? ` style="background:${c.hex}"` : ' class="sinhex"'}
+             aria-pressed="${eleg === c.nombre}" title="${esc(c.nombre)}"
+             aria-label="Elegir ${esc(c.nombre)}"></button>`).join('');
+
+  return `<div class="fi-pintas">${puntos}</div>
+    <span class="fi-color-elegido" id="fi-color-txt">${eleg ? `<b>${esc(eleg)}</b>` : esc(p.color)}</span>
+    <span class="fi-hint" id="fi-color-hint"${eleg ? ' hidden' : ''}>Tocá un color para elegirlo</span>`;
+}
+
+/* Foto por color. La planilla trae una sola foto por producto, así que la del
+   color se busca por convención de nombre: fotos/<ID>-<color>.jpg — por
+   ejemplo CEL-APP-066-black.jpg o CEL-APP-066-space-gray.jpg. Se pide recién
+   cuando el cliente toca el puntito (si no, serían cinco pedidos fallidos cada
+   vez que se abre una ficha) y la foto se cambia solo si el archivo existe:
+   sin foto de ese color queda la principal y no se ve nada roto. */
+const slugColor = s => norm(s).replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+
+function fotoDeColor(p, color){
+  const s = slugColor(color || '');
+  if(!CARPETA_FOTOS || !p.id || !s) return '';
+  return urlFoto(CARPETA_FOTOS + encodeURIComponent(p.id + '-' + s) + EXT_FOTOS);
+}
+
+function mostrarFotoColor(p, color, d){
+  const img = d.querySelector('.fi-foto img');
+  if(!img) return;                                    // ficha sin foto: nada que cambiar
+  const volver = () => { if(p.imagen && img.getAttribute('src') !== p.imagen) img.src = p.imagen; };
+  const url = fotoDeColor(p, color);
+  if(!url) return volver();
+  const prueba = new Image();
+  prueba.onload  = () => { img.src = url; img.classList.add('ok'); };
+  prueba.onerror = volver;
+  prueba.src = url;
+}
+
+// El mismo control de unidades sirve en la ficha y en la lista del pedido
+function htmlStepper(n){
+  return `<div class="stepper">
+    <button type="button" data-d="-1" aria-label="Quitar una unidad">&minus;</button>
+    <span class="n" aria-live="polite">${n}</span>
+    <button type="button" data-d="1" aria-label="Agregar una unidad"${n >= MAX_CANT ? ' disabled' : ''}>+</button>
+  </div>`;
+}
+
+// Los dos íconos del botón de pedido viajan juntos; el CSS muestra el que va
+// según aria-pressed. Así el cambio es instantáneo, sin volver a dibujar nada.
+const ICONO_WA = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.24-1.47-1.38-1.72-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.42.09-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.16 0-.43.06-.65.31-.22.25-.85.84-.85 2.03 0 1.2.87 2.35.99 2.51.12.17 1.71 2.62 4.15 3.67.58.25 1.03.4 1.39.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29Z"/></svg>`;
+
+const ICONO_MAS = `
+  <svg class="i-mas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+  <svg class="i-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>`;
+
+/* ---------- Agrupar las variantes de un mismo modelo ----------
+   La planilla trae una fila por combinación: el iPad 11 A16 ocupa tres (128,
+   256 y 512gb) y el Apple Watch Series 11 siete. Como tarjetas sueltas el
+   cliente ve el mismo producto repetido, y encima a veces separado en la
+   grilla. Acá las juntamos: una tarjeta por modelo, y adentro de la ficha se
+   elige la variante, que es la que tiene el precio y el ID de verdad.
+
+   Ojo con el alcance de las reglas: la capacidad y la RAM se sacan en todas
+   las categorías, pero la medida en mm y las correas SOLO en los relojes. En
+   un lente "100-400mm" es el foco, no una variante, y agrupar por ahí juntaría
+   lentes que no tienen nada que ver. */
+
+const RE_CAP   = /\b\d+(?:[.,]\d+)?\s*(?:gb|tb)\b/gi;   // 128gb, 1tb
+const RE_RAM   = /\b\d+\s*ram\b/gi;                     // 16ram
+const RE_DUAL  = /\b\d{1,2}\s*\/\s*\d{3,4}\s*gb\b/gi;   // 12/256GB
+const RE_PAREN = /\([^)]*\)/g;                          // (Space Gray/Silver)
+const RE_CORCH = /\[[^\]]*\]/g;                         // [5G]
+// Solo relojes:
+const RE_MM     = /\b\d{2}\s*mm\b/gi;
+const RE_TALLE  = /\b[SML](?:\/[SML])?(?:-[SML](?:\/[SML])?)?\b/g;
+const RE_CORREA = /\b(?:sport band|ocean band|alpine loop|milanese loop|trail loop|sport loop)\b/gi;
+const RE_COLOR  = /\b(?:midnight|starlight|silver|space gray|rose gold|jet black|natural|anchor blue|dark green|black|gold|white|blue)\b/gi;
+
+const esReloj = p => ['apple watch','smartwatch'].includes(norm(p.cat));
+
+// Dos filas con la misma familia son el mismo modelo. La columna Grupo de la
+// planilla, si está, manda sobre todo esto.
+function familia(p){
+  if(p.grupo) return 'G:' + norm(p.grupo);
+  let t = (p.desc || '').replace(RE_PAREN,' ').replace(RE_CORCH,' ')
+                        .replace(RE_DUAL,' ').replace(RE_CAP,' ').replace(RE_RAM,' ');
+  if(esReloj(p))
+    t = t.replace(RE_MM,' ').replace(RE_CORREA,' ').replace(RE_TALLE,' ').replace(RE_COLOR,' ');
+  return [norm(p.cat), norm(p.marca), norm(t).replace(/[\s\-–/]+/g,' ').trim()].join('|');
+}
+
+// El nombre de la tarjeta es lo que todas las variantes tienen en común:
+// "Apple iPad 11 A16 128gb" + "… 256gb" + "… 512gb" → "Apple iPad 11 A16".
+function nombreGrupo(vs){
+  if(vs.length === 1) return vs[0].desc;
+  const pal = vs.map(v => (v.desc || '').split(/\s+/));
+  const out = [];
+  for(let i = 0, min = Math.min(...pal.map(w => w.length)); i < min; i++){
+    if(!pal.every(w => norm(w[i]) === norm(pal[0][i]))) break;
+    out.push(pal[0][i]);
+  }
+  const n = out.join(' ').replace(/[\s\-–(]+$/,'');
+  // Un prefijo de una sola palabra no nombra nada ("Apple"): antes de mostrar
+  // eso, preferimos el nombre completo de la primera variante.
+  return n.split(/\s+/).filter(Boolean).length >= 2 ? n : vs[0].desc;
+}
+
+// Lo que distingue a esta variante de sus hermanas: "512gb", "16ram 1tb",
+// "42mm Silver S/M". El paréntesis de color no entra, porque el color se elige
+// aparte con los puntitos.
+function etiquetaVariante(p, nombre){
+  let e = p.desc || '';
+  if(norm(e).startsWith(norm(nombre))) e = e.slice(nombre.length);
+  e = e.replace(RE_PAREN,' ').replace(/[\s\-–]+/g,' ').trim();
+  return e || p.color || 'Estándar';
+}
+
+function armarModelo(vs){
+  const conPrecio = vs.filter(v => v.precio !== null);
+  const precioMin = conPrecio.length ? Math.min(...conPrecio.map(v => v.precio)) : null;
+  // El representante da la foto y los datos de la tarjeta. Elegimos el más
+  // barato CON stock: es el que corresponde al "desde" que se muestra.
+  const rep = vs.find(v => v.stock && v.precio === precioMin)
+           || vs.find(v => v.precio === precioMin) || vs[0];
+  const nombre = nombreGrupo(vs);
+  vs.forEach(v => { v.etiqueta = etiquetaVariante(v, nombre); });
+
+  // Dos variantes con la misma etiqueta serían dos botones idénticos con
+  // precios distintos, y el cliente no tendría cómo saber cuál es cuál. Pasa
+  // de verdad: el iPhone 17 Pro tiene dos filas de 256GB, una Blue/Orange a
+  // USD 1.190 y otra Silver a USD 1.195. Se separan con el color.
+  const cuenta = {};
+  vs.forEach(v => { cuenta[v.etiqueta] = (cuenta[v.etiqueta] || 0) + 1; });
+  vs.forEach(v => {
+    if(cuenta[v.etiqueta] > 1 && v.color) v.etiqueta = `${v.etiqueta} · ${v.color}`;
+  });
+
+  const colores = [...new Set(
+    vs.flatMap(v => (v.color || '').split('/').map(s => s.trim()).filter(Boolean)))];
+
+  return {
+    ...rep,                                    // hereda foto, incluye, detalle, categoría…
+    idx:   Math.min(...vs.map(v => v.idx)),    // el grupo va donde estaba el primero
+    desc:  nombre,
+    precio: precioMin,                         // el "desde"
+    precioMax: conPrecio.length ? Math.max(...conPrecio.map(v => v.precio)) : null,
+    stock: vs.some(v => v.stock),              // con que una esté disponible, alcanza
+    color: colores.join('/'),
+    variantes: vs,
+    rep,
+    multi: vs.length > 1,
+    // Que el buscador encuentre por la capacidad, el color o el ID de CUALQUIER
+    // variante, aunque la tarjeta muestre otra.
+    busq: [...new Set(vs.flatMap(v => [v.busq, v.desc, v.id, v.color]))].filter(Boolean).join(' ')
+  };
+}
+
+function agrupar(prods){
+  const mapa = new Map();
+  prods.forEach(p => {
+    const f = familia(p);
+    if(!mapa.has(f)) mapa.set(f, []);
+    mapa.get(f).push(p);
+  });
+  return [...mapa.values()].map(armarModelo).sort((a,b) => a.idx - b.idx);
+}
+
+// El modelo que contiene esta variante. Sirve para abrir la ficha desde un link
+// viejo o desde el pedido, que guardan el ID de la variante.
+const buscarModelo = k => MODELOS.find(m => m.variantes.some(v => clave(v) === k));
+
+// El + de la tarjeta se marca si el cliente cargó CUALQUIERA de las variantes,
+// no solo la que la tarjeta muestra de frente.
+const enPedidoModelo = m =>
+  (m.variantes || [m]).some(v => enPedido(clave(v)));
+
+// Cuando las variantes no valen lo mismo, el precio de la tarjeta es un "desde"
+const precioTarjeta = m => {
+  if(!m.multi || m.precio === null || m.precio === m.precioMax) return precioUSD(m);
+  return `<i class="desde">desde</i> ${precioUSD(m)}`;
+};
+
+// Las opciones, resumidas en un renglón: "128gb · 256gb · 512gb". Si las
+// etiquetas son largas (los relojes son "42mm Silver S/M") no entran, y decir
+// cuántas hay informa más que cortarlas por la mitad.
+function htmlOpciones(m){
+  if(!m.multi) return '';
+  const et = m.variantes.map(v => v.etiqueta);
+  return (et.length <= 4 && et.every(e => e.length <= 12))
+    ? et.map(esc).join(' · ')
+    : `${et.length} opciones`;
+}
+
+/* ---------- Render ---------- */
+
+function tarjeta(p){
+  const el = document.createElement('article');
+  el.className = 'card' + (p.stock ? '' : ' agotado') + (CON_FOTOS ? '' : ' compacta');
+  el.dataset.key = clave(p);
+  el.tabIndex = 0;
+
+  // El ID (CEL-APP-005) no se muestra: al cliente no le dice nada. Igual viaja
+  // en el mensaje de WhatsApp y se puede buscar por él.
+  const sub   = p.color;
+  const link  = linkWA(mensajeWA(p));
+  const badge = htmlBadge(p);
+  const ars   = precioARS(p);
+  // En la tarjeta van pocas: las que entran en un renglón sin apretar el diseño
+  const chips = specs(p).slice(0,4);
+  const opts  = htmlOpciones(p);
+
+  el.innerHTML = `
+    ${CON_FOTOS ? `<div class="foto">${badge}${htmlFoto(p,'loading="lazy"')}</div>` : ''}
+    <div class="cuerpo">
+      <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}</span>
+      <h2 class="nombre">${esc(p.desc)}</h2>
+      ${sub ? `<p class="meta">${htmlColores(sub)}<span>${esc(sub)}</span></p>` : ''}
+      ${chips.length ? `<div class="specs">${chips.map(s=>`<span>${esc(s)}</span>`).join('')}</div>` : ''}
+      ${opts ? `<p class="opciones">${opts}</p>` : ''}
+      ${p.incluye ? `<div class="incluye">${esc(p.incluye)}</div>` : ''}
+      <div class="pie">
+        <div>
+          <span class="usd">${precioTarjeta(p)}</span>
+          ${ars ? `<div class="ars">${ars}</div>` : ''}
+        </div>
+        <div class="acciones">
+          ${link ? `<a class="wa" href="${link}" target="_blank" rel="noopener">${ICONO_WA}Consultar</a>` : ''}
+          <button class="mas" type="button" aria-pressed="${enPedidoModelo(p)}"
+                  aria-label="Agregar al pedido" title="Agregar al pedido">${ICONO_MAS}</button>
+        </div>
+      </div>
+    </div>`;
+  return el;
+}
+
+/* Se dibuja de a tandas. Con 483 productos, armar las 483 tarjetas en cada
+   tecla del buscador hace que escribir se sienta trabado en el celular. En
+   pantalla entran doce: dibujamos las primeras y el resto entra al bajar. */
+const TANDA = 60;
+let LISTA = [], dibujadas = 0;
+
+const finGrilla = document.createElement('div');
+finGrilla.className = 'centinela';
+
+const obsTanda = ('IntersectionObserver' in window)
+  ? new IntersectionObserver(es => { if(es.some(e => e.isIntersecting)) dibujarTanda(); },
+                             { rootMargin: '900px 0px' })
+  : null;
+
+function dibujarTanda(){
+  if(dibujadas >= LISTA.length) return;
+  const lote = LISTA.slice(dibujadas, dibujadas + TANDA);
+  dibujadas += lote.length;
+
+  const frag = document.createDocumentFragment();
+  const nuevas = lote.map(p => { const el = tarjeta(p); frag.appendChild(el); return el; });
+  grid.insertBefore(frag, finGrilla);
+  revelar(nuevas);
+
+  if(dibujadas >= LISTA.length){
+    obsTanda?.unobserve(finGrilla);
+    finGrilla.remove();
+    return;
+  }
+  // Si la tanda entró entera en pantalla, el observador no se vuelve a
+  // disparar solo: hay que pedirle la siguiente a mano.
+  requestAnimationFrame(() => {
+    if(finGrilla.isConnected && finGrilla.getBoundingClientRect().top < innerHeight + 900)
+      dibujarTanda();
+  });
+}
+
+function pintar(){
+  LISTA = filtrar();
+  dibujadas = 0;
+  // Con CARPETA_FOTOS todos tienen una URL "supuesta", exista o no el archivo,
+  // así que contar p.imagen mentiría. En ese modo solo mostramos la cantidad.
+  const n = `${LISTA.length} producto${LISTA.length!==1?'s':''}`;
+  $('count').textContent = !LISTA.length ? ''
+    : CARPETA_FOTOS ? n
+    : `${n} · ${LISTA.filter(p => p.imagen).length} con foto`;
+
+  if(!LISTA.length){
+    grid.replaceChildren();
+    grid.innerHTML = `<div class="msg" style="grid-column:1/-1">
+      <h2>No encontramos nada</h2>
+      <p>Probá con menos palabras, o buscá por marca (Apple, Canon, Samsung…).</p>
+    </div>`;
+    return;
+  }
+  grid.replaceChildren(finGrilla);
+  obsTanda?.observe(finGrilla);
+  dibujarTanda();
+}
+
+/* ---------- Aparición progresiva ---------- */
+
+const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Una tarjeta se muestra recién cuando está por entrar en pantalla.
+const observador = (!quieto && 'IntersectionObserver' in window)
+  ? new IntersectionObserver((entradas, obs) => {
+      entradas.forEach(e => {
+        if(!e.isIntersecting) return;
+        e.target.classList.add('vis');
+        obs.unobserve(e.target);
+      });
+    }, { rootMargin: '120px 0px' })
+  : null;
+
+function revelar(tarjetas){
+  if(!observador){ tarjetas.forEach(el => el.classList.add('vis')); return; }
+  tarjetas.forEach((el, i) => {
+    // Escalonado solo en las primeras: más allá no se ve y solo suma demora
+    if(i < 10) el.style.transitionDelay = (i * 45) + 'ms';
+    observador.observe(el);
+  });
+  // Una imagen que ya estaba en caché puede no disparar onload
+  requestAnimationFrame(() => {
+    grid.querySelectorAll('.foto img').forEach(im => { if(im.complete) im.classList.add('ok'); });
+  });
+
+  // Seguro: las tarjetas arrancan invisibles, así que si el observador fallara
+  // el catálogo entero quedaría en blanco. Al segundo, se muestran igual.
+  clearTimeout(revelar.red);
+  revelar.red = setTimeout(() => {
+    if(!grid.querySelector('.card.vis'))
+      grid.querySelectorAll('.card').forEach(el => el.classList.add('vis'));
+  }, 1000);
+}
+
+/* Los filtros se rearman en cada refresco, no solo al abrir la página: si
+   agregás una categoría o una marca nueva en la planilla, aparece sola a los
+   pocos minutos. Como redibujarlos perdería el scroll de la cinta y el foco,
+   solo se rehacen cuando la lista realmente cambió. */
+let FIRMA_FILTROS = '';
+
+function armarFiltros(){
+  const unicos = campo => [...new Set(PRODUCTOS.map(p => p[campo]).filter(Boolean))]
+                            .sort((a,b) => a.localeCompare(b,'es'));
+  const cats     = unicos('cat');
+  const marcas   = unicos('marca');
+  const monturas = unicos('montura');
+
+  // Si lo que estaba elegido ya no existe en la planilla, volvemos a "todo":
+  // si no, la grilla quedaría vacía sin explicación.
+  if(filtros.cat      && !cats.includes(filtros.cat))          filtros.cat = '';
+  if(filtros.marca    && !marcas.includes(filtros.marca))      filtros.marca = '';
+  if(filtros.montura  && !monturas.includes(filtros.montura))  filtros.montura = '';
+
+  // Los tramos de precio no dependen de la planilla: se arman una sola vez
+  if($('precio').options.length <= 1)
+    $('precio').innerHTML = '<option value="">Cualquier precio</option>'
+      + RANGOS.map(([val,txt]) => `<option value="${val}">${esc(txt)}</option>`).join('');
+
+  const firma = cats.join('|') + '#' + marcas.join('|') + '#' + monturas.join('|');
+  if(firma === FIRMA_FILTROS){ sincronizarControles(); return; }
+  FIRMA_FILTROS = firma;
+
+  // Con el número al lado se ve de una si conviene filtrar por ahí
+  $('montura').innerHTML = '<option value="">Cualquier montura</option>'
+    + monturas.map(m => {
+        const n = PRODUCTOS.filter(p => p.montura === m).length;
+        return `<option value="${esc(m)}">${esc(m)} (${n})</option>`;
+      }).join('');
+
+  $('cats').innerHTML = '';
+  // El valor sigue siendo la categoría tal cual (el filtro y el link la usan);
+  // lo que se pluraliza es únicamente el texto del chip.
+  [['','Todo'], ...cats.map(c => [c, plural(c)])].forEach(([val,txt]) => {
+    const b = document.createElement('button');
+    b.className='chip'; b.type='button'; b.textContent=txt;
+    b.dataset.cat = val;
+    b.setAttribute('aria-pressed', String(filtros.cat === val));
+    b.onclick = () => {
+      filtros.cat = val;
+      [...$('cats').children].forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      aplicarFiltro(true);
+      // El chip elegido se centra en la fila
+      b.scrollIntoView({ behavior: quieto ? 'auto' : 'smooth', block:'nearest', inline:'center' });
+    };
+    $('cats').appendChild(b);
+  });
+  sincronizarCinta();   // recién ahora sabemos si la cinta se pasa de ancho
+
+  $('marca').innerHTML = '<option value="">Todas las marcas</option>'
+    + marcas.map(m => `<option value="${esc(m)}">${esc(m)}</option>`).join('');
+  sincronizarControles();
+}
+
+// Deja los controles mostrando lo que dice el objeto `filtros`. Se usa al
+// abrir con un link filtrado y al tocar el botón Atrás del navegador.
+function sincronizarControles(){
+  $('q').value = filtros.q;
+  $('clear').hidden = !filtros.q;
+  $('marca').value = filtros.marca;
+  $('orden').value = filtros.orden;
+  $('precio').value = filtros.rango;
+  $('soloStock').checked = filtros.soloStock;
+  sincronizarLentes();
+  [...$('cats').children].forEach(b =>
+    b.setAttribute('aria-pressed', String((b.dataset.cat || '') === filtros.cat)));
+}
+
+/* Montura y apertura aparecen solo en la categoría Lente. Ofrecerlas en
+   "Celular" sería dar un filtro que deja la grilla vacía, y al salir de Lente
+   hay que soltarlos: si no, elegís Celular con "Canon RF" puesto y no entiende
+   nadie por qué no hay nada. Va aparte de sincronizarControles porque se llama
+   mientras escribís en el buscador, y ahí no se puede tocar el <input>. */
+function sincronizarLentes(){
+  const hayLentes = norm(filtros.cat) === 'lente';
+  if(!hayLentes){ filtros.montura = ''; filtros.apertura = ''; }
+  $('montura').hidden = $('apertura').hidden = !hayLentes;
+  $('montura').value  = filtros.montura;
+  $('apertura').value = filtros.apertura;
+}
+
+function error(e){
+  console.error(e);
+  grid.innerHTML = `<div class="msg" style="grid-column:1/-1">
+    <h2>No se pudo leer la planilla</h2>
+    <p>Casi siempre es porque todavía no está compartida públicamente. Se arregla así:</p>
+    <ol>
+      <li>Abrí el Sheet en Google Drive.</li>
+      <li>Botón <b>Compartir</b> (arriba a la derecha).</li>
+      <li>En "Acceso general" elegí <b>Cualquier usuario con el enlace</b>.</li>
+      <li>Dejalo como <b>Lector</b> y guardá.</li>
+      <li>Recargá esta página.</li>
+    </ol>
+    <p style="margin-top:18px"><code>${esc(String(e.message||e))}</code></p>
+  </div>`;
+  $('stamp').textContent = 'Sin conexión';
+  const d = document.querySelector('.dot');
+  d.style.background = '#5A6273'; d.classList.remove('live');
+}
+
+/* El sello del encabezado. Cuando algo falla no lo dejamos diciendo
+   "Actualizado": un precio viejo mostrado como si fuera de ahora es peor que
+   avisar que no se pudo actualizar. */
+let ULTIMA_OK = 0;
+
+function sello(txt, vivo){
+  $('stamp').textContent = txt;
+  const d = document.querySelector('.stamp .dot');
+  if(!d) return;
+  d.style.background = vivo ? '' : '#C9A227';
+  d.classList.toggle('live', !!vivo);
+}
+const hhmm = ms => new Date(ms).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
+
+// Las fechas vienen "24/08/2026". Mostramos la más nueva de toda la planilla,
+// no la de la primera fila que tenga algo cargado.
+function fechaMasNueva(prods){
+  let mejor = null, texto = '';
+  for(const p of prods){
+    const m = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/.exec((p.fecha||'').trim());
+    if(!m) continue;
+    const d = new Date(+m[3] < 100 ? 2000 + +m[3] : +m[3], +m[2]-1, +m[1]);
+    if(isNaN(d)) continue;
+    if(!mejor || d > mejor){ mejor = d; texto = p.fecha.trim(); }
+  }
+  return texto;
+}
+
+async function actualizar(primera){
+  if(primera) grid.innerHTML = Array.from({length:10},()=>'<div class="skeleton"></div>').join('');
+  try{
+    // La cotización y el catálogo se piden a la vez, no uno después del otro
+    const [prods, tc] = await Promise.all([cargar(), traerCotizacion()]);
+    PRODUCTOS = prods;
+    MODELOS   = agrupar(prods);   // las variantes del mismo modelo van a una sola tarjeta
+    TC = tc;
+    ULTIMA_OK = Date.now();
+    // Con columna "Imagen" la URL viene escrita, así que existe.
+    // Con carpeta hay que comprobar que los archivos estén de verdad.
+    CON_FOTOS = CARPETA_FOTOS
+      ? await probarFotos(PRODUCTOS)
+      : PRODUCTOS.some(p => p.imagen);
+    armarFiltros();          // también en los refrescos: la planilla pudo cambiar
+    limpiarPedido();         // saca del pedido lo que ya no está en la planilla
+    pintar();
+    if(primera) abrirFichaDesdeURL();
+    const fecha = fechaMasNueva(PRODUCTOS);
+    sello(fecha ? `Actualizado ${fecha}` : 'En vivo', true);
+  }catch(e){
+    console.warn('No se pudo actualizar:', e);
+    if(primera) error(e);
+    // Ya había datos en pantalla: se quedan, pero avisamos que son de antes
+    else sello(`Sin actualizar desde ${hhmm(ULTIMA_OK)}`, false);
+  }
+}
+
+/* ---------- Links compartibles ----------
+   Lo que estás mirando vive en la dirección: podés mandarle a un cliente
+   "mirá los iPhone" y le abre ya filtrado. El botón Atrás también funciona. */
+
+const ORDENES = ['sheet','cat','asc','desc','az'];
+
+function leerURL(){
+  const s = new URL(location.href).searchParams;
+  filtros.q         = s.get('q') || '';
+  filtros.cat       = s.get('cat') || '';
+  filtros.marca     = s.get('marca') || '';
+  filtros.orden     = ORDENES.includes(s.get('orden')) ? s.get('orden') : 'sheet';
+  filtros.soloStock = s.get('stock') === '1';
+  // Se validan contra la lista: un link con ?precio=cualquiercosa no debe
+  // dejar la grilla vacía sin que se vea ningún filtro puesto
+  filtros.rango     = RANGOS.some(r => r[0] === s.get('precio')) ? s.get('precio') : '';
+  filtros.apertura  = ['luminoso','cerrado'].includes(s.get('apertura')) ? s.get('apertura') : '';
+  // La montura se valida en armarFiltros(), cuando ya sabemos cuáles hay
+  filtros.montura   = s.get('montura') || '';
+}
+
+function urlActual(){
+  const u = new URL(location.href), s = u.searchParams;
+  const set = (k,v) => v ? s.set(k,v) : s.delete(k);
+  set('q',     filtros.q.trim());
+  set('cat',   filtros.cat);
+  set('marca', filtros.marca);
+  set('orden', filtros.orden === 'sheet' ? '' : filtros.orden);   // el default no ensucia
+  set('stock', filtros.soloStock ? '1' : '');
+  set('precio',   filtros.rango);
+  set('montura',  filtros.montura);
+  set('apertura', filtros.apertura);
+  const qs = s.toString();
+  return u.pathname + (qs ? '?' + qs : '') + (FICHA ? '#p=' + encodeURIComponent(FICHA) : '');
+}
+
+// Abriendo el archivo con doble clic (file://) el navegador no deja tocar el
+// historial. Con el .bat, que levanta un servidor, anda perfecto.
+function escribirURL(push){
+  try{ history[push ? 'pushState' : 'replaceState'](null, '', urlActual()); }catch{}
+}
+
+const claveDeHash = () => {
+  const m = /^#p=(.+)$/.exec(location.hash);
+  try{ return m ? decodeURIComponent(m[1]) : ''; }catch{ return ''; }
+};
+
+// Si venís scrolleado y cambiás un filtro, los resultados nuevos empiezan
+// arriba: sin esto quedarías mirando el medio de una lista que ya no existe.
+function volverArriba(){
+  if(grid.getBoundingClientRect().top < -4) scrollTo({ top: Math.max(0, grid.offsetTop - 150) });
+}
+function aplicarFiltro(push){ sincronizarLentes(); escribirURL(push); volverArriba(); pintar(); }
+
+addEventListener('popstate', () => {
+  const antes = JSON.stringify(filtros);
+  leerURL();
+  if(JSON.stringify(filtros) !== antes){ sincronizarControles(); pintar(); }
+  const k = claveDeHash();
+  if(k && k !== FICHA){ quitarFicha(); abrirFicha(k, null); }
+  else if(!k && FICHA) quitarFicha();
+});
+
+/* ---------- Ficha del producto ---------- */
+
+let FICHA = null;           // clave de la VARIANTE que se está mirando
+let FICHA_MODELO = null;    // el modelo al que pertenece, con todas sus variantes
+let COLOR_FICHA = '';       // color elegido en la ficha abierta
+let fichaEmpujada = false;  // ¿agregamos una entrada al historial al abrirla?
+let cerrarFichaDOM = null;  // saca la ventana de la pantalla, sin tocar el historial
+
+function quitarFicha(){
+  FICHA = null; FICHA_MODELO = null; fichaEmpujada = false;
+  const c = cerrarFichaDOM; cerrarFichaDOM = null;
+  c?.();
+}
+
+// Cerrar con la X, Escape o tocando afuera equivale a "atrás": así el botón
+// del navegador no te devuelve a la ficha que acabás de cerrar.
+function cerrarFicha(){
+  if(!FICHA) return;
+  if(fichaEmpujada){ fichaEmpujada = false; history.back(); }   // el popstate hace el resto
+  else { quitarFicha(); escribirURL(false); }
+}
+
+/* Los datos de la ficha: todo lo que cambia cuando el cliente elige otra
+   versión. Va aparte de la foto porque al cambiar de variante se redibuja
+   entero, y la foto se toca solo si de verdad es otra imagen. */
+function htmlDatosFicha(m, v){
+  const filas = [
+    ['Categoría',   v.cat],
+    ['Modelo',      v.modelo],
+    ['Color',       v.color ? htmlColorFicha(v) : '', true],
+    ['Condición',   v.condicion],
+    ['Garantía',    v.garantia],
+    // La cotización con la que se calculó el precio en pesos de ESTA ficha.
+    // Si no hay pesos (no se pudo traer el dólar), la fila no aparece.
+    ['Cotización',  TC ? `$ ${plata(Math.round(TC))} por dólar` : '']
+  ].filter(([,x]) => x);
+
+  const lista = specs(v);
+  const ars   = precioARS(v);
+
+  return `
+    <span class="fi-marca">${esc(v.marca)}</span>
+    <h3 class="fi-nombre">${esc(m.desc)}</h3>
+    ${lista.length ? `<div class="specs">${lista.map(s=>`<span>${esc(s)}</span>`).join('')}</div>` : ''}
+    ${v.incluye ? `<div class="incluye">${esc(v.incluye)}</div>` : ''}
+    ${v.detalle ? `<p class="fi-detalle">${esc(v.detalle)}</p>` : ''}
+    ${filas.length ? `<dl class="fi-tabla">${filas.map(([t,x,crudo]) =>
+      // `crudo` marca las filas que ya vienen armadas como HTML (los
+      // puntitos de color). El resto se escapa, como siempre.
+      `<dt>${esc(t)}</dt><dd>${crudo ? x : esc(x)}</dd>`).join('')}</dl>` : ''}
+    ${htmlOpcionesFicha(m, v)}
+    <div class="fi-precio">
+      <div class="usd">${precioUSD(v)}</div>
+      ${ars ? `<div class="ars">${ars}</div>` : ''}
+      <div class="sub" id="fi-sub" hidden></div>
+    </div>
+    <div class="botones fi-botones">
+      ${WHATSAPP ? `<a class="pri cta" href="${linkWA(mensajeWA(v, COLOR_FICHA))}" target="_blank" rel="noopener">${ICONO_WA}Consultar por WhatsApp</a>` : ''}
+      <div id="fi-pedido-caja">${htmlPedidoFicha(clave(v))}</div>
+    </div>
+    <p class="fi-nota">Precio sujeto a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</p>`;
+}
+
+/* El selector de versiones. Cada botón lleva SU precio: es lo que el cliente
+   está comparando, y verlo junto evita tener que tocar una por una. */
+function htmlOpcionesFicha(m, v){
+  if(!m.multi) return '';
+  const elegida = clave(v);
+  const btns = m.variantes.map(x => {
+    const k = clave(x);
+    return `<button type="button" class="fi-op${x.stock ? '' : ' agotada'}" data-k="${esc(k)}"
+             aria-pressed="${k === elegida}"${x.stock ? '' : ' title="Sin stock"'}>
+             <b>${esc(x.etiqueta)}</b>
+             <i>${x.precio === null ? 'Consultar' : 'USD ' + plata(x.precio)}</i>
+           </button>`;
+  }).join('');
+  return `<div class="fi-ops-caja">
+    <span class="fi-ops-lbl">Opciones</span>
+    <div class="fi-ops">${btns}</div>
+  </div>`;
+}
+
+// historia: true = suma al historial · false = reemplaza · null = no lo toca
+function abrirFicha(k, historia = true){
+  const m = buscarModelo(k);
+  if(!m) return;
+  // El link puede apuntar a cualquier variante: se abre el modelo con esa puesta
+  const v = m.variantes.find(x => clave(x) === k) || m.rep;
+  if(FICHA) quitarFicha();
+
+  FICHA_MODELO = m;
+  FICHA = clave(v);
+  // El color arranca en el que ya haya elegido para este producto en el pedido
+  COLOR_FICHA = colorDe(FICHA);
+  if(historia !== null){ fichaEmpujada = historia === true; escribirURL(historia === true); }
+
+  const d = document.createElement('div');
+  d.id = 'ficha'; d.className = 'modal';
+  d.innerHTML = `
+    <div class="caja" role="dialog" aria-modal="true" aria-label="${esc(m.desc)}">
+      <button class="fi-cerrar" type="button" aria-label="Cerrar">&times;</button>
+      <div class="fi-cols">
+        <div class="fi-foto">${htmlBadge(v, true)}${htmlFoto(v)}</div>
+        <div class="fi-datos">${htmlDatosFicha(m, v)}</div>
+      </div>
+    </div>`;
+
+  cerrarFichaDOM = montarModal(d, () => { if(FICHA) cerrarFicha(); });
+  d.querySelector('.fi-cerrar').onclick = () => cerrarFicha();
+  engancharFicha(d, m, v);
+  // Si el cliente ya había elegido un color, la ficha abre mostrando ese
+  if(COLOR_FICHA) mostrarFotoColor(v, COLOR_FICHA, d);
+  // Una foto ya cacheada puede no disparar el onload
+  const im = d.querySelector('.fi-foto img');
+  if(im?.complete) im.classList.add('ok');
+}
+
+// Todo lo que hay que volver a atar cada vez que se redibuja el panel de datos
+function engancharFicha(d, m, v){
+  engancharPedidoFicha(d, v);
+  pintarSubFicha(d, v);
+  d.querySelectorAll('.fi-pintas button').forEach(b =>
+    b.onclick = () => elegirColorFicha(d, v, b.dataset.color));
+  d.querySelectorAll('.fi-op').forEach(b => b.onclick = () => {
+    const otra = m.variantes.find(x => clave(x) === b.dataset.k);
+    if(otra && clave(otra) !== FICHA) elegirVariante(d, m, otra);
+  });
+}
+
+/* Cambiar de versión cambia el precio, el ID, el stock y la foto: es otro
+   producto de la planilla. Se redibujan los datos y se deja el link apuntando
+   a la variante que se está mirando, así lo que se comparte es exactamente
+   esto y no la versión más barata. */
+function elegirVariante(d, m, v){
+  FICHA = clave(v);
+  COLOR_FICHA = colorDe(FICHA);
+  d.querySelector('.fi-datos').innerHTML = htmlDatosFicha(m, v);
+  pintarFotoFicha(d, v);
+  engancharFicha(d, m, v);
+  escribirURL(false);
+  if(COLOR_FICHA) mostrarFotoColor(v, COLOR_FICHA, d);
+}
+
+// La foto se toca lo mínimo: si es la misma imagen, solo se actualiza el badge
+// de stock. Recargarla siempre haría un parpadeo blanco en cada clic.
+function pintarFotoFicha(d, v){
+  const cont = d.querySelector('.fi-foto');
+  if(!cont) return;
+  const img = cont.querySelector('img');
+  if(!img || !v.imagen){ cont.innerHTML = htmlBadge(v, true) + htmlFoto(v); return; }
+  if(img.getAttribute('src') !== v.imagen){ img.classList.remove('ok'); img.src = v.imagen; }
+  const badge = cont.querySelector('.badge');
+  if(badge) badge.outerHTML = htmlBadge(v, true);
+  else cont.insertAdjacentHTML('afterbegin', htmlBadge(v, true));
+}
+
+/* ---------- La parte viva de la ficha ----------
+   Unidades, color elegido y subtotal cambian sin cerrar la ficha, así que se
+   redibujan solos. Se toca únicamente ese pedazo: volver a armar la ficha
+   entera haría parpadear la foto en cada clic del "+". */
+
+// Sin nada cargado, un botón. Con algo cargado, el contador de unidades.
+function htmlPedidoFicha(k){
+  const n = cantDe(k);
+  if(!n) return `<button type="button" class="sec" id="fi-pedido">Agregar al pedido</button>`;
+  return `<div class="fi-cant"><span class="lbl">Unidades</span>${htmlStepper(n)}</div>
+    <button type="button" class="sec" id="fi-pedido">Quitar del pedido</button>`;
+}
+
+function engancharPedidoFicha(d, p){
+  const k = clave(p);
+  const b = d.querySelector('#fi-pedido');
+  // Al agregar se lleva el color que el cliente haya elegido recién
+  if(b) b.onclick = () => togglePedido(k, COLOR_FICHA);
+  d.querySelectorAll('#fi-pedido-caja .stepper button').forEach(x =>
+    x.onclick = () => cambiarCant(k, Number(x.dataset.d)));
+}
+
+// El total por varias unidades, al lado del precio: sin esto el número de la
+// barra del pedido aparece de la nada.
+function pintarSubFicha(d, p){
+  const s = d.querySelector('#fi-sub');
+  if(!s) return;
+  const n = cantDe(clave(p));
+  if(n < 2 || p.precio === null){ s.hidden = true; s.textContent = ''; return; }
+  const t = p.precio * n;
+  s.textContent = `${n} unidades · USD ${plata(t)}` + (TC ? ` · $ ${plata(Math.round(t * TC))}` : '');
+  s.hidden = false;
+}
+
+function refrescarFicha(){
+  const d = document.getElementById('ficha');
+  if(!d || !FICHA) return;
+  const p = buscarProducto(FICHA);
+  if(!p) return;
+  const caja = d.querySelector('#fi-pedido-caja');
+  if(caja){ caja.innerHTML = htmlPedidoFicha(FICHA); engancharPedidoFicha(d, p); }
+  pintarSubFicha(d, p);
+}
+
+function elegirColorFicha(d, p, color){
+  const k = clave(p);
+  COLOR_FICHA = color;
+  if(enPedido(k)) elegirColor(k, color);          // ya está en el pedido: se le actualiza el color
+
+  d.querySelectorAll('.fi-pintas button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.color === color)));
+  const t = d.querySelector('#fi-color-txt');
+  if(t) t.innerHTML = `<b>${esc(color)}</b>`;
+  d.querySelector('#fi-color-hint')?.setAttribute('hidden', '');
+  // El mensaje de WhatsApp de la ficha ya nombra el color
+  const wa = d.querySelector('.fi-botones .cta');
+  if(wa) wa.href = linkWA(mensajeWA(p, color));
+
+  mostrarFotoColor(p, color, d);
+}
+
+function abrirFichaDesdeURL(){
+  const k = claveDeHash();
+  if(k) abrirFicha(k, false);
+}
+
+/* ---------- Armar pedido ----------
+   Se guarda en este navegador, así que si el cliente cierra la pestaña y
+   vuelve, su pedido sigue ahí. */
+
+const PEDIDO_KEY = 'advtecno.pedido';
+// Un tope por las dudas: nadie encarga 300 iPhone desde el catálogo, y con un
+// número suelto el total del mensaje pierde sentido.
+const MAX_CANT = 99;
+let PEDIDO = [];
+try{
+  const g = JSON.parse(localStorage.getItem(PEDIDO_KEY) || '[]');
+  if(Array.isArray(g)) PEDIDO = g.map(lineaValida).filter(Boolean);
+}catch{}
+
+/* Cada línea del pedido es {k, n, color}: qué producto, cuántas unidades y en
+   qué color. Antes el pedido era una lista de claves sueltas, así que el que
+   vuelva con ese formato guardado no pierde nada: una clave vieja es una línea
+   de una unidad sin color elegido. */
+const acotarCant = n => Math.min(MAX_CANT, Math.max(1, Math.round(Number(n)) || 1));
+
+function lineaValida(x){
+  if(typeof x === 'string') return x ? {k:x, n:1, color:''} : null;
+  if(x && typeof x.k === 'string' && x.k)
+    return {k:x.k, n:acotarCant(x.n), color: typeof x.color === 'string' ? x.color : ''};
+  return null;
+}
+
+const lineaPedido = k => PEDIDO.find(l => l.k === k);
+const enPedido = k => !!lineaPedido(k);
+const cantDe   = k => lineaPedido(k)?.n || 0;
+const colorDe  = k => lineaPedido(k)?.color || '';
+
+// El producto ya resuelto viaja junto a la cantidad: la lista, el total y el
+// mensaje de WhatsApp lo necesitan los tres.
+const itemsPedido = () => PEDIDO
+  .map(l => { const p = buscarProducto(l.k); return p ? {p, n:l.n, color:l.color} : null; })
+  .filter(Boolean);
+
+const totalPedido    = () => itemsPedido().reduce((s,it) => s + (it.p.precio || 0) * it.n, 0);
+const unidadesPedido = () => itemsPedido().reduce((s,it) => s + it.n, 0);
+const hayAConsultar  = () => itemsPedido().some(it => it.p.precio === null);
+
+function guardarPedido(){ try{ localStorage.setItem(PEDIDO_KEY, JSON.stringify(PEDIDO)); }catch{} }
+
+function togglePedido(k, color){
+  const i = PEDIDO.findIndex(l => l.k === k);
+  if(i === -1) PEDIDO.push({k, n:1, color: color || ''});
+  else PEDIDO.splice(i, 1);
+  guardarPedido();
+  pintarPedido();
+  refrescarBotonesPedido();
+}
+
+// Bajar de una unidad saca el producto: es lo que el cliente espera del "−" y
+// evita dejar líneas en cero que después haya que limpiar.
+function cambiarCant(k, delta){
+  const l = lineaPedido(k);
+  if(!l) return;
+  const n = l.n + delta;
+  if(n < 1){ togglePedido(k); return; }
+  l.n = Math.min(MAX_CANT, n);
+  guardarPedido();
+  pintarPedido();
+  refrescarBotonesPedido();
+}
+
+// El color elegido en la ficha se guarda en la línea, así llega al mensaje
+function elegirColor(k, color){
+  const l = lineaPedido(k);
+  if(!l || l.color === color) return;
+  l.color = color;
+  guardarPedido();
+  pintarPedido();
+}
+
+// Lo que ya no está en la planilla no puede seguir en el pedido
+function limpiarPedido(){
+  const antes = PEDIDO.length;
+  PEDIDO = PEDIDO.filter(l => buscarProducto(l.k));
+  if(PEDIDO.length !== antes) guardarPedido();
+  pintarPedido();
+}
+
+// Marca el + de cada tarjeta sin redibujar la grilla entera
+function refrescarBotonesPedido(){
+  grid.querySelectorAll('.card').forEach(c => {
+    const m = buscarModelo(c.dataset.key);
+    c.querySelector('.mas')?.setAttribute('aria-pressed',
+      String(m ? enPedidoModelo(m) : enPedido(c.dataset.key)));
+  });
+  refrescarFicha();
+}
+
+/* El + de la tarjeta carga la versión que la tarjeta muestra. Si el cliente ya
+   tenía cargada otra versión de ese mismo modelo, el botón la saca: si no,
+   tocar "quitar" no haría nada visible y quedarían dos líneas del mismo
+   producto sin que se entienda por qué. */
+function togglePedidoModelo(k){
+  const m = buscarModelo(k);
+  if(!m) return togglePedido(k);
+  const cargadas = m.variantes.filter(v => enPedido(clave(v)));
+  if(!cargadas.length) return togglePedido(clave(m.rep));
+  cargadas.forEach(v => togglePedido(clave(v)));
+}
+
+function mensajePedido(){
+  const lineas = itemsPedido().map((it,i) => {
+    const p = it.p;
+    let l = `${i+1}. ${p.desc}${p.id ? ` (${p.id})` : ''}`;
+    if(it.color) l += ` · ${it.color}`;
+    if(it.n > 1) l += ` · x${it.n}`;
+    return l + ' — ' + (p.precio === null ? 'a consultar' : 'USD ' + plata(p.precio * it.n));
+  });
+  const total = totalPedido();
+  let cola = `Total: USD ${plata(total)}`;
+  if(TC) cola += ` (aprox. $ ${plata(Math.round(total * TC))})`;
+  if(hayAConsultar()) cola += ', más los productos a consultar';
+  return `Hola! Te paso mi pedido:\n\n${lineas.join('\n')}\n\n${cola}`;
+}
+
+function pintarPedido(){
+  const items = itemsPedido();
+  document.body.classList.toggle('con-pedido', items.length > 0);
+  $('barra-pedido').hidden = !items.length;
+  if(!items.length) return;
+  const total = totalPedido(), u = unidadesPedido();
+  // Cuenta unidades, no líneas: si el cliente cargó tres iPhone iguales, el
+  // botón tiene que decir tres.
+  $('bp-ver').textContent = `${u} producto${u!==1?'s':''}`;
+  $('bp-usd').textContent = 'USD ' + plata(total) + (hayAConsultar() ? ' +' : '');
+  $('bp-ars').textContent = TC ? '$ ' + plata(Math.round(total * TC)) : '';
+  $('bp-enviar').href = linkWA(mensajePedido());
+}
+
+function abrirPedido(){
+  if(document.getElementById('pedido')) return;
+  const d = document.createElement('div');
+  d.id = 'pedido'; d.className = 'modal';
+
+  const dibujar = () => {
+    const items = itemsPedido(), total = totalPedido();
+    d.innerHTML = `
+      <div class="caja" role="dialog" aria-modal="true" aria-label="Tu pedido">
+        <h3>Tu pedido</h3>
+        ${items.length ? items.map(({p, n, color}) => `
+          <div class="pd-item" data-key="${esc(clave(p))}">
+            ${p.imagen ? `<img class="pd-foto" src="${esc(p.imagen)}" alt="" onerror="this.remove()">` : ''}
+            <div class="pd-txt">
+              <b>${esc(p.desc)}</b>
+              <i>${esc(p.marca)}</i>
+              ${color ? `<span class="pd-color">Color: ${esc(color)}</span>` : ''}
+            </div>
+            ${htmlStepper(n)}
+            <span class="pd-precio">${p.precio === null ? 'Consultar' : 'USD ' + plata(p.precio * n)}
+              ${n > 1 && p.precio !== null ? `<i>USD ${plata(p.precio)} c/u</i>` : ''}</span>
+            <button class="pd-quitar" type="button" aria-label="Quitar del pedido">&times;</button>
+          </div>`).join('')
+        : '<p class="pd-vacio">Todavía no agregaste nada. Tocá el + en cualquier producto.</p>'}
+        ${items.length ? `
+          <div class="pd-total">
+            <span>Total</span>
+            <div><b>USD ${plata(total)}</b>${TC ? `<i>$ ${plata(Math.round(total*TC))}</i>` : ''}</div>
+          </div>` : ''}
+        <div class="botones">
+          <button type="button" class="sec" id="pd-vaciar"${items.length ? '' : ' disabled'}>Vaciar</button>
+          ${WHATSAPP && items.length
+            ? `<a class="pri" href="${linkWA(mensajePedido())}" target="_blank" rel="noopener">Enviar por WhatsApp</a>`
+            : ''}
+        </div>
+      </div>`;
+
+    d.querySelectorAll('.pd-quitar').forEach(b => b.onclick = () => {
+      togglePedido(b.closest('.pd-item').dataset.key);
+      dibujar();
+    });
+    d.querySelectorAll('.pd-item .stepper button').forEach(b => b.onclick = () => {
+      cambiarCant(b.closest('.pd-item').dataset.key, Number(b.dataset.d));
+      dibujar();
+    });
+    const v = d.querySelector('#pd-vaciar');
+    if(v) v.onclick = () => {
+      PEDIDO = []; guardarPedido(); pintarPedido(); refrescarBotonesPedido(); dibujar();
+    };
+  };
+
+  dibujar();
+  montarModal(d);
+}
+
+/* ---------- Eventos ---------- */
+
+let t;
+$('q').addEventListener('input', e => {
+  filtros.q = e.target.value;
+  $('clear').hidden = !e.target.value;
+  // Easter egg escondido en el buscador: escribí "el primo"
+  if(['primo','el primo'].includes(norm(e.target.value))) abrirPrimo();
+  clearTimeout(t); t = setTimeout(() => aplicarFiltro(false), 120);
+});
+$('clear').onclick = () => {
+  $('q').value=''; filtros.q=''; $('clear').hidden=true; aplicarFiltro(false); $('q').focus();
+};
+$('marca').onchange     = e => { filtros.marca = e.target.value;    aplicarFiltro(true); };
+$('orden').onchange     = e => { filtros.orden = e.target.value;    aplicarFiltro(true); };
+$('precio').onchange    = e => { filtros.rango = e.target.value;    aplicarFiltro(true); };
+$('montura').onchange   = e => { filtros.montura = e.target.value;  aplicarFiltro(true); };
+$('apertura').onchange  = e => { filtros.apertura = e.target.value; aplicarFiltro(true); };
+$('soloStock').onchange = e => { filtros.soloStock = e.target.checked; aplicarFiltro(true); };
+$('bp-ver').onclick     = abrirPedido;
+
+// Un solo escuchador para toda la grilla: 483 tarjetas con tres escuchadores
+// cada una serían 1449 escuchadores para nada.
+// Las fotos arrancan en opacidad 0 y aparecen con un fundido al terminar de
+// cargar. El onload de cada <img> a veces no alcanza: con el dibujado por
+// tandas y las imágenes que ya están en caché, algunas quedaban invisibles
+// para siempre. Este escucha único las agarra a todas, sin importar cómo se
+// hayan insertado. Va en fase de captura porque "load" no burbujea.
+grid.addEventListener('load', e => {
+  if(e.target.tagName === 'IMG') e.target.classList.add('ok');
+}, true);
+
+grid.addEventListener('click', e => {
+  const card = e.target.closest('.card');
+  if(!card) return;
+  if(e.target.closest('.mas')){ togglePedidoModelo(card.dataset.key); return; }
+  if(e.target.closest('a')) return;          // el botón Consultar hace lo suyo
+  abrirFicha(card.dataset.key);
+});
+grid.addEventListener('keydown', e => {
+  if(e.key !== 'Enter' && e.key !== ' ') return;
+  if(!e.target.classList?.contains('card')) return;
+  e.preventDefault();
+  abrirFicha(e.target.dataset.key);
+});
+
+/* ---------- Easter egg: 7 clics en el triángulo del logo ----------
+   Los clics tienen que ser seguidos (menos de 1,2 s entre uno y otro), así
+   nadie lo dispara sin querer. Anda igual con el dedo en el celular.        */
+
+const EGG_CLICS = 7, EGG_VENTANA = 1200, EGG_DURACION = 6000;
+let eggN = 0, eggUltimo = 0, eggTimer;
+
+/* La voz sale del juego. Los navegadores no dejan sonar audio sin un gesto
+   del usuario, pero el egg se dispara tipeando en el buscador, así que el
+   gesto ya está hecho. Si aun así lo bloquean se ignora: el egg tiene que
+   andar con o sin sonido. */
+let vozEgg = null, vozCola = [], vozTimer;
+
+/* Los tres audios no vienen al mismo volumen y no se puede emparejar en el
+   archivo: la voz sintetizada ya está al borde de distorsionar y sigue 3 dB
+   por debajo de las otras. Se empareja acá, bajando las que sobran. */
+const VOZ_VOL = {
+  'assets/el-primo-voz.mp3': .63,   // -10.4 LUFS
+  'assets/vegetta-voz.mp3':  .75,   // -11.9 LUFS
+};
+
+// Acepta una pista o una lista: si son varias, cada una arranca cuando
+// termina la anterior (por el evento 'ended', no por tiempos fijos). Hoy los
+// dos eggs mandan una sola; quedó así por si alguna vez se les engancha un
+// remate atrás.
+function sonarVoz(pistas, retraso){
+  clearTimeout(vozTimer);
+  vozCola = [].concat(pistas);
+  const siguiente = () => {
+    const src = vozCola.shift();
+    if(!src){ vozEgg = null; return; }
+    vozEgg = new Audio(src);
+    vozEgg.volume = VOZ_VOL[src] || .75;
+    vozEgg.addEventListener('ended', siguiente);
+    vozEgg.play().catch(() => {});
+  };
+  vozTimer = setTimeout(siguiente, retraso);
+}
+
+function callarVoz(){
+  clearTimeout(vozTimer);
+  vozCola = [];   // sin esto, cerrar mientras habla el personaje dejaba
+  if(vozEgg){ vozEgg.pause(); vozEgg = null; }   // el remate sonando solo
+}
+
+// Los dos easter eggs comparten la misma pantalla; solo cambia el contenido
+// y una clase que define los colores.
+function mostrarEgg(contenido, clase, duracion = EGG_DURACION, fondo = ''){
+  if(document.getElementById('egg')) return;
+  const d = document.createElement('div');
+  d.id = 'egg';
+  if(clase) d.className = clase;
+  d.innerHTML = `${fondo}<div>${contenido}
+      <div class="cerrar">Tocá en cualquier lado para salir</div>
+    </div>`;
+  document.body.appendChild(d);
+  document.body.classList.add('egg-on');
+  if(clase) document.body.classList.add(clase + '-on');
+
+  const cerrar = () => {
+    callarVoz();
+    d.remove();
+    document.body.classList.remove('egg-on');
+    if(clase) document.body.classList.remove(clase + '-on');
+    clearTimeout(eggTimer);
+    document.removeEventListener('keydown', porTecla);
+  };
+  const porTecla = e => { if(e.key === 'Escape') cerrar(); };
+
+  d.addEventListener('click', cerrar);
+  document.addEventListener('keydown', porTecla);
+  eggTimer = setTimeout(cerrar, duracion);
+}
+
+// Vegetta777 — se abre con 7 clics seguidos en el triángulo del logo.
+// El skin de Minecraft de la cuenta "vegetta777", renderizado por mc-heads.
+const VEGETTA_FIG = `<div class="egg-escena"><div class="egg-sway">
+  <img class="egg-fig" src="assets/vegetta-skin.png" alt="" width="400" height="960" decoding="async">
+</div></div>`;
+
+function abrirEgg(){
+  // Entra con el título, igual que la del Primo.
+  sonarVoz('assets/vegetta-voz.mp3', 620);
+  mostrarEgg(`
+    <p class="saludo">Heyy muy buenas a todos,</p>
+    <p class="frase"><span>Guapisimooos</span></p>
+    <p class="gameplay">Aquí Vegetta en un nuevo gameplay de <b>Advagetta</b></p>
+    <div class="sub">Advance Tecno · Modo Vegetta777</div>`,
+    'vegetta', 9000, VEGETTA_FIG);
+}
+
+// El Primo — se abre escribiendo "el primo" en el buscador.
+// El render oficial del juego, con fondo transparente. Va en dos capas
+// anidadas porque cada elemento admite una sola animación: la de afuera
+// balancea, la de adentro rebota.
+const PRIMO_FIG = `<div class="egg-escena"><div class="egg-sway">
+  <img class="egg-fig" src="assets/el-primo.webp" alt="" width="850" height="1129" decoding="async">
+</div></div>`;
+
+// El render pesa 100 KB y recién se pediría al abrir el egg: la primera vez
+// el escenario arrancaba vacío esperando la descarga. Se trae cuando el
+// navegador está ocioso, así no le pelea el ancho de banda a las fotos.
+(() => {
+  const precargar = () => {
+    ['assets/el-primo.webp', 'assets/vegetta-skin.png']
+      .forEach(u => { new Image().src = u; });
+    ['assets/el-primo-voz.mp3', 'assets/vegetta-voz.mp3']
+      .forEach(u => { const a = new Audio(); a.preload = 'auto'; a.src = u; });
+  };
+  if(window.requestIdleCallback) requestIdleCallback(precargar, {timeout:5000});
+  else setTimeout(precargar, 3000);
+})();
+
+function abrirPrimo(){
+  // Entra con el título, que es justo la frase que se escucha.
+  sonarVoz('assets/el-primo-voz.mp3', 620);
+  // Más largo que el de Vegetta: si dura 6 s no se lo llega a ver bailar.
+  mostrarEgg(`
+    <p class="saludo">¡Ay ay ay!</p>
+    <p class="frase"><span>Sin dolor<br>no hay gloria</span></p>
+    <p class="gameplay">El Primo llegó a <b>Advance Tecno</b></p>
+    <div class="sub">Advance Tecno · Modo Brawl</div>`,
+    'primo', 9000, PRIMO_FIG);
+}
+
+/* ---------- La cinta de categorías se desliza ----------
+   Con overflow-x solo alcanza en el celular. En la compu la barra de scroll
+   está oculta a propósito, así que sin esto no había forma de llegar a las
+   categorías de la derecha. Ahora anda con la rueda, arrastrando y con flechas. */
+
+const cinta = $('cats'), cintaWrap = $('cats-wrap');
+
+function sincronizarCinta(){
+  const max = cinta.scrollWidth - cinta.clientWidth;
+  cintaWrap.classList.toggle('hay-izq', cinta.scrollLeft > 4);
+  cintaWrap.classList.toggle('hay-der', cinta.scrollLeft < max - 4);
+}
+cinta.addEventListener('scroll', sincronizarCinta, {passive:true});
+addEventListener('resize', sincronizarCinta);
+
+// Flechas: se corre poco menos de una pantalla, para no perder el hilo
+const pasoCinta = () => Math.max(180, cinta.clientWidth * 0.75);
+const correr = d => cinta.scrollBy({left:d, behavior: quieto ? 'auto' : 'smooth'});
+$('cats-izq').onclick = () => correr(-pasoCinta());
+$('cats-der').onclick = () => correr(pasoCinta());
+
+// Rueda vertical del mouse → desplazamiento horizontal. Si ya estamos en la
+// punta, dejamos que el gesto siga scrolleando la página como siempre.
+cinta.addEventListener('wheel', e => {
+  if(Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+  const max = cinta.scrollWidth - cinta.clientWidth;
+  if(max <= 0) return;
+  if((e.deltaY < 0 && cinta.scrollLeft <= 0) || (e.deltaY > 0 && cinta.scrollLeft >= max)) return;
+  e.preventDefault();
+  cinta.scrollLeft += e.deltaY;
+}, {passive:false});
+
+// Arrastrar con el mouse, como si agarraras la cinta con la mano
+let cX0 = 0, cS0 = 0, cActivo = false, cArrastro = false, cId = null;
+
+cinta.addEventListener('pointerdown', e => {
+  if(e.pointerType === 'touch' || e.button !== 0) return;   // el dedo ya desliza solo
+  cActivo = true; cArrastro = false; cId = e.pointerId;
+  cX0 = e.clientX; cS0 = cinta.scrollLeft;
+});
+cinta.addEventListener('pointermove', e => {
+  if(!cActivo || e.pointerId !== cId) return;
+  const d = e.clientX - cX0;
+  // Un umbral chico: sin esto, el temblor del clic ya contaría como arrastre
+  if(!cArrastro){
+    if(Math.abs(d) < 5) return;
+    cArrastro = true;
+    cinta.classList.add('arrastrando');
+    try{ cinta.setPointerCapture(cId); }catch{}
+  }
+  cinta.scrollLeft = cS0 - d;
+});
+const soltarCinta = () => {
+  if(!cActivo) return;
+  cActivo = false;
+  cinta.classList.remove('arrastrando');
+  try{ if(cId !== null && cinta.hasPointerCapture(cId)) cinta.releasePointerCapture(cId); }catch{}
+};
+cinta.addEventListener('pointerup', soltarCinta);
+cinta.addEventListener('pointercancel', soltarCinta);
+// Si soltaste después de arrastrar, no queremos cambiar de categoría sin querer.
+// La bandera se limpia sola en el próximo pointerdown.
+cinta.addEventListener('click', e => {
+  if(!cArrastro) return;
+  cArrastro = false;
+  e.stopPropagation(); e.preventDefault();
+}, true);
+
+/* ---------- Botón flotante de WhatsApp ----------
+   Sale del mismo número que los botones de cada tarjeta. Si algún día borrás
+   la constante, el botón no queda apuntando a la nada: directamente no aparece. */
+if(WHATSAPP){
+  const wf = $('wa-flotante');
+  wf.href = `https://wa.me/${WHATSAPP}?text=` +
+            encodeURIComponent('Hola! Te escribo desde el catálogo de Advance Tecno.');
+  wf.hidden = false;
+}
+
+$('cfg-btn').addEventListener('click', abrirPanel);
+
+// Sombra de la barra de filtros cuando queda pegada arriba. Un centinela de
+// 1px evita escuchar el scroll, que dispararía cientos de veces por segundo.
+if(!quieto && 'IntersectionObserver' in window){
+  const centinela = document.createElement('div');
+  centinela.style.cssText = 'position:absolute;top:0;height:1px;width:1px';
+  document.querySelector('header').appendChild(centinela);
+  new IntersectionObserver(
+    ([e]) => document.querySelector('.toolbar').classList.toggle('pegada', !e.isIntersecting),
+    { rootMargin: '0px' }
+  ).observe(centinela);
+}
+
+$('marca-btn').addEventListener('click', () => {
+  const ahora = Date.now();
+  eggN = (ahora - eggUltimo < EGG_VENTANA) ? eggN + 1 : 1;
+  eggUltimo = ahora;
+  if(eggN >= EGG_CLICS){ eggN = 0; abrirEgg(); }
+});
+
+/* ---------- Arranque ---------- */
+
+leerURL();               // por si entraste con un link ya filtrado
+sincronizarControles();
+pintarPedido();          // el pedido guardado de la visita anterior
+actualizar(true);
+
+setInterval(() => actualizar(false), REFRESCO_MIN * 60 * 1000);
+
+// Al volver a la pestaña refrescamos, pero no cada vez: cambiar de app en el
+// celular dispara esto todo el tiempo y bajar el catálogo entero de gusto
+// gasta datos del cliente.
+document.addEventListener('visibilitychange', () => {
+  if(!document.hidden && Date.now() - ULTIMA_OK > 60000) actualizar(false);
+});
+</script>
+</body>
+</html>

@@ -6,7 +6,7 @@
 <title>Catálogo Advance — Stock y precios en vivo</title>
 <meta name="description" content="Catálogo con stock y precios actualizados en tiempo real. Consultá por WhatsApp desde cualquier producto.">
 <link rel="icon" href="assets/logo-mark.png">
-<meta name="theme-color" content="#0A0710">
+<meta name="theme-color" content="#FFFFFF">
 
 <!-- Mientras el catálogo sea de uso interno: le pide a Google y demás buscadores
      que NO lo indexen. El link sigue andando para cualquiera que lo tenga, pero
@@ -64,21 +64,24 @@
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,monospace;
 
-    /* Paleta Ultravioleta. El diseño está comprometido con el modo oscuro:
-       no cambia con el tema del celular del cliente, se ve siempre igual. */
-    --paper:#0A0710;      /* fondo, negro casi puro con tinte violeta */
-    --surface:#17102A;    /* tarjetas */
-    --surface-2:#211738;  /* controles */
-    --line:#2E1F52;       /* bordes */
-    --ink:#F3EEFF;        /* texto principal */
-    --muted:#B3A6D0;      /* texto secundario */
-    --faint:#7D6FA0;      /* texto tenue */
-    --acento:#A855F7;     /* el morado: botones, chip activo */
-    --glow:#C084FC;       /* resplandor y hover */
-    --ok:#5EE9A4;
-    --ok-soft:rgba(94,233,164,.12);
-    --shadow:0 1px 2px rgba(0,0,0,.5), 0 14px 44px rgba(10,7,16,.7);
-    --foto-bg:#F5F5F7;    /* gris muy claro: los productos blancos (Pencil, AirTag, AirPods) desaparecen sobre fondo blanco */
+    /* Paleta Ultravioleta en claro. El blanco es el color principal y el
+       morado el complemento: acompaña, no tapa. El diseño está comprometido
+       con el modo claro: no cambia con el tema del celular del cliente.
+       Ojo con --glow: sobre blanco el hover tiene que ser MÁS oscuro que
+       --acento, no más claro, o el texto morado deja de leerse. */
+    --paper:#F4EFFD;      /* fondo lila claro: el morado se ve siempre */
+    --surface:#FFFFFF;    /* tarjetas: el blanco sigue siendo lo que manda */
+    --surface-2:#F1EAFD;  /* controles */
+    --line:#E0D4F7;       /* bordes */
+    --ink:#170F28;        /* texto principal */
+    --muted:#584D70;      /* texto secundario */
+    --faint:#867AA6;      /* texto tenue */
+    --acento:#7C3AED;     /* el morado: botones, chip activo */
+    --glow:#6D28D9;       /* hover y detalle: un morado mas hondo */
+    --ok:#0F8A5F;
+    --ok-soft:rgba(15,138,95,.10);
+    --shadow:0 1px 2px rgba(24,18,38,.05), 0 10px 30px rgba(24,18,38,.07);
+    --foto-bg:#F3EFFA;    /* lila claro: los productos blancos (Pencil, AirTag, AirPods) desaparecen sobre la tarjeta blanca */
     --radius:14px;
   }
 
@@ -96,31 +99,31 @@
 
   /* ---------- Encabezado ---------- */
   header{
-    color:#fff;position:relative;overflow:hidden;
+    color:var(--ink);position:relative;overflow:hidden;
     background:
-      radial-gradient(120% 90% at 15% -20%, rgba(168,85,247,.30), transparent 60%),
-      radial-gradient(90% 80% at 95% 0%, rgba(192,132,252,.16), transparent 55%),
-      #0A0710;
+      radial-gradient(120% 90% at 15% -20%, rgba(124,58,237,.30), transparent 62%),
+      radial-gradient(90% 80% at 95% 0%, rgba(109,40,217,.16), transparent 58%),
+      #FFFFFF;
     border-bottom:1px solid var(--line);
   }
   .head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:20px 0 6px}
   .logo{display:flex;align-items:center;gap:10px}
-  /* El PNG es línea oscura sobre transparente: hay que invertirlo para que se
-     vea blanco sobre el fondo negro, igual que en advancegrouparg.com */
+  /* El PNG ya es línea oscura sobre transparente: sobre el encabezado blanco
+     va tal cual, sin invertir, igual que en advancegrouparg.com */
   .marca-btn{
     background:transparent;border:0;padding:0;cursor:pointer;line-height:0;
     border-radius:8px;transition:filter .2s, transform .12s;
   }
-  .marca-btn img{height:24px;width:auto;display:block;filter:invert(1);opacity:.95}
-  .marca-btn:hover img{filter:invert(1) drop-shadow(0 0 7px var(--glow))}
+  .marca-btn img{height:24px;width:auto;display:block;opacity:.92}
+  .marca-btn:hover img{opacity:1;filter:drop-shadow(0 0 7px rgba(124,58,237,.55))}
   .marca-btn:active{transform:scale(.92)}
-  .logo a{text-decoration:none;color:#fff}
+  .logo a{text-decoration:none;color:var(--ink)}
   .logo b{font:400 17px/1 var(--display);text-transform:uppercase;letter-spacing:.06em}
   .logo b span{color:var(--glow)}
-  .head .eyebrow{color:rgba(255,255,255,.55)}
+  .head .eyebrow{color:var(--acento)}
   .stamp{margin-left:auto;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
-         color:rgba(255,255,255,.6);display:flex;align-items:center;gap:8px;white-space:nowrap}
-  .dot{width:7px;height:7px;border-radius:50%;background:#5ED79B;flex:none}
+         color:var(--muted);display:flex;align-items:center;gap:8px;white-space:nowrap}
+  .dot{width:7px;height:7px;border-radius:50%;background:#12A06A;flex:none}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
   .dot.live{animation:pulse 2.4s ease-in-out infinite}
 
@@ -128,6 +131,7 @@
     font:400 clamp(1.9rem,4.6vw,3.1rem)/0.98 var(--display);
     text-transform:uppercase;letter-spacing:-.005em;margin:14px 0 6px;
   }
+  .titulo-h span{color:var(--acento)}
 
   /* Entrada del encabezado, escalonada de arriba hacia abajo */
   @media (prefers-reduced-motion: no-preference){
@@ -140,33 +144,33 @@
     @keyframes respirar{0%,100%{opacity:1}50%{opacity:.72}}
     header::before{
       content:"";position:absolute;inset:0;pointer-events:none;
-      background:radial-gradient(120% 90% at 15% -20%, rgba(168,85,247,.22), transparent 60%);
+      background:radial-gradient(120% 90% at 15% -20%, rgba(124,58,237,.20), transparent 60%);
       animation:respirar 9s ease-in-out infinite;
     }
     header > *{position:relative;z-index:1}
     /* La barra de filtros se despega cuando arrancás a bajar */
     .toolbar{transition:box-shadow .25s, background .25s}
-    .toolbar.pegada{box-shadow:0 6px 26px rgba(0,0,0,.45)}
+    .toolbar.pegada{box-shadow:0 6px 22px rgba(24,18,38,.09)}
   }
-  .bajada{color:rgba(255,255,255,.62);font-size:14.5px;margin:0 0 20px;max-width:52ch}
+  .bajada{color:var(--muted);font-size:14.5px;margin:0 0 20px;max-width:52ch}
 
   .search{position:relative;display:flex;align-items:center;max-width:660px;padding-bottom:22px}
   .search svg{position:absolute;left:16px;width:18px;height:18px;color:var(--faint);pointer-events:none}
   #q{
     width:100%;padding:14px 15px 14px 45px;font:16px var(--sans);
-    background:rgba(255,255,255,.06);color:#fff;
-    border:1px solid rgba(192,132,252,.28);border-radius:999px;outline:none;
+    background:#fff;color:var(--ink);
+    border:1px solid var(--line);border-radius:999px;outline:none;
     transition:border-color .18s, box-shadow .18s, background .18s;
   }
-  #q::placeholder{color:#8E7FB4}
-  #q:focus{border-color:var(--glow);background:rgba(255,255,255,.09);
-           box-shadow:0 0 0 4px rgba(168,85,247,.18), 0 0 26px rgba(168,85,247,.22)}
+  #q::placeholder{color:var(--faint)}
+  #q:focus{border-color:var(--acento);background:#fff;
+           box-shadow:0 0 0 4px rgba(124,58,237,.14)}
   .clear{position:absolute;right:6px;border:0;background:transparent;cursor:pointer;
-         color:#8E7FB4;font-size:20px;line-height:1;padding:7px 13px;border-radius:999px}
-  .clear:hover{background:rgba(255,255,255,.09);color:#fff}
+         color:var(--faint);font-size:20px;line-height:1;padding:7px 13px;border-radius:999px}
+  .clear:hover{background:rgba(124,58,237,.10);color:var(--acento)}
 
   /* ---------- Filtros ---------- */
-  .toolbar{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+  .toolbar{position:sticky;top:0;z-index:20;background:#FBF8FF;border-bottom:1px solid var(--line)}
   /* La cinta de categorías se desliza: con el dedo, con la rueda del mouse,
      arrastrándola, o con las flechas de los costados. */
   .chips-wrap{position:relative}
@@ -185,8 +189,8 @@
     content:"";position:absolute;top:0;bottom:0;width:54px;z-index:2;
     pointer-events:none;opacity:0;transition:opacity .2s;
   }
-  .chips-wrap::before{left:0;background:linear-gradient(90deg,var(--surface) 30%,transparent)}
-  .chips-wrap::after{right:0;background:linear-gradient(270deg,var(--surface) 30%,transparent)}
+  .chips-wrap::before{left:0;background:linear-gradient(90deg,#FBF8FF 30%,transparent)}
+  .chips-wrap::after{right:0;background:linear-gradient(270deg,#FBF8FF 30%,transparent)}
   .chips-wrap.hay-izq::before,.chips-wrap.hay-der::after{opacity:1}
 
   .chip-nav{
@@ -194,7 +198,7 @@
     width:30px;height:30px;padding:0;border-radius:50%;cursor:pointer;
     display:grid;place-items:center;
     background:var(--surface-2);color:var(--muted);border:1px solid var(--line);
-    box-shadow:0 4px 14px rgba(0,0,0,.45);
+    box-shadow:0 4px 12px rgba(24,18,38,.10);
     opacity:0;pointer-events:none;transition:opacity .2s, transform .2s, color .16s, border-color .16s;
   }
   .chip-nav svg{width:15px;height:15px;display:block}
@@ -211,10 +215,10 @@
     font:600 10.5px/1.6 var(--mono);letter-spacing:.12em;text-transform:uppercase;
     background:transparent;color:var(--muted);border:1px solid var(--line);white-space:nowrap;
   }
-  .chip:hover{color:var(--ink);border-color:var(--glow)}
+  .chip:hover{color:var(--acento);border-color:var(--acento);background:rgba(124,58,237,.06)}
   .chip[aria-pressed="true"]{
     background:var(--acento);color:#fff;border-color:var(--acento);
-    box-shadow:0 0 18px rgba(168,85,247,.45);
+    box-shadow:0 4px 14px rgba(124,58,237,.40);
   }
 
   /* ---------- Segunda cinta: las marcas de la sección ----------
@@ -235,10 +239,10 @@
     padding:2px 5px;border-radius:5px;background:var(--surface-2);color:var(--faint);
   }
   .chip-marca[aria-pressed="true"]{
-    background:rgba(168,85,247,.16);color:var(--glow);border-color:var(--acento);
+    background:rgba(124,58,237,.16);color:var(--glow);border-color:var(--acento);
     box-shadow:none;
   }
-  .chip-marca[aria-pressed="true"] i{background:rgba(168,85,247,.28);color:#fff}
+  .chip-marca[aria-pressed="true"] i{background:var(--acento);color:#fff}
 
   .row2{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:0 0 12px}
   select{
@@ -254,23 +258,24 @@
      celular ocupaban tres, y como la barra es sticky se comían un quinto de la
      pantalla todo el tiempo. Ahí se esconden detrás de este botón: la cinta de
      categorías, que es lo que más se toca, sigue siempre arriba. */
-  .filtros-btn{display:none}
-  @media (max-width:560px){
-    .filtros-btn{
-      display:flex;align-items:center;gap:7px;order:-1;
-      padding:9px 14px;border-radius:999px;cursor:pointer;
-      background:var(--surface-2);color:var(--ink);border:1px solid var(--line);
-      font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
-    }
-    .filtros-btn svg{width:13px;height:13px;display:block;transition:transform .2s}
-    .filtros-btn[aria-expanded="true"]{border-color:var(--glow)}
-    .filtros-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
-    .row2 select,.row2 .toggle{display:none}
-    .row2.abierta select{display:block}
-    .row2.abierta .toggle{display:flex}
-    /* Montura y apertura siguen siendo cosa de lentes, abierta o no */
-    .row2.abierta select[hidden]{display:none}
+  /* Precio, orden y stock se tocan de vez en cuando; las categorias y las marcas,
+     todo el tiempo. Los tres primeros pasan a vivir detras de este boton: la barra
+     queda pegada arriba y no tiene sentido que se coma media pantalla. */
+  .filtros-btn{
+    display:flex;align-items:center;gap:7px;order:-1;
+    padding:9px 14px;border-radius:999px;cursor:pointer;
+    background:var(--surface-2);color:var(--ink);border:1px solid var(--line);
+    font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
   }
+  .filtros-btn svg{width:13px;height:13px;display:block;transition:transform .2s}
+  .filtros-btn:hover{border-color:var(--acento)}
+  .filtros-btn[aria-expanded="true"]{border-color:var(--acento);color:var(--acento)}
+  .filtros-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
+  .row2 select,.row2 .toggle{display:none}
+  .row2.abierta select{display:block}
+  .row2.abierta .toggle{display:flex}
+  /* Montura y apertura siguen siendo cosa de lentes, abierta o no */
+  .row2.abierta select[hidden]{display:none}
 
   /* ---------- Grilla ---------- */
   .grid{display:grid;gap:14px;padding:22px 0 64px;grid-template-columns:repeat(auto-fill,minmax(216px,1fr))}
@@ -279,7 +284,7 @@
     display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow);
     transition:transform .16s, box-shadow .16s;
   }
-  .card:hover{transform:translateY(-3px);box-shadow:0 2px 6px rgba(0,0,0,.3),0 18px 48px rgba(168,85,247,.16);border-color:rgba(168,85,247,.35)}
+  .card:hover{transform:translateY(-3px);box-shadow:0 2px 6px rgba(24,18,38,.06),0 16px 40px rgba(124,58,237,.22);border-color:rgba(124,58,237,.45)}
 
   /* Aparición al entrar en pantalla. Solo se anima lo que estás mirando:
      con 483 tarjetas, animarlas todas de una vez trabaría el scroll. */
@@ -304,11 +309,20 @@
        (los productos blancos se pierden sobre blanco). Donde no hay foto no
        hay nada que proteger, y un bloque blanco gigante le roba la atención
        al producto. */
-    width:100%;height:100%;background:repeating-linear-gradient(45deg,#1B1330 0 10px,#161029 10px 20px);
+    width:100%;height:100%;background:repeating-linear-gradient(45deg,#F6F1FE 0 10px,#EDE4FB 10px 20px);
   }
   .sinfoto b{font:400 15px/1.2 var(--display);text-transform:uppercase;letter-spacing:.05em;
-             color:#6E6091;text-align:center;padding:0 10px}
-  .sinfoto i{font:500 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#4C4270;font-style:normal}
+             color:#A79EBF;text-align:center;padding:0 10px}
+  .sinfoto i{font:500 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#BDB5D0;font-style:normal}
+
+  /* Un cuadrado entero de nada por cada producto sin foto dejaba la grilla
+     llena de huecos. Donde no hay imagen el bloque se achata a una franja:
+     sigue diciendo la marca, pero la tarjeta pasa a medir lo que de verdad
+     tiene para mostrar. */
+  .foto.vacia{aspect-ratio:16/5}
+  .foto.vacia .sinfoto{gap:3px}
+  .foto.vacia .sinfoto b{font-size:12px}
+  .foto.vacia .sinfoto i{font-size:8px}
 
   .badge{font:600 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;
          padding:5px 9px;border-radius:999px;white-space:nowrap;flex:none}
@@ -336,7 +350,7 @@
   .pintas{display:inline-flex;gap:4px;flex:none}
   .pintas i{
     width:12px;height:12px;border-radius:50%;display:block;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.22), 0 1px 2px rgba(0,0,0,.5);
+    box-shadow:inset 0 0 0 1px rgba(24,18,38,.18), 0 1px 2px rgba(24,18,38,.12);
   }
   .fi-tabla .pintas i{width:14px;height:14px}
   .fi-tabla dd .pintas{vertical-align:-3px;margin-right:7px}
@@ -360,15 +374,15 @@
   .wa{
     display:flex;align-items:center;justify-content:center;
     text-decoration:none;flex:none;width:44px;border-radius:999px;
-    color:var(--glow);background:transparent;
-    border:1px solid rgba(168,85,247,.42);
+    color:var(--acento);background:rgba(124,58,237,.06);
+    border:1px solid rgba(124,58,237,.42);
     transition:background .16s, border-color .16s, color .16s, transform .12s;
   }
   .wa svg{width:19px;height:19px;flex:none;display:block}
-  .wa:hover{background:rgba(168,85,247,.16);border-color:var(--glow);color:#fff}
+  .wa:hover{background:rgba(124,58,237,.10);border-color:var(--acento);color:var(--glow)}
   .wa:active{transform:scale(.94)}
   /* La tarjeta entera empuja hacia las acciones al pasar el mouse */
-  .card:hover .wa{border-color:rgba(168,85,247,.7)}
+  .card:hover .wa{border-color:rgba(124,58,237,.55)}
 
   /* En la ficha el CTA va primero, ocupa todo el ancho y es el doble de alto
      que "Agregar al pedido". No compiten: uno manda y el otro acompaña. */
@@ -376,10 +390,10 @@
   .fi-botones .cta{
     display:flex;align-items:center;justify-content:center;gap:9px;
     text-decoration:none;padding:15px 16px;font-size:11.5px;letter-spacing:.1em;
-    box-shadow:0 0 0 1px rgba(192,132,252,.45), 0 8px 26px rgba(168,85,247,.45);
+    box-shadow:0 6px 20px rgba(124,58,237,.32);
   }
   .fi-botones .cta svg{width:17px;height:17px;flex:none;display:block}
-  .fi-botones .cta:hover{filter:brightness(1.08);box-shadow:0 0 0 1px var(--glow), 0 12px 36px rgba(168,85,247,.7)}
+  .fi-botones .cta:hover{filter:brightness(1.06);box-shadow:0 10px 28px rgba(124,58,237,.42)}
   .fi-botones .sec{padding:11px 14px;font-size:10px;opacity:.85}
   .fi-botones .sec:hover{opacity:1}
   /* El contador de unidades y el "quitar" son una sola pieza dentro de la columna */
@@ -409,16 +423,16 @@
     position:fixed;right:20px;bottom:20px;z-index:500;
     display:flex;align-items:center;gap:9px;
     padding:12px 20px 12px 16px;border-radius:999px;
-    background:#fff;color:#0A0710;text-decoration:none;
-    box-shadow:0 6px 22px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.12);
+    background:var(--acento);color:#fff;text-decoration:none;
+    box-shadow:0 8px 24px rgba(124,58,237,.34);
     transition:transform .16s cubic-bezier(.22,.7,.3,1), box-shadow .2s;
   }
   /* El display:flex de arriba le gana al hidden del navegador: hay que repetirlo */
   .wa-flotante[hidden]{display:none}
   .wa-flotante svg{width:22px;height:22px;display:block;flex:none}
   .wa-flotante b{font:600 13px/1 var(--sans);letter-spacing:.01em}
-  .wa-flotante:hover{transform:translateY(-2px);
-    box-shadow:0 10px 30px rgba(0,0,0,.6), 0 0 0 1px rgba(192,132,252,.6), 0 0 26px rgba(168,85,247,.35)}
+  .wa-flotante:hover{transform:translateY(-2px);background:var(--glow);
+    box-shadow:0 12px 32px rgba(124,58,237,.45)}
   .wa-flotante:active{transform:translateY(0) scale(.97)}
   @media (prefers-reduced-motion: no-preference){
     @keyframes waEntra{from{opacity:0;transform:translateY(20px) scale(.9)}to{opacity:1;transform:none}}
@@ -431,22 +445,22 @@
   }
 
   /* El 96 de abajo es el lugar que ocupa el botón flotante */
-  footer{border-top:1px solid var(--line);padding:26px 0 96px;color:var(--faint);
+  footer{border-top:1px solid var(--line);padding:26px 0 96px;color:var(--muted);
          font:11px/1.7 var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:center}
 
   /* ---------- Panel de cotización ---------- */
   #cfg-btn{
-    background:transparent;border:1px solid rgba(255,255,255,.22);border-radius:999px;
-    color:rgba(255,255,255,.75);cursor:pointer;padding:5px;line-height:0;margin-left:2px;
+    background:transparent;border:1px solid var(--line);border-radius:999px;
+    color:var(--faint);cursor:pointer;padding:5px;line-height:0;margin-left:2px;
     transition:border-color .16s, color .16s, transform .3s;
   }
   #cfg-btn svg{width:15px;height:15px;display:block}
-  #cfg-btn:hover{border-color:var(--glow);color:#fff;transform:rotate(60deg)}
+  #cfg-btn:hover{border-color:var(--acento);color:var(--acento);transform:rotate(60deg)}
 
   /* Todas las ventanas (cotización, ficha de producto, pedido) comparten esto */
   .modal{
     position:fixed;inset:0;z-index:900;display:grid;place-items:center;padding:20px;
-    background:rgba(10,7,16,.72);backdrop-filter:blur(4px);
+    background:rgba(24,18,38,.52);backdrop-filter:blur(5px);
   }
   @media (prefers-reduced-motion: no-preference){
     @keyframes modalIn{from{opacity:0}to{opacity:1}}
@@ -459,7 +473,7 @@
   .caja:focus{outline:none}
   .caja{
     background:var(--surface);border:1px solid var(--line);border-radius:16px;
-    padding:22px;width:min(400px,100%);box-shadow:0 24px 70px rgba(0,0,0,.6);
+    padding:22px;width:min(400px,100%);box-shadow:0 24px 60px rgba(24,18,38,.22);
   }
   .modal h3{font:400 20px/1 var(--display);text-transform:uppercase;margin:0 0 18px;letter-spacing:.02em}
   #panel .op{display:flex;gap:11px;align-items:flex-start;cursor:pointer;padding:9px 0}
@@ -495,10 +509,10 @@
   .fi-cerrar{
     position:absolute;top:14px;right:14px;z-index:4;width:34px;height:34px;padding:0;
     border-radius:50%;cursor:pointer;display:grid;place-items:center;
-    background:rgba(10,7,16,.6);color:#fff;border:1px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.82);color:var(--ink);border:1px solid var(--line);
     backdrop-filter:blur(6px);font-size:20px;line-height:1;
   }
-  .fi-cerrar:hover{background:var(--acento);border-color:var(--acento)}
+  .fi-cerrar:hover{background:var(--acento);border-color:var(--acento);color:#fff}
   #ficha .caja{position:relative}
   .fi-cols{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr)}
   /* Sin aspect-ratio fijo: es un item del grid, asi que se estira solo hasta
@@ -531,14 +545,14 @@
   .fi-pintas{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:5px}
   .fi-pintas button{
     width:20px;height:20px;padding:0;border-radius:50%;cursor:pointer;display:block;
-    border:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22), 0 1px 2px rgba(0,0,0,.5);
+    border:0;box-shadow:inset 0 0 0 1px rgba(24,18,38,.18), 0 1px 2px rgba(24,18,38,.12);
     transition:transform .12s ease, box-shadow .12s ease;
   }
   .fi-pintas button:hover{transform:scale(1.12)}
   /* El anillo va por fuera del puntito para no taparle el color */
   .fi-pintas button[aria-pressed="true"]{
     transform:scale(1.06);
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.3), 0 0 0 2px var(--surface), 0 0 0 4px var(--glow);
+    box-shadow:inset 0 0 0 1px rgba(24,18,38,.22), 0 0 0 2px var(--surface), 0 0 0 4px var(--acento);
   }
   /* Color que no está en la lista de hex: no inventamos el tono, se marca con rayas */
   .fi-pintas button.sinhex{
@@ -569,7 +583,7 @@
   .fi-op i{font:500 10.5px/1 var(--mono);color:var(--muted);font-style:normal}
   .fi-op:hover{border-color:var(--faint)}
   .fi-op[aria-pressed="true"]{
-    border-color:var(--acento);background:rgba(168,85,247,.16);
+    border-color:var(--acento);background:rgba(124,58,237,.10);
     box-shadow:0 0 0 1px var(--acento);
   }
   .fi-op[aria-pressed="true"] i{color:var(--glow)}
@@ -620,7 +634,7 @@
     display:flex;align-items:center;justify-content:center;gap:7px;
     border-radius:999px;cursor:pointer;
     font:700 11.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
-    background:rgba(168,85,247,.12);color:var(--ink);border:1px solid rgba(168,85,247,.42);
+    background:rgba(124,58,237,.13);color:var(--acento);border:1px solid rgba(124,58,237,.42);
     transition:background .16s, color .16s, border-color .16s, transform .12s;
   }
   /* Los dos íconos van apilados en la misma celda y el CSS muestra el que va.
@@ -631,9 +645,9 @@
   .mas[aria-pressed="true"] .ico .i-mas,.mas[aria-pressed="true"] .txt-add{display:none}
   .mas[aria-pressed="true"] .ico .i-ok{display:block}
   .mas[aria-pressed="true"] .txt-ok{display:inline}
-  .mas:hover{background:rgba(168,85,247,.22);border-color:var(--glow)}
+  .mas:hover{background:rgba(124,58,237,.20);border-color:var(--acento)}
   .mas:active{transform:scale(.97)}
-  .mas[aria-pressed="true"]{background:var(--ok-soft);color:var(--ok);border-color:rgba(94,233,164,.55)}
+  .mas[aria-pressed="true"]{background:var(--ok-soft);color:var(--ok);border-color:rgba(15,138,95,.45)}
   .card{cursor:pointer}
   .card:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
 
@@ -641,7 +655,7 @@
   .barra-pedido{
     position:fixed;left:0;right:0;bottom:0;z-index:600;
     background:var(--surface);border-top:1px solid var(--line);
-    box-shadow:0 -8px 30px rgba(0,0,0,.5);
+    box-shadow:0 -8px 26px rgba(24,18,38,.10);
     /* El contenido sigue la misma caja de 1280 que el resto de la página: sin
        esto, en pantallas anchas el total quedaba contra un borde y el CTA
        contra el otro, con medio metro de vacío en el medio. */
@@ -672,12 +686,12 @@
   .bp-total i{font:500 11px/1 var(--mono);color:var(--faint);font-style:normal}
   .bp-enviar{
     margin-left:auto;flex:none;text-decoration:none;color:#fff;
-    background:linear-gradient(135deg,var(--acento),#8B3FE0);
+    background:linear-gradient(135deg,var(--acento),#6D28D9);
     border-radius:999px;padding:13px 22px;font:600 10.5px/1 var(--mono);
     letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;
-    box-shadow:0 0 0 1px rgba(192,132,252,.35), 0 6px 20px rgba(168,85,247,.3);
+    box-shadow:0 6px 18px rgba(124,58,237,.30);
   }
-  .bp-enviar:hover{box-shadow:0 0 0 1px var(--glow), 0 8px 30px rgba(168,85,247,.5)}
+  .bp-enviar:hover{box-shadow:0 8px 26px rgba(124,58,237,.45)}
   /* Con el pedido abierto, el flotante se va. Ya hay un WhatsApp por tarjeta y
      otro en la ficha: un tercero encima de la barra no suma, y le compite el
      lugar al único botón que importa en ese momento, que es enviar el pedido. */
@@ -713,7 +727,7 @@
   }
   .pd-quitar{background:transparent;border:0;color:var(--faint);cursor:pointer;font-size:19px;
              line-height:1;padding:5px 8px;border-radius:8px;flex:none}
-  .pd-quitar:hover{color:#FF8A8A;background:rgba(255,138,138,.1)}
+  .pd-quitar:hover{color:#C2352B;background:rgba(194,53,43,.09)}
   .pd-total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
             border-top:1px solid var(--line);margin-top:6px;padding-top:14px}
   .pd-total span{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
@@ -894,13 +908,11 @@
     <div class="head">
       <span class="logo">
         <!-- El triángulo NO navega: es el disparador del easter egg (7 clics).
-             El texto sí lleva al sitio, para no perder el link. -->
+             El nombre tampoco: el catálogo no manda a ningún lado. -->
         <button class="marca-btn" id="marca-btn" type="button" aria-label="Advance Tecno">
           <img src="assets/logo-mark.png" alt="">
         </button>
-        <a href="https://advancegrouparg.com/" target="_blank" rel="noopener">
-          <b>Advance <span>Tecno</span></b>
-        </a>
+        <b>Advance <span>Tecno</span></b>
       </span>
       <span class="eyebrow">Catálogo</span>
       <div class="stamp">
@@ -913,7 +925,7 @@
         </button>
       </div>
     </div>
-    <h1 class="titulo-h">Stock y precios<br>en tiempo real.</h1>
+    <h1 class="titulo-h">Stock y precios<br><span>en tiempo real.</span></h1>
     <p class="bajada">Todo lo que tenemos disponible, actualizado al momento. Consultá por WhatsApp desde cualquier producto.</p>
     <div class="search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -1614,7 +1626,8 @@ function htmlFoto(p, clase){
   if(!p.imagen) return sinFoto;
   return `<img src="${esc(p.imagen)}" alt="${esc(p.desc)}" ${clase || ''} decoding="async"
                onload="this.classList.add('ok')"
-               onerror="this.outerHTML=this.dataset.alt" data-alt="${esc(sinFoto)}">`;
+               onerror="this.parentElement.classList.add('vacia'); this.outerHTML=this.dataset.alt"
+               data-alt="${esc(sinFoto)}">`;
 }
 // En la grilla el badge solo aparece cuando FALTA stock: con 472 productos
 // disponibles, "En stock" repetido 472 veces no distingue nada. En la ficha
@@ -1917,7 +1930,7 @@ function tarjeta(p){
   const opts  = htmlOpciones(p);
 
   el.innerHTML = `
-    ${CON_FOTOS ? `<div class="foto">${badge}${htmlFoto(p,'loading="lazy"')}</div>` : ''}
+    ${CON_FOTOS ? `<div class="foto${p.imagen ? '' : ' vacia'}">${badge}${htmlFoto(p,'loading="lazy"')}</div>` : ''}
     <div class="cuerpo">
       <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}</span>
       <h2 class="nombre">${esc(p.desc)}</h2>
@@ -2120,9 +2133,12 @@ function marcasDisponibles(){
 
 function pintarMarcas(){
   const lista = marcasDisponibles();
-  // Con una sola marca no hay nada que elegir y la cinta sobra
+  /* La cinta aparece adentro de una seccion. En "Todo" son las 21 marcas del
+     catalogo en una sola fila que hay que scrollear entera, y filtrar por marca
+     sin decir de que rubro no le sirve a nadie: la barra queda mas limpia sin
+     ella. Con una sola marca tampoco aparece: no habria nada que elegir. */
   const wrap = $('marcas-wrap');
-  wrap.hidden = lista.length < 2;
+  wrap.hidden = !filtros.cat || lista.length < 2;
 
   const firma = filtros.marca + '#' + lista.map(([m,n]) => m + n).join('|');
   if(firma === FIRMA_MARCAS) return;

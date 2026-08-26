@@ -217,6 +217,29 @@
     box-shadow:0 0 18px rgba(168,85,247,.45);
   }
 
+  /* ---------- Segunda cinta: las marcas de la sección ----------
+     Antes esto era un select con las 21 marcas del catálogo entero, así que
+     en Consolas te ofrecía Canon o Nikon, que no tienen ni una. Ahora muestra
+     solo las que hay adentro de lo que estás mirando, con cuántas son.
+     Van más chicos y sin relleno morado al elegirlos: el chip de categoría
+     tiene que seguir siendo el que manda en la barra. */
+  .chips-marcas{border-top:1px solid var(--line)}
+  .chips-marcas[hidden]{display:none}
+  .chips-marcas .chips{padding:8px 0 9px}
+  .chip-marca{
+    display:flex;align-items:center;gap:7px;
+    padding:6px 12px;font-size:9.5px;text-transform:none;letter-spacing:.08em;
+  }
+  .chip-marca i{
+    font-style:normal;font-size:9px;letter-spacing:.04em;
+    padding:2px 5px;border-radius:5px;background:var(--surface-2);color:var(--faint);
+  }
+  .chip-marca[aria-pressed="true"]{
+    background:rgba(168,85,247,.16);color:var(--glow);border-color:var(--acento);
+    box-shadow:none;
+  }
+  .chip-marca[aria-pressed="true"] i{background:rgba(168,85,247,.28);color:#fff}
+
   .row2{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:0 0 12px}
   select{
     padding:9px 13px;font:13px var(--sans);border-radius:999px;cursor:pointer;
@@ -226,6 +249,28 @@
   .toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
   .toggle input{width:16px;height:16px;accent-color:var(--acento);cursor:pointer}
   .count{margin-left:auto;font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+
+  /* En la compu los filtros entran en un renglón y quedan a la vista. En el
+     celular ocupaban tres, y como la barra es sticky se comían un quinto de la
+     pantalla todo el tiempo. Ahí se esconden detrás de este botón: la cinta de
+     categorías, que es lo que más se toca, sigue siempre arriba. */
+  .filtros-btn{display:none}
+  @media (max-width:560px){
+    .filtros-btn{
+      display:flex;align-items:center;gap:7px;order:-1;
+      padding:9px 14px;border-radius:999px;cursor:pointer;
+      background:var(--surface-2);color:var(--ink);border:1px solid var(--line);
+      font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    }
+    .filtros-btn svg{width:13px;height:13px;display:block;transition:transform .2s}
+    .filtros-btn[aria-expanded="true"]{border-color:var(--glow)}
+    .filtros-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
+    .row2 select,.row2 .toggle{display:none}
+    .row2.abierta select{display:block}
+    .row2.abierta .toggle{display:flex}
+    /* Montura y apertura siguen siendo cosa de lentes, abierta o no */
+    .row2.abierta select[hidden]{display:none}
+  }
 
   /* ---------- Grilla ---------- */
   .grid{display:grid;gap:14px;padding:22px 0 64px;grid-template-columns:repeat(auto-fill,minmax(216px,1fr))}
@@ -307,23 +352,23 @@
   .usd .desde{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
               color:var(--faint);font-style:normal;display:block;margin-bottom:5px}
   .ars{font:500 12px/1 var(--mono);letter-spacing:.03em;color:var(--muted);margin-top:5px}
-  /* EL CTA. Es la acción que da plata, así que manda visualmente sobre todo lo
-     demás de la tarjeta: más alto, más contraste, con el ícono de WhatsApp para
-     que se entienda a dónde lleva antes de leer. */
+  /* WhatsApp en la tarjeta queda como ícono: el logo se reconoce sin leer, y
+     el texto lo necesita más el otro botón, que es el que arma el pedido.
+     Ninguno de los dos va lleno de morado. Con quince tarjetas en pantalla,
+     quince botones llenos dejaban de resaltar: el morado sólido quedó para una
+     sola cosa por pantalla, que es enviar el pedido. */
   .wa{
-    display:flex;align-items:center;justify-content:center;gap:7px;
-    text-align:center;text-decoration:none;
-    font:700 11.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
-    padding:14px 12px;border-radius:999px;color:#fff;
-    background:linear-gradient(135deg,var(--acento),#8B3FE0);
-    box-shadow:0 0 0 1px rgba(192,132,252,.45), 0 6px 22px rgba(168,85,247,.42);
-    transition:box-shadow .18s, transform .12s, filter .18s;
+    display:flex;align-items:center;justify-content:center;
+    text-decoration:none;flex:none;width:44px;border-radius:999px;
+    color:var(--glow);background:transparent;
+    border:1px solid rgba(168,85,247,.42);
+    transition:background .16s, border-color .16s, color .16s, transform .12s;
   }
-  .wa svg{width:15px;height:15px;flex:none;display:block}
-  .wa:hover{box-shadow:0 0 0 1px var(--glow), 0 10px 34px rgba(168,85,247,.7);filter:brightness(1.08)}
-  .wa:active{transform:translateY(1px)}
-  /* La tarjeta entera empuja hacia el CTA al pasar el mouse */
-  .card:hover .wa{box-shadow:0 0 0 1px var(--glow), 0 10px 30px rgba(168,85,247,.55)}
+  .wa svg{width:19px;height:19px;flex:none;display:block}
+  .wa:hover{background:rgba(168,85,247,.16);border-color:var(--glow);color:#fff}
+  .wa:active{transform:scale(.94)}
+  /* La tarjeta entera empuja hacia las acciones al pasar el mouse */
+  .card:hover .wa{border-color:rgba(168,85,247,.7)}
 
   /* En la ficha el CTA va primero, ocupa todo el ancho y es el doble de alto
      que "Agregar al pedido". No compiten: uno manda y el otro acompaña. */
@@ -567,21 +612,28 @@
 
   /* ---------- Botones de la tarjeta ---------- */
   .acciones{display:flex;gap:8px}
-  .acciones .wa{flex:1;min-width:0}
-  /* Secundario a propósito: más angosto y apagado que el CTA, para que la vista
-     caiga primero en "Consultar". Sube el contraste solo al pasarle el mouse. */
+  /* El que arma el pedido es el ancho y el único con texto: es la acción que
+     deja vender varios productos en un solo mensaje, y como ícono suelto nadie
+     entendía qué hacía. Los 44px son el mínimo para el dedo. */
   .mas{
-    flex:none;width:38px;border-radius:999px;cursor:pointer;display:grid;place-items:center;
-    background:transparent;color:var(--faint);border:1px solid var(--line);
+    flex:1;min-width:0;min-height:44px;
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    border-radius:999px;cursor:pointer;
+    font:700 11.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    background:rgba(168,85,247,.12);color:var(--ink);border:1px solid rgba(168,85,247,.42);
     transition:background .16s, color .16s, border-color .16s, transform .12s;
   }
-  .mas svg{width:16px;height:16px;display:block;grid-area:1/1}
-  .mas .i-ok{display:none}
-  .mas[aria-pressed="true"] .i-mas{display:none}
-  .mas[aria-pressed="true"] .i-ok{display:block}
-  .mas:hover{color:var(--ink);border-color:var(--glow)}
-  .mas:active{transform:scale(.92)}
-  .mas[aria-pressed="true"]{background:var(--ok-soft);color:var(--ok);border-color:rgba(94,233,164,.4)}
+  /* Los dos íconos van apilados en la misma celda y el CSS muestra el que va.
+     Ojo con la especificidad: quien esconde tiene que pesar más que el svg. */
+  .mas .ico{display:grid;place-items:center;width:16px;height:16px;flex:none}
+  .mas .ico svg{width:16px;height:16px;display:block;grid-area:1/1}
+  .mas .ico .i-ok,.mas .txt-ok{display:none}
+  .mas[aria-pressed="true"] .ico .i-mas,.mas[aria-pressed="true"] .txt-add{display:none}
+  .mas[aria-pressed="true"] .ico .i-ok{display:block}
+  .mas[aria-pressed="true"] .txt-ok{display:inline}
+  .mas:hover{background:rgba(168,85,247,.22);border-color:var(--glow)}
+  .mas:active{transform:scale(.97)}
+  .mas[aria-pressed="true"]{background:var(--ok-soft);color:var(--ok);border-color:rgba(94,233,164,.55)}
   .card{cursor:pointer}
   .card:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
 
@@ -590,17 +642,29 @@
     position:fixed;left:0;right:0;bottom:0;z-index:600;
     background:var(--surface);border-top:1px solid var(--line);
     box-shadow:0 -8px 30px rgba(0,0,0,.5);
-    padding:11px 20px;display:flex;align-items:center;gap:14px;
+    /* El contenido sigue la misma caja de 1280 que el resto de la página: sin
+       esto, en pantallas anchas el total quedaba contra un borde y el CTA
+       contra el otro, con medio metro de vacío en el medio. */
+    padding:11px max(20px, calc((100% - 1280px) / 2 + 20px));
+    display:flex;align-items:center;gap:14px;
   }
   .barra-pedido[hidden]{display:none}
   @media (prefers-reduced-motion: no-preference){
     @keyframes bpEntra{from{transform:translateY(100%)}to{transform:none}}
     .barra-pedido{animation:bpEntra .28s cubic-bezier(.22,.7,.3,1)}
   }
+  /* Con fondo y chevron se lee como botón. Antes parecía una etiqueta y casi
+     nadie descubría que ahí adentro estaba la lista del pedido. */
   .bp-ver{
-    background:transparent;border:1px solid var(--line);color:var(--ink);cursor:pointer;
-    border-radius:999px;padding:9px 15px;font:600 10.5px/1 var(--mono);
+    background:var(--surface-2);border:1px solid var(--line);color:var(--ink);cursor:pointer;
+    display:flex;align-items:center;gap:8px;
+    border-radius:999px;padding:10px 15px;font:600 10.5px/1 var(--mono);
     letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+  }
+  .bp-ver::after{
+    content:"";width:6px;height:6px;flex:none;opacity:.65;
+    border:1.6px solid currentColor;border-left:0;border-bottom:0;
+    transform:rotate(-45deg) translate(-1px,1px);
   }
   .bp-ver:hover{border-color:var(--glow)}
   .bp-total{display:flex;flex-direction:column;gap:3px;min-width:0}
@@ -614,12 +678,14 @@
     box-shadow:0 0 0 1px rgba(192,132,252,.35), 0 6px 20px rgba(168,85,247,.3);
   }
   .bp-enviar:hover{box-shadow:0 0 0 1px var(--glow), 0 8px 30px rgba(168,85,247,.5)}
-  /* Con la barra abajo, el botón flotante sube para no taparla */
-  body.con-pedido .wa-flotante{bottom:86px}
+  /* Con el pedido abierto, el flotante se va. Ya hay un WhatsApp por tarjeta y
+     otro en la ficha: un tercero encima de la barra no suma, y le compite el
+     lugar al único botón que importa en ese momento, que es enviar el pedido. */
+  body.con-pedido .wa-flotante{display:none}
   body.con-pedido footer{padding-bottom:120px}
   @media (max-width:560px){
     .barra-pedido{padding:10px 14px;gap:10px}
-    .bp-ver{padding:9px 12px}
+    .bp-ver{padding:9px 11px;gap:6px;font-size:9.5px}
     .bp-enviar{padding:12px 16px}
     .bp-total b{font-size:17px}
   }
@@ -870,8 +936,22 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
       </button>
     </div>
-    <div class="row2">
-      <select id="marca"><option value="">Todas las marcas</option></select>
+    <!-- Segunda cinta: las marcas que hay dentro de la sección que estás
+         mirando. La arma el script y se esconde sola cuando no hay más de una. -->
+    <div class="chips-wrap chips-marcas" id="marcas-wrap" hidden>
+      <button class="chip-nav izq" id="marcas-izq" type="button" tabindex="-1" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <div class="chips" id="marcas"></div>
+      <button class="chip-nav der" id="marcas-der" type="button" tabindex="-1" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <div class="row2" id="row2">
+      <button class="filtros-btn" id="filtros-btn" type="button" aria-expanded="false" aria-controls="row2">
+        Filtros
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
       <select id="precio"><option value="">Cualquier precio</option></select>
       <!-- Montura y apertura solo tienen sentido en lentes: el script los
            muestra al elegir esa categoría y los esconde al salir. -->
@@ -882,6 +962,7 @@
         <option value="cerrado">Estándar · más de f/2.8</option>
       </select>
       <select id="orden">
+        <option value="modelo">Marca y modelo</option>
         <option value="sheet">Orden de la planilla</option>
         <option value="cat">Agrupado por categoría</option>
         <option value="asc">Precio: menor a mayor</option>
@@ -988,7 +1069,10 @@ let PRODUCTOS = [];         // una entrada por fila de la planilla (las variante
 let MODELOS   = [];         // una entrada por modelo: lo que se dibuja en la grilla
 let CON_FOTOS = false;
 let TC = null;              // cotización efectiva (número) o null si no hay
-const filtros = { q:'', cat:'', marca:'', orden:'sheet', soloStock:false,
+// Cómo sale ordenada la grilla si no pedís otra cosa. Cambiándolo por 'sheet'
+// el catálogo vuelve a respetar el orden crudo de las filas de la planilla.
+const ORDEN_DEF = 'modelo';
+const filtros = { q:'', cat:'', marca:'', orden:ORDEN_DEF, soloStock:false,
                   rango:'', montura:'', apertura:'' };
 
 // Tramos de precio. Los cortes salen de cómo está repartido el catálogo, no de
@@ -1299,7 +1383,9 @@ async function cargar(){
         precio: !esCosto ? base
               : (MARGEN_PCT === null || MARGEN_PCT === undefined) ? null
               : Math.round(base * (1 + MARGEN_PCT/100)),
-        color:  val(f,C.color),
+        // Si la columna Color está vacía, se buscan los colores en el paréntesis
+        // del nombre, que es donde los carga la mitad de la planilla.
+        color:  val(f,C.color) || colorDelParentesis(val(f,C.desc) || val(f,C.modelo)),
         stock:  esSi(val(f,C.stock)),
         busq:   val(f,C.busq),
         fecha:  val(f,C.fecha),
@@ -1352,8 +1438,32 @@ function filtrar(){
   // Infinity - Infinity, que da NaN y rompe el sort.
   const pr = p => p.precio === null ? Infinity : p.precio;
   const porPrecio = (a,b) => { const x=pr(a), y=pr(b); return x===y ? 0 : x-y; };
+  /* Marca y modelo. La planilla se fue llenando por tandas, así que las cuatro
+     PlayStation terminaron en las filas 86, 87, 402 y 446 y en la grilla salían
+     desparramadas entre medio de las Switch y las Xbox. Acá cada marca queda
+     entera y sus modelos correlativos.
+     Las categorías y las marcas NO se ordenan alfabéticamente: van en el orden
+     en que aparecen en la planilla, así lo que pusiste primero sigue primero.
+     Lo único alfabético es el modelo dentro de su marca, y se compara sin
+     espacios ni acentos porque la misma consola está escrita de las dos formas
+     ("PlayStation 5 Pro" y "Play Station 5 Física"): con los espacios en el
+     medio, una caía antes de la "P" y la otra después. */
+  const claveModelo = p => norm(p.desc).replace(/[^a-z0-9]/g,'');
+  const posCat = new Map(), posMarca = new Map();
+  const kMarca = p => norm(p.cat) + '|' + norm(p.marca);
+  out.forEach(p => {
+    if(!posCat.has(norm(p.cat))) posCat.set(norm(p.cat), p.idx);
+    if(!posMarca.has(kMarca(p))) posMarca.set(kMarca(p), p.idx);
+  });
+  const porMarcaModelo = (a,b) =>
+    (posCat.get(norm(a.cat)) - posCat.get(norm(b.cat))) ||
+    (posMarca.get(kMarca(a)) - posMarca.get(kMarca(b))) ||
+    claveModelo(a).localeCompare(claveModelo(b),'es') ||
+    (a.idx - b.idx);
+
   const orden = {
-    // Por defecto respetamos el orden de la planilla: ya está curada
+    modelo: porMarcaModelo,
+    // El orden crudo de la planilla, por si querés acomodar algo a mano
     sheet:(a,b) => a.idx - b.idx,
     asc:  (a,b) => porPrecio(a,b) || porNombre(a,b),
     desc: (a,b) => porPrecio(b,a) || porNombre(a,b),
@@ -1537,17 +1647,47 @@ const COLORES = {
   'rose gold':'#E0BFB4', orange:'#F07A24', pink:'#F2A9C0', pin:'#F2A9C0',
   'cherry pink':'#D94A6E', purple:'#8A4FD0', pur:'#8A4FD0', violet:'#8E6FE0',
   lavender:'#C3B2E8', 'techno red':'#C6303A', red:'#D8352E', brown:'#6B4A34',
-  midnight:'#1E2434', astrobot:'#5A6B8C'
+  midnight:'#1E2434', astrobot:'#5A6B8C',
+  starlight:'#EDE6DA', 'icy blue':'#BFDCE8', icyblue:'#BFDCE8', blush:'#E8B4B0',
+  amethyst:'#8A5FA8', sapphire:'#2D5A9E',
+  // Como vienen escritos en algunas filas de la planilla
+  whites:'#F5F5F7', sil:'#D8DADC', jetblack:'#0B0B0D', negro:'#1D1D1F', violeta:'#8E6FE0'
 };
 
-// "Midnight/Blue/Orange" → tres puntitos. Si el nombre no está en la lista,
-// probamos con la última palabra ("cherry pink" → "pink").
+// El tono de un nombre suelto, o null si no lo sabemos pintar. Si el nombre
+// completo no está en la lista, probamos con la última palabra ("cherry pink"
+// → "pink").
+function hexColor(n){
+  const k = norm(n);
+  return COLORES[k] || COLORES[k.split(/\s+/).pop()] || null;
+}
+
+// "Midnight/Blue/Orange" → tres puntitos.
+// Algunas filas separan con guión en vez de barra ("Black-Silver"). Ese corte
+// se hace SOLO si los dos lados son colores conocidos: así "Rose-Gold" o
+// "Space-Gray" siguen siendo un color y no dos.
 function pintas(txt){
-  return (txt||'').split('/').map(s => s.trim()).filter(Boolean).map(n => {
-    const k = norm(n);
-    const hex = COLORES[k] || COLORES[k.split(/\s+/).pop()] || null;
-    return { nombre:n, hex };
-  });
+  return (txt||'').split('/').map(s => s.trim()).filter(Boolean)
+    .flatMap(n => {
+      const partes = n.split('-').map(s => s.trim()).filter(Boolean);
+      return partes.length > 1 && partes.every(hexColor) ? partes : [n];
+    })
+    .map(n => ({ nombre:n, hex:hexColor(n) }));
+}
+
+/* Muchas filas dejan la columna Color vacía y ponen los colores entre
+   paréntesis en el modelo: "Airpods Max USB-C (Purple/Starlight/Midnight)".
+   Los rescatamos de ahí, pero solo cuando TODO lo que hay adentro del
+   paréntesis son colores que sabemos pintar. Ese recaudo es lo que evita
+   confundir "(CAJA DE KIT)", "(INGLES)", "(2ª Gen)" o "(MINI 3 PRO)" con un
+   color: ante la duda, la fila se queda sin puntitos, como antes. */
+const RE_PAREN_CAP = /\(([^)]*)\)/g;
+function colorDelParentesis(desc){
+  for(const m of String(desc||'').matchAll(RE_PAREN_CAP)){
+    const lista = pintas(m[1].trim());
+    if(lista.length && lista.every(c => c.hex)) return lista.map(c => c.nombre).join('/');
+  }
+  return '';
 }
 function htmlColores(txt){
   const lista = pintas(txt).filter(c => c.hex);
@@ -1791,9 +1931,13 @@ function tarjeta(p){
           ${ars ? `<div class="ars">${ars}</div>` : ''}
         </div>
         <div class="acciones">
-          ${link ? `<a class="wa" href="${link}" target="_blank" rel="noopener">${ICONO_WA}Consultar</a>` : ''}
           <button class="mas" type="button" aria-pressed="${enPedidoModelo(p)}"
-                  aria-label="Agregar al pedido" title="Agregar al pedido">${ICONO_MAS}</button>
+                  aria-label="Agregar al pedido">
+            <span class="ico">${ICONO_MAS}</span>
+            <b class="txt-add">Agregar</b><b class="txt-ok">Agregado</b>
+          </button>
+          ${link ? `<a class="wa" href="${link}" target="_blank" rel="noopener"
+                       title="Consultar por WhatsApp" aria-label="Consultar por WhatsApp">${ICONO_WA}</a>` : ''}
         </div>
       </div>
     </div>`;
@@ -1838,6 +1982,7 @@ function dibujarTanda(){
 }
 
 function pintar(){
+  pintarMarcas();
   LISTA = filtrar();
   dibujadas = 0;
   // Con CARPETA_FOTOS todos tienen una URL "supuesta", exista o no el archivo,
@@ -1941,6 +2086,10 @@ function armarFiltros(){
     b.setAttribute('aria-pressed', String(filtros.cat === val));
     b.onclick = () => {
       filtros.cat = val;
+      // Si venías filtrando por Apple y te vas a Consolas, esa marca no existe
+      // ahí: sin esto la grilla quedaba vacía y parecía que no hay stock.
+      if(filtros.marca && !MODELOS.some(p => (!val || p.cat === val) && p.marca === filtros.marca))
+        filtros.marca = '';
       [...$('cats').children].forEach(x => x.setAttribute('aria-pressed', String(x === b)));
       aplicarFiltro(true);
       // El chip elegido se centra en la fila
@@ -1949,10 +2098,59 @@ function armarFiltros(){
     $('cats').appendChild(b);
   });
   sincronizarCinta();   // recién ahora sabemos si la cinta se pasa de ancho
-
-  $('marca').innerHTML = '<option value="">Todas las marcas</option>'
-    + marcas.map(m => `<option value="${esc(m)}">${esc(m)}</option>`).join('');
   sincronizarControles();
+}
+
+/* ---------- Las marcas de la sección ----------
+   Los números dicen cuánto verías si tocaras ese chip: se cuentan con todos
+   los demás filtros puestos, pero sin el de marca. Se redibuja solo cuando la
+   lista cambió de verdad, para no perder el scroll de la cinta. */
+let FIRMA_MARCAS = '';
+
+function marcasDisponibles(){
+  const guardado = filtros.marca;
+  filtros.marca = '';
+  const base = filtrar();
+  filtros.marca = guardado;
+  const cuenta = new Map();
+  base.forEach(p => cuenta.set(p.marca, (cuenta.get(p.marca) || 0) + 1));
+  // Primero la marca con más productos: es por la que más se filtra
+  return [...cuenta].sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0],'es'));
+}
+
+function pintarMarcas(){
+  const lista = marcasDisponibles();
+  // Con una sola marca no hay nada que elegir y la cinta sobra
+  const wrap = $('marcas-wrap');
+  wrap.hidden = lista.length < 2;
+
+  const firma = filtros.marca + '#' + lista.map(([m,n]) => m + n).join('|');
+  if(firma === FIRMA_MARCAS) return;
+  FIRMA_MARCAS = firma;
+  if(wrap.hidden){ $('marcas').replaceChildren(); return; }
+
+  const chip = (val, txt, n) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip chip-marca';
+    b.dataset.marca = val;
+    b.setAttribute('aria-pressed', String(val === filtros.marca));
+    b.append(txt);
+    const i = document.createElement('i');
+    i.textContent = n;
+    b.append(i);
+    // Tocar la marca que ya estaba puesta la saca: es el atajo para volver
+    // a ver la sección entera sin ir hasta el chip "Todas".
+    b.onclick = () => {
+      filtros.marca = filtros.marca === val ? '' : val;
+      aplicarFiltro(true);
+    };
+    return b;
+  };
+
+  const total = lista.reduce((s,[,n]) => s + n, 0);
+  $('marcas').replaceChildren(chip('', 'Todas', total), ...lista.map(([m,n]) => chip(m, m, n)));
+  sincronizarMarcas();
 }
 
 // Deja los controles mostrando lo que dice el objeto `filtros`. Se usa al
@@ -1960,13 +2158,14 @@ function armarFiltros(){
 function sincronizarControles(){
   $('q').value = filtros.q;
   $('clear').hidden = !filtros.q;
-  $('marca').value = filtros.marca;
   $('orden').value = filtros.orden;
   $('precio').value = filtros.rango;
   $('soloStock').checked = filtros.soloStock;
   sincronizarLentes();
   [...$('cats').children].forEach(b =>
     b.setAttribute('aria-pressed', String((b.dataset.cat || '') === filtros.cat)));
+  [...$('marcas').children].forEach(b =>
+    b.setAttribute('aria-pressed', String((b.dataset.marca || '') === filtros.marca)));
 }
 
 /* Montura y apertura aparecen solo en la categoría Lente. Ofrecerlas en
@@ -2061,14 +2260,14 @@ async function actualizar(primera){
    Lo que estás mirando vive en la dirección: podés mandarle a un cliente
    "mirá los iPhone" y le abre ya filtrado. El botón Atrás también funciona. */
 
-const ORDENES = ['sheet','cat','asc','desc','az'];
+const ORDENES = ['modelo','sheet','cat','asc','desc','az'];
 
 function leerURL(){
   const s = new URL(location.href).searchParams;
   filtros.q         = s.get('q') || '';
   filtros.cat       = s.get('cat') || window.CAT_FIJA || '';
   filtros.marca     = s.get('marca') || '';
-  filtros.orden     = ORDENES.includes(s.get('orden')) ? s.get('orden') : 'sheet';
+  filtros.orden     = ORDENES.includes(s.get('orden')) ? s.get('orden') : ORDEN_DEF;
   filtros.soloStock = s.get('stock') === '1';
   // Se validan contra la lista: un link con ?precio=cualquiercosa no debe
   // dejar la grilla vacía sin que se vea ningún filtro puesto
@@ -2084,7 +2283,7 @@ function urlActual(){
   set('q',     filtros.q.trim());
   set('cat',   filtros.cat);
   set('marca', filtros.marca);
-  set('orden', filtros.orden === 'sheet' ? '' : filtros.orden);   // el default no ensucia
+  set('orden', filtros.orden === ORDEN_DEF ? '' : filtros.orden);   // el default no ensucia
   set('stock', filtros.soloStock ? '1' : '');
   set('precio',   filtros.rango);
   set('montura',  filtros.montura);
@@ -2470,7 +2669,7 @@ function pintarPedido(){
   const total = totalPedido(), u = unidadesPedido();
   // Cuenta unidades, no líneas: si el cliente cargó tres iPhone iguales, el
   // botón tiene que decir tres.
-  $('bp-ver').textContent = `${u} producto${u!==1?'s':''}`;
+  $('bp-ver').textContent = `Ver pedido (${u})`;
   $('bp-usd').textContent = 'USD ' + plata(total) + (hayAConsultar() ? ' +' : '');
   $('bp-ars').textContent = TC ? '$ ' + plata(Math.round(total * TC)) : '';
   $('bp-enviar').href = linkWA(mensajePedido());
@@ -2544,7 +2743,6 @@ $('q').addEventListener('input', e => {
 $('clear').onclick = () => {
   $('q').value=''; filtros.q=''; $('clear').hidden=true; aplicarFiltro(false); $('q').focus();
 };
-$('marca').onchange     = e => { filtros.marca = e.target.value;    aplicarFiltro(true); };
 $('orden').onchange     = e => { filtros.orden = e.target.value;    aplicarFiltro(true); };
 $('precio').onchange    = e => { filtros.rango = e.target.value;    aplicarFiltro(true); };
 $('montura').onchange   = e => { filtros.montura = e.target.value;  aplicarFiltro(true); };
@@ -2702,73 +2900,81 @@ function abrirPrimo(){
     'primo', 9000, PRIMO_FIG);
 }
 
-/* ---------- La cinta de categorías se desliza ----------
+/* ---------- Las cintas de chips se deslizan ----------
    Con overflow-x solo alcanza en el celular. En la compu la barra de scroll
    está oculta a propósito, así que sin esto no había forma de llegar a las
-   categorías de la derecha. Ahora anda con la rueda, arrastrando y con flechas. */
+   categorías de la derecha. Ahora anda con la rueda, arrastrando y con flechas.
+   Está armado como función porque hay dos cintas: categorías y marcas. */
 
-const cinta = $('cats'), cintaWrap = $('cats-wrap');
+function activarCinta(idWrap, idCinta, idIzq, idDer){
+  const cinta = $(idCinta), wrap = $(idWrap);
 
-function sincronizarCinta(){
-  const max = cinta.scrollWidth - cinta.clientWidth;
-  cintaWrap.classList.toggle('hay-izq', cinta.scrollLeft > 4);
-  cintaWrap.classList.toggle('hay-der', cinta.scrollLeft < max - 4);
+  const sincronizar = () => {
+    const max = cinta.scrollWidth - cinta.clientWidth;
+    wrap.classList.toggle('hay-izq', cinta.scrollLeft > 4);
+    wrap.classList.toggle('hay-der', cinta.scrollLeft < max - 4);
+  };
+  cinta.addEventListener('scroll', sincronizar, {passive:true});
+  addEventListener('resize', sincronizar);
+
+  // Flechas: se corre poco menos de una pantalla, para no perder el hilo
+  const paso = () => Math.max(180, cinta.clientWidth * 0.75);
+  const correr = d => cinta.scrollBy({left:d, behavior: quieto ? 'auto' : 'smooth'});
+  $(idIzq).onclick = () => correr(-paso());
+  $(idDer).onclick = () => correr(paso());
+
+  // Rueda vertical del mouse → desplazamiento horizontal. Si ya estamos en la
+  // punta, dejamos que el gesto siga scrolleando la página como siempre.
+  cinta.addEventListener('wheel', e => {
+    if(Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    const max = cinta.scrollWidth - cinta.clientWidth;
+    if(max <= 0) return;
+    if((e.deltaY < 0 && cinta.scrollLeft <= 0) || (e.deltaY > 0 && cinta.scrollLeft >= max)) return;
+    e.preventDefault();
+    cinta.scrollLeft += e.deltaY;
+  }, {passive:false});
+
+  // Arrastrar con el mouse, como si agarraras la cinta con la mano
+  let x0 = 0, s0 = 0, activo = false, arrastro = false, id = null;
+
+  cinta.addEventListener('pointerdown', e => {
+    if(e.pointerType === 'touch' || e.button !== 0) return;   // el dedo ya desliza solo
+    activo = true; arrastro = false; id = e.pointerId;
+    x0 = e.clientX; s0 = cinta.scrollLeft;
+  });
+  cinta.addEventListener('pointermove', e => {
+    if(!activo || e.pointerId !== id) return;
+    const d = e.clientX - x0;
+    // Un umbral chico: sin esto, el temblor del clic ya contaría como arrastre
+    if(!arrastro){
+      if(Math.abs(d) < 5) return;
+      arrastro = true;
+      cinta.classList.add('arrastrando');
+      try{ cinta.setPointerCapture(id); }catch{}
+    }
+    cinta.scrollLeft = s0 - d;
+  });
+  const soltar = () => {
+    if(!activo) return;
+    activo = false;
+    cinta.classList.remove('arrastrando');
+    try{ if(id !== null && cinta.hasPointerCapture(id)) cinta.releasePointerCapture(id); }catch{}
+  };
+  cinta.addEventListener('pointerup', soltar);
+  cinta.addEventListener('pointercancel', soltar);
+  // Si soltaste después de arrastrar, no queremos cambiar de categoría sin
+  // querer. La bandera se limpia sola en el próximo pointerdown.
+  cinta.addEventListener('click', e => {
+    if(!arrastro) return;
+    arrastro = false;
+    e.stopPropagation(); e.preventDefault();
+  }, true);
+
+  return sincronizar;
 }
-cinta.addEventListener('scroll', sincronizarCinta, {passive:true});
-addEventListener('resize', sincronizarCinta);
 
-// Flechas: se corre poco menos de una pantalla, para no perder el hilo
-const pasoCinta = () => Math.max(180, cinta.clientWidth * 0.75);
-const correr = d => cinta.scrollBy({left:d, behavior: quieto ? 'auto' : 'smooth'});
-$('cats-izq').onclick = () => correr(-pasoCinta());
-$('cats-der').onclick = () => correr(pasoCinta());
-
-// Rueda vertical del mouse → desplazamiento horizontal. Si ya estamos en la
-// punta, dejamos que el gesto siga scrolleando la página como siempre.
-cinta.addEventListener('wheel', e => {
-  if(Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-  const max = cinta.scrollWidth - cinta.clientWidth;
-  if(max <= 0) return;
-  if((e.deltaY < 0 && cinta.scrollLeft <= 0) || (e.deltaY > 0 && cinta.scrollLeft >= max)) return;
-  e.preventDefault();
-  cinta.scrollLeft += e.deltaY;
-}, {passive:false});
-
-// Arrastrar con el mouse, como si agarraras la cinta con la mano
-let cX0 = 0, cS0 = 0, cActivo = false, cArrastro = false, cId = null;
-
-cinta.addEventListener('pointerdown', e => {
-  if(e.pointerType === 'touch' || e.button !== 0) return;   // el dedo ya desliza solo
-  cActivo = true; cArrastro = false; cId = e.pointerId;
-  cX0 = e.clientX; cS0 = cinta.scrollLeft;
-});
-cinta.addEventListener('pointermove', e => {
-  if(!cActivo || e.pointerId !== cId) return;
-  const d = e.clientX - cX0;
-  // Un umbral chico: sin esto, el temblor del clic ya contaría como arrastre
-  if(!cArrastro){
-    if(Math.abs(d) < 5) return;
-    cArrastro = true;
-    cinta.classList.add('arrastrando');
-    try{ cinta.setPointerCapture(cId); }catch{}
-  }
-  cinta.scrollLeft = cS0 - d;
-});
-const soltarCinta = () => {
-  if(!cActivo) return;
-  cActivo = false;
-  cinta.classList.remove('arrastrando');
-  try{ if(cId !== null && cinta.hasPointerCapture(cId)) cinta.releasePointerCapture(cId); }catch{}
-};
-cinta.addEventListener('pointerup', soltarCinta);
-cinta.addEventListener('pointercancel', soltarCinta);
-// Si soltaste después de arrastrar, no queremos cambiar de categoría sin querer.
-// La bandera se limpia sola en el próximo pointerdown.
-cinta.addEventListener('click', e => {
-  if(!cArrastro) return;
-  cArrastro = false;
-  e.stopPropagation(); e.preventDefault();
-}, true);
+const sincronizarCinta   = activarCinta('cats-wrap',   'cats',   'cats-izq',   'cats-der');
+const sincronizarMarcas  = activarCinta('marcas-wrap', 'marcas', 'marcas-izq', 'marcas-der');
 
 /* ---------- Botón flotante de WhatsApp ----------
    Sale del mismo número que los botones de cada tarjeta. Si algún día borrás
@@ -2781,6 +2987,13 @@ if(WHATSAPP){
 }
 
 $('cfg-btn').addEventListener('click', abrirPanel);
+
+// Abrir y cerrar los filtros en el celular. En la compu el botón no se muestra,
+// así que esto no llega a correr nunca.
+$('filtros-btn').addEventListener('click', e => {
+  const abierta = $('row2').classList.toggle('abierta');
+  e.currentTarget.setAttribute('aria-expanded', String(abierta));
+});
 
 // Sombra de la barra de filtros cuando queda pegada arriba. Un centinela de
 // 1px evita escuchar el scroll, que dispararía cientos de veces por segundo.

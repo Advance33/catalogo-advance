@@ -6,3 +6,5 @@ _*
 # Herramientas para trabajar en local (no tienen que quedar descargables)
 ABRIR CATALOGO.bat
 servidor.py
+publicar.bat
+.vscode/

@@ -1,0 +1,471 @@
+﻿QUE FOTOS FALTAN
+==============================================================
+
+Cargadas: 158 de 492    Faltan: 334
+Actualizado: 26/08/2026 15:27
+
+Guarda cada foto en ESTA carpeta con el ID como nombre, en .jpg.
+No hace falta cargarlas todas: las que falten muestran un recuadro
+con la marca. Cada foto que agregues aparece sola al recargar.
+
+--------------------------------------------------------------
+ATAJO: en vez del archivo, un link
+--------------------------------------------------------------
+
+Si agregas una columna llamada  Imagen  en la planilla y pegas ahi
+el link de una foto (clic derecho sobre la foto -> Copiar direccion
+de la imagen), la web la usa directamente y no hace falta descargar
+ni renombrar nada. Esa columna tiene prioridad sobre el archivo.
+
+Para los lentes esto es MUCHO mas rapido que bajar 200 archivos.
+
+OJO: los links de Google Imagenes no sirven, se vencen. Usa el link
+de la web del fabricante o de tu proveedor.
+
+--------------------------------------------------------------
+OTRA FOTO POR COLOR (opcional)
+--------------------------------------------------------------
+
+Si un producto tiene varios colores podes agregar una foto por color:
+   CEL-APP-066.jpg            <- la principal
+   CEL-APP-066-black.jpg      <- se muestra al tocar el puntito negro
+   CEL-APP-066-space-gray.jpg
+El nombre del color va en minuscula y con guiones en vez de espacios.
+Es opcional: sin esa foto queda la principal y no se ve nada roto.
+
+Ya cargadas: 67 fotos de color en 25 productos.
+   ACC-SON-003      astrobot, remix-green, rhythm-blue, techno-red
+   AUD-APP-006      blue, midnight, orange
+   CEL-APP-004      black, blue
+   CEL-APP-005      black, pink, teal, ultramarine, white
+   CEL-APP-011      orange, silver
+   CEL-APP-019      blue, orange, silver
+   CEL-APP-033      orange, silver
+   CEL-APP-065      black, pink, white
+   CEL-APP-066      blue, orange
+   CEL-APP-068      blue, silver
+   CEL-APP-069      blue, orange
+   CEL-APP-071      blue, orange
+   CEL-APP-075      black, blue, lavender, sage, white
+   CEL-MOT-067      blue, laurel-oak
+   CEL-SAM-003      black, blue, gray
+   CEL-SAM-042      gray, navy
+   CEL-SAM-063      icyblue, jetblack, navy
+   CEL-SAM-064      icyblue, navy, white
+   TAB-APP-005      blue, purple
+   TAB-APP-006      blue, purple, space-gray, starlight
+   TAB-APP-008      blue, space-gray, starlight
+   TAB-APP-014      silver, space-black
+   TAB-APP-015      silver, space-black
+   TAB-APP-018      silver, space-black
+   TAB-APP-043      blue, space-gray
+
+--------------------------------------------------------------
+POR DONDE EMPEZAR  (de mayor a menor cantidad)
+--------------------------------------------------------------
+
+LENTE  (169 sin foto)
+
+   LEN-CAN-038.jpg      Canon Canon EF S 24 F/2.8 STM
+   LEN-CAN-047.jpg      Canon Canon EF S 10-18 F/4.5-5.6 IS STM
+   LEN-CAN-001.jpg      Canon Canon RF 50 F1,8 STM
+   LEN-CAN-003.jpg      Canon Canon RF 16 F/2,8 STM
+   LEN-CAN-004.jpg      Canon Canon RF 28 F/2.8
+   LEN-CAN-005.jpg      Canon Canon RF 75-300 F/4-5.6
+   LEN-CAN-006.jpg      Canon Canon RF-S 10-18 F/4.5-6.3
+   LEN-CAN-039.jpg      Canon Canon EF 50MM F/1,4 USM
+   LEN-CAN-042.jpg      Canon Canon RF-S 55-210MM F/5-7 CAJA BLANCA
+   LEN-CAN-007.jpg      Canon Canon RF 15-30 F4,5-6,3 IS
+   LEN-CAN-013.jpg      Canon Canon RF-S 18-150 F3.5-6.3 IS STM
+   LEN-CAN-008.jpg      Canon Canon RF 24-105 F/4-7,1 IS STM
+   LEN-CAN-010.jpg      Canon Canon RF-S 7.8 F/4 STM DUAL
+   LEN-CAN-011.jpg      Canon Canon RF 24 F1.8 MACRO IS STM
+   LEN-CAN-012.jpg      Canon Canon RF 600 F/11L IS STM
+   LEN-CAN-014.jpg      Canon Canon RF 45 F/1.2
+   LEN-CAN-015.jpg      Canon Canon RF 85MM F2 MACRO IS STM
+   LEN-CAN-016.jpg      Canon Canon RF 100-400 F/5.6-8 IS USM
+   LEN-CAN-018.jpg      Canon Canon RF 800 F/11 IS STM
+   LEN-CAN-017.jpg      Canon Canon EF 16-35 F/4L IS USM
+   LEN-CAN-019.jpg      Canon Canon RF 24-240 F/4-6.3 IS USM
+   LEN-CAN-020.jpg      Canon Canon RF 16-28 F/2.8 IS STM
+   LEN-CAN-021.jpg      Canon Canon RF-S 3.9 F/3.5 DUAL FISHEYE STM
+   LEN-CAN-044.jpg      Canon Canon RF 14-35 F4L IS USM
+   LEN-CAN-023.jpg      Canon Canon RF 70-200 F/4L IS
+   LEN-CAN-022.jpg      Canon Canon RF 100 F2.8 L MACRO IS USM
+   LEN-CAN-049.jpg      Canon Canon RF 24-105 F/4 IS USM WHITE BOX
+   LEN-CAN-024.jpg      Canon Canon RF 35 F/1,4 L VCM
+   LEN-CAN-025.jpg      Canon Canon RF 24 F/1.4 VCM
+   LEN-CAN-026.jpg      Canon Canon RF 20 f/1,4
+   LEN-CAN-027.jpg      Canon Canon EF 24-70 F/2.8 II USM
+   LEN-CAN-028.jpg      Canon Canon RF 15-35 F/2.8 IS USM
+   LEN-CAN-029.jpg      Canon Canon RF 7-14 F/2.8-3.5 L FISHEYE STM
+   LEN-CAN-030.jpg      Canon Canon RF 135 F1.8 IS USM
+   LEN-CAN-031.jpg      Canon Canon RF 10-20 F/4 STM
+   LEN-CAN-050.jpg      Canon Canon RF 24-70 F/2,8 IS USM
+   LEN-CAN-034.jpg      Canon Canon RF 28-70 F/2 L USM
+   LEN-CAN-035.jpg      Canon Canon RF 70-200 F/2.8 IS USM Z BLACK
+   LEN-SIG-001.jpg      Sigma Sigma 30MM F/1.4 DC HSM ART CANON EF
+   LEN-SIG-005.jpg      Sigma Sigma 85MM F/1,4 EX DG CANON AF
+   LEN-SIG-007.jpg      Sigma Sigma 50MM F/1,4 DG HSM ART CANON
+   LEN-SIG-009.jpg      Sigma Sigma 18-35MM F1,8 ART HSM CANON
+   LEN-SIG-010.jpg      Sigma Sigma 35MM F/1.4 DG ART HSM CANON
+   LEN-SIG-013.jpg      Sigma Sigma 50-100MM F/1,8 ART DC HSM CANON
+   LEN-SIG-014.jpg      Sigma Sigma 85MM F/1,4 DG HSM ART EF CANON
+   LEN-SIG-015.jpg      Sigma Sigma 12-24 F/4 HSM ART CANON
+   LEN-SIG-016.jpg      Sigma Sigma 24-70MM F/2,8 DG OS ART HSM CANON
+   LEN-SIG-017.jpg      Sigma Sigma 14-24MM F2,8 HSM CANON
+   LEN-TAM-001.jpg      Tamron TAMRON 11-20 F/2,8 III CANON
+   LEN-TAM-002.jpg      Tamron TAMRON 18-300 CANON RF
+   LEN-NIK-001.jpg      Nikon Nikon AF-S 35 F/1.8 G
+   LEN-NIK-002.jpg      Nikon Nikon AF-S 50 F/1.8 G
+   LEN-NIK-003.jpg      Nikon Nikon Z 28 F/2.8
+   LEN-NIK-004.jpg      Nikon Nikon Z DX 24 F/1.7
+   LEN-NIK-005.jpg      Nikon Nikon Z 40MM F 2
+   LEN-NIK-006.jpg      Nikon Nikon Z 12-28 DX F/3.5 5.6 PZ VR
+   LEN-NIK-036.jpg      Nikon Nikon Z 12-28 F/3.5-5.6 PZ VR
+   LEN-NIK-007.jpg      Nikon Nikon Z 26 F/2.8
+   LEN-NIK-008.jpg      Nikon Nikon Z 50 F 1,4
+   LEN-NIK-010.jpg      Nikon Nikon Z 50 F 1,8 S
+   LEN-NIK-011.jpg      Nikon Nikon Z MC 50 F/2.8 MACRO
+   LEN-NIK-012.jpg      Nikon Nikon Z 24-105 F/4-7.1
+   LEN-NIK-013.jpg      Nikon Nikon Z 24-70 F/4S
+   LEN-NIK-014.jpg      Nikon Nikon Z 24-200 F/4-6.3 VR
+   LEN-NIK-015.jpg      Nikon Nikon Z 35 F 1,8 S
+   LEN-NIK-017.jpg      Nikon Nikon Z MC 105 F2.8 VR MACRO
+   LEN-NIK-018.jpg      Nikon Nikon Z 24 F 1.8
+   LEN-NIK-019.jpg      Nikon Nikon AF DX ZOOM 12-24 F/4 IF
+   LEN-NIK-021.jpg      Nikon Nikon Z 14-30 F/4 S
+   LEN-NIK-022.jpg      Nikon Nikon Z 17-28 F/2.8
+   LEN-NIK-023.jpg      Nikon Nikon Z 70-180MM F/2.8
+   LEN-NIK-024.jpg      Nikon Nikon Z 50 F 1,2 S
+   LEN-NIK-025.jpg      Nikon Nikon Z 14-24MM F2,8 S
+   LEN-NIK-026.jpg      Nikon Nikon Z 180-600 F/5,6-6,3
+   LEN-NIK-027.jpg      Nikon Nikon Z 135 F/1.8 S PLENA
+   LEN-NIK-028.jpg      Nikon Nikon Z 35 F 1,2 S
+   LEN-NIK-029.jpg      Nikon Nikon Z 70-200 F2,8 VR S
+   LEN-NIK-030.jpg      Nikon Nikon Z 85 F/1.2
+   LEN-NIK-031.jpg      Nikon Nikon Z 24-70 F2.8 II
+   LEN-NIK-032.jpg      Nikon Nikon Z 28-135 F/4 PZ
+   LEN-NIK-034.jpg      Nikon Nikon Z 70-200MM F/2.8 VR S II
+   LEN-SIG-020.jpg      Sigma Sigma 85MM F/1,4 EX DG NIKON D
+   LEN-SIG-021.jpg      Sigma Sigma 18-35 F/1.8 HSM NIKON
+   LEN-SIG-023.jpg      Sigma Sigma 50 F/1,4 DG HSM ART NIKON
+   LEN-SIG-024.jpg      Sigma Sigma 85MM F/1,4 DG HSM ART AF NIKON
+   LEN-SIG-025.jpg      Sigma Sigma 24-70 F/2,8 DG ART HSM NIKON
+   LEN-SIG-026.jpg      Sigma Sigma 12-24 F4 DG HSM ART NIKON
+   LEN-TAM-003.jpg      Tamron Tamron 70-300 F/4.5-6.3 DI III RXD NIKON Z
+   LEN-TAM-004.jpg      Tamron Tamron 18-300 F3.5-6.3 III NIKON
+   LEN-TAM-005.jpg      Tamron Tamron 16-30 F2.8 III G2 NIKON
+   LEN-TAM-028.jpg      Tamron Tamron 17-70 F2.8 III NIKON
+   LEN-TAM-006.jpg      Tamron Tamron 28-75 F/2.8 III G2 NIKON
+   LEN-TAM-007.jpg      Tamron Tamron 35-100 F/2.8 DI III VXD NIKON
+   LEN-TAM-008.jpg      Tamron Tamron 24-70 F2.8 G2 NIKON
+   LEN-TAM-029.jpg      Tamron Tamron 150-500 F/5-6.7 III NIKON Z
+   LEN-TAM-009.jpg      Tamron Tamron 70-180 F/2.8 III G2 NIKON
+   LEN-TAM-010.jpg      Tamron Tamron 50-400 F/4.5-6.3 III NIKON
+   LEN-TAM-011.jpg      Tamron Tamron 35-150 F/2-2.8 NIKON Z
+   LEN-SON-002.jpg      Sony Sony FE 50MM F/1.8
+   LEN-SON-003.jpg      Sony Sony E 55-210 F/4.5-6.3 WHITE BOX
+   LEN-SON-004.jpg      Sony Sony FE 28-70MM F/3,5-5,6 (CAJA BLANCA)
+   LEN-SON-005.jpg      Sony Sony FE 28 F/2
+   LEN-SON-006.jpg      Sony Sony FE 85 F/1,8
+   LEN-SON-007.jpg      Sony Sony FE 55 F/1.8 ZA
+   LEN-SON-008.jpg      Sony Sony FE 90 F/2.8 MACRO G OSS
+   LEN-SON-010.jpg      Sony Sony FE 20 F/1.8 G
+   LEN-SON-012.jpg      Sony Sony E 70-350 F4.5-6.3G
+   LEN-SON-011.jpg      Sony Sony FE 24-70 F/A VARIO TESSAR
+   LEN-SON-013.jpg      Sony Sony FE 20-70 F/4 GM
+   LEN-SON-014.jpg      Sony Sony FE 35 F/1,4 DISTAGON T
+   LEN-SON-016.jpg      Sony Sony FE 24MM F/1.4 GM
+   LEN-SON-018.jpg      Sony Sony FE 16-25 F/2,8 G
+   LEN-SON-019.jpg      Sony Sony FE 50 F/1.4 PLANAR T
+   LEN-SON-020.jpg      Sony Sony FE 50 F/1.4 GM
+   LEN-SON-021.jpg      Sony Sony FE 35 F/1,4 GM
+   LEN-SON-023.jpg      Sony Sony FE 100 F/2.8 GM OSS
+   LEN-SON-022.jpg      Sony Sony FE 14 F/1,8 GM
+   LEN-SON-026.jpg      Sony Sony FE 24-70 F/2.8 GM
+   LEN-SON-024.jpg      Sony Sony FE 50 F/1.2 GM
+   LEN-SON-025.jpg      Sony Sony FE 16-35 F/2,8 GM
+   LEN-SON-027.jpg      Sony Sony FE 70-200 F/4 MACRO G OSS II
+   LEN-SON-028.jpg      Sony Sony FE 85 F/1.4 GM II
+   LEN-SON-029.jpg      Sony Sony FE 135 F1.8 GM
+   LEN-SON-030.jpg      Sony Sony FE 24-70 F/2.8 GM II
+   LEN-SON-032.jpg      Sony Sony FE 16-35 F/2,8 GM II
+   LEN-SON-031.jpg      Sony Sony E PZ 28-135 F4 G OSS
+   LEN-SON-033.jpg      Sony Sony FE 200-600 F/5,6-6,3 G OSS
+   LEN-SON-034.jpg      Sony Sony FE 100-400 F/4,5-5,6 GM
+   LEN-SON-035.jpg      Sony Sony FE 400-800MM F/6,3-8 G OSS
+   LEN-SON-036.jpg      Sony Sony FE 12-24 F/2.8 GM
+   LEN-SON-040.jpg      Sony Sony FE 70-200 F/2.8 GM II
+   LEN-SON-037.jpg      Sony Sony FE 28-70MM F/2 GM
+   LEN-SON-038.jpg      Sony Sony FE 50-150 F/2 GM
+   LEN-SIG-031.jpg      Sigma Sigma 28 F/1.4 DG HSM ART SONY
+   LEN-SIG-034.jpg      Sigma Sigma 28-70MM F/2.8 DG DN CONTEMPORARY SONY
+   LEN-SIG-036.jpg      Sigma Sigma 35 F/1,4 DG HSM ART SONY
+   LEN-SIG-042.jpg      Sigma Sigma 100-400 F/5-6.3 DG HSM CONTEMPORARY SONY
+   LEN-SIG-047.jpg      Sigma Sigma 35 F/1.2 ART SONY
+   LEN-TAM-012.jpg      Tamron Tamron 70-300 F/4.5-6.3 DI III RXD SONY
+   LEN-TAM-013.jpg      Tamron Tamron 11-20 F/2.8 DI III A RXD SONY E
+   LEN-TAM-030.jpg      Tamron Tamron 17-50 F/4 DI. III SONY
+   LEN-TAM-014.jpg      Tamron Tamron 17-28 F/2.8 DI III RXD SONY
+   LEN-TAM-015.jpg      Tamron Tamron 18-300 F/3.5-6.3 DI III A VC VXD SONY
+   LEN-TAM-016.jpg      Tamron Tamron 20-40 F/2.8 DI III SONY
+   LEN-TAM-032.jpg      Tamron Tamron 17-70 F/2.8 DI III SONY
+   LEN-TAM-031.jpg      Tamron Tamron 28-200 F/2.8-5.6 DI III RXD SONY
+   LEN-TAM-017.jpg      Tamron Tamron 90 F/2.8 III MACRO SONY
+   LEN-TAM-018.jpg      Tamron Tamron 16-30 F2.8 III G2 SONY
+   LEN-TAM-020.jpg      Tamron Tamron 50-300 F4.5-6.3 III SONY
+   LEN-TAM-021.jpg      Tamron Tamron 28-75 F/2.8 DI III RXD SONY
+   LEN-TAM-022.jpg      Tamron Tamron 28-300 F/4-7.1 III SONY
+   LEN-TAM-023.jpg      Tamron Tamron 35-100 F/2.8 DI III VXD SONY
+   LEN-TAM-024.jpg      Tamron Tamron 70-180 F/2,8 III G2 SONY
+   LEN-TAM-026.jpg      Tamron Tamron 150-500 F/5-6.7 DI III VXD SONY
+   LEN-TAM-027.jpg      Tamron Tamron 50-400 F/4.5-6.3 DI III VC VXD SONY
+   LEN-TAM-025.jpg      Tamron Tamron 35-150 F/2-2.8 DI III VXD SONY E
+   LEN-CAN-051.jpg      Canon Canon RF 50 F/1.2 L USM
+   LEN-NIK-038.jpg      Nikon Nikon Z 18-140 DX F/3.5-6.3 VR
+   LEN-NIK-039.jpg      Nikon Nikon Z 28-400 F/4-8 VR
+   LEN-SON-041.jpg      Sony Sony FE 24-105 F/4 G
+   LEN-SON-017.jpg      Sony Sony FE 24-50 F/2.8 G
+   LEN-CAN-048.jpg      Canon Canon RF 35 F/1.8 MACRO IS STM
+   LEN-CAN-052.jpg      Canon Canon RF 200-800MM F/6,3-9 IS USM
+   LEN-SON-015.jpg      Sony Sony FE PZ 16-35 F4
+   LEN-CAN-009.jpg      Canon Canon RF 1.4X Extender
+   LEN-CAN-043.jpg      Canon Canon RF 2.0X Extender
+   LEN-NIK-009.jpg      Nikon Nikon Z Teleconverter TC-2X
+   LEN-SON-039.jpg      Sony Sony FE 2X Teleconverter
+   LEN-SIG-058.jpg      Sigma Sigma 18-50 F/2.8 DC DN Contemporary Sony
+
+CÁMARA  (66 sin foto)
+
+   CAM-CAN-028.jpg      Canon Canon EOS R100 KIT 18-45 / 55-210
+   CAM-CAN-003.jpg      Canon Canon EOS RP BODY
+   CAM-CAN-032.jpg      Canon Canon EOS RP 24-105 F/4-7.1 IS STM KIT
+   CAM-CAN-004.jpg      Canon Canon EOS R10 BODY
+   CAM-CAN-005.jpg      Canon Canon EOS R7 BODY
+   CAM-CAN-029.jpg      Canon Canon EOS R8 BODY
+   CAM-CAN-027.jpg      Canon Canon EOS R8 KIT 24-50 F/4.5-6.3 IS STM
+   CAM-CAN-008.jpg      Canon Canon EOS R6 MARK III BODY (CAJA DE KIT)
+   CAM-CAN-011.jpg      Canon Canon EOS R6 MARK III KIT 24-105 F4-7.1 IS STM
+   CAM-CAN-014.jpg      Canon Canon EOS R6 V KIT 20-50 F/4USM PZ
+   CAM-CAN-009.jpg      Canon Canon EOS R5 BODY
+   CAM-CAN-010.jpg      Canon Canon EOS R5 C CINEMA
+   CAM-CAN-015.jpg      Canon Canon EOS R3 BODY
+   CAM-CAN-016.jpg      Canon Canon EOS R1 BODY
+   CAM-CAN-018.jpg      Canon Canon EOS 2000D KIT 18-55 III (T7)
+   CAM-CAN-020.jpg      Canon Canon EOS 4000D KIT 18-55 III (T100)
+   CAM-CAN-021.jpg      Canon Canon EOS 5D MARK IV BODY
+   CAM-CAN-022.jpg      Canon Canon POWERSHOT SX740 (SILVER)
+   CAM-CAN-023.jpg      Canon Canon POWERSHOT V1
+   CAM-NIK-001.jpg      Nikon Nikon Z30 KIT 16-50 MM
+   CAM-NIK-002.jpg      Nikon Nikon Z30 KIT 18-140 VR
+   CAM-NIK-003.jpg      Nikon Nikon Z30 KIT 16-50/50-250 VR II
+   CAM-NIK-004.jpg      Nikon Nikon Z6 II BODY (INGLES)
+   CAM-NIK-016.jpg      Nikon Nikon Z6 II Kit 24-120mm
+   CAM-NIK-015.jpg      Nikon Nikon Z6 III BODY (INGLES/ESPAÑOL)
+   CAM-NIK-006.jpg      Nikon Nikon Z7 II BODY ESPAÑOL
+   CAM-NIK-010.jpg      Nikon Nikon Z8 BODY
+   CAM-NIK-017.jpg      Nikon Nikon Z8 KIT 24-120
+   CAM-NIK-009.jpg      Nikon Nikon ZR 6K CINEMA
+   CAM-NIK-011.jpg      Nikon Nikon D7500 KIT 18-140
+   CAM-NIK-014.jpg      Nikon Nikon COOLPIX P950
+   CAM-SON-028.jpg      Sony Sony ZV-E10 KIT 16-50 BLACK
+   CAM-SON-003.jpg      Sony Sony ZV-E10 II Body (Whi)
+   CAM-SON-005.jpg      Sony Sony ALFA 7C BODY
+   CAM-SON-006.jpg      Sony Sony ALFA 7 III BODY BLACK
+   CAM-SON-027.jpg      Sony Sony ALFA 7 III KIT 28-70
+   CAM-SON-009.jpg      Sony Sony ALFA 7 CII BODY
+   CAM-SON-011.jpg      Sony Sony ALFA 7C II KIT 28-60
+   CAM-SON-013.jpg      Sony Sony Alfa 7CR Body (Black-Silver)
+   CAM-SON-010.jpg      Sony Sony ALFA 7 IV KIT 28-70
+   CAM-SON-015.jpg      Sony Sony ALFA 7 V BODY
+   CAM-SON-017.jpg      Sony SONY ALFA 7 V KIT 28-70
+   CAM-SON-008.jpg      Sony Sony ALFA 7R III BODY
+   CAM-SON-012.jpg      Sony Sony ALFA 7R IV BODY BLACK
+   CAM-SON-018.jpg      Sony Sony ALFA 7R V BODY
+   CAM-SON-020.jpg      Sony Sony ALFA 7R VI BODY
+   CAM-SON-016.jpg      Sony Sony ALFA 7S III BODY BLACK
+   CAM-SON-021.jpg      Sony Sony ALFA 9 MK III
+   CAM-SON-023.jpg      Sony Sony ALFA 1 II BODY
+   CAM-SON-007.jpg      Sony Sony FX30 BODY
+   CAM-SON-014.jpg      Sony Sony FX2 BODY
+   CAM-SON-019.jpg      Sony Sony FX3 BODY
+   CAM-SON-022.jpg      Sony Sony FX6 V
+   CAM-SON-024.jpg      Sony Sony DSC RX100 VII
+   CAM-FUJ-003.jpg      Fujifilm Fujifilm X-T5 KIT 16-50 BLACK
+   CAM-FUJ-004.jpg      Fujifilm Fujifilm X-T5 KIT 16-80 BLACK
+   CAM-CAN-024.jpg      Canon Canon PowerShot G7 X Mark III (Sil)
+   CAM-CAN-002.jpg      Canon Canon EOS R50 KIT 18-45 WHITE
+   CAM-CAN-034.jpg      Canon Canon EOS R10 18-150 KIT
+   CAM-SON-029.jpg      Sony Sony ZV-E10 II Kit 16-50 (Bla)
+   CAM-SON-030.jpg      Sony Sony ZVE10 II Kit 16-50/55-210 (Bla)
+   CAM-SON-031.jpg      Sony Sony ALFA A6700 KIT 16-50MM II
+   CAM-CAN-036.jpg      Canon Canon EOS R6 MARK III 24-105 F/4 USM
+   CAM-NIK-019.jpg      Nikon Nikon Z50 II KIT 16-50 + 50-250
+   CAM-SON-032.jpg      Sony Sony ALFA 6400 KIT 16-50 II
+   CAM-CAN-037.jpg      Canon Canon EOS R6 V Body
+
+ACCESORIO CÁMARA  (21 sin foto)
+
+   ACC-GOP-001.jpg      GoPro Batería Recargable GoPro 9/10/11/12
+   ACC-CAN-006.jpg      Canon Canon ADAPTADOR AD-E1 ZAPATA MULTIFUNCION
+   ACC-CAN-001.jpg      Canon Canon BATERIA SMALLRIG LP-E6NH KIT (2 X BAT + CAR) (90D 7D 6D 5D R5 R6)
+   ACC-CAN-009.jpg      Canon Canon BATERIA LP E6P PARA R5 R6M2 R7 R5C R5II 5D 6D
+   ACC-CAN-002.jpg      Canon Canon MOUNT ADAPTER EF-EOS R
+   ACC-CAN-004.jpg      Canon Canon BATERIA GRIP BG-R20
+   ACC-CAN-005.jpg      Canon FLASH CANON SPEEDLITE EL-5
+   ACC-CAN-007.jpg      Canon Canon FLASH EF-630 ELECTRONIC
+   ACC-NIK-001.jpg      Nikon BATERIA NIKON EN-EL20A
+   ACC-NIK-002.jpg      Nikon CONTROL REMOTO NIKON ML-L7
+   ACC-NIK-006.jpg      Nikon MEMORIA NIKON 64GB XQD
+   ACC-NIK-004.jpg      Nikon Nikon ADAPTADOR FTZ II
+   ACC-NIK-005.jpg      Nikon BATERIA NIKON EN-EL 18D 3300MHA
+   ACC-SON-004.jpg      Sony Sony BATERÍA SMALLRIG USB-C FW-50 (2 X BAT + CAR)
+   ACC-SON-005.jpg      Sony BATERIA SONY NP-FZ100
+   ACC-SON-006.jpg      Sony Sony Batería SmallRig USB-C FZ-100 (Recargable)
+   ACC-SON-007.jpg      Sony Sony SHOOTING GRIP VCT-SGR1
+   ACC-SON-008.jpg      Sony Batería Cargador Sony BC-QZ1
+   ACC-SON-009.jpg      Sony Sony SHOTGUN MIC MOUNT DIGITAL ECM-B10
+   ACC-FUJ-001.jpg      Fujifilm Fujifilm FUJI INSTAX MINI TWIN FILM ROLLO REPUESTO (2 X 10)
+   ACC-NIK-008.jpg      Nikon Sigma EF-630 Flash Nikon
+
+CELULAR  (20 sin foto)
+
+   CEL-SAM-050.jpg      Samsung SAMSUNG S26 PLUS 256GB 5G (violet/white)
+   CEL-SAM-053.jpg      Samsung SAMSUNG S26 12/512GB (white/black/violet/skyblue)
+   CEL-SAM-054.jpg      Samsung SAMSUNG S26 ULTRA 16/1TB 5G (white/black/violet)
+   CEL-SAM-056.jpg      Samsung SAMSUNG S26 PLUS 512GB 5G (Black/sky blue)
+   CEL-XIA-087.jpg      Xiaomi XIAOMI REDMI A7 PRO 4/64GB (Black)
+   CEL-XIA-088.jpg      Xiaomi XIAOMI REDMI 15C 4/128GB (Black/Green)
+   CEL-XIA-092.jpg      Xiaomi XIAOMI REDMI NOTE 15 PRO 8/256GB (black)
+   CEL-XIA-093.jpg      Xiaomi XIAOMI REDMI NOTE 15 PRO 12/512GB [5G] (black/titanium/purple)
+   CEL-XIA-095.jpg      Xiaomi XIAOMI POCOPHONE C81 PRO 4/128GB (gold/green)
+   CEL-XIA-096.jpg      Xiaomi XIAOMI POCOPHONE X8 PRO 8/256GB [5G] (green)
+   CEL-XIA-097.jpg      Xiaomi XIAOMI POCOPHONE X8 PRO 8/512GB [5G] (green)
+   CEL-XIA-098.jpg      Xiaomi XIAOMI POCOPHONE X8 PRO MAX 12/256GB [5G] (white)
+   CEL-XIA-099.jpg      Xiaomi XIAOMI POCOPHONE X8 PRO MAX 12/512GB [5G] (black/blue/orange)
+   CEL-MOT-069.jpg      Motorola MOTOROLA G15 POWER 8/256GB S/C (gray/green)
+   CEL-MOT-071.jpg      Motorola MOTOROLA G57 8/256GB [5G] S/C (Green)
+   CEL-MOT-073.jpg      Motorola MOTOROLA G86 POWER 8/256GB [5G] (cherry pink/blue)
+   CEL-SAM-057.jpg      Samsung SAMSUNG S26 ULTRA 256GB (skyblue)
+   CEL-XIA-100.jpg      Xiaomi XIAOMI REDMI NOTE 15 PRO PLUS 12/512GB [5G] (black)
+   CEL-XIA-094.jpg      Xiaomi XIAOMI REDMI NOTE 15 PRO PLUS 8/256GB [5G] (Black/Blue/Brown)
+   CEL-SAM-065.jpg      Samsung SAMSUNG S26 ULTRA 12/512GB 5G (skyblue/violeta/white)
+
+LENTES INTELIGENTES  (9 sin foto)
+
+   GAF-RAY-004.jpg      Ray-Ban Ray-Ban Wayfarer (601ST350) (Black/Polarized Gradient Graphite)
+   GAF-RAY-005.jpg      Ray-Ban Ray-Ban Wayfarer (601/1M50) (Shiny Black/Graphite Green Transitions)
+   GAF-RAY-006.jpg      Ray-Ban Ray-Ban Skyler (601/T352) (Shiny Black/Polarized Gradient Graphite)
+   GAF-RAY-007.jpg      Ray-Ban Ray-Ban Skyler (T155/S52) (Shiny Chalky Grey/Transitions Sapphire)
+   GAF-RAY-008.jpg      Ray-Ban Ray-Ban Skyler (601/1M52) (Shiny Black/Transitions Green)
+   GAF-RAY-009.jpg      Ray-Ban Ray-Ban Skyler (601/CH52) (Shiny Black/Transitions Amethyst)
+   GAF-RAY-010.jpg      Ray-Ban Ray-Ban Rayban Meta Gen2 Skyler (Shiny Black-Amethyst/Shiny Chalky Gray-Sapphire)
+   GAF-RAY-011.jpg      Ray-Ban Ray-Ban Rayban Meta Gen2 Wayfarer (Mate Black-Grey/Shiny Black-Graph Green)
+   GAF-RAY-012.jpg      Ray-Ban Ray-Ban Rayban Meta Gen2 Headliner (Shiny Black-Graph Green)
+
+FILMADORA  (9 sin foto)
+
+   FIL-PAN-001.jpg      Panasonic PANASONIC HC-V900 HD CAMCORDER HD 24X ZOOM
+   FIL-PAN-002.jpg      Panasonic PANASONIC HC-VX3 UHD CAMCORDER 4K 24X ZOOM
+   FIL-PAN-006.jpg      Panasonic PANASONIC HC X1200 4K HDMI 24X
+   FIL-PAN-003.jpg      Panasonic PANASONIC HC X2100 4K UHD 3G/SDI/HDMI PRO WITH 24X
+   FIL-PAN-004.jpg      Panasonic PANASONIC AG-CX20 4K
+   FIL-PAN-005.jpg      Panasonic PANASONIC AG CX350 4K
+   FIL-CAN-001.jpg      Canon Canon HFG70 Vixia UHD 4K Camcorder
+   FIL-SON-001.jpg      Sony SONY HXR-NX800 4K 1"CMOS SENSOR NXCAM
+   FIL-SON-002.jpg      Sony SONY PXW Z200 4K 1"CMOS SENSOR XDCAM
+
+CONSOLA  (7 sin foto)
+
+   CON-MIC-008.jpg      Microsoft Microsoft Xbox Series X 1tb Digital (Whites)
+   CON-MET-006.jpg      Meta Meta Quest 3s 128GB
+   CON-MET-007.jpg      Meta Meta Quest 3s 128GB + Batman
+   CON-MET-001.jpg      Meta Meta Quest 3s 256GB
+   CON-MET-009.jpg      Meta Meta Quest 3s 256GB + Batman
+   CON-MET-002.jpg      Meta Meta Quest 3 512GB
+   CON-MIC-006.jpg      Microsoft Microsoft Xbox Series S 512gb
+
+CÁMARA DE ACCIÓN  (6 sin foto)
+
+   CAM-GOP-002.jpg      GoPro GoPro Hero 13 Black
+   CAM-GOP-003.jpg      GoPro GoPro Hero 12 Black Special Bundle
+   CAM-GOP-005.jpg      GoPro GoPro Mission 1 Sensor 8K
+   CAM-INS-001.jpg      Insta360 Insta360 INSTA 360 ACE PRO
+   CAM-INS-003.jpg      Insta360 Insta360 Insta 360 X5 Bundle (Stick+2 Bater + Tapa Lente)
+   CAM-FUJ-006.jpg      Fujifilm Fujifilm Instax Mini 12 (Pin/Whi/Pur/Gre/Blu)
+
+NOTEBOOK  (5 sin foto)
+
+   NB-APP-065.jpg       Apple Apple MACBOOK NEO A18 13" 8ram 256gb (Silver/Blush)
+   NB-APP-066.jpg       Apple Apple MACBOOK AIR M5 13.6" 16ram 512gb (Sky Blue)
+   NB-APP-067.jpg       Apple Apple MACBOOK PRO M4 PRO 14" 24ram 512gb (Silver)
+   NB-APP-068.jpg       Apple Apple MACBOOK PRO M5 PRO 14" 24ram 1tb (Silver)
+   NB-APP-069.jpg       Apple Apple MACBOOK PRO M5 MAX 16" 36ram 2tb (Silver)
+
+ACCESORIO DRONE  (5 sin foto)
+
+   ACC-DJI-001.jpg      DJI ACC DJI HELICES (MINI 3 PRO)
+   ACC-DJI-002.jpg      DJI ACC DJI FILTRO CAMARA (MINI 3 PRO)
+   ACC-DJI-004.jpg      DJI DJI CONTROL P/AVATA RC MOTION 2
+   ACC-DJI-005.jpg      DJI ACC DJI CONTROL RC W/ SCREEN
+   ACC-DJI-006.jpg      DJI DJI GOOGLES 2
+
+ACCESORIO APPLE  (4 sin foto)
+
+   ACC-APP-043.jpg      Apple Apple Magic Keyboard Touch ID + Pad Numérico (White/Black) (Inglés)
+   ACC-APP-044.jpg      Apple Apple Smart Keyboard Folio 12.9" / Air M2-M3
+   ACC-APP-045.jpg      Apple Apple Magic Keyboard 11" (M2) Black
+   ACC-APP-013.jpg      Apple Apple Magic Keyboard for 11" iPad Air M3/M4 (White) (English)
+
+AURICULARES  (4 sin foto)
+
+   AUD-APP-008.jpg      Apple Apple EarPods Lightning
+   AUD-APP-007.jpg      Apple Apple EarPods USB-C
+   AUD-APP-009.jpg      Apple Apple Airpods Max USB-C 2 (Midnight-Blue-Orange)
+   AUD-SON-001.jpg      Sony Sony WH-1000XM5 Inalámbricos Over Ear Noise Cancelling
+
+DRONE  (3 sin foto)
+
+   DRO-DJI-001.jpg      DJI DRONE DJI MINI 5 PRO 4 BATT
+   DRO-ANT-001.jpg      Antigravity Drone Antigravity A1 Explorer 8K 360 Bundle
+   DRO-DJI-002.jpg      DJI Drone DJI Avata Pro View (Solo Drone)
+
+TABLET  (2 sin foto)
+
+   TAB-APP-043.jpg      Apple Apple iPad Air M4 11" 128gb (Space Gray/Blue)
+   TAB-APP-005.jpg      Apple Apple iPad Air M3 13" (7ª Gen) 128gb (Blue/Purple)
+
+E-READER  (1 sin foto)
+
+   ERD-AMZ-003.jpg      Amazon Amazon Kindle Paperwhite (12ª Gen 2024) 16GB (Black)
+
+MONITOR  (1 sin foto)
+
+   MON-APP-003.jpg      Apple Apple Studio Display 27" (Standard Glass, Tilt & Height Adjustable Stand)
+
+SMARTWATCH  (1 sin foto)
+
+   SW-APP-009.jpg       Apple Apple Watch Series 11 GPS 46mm M/L (Jet Black/Space Gray/Silver)
+
+DESKTOP  (1 sin foto)
+
+   PC-APP-012.jpg       Apple Apple iMac 24" 4.5K Retina M4 16ram 256gb (Blue)
+
+--------------------------------------------------------------
+FOTOS QUE SOBRAN (el ID ya no esta activo en la planilla)
+--------------------------------------------------------------
+
+No molestan, pero podes borrarlas si el producto no vuelve:
+
+   ACC-APP-042
+   ACC-SON-010
+   CEL-APP-013
+   CEL-APP-017
+   CEL-APP-067
+   CEL-APP-072
+   CEL-APP-073
+   CEL-APP-074
+   NB-APP-063
+   SW-APP-043
+

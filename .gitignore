@@ -1,0 +1,8 @@
+# Lo que vive en la carpeta pero NO forma parte del sitio publicado
+backups/
+fotos-faltantes.csv
+_*
+
+# Herramientas para trabajar en local (no tienen que quedar descargables)
+ABRIR CATALOGO.bat
+servidor.py

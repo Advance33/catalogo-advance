@@ -1514,13 +1514,19 @@ const CATS_PLURAL = {
   'Consola':'Consolas', 'Filmadora':'Filmadoras', 'Drone':'Drones', 'Desktop':'Desktops',
   'Accesorio Apple':'Accesorios Apple', 'Accesorio Cámara':'Accesorios Cámara',
   'Accesorio Drone':'Accesorios Drone', 'Accesorio Gaming':'Accesorios Gaming',
-  // Estas ya funcionan como plural: "Apple Watchs" y "Auducularess" no existen
-  'Apple Watch':'Apple Watch', 'Auriculares':'Auriculares'
+  'Monitor':'Monitores', 'E-Reader':'E-Readers',
+  // Estas ya funcionan como plural: "Apple Watchs" y "Auricularess" no existen
+  'Apple Watch':'Apple Watch', 'Auriculares':'Auriculares',
+  'Lentes Inteligentes':'Lentes Inteligentes'
 };
 
 function plural(cat){
   if(CATS_PLURAL[cat]) return CATS_PLURAL[cat];
   if(!cat) return cat;
+  // Lo que ya viene en plural se deja como está. Sin esto, una categoría nueva
+  // como "Lentes Inteligentes" salta a la barra convertida en
+  // "Lentes Inteligenteses", y de eso nos enteramos cuando ya está publicado.
+  if(/s$/i.test(cat)) return cat;
   return /[aeiouáéíóú]$/i.test(cat) ? cat + 's' : cat + 'es';
 }
 
@@ -1832,6 +1838,9 @@ function etiquetaVariante(p, nombre){
   let e = p.desc || '';
   if(norm(e).startsWith(norm(nombre))) e = e.slice(nombre.length);
   e = e.replace(RE_PAREN,' ').replace(/[\s\-–]+/g,' ').trim();
+  // La planilla escribe la capacidad como se le ocurre ("128gb", "512GB") y en
+  // los botones quedaban mezcladas. Acá se emparejan.
+  e = e.replace(/(\d+\s*)(gb|tb)\b/gi, (_,n,u) => n.trim() + u.toUpperCase());
   return e || p.color || 'Estándar';
 }
 

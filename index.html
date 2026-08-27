@@ -174,6 +174,8 @@
   /* La cinta de categorías se desliza: con el dedo, con la rueda del mouse,
      arrastrándola, o con las flechas de los costados. */
   .chips-wrap{position:relative}
+  /* Solo se ven cuando los filtros estan en la columna del costado */
+  .rotulo{display:none}
   .chips{
     display:flex;gap:8px;overflow-x:auto;padding:12px 0 10px;scrollbar-width:none;
     cursor:grab;overscroll-behavior-x:contain;
@@ -899,6 +901,125 @@
   @media (prefers-reduced-motion: reduce){
     .egg-escena,.egg-sway,.egg-fig,#egg.primo>div,#egg.vegetta>div{animation:none}
   }
+
+  /* ---------- Pantalla ancha: dos columnas ----------
+     En un monitor grande sobraban 300px de fondo vacío a cada lado. Las
+     categorías se quedan arriba (son navegación: decir en qué parte del
+     catálogo estás) y al costado va sólo lo que filtra lo que ya estás
+     mirando: la marca y los filtros. Así la columna es corta y no necesita
+     scroll propio. Debajo de 1180px no cambia nada: todo vuelve a la barra. */
+  @media (min-width:1180px){
+    .wrap{max-width:1680px}
+
+    .columnas{
+      max-width:1680px;margin:0 auto;padding:0 20px;
+      display:grid;grid-template-columns:212px minmax(0,1fr);
+      gap:34px;align-items:start;
+    }
+    /* La barra deja de ser una banda de lado a lado y pasa a ser la columna */
+    .columnas > .toolbar{
+      position:sticky;top:64px;z-index:10;
+      background:transparent;border-bottom:0;padding:26px 0 24px;
+    }
+    .columnas > .toolbar > .wrap{max-width:none;padding:0}
+    .columnas > main{padding:0;margin:0;max-width:none}
+
+    /* Las marcas se enderezan: de cinta que se desliza a lista de texto. La
+       píldora funcionaba en horizontal; apilada pesa demasiado para lo que es. */
+    .columnas .chips{
+      flex-direction:column;align-items:stretch;gap:0;
+      overflow:visible;padding:0;cursor:default;
+    }
+    .columnas .chip-nav{display:none}
+    .columnas .chips-wrap::before,.columnas .chips-wrap::after{display:none}
+    .columnas .chip{
+      width:100%;justify-content:flex-start;text-align:left;
+      background:transparent;border:0;box-shadow:none;border-radius:0;
+      padding:6px 0;font:400 13.5px/1.35 var(--sans);
+      letter-spacing:0;text-transform:none;color:var(--muted);
+    }
+    .columnas .chip:hover{color:var(--acento);background:transparent}
+    .columnas .chip[aria-pressed="true"]{
+      color:var(--acento);font-weight:600;background:transparent;
+    }
+    .columnas .chip b{margin-left:6px;font:400 11.5px var(--mono);color:var(--faint)}
+
+    /* Cada bloque de la columna se presenta */
+    .columnas .chips-wrap,.columnas .row2{
+      border-top:1px solid var(--line);padding-top:11px;margin-top:18px;
+    }
+    .columnas #marcas-wrap{border-top:0;margin-top:0;padding-top:0}
+    .columnas .rotulo{
+      display:block;font:600 9.5px/1 var(--mono);letter-spacing:.16em;
+      text-transform:uppercase;color:var(--faint);margin:0 0 9px;
+    }
+
+    /* Con lugar de sobra, los filtros no tienen por qué estar escondidos */
+    .columnas .filtros-btn{display:none}
+    .columnas .row2{flex-direction:column;align-items:stretch;gap:9px;padding-bottom:0}
+    .columnas .row2 select{display:block;width:100%}
+    .columnas .row2 select[hidden]{display:none}
+    .columnas .row2 .toggle{display:flex}
+    /* El conteo se mudó al título de la sección */
+    .columnas .count{display:none}
+
+    /* La cinta de categorías, ahora sola arriba */
+    .barra-cats .wrap{max-width:1680px}
+    .barra-cats .rotulo{display:none}
+
+    /* Lo que combina con la categoría abierta. Es el uso que le encontramos al
+       aire que quedaba abajo de los filtros: en vez de fondo vacío, tres cosas
+       que se suman a la compra. */
+    .sugeridos{
+      display:flex;flex-direction:column;gap:2px;
+      border-top:1px solid var(--line);padding-top:11px;margin-top:18px;
+    }
+    .sug{
+      display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+      background:transparent;border:0;border-radius:9px;padding:7px 6px;
+      cursor:pointer;color:var(--ink);transition:background .14s ease;
+    }
+    .sug:hover{background:var(--surface-2)}
+    /* El marco existe aunque la foto no: sin esto, los productos sin imagen
+       corren el texto a la izquierda y la lista queda dispareja. */
+    .sug-foto{
+      width:40px;height:40px;flex:none;border-radius:7px;
+      background:var(--foto-bg);display:block;overflow:hidden;
+    }
+    .sug-foto img{width:100%;height:100%;object-fit:contain;padding:3px;display:block}
+    .sug-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+    /* Dos renglones como mucho: los nombres largos no pueden estirar la columna */
+    .sug-txt b{
+      font:500 11.5px/1.3 var(--sans);display:-webkit-box;-webkit-line-clamp:2;
+      -webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;
+    }
+    .sug-txt i{font:500 11px/1 var(--mono);color:var(--acento);font-style:normal}
+
+    /* Título de la sección: qué estás viendo y cuánto hay */
+    .seccion{
+      display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+      padding:24px 0 12px;border-bottom:1px solid var(--line);
+    }
+    .seccion h2{font:400 27px/1.1 var(--display);margin:0;letter-spacing:-.01em}
+    .seccion span{font:500 13px/1 var(--mono);color:var(--faint)}
+    .columnas .grid{padding-top:18px}
+  }
+
+  /* La barra de categorías queda pegada arriba también en pantalla chica */
+  .barra-cats{position:sticky;top:0;z-index:21;background:#FBF8FF;
+              border-bottom:1px solid var(--line)}
+  /* El título de sección sólo tiene sentido con la columna al costado: en
+     pantalla chica la categoría elegida ya se ve en la cinta, ahí arriba.
+     Va con su propio media query y no como regla suelta: escrita después del
+     bloque de arriba, con la misma especificidad, le ganaba siempre y el
+     título no aparecía nunca. */
+  @media (max-width:1179px){ .seccion{display:none} }
+
+  /* En un monitor muy ancho la grilla sola se estira demasiado y las tarjetas
+     quedan enormes: mejor sumar columnas que agrandar cada una. */
+  @media (min-width:1600px){
+    .columnas .grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+  }
 </style>
 </head>
 <body>
@@ -937,9 +1058,12 @@
   </div>
 </header>
 
-<div class="toolbar">
+<!-- Las categorías no son un filtro: son dónde estás parado. Por eso van
+     arriba y a lo ancho, y la columna de al lado queda para filtrar. -->
+<div class="barra-cats">
   <div class="wrap">
     <div class="chips-wrap" id="cats-wrap">
+      <span class="rotulo">Categoría</span>
       <button class="chip-nav izq" id="cats-izq" type="button" tabindex="-1" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
       </button>
@@ -948,9 +1072,15 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
       </button>
     </div>
+  </div>
+</div>
+<div class="columnas">
+<div class="toolbar">
+  <div class="wrap">
     <!-- Segunda cinta: las marcas que hay dentro de la sección que estás
          mirando. La arma el script y se esconde sola cuando no hay más de una. -->
     <div class="chips-wrap chips-marcas" id="marcas-wrap" hidden>
+      <span class="rotulo">Marca</span>
       <button class="chip-nav izq" id="marcas-izq" type="button" tabindex="-1" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
       </button>
@@ -960,6 +1090,7 @@
       </button>
     </div>
     <div class="row2" id="row2">
+      <span class="rotulo">Filtros</span>
       <button class="filtros-btn" id="filtros-btn" type="button" aria-expanded="false" aria-controls="row2">
         Filtros
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
@@ -984,10 +1115,22 @@
       <label class="toggle"><input type="checkbox" id="soloStock"> Solo con stock</label>
       <span class="count" id="count" aria-live="polite"></span>
     </div>
+    <!-- Lo que combina con la categoría que estás mirando. Lo llena el script
+         y desaparece solo cuando no hay nada para sugerir. -->
+    <div class="sugeridos" id="sugeridos" hidden></div>
   </div>
 </div>
 
-<main class="wrap"><div class="grid" id="grid"></div></main>
+<main class="wrap">
+  <!-- Dice qué estás mirando y cuánto hay. El contador de la barra se queda
+       como respaldo para las pantallas chicas. -->
+  <div class="seccion">
+    <h2 id="sec-titulo">Todo el catálogo</h2>
+    <span id="sec-count"></span>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+</div><!-- /columnas -->
 
 <!-- Barra del pedido. Aparece sola cuando hay algo cargado. -->
 <div class="barra-pedido" id="barra-pedido" hidden>
@@ -2003,6 +2146,86 @@ function dibujarTanda(){
   });
 }
 
+/* ---------- Lo que combina con lo que estás mirando ----------
+   Si alguien está en Celulares, lo que le falta es un auricular o una funda.
+   Eso no se puede deducir del nombre del producto, así que va escrito a mano.
+   Cada categoría lista sus complementos en orden de prioridad; si alguna no
+   está acá, simplemente no se muestra nada y la columna queda como estaba. */
+const COMPLEMENTOS = {
+  'Celular':             ['Auriculares', 'Accesorio Apple', 'Apple Watch'],
+  'iPad':                ['Accesorio Apple', 'Auriculares'],
+  'MacBook':             ['Accesorio Apple', 'Monitor', 'Auriculares'],
+  'Apple Watch':         ['Accesorio Apple', 'Celular'],
+  'Tablet':              ['Auriculares', 'Accesorio Apple'],
+  'Desktop':             ['Monitor', 'Accesorio Apple'],
+  'Monitor':             ['Desktop', 'MacBook'],
+  'Auriculares':         ['Celular', 'Consola'],
+  'Accesorio Apple':     ['Celular', 'iPad', 'MacBook'],
+  // El mundo de la foto: la cámara y el lente se venden de a pares
+  'Cámara':              ['Lente', 'Accesorio Cámara'],
+  'Lente':               ['Cámara', 'Accesorio Cámara'],
+  'Accesorio Cámara':    ['Cámara', 'Lente'],
+  'Filmadora':           ['Accesorio Cámara', 'Lente'],
+  'Cámara de Acción':    ['Accesorio Cámara', 'Drone'],
+  'Drone':               ['Accesorio Drone', 'Cámara de Acción'],
+  'Accesorio Drone':     ['Drone'],
+  'Consola':             ['Accesorio Gaming', 'Auriculares'],
+  'Accesorio Gaming':    ['Consola', 'Auriculares'],
+  'Lentes Inteligentes': ['Celular', 'Auriculares'],
+  'E-Reader':            ['Tablet', 'Accesorio Apple']
+};
+
+const CUANTOS_SUGERIDOS = 3;
+
+/* Se elige uno de cada categoría complementaria antes de repetir: así al lado
+   de un celular aparece un auricular Y una funda, y no tres fundas. Van los
+   más baratos con stock, que es lo que se suma sin pensarlo a una compra. */
+function elegirSugeridos(cat){
+  const listas = (COMPLEMENTOS[cat] || []).map(c =>
+    MODELOS.filter(m => m.cat === c && m.stock && m.precio !== null && m.imagen)
+           .sort((a,b) => a.precio - b.precio));
+  const out = [];
+  for(let vuelta = 0; out.length < CUANTOS_SUGERIDOS; vuelta++){
+    // Si en una vuelta entera ninguna lista aportó, no hay más para dar
+    const antes = out.length;
+    listas.forEach(l => { if(out.length < CUANTOS_SUGERIDOS && l[vuelta]) out.push(l[vuelta]); });
+    if(out.length === antes) break;
+  }
+  return out;
+}
+
+function pintarSugeridos(){
+  const caja = $('sugeridos');
+  if(!caja) return;
+  // Sin categoría elegida no hay con qué relacionar: el bloque no aparece
+  const lista = filtros.cat ? elegirSugeridos(filtros.cat) : [];
+  caja.hidden = !lista.length;
+  if(!lista.length){ caja.replaceChildren(); return; }
+
+  caja.innerHTML = `<span class="rotulo">Te puede servir</span>` + lista.map(m => `
+    <button class="sug" type="button" data-key="${esc(clave(m.rep))}">
+      <span class="sug-foto"><img src="${esc(m.imagen)}" alt="" loading="lazy" onerror="this.remove()"></span>
+      <span class="sug-txt">
+        <b>${esc(m.desc)}</b>
+        <i>${m.multi && m.precio !== m.precioMax ? 'desde ' : ''}USD ${plata(m.precio)}</i>
+      </span>
+    </button>`).join('');
+
+  caja.querySelectorAll('.sug').forEach(b =>
+    b.onclick = () => abrirFicha(b.dataset.key));
+}
+
+/* El título de arriba de la grilla. Con un filtro puesto, el cliente tiene que
+   poder saber qué está viendo sin releer los controles. */
+function pintarSeccion(cuenta){
+  const t = $('sec-titulo'), c = $('sec-count');
+  if(!t) return;
+  t.textContent = filtros.cat ? plural(filtros.cat)
+                : filtros.q   ? `Resultados para "${filtros.q.trim()}"`
+                : 'Todo el catálogo';
+  if(c) c.textContent = cuenta || '';
+}
+
 function pintar(){
   pintarMarcas();
   LISTA = filtrar();
@@ -2010,9 +2233,12 @@ function pintar(){
   // Con CARPETA_FOTOS todos tienen una URL "supuesta", exista o no el archivo,
   // así que contar p.imagen mentiría. En ese modo solo mostramos la cantidad.
   const n = `${LISTA.length} producto${LISTA.length!==1?'s':''}`;
-  $('count').textContent = !LISTA.length ? ''
+  const texto = !LISTA.length ? ''
     : CARPETA_FOTOS ? n
     : `${n} · ${LISTA.filter(p => p.imagen).length} con foto`;
+  $('count').textContent = texto;
+  pintarSeccion(texto);
+  pintarSugeridos();
 
   if(!LISTA.length){
     grid.replaceChildren();
@@ -2964,6 +3190,10 @@ function activarCinta(idWrap, idCinta, idIzq, idDer){
 
   cinta.addEventListener('pointerdown', e => {
     if(e.pointerType === 'touch' || e.button !== 0) return;   // el dedo ya desliza solo
+    // En pantalla ancha la cinta es una lista vertical: no hay nada que
+    // arrastrar, y sin esto un mínimo movimiento del mouse contaría como
+    // arrastre y se comería el clic sobre la categoría.
+    if(cinta.scrollWidth <= cinta.clientWidth) return;
     activo = true; arrastro = false; id = e.pointerId;
     x0 = e.clientX; s0 = cinta.scrollLeft;
   });

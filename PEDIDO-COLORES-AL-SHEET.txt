@@ -1,0 +1,77 @@
+PEDIDO PARA EL AGENTE QUE MANEJA LA PLANILLA
+============================================================
+
+Planilla: Google Sheets del catalogo Advance Tecno
+  SHEET_ID = 1pXNtSTiHeyQYM-gyzMbmL-76YwQZNrOGm4ujy4xRElk
+  GID      = 705084569
+Columna a modificar: "Color"  (NINGUNA OTRA)
+
+
+POR QUE
+------------------------------------------------------------
+La web del catalogo muestra un puntito por cada color listado
+en la columna "Color", separados por barra "/". Al tocar el
+puntito busca la foto  fotos/<ID>-<color>.jpg , donde <color>
+es el nombre en minuscula, sin acentos y con guiones en lugar
+de espacios (ejemplo: "Space Gray" -> space-gray).
+
+Ya estan CARGADAS Y VERIFICADAS las fotos de los colores que
+figuran abajo como "agregar". Hoy no se ven porque el color no
+esta escrito en la celda. No hay que subir ninguna foto: solo
+completar la celda y aparecen solas.
+
+
+CAMBIOS PEDIDOS
+------------------------------------------------------------
+Para cada fila, reemplazar el contenido actual de la celda
+"Color" por el valor de NUEVO (esta escrito completo, no es un
+agregado parcial). Respetar mayusculas y las barras sin espacios.
+
+ID              VALOR ACTUAL            ->  VALOR NUEVO
+--------------------------------------------------------------------------
+CEL-APP-071     Orange/Blue             ->  Orange/Blue/Silver
+CEL-APP-069     Blue/Silver             ->  Blue/Silver/Orange
+CEL-APP-068     Orange                  ->  Orange/Blue/Silver
+CEL-APP-066     Black/White/Pink        ->  Black/White/Pink/Blue/Orange
+CEL-APP-011     Silver                  ->  Silver/Orange
+CEL-APP-005     Black/White/Teal        ->  Black/White/Teal/Pink/Ultramarine
+CEL-APP-075     Black/Sage/White/Blue   ->  Black/Sage/White/Blue/Lavender
+CEL-XIA-093     Black                   ->  Black/Purple
+AUD-APP-009     Midnight/Orange         ->  Midnight/Orange/Blue
+NB-APP-006      Sky Blue                ->  Sky Blue/Midnight/Starlight
+NB-APP-035      Sky Blue                ->  Sky Blue/Silver/Starlight
+TAB-APP-006     Starlight/Purple        ->  Starlight/Purple/Blue/Space Gray
+TAB-APP-008     Blue/Space Gray         ->  Blue/Space Gray/Starlight
+
+
+IMPORTANTE - EL CRITERIO ES COMERCIAL
+------------------------------------------------------------
+Aplicar un cambio SOLO si Advance efectivamente vende ese color.
+La foto existe, pero eso no significa que el color este a la venta.
+Si alguno no se vende, dejar esa fila como esta y avisar cual, para
+borrar la foto que sobra.
+
+
+CASO APARTE - NO APLICAR SIN CONSULTAR
+------------------------------------------------------------
+NB-APP-024  "Apple MACBOOK PRO M5 PRO 16 24GB/1TB (Space Black ES)"
+  La celda dice: Space Black ES
+
+  El "ES" es el idioma del teclado, no parte del color. La web lo
+  toma como si el color se llamara "Space Black ES" y busca
+  fotos/NB-APP-024-space-black-es.jpg, que no existe.
+  Mismo problema en NB-APP-001 (Indigo EN/Citrus EN) y
+  NB-APP-065 (Blush ES/Silver ES/Citrus ES).
+
+  Lo correcto es sacar el idioma de la columna Color y ponerlo en
+  la descripcion o en una columna aparte. Antes de tocarlo hay que
+  definir donde va el idioma, porque afecta a varias filas.
+
+
+NO HACER
+------------------------------------------------------------
+- No tocar otras columnas (ID, Precio, Stock, Descripcion, etc).
+- No reordenar los colores existentes: el primero de la lista es
+  el que se corresponde con la foto principal del producto.
+- No agregar colores que no esten en esta lista: si no hay foto
+  cargada, el puntito queda sin foto.

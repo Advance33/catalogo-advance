@@ -970,6 +970,7 @@
     /* Lo que combina con la categoría abierta. Es el uso que le encontramos al
        aire que quedaba abajo de los filtros: en vez de fondo vacío, tres cosas
        que se suman a la compra. */
+    .columnas > main > .sugeridos{display:none}   /* en ancho vive en la columna */
     .sugeridos{
       display:flex;flex-direction:column;gap:2px;
       border-top:1px solid var(--line);padding-top:11px;margin-top:18px;
@@ -1019,6 +1020,34 @@
      quedan enormes: mejor sumar columnas que agrandar cada una. */
   @media (min-width:1600px){
     .columnas .grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+  }
+
+  /* ---------- Las recomendaciones en el celular ----------
+     Acá no hay columna al costado: el bloque se mete al final de la grilla,
+     después de los productos, y ocupa todo el ancho. */
+  @media (max-width:1179px){
+    .sugeridos{
+      display:flex;flex-direction:column;gap:2px;
+      margin:6px 0 56px;padding:16px 4px 6px;border-top:1px solid var(--line);
+    }
+    .sugeridos .rotulo{
+      display:block;font:600 9.5px/1 var(--mono);letter-spacing:.16em;
+      text-transform:uppercase;color:var(--faint);margin:0 0 10px;
+    }
+    .sug{
+      display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+      background:transparent;border:0;border-radius:10px;padding:9px 8px;
+      cursor:pointer;color:var(--ink);
+    }
+    .sug:active{background:var(--surface-2)}
+    .sug-foto{
+      width:46px;height:46px;flex:none;border-radius:8px;
+      background:var(--foto-bg);display:block;overflow:hidden;
+    }
+    .sug-foto img{width:100%;height:100%;object-fit:contain;padding:3px;display:block}
+    .sug-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+    .sug-txt b{font:500 13px/1.3 var(--sans);overflow-wrap:anywhere}
+    .sug-txt i{font:500 12px/1 var(--mono);color:var(--acento);font-style:normal}
   }
 </style>
 </head>
@@ -1160,9 +1189,13 @@
    ========================================================================== */
 
 // ID de tu planilla (lo que va entre /d/ y /edit en la URL)
-const SHEET_ID  = '1pXNtSTiHeyQYM-gyzMbmL-76YwQZNrOGm4ujy4xRElk';
+// OJO: esta es la planilla "Landing", NO la de Cami. La de Cami es la fuente
+// comercial, pero la carga diaria de precios le pisa la columna Color. La
+// Landing se regenera después de cada carga: clona Cami y vuelve a aplicar los
+// colores que la web necesita para mostrar una foto por color.
+const SHEET_ID  = '18xxslIKTBnVMrLixCGlQBJGje3vKBYQHXy0qvVp8tpQ';
 // gid de la pestaña (el número al final de la URL, después de #gid=)
-const SHEET_GID = '705084569';
+const SHEET_GID = '482985525';
 
 // Tu WhatsApp con código de país, solo números
 const WHATSAPP = '5491122620770';   // +54 9 11 2262-0770
@@ -2155,34 +2188,48 @@ const COMPLEMENTOS = {
   'Celular':             ['Auriculares', 'Accesorio Apple', 'Apple Watch'],
   'iPad':                ['Accesorio Apple', 'Auriculares'],
   'MacBook':             ['Accesorio Apple', 'Monitor', 'Auriculares'],
-  'Apple Watch':         ['Accesorio Apple', 'Celular'],
+  'Apple Watch':         ['Accesorio Apple', 'Auriculares'],
   'Tablet':              ['Auriculares', 'Accesorio Apple'],
   'Desktop':             ['Monitor', 'Accesorio Apple'],
-  'Monitor':             ['Desktop', 'MacBook'],
-  'Auriculares':         ['Celular', 'Consola'],
-  'Accesorio Apple':     ['Celular', 'iPad', 'MacBook'],
+  'Monitor':             ['Accesorio Apple', 'Auriculares'],
+  // Desde un accesorio no se ofrece el producto grande: quien mira una funda
+  // no está por comprarse otro celular. Se le ofrece otro accesorio.
+  'Auriculares':         ['Accesorio Apple', 'Accesorio Gaming'],
+  'Accesorio Apple':     ['Auriculares', 'Apple Watch', 'Accesorio Gaming'],
   // El mundo de la foto: la cámara y el lente se venden de a pares
   'Cámara':              ['Lente', 'Accesorio Cámara'],
   'Lente':               ['Cámara', 'Accesorio Cámara'],
-  'Accesorio Cámara':    ['Cámara', 'Lente'],
+  'Accesorio Cámara':    ['Lente', 'Cámara de Acción', 'Accesorio Drone'],
   'Filmadora':           ['Accesorio Cámara', 'Lente'],
   'Cámara de Acción':    ['Accesorio Cámara', 'Drone'],
   'Drone':               ['Accesorio Drone', 'Cámara de Acción'],
-  'Accesorio Drone':     ['Drone'],
+  'Accesorio Drone':     ['Accesorio Cámara', 'Cámara de Acción'],
   'Consola':             ['Accesorio Gaming', 'Auriculares'],
-  'Accesorio Gaming':    ['Consola', 'Auriculares'],
+  'Accesorio Gaming':    ['Auriculares', 'Accesorio Apple'],
   'Lentes Inteligentes': ['Celular', 'Auriculares'],
   'E-Reader':            ['Tablet', 'Accesorio Apple']
 };
 
 const CUANTOS_SUGERIDOS = 3;
 
+/* Un complemento se suma a la compra, así que no puede costar más que lo que
+   la persona vino a ver: ofrecerle un drone de USD 1.800 a quien está mirando
+   hélices de USD 65 es al revés. El techo sale de lo que hay en pantalla, con
+   un piso para que en las categorías baratas siga entrando algo. */
+function techoSugeridos(){
+  const precios = LISTA.map(m => m.precio).filter(p => p !== null).sort((a,b) => a-b);
+  if(!precios.length) return Infinity;
+  const mediana = precios[Math.floor(precios.length / 2)];
+  return Math.max(250, Math.round(mediana * 1.5));
+}
+
 /* Se elige uno de cada categoría complementaria antes de repetir: así al lado
    de un celular aparece un auricular Y una funda, y no tres fundas. Van los
    más baratos con stock, que es lo que se suma sin pensarlo a una compra. */
-function elegirSugeridos(cat){
+function elegirSugeridos(cat, techo = techoSugeridos()){
   const listas = (COMPLEMENTOS[cat] || []).map(c =>
-    MODELOS.filter(m => m.cat === c && m.stock && m.precio !== null && m.imagen)
+    MODELOS.filter(m => m.cat === c && m.stock && m.precio !== null && m.imagen
+                        && m.precio <= techo)
            .sort((a,b) => a.precio - b.precio));
   const out = [];
   for(let vuelta = 0; out.length < CUANTOS_SUGERIDOS; vuelta++){
@@ -2191,18 +2238,46 @@ function elegirSugeridos(cat){
     listas.forEach(l => { if(out.length < CUANTOS_SUGERIDOS && l[vuelta]) out.push(l[vuelta]); });
     if(out.length === antes) break;
   }
+  // Si el techo no dejó pasar nada, se vuelve a intentar sin él: más vale una
+  // sugerencia cara que un espacio en blanco.
+  if(!out.length && techo !== Infinity) return elegirSugeridos(cat, Infinity);
+  return out;
+}
+
+/* En "Todo el catálogo" no hay con qué relacionar, pero sí algo que mostrar:
+   lo último que entró. Van de categorías distintas a propósito, para que de un
+   vistazo se vea la variedad de rubros y no tres lentes seguidos. */
+function novedades(){
+  const fecha = p => {
+    const m = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/.exec((p.fecha || '').trim());
+    if(!m) return 0;
+    const d = new Date(+m[3] < 100 ? 2000 + +m[3] : +m[3], +m[2]-1, +m[1]);
+    return isNaN(d) ? 0 : d.getTime();
+  };
+  const orden = MODELOS
+    .filter(m => m.stock && m.precio !== null && m.imagen)
+    .sort((a,b) => fecha(b.rep) - fecha(a.rep) || a.idx - b.idx);
+
+  const out = [], vistas = new Set();
+  for(const m of orden){
+    if(out.length >= CUANTOS_SUGERIDOS) break;
+    if(vistas.has(m.cat)) continue;      // una por rubro
+    vistas.add(m.cat); out.push(m);
+  }
   return out;
 }
 
 function pintarSugeridos(){
   const caja = $('sugeridos');
   if(!caja) return;
-  // Sin categoría elegida no hay con qué relacionar: el bloque no aparece
-  const lista = filtros.cat ? elegirSugeridos(filtros.cat) : [];
+  // Con una categoría abierta se recomienda lo que la complementa; sin ninguna,
+  // lo último que entró al catálogo.
+  const lista = filtros.cat ? elegirSugeridos(filtros.cat) : novedades();
+  const rotulo = filtros.cat ? 'Te puede servir' : 'Lo último que entró';
   caja.hidden = !lista.length;
   if(!lista.length){ caja.replaceChildren(); return; }
 
-  caja.innerHTML = `<span class="rotulo">Te puede servir</span>` + lista.map(m => `
+  caja.innerHTML = `<span class="rotulo">${rotulo}</span>` + lista.map(m => `
     <button class="sug" type="button" data-key="${esc(clave(m.rep))}">
       <span class="sug-foto"><img src="${esc(m.imagen)}" alt="" loading="lazy" onerror="this.remove()"></span>
       <span class="sug-txt">
@@ -2213,7 +2288,23 @@ function pintarSugeridos(){
 
   caja.querySelectorAll('.sug').forEach(b =>
     b.onclick = () => abrirFicha(b.dataset.key));
+  ubicarSugeridos();
 }
+
+/* En pantalla ancha el bloque vive en la columna de filtros. En el celular esa
+   columna es la barra de arriba, y ahí las recomendaciones taparían los
+   productos antes de que se vean: se mudan al final de la grilla. Se mueve el
+   mismo nodo, así no hay dos copias que mantener. */
+const ANCHA = matchMedia('(min-width:1180px)');
+
+function ubicarSugeridos(){
+  const caja = $('sugeridos');
+  if(!caja) return;
+  const destino = ANCHA.matches ? $('row2').parentElement : document.querySelector('main');
+  if(destino && caja.parentElement !== destino) destino.appendChild(caja);
+}
+
+ANCHA.addEventListener('change', ubicarSugeridos);
 
 /* El título de arriba de la grilla. Con un filtro puesto, el cliente tiene que
    poder saber qué está viendo sin releer los controles. */

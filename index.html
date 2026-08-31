@@ -1544,6 +1544,10 @@ async function cargar(){
     detalle:col('detalle','especificaciones','specs','ficha'),
     garantia:col('garantia'),
     condicion:col('condicion','estado'),
+    // Idioma del teclado (ES/EN) en notebooks. Vive en su propia columna de la
+    // planilla Landing: antes venía pegado al color ("Space Black ES") y la web
+    // lo dibujaba como un color más, buscando una foto que no existía.
+    teclado:col('teclado','idioma teclado'),
     // Si dos filas llevan el mismo texto acá, van juntas en la misma tarjeta.
     // Es la forma de corregir a mano lo que el agrupado automático no acierte.
     grupo:col('grupo','familia')
@@ -1581,6 +1585,7 @@ async function cargar(){
         detalle:  val(f,C.detalle),
         garantia: val(f,C.garantia),
         condicion:val(f,C.condicion),
+        teclado:  val(f,C.teclado),
         // Primero la columna Imagen; si está vacía, se prueba con la carpeta
         // usando el ID. Si el archivo no existe, el onerror muestra el placeholder.
         imagen: urlFoto(val(f,C.imagen)) ||
@@ -1656,10 +1661,21 @@ function filtrar(){
     asc:  (a,b) => porPrecio(a,b) || porNombre(a,b),
     desc: (a,b) => porPrecio(b,a) || porNombre(a,b),
     az:   porNombre,
-    cat:  (a,b) => a.cat.localeCompare(b.cat,'es') || porPrecio(a,b) || porNombre(a,b)
+    cat:  (a,b) => ordenCat(a.cat, b.cat) || porPrecio(a,b) || porNombre(a,b)
   }[filtros.orden];
 
-  return out.sort((a,b) => (b.stock - a.stock) || orden(a,b));
+  /* La marca destacada sube al principio, pero no en cualquier orden: si el
+     cliente pidió "precio menor a mayor" o alfabético, manda lo que pidió él.
+     "Agrupado por categoría" sí entra, porque estando dentro de una categoría
+     no agrupa nada y lo único que hacía era ordenar por precio por atrás. Y si
+     ya eligió una marca, no hay nada que destacar. */
+  const ORDENES_CON_DESTACADA = ['modelo', 'cat'];
+  const dest = (ORDENES_CON_DESTACADA.includes(filtros.orden) && !filtros.marca)
+             ? norm(marcaDestacada()) : '';
+  const porDestacada = (a,b) =>
+    dest ? (norm(b.marca) === dest) - (norm(a.marca) === dest) : 0;
+
+  return out.sort((a,b) => (b.stock - a.stock) || porDestacada(a,b) || orden(a,b));
 }
 
 /* ---------- Datos derivados de cada producto ---------- */
@@ -1678,6 +1694,48 @@ function categoriaReal(cat, marca, desc){
   // El iPad se reconoce por el nombre aunque la marca venga vacía o mal escrita
   const esApple = norm(marca) === 'apple' || /\bipad|macbook|apple watch\b/i.test(desc || '');
   return esApple ? propia : cat;
+}
+
+/* El orden de la barra no es alfabético: arranca por lo que más se busca, que
+   es con lo que conviene recibir al cliente. Lo que no figure acá va después,
+   ordenado alfabéticamente, así una categoría nueva en la planilla aparece
+   igual sin tener que tocar el código. Para cambiar el orden alcanza con mover
+   los nombres de esta lista. */
+const ORDEN_CATS = [
+  // Arranca por lo de Apple, que es lo que más se busca
+  'Celular', 'Accesorio Apple', 'Auriculares',
+  // El mundo gaming
+  'Consola', 'Accesorio Gaming',
+  // Computación y pantallas
+  'MacBook', 'iPad', 'Monitor', 'Desktop', 'Apple Watch', 'Smartwatch', 'Tablet',
+  // Foto y video: cada cosa al lado de su accesorio
+  'Filmadora', 'Cámara de Acción', 'Cámara', 'Accesorio Cámara',
+  'Lente', 'Lentes Inteligentes',
+  'Drone', 'Accesorio Drone'
+];
+
+/* La marca que se pone adelante en cada categoría. NO filtra: aparece primera
+   en la lista de marcas y sus productos van arriba en la grilla, pero el resto
+   sigue estando. Filtrar escondería, por ejemplo, los 24 Samsung de Celulares,
+   y el que entra buscando uno se iría creyendo que no hay. */
+const MARCA_DESTACADA = {
+  'Celular':     'Apple',
+  'Auriculares': 'Apple',
+  'Consola':     'Sony'
+};
+
+// La destacada de la categoría abierta, sólo si esa marca existe ahí
+function marcaDestacada(){
+  const m = MARCA_DESTACADA[filtros.cat];
+  return m && MODELOS.some(p => p.cat === filtros.cat && norm(p.marca) === norm(m)) ? m : '';
+}
+
+function ordenCat(a, b){
+  const ia = ORDEN_CATS.indexOf(a), ib = ORDEN_CATS.indexOf(b);
+  if(ia !== -1 && ib !== -1) return ia - ib;
+  if(ia !== -1) return -1;          // lo listado siempre antes que lo no listado
+  if(ib !== -1) return 1;
+  return a.localeCompare(b, 'es');
 }
 
 /* Los chips de la barra van en plural, pero SOLO ahí: el dato sigue en singular
@@ -1843,6 +1901,12 @@ const COLORES = {
   'cherry pink':'#D94A6E', purple:'#8A4FD0', pur:'#8A4FD0', violet:'#8E6FE0',
   lavender:'#C3B2E8', 'techno red':'#C6303A', red:'#D8352E', brown:'#6B4A34',
   midnight:'#1E2434', astrobot:'#5A6B8C',
+  // Sumados el 29/08 mirando qué traía la planilla sin pintar. Starlight era
+  // el más repetido: 9 filas de MacBook y iPad lo mostraban sólo como texto.
+  yellow:'#F6D64A', denim:'#46688C', camo:'#6E7554', 'gray camo':'#8A8D80',
+  // Los mismos colores escritos en español y portugués: la planilla mezcla
+  blanco:'#F5F5F7', gris:'#8E8E93', cinza:'#8E8E93', grafito:'#5B5B5F',
+  titanio:'#C6C2BC', 'titanio gris':'#9E9B96',
   starlight:'#EDE6DA', 'icy blue':'#BFDCE8', icyblue:'#BFDCE8', blush:'#E8B4B0',
   amethyst:'#8A5FA8', sapphire:'#2D5A9E',
   // Como vienen escritos en algunas filas de la planilla
@@ -1852,9 +1916,16 @@ const COLORES = {
 // El tono de un nombre suelto, o null si no lo sabemos pintar. Si el nombre
 // completo no está en la lista, probamos con la última palabra ("cherry pink"
 // → "pink").
+/* Se prueba el nombre entero, después la última palabra y por último la
+   primera. La última va antes porque en inglés el color es el sustantivo del
+   final ("cherry pink" es un pink). La primera rescata los nombres que siguen
+   con algo que no es un color: "Black Ocean Band" es la correa del reloj y
+   "Grey Transitions" el cristal del anteojo, pero los dos empiezan diciendo
+   de qué color son. */
 function hexColor(n){
   const k = norm(n);
-  return COLORES[k] || COLORES[k.split(/\s+/).pop()] || null;
+  const palabras = k.split(/\s+/);
+  return COLORES[k] || COLORES[palabras[palabras.length-1]] || COLORES[palabras[0]] || null;
 }
 
 // "Midnight/Blue/Orange" → tres puntitos.
@@ -2189,6 +2260,7 @@ const COMPLEMENTOS = {
   'iPad':                ['Accesorio Apple', 'Auriculares'],
   'MacBook':             ['Accesorio Apple', 'Monitor', 'Auriculares'],
   'Apple Watch':         ['Accesorio Apple', 'Auriculares'],
+  'Smartwatch':          ['Auriculares', 'Celular'],
   'Tablet':              ['Auriculares', 'Accesorio Apple'],
   'Desktop':             ['Monitor', 'Accesorio Apple'],
   'Monitor':             ['Accesorio Apple', 'Auriculares'],
@@ -2387,9 +2459,9 @@ function revelar(tarjetas){
 let FIRMA_FILTROS = '';
 
 function armarFiltros(){
-  const unicos = campo => [...new Set(PRODUCTOS.map(p => p[campo]).filter(Boolean))]
-                            .sort((a,b) => a.localeCompare(b,'es'));
-  const cats     = unicos('cat');
+  const unicos = (campo, orden) => [...new Set(PRODUCTOS.map(p => p[campo]).filter(Boolean))]
+                            .sort(orden || ((a,b) => a.localeCompare(b,'es')));
+  const cats     = unicos('cat', ordenCat);
   const marcas   = unicos('marca');
   const monturas = unicos('montura');
 
@@ -2453,8 +2525,12 @@ function marcasDisponibles(){
   filtros.marca = guardado;
   const cuenta = new Map();
   base.forEach(p => cuenta.set(p.marca, (cuenta.get(p.marca) || 0) + 1));
-  // Primero la marca con más productos: es por la que más se filtra
-  return [...cuenta].sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0],'es'));
+  // Primero la destacada de la sección; después, la que más productos tiene,
+  // que es por la que más se filtra.
+  const dest = norm(marcaDestacada());
+  const esDest = m => dest && norm(m) === dest ? 0 : 1;
+  return [...cuenta].sort((a,b) =>
+    esDest(a[0]) - esDest(b[0]) || b[1] - a[1] || a[0].localeCompare(b[0],'es'));
 }
 
 function pintarMarcas(){
@@ -2692,6 +2768,8 @@ function htmlDatosFicha(m, v){
     ['Modelo',      v.modelo],
     ['Color',       v.color ? htmlColorFicha(v) : '', true],
     ['Condición',   v.condicion],
+    ['Teclado',     v.teclado ? (v.teclado.toUpperCase() === 'ES' ? 'Español' :
+                                 v.teclado.toUpperCase() === 'EN' ? 'Inglés' : v.teclado) : ''],
     ['Garantía',    v.garantia],
     // La cotización con la que se calculó el precio en pesos de ESTA ficha.
     // Si no hay pesos (no se pudo traer el dólar), la fila no aparece.

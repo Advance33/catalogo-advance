@@ -1,8 +1,8 @@
 ﻿QUE FOTOS FALTAN
 ==============================================================
 
-Cargadas: 346 de 514    Faltan: 168
-Actualizado: 31/08/2026 17:53
+Cargadas: 330 de 514    Faltan: 184
+Actualizado: 31/08/2026 17:33
 
 Guarda cada foto en ESTA carpeta con el ID como nombre, en .jpg.
 No hace falta cargarlas todas: las que falten muestran un recuadro
@@ -182,6 +182,25 @@ CÁMARA  (30 sin foto)
    CAM-FUJ-001.jpg      Fujifilm FUJIFILM INSTAX MINI 12 (Pink/White/Purple/Green/Blue)
    CAM-FUJ-008.jpg      Fujifilm Fujifilm FUJI INSTAX MINI TWIN FILM ROLLO REPUESTO (2 X 10)
 
+CELULAR  (16 sin foto)
+
+   CEL-SAM-054.jpg      Samsung SAMSUNG S26 ULTRA 16/1TB 5G (White/Violet)
+   CEL-XIA-095.jpg      Xiaomi XIAOMI POCOPHONE C81 PRO 4/128GB (gold/green)
+   CEL-XIA-096.jpg      Xiaomi Xiaomi POCOPHONE X8 PRO 8/256GB 5G (Green)
+   CEL-XIA-097.jpg      Xiaomi XIAOMI POCOPHONE X8 PRO 8/512GB 5G (Green)
+   CEL-MOT-071.jpg      Motorola Motorola G57 8/256GB 5G (S/C) (Green)
+   CEL-APP-077.jpg      Apple Apple iPhone 17 AIR 256GB (Skyblue)
+   CEL-APP-078.jpg      Apple Apple iPhone 17 PRO MAX 256GB E-Sim (Orange)
+   CEL-SAM-032.jpg      Samsung SAMSUNG GALAXY Z FOLD 8 256GB (Graphite)
+   CEL-SAM-033.jpg      Samsung SAMSUNG GALAXY Z FOLD 8 512GB (Lavender/Graphite)
+   CEL-SAM-035.jpg      Samsung Samsung GALAXY Z FOLD 8 ULTRA 512GB (Graphite/Violet)
+   CEL-XIA-103.jpg      Xiaomi XIAOMI REDMI NOTE 15 PRO PLUS 5G 8/256GB (Black/Blue/Brown)
+   CEL-XIA-104.jpg      Xiaomi XIAOMI REDMI NOTE 15 PRO PLUS 5G 12/512GB (Black)
+   CEL-XIA-105.jpg      Xiaomi XIAOMI POCOPHONE F6 8/256GB (Green)
+   CEL-XIA-106.jpg      Xiaomi XIAOMI POCOPHONE F6 PRO 12/256GB (Black)
+   CEL-APP-079.jpg      Apple Apple iPhone 17 PRO MAX 256GB E-Sim (Blue)
+   CEL-APP-080.jpg      Apple Apple iPhone 17 PRO MAX 1TB E-Sim (Silver)
+
 ACCESORIO CÁMARA  (13 sin foto)
 
    ACC-GOP-001.jpg      GoPro GoPro BATERIA RECARGABLE GO PRO 9/10/11/12
@@ -198,18 +217,30 @@ ACCESORIO CÁMARA  (13 sin foto)
    ACC-CAN-009.jpg      Canon Canon BATERIA LP E6P PARA R5 R6M2 R7 R5C R5II 5D 6D
    ACC-SAR-001.jpg      Saramonic MICROFONO SARAMONIC BLINK ME 2 WIRELESS
 
-CELULAR  (10 sin foto)
+SMARTWATCH  (11 sin foto)
 
-   CEL-XIA-095.jpg      Xiaomi XIAOMI POCOPHONE C81 PRO 4/128GB (gold/green)
-   CEL-MOT-071.jpg      Motorola Motorola G57 8/256GB 5G (S/C) (Green)
-   CEL-APP-077.jpg      Apple Apple iPhone 17 AIR 256GB (Skyblue)
-   CEL-APP-078.jpg      Apple Apple iPhone 17 PRO MAX 256GB E-Sim (Orange)
-   CEL-SAM-032.jpg      Samsung SAMSUNG GALAXY Z FOLD 8 256GB (Graphite)
-   CEL-SAM-033.jpg      Samsung SAMSUNG GALAXY Z FOLD 8 512GB (Lavender/Graphite)
-   CEL-SAM-035.jpg      Samsung Samsung GALAXY Z FOLD 8 ULTRA 512GB (Graphite/Violet)
-   CEL-XIA-105.jpg      Xiaomi XIAOMI POCOPHONE F6 8/256GB (Green)
-   CEL-APP-079.jpg      Apple Apple iPhone 17 PRO MAX 256GB E-Sim (Blue)
-   CEL-APP-080.jpg      Apple Apple iPhone 17 PRO MAX 1TB E-Sim (Silver)
+   SW-APP-044.jpg       Apple Apple Watch Series 11 46mm GPS (Rose Gold/Jet Black/Space Gray/Silver)
+   SW-APP-047.jpg       Apple Apple Watch SE 3 GEN 44mm (Midnight)
+   SW-APP-048.jpg       Apple Apple Watch SE 3 GEN 44mm + CELL (Midnight/Starlight)
+   SW-GAR-001.jpg       Garmin Garmin Instinct 2S Solar (Grafito)
+   SW-GAR-002.jpg       Garmin Garmin Epix Pro (Gen 2) 42mm Sapphire (Blanco)
+   SW-GAR-003.jpg       Garmin Garmin Epix Pro (Gen 2) 51mm Sapphire (Titanio Gris/Blanco)
+   SW-GAR-004.jpg       Garmin Garmin Approach S70 42mm (Black Ceramic/Black Peach)
+   SW-KIE-001.jpg       Kieslect Kieslect Calling Watch Kr 3 (Denim/Denim + Milky White Silicone)
+   SW-KIE-002.jpg       Kieslect Kieslect Calling Watch Kr Ultra 3 (Ice White/White Leather + White Silicone)
+   SW-KIE-003.jpg       Kieslect Kieslect Lady Watch Elfin (Graphite Black/Black Metal + Brown Leather · Rose Gold/Gold Metal + White · Moonlit Silver/Silver Metal + Purple Silicone)
+   SW-KIE-004.jpg       Kieslect Kieslect Al Watch Elite 2 (Titan Black/Black Leather)
+
+TABLET  (8 sin foto)
+
+   TAB-APP-046.jpg      Apple Apple iPad Pro M4 11" 512GB
+   TAB-APP-047.jpg      Apple Apple iPad Pro M5 11" 512GB [5G + Wi-Fi] Standard Glass (Space Black)
+   TAB-SAM-019.jpg      Samsung Samsung A11+ 5G (X236B) 6/128GB (Gray)
+   TAB-SAM-020.jpg      Samsung Samsung S10 Lite 10,9" (X400) 6/128GB Wi-Fi (+Capa) (Cinza)
+   TAB-SAM-021.jpg      Samsung Samsung S10 FE Plus 13,1" (X620) 128GB (Incluye solo lápiz) (Gray)
+   TAB-SAM-022.jpg      Samsung Samsung S10 FE Plus 13,1" (X620) 256GB (Incluye solo lápiz) (Silver)
+   TAB-XIA-007.jpg      Xiaomi Xiaomi Redmi Pad 2 Pro 12" 6/128GB (Gris)
+   TAB-SAM-027.jpg      Samsung Samsung S10 FE Plus (X620) 8/128GB Wi-Fi (Grey)
 
 FILMADORA  (8 sin foto)
 
@@ -232,16 +263,6 @@ ACCESORIO APPLE  (7 sin foto)
    ACC-APP-048.jpg      Apple Apple Magic Keyboard for iPad Air 13" M3/M4 (White)
    ACC-APP-049.jpg      Apple Apple Magic Keyboard with Touch ID & Numeric Pad (Black Keys)
 
-TABLET  (7 sin foto)
-
-   TAB-APP-046.jpg      Apple Apple iPad Pro M4 11" 512GB
-   TAB-APP-047.jpg      Apple Apple iPad Pro M5 11" 512GB [5G + Wi-Fi] Standard Glass (Space Black)
-   TAB-SAM-020.jpg      Samsung Samsung S10 Lite 10,9" (X400) 6/128GB Wi-Fi (+Capa) (Cinza)
-   TAB-SAM-021.jpg      Samsung Samsung S10 FE Plus 13,1" (X620) 128GB (Incluye solo lápiz) (Gray)
-   TAB-SAM-022.jpg      Samsung Samsung S10 FE Plus 13,1" (X620) 256GB (Incluye solo lápiz) (Silver)
-   TAB-XIA-007.jpg      Xiaomi Xiaomi Redmi Pad 2 Pro 12" 6/128GB (Gris)
-   TAB-SAM-027.jpg      Samsung Samsung S10 FE Plus (X620) 8/128GB Wi-Fi (Grey)
-
 LENTES INTELIGENTES  (6 sin foto)
 
    GAF-RAY-004.jpg      Ray-Ban Ray-Ban Wayfarer (601ST350) (Black/Polarized Gradient Graphite)
@@ -251,43 +272,41 @@ LENTES INTELIGENTES  (6 sin foto)
    GAF-RAY-018.jpg      Ray-Ban Ray-Ban Skyler (601/1M52) (Shiny Black/Transitions Green)
    GAF-RAY-019.jpg      Ray-Ban Ray-Ban Skyler (601/CH52) (Shiny Black/Transitions Amethyst)
 
-SMARTWATCH  (6 sin foto)
+NOTEBOOK  (4 sin foto)
 
-   SW-GAR-002.jpg       Garmin Garmin Epix Pro (Gen 2) 42mm Sapphire (Blanco)
-   SW-GAR-003.jpg       Garmin Garmin Epix Pro (Gen 2) 51mm Sapphire (Titanio Gris/Blanco)
-   SW-KIE-001.jpg       Kieslect Kieslect Calling Watch Kr 3 (Denim/Denim + Milky White Silicone)
-   SW-KIE-002.jpg       Kieslect Kieslect Calling Watch Kr Ultra 3 (Ice White/White Leather + White Silicone)
-   SW-KIE-003.jpg       Kieslect Kieslect Lady Watch Elfin (Graphite Black/Black Metal + Brown Leather · Rose Gold/Gold Metal + White · Moonlit Silver/Silver Metal + Purple Silicone)
-   SW-KIE-004.jpg       Kieslect Kieslect Al Watch Elite 2 (Titan Black/Black Leather)
-
-NOTEBOOK  (3 sin foto)
-
+   NB-APP-065.jpg       Apple Apple MacBook NEO 13" 256GB (Silver/Blush)
    NB-APP-067.jpg       Apple Apple MacBook Pro M4 Pro 14" 24GB/512GB (Silver)
    NB-APP-073.jpg       Apple Apple MacBook Pro M5 Max 16" 36GB/2TB (Space Black)
    NB-APP-074.jpg       Apple Apple MacBook Pro M5 14" 16GB/1TB (Space Black)
 
-CÁMARA DE ACCIÓN  (2 sin foto)
-
-   CAM-INS-001.jpg      Insta360 Insta360 INSTA 360 ACE PRO
-   CAM-INS-003.jpg      Insta360 Insta360 Insta 360 X5 Bundle (Stick+2 Bater + Tapa Lente)
-
-AURICULARES  (2 sin foto)
+AURICULARES  (3 sin foto)
 
    AUD-JBL-001.jpg      JBL JBL Tune Flex Wireless NC (White)
    AUD-KIE-001.jpg      Kieslect KIESLECT Adjustable Earbuds (Black)
+   AUD-JBL-002.jpg      JBL JBL Charge 6 (Camo)
 
 DRONE  (2 sin foto)
 
    DRO-DJI-001.jpg      DJI DRONE DJI MINI 5 PRO 4 BATT
    DRO-ANT-001.jpg      Antigravity Drone Antigravity A1 Explorer 8K 360 Bundle
 
-ACCESORIO GAMING  (1 sin foto)
+CONSOLA  (2 sin foto)
 
-   ACC-SON-017.jpg      Sony Sony Joystick PS5 perlado (Chroma Indigo/Chroma Pearl)
+   CON-MIC-008.jpg      Microsoft Microsoft Xbox Series X 1TB Digital (White)
+   CON-MIC-006.jpg      Microsoft Microsoft Xbox Series S 512gb
+
+CÁMARA DE ACCIÓN  (2 sin foto)
+
+   CAM-INS-001.jpg      Insta360 Insta360 INSTA 360 ACE PRO
+   CAM-INS-003.jpg      Insta360 Insta360 Insta 360 X5 Bundle (Stick+2 Bater + Tapa Lente)
 
 MONITOR  (1 sin foto)
 
    MON-APP-004.jpg      Apple Apple Studio Display 27" (Standard Glass, Tilt & Height Adjustable Stand)
+
+ACCESORIO GAMING  (1 sin foto)
+
+   ACC-SON-017.jpg      Sony Sony Joystick PS5 perlado (Chroma Indigo/Chroma Pearl)
 
 ACCESORIO DRONE  (1 sin foto)
 

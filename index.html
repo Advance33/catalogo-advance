@@ -1693,7 +1693,16 @@ function filtrar(){
    tablet Lenovo, cae sola en "Tablet" sin tocar nada acá. */
 const CATS_APPLE = { tablet:'iPad', notebook:'MacBook', smartwatch:'Apple Watch' };
 
+/* Como se llaman en la web las categorias que la planilla todavia escribe de
+   otra manera. "Lente" se confundia con los anteojos y "Lentes Inteligentes"
+   con los objetivos de camara. Renombrar aca en vez de esperar a la Landing
+   evita tener que cambiar las dos cosas el mismo dia: cuando la planilla los
+   adopte, esta lista deja de encontrar nada y todo sigue igual. */
+const CATS_RENOMBRE = { 'lente':'Objetivo', 'lentes inteligentes':'Gafas Inteligentes' };
+
 function categoriaReal(cat, marca, desc){
+  const nuevo = CATS_RENOMBRE[norm(cat)];
+  if(nuevo) return nuevo;
   const propia = CATS_APPLE[norm(cat)];
   if(!propia) return cat;
   // El iPad se reconoce por el nombre aunque la marca venga vacía o mal escrita
@@ -1715,7 +1724,7 @@ const ORDEN_CATS = [
   'MacBook', 'iPad', 'Monitor', 'Desktop', 'Apple Watch', 'Smartwatch', 'Tablet',
   // Foto y video: cada cosa al lado de su accesorio
   'Filmadora', 'Cámara de Acción', 'Cámara', 'Accesorio Cámara',
-  'Lente', 'Lentes Inteligentes',
+  'Objetivo', 'Gafas Inteligentes',
   'Drone', 'Accesorio Drone'
 ];
 
@@ -1749,7 +1758,7 @@ function ordenCat(a, b){
    lista se pluralizan con la regla de siempre. */
 const CATS_PLURAL = {
   'Celular':'Celulares', 'Cámara':'Cámaras', 'Cámara de Acción':'Cámaras de Acción',
-  'Lente':'Lentes', 'Tablet':'Tablets', 'iPad':'iPads', 'MacBook':'MacBooks',
+  'Objetivo':'Objetivos', 'Tablet':'Tablets', 'iPad':'iPads', 'MacBook':'MacBooks',
   'Consola':'Consolas', 'Filmadora':'Filmadoras', 'Drone':'Drones', 'Desktop':'Desktops',
   'Notebook':'Notebooks', 'Parlante':'Parlantes', 'Smartwatch':'Smartwatches',
   'Accesorio Apple':'Accesorios Apple', 'Accesorio Cámara':'Accesorios Cámara',
@@ -1757,7 +1766,7 @@ const CATS_PLURAL = {
   'Monitor':'Monitores', 'E-Reader':'E-Readers',
   // Estas ya funcionan como plural: "Apple Watchs" y "Auricularess" no existen
   'Apple Watch':'Apple Watch', 'Auriculares':'Auriculares',
-  'Lentes Inteligentes':'Lentes Inteligentes'
+  'Gafas Inteligentes':'Gafas Inteligentes'
 };
 
 function plural(cat){
@@ -1794,7 +1803,7 @@ const MONTURAS_PREFIJO = [
   [/^Z\b/,     'Nikon Z'],    [/^AF-?S?\b/,    'Nikon F'],
 ];
 
-const esLente = p => norm(p.cat) === 'lente';
+const esLente = p => norm(p.cat) === 'objetivo';
 
 function monturaDe(p){
   if(!esLente(p)) return '';
@@ -2328,16 +2337,18 @@ const COMPLEMENTOS = {
   'Auriculares':         ['Accesorio Apple', 'Accesorio Gaming'],
   'Accesorio Apple':     ['Auriculares', 'Apple Watch', 'Accesorio Gaming'],
   // El mundo de la foto: la cámara y el lente se venden de a pares
-  'Cámara':              ['Lente', 'Accesorio Cámara'],
-  'Lente':               ['Cámara', 'Accesorio Cámara'],
-  'Accesorio Cámara':    ['Lente', 'Cámara de Acción', 'Accesorio Drone'],
-  'Filmadora':           ['Accesorio Cámara', 'Lente'],
+  'Cámara':              ['Objetivo', 'Accesorio Cámara'],
+  'Objetivo':            ['Cámara', 'Accesorio Cámara'],
+  'Accesorio Cámara':    ['Objetivo', 'Cámara de Acción', 'Accesorio Drone'],
+  'Filmadora':           ['Accesorio Cámara', 'Objetivo'],
   'Cámara de Acción':    ['Accesorio Cámara', 'Drone'],
   'Drone':               ['Accesorio Drone', 'Cámara de Acción'],
   'Accesorio Drone':     ['Accesorio Cámara', 'Cámara de Acción'],
   'Consola':             ['Accesorio Gaming', 'Auriculares'],
   'Accesorio Gaming':    ['Auriculares', 'Accesorio Apple'],
-  'Lentes Inteligentes': ['Celular', 'Auriculares'],
+  'Gafas Inteligentes':  ['Celular', 'Auriculares'],
+  // El parlante entro a la planilla el 01/09, con el JBL Charge 6
+  'Parlante':            ['Auriculares', 'Celular', 'Accesorio Gaming'],
   'E-Reader':            ['Tablet', 'Accesorio Apple']
 };
 
@@ -2645,13 +2656,13 @@ function sincronizarControles(){
     b.setAttribute('aria-pressed', String((b.dataset.marca || '') === filtros.marca)));
 }
 
-/* Montura y apertura aparecen solo en la categoría Lente. Ofrecerlas en
-   "Celular" sería dar un filtro que deja la grilla vacía, y al salir de Lente
+/* Montura y apertura aparecen solo en la categoría Objetivo. Ofrecerlas en
+   "Celular" sería dar un filtro que deja la grilla vacía, y al salir de ahí
    hay que soltarlos: si no, elegís Celular con "Canon RF" puesto y no entiende
    nadie por qué no hay nada. Va aparte de sincronizarControles porque se llama
    mientras escribís en el buscador, y ahí no se puede tocar el <input>. */
 function sincronizarLentes(){
-  const hayLentes = norm(filtros.cat) === 'lente';
+  const hayLentes = norm(filtros.cat) === 'objetivo';
   if(!hayLentes){ filtros.montura = ''; filtros.apertura = ''; }
   $('montura').hidden = $('apertura').hidden = !hayLentes;
   $('montura').value  = filtros.montura;

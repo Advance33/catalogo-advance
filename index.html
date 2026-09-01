@@ -1582,7 +1582,7 @@ async function cargar(){
               : Math.round(base * (1 + MARGEN_PCT/100)),
         // Si la columna Color está vacía, se buscan los colores en el paréntesis
         // del nombre, que es donde los carga la mitad de la planilla.
-        color:  val(f,C.color) || colorDelParentesis(val(f,C.desc) || val(f,C.modelo)),
+        color:  colorDeLaFila(val(f,C.color), val(f,C.desc) || val(f,C.modelo)),
         stock:  esSi(val(f,C.stock)),
         busq:   val(f,C.busq),
         fecha:  val(f,C.fecha),
@@ -1708,7 +1708,7 @@ function categoriaReal(cat, marca, desc){
    los nombres de esta lista. */
 const ORDEN_CATS = [
   // Arranca por lo de Apple, que es lo que más se busca
-  'Celular', 'Accesorio Apple', 'Auriculares',
+  'Celular', 'Accesorio Apple', 'Auriculares', 'Parlante',
   // El mundo gaming
   'Consola', 'Accesorio Gaming',
   // Computación y pantallas
@@ -1751,7 +1751,7 @@ const CATS_PLURAL = {
   'Celular':'Celulares', 'Cámara':'Cámaras', 'Cámara de Acción':'Cámaras de Acción',
   'Lente':'Lentes', 'Tablet':'Tablets', 'iPad':'iPads', 'MacBook':'MacBooks',
   'Consola':'Consolas', 'Filmadora':'Filmadoras', 'Drone':'Drones', 'Desktop':'Desktops',
-  'Notebook':'Notebooks', 'Parlante':'Parlantes',
+  'Notebook':'Notebooks', 'Parlante':'Parlantes', 'Smartwatch':'Smartwatches',
   'Accesorio Apple':'Accesorios Apple', 'Accesorio Cámara':'Accesorios Cámara',
   'Accesorio Drone':'Accesorios Drone', 'Accesorio Gaming':'Accesorios Gaming',
   'Monitor':'Monitores', 'E-Reader':'E-Readers',
@@ -1963,6 +1963,22 @@ function colorDelParentesis(desc){
   }
   return '';
 }
+/* El color que se muestra. Manda la columna Color, salvo cuando el parentesis
+   del nombre dice MENOS colores que ella: ahi el nombre es el que sabe, porque
+   la columna se completa con los colores de toda la familia y el precio de la
+   fila es el de un color solo. El iPhone 17 PRO 256GB son dos filas con los
+   mismos tres colores en la columna: la de USD 1.185 se llama "(Orange)" y la
+   de USD 1.200 "(Blue/Silver)", y sin esto las dos mostraban los tres puntitos
+   y el cliente no tenia como saber que color le tocaba a que precio. */
+function colorDeLaFila(col, desc){
+  const par = colorDelParentesis(desc);
+  if(!col) return par;
+  if(!par) return col;
+  const conj = t => new Set(t.split('/').map(x => norm(x.trim())).filter(Boolean));
+  const a = conj(par), b = conj(col);
+  return (a.size < b.size && [...a].every(c => b.has(c))) ? par : col;
+}
+
 function htmlColores(txt){
   const lista = pintas(txt).filter(c => c.hex);
   if(!lista.length) return '';
@@ -2007,7 +2023,14 @@ function fotosDeColor(p, color){
   const s = slugColor(color || '');
   if(!CARPETA_FOTOS || !p.id || !s) return [];
   const formas = [...new Set([s, s.replace(/-/g,'')])];
-  return formas.map(f => urlFoto(CARPETA_FOTOS + encodeURIComponent(p.id + '-' + f) + EXT_FOTOS));
+  const arma = id => formas.map(f => urlFoto(CARPETA_FOTOS + encodeURIComponent(id + '-' + f) + EXT_FOTOS));
+  /* Si esta fila no tiene la foto de ese color, se busca en sus hermanas: es
+     el mismo producto y la foto sirve igual. El MacBook Neo de 8/256GB trae
+     solo la Citrus, asi que al elegir Indigo volvia a mostrar la amarilla
+     aunque la Indigo estuviera cargada en la fila de 8/512GB. */
+  const modelo = buscarModelo(clave(p));
+  const hermanas = modelo ? modelo.variantes.filter(v => v.id && v.id !== p.id) : [];
+  return [...arma(p.id), ...hermanas.flatMap(v => arma(v.id))];
 }
 
 function mostrarFotoColor(p, color, d){

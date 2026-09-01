@@ -7,6 +7,9 @@ _*
 ABRIR CATALOGO.bat
 servidor.py
 publicar.bat
+validar.py
+verificar-fotos.py
+VERIFICAR FOTOS.bat
 .vscode/
 
 # Notas de trabajo internas: viven en la carpeta pero NO se publican.
@@ -15,3 +18,4 @@ publicar.bat
 *-AL-SHEET.txt
 *-AL-SHEET.csv
 Auditoria-*.pdf
+REVISAR-FOTOS.txt

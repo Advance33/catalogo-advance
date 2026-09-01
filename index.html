@@ -1999,22 +1999,30 @@ function htmlColorFicha(p){
    sin foto de ese color queda la principal y no se ve nada roto. */
 const slugColor = s => norm(s).replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
 
-function fotoDeColor(p, color){
+/* La planilla escribe el mismo color de dos maneras: "Jet Black" y "Jetblack",
+   "Icy Blue" e "Icyblue". La primera da el archivo jet-black.jpg y la segunda
+   jetblack.jpg, así que la foto aparecía o no según cómo lo hubiera tipeado el
+   proveedor ese día. Se prueban las dos formas antes de darse por vencido. */
+function fotosDeColor(p, color){
   const s = slugColor(color || '');
-  if(!CARPETA_FOTOS || !p.id || !s) return '';
-  return urlFoto(CARPETA_FOTOS + encodeURIComponent(p.id + '-' + s) + EXT_FOTOS);
+  if(!CARPETA_FOTOS || !p.id || !s) return [];
+  const formas = [...new Set([s, s.replace(/-/g,'')])];
+  return formas.map(f => urlFoto(CARPETA_FOTOS + encodeURIComponent(p.id + '-' + f) + EXT_FOTOS));
 }
 
 function mostrarFotoColor(p, color, d){
   const img = d.querySelector('.fi-foto img');
   if(!img) return;                                    // ficha sin foto: nada que cambiar
   const volver = () => { if(p.imagen && img.getAttribute('src') !== p.imagen) img.src = p.imagen; };
-  const url = fotoDeColor(p, color);
-  if(!url) return volver();
-  const prueba = new Image();
-  prueba.onload  = () => { img.src = url; img.classList.add('ok'); };
-  prueba.onerror = volver;
-  prueba.src = url;
+  const urls = fotosDeColor(p, color);
+  if(!urls.length) return volver();
+  (function probar(i){
+    if(i >= urls.length) return volver();
+    const prueba = new Image();
+    prueba.onload  = () => { img.src = urls[i]; img.classList.add('ok'); };
+    prueba.onerror = () => probar(i + 1);
+    prueba.src = urls[i];
+  })(0);
 }
 
 // El mismo control de unidades sirve en la ficha y en la lista del pedido

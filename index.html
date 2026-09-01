@@ -170,7 +170,7 @@
   .clear:hover{background:rgba(124,58,237,.10);color:var(--acento)}
 
   /* ---------- Filtros ---------- */
-  .toolbar{position:sticky;top:0;z-index:20;background:#FBF8FF;border-bottom:1px solid var(--line)}
+  .toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
   /* La cinta de categorías se desliza: con el dedo, con la rueda del mouse,
      arrastrándola, o con las flechas de los costados. */
   .chips-wrap{position:relative}
@@ -191,8 +191,8 @@
     content:"";position:absolute;top:0;bottom:0;width:54px;z-index:2;
     pointer-events:none;opacity:0;transition:opacity .2s;
   }
-  .chips-wrap::before{left:0;background:linear-gradient(90deg,#FBF8FF 30%,transparent)}
-  .chips-wrap::after{right:0;background:linear-gradient(270deg,#FBF8FF 30%,transparent)}
+  .chips-wrap::before{left:0;background:linear-gradient(90deg,var(--paper) 30%,transparent)}
+  .chips-wrap::after{right:0;background:linear-gradient(270deg,var(--paper) 30%,transparent)}
   .chips-wrap.hay-izq::before,.chips-wrap.hay-der::after{opacity:1}
 
   .chip-nav{
@@ -920,6 +920,11 @@
     .columnas > .toolbar{
       position:sticky;top:64px;z-index:10;
       background:transparent;border-bottom:0;padding:26px 0 24px;
+      /* Si la columna no entra en la pantalla, scrollea ella sola. Sin esto,
+         en una laptop de 768px las recomendaciones quedaban abajo del borde
+         y no había manera de verlas: la columna está fija. */
+      max-height:calc(100vh - 88px);overflow-y:auto;overscroll-behavior:contain;
+      scrollbar-width:thin;scrollbar-color:var(--line) transparent;
     }
     .columnas > .toolbar > .wrap{max-width:none;padding:0}
     .columnas > main{padding:0;margin:0;max-width:none}
@@ -1007,7 +1012,7 @@
   }
 
   /* La barra de categorías queda pegada arriba también en pantalla chica */
-  .barra-cats{position:sticky;top:0;z-index:21;background:#FBF8FF;
+  .barra-cats{position:sticky;top:0;z-index:21;background:var(--paper);
               border-bottom:1px solid var(--line)}
   /* El título de sección sólo tiene sentido con la columna al costado: en
      pantalla chica la categoría elegida ya se ve en la cinta, ahí arriba.
@@ -1746,6 +1751,7 @@ const CATS_PLURAL = {
   'Celular':'Celulares', 'Cámara':'Cámaras', 'Cámara de Acción':'Cámaras de Acción',
   'Lente':'Lentes', 'Tablet':'Tablets', 'iPad':'iPads', 'MacBook':'MacBooks',
   'Consola':'Consolas', 'Filmadora':'Filmadoras', 'Drone':'Drones', 'Desktop':'Desktops',
+  'Notebook':'Notebooks', 'Parlante':'Parlantes',
   'Accesorio Apple':'Accesorios Apple', 'Accesorio Cámara':'Accesorios Cámara',
   'Accesorio Drone':'Accesorios Drone', 'Accesorio Gaming':'Accesorios Gaming',
   'Monitor':'Monitores', 'E-Reader':'E-Readers',
@@ -1836,8 +1842,10 @@ function specs(p){
   const out = [];
   const add = v => { if(v && !out.includes(v)) out.push(v); };
 
-  // "12/256GB" = memoria RAM / almacenamiento, como lo escriben los fabricantes
-  const dual = /(\d{1,2})\s*\/\s*(\d{3,4})\s*GB\b/i.exec(txt);
+  // "12/256GB" = memoria RAM / almacenamiento, como lo escriben los fabricantes.
+  // Los Desktop vienen con la RAM escrita entera ("Mac Mini M4 16GB/256GB"): sin
+  // contemplar ese "GB" del medio, la ficha mostraba la RAM y perdía el disco.
+  const dual = /(\d{1,2})\s*(?:GB)?\s*\/\s*(\d{3,4})\s*GB\b/i.exec(txt);
   if(dual){ add(dual[1] + 'GB RAM'); add(dual[2] + 'GB'); }
   else{
     const tb = /(\d(?:[.,]\d)?)\s*TB\b/i.exec(txt);
@@ -2072,7 +2080,10 @@ function nombreGrupo(vs){
     if(!pal.every(w => norm(w[i]) === norm(pal[0][i]))) break;
     out.push(pal[0][i]);
   }
-  const n = out.join(' ').replace(/[\s\-–(]+$/,'');
+  // El prefijo común puede cortar adentro de un paréntesis y dejarlo abierto:
+  // los cuatro Ray-Ban Skyler comparten "Ray-Ban Skyler (Shiny" y eso se veía
+  // tal cual en la tarjeta. Si quedó un "(" sin cerrar, se va con lo que sigue.
+  const n = out.join(' ').replace(/\s*\([^)]*$/,'').replace(/[\s\-–(]+$/,'');
   // Un prefijo de una sola palabra no nombra nada ("Apple"): antes de mostrar
   // eso, preferimos el nombre completo de la primera variante.
   return n.split(/\s+/).filter(Boolean).length >= 2 ? n : vs[0].desc;
@@ -2084,11 +2095,28 @@ function nombreGrupo(vs){
 function etiquetaVariante(p, nombre){
   let e = p.desc || '';
   if(norm(e).startsWith(norm(nombre))) e = e.slice(nombre.length);
-  e = e.replace(RE_PAREN,' ').replace(/[\s\-–]+/g,' ').trim();
+  /* Del paréntesis se saca el color, porque eso ya se elige con los puntitos.
+     Pero sólo si TODO lo de adentro son colores: entre paréntesis también
+     viene lo que distingue a un producto de otro, y borrarlo dejaba dos
+     botones idénticos. Pasó con los Magic Keyboard "(M4/M5)" y "(M2)": los
+     dos quedaban diciendo "Black" con precios distintos y no había forma de
+     saber cuál era cuál. */
+  e = e.replace(RE_PAREN, m => {
+    const dentro = m.slice(1, -1).trim();
+    const lista = pintas(dentro);
+    return (lista.length && lista.every(c => c.hex)) ? ' ' : ' ' + dentro + ' ';
+  });
+  e = e.replace(/[\s\-–]+/g,' ').trim();
   // La planilla escribe la capacidad como se le ocurre ("128gb", "512GB") y en
   // los botones quedaban mezcladas. Acá se emparejan.
   e = e.replace(/(\d+\s*)(gb|tb)\b/gi, (_,n,u) => n.trim() + u.toUpperCase());
-  return e || p.color || 'Estándar';
+  if(e) return e;
+  // Sin nada que la distinga, la variante se queda con el color. Cuando la
+  // columna Color está vacía suele estar al final del nombre, entre paréntesis
+  // ("Magic Mouse 2 (White)"): mirarlo ahí antes de rendirse evita que dos
+  // productos distintos queden los dos con el botón "Estándar".
+  const par = (p.desc || '').match(/\(([^)]*)\)\s*$/);
+  return p.color || (par ? par[1].trim() : '') || 'Estándar';
 }
 
 function armarModelo(vs){
@@ -2108,7 +2136,7 @@ function armarModelo(vs){
   const cuenta = {};
   vs.forEach(v => { cuenta[v.etiqueta] = (cuenta[v.etiqueta] || 0) + 1; });
   vs.forEach(v => {
-    if(cuenta[v.etiqueta] > 1 && v.color) v.etiqueta = `${v.etiqueta} · ${v.color}`;
+    if(cuenta[v.etiqueta] > 1) v.etiqueta += ' · ' + (v.color || v.id);
   });
 
   const colores = [...new Set(

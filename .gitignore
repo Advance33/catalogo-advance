@@ -8,3 +8,10 @@ ABRIR CATALOGO.bat
 servidor.py
 publicar.bat
 .vscode/
+
+# Notas de trabajo internas: viven en la carpeta pero NO se publican.
+# GitHub Pages sirve todo lo que esta en el repo, asi que un .txt suelto
+# queda legible para cualquiera que adivine la direccion.
+*-AL-SHEET.txt
+*-AL-SHEET.csv
+Auditoria-*.pdf

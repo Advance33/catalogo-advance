@@ -2144,7 +2144,11 @@ const ICONO_MAS = `
 
 const RE_CAP   = /\b\d+(?:[.,]\d+)?\s*(?:gb|tb)\b/gi;   // 128gb, 1tb
 const RE_RAM   = /\b\d+\s*ram\b/gi;                     // 16ram
-const RE_DUAL  = /\b\d{1,2}\s*\/\s*\d{3,4}\s*gb\b/gi;   // 12/256GB
+/* El segundo numero puede ser TB y de un solo digito: sin eso "16/1TB" no se
+   reconocia como RAM/almacenamiento, RE_CAP se llevaba el "1TB" y el "16"
+   quedaba suelto en el nombre. Eso partia en dos tarjetas cosas que son un
+   solo modelo: los MacBook Air M5 y el S26 Ultra de 16/1TB. */
+const RE_DUAL  = /\b\d{1,2}\s*\/\s*\d{1,4}\s*(?:gb|tb)\b/gi;  // 12/256GB, 16/1TB
 const RE_PAREN = /\([^)]*\)/g;                          // (Space Gray/Silver)
 const RE_CORCH = /\[[^\]]*\]/g;                         // [5G]
 // Solo relojes:

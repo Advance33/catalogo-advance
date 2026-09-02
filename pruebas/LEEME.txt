@@ -1,0 +1,51 @@
+PRUEBAS DEL CATALOGO
+====================
+
+Cada archivo .js de esta carpeta es una tanda de comprobaciones que se corre
+sobre el catalogo de verdad, con la planilla de verdad. Entre las cuatro son
+unas 296 comprobaciones.
+
+  agrupacion.js   Que filas se juntan en una tarjeta y cuales no, los botones
+                  de cada version, los precios, la ficha, el pedido, el
+                  buscador y los chips de categoria.
+  sugeridos.js    El bloque "Te puede servir": que recomienda cada categoria,
+                  que no se recomiende a si misma y el techo de precio.
+  destacada.js    El orden de la barra de categorias y la marca destacada.
+  layout.js       Como se ve en 390, 900, 1440 y 1920 px de ancho.
+
+COMO SE CORREN
+--------------
+Doble clic en "PROBAR.bat", en la carpeta de arriba. O a mano:
+
+    python pruebas\correr.py
+
+Tarda un par de minutos: cada tanda abre el catalogo entero y espera a que
+baje la planilla.
+
+QUE NECESITAN
+-------------
+Chrome o Edge instalado, y internet (bajan la planilla Landing de verdad,
+no una copia: por eso avisan cuando algo cambia en el Sheet).
+
+El servidor local lo levanta y lo baja solo el propio script.
+
+COMO LEER EL RESULTADO
+----------------------
+Cada linea que empieza con FALLA es algo que el cliente veria mal.
+Las que dicen OK estan bien. Al final de cada tanda hay numeros del dia
+(cuantas filas, cuantas tarjetas) que son informativos, no comprobaciones.
+
+POR QUE NO TIENEN NUMEROS FIJOS
+-------------------------------
+La planilla cambia todos los dias, asi que las pruebas no verifican "hay 442
+tarjetas" sino cosas que tienen que ser ciertas siempre: que no se pierda
+ninguna fila, que no se dupliquen, que el precio de la tarjeta sea el menor
+de sus versiones, que ningun chip quede en singular. Asi siguen sirviendo
+manana sin tener que actualizarlas.
+
+SI AGREGAS UNA TANDA NUEVA
+--------------------------
+Alcanza con dejar el .js en esta carpeta: correr.py toma todos los que
+encuentre. La tanda tiene que escribir su resultado en un <pre id="RESULTADO">
+y marcar las fallas con lineas que empiecen con FALLA (copiar el arranque de
+cualquiera de las que ya estan).

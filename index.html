@@ -902,6 +902,53 @@
     .egg-escena,.egg-sway,.egg-fig,#egg.primo>div,#egg.vegetta>div{animation:none}
   }
 
+  /* ---------- La fila de marcas ----------
+     Ocupa una fila entera de la grilla y se desliza en horizontal si no
+     entran todas. Los círculos son blancos sobre el lila del fondo: se leen
+     como una pausa entre los productos, no como más tarjetas. */
+  .fila-marcas{
+    grid-column:1/-1;display:flex;flex-direction:column;gap:12px;
+    padding:20px 2px 22px;margin:2px 0;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .fm-rotulo{
+    font:600 9.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+    color:var(--faint);
+  }
+  .fm-lista{
+    display:flex;gap:18px;overflow-x:auto;padding:2px 0 6px;
+    scrollbar-width:none;overscroll-behavior-x:contain;
+  }
+  .fm-lista::-webkit-scrollbar{display:none}
+  .mk{
+    display:flex;flex-direction:column;align-items:center;gap:7px;flex:none;
+    background:transparent;border:0;padding:0;cursor:pointer;width:78px;
+  }
+  .mk-cir{
+    width:66px;height:66px;border-radius:50%;display:grid;place-items:center;
+    background:var(--surface);border:1px solid var(--line);overflow:hidden;
+    transition:border-color .15s ease, transform .15s ease;padding:8px;
+  }
+  .mk-cir img{width:100%;height:100%;object-fit:contain;display:block}
+  /* El nombre es el respaldo: si hay logo, la imagen lo tapa */
+  .mk-cir b{
+    font:600 11px/1.15 var(--sans);color:var(--ink);text-align:center;
+    overflow-wrap:anywhere;letter-spacing:-.01em;
+  }
+  /* Sin esto "Panasonic" se parte al medio y queda una "c" sola abajo */
+  .mk-cir b[data-largo="algo"]{font-size:10px}
+  .mk-cir b[data-largo="mucho"]{font-size:8.5px;letter-spacing:-.02em}
+  .mk-cir img + b{display:none}
+  .mk i{font:500 10.5px/1 var(--mono);color:var(--faint);font-style:normal}
+  .mk:hover .mk-cir{border-color:var(--acento);transform:translateY(-2px)}
+  .mk:hover i{color:var(--acento)}
+  .mk:focus-visible .mk-cir{outline:2px solid var(--acento);outline-offset:2px}
+  @media (max-width:560px){
+    .fm-lista{gap:14px}
+    .mk{width:66px}
+    .mk-cir{width:56px;height:56px}
+  }
+
   /* ---------- Pantalla ancha: dos columnas ----------
      En un monitor grande sobraban 300px de fondo vacío a cada lado. Las
      categorías se quedan arriba (son navegación: decir en qué parte del
@@ -1721,7 +1768,9 @@ const ORDEN_CATS = [
   // El mundo gaming
   'Consola', 'Accesorio Gaming',
   // Computación y pantallas
-  'MacBook', 'iPad', 'Monitor', 'Desktop', 'Apple Watch', 'Smartwatch', 'Tablet',
+  // "Notebook" no aparece mientras todas sean Apple (se convierten en MacBook),
+  // pero el día que entre una Asus tiene que caer acá y no al final de la barra.
+  'MacBook', 'Notebook', 'iPad', 'Monitor', 'Desktop', 'Apple Watch', 'Smartwatch', 'Tablet',
   // Foto y video: cada cosa al lado de su accesorio
   'Filmadora', 'Cámara de Acción', 'Cámara', 'Accesorio Cámara',
   'Objetivo', 'Gafas Inteligentes',
@@ -1927,7 +1976,14 @@ const COLORES = {
   starlight:'#EDE6DA', 'icy blue':'#BFDCE8', icyblue:'#BFDCE8', blush:'#E8B4B0',
   amethyst:'#8A5FA8', sapphire:'#2D5A9E',
   // Como vienen escritos en algunas filas de la planilla
-  whites:'#F5F5F7', sil:'#D8DADC', jetblack:'#0B0B0D', negro:'#1D1D1F', violeta:'#8E6FE0'
+  whites:'#F5F5F7', sil:'#D8DADC', jetblack:'#0B0B0D', negro:'#1D1D1F', violeta:'#8E6FE0',
+  // Sumados el 01/09 con lo que marcó validar.py: eran los negros con apellido.
+  // "Shiny Black" solo ya eran 4 filas de Ray-Ban saliendo sin muestra.
+  'shiny black':'#131316', 'matte black':'#2A2A2D', 'graphite black':'#35353A',
+  'titan black':'#2E2E33', 'black ceramic':'#1F1F22', 'black leather':'#2B2320',
+  'black keys':'#1D1D1F', 'ice white':'#F0F4F6', 'shiny chalky grey':'#A8A69F',
+  // La planilla lo escribe sin la segunda e
+  lavander:'#C3B2E8'
 };
 
 // El tono de un nombre suelto, o null si no lo sabemos pintar. Si el nombre
@@ -2304,6 +2360,7 @@ function dibujarTanda(){
   const nuevas = lote.map(p => { const el = tarjeta(p); frag.appendChild(el); return el; });
   grid.insertBefore(frag, finGrilla);
   revelar(nuevas);
+  ponerFilaMarcas();
 
   if(dibujadas >= LISTA.length){
     obsTanda?.unobserve(finGrilla);
@@ -2315,6 +2372,63 @@ function dibujarTanda(){
   requestAnimationFrame(() => {
     if(finGrilla.isConnected && finGrilla.getBoundingClientRect().top < innerHeight + 900)
       dibujarTanda();
+  });
+}
+
+/* ---------- La fila de marcas ----------
+   Una fila de marcas metida entre los productos, para saltar a la que te
+   interesa de un toque. Va sólo en "Todo el catálogo": adentro de una
+   categoría, la lista de marcas ya está en la columna de al lado.
+
+   No hay archivos de logo, así que cada marca se dibuja con su nombre. Si
+   algún día se suben, se usan solos: alcanza con dejarlos en
+   marcas/<marca-en-minuscula>.png y el nombre queda de respaldo si el archivo
+   no está, igual que con las fotos por color. */
+const CARPETA_MARCAS = 'marcas/';
+const CUANTAS_MARCAS = 12;
+// Después de cuántas tarjetas se mete la fila: entra pasada la primera tanda
+// visible, como para no empujar los productos abajo del todo.
+const MARCAS_DESPUES_DE = 6;
+
+function marcasParaLaFila(){
+  const cuenta = new Map();
+  MODELOS.forEach(m => { if(m.marca) cuenta.set(m.marca, (cuenta.get(m.marca) || 0) + 1); });
+  return [...cuenta]
+    .sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0],'es'))
+    .slice(0, CUANTAS_MARCAS);
+}
+
+function htmlFilaMarcas(){
+  const lista = marcasParaLaFila();
+  if(lista.length < 3) return '';
+  const items = lista.map(([marca, n]) => {
+    const logo = urlFoto(CARPETA_MARCAS + encodeURIComponent(norm(marca).replace(/[^a-z0-9]+/g,'-')) + '.png');
+    return `<button class="mk" type="button" data-marca="${esc(marca)}" title="${esc(marca)} · ${n} productos">
+      <span class="mk-cir">
+        ${logo ? `<img src="${esc(logo)}" alt="" loading="lazy" onerror="this.remove()">` : ''}
+        <b data-largo="${marca.length > 8 ? 'mucho' : marca.length > 6 ? 'algo' : 'no'}">${esc(marca)}</b>
+      </span>
+      <i>${n}</i>
+    </button>`;
+  }).join('');
+  return `<div class="fila-marcas" id="fila-marcas">
+    <span class="fm-rotulo">Buscá por marca</span>
+    <div class="fm-lista">${items}</div>
+  </div>`;
+}
+
+// Se mete dentro de la grilla, ocupando una fila entera
+function ponerFilaMarcas(){
+  if(filtros.cat || filtros.marca || filtros.q) return;   // sólo en "Todo", sin filtros
+  if(grid.querySelector('.fila-marcas')) return;
+  const tarjetas = grid.querySelectorAll('.card');
+  if(tarjetas.length <= MARCAS_DESPUES_DE) return;
+  const html = htmlFilaMarcas();
+  if(!html) return;
+  tarjetas[MARCAS_DESPUES_DE].insertAdjacentHTML('beforebegin', html);
+  grid.querySelectorAll('.fila-marcas .mk').forEach(b => b.onclick = () => {
+    filtros.marca = b.dataset.marca;
+    aplicarFiltro(true);
   });
 }
 
@@ -2753,7 +2867,12 @@ const ORDENES = ['modelo','sheet','cat','asc','desc','az'];
 function leerURL(){
   const s = new URL(location.href).searchParams;
   filtros.q         = s.get('q') || '';
-  filtros.cat       = s.get('cat') || window.CAT_FIJA || '';
+  // Un link compartido antes del renombre trae la categoría vieja ("Lente",
+  // "Lentes Inteligentes"). Se traduce al nombre nuevo en vez de ignorarla:
+  // sin esto el cliente abría el link y veía el catálogo entero, sin ninguna
+  // señal de que el filtro que le mandamos no se aplicó.
+  const catURL      = s.get('cat') || window.CAT_FIJA || '';
+  filtros.cat       = CATS_RENOMBRE[norm(catURL)] || catURL;
   filtros.marca     = s.get('marca') || '';
   filtros.orden     = ORDENES.includes(s.get('orden')) ? s.get('orden') : ORDEN_DEF;
   filtros.soloStock = s.get('stock') === '1';

@@ -32,7 +32,11 @@ PUERTO  = 8765
 BASE    = 'http://localhost:%d' % PUERTO
 
 # El orden importa solo para leer la salida: primero lo que mas se rompe.
-ORDEN = ['agrupacion', 'sugeridos', 'destacada', 'layout']
+# El presupuesto es cuanto reloj virtual se le da a cada tanda: layout abre
+# el catalogo entero cuatro veces (una por ancho) y espera a que cada una
+# termine de dibujar, asi que necesita bastante mas que las demas.
+ORDEN = ['agrupacion', 'sugeridos', 'destacada', 'carrusel', 'layout']
+PRESUPUESTO = {'layout': 200}   # segundos; el resto usa el de correr()
 
 CHROMES = [
     r'C:\Program Files\Google\Chrome\Application\chrome.exe',
@@ -112,7 +116,7 @@ def main():
         print('Corriendo %d tandas contra la planilla de hoy...\n' % len(tandas))
         for nombre in tandas:
             armar_probe(os.path.join(AQUI, nombre + '.js'))
-            texto = correr(chrome)
+            texto = correr(chrome, PRESUPUESTO.get(nombre, 90))
             if not texto:
                 sin_correr.append(nombre)
                 print('  %-14s NO LLEGO A CORRER' % nombre)

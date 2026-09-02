@@ -25,6 +25,9 @@ logs/
 *-AL-SHEET*.csv
 Auditoria-*.pdf
 REVISAR-FOTOS.txt
+# Que duplicados de foto ya se miraron y se dieron por buenos. Es estado
+# de esta maquina, no del sitio: se regenera con verificar-fotos.py --aceptar.
+fotos-aceptadas.txt
 # Las notas de trabajo dentro de fotos/ ("QUE FOTOS FALTAN.txt" y sus
 # backups) estuvieron publicadas hasta el 02/09: cualquiera con la
 # direccion las leia. Las fotos se publican; las notas al lado, no.

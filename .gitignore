@@ -16,6 +16,6 @@ VERIFICAR FOTOS.bat
 # GitHub Pages sirve todo lo que esta en el repo, asi que un .txt suelto
 # queda legible para cualquiera que adivine la direccion.
 *-AL-SHEET.txt
-*-AL-SHEET.csv
+*-AL-SHEET*.csv
 Auditoria-*.pdf
 REVISAR-FOTOS.txt

@@ -2,15 +2,18 @@ PRUEBAS DEL CATALOGO
 ====================
 
 Cada archivo .js de esta carpeta es una tanda de comprobaciones que se corre
-sobre el catalogo de verdad, con la planilla de verdad. Entre las cuatro son
-unas 296 comprobaciones.
+sobre el catalogo de verdad, con la planilla de verdad. Entre las cinco son
+unas 341 comprobaciones.
 
   agrupacion.js   Que filas se juntan en una tarjeta y cuales no, los botones
                   de cada version, los precios, la ficha, el pedido, el
                   buscador y los chips de categoria.
   sugeridos.js    El bloque "Te puede servir": que recomienda cada categoria,
                   que no se recomiende a si misma y el techo de precio.
-  destacada.js    El orden de la barra de categorias y la marca destacada.
+  destacada.js    El orden de la barra de categorias, la marca destacada y la
+                  fila de marcas que va entre los productos.
+  carrusel.js     La vidriera de ofertas de arriba: de donde salen, el % de
+                  descuento, las flechas y que se frene sola.
   layout.js       Como se ve en 390, 900, 1440 y 1920 px de ancho.
 
 COMO SE CORREN

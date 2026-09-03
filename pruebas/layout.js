@@ -20,7 +20,16 @@ function probar(){
   f.style.cssText = `width:${w}px;height:900px;border:0;position:absolute;left:-9999px`;
   f.src = 'index.html';
   document.body.appendChild(f);
-  f.onload = () => setTimeout(() => { medir(f, w); f.remove(); probar(); }, 3500);
+  /* El carrusel de cada copia se apaga apenas carga: son cuatro catalogos
+     enteros a la vez y, con el reloj acelerado del headless, cuatro
+     auto-plays deslizandose hacen que Chrome no llegue a terminar. */
+  f.onload = () => {
+    try{ f.contentWindow.pararOfertas?.(); }catch{}
+    setTimeout(() => {
+      try{ f.contentWindow.pararOfertas?.(); }catch{}
+      medir(f, w); f.remove(); probar();
+    }, 3500);
+  };
 }
 
 function medir(f, w){

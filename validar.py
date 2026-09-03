@@ -129,22 +129,33 @@ def regla_marca_ajena(filas, ctx):
       - si la marca propia NO figura en el nombre, es GRAVE
       - si figuran las dos, es un AVISO para que lo mire una persona
     """
+    def compacta(s):
+        # "Ray-Ban" y "Rayban" son la misma marca escrita distinto
+        return re.sub(r'[^a-z0-9]', '', norm(s))
+
     fallas = []
     marcas = set(norm(f['Marca']) for f in filas if limpio(f['Marca']))
     for f in filas:
         # En los lentes la otra marca es siempre la montura, no un error.
-        if f['Categoría'] == 'Lente':
+        if f['Categoría'] in ('Lente', 'Objetivo'):
             continue
         d, propia = norm(f['Descripción completa']), norm(f['Marca'])
         otras = [m for m in marcas
                  if m and m != propia and re.search(r'\b%s\b' % re.escape(m), d)]
         if not otras:
             continue
-        propia_figura = propia and re.search(r'\b%s\b' % re.escape(propia), d)
+        # Siempre AVISO, nunca grave. Los nombres comerciales legítimos que
+        # incluyen otra marca son la mayoría de los casos: "Ray-Ban Meta
+        # Wayfarer", "Sigma EF-630 Flash Nikon", "Volante Logitech G29 PS5".
+        # Frenar una publicación por esto es ruido; que una persona lo mire,
+        # no. El único error real que encontró esta regla (un volante Logitech
+        # cargado como Microsoft) se ve igual de bien en la lista de avisos.
+        propia_figura = propia and compacta(propia) in compacta(d)
         fallas.append((
-            'AVISO' if propia_figura else 'GRAVE', f['ID'],
+            'AVISO', f['ID'],
             'marca "%s" y el nombre menciona "%s"%s' % (
-                f['Marca'], otras[0], ' (¿montura o compatibilidad?)' if propia_figura else '')))
+                f['Marca'], otras[0],
+                '' if propia_figura else ' — y la propia no figura en el nombre')))
     return fallas
 
 
@@ -350,16 +361,25 @@ def regla_tarjetas(filas, ctx):
             e = re.sub(r'\([^)]*\)', sin_color, e)
             e = re.sub(r'[\s\-–]+', ' ', e).strip()
             etiquetas.append(e or limpio(v['Color']) or 'Estándar')
+        # El catálogo desempata los botones repetidos en tres pasadas: primero
+        # el color, después el idioma del teclado y al final el ID. Con el ID
+        # nunca quedan dos botones iguales, así que no hay nada grave que
+        # avisar. Lo que sí vale la pena es cuando hay que llegar al ID: quiere
+        # decir que ningún dato distingue las variantes y al cliente le queda
+        # un "NB-APP-089" pegado al botón, que no le dice nada.
+        for campo in ('Color', 'Teclado'):
+            repes = collections.Counter(etiquetas)
+            etiquetas = [e + ' · ' + limpio(v[campo]) if repes[e] > 1 and limpio(v.get(campo)) else e
+                         for e, v in zip(etiquetas, vs)]
+
         repes = collections.Counter(etiquetas)
         for e, n in repes.items():
             if n < 2:
                 continue
             iguales = [v for v, x in zip(vs, etiquetas) if x == e]
-            colores = set(limpio(v['Color']) for v in iguales)
-            if len(colores) < len(iguales):     # el color tampoco los distingue
-                fallas.append(('GRAVE', iguales[0]['ID'],
-                               '%d variantes con el botón "%s" y sin color que las separe (%s)'
-                               % (n, e, ', '.join(v['ID'] for v in iguales))))
+            fallas.append(('AVISO', iguales[0]['ID'],
+                           'el botón "%s" se repite y sólo el ID lo distingue: %s'
+                           % (e, ', '.join(v['ID'] for v in iguales))))
     return fallas
 
 

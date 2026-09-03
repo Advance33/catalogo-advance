@@ -37,14 +37,17 @@ function correrPruebas(){
   ok(cuenta('iPad') > 0 && cuenta('MacBook') > 0 && cuenta('Apple Watch') > 0,
      'existen las categorias nuevas',
      cuenta('iPad') + ' iPad, ' + cuenta('MacBook') + ' MacBook, ' + cuenta('Apple Watch') + ' Apple Watch');
-  // Lo importante no es cuantos hay, sino que cada uno este donde va
-  ok(PRODUCTOS.filter(p => p.cat==='iPad').every(p => /ipad/i.test(p.desc)),
+  /* Lo importante no es cuantos hay, sino que cada uno este donde va. Se
+     mira la descripcion Y el modelo: la planilla dejo de repetir la marca
+     en la descripcion ("Watch SE 3 GPS" con el modelo "Apple Watch SE 3"), asi
+     que mirar solo la descripcion daba una falla que no era. */
+  ok(PRODUCTOS.filter(p => p.cat==='iPad').every(p => /ipad/i.test(p.desc + ' ' + p.modelo)),
      'todo lo que esta en iPad es un iPad');
-  ok(PRODUCTOS.filter(p => p.cat==='MacBook').every(p => /macbook/i.test(p.desc)),
+  ok(PRODUCTOS.filter(p => p.cat==='MacBook').every(p => /macbook/i.test(p.desc + ' ' + p.modelo)),
      'todo lo que esta en MacBook es un MacBook');
-  ok(PRODUCTOS.filter(p => p.cat==='Apple Watch').every(p => /apple watch/i.test(p.desc)),
+  ok(PRODUCTOS.filter(p => p.cat==='Apple Watch').every(p => /apple watch/i.test(p.desc + ' ' + p.modelo)),
      'todo lo que esta en Apple Watch es un Apple Watch');
-  ok(PRODUCTOS.filter(p => p.cat==='Tablet').every(p => !/ipad/i.test(p.desc)),
+  ok(PRODUCTOS.filter(p => p.cat==='Tablet').every(p => !/ipad/i.test(p.desc + ' ' + p.modelo)),
      'no quedo ningun iPad suelto en Tablet',
      [...new Set(PRODUCTOS.filter(p => p.cat==='Tablet').map(p=>p.marca))].join(','));
   ok(categoriaReal('Tablet','Samsung','Samsung GALAXY TAB') === 'Tablet' &&

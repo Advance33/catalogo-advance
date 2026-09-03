@@ -902,6 +902,134 @@
     .egg-escena,.egg-sway,.egg-fig,#egg.primo>div,#egg.vegetta>div{animation:none}
   }
 
+  /* ---------- La vidriera de ofertas ----------
+     Es lo primero que se ve, así que se despega del resto: el catálogo es
+     claro y liviano, y esta banda es morada y profunda. El contraste es el que
+     avisa "esto es otra cosa, mirá acá". Va entre el buscador y las
+     categorías, y abajo sigue el catálogo como siempre. */
+  /* El morado no va a sangre: iba de blanco a morado profundo de un corte y el
+     salto pegaba fuerte. Ahora es un panel redondeado apoyado sobre el fondo
+     de la página, con aire alrededor: se distingue igual, pero se lee como una
+     pieza adentro del sitio y no como un tajo. */
+  .ofertas{background:transparent;padding:22px 0 26px}
+  .ofertas > .wrap{
+    background:
+      radial-gradient(120% 150% at 10% 0%, rgba(167,84,255,.45), transparent 58%),
+      radial-gradient(90% 120% at 95% 100%, rgba(109,40,217,.5), transparent 60%),
+      linear-gradient(152deg, #4A1D93 0%, #2E1166 100%);
+    color:#F6F1FF;border-radius:24px;overflow:hidden;
+    padding:24px 30px 26px;
+    box-shadow:0 18px 44px rgba(46,17,102,.28);
+  }
+  .of-cab{display:flex;align-items:center;justify-content:space-between;gap:14px;
+          padding-bottom:16px}
+  .of-rotulo{
+    margin:0;display:inline-flex;align-items:center;gap:9px;
+    font:600 12px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;
+    color:#F0D98C;
+  }
+  /* El puntito que late: lo único que se mueve además del carrusel */
+  .of-rotulo::before{
+    content:'';width:7px;height:7px;border-radius:50%;background:#F0D98C;
+    box-shadow:0 0 0 0 rgba(240,217,140,.7);animation:ofLate 2s ease-out infinite;
+  }
+  @keyframes ofLate{
+    to{box-shadow:0 0 0 9px rgba(240,217,140,0)}
+  }
+  .of-flechas{display:flex;gap:8px}
+  .of-flechas button{
+    width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+    background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);
+    color:#F6F1FF;cursor:pointer;transition:background .15s ease, border-color .15s ease;
+  }
+  .of-flechas button svg{width:17px;height:17px;display:block}
+  .of-flechas button:hover{background:rgba(255,255,255,.20);border-color:rgba(255,255,255,.45)}
+  .of-flechas button:focus-visible{outline:2px solid #F0D98C;outline-offset:2px}
+
+  .of-pista{
+    display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;
+    scrollbar-width:none;overscroll-behavior-x:contain;
+  }
+  .of-pista::-webkit-scrollbar{display:none}
+
+  .of-slide{
+    flex:0 0 100%;scroll-snap-align:start;cursor:pointer;
+    display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);
+    gap:34px;align-items:center;
+  }
+  /* La foto va sobre un panel claro: los productos vienen recortados en blanco
+     y sobre el morado quedarían con un halo. */
+  .of-foto{
+    background:#fff;border-radius:18px;display:flex;align-items:center;
+    justify-content:center;overflow:hidden;height:340px;
+    box-shadow:0 18px 50px rgba(10,4,26,.45);
+  }
+  .of-foto img{width:100%;height:100%;object-fit:contain;padding:26px;display:block}
+  .of-foto .sinfoto{color:#8E7FB5}
+  .of-datos{
+    display:flex;flex-direction:column;gap:14px;align-items:flex-start;
+    min-width:0;padding:8px 0;
+  }
+  .of-marca{font:600 11px/1 var(--mono);letter-spacing:.2em;
+            text-transform:uppercase;color:#C9AEFF}
+  .of-datos h3{
+    margin:0;color:#fff;
+    font:400 clamp(1.5rem,3.4vw,2.6rem)/1.08 var(--display);
+    text-transform:uppercase;letter-spacing:.005em;text-wrap:balance;
+  }
+  .of-tags{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  /* El porcentaje es el grito de la pieza: es lo único dorado y lo único que
+     tiene sombra propia. */
+  .of-off{
+    font:700 17px/1 var(--display);letter-spacing:.04em;padding:11px 17px;
+    border-radius:999px;background:linear-gradient(135deg,#FFE9A8,#F0C24A);
+    color:#3B2000;box-shadow:0 8px 24px rgba(240,194,74,.35);
+  }
+  .of-regalo{
+    font:600 12.5px/1.35 var(--sans);color:#BFF3D8;
+    background:rgba(94,233,164,.14);padding:9px 14px;border-radius:999px;
+  }
+  .of-precio{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .of-precio s{font:500 17px/1 var(--mono);color:#A392C9}
+  .of-precio b{
+    font:400 clamp(2rem,4.6vw,3.1rem)/1 var(--display);color:#fff;
+    letter-spacing:.01em;
+  }
+  .of-precio i{font:500 15px/1 var(--mono);color:#C9AEFF;font-style:normal;flex-basis:100%}
+  .of-ver{
+    display:inline-flex;align-items:center;gap:8px;margin-top:4px;
+    font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    color:#1B0B40;background:#F6F1FF;padding:13px 20px;border-radius:999px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .of-slide:hover .of-ver{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.3)}
+
+  .of-pie{display:flex;flex-direction:column;gap:12px;align-items:center;padding-top:20px}
+  .of-dots{display:flex;gap:8px;justify-content:center}
+  .of-dots button{
+    width:8px;height:8px;padding:0;border-radius:50%;border:0;cursor:pointer;
+    background:rgba(255,255,255,.30);transition:background .2s ease, width .2s ease;
+  }
+  .of-dots button[aria-selected="true"]{background:#F0D98C;width:24px;border-radius:99px}
+  .of-dots button:focus-visible{outline:2px solid #F0D98C;outline-offset:3px}
+
+  /* Cuánto falta para la próxima */
+  .of-barra{width:min(280px,60%);height:2px;border-radius:2px;
+            background:rgba(255,255,255,.16);overflow:hidden}
+  .of-barra span{display:block;height:100%;width:100%;background:#F0D98C;
+                 transform-origin:left center;transform:scaleX(0)}
+  @keyframes ofAvanza{ from{transform:scaleX(0)} to{transform:scaleX(1)} }
+
+  @media (max-width:860px){
+    .of-slide{grid-template-columns:1fr;gap:20px}
+    .of-foto{height:230px}
+    .of-datos{padding:0}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .of-rotulo::before{animation:none}
+    .of-barra{display:none}
+  }
+
   /* ---------- La fila de marcas ----------
      Ocupa una fila entera de la grilla y se desliza en horizontal si no
      entran todas. Los círculos son blancos sobre el lila del fondo: se leen
@@ -1141,6 +1269,30 @@
 
 <!-- Las categorías no son un filtro: son dónde estás parado. Por eso van
      arriba y a lo ancho, y la columna de al lado queda para filtrar. -->
+
+<!-- La vidriera: lo que está en promoción, antes del catálogo. Se llena sola
+     desde la planilla y no aparece si no hay nada que mostrar. -->
+<section class="ofertas" id="ofertas" hidden aria-labelledby="of-rotulo">
+  <div class="wrap">
+    <div class="of-cab">
+      <h2 class="of-rotulo" id="of-rotulo">Ofertas</h2>
+      <div class="of-flechas">
+        <button type="button" id="of-prev" aria-label="Oferta anterior">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <button type="button" id="of-next" aria-label="Oferta siguiente">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="of-pista" id="of-pista"></div>
+    <div class="of-pie">
+      <div class="of-dots" id="of-dots" role="tablist" aria-label="Elegir oferta"></div>
+      <!-- Muestra cuánto falta para la próxima. Se reinicia en cada cambio. -->
+      <div class="of-barra" id="of-barra" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
+</section>
 <div class="barra-cats">
   <div class="wrap">
     <div class="chips-wrap" id="cats-wrap">
@@ -1602,7 +1754,10 @@ async function cargar(){
     teclado:col('teclado','idioma teclado'),
     // Si dos filas llevan el mismo texto acá, van juntas en la misma tarjeta.
     // Es la forma de corregir a mano lo que el agrupado automático no acierte.
-    grupo:col('grupo','familia')
+    grupo:col('grupo','familia'),
+    // El precio de antes, para los que están en promoción. Si la columna no
+    // existe, el catálogo anda igual y el carrusel usa los que tienen regalo.
+    antes:col('oferta','precio anterior','antes','precio lista')
   };
 
   const esCosto = C.precio === -1 && C.costo !== -1;
@@ -1631,6 +1786,9 @@ async function cargar(){
         // del nombre, que es donde los carga la mitad de la planilla.
         color:  colorDeLaFila(val(f,C.color), val(f,C.desc) || val(f,C.modelo)),
         stock:  esSi(val(f,C.stock)),
+        // El precio de antes, sólo en los que están en promoción. Cuenta como
+        // oferta únicamente si es mayor que el de hoy.
+        antes:  (() => { const a = num(val(f,C.antes)); return a > 0 ? a : null; })(),
         busq:   val(f,C.busq),
         fecha:  val(f,C.fecha),
         incluye:val(f,C.incluye),
@@ -1885,8 +2043,17 @@ const precioARS = p => (TC && p.precio) ? '$ ' + plata(Math.round(p.precio * TC)
 // El mensaje que el cliente manda al tocar Consultar. Sin código interno y sin
 // precio: tiene que sonar a una persona escribiendo, no a un formulario. Termina
 // en pregunta, que es lo que invita a contestar.
+/* Desde el 02/09 la planilla saca la marca del texto y la deja sólo en su
+   columna, así que la descripción del Panasonic dice "HC-V900 HD Camcorder"
+   y nada más. En la tarjeta y en la ficha eso se ve bien, porque la marca va
+   arriba del nombre; pero un mensaje de WhatsApp es texto pelado, y al
+   vendedor le llegaba "me interesa el EOS RP Body" sin saber de qué marca.
+   Las filas donde la marca todavía abre el texto no se duplican. */
+const nombreConMarca = p =>
+  (!p.marca || norm(p.desc || '').startsWith(norm(p.marca))) ? p.desc : `${p.marca} ${p.desc}`;
+
 function mensajeWA(p, color){
-  return `Hola! Me interesa el ${p.desc}${color ? ` en ${color}` : ''}. ¿Me pasás info?`;
+  return `Hola! Me interesa el ${nombreConMarca(p)}${color ? ` en ${color}` : ''}. ¿Me pasás info?`;
 }
 const linkWA = texto => WHATSAPP ? `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}` : '';
 
@@ -1930,7 +2097,7 @@ function specs(p){
 function htmlFoto(p, clase){
   const sinFoto = `<div class="sinfoto"><b>${esc(p.marca || 'Sin foto')}</b><i>sin imagen</i></div>`;
   if(!p.imagen) return sinFoto;
-  return `<img src="${esc(p.imagen)}" alt="${esc(p.desc)}" ${clase || ''} decoding="async"
+  return `<img src="${esc(p.imagen)}" alt="${esc(nombreConMarca(p))}" ${clase || ''} decoding="async"
                onload="this.classList.add('ok')"
                onerror="this.parentElement.classList.add('vacia'); this.outerHTML=this.dataset.alt"
                data-alt="${esc(sinFoto)}">`;
@@ -1982,6 +2149,8 @@ const COLORES = {
   'shiny black':'#131316', 'matte black':'#2A2A2D', 'graphite black':'#35353A',
   'titan black':'#2E2E33', 'black ceramic':'#1F1F22', 'black leather':'#2B2320',
   'black keys':'#1D1D1F', 'ice white':'#F0F4F6', 'shiny chalky grey':'#A8A69F',
+  // La planilla escribe "Mate Black" con una sola t, y "chalky gray" con a
+  'mate black':'#2A2A2D', 'shiny chalky gray':'#A8A69F',
   // La planilla lo escribe sin la segunda e
   lavander:'#C3B2E8'
 };
@@ -2011,7 +2180,14 @@ function pintas(txt){
       const partes = n.split('-').map(s => s.trim()).filter(Boolean);
       return partes.length > 1 && partes.every(hexColor) ? partes : [n];
     })
-    .map(n => ({ nombre:n, hex:hexColor(n) }));
+    .map(n => {
+      let hex = hexColor(n);
+      // Los Ray-Ban vienen "Mate Black - transitions grey": armazón y cristal.
+      // El cristal no es un color que sepamos pintar, pero el armazón sí, y es
+      // lo que se ve de frente. Se pinta con el primero y se muestra entero.
+      if(!hex && n.includes('-')) hex = hexColor(n.split('-')[0].trim());
+      return { nombre:n, hex };
+    });
 }
 
 /* Muchas filas dejan la columna Color vacía y ponen los colores entre
@@ -2192,6 +2368,18 @@ function nombreGrupo(vs){
 // Lo que distingue a esta variante de sus hermanas: "512gb", "16ram 1tb",
 // "42mm Silver S/M". El paréntesis de color no entra, porque el color se elige
 // aparte con los puntitos.
+/* El idioma del teclado, como se lo nombra al cliente. En la ficha va suelto
+   ("Español"), porque la fila de al lado ya dice Teclado; en el botón de la
+   variante va entero, que ahí no hay nada que dé contexto. */
+const idiomaTeclado = t => {
+  const x = (t || '').trim().toUpperCase();
+  return x === 'ES' ? 'Español' : x === 'EN' ? 'Inglés' : (t || '');
+};
+const nombreTeclado = t => {
+  const i = idiomaTeclado(t);
+  return i ? 'Teclado ' + i.toLowerCase() : '';
+};
+
 function etiquetaVariante(p, nombre){
   let e = p.desc || '';
   if(norm(e).startsWith(norm(nombre))) e = e.slice(nombre.length);
@@ -2206,7 +2394,11 @@ function etiquetaVariante(p, nombre){
     const lista = pintas(dentro);
     return (lista.length && lista.every(c => c.hex)) ? ' ' : ' ' + dentro + ' ';
   });
-  e = e.replace(/[\s\-–]+/g,' ').trim();
+  /* Se limpian los guiones que SEPARAN ("iPhone 15 - 128GB"), no los que son
+     parte del nombre: "RC-N3" es el control del drone y "E-Sim" se escribe
+     así. Antes se borraban todos y quedaban "RC N3" y "E Sim". */
+  e = e.replace(/\s+[-–—]+\s+/g, ' ').replace(/^[-–—\s]+|[-–—\s]+$/g, '')
+       .replace(/\s+/g, ' ').trim();
   // La planilla escribe la capacidad como se le ocurre ("128gb", "512GB") y en
   // los botones quedaban mezcladas. Acá se emparejan.
   e = e.replace(/(\d+\s*)(gb|tb)\b/gi, (_,n,u) => n.trim() + u.toUpperCase());
@@ -2233,11 +2425,27 @@ function armarModelo(vs){
   // precios distintos, y el cliente no tendría cómo saber cuál es cuál. Pasa
   // de verdad: el iPhone 17 Pro tiene dos filas de 256GB, una Blue/Orange a
   // USD 1.190 y otra Silver a USD 1.195. Se separan con el color.
-  const cuenta = {};
-  vs.forEach(v => { cuenta[v.etiqueta] = (cuenta[v.etiqueta] || 0) + 1; });
-  vs.forEach(v => {
-    if(cuenta[v.etiqueta] > 1) v.etiqueta += ' · ' + (v.color || v.id);
-  });
+  const repetir = () => {
+    const c = {};
+    vs.forEach(v => { c[v.etiqueta] = (c[v.etiqueta] || 0) + 1; });
+    return v => c[v.etiqueta] > 1;
+  };
+  // Primero se prueba con el color, que es lo que el cliente entiende
+  let repetida = repetir();
+  vs.forEach(v => { if(repetida(v) && v.color) v.etiqueta += ' · ' + v.color; });
+  /* Y si con el color TAMPOCO alcanza, va el ID. Pasa cuando dos filas tienen
+     la misma capacidad y el mismo color: el MacBook Neo A18 tenía dos "512GB ·
+     Citrus" con precios distintos. El código no es lindo, pero es único, y es
+     preferible a dos botones iguales entre los que no se puede elegir. */
+  /* Antes del ID conviene probar con el teclado, que sí le dice algo al que
+     compra. Desde que la planilla saca "ARG · Teclado español" del nombre y lo
+     pone en su columna, el mismo MacBook aparece dos veces —EN y ES, con USD 44
+     de diferencia— y el color no los separa porque los dos son Citrus. */
+  repetida = repetir();
+  vs.forEach(v => { if(repetida(v) && v.teclado) v.etiqueta += ' · ' + nombreTeclado(v.teclado); });
+
+  repetida = repetir();
+  vs.forEach(v => { if(repetida(v)) v.etiqueta += ' · ' + v.id; });
 
   const colores = [...new Set(
     vs.flatMap(v => (v.color || '').split('/').map(s => s.trim()).filter(Boolean)))];
@@ -2377,6 +2585,128 @@ function dibujarTanda(){
     if(finGrilla.isConnected && finGrilla.getBoundingClientRect().top < innerHeight + 900)
       dibujarTanda();
   });
+}
+
+/* ---------- El carrusel de ofertas ----------
+   Va arriba de todo, antes del catálogo: es la vidriera. Sale de la columna
+   "Oferta" de la planilla, donde se escribe el precio de ANTES sólo en los
+   productos que están en promoción. Con ese número se puede mostrar el tachado
+   y el porcentaje, que es lo que hace que una oferta se lea como oferta.
+
+   Mientras esa columna no exista, muestra los que tienen un regalo cargado en
+   "Incluye", así la vidriera no queda vacía. Y si no hay ni una cosa ni la
+   otra, el carrusel directamente no aparece: mejor nada que un hueco. */
+
+const OFERTAS_MAX = 8;
+const OFERTAS_MS = 3000;   // cada 3 segundos
+
+const enOferta = m => m.antes !== null && m.precio !== null && m.antes > m.precio;
+const descuento = m => Math.round((1 - m.precio / m.antes) * 100);
+// El regalo es el respaldo: "Sin cargador" también vive en esa columna y no es
+// ningún beneficio, así que sólo cuentan los que suman algo.
+const conRegalo = m => /^\s*\+|🎁/.test(m.incluye || '');
+
+function ofertas(){
+  const base = MODELOS.filter(m => m.stock && m.precio !== null && m.imagen);
+  const conPrecioAnterior = base.filter(enOferta)
+    .sort((a,b) => descuento(b) - descuento(a));
+  if(conPrecioAnterior.length) return conPrecioAnterior.slice(0, OFERTAS_MAX);
+  return base.filter(conRegalo).slice(0, OFERTAS_MAX);
+}
+
+let ofIndice = 0, ofTimer = null, OF = [];
+
+function htmlOferta(m){
+  const hay = enOferta(m);
+  const ars = precioARS(m);
+  return `
+    <article class="of-slide" data-key="${esc(clave(m.rep))}">
+      <div class="of-foto">${htmlFoto(m)}</div>
+      <div class="of-datos">
+        <span class="of-marca">${esc(m.marca)}</span>
+        <h3>${esc(m.desc)}</h3>
+        ${hay ? `<div class="of-tags"><span class="of-off">${descuento(m)}% OFF</span></div>` : ''}
+        ${!hay && m.incluye ? `<div class="of-tags"><span class="of-regalo">${esc(m.incluye)}</span></div>` : ''}
+        <div class="of-precio">
+          ${hay ? `<s>USD ${plata(m.antes)}</s>` : ''}
+          <b>${m.multi && m.precio !== m.precioMax ? 'desde ' : ''}USD ${plata(m.precio)}</b>
+          ${ars ? `<i>${ars}</i>` : ''}
+        </div>
+        <span class="of-ver">Ver el producto</span>
+      </div>
+    </article>`;
+}
+
+function pintarOfertas(){
+  const caja = $('ofertas');
+  if(!caja) return;
+  OF = ofertas();
+  caja.hidden = !OF.length;
+  if(!OF.length) return;
+
+  const hayPrecios = OF.some(enOferta);
+  $('of-rotulo').textContent = hayPrecios ? 'Ofertas' : 'Destacados';
+  $('of-pista').innerHTML = OF.map(htmlOferta).join('');
+  $('of-dots').innerHTML = OF.map((_, i) =>
+    `<button type="button" role="tab" aria-label="Oferta ${i+1} de ${OF.length}"
+             aria-selected="${i===0}" data-i="${i}"></button>`).join('');
+
+  $('of-pista').querySelectorAll('.of-slide').forEach(el =>
+    el.onclick = () => abrirFicha(el.dataset.key));
+  $('of-dots').querySelectorAll('button').forEach(b =>
+    b.onclick = () => irOferta(+b.dataset.i));
+
+  ofIndice = 0;
+  marcarOferta();
+  arrancarOfertas();
+}
+
+function irOferta(i, suave = true){
+  if(!OF.length) return;
+  ofIndice = (i + OF.length) % OF.length;
+  const pista = $('of-pista');
+  const slide = pista.children[ofIndice];
+  if(!slide) return;
+  // scrollLeft en vez de scrollIntoView: scrollIntoView arrastra la página
+  // entera y en el celular te saca de la vidriera.
+  pista.scrollTo({ left: slide.offsetLeft - pista.offsetLeft,
+                   behavior: (suave && !quieto) ? 'smooth' : 'auto' });
+  marcarOferta();
+}
+
+function marcarOferta(){
+  $('of-dots').querySelectorAll('button').forEach((b,i) =>
+    b.setAttribute('aria-selected', String(i === ofIndice)));
+  reiniciarBarra();
+}
+
+/* La barra de abajo cuenta lo que falta para la próxima. Se reinicia sacando y
+   volviendo a poner la animación: sin el reflow del medio, el navegador no se
+   entera de que tiene que empezar de nuevo. */
+function reiniciarBarra(){
+  const b = $('of-barra')?.firstElementChild;
+  if(!b) return;
+  b.style.animation = 'none';
+  void b.offsetWidth;
+  b.style.animation = ofTimer ? `ofAvanza ${OFERTAS_MS}ms linear` : 'none';
+}
+
+/* Gira solo, pero se frena cuando alguien está mirando: al pasar el mouse, al
+   tocar con el dedo, o si el navegador pide menos animación. */
+/* Gira igual con "reducir movimiento" puesto: esa opción pide que no haya
+   animaciones, no que la vidriera se quede congelada. Lo que cambia es el
+   cómo: en vez de deslizarse, pasa de golpe (de eso se encarga irOferta) y la
+   barrita de progreso no se muestra. */
+function arrancarOfertas(){
+  pararOfertas();
+  if(OF.length < 2) return;
+  ofTimer = setInterval(() => irOferta(ofIndice + 1), OFERTAS_MS);
+  reiniciarBarra();
+}
+function pararOfertas(){
+  if(ofTimer){ clearInterval(ofTimer); ofTimer = null; }
+  const b = $('of-barra')?.firstElementChild;
+  if(b) b.style.animation = 'none';
 }
 
 /* ---------- La fila de marcas ----------
@@ -2849,6 +3179,7 @@ async function actualizar(primera){
       ? await probarFotos(PRODUCTOS)
       : PRODUCTOS.some(p => p.imagen);
     armarFiltros();          // también en los refrescos: la planilla pudo cambiar
+    pintarOfertas();         // la vidriera de arriba
     limpiarPedido();         // saca del pedido lo que ya no está en la planilla
     pintar();
     if(primera) abrirFichaDesdeURL();
@@ -2961,8 +3292,7 @@ function htmlDatosFicha(m, v){
     ['Modelo',      v.modelo],
     ['Color',       v.color ? htmlColorFicha(v) : '', true],
     ['Condición',   v.condicion],
-    ['Teclado',     v.teclado ? (v.teclado.toUpperCase() === 'ES' ? 'Español' :
-                                 v.teclado.toUpperCase() === 'EN' ? 'Inglés' : v.teclado) : ''],
+    ['Teclado',     idiomaTeclado(v.teclado)],
     ['Garantía',    v.garantia],
     // La cotización con la que se calculó el precio en pesos de ESTA ficha.
     // Si no hay pesos (no se pudo traer el dólar), la fila no aparece.
@@ -3262,7 +3592,7 @@ function togglePedidoModelo(k){
 function mensajePedido(){
   const lineas = itemsPedido().map((it,i) => {
     const p = it.p;
-    let l = `${i+1}. ${p.desc}${p.id ? ` (${p.id})` : ''}`;
+    let l = `${i+1}. ${nombreConMarca(p)}${p.id ? ` (${p.id})` : ''}`;
     if(it.color) l += ` · ${it.color}`;
     if(it.n > 1) l += ` · x${it.n}`;
     return l + ' — ' + (p.precio === null ? 'a consultar' : 'USD ' + plata(p.precio * it.n));
@@ -3602,6 +3932,30 @@ if(WHATSAPP){
             encodeURIComponent('Hola! Te escribo desde el catálogo de Advance Tecno.');
   wf.hidden = false;
 }
+
+/* ---------- Controles del carrusel ---------- */
+$('of-prev').onclick = () => { irOferta(ofIndice - 1); arrancarOfertas(); };
+$('of-next').onclick = () => { irOferta(ofIndice + 1); arrancarOfertas(); };
+
+// Se frena mientras lo estás mirando y vuelve a andar cuando te vas
+const cajaOf = $('ofertas');
+['mouseenter','focusin','touchstart'].forEach(ev =>
+  cajaOf.addEventListener(ev, pararOfertas, {passive:true}));
+['mouseleave','focusout'].forEach(ev =>
+  cajaOf.addEventListener(ev, arrancarOfertas));
+// Si el cliente desliza a mano, los puntitos tienen que seguirlo
+let ofScroll;
+$('of-pista').addEventListener('scroll', () => {
+  clearTimeout(ofScroll);
+  ofScroll = setTimeout(() => {
+    const pista = $('of-pista');
+    const i = Math.round(pista.scrollLeft / (pista.clientWidth || 1));
+    if(i !== ofIndice && OF[i]){ ofIndice = i; marcarOferta(); }
+  }, 120);
+}, {passive:true});
+// En una pestaña de fondo no tiene sentido que siga girando
+document.addEventListener('visibilitychange', () =>
+  document.hidden ? pararOfertas() : arrancarOfertas());
 
 $('cfg-btn').addEventListener('click', abrirPanel);
 

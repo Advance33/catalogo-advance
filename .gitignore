@@ -3,15 +3,17 @@ backups/
 fotos-faltantes.csv
 _*
 
-# Herramientas para trabajar en local (no tienen que quedar descargables)
-ABRIR CATALOGO.bat
-servidor.py
-publicar.bat
-validar.py
-verificar-fotos.py
-revision-diaria.py
-VERIFICAR FOTOS.bat
-REVISAR CATALOGO.bat
+# Las herramientas SI van al repo, aunque no sean parte del sitio.
+#
+# Estuvieron ignoradas hasta el 02/09 con el criterio de "que no queden
+# descargables". Estaba mal por dos motivos: PUBLICAR.bat llama a validar.py,
+# a verificar-fotos.py y a las pruebas, asi que en una maquina nueva el repo
+# venia sin poder publicar; y son scripts sin claves ni datos de nadie, donde
+# el riesgo de que alguien los baje es ninguno y el de perderlos es todo.
+#
+# Ojo con esto: la linea "publicar.bat" tenia atrapado a PUBLICAR.bat, porque
+# Windows no distingue mayusculas. El script mas importante del proyecto
+# nunca habia tenido copia.
 .vscode/
 
 # Lo que deja la revision diaria al correr. Son notas de trabajo con el

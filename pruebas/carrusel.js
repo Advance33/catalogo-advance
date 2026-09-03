@@ -5,7 +5,11 @@ const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 
 const esperar = setInterval(() => {
-  if(!MODELOS.length || !document.querySelectorAll('.card').length) return;
+  if(!MODELOS.length) return;
+  // La portada muestra los rubros, no los productos. Para probar la grilla hay
+  // que pedirla, igual que hace el cliente cuando toca "Ver todo".
+  verTodoElCatalogo();
+  if(!document.querySelectorAll('.card').length) return;
   clearInterval(esperar);
   for(let i=1;i<5000;i++) clearInterval(i);
   try{ correrPruebas(); }catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; }
@@ -28,7 +32,7 @@ function correrPruebas(){
   ok(conRegaloVisible.every(m => /^\s*\+|🎁/.test(m.incluye || '')),
      'todos los que aparecen tienen un regalo cargado');
   ok(slides().every(s => !s.querySelector('.of-off')),
-     'sin precio anterior no se inventa ningun % de descuento');
+     'sin precio anterior no se marca ninguno como oferta');
   // "Sin cargador" vive en la misma columna y NO es un beneficio
   ok(conRegaloVisible.every(m => !/^sin /i.test((m.incluye||'').trim())),
      'no entra ningun "Sin cargador" como si fuera un regalo');
@@ -44,14 +48,14 @@ function correrPruebas(){
      slides().length + ' de ' + MODELOS.length + ' modelos');
   ok(slides().every(s => enOferta(buscarModelo(s.dataset.key))),
      'ninguno sin precio anterior se cuela');
-  // El porcentaje no puede ser decorativo: tiene que dar la cuenta
-  const malCalculado = slides().filter(s => {
-    const m = buscarModelo(s.dataset.key);
+  /* La etiqueta ya no dice cuanto bajo: en este rubro las bajas son chicas y
+     un "4% OFF" resta mas de lo que suma. Queda el precio tachado al lado. */
+  const conNumero = slides().filter(s => {
     const off = s.querySelector('.of-off');
-    return !off || +off.textContent.match(/\d+/)[0] !== Math.round((1 - m.precio/m.antes)*100);
+    return !off || /\d/.test(off.textContent);
   });
-  ok(malCalculado.length === 0, 'el % de descuento coincide con la cuenta',
-     slides().map(s => s.querySelector('.of-off')?.textContent).join(' '));
+  ok(conNumero.length === 0, 'la etiqueta dice "Oferta", sin ningun numero',
+     slides().map(s => s.querySelector('.of-off') && s.querySelector('.of-off').textContent).join(' ')); 
   ok(slides().every(s => s.querySelector('.of-precio s')), 'todos muestran el precio tachado');
   // El mas descontado primero: es lo que conviene mostrar de entrada
   const offs = slides().map(s => { const m = buscarModelo(s.dataset.key);

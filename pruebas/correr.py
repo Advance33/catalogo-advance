@@ -35,7 +35,7 @@ BASE    = 'http://localhost:%d' % PUERTO
 # El presupuesto es cuanto reloj virtual se le da a cada tanda: layout abre
 # el catalogo entero cuatro veces (una por ancho) y espera a que cada una
 # termine de dibujar, asi que necesita bastante mas que las demas.
-ORDEN = ['agrupacion', 'color-precio', 'sugeridos', 'destacada', 'carrusel', 'layout']
+ORDEN = ['agrupacion', 'portada', 'precios', 'color-precio', 'sugeridos', 'destacada', 'carrusel', 'layout']
 PRESUPUESTO = {'layout': 200}   # segundos; el resto usa el de correr()
 
 CHROMES = [
@@ -121,9 +121,17 @@ def main():
                 sin_correr.append(nombre)
                 print('  %-14s NO LLEGO A CORRER' % nombre)
                 continue
-            fallas = [l for l in texto.split('\n') if l.startswith('FALLA')]
-            fallas_totales += len(fallas)
-            cabecera = next((l.strip() for l in texto.split('\n') if l.strip()), '')
+            # La cabecera la escribe la propia tanda y es la que manda. Si una
+            # prueba revienta, el detalle sale como EXCEPCION: contando solo las
+            # lineas 'FALLA' el runner decia "pasa todo" con exit 0 y
+            # PUBLICAR.bat dejaba subir el catalogo con el JS roto.
+            lineas = texto.split('\n')
+            fallas = [l for l in lineas
+                      if l.startswith('FALLA') or l.startswith('EXCEPCION')]
+            cabecera = next((l.strip() for l in lineas if l.strip()), '')
+            declaradas = re.search('(\\d+) FALLA', cabecera)
+            fallas_totales += max(len(fallas),
+                                  int(declaradas.group(1)) if declaradas else 0)
             print('  %-14s %s' % (nombre, cabecera))
             for l in fallas:
                 print('       ' + l.strip())

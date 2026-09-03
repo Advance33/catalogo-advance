@@ -1,0 +1,184 @@
+FOTOS QUE FALTAN, AGRUPADAS POR MARCA
+143 productos · guardar como fotos/<ID>.jpg · 900x900 fondo blanco
+
+=== CANON — 20 fotos · USD 37.606 ===
+  [ ] CAM-CAN-015   USD 4620   EOS R3 Body
+  [ ] CAM-CAN-014   USD 4235   EOS R6 V Kit 20-50 F/4USM PZ (Video)
+  [ ] CAM-CAN-036   USD 4016   EOS R6 Mark III 24-105 F/4 L USM
+  [ ] CAM-CAN-011   USD 3521   EOS R6 Mark III Kit 24-105 F4-7.1 IS STM
+  [ ] LEN-CAN-050   USD 2695   RF 24-70mm F/2.8 IS USM
+  [ ] LEN-CAN-052   USD 2585   RF 200-800mm F/6.3-9 IS USM
+  [ ] LEN-CAN-030   USD 2420   RF 135mm F/1.8 IS USM
+  [ ] LEN-CAN-026   USD 2036   RF 20mm F/1.4 L Vcm
+  [ ] LEN-CAN-022   USD 1750   RF 100mm F/2.8 L Macro IS USM
+  [ ] CAM-CAN-005   USD 1497   EOS R7 Body
+  [ ] FIL-CAN-001   USD 1420   HFG70 Vixia UHD 4K Camcoder
+  [ ] LEN-CAN-021   USD 1364   RF-S 3.9mm F/3.5 Dual Fisheye STM
+  [ ] LEN-CAN-020   USD 1287   RF 16-28mm F/2.8 IS STM
+  [ ] CAM-CAN-004   USD 1089   EOS R10 Body
+  [ ] CAM-CAN-028   USD 980    EOS R100 Kit 18-45 / 55-210
+  [ ] LEN-CAN-043   USD 716    RF 2.0X Extender
+  [ ] CAM-CAN-020   USD 649    EOS 4000D Kit 18-55 III (T100)
+  [ ] CAM-CAN-018   USD 528    EOS 2000D Kit 18-55 III (T7)
+  [ ] ACC-CAN-009   USD 132    Bateria Lp E6P Para R5 R6M2 R7 R5C R5II 5D 6D
+  [ ] ACC-CAN-006   USD 66     Adaptador AD-E1 Zapata Multifuncion
+
+=== SONY — 16 fotos · USD 37.534 ===
+  [ ] CAM-SON-022   USD 5941   FX6 V
+  [ ] CAM-SON-021   USD 5500   Alfa 9 MK III
+  [ ] FIL-SON-002   USD 5088   PXW Z200 4K 1"CMOS Sensor XDCAM
+  [ ] CAM-SON-019   USD 4016   FX3 Body
+  [ ] CAM-SON-017   USD 3026   Alfa 7 V Kit 28-70
+  [ ] CAM-SON-010   USD 2585   Alfa 7 IV Kit 28-70
+  [ ] CAM-SON-007   USD 2036   FX30 Body
+  [ ] CAM-SON-027   USD 1871   Alfa 7 III Kit 28-70
+  [ ] CAM-SON-024   USD 1541   DSC RX100 VII
+  [ ] CAM-SON-030   USD 1431   ZVE10 II Kit 16-50/55-210 (Black)
+  [ ] LEN-SON-018   USD 1210   FE 16-25mm F/2.8 G
+  [ ] LEN-SON-017   USD 1210   FE 24-50mm F/2.8 G
+  [ ] CAM-SON-032   USD 1155   Alfa 6400 Kit 16-50 II
+  [ ] LEN-SON-039   USD 572    FE 2X Teleconverter
+  [ ] ACC-SON-009   USD 275    Shotgun Mic Mount Digital ECM-B10
+  [ ] ACC-SON-004   USD 77     Batería Smallrig USB-C FW-50 (2 X Bat + Car)
+
+=== APPLE — 21 fotos · USD 25.801 ===
+  [ ] NB-APP-091    USD 4708   MacBook Pro M5 Max 16" 36ram 2tb (Silver)
+  [ ] MON-APP-005   USD 2920   27" Studio Display (Standard Glass, Tilt & Height Adjustable Stand)
+  [ ] NB-APP-090    USD 2894   MacBook Pro M5 Pro 14" 24ram 1tb (Silver)
+  [ ] TAB-APP-057   USD 1720   iPad Pro M5 11" 512gb Cellular 5G + Wi-Fi (Space Black)
+  [ ] CEL-APP-085   USD 1700   iPhone 17 Pro Max 1TB E-Sim (Silver)
+  [ ] CEL-APP-084   USD 1520   iPhone 17 Pro Max 512GB E-Sim (Silver)
+  [ ] CEL-APP-072   USD 1490   iPhone 17 Pro Max 512GB E-Sim (Orange)
+  [ ] NB-APP-004    USD 1475   MacBook Air M4 15" 16ram 256gb (Midnight)
+  [ ] NB-APP-089    USD 1002   MacBook Neo A18 13" 8ram 512gb(Citrus)
+  [ ] TAB-APP-056   USD 940    iPad Air M4 11" 256gb (Starlight)
+  [ ] NB-APP-088    USD 892    MacBook Neo A18 13" 8ram 256gb(Blush/Silver/Citrus)
+  [ ] SW-APP-056    USD 800    Watch Ultra 3 49mm 49mm M/L (Black/Black Ocean Band/Natural Blue Trail Loop/Natural Anchor Blue Ocean Band)
+  [ ] SW-APP-055    USD 680    Watch Ultra 2 49mm Black/Dark Green Alpine Loop L
+  [ ] AUD-APP-012   USD 620    AirPods Max 2ª Gen USB-C (Blue/Orange)
+  [ ] ACC-APP-054   USD 505    Magic Keyboard For 13" iPad Pro M4/M5 (White) English
+  [ ] ACC-APP-048   USD 475    Magic Keyboard For 13" iPad Air M3/M4 (White) English
+  [ ] ACC-APP-052   USD 335    Smart Keyboard Folio 12.9" / iPad Air M2-M3
+  [ ] ACC-APP-053   USD 335    Magic Keyboard 11" (Black) iPad Pro M2
+  [ ] ACC-APP-051   USD 305    Magic Keyboard Touch Id + Teclado Numérico (Teclas Blancas/Teclas Negras)
+  [ ] ACC-APP-050   USD 255    Magic Trackpad 2 (Black - Edición 2024)
+  [ ] AUD-APP-011   USD 230    AirPods 4 ANC (MXP93LL/A)
+
+=== TAMRON — 15 fotos · USD 16.067 ===
+  [ ] LEN-TAM-011   USD 1871   35-150mm F/2-2.8 Nikon Z
+  [ ] LEN-TAM-010   USD 1486   50-400mm F/4.5-6.3 III Nikon
+  [ ] LEN-TAM-009   USD 1431   70-180mm F/2.8 III G2 Nikon
+  [ ] LEN-TAM-007   USD 1210   35-100mm F/2.8 Di III VXD Nikon
+  [ ] LEN-TAM-023   USD 1210   35-100mm F/2.8 Di III VXD Sony
+  [ ] LEN-TAM-006   USD 1089   28-75mm F/2.8 III G2 Nikon
+  [ ] LEN-TAM-028   USD 1067   17-70mm F/2.8 III Nikon
+  [ ] LEN-TAM-005   USD 1045   16-30mm F/2.8 III G2 Nikon
+  [ ] LEN-TAM-020   USD 1045   50-300mm F/4.5-6.3 III Sony
+  [ ] LEN-TAM-002   USD 826    18-300mm Canon RF
+  [ ] LEN-TAM-004   USD 826    18-300mm F/3.5-6.3 III Nikon
+  [ ] LEN-TAM-014   USD 826    17-28mm F/2.8 Di III RXD Sony
+  [ ] LEN-TAM-016   USD 826    20-40mm F/2.8 Di III Sony
+  [ ] LEN-TAM-001   USD 660    11-20mm F/2.8 III Canon
+  [ ] LEN-TAM-013   USD 649    11-20mm F/2.8 Di III A RXD Sony E
+
+=== DJI — 14 fotos · USD 15.929 ===
+  [ ] DRO-DJI-012   USD 4290   Drone DJI Mavic 4 Pro + Creator Combo 512GB
+  [ ] ACC-DJI-017   USD 1981   Drone DJI Air 3S (RC2) + Fly More Combo
+  [ ] DRO-DJI-011   USD 1431   Drone DJI Mini 5 Pro (Rc 2) + Combo More Fly Plus
+  [ ] DRO-DJI-010   USD 1375   Drone DJI Mini 5 Pro (Rc 2) + Combo More Fly
+  [ ] DRO-DJI-001   USD 1320   Drone DJI Mini 5 Pro
+  [ ] DRO-DJI-009   USD 1155   Drone DJI Mini 5 Pro (Rc-N3)
+  [ ] ACC-DJI-013   USD 826    Drone DJI Neo 2 Motion + Fly More Combo
+  [ ] ACC-DJI-015   USD 760    Drone DJI Lito X1 (Rc-N3) + Fly More Combo
+  [ ] ACC-DJI-014   USD 649    Drone DJI Lito 1 (Rc-N3) + Fly More Combo
+  [ ] ACC-DJI-012   USD 605    Drone DJI Neo 2 + Fly More Combo
+  [ ] CAM-DJI-003   USD 561    Osmo Nano Standard Combo 124GB
+  [ ] CAM-DJI-002   USD 496    Osmo Nano 64GB
+  [ ] ACC-DJI-011   USD 370    Osmo Mobile 8P Creator Combo
+  [ ] ACC-DJI-002   USD 110    Acc DJI Filtro Camara (Mini 3 Pro)
+
+=== PANASONIC — 6 fotos · USD 12.059 ===
+  [ ] FIL-PAN-005   USD 3169   AG CX350 4K
+  [ ] FIL-PAN-004   USD 2750   AG-CX20 4K
+  [ ] FIL-PAN-003   USD 2475   HC X2100 4K UHD 3G/SDI/HDMI Pro With 24X
+  [ ] FIL-PAN-006   USD 1750   HC X1200 4K HDMI 24X
+  [ ] FIL-PAN-002   USD 1045   HC-VX3 UHD Camcorder 4K 24X Zoom
+  [ ] FIL-PAN-001   USD 870    HC-V900 HD Camcorder HD 24X Zoom
+
+=== NIKON — 8 fotos · USD 9.285 ===
+  [ ] CAM-NIK-017   USD 4400   Z8 Kit 24-120
+  [ ] CAM-NIK-003   USD 1265   Z30 Kit 16-50/50-250 VR II
+  [ ] CAM-NIK-011   USD 1210   D7500 Kit 18-140
+  [ ] CAM-NIK-002   USD 1100   Z30 Kit 18-140 VR
+  [ ] LEN-NIK-009   USD 660    Z Teleconverter TC-2X
+  [ ] ACC-NIK-005   USD 275    Bateria Nikon EN-EL 18D 3300MHA
+  [ ] ACC-NIK-004   USD 264    Adaptador FTZ II
+  [ ] ACC-NIK-006   USD 111    Memoria Nikon 64GB XQD
+
+=== SAMSUNG — 13 fotos · USD 9.050 ===
+  [ ] CEL-SAM-070   USD 1005   Galaxy S25 Ultra 1TB (Silverblue)
+  [ ] CEL-SAM-073   USD 990    Galaxy S26 FE 8/512GB (Graphite/Blueberry/Pistacho)
+  [ ] CEL-SAM-050   USD 905    Galaxy S26 Plus 256GB 5G (Violet/White)
+  [ ] CEL-SAM-072   USD 860    Galaxy S26 FE 8/256GB (Graphite/Blueberry)
+  [ ] TAB-SAM-022   USD 850    Galaxy Tab S10 FE Plus 13,1" (X620) 256GB (Silver)
+  [ ] TAB-SAM-038   USD 800    Galaxy Tab S11 (X730) 12GB Ram + 128GB
+  [ ] CEL-SAM-071   USD 735    Galaxy S26 FE 8/128GB (Graphite/Blueberry)
+  [ ] TAB-SAM-021   USD 690    Galaxy Tab S10 FE Plus 13,1" (X620) 128GB (Gray)
+  [ ] TAB-SAM-027   USD 675    Galaxy Tab S10 FE Plus (X620) 8GB + 128GB Wi-Fi (Grey)
+  [ ] TAB-SAM-037   USD 460    Galaxy Tab S10 Lite 10,9" (X400) 6GB + 128GB Wi-Fi (Gray)
+  [ ] TAB-SAM-036   USD 400    Galaxy Tab A11+ 5G (X236B) 6GB + 128GB (Gray)
+  [ ] TAB-SAM-035   USD 350    Galaxy Tab A11+ (X230) 6GB + 128GB
+  [ ] CEL-SAM-036   USD 330    Galaxy A27 6/128GB 5G (Black)
+
+=== RAY-BAN — 9 fotos · USD 5.135 ===
+  [ ] GAF-RAY-021   USD 605    Meta Wayfarer (601S1Z50) Matte Black / Grey Transitions
+  [ ] GAF-RAY-022   USD 605    Meta Wayfarer (601/1M50) Shiny Black / Graphite Green Transitions
+  [ ] GAF-RAY-025   USD 605    Meta Skyler (601/1M52) Shiny Black / Transitions Green
+  [ ] GAF-RAY-026   USD 605    Meta Skyler (601/CH52) Shiny Black / Transitions Amethyst
+  [ ] GAF-RAY-024   USD 555    Meta Skyler (T155 / S52) Shiny Chalky Grey / Transitions Sapphire
+  [ ] GAF-RAY-004   USD 545    Rayban Meta Gen2 Wayfarer (Mate Black - Transitions Grey/Shiny Black - Transitions Graph Green)
+  [ ] GAF-RAY-027   USD 545    Rayban Meta Gen2 Headliner (Shiny Black - Transitions Graph Green)
+  [ ] GAF-RAY-020   USD 535    Meta Wayfarer (601ST350) Black / Polarized Gradient Graphite
+  [ ] GAF-RAY-023   USD 535    Meta Skyler (601/T352) Shiny Black / Polarized Gradient Graphite
+
+=== SIGMA — 3 fotos · USD 2.498 ===
+  [ ] LEN-SIG-042   USD 1100   100-400mm F/5-6.3 DG HSM Contemporary Sony
+  [ ] LEN-SIG-021   USD 881    18-35mm F/1.8 HSM Nikon
+  [ ] ACC-NIK-008   USD 517    EF-630 Flash Nikon
+
+=== FUJIFILM — 3 fotos · USD 2.454 ===
+  [ ] CAM-FUJ-003   USD 2299   X-T5 Kit 16-50 Black
+  [ ] CAM-FUJ-001   USD 127    Instax Mini 12 (Pink/White/Purple/Green/Blue)
+  [ ] CAM-FUJ-008   USD 28     Fuji Instax Mini Twin Film Rollo Repuesto (2 X 10)
+
+=== INSTA360 — 2 fotos · USD 1.366 ===
+  [ ] CAM-INS-003   USD 870    Insta 360 X5 Bundle (Stick+2 Bater + Tapa Lente)
+  [ ] CAM-INS-001   USD 496    Insta 360 Ace Pro
+
+=== XIAOMI — 3 fotos · USD 870 ===
+  [ ] TAB-XIA-007   USD 380    Redmi Pad 2 Pro 12" 6GB + 128GB (Gris)
+  [ ] CEL-XIA-105   USD 310    Poco F6 8/256GB (Green)
+  [ ] CEL-XIA-095   USD 180    Poco C81 Pro 4/128GB (Gold/Green)
+
+=== GARMIN — 1 fotos · USD 694 ===
+  [ ] SW-GAR-003    USD 694    Epix Pro (Gen 2) 51mm Sapphire (Titanio Gris · Blanco)
+
+=== KIESLECT — 5 fotos · USD 539 ===
+  [ ] SW-KIE-004    USD 125    AI Watch Elite 2 (Titan Black · Black Leather)
+  [ ] SW-KIE-001    USD 115    Calling Watch Kr 3 (Denim · Denim + Milky White Silicone)
+  [ ] SW-KIE-002    USD 115    Calling Watch Kr Ultra 3 (Ice White · White Leather + White Silicone)
+  [ ] SW-KIE-003    USD 115    Lady Watch Elfin (Graphite Black · Black Metal + Brown Leather / Rose Gold · Gold Metal + White / Moonlit Silver · Silver Metal + Purple Silicone)
+  [ ] AUD-KIE-001   USD 69     Adjustable Earbuds (Black)
+
+=== SARAMONIC — 1 fotos · USD 310 ===
+  [ ] ACC-SAR-001   USD 310    Microfono Saramonic Blink Me 2 Wireless
+
+=== MOTOROLA — 1 fotos · USD 285 ===
+  [ ] CEL-MOT-071   USD 285    G57 8/256GB 5G (Green)
+
+=== JBL — 1 fotos · USD 105 ===
+  [ ] AUD-JBL-001   USD 105    Earbuds Tune Flex Wireless Nc (White)
+
+=== GOPRO — 1 fotos · USD 38 ===
+  [ ] ACC-GOP-001   USD 38     Bateria Recargable Go Pro 9/10/11/12
+

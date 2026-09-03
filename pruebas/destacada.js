@@ -2,6 +2,9 @@ const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const esperar = setInterval(() => {
   if(!MODELOS.length || !document.querySelectorAll('#cats .chip').length) return;
+  // La portada muestra los rubros, no los productos: la grilla hay que pedirla.
+  verTodoElCatalogo();
+  if(!document.querySelectorAll('.card').length) return;
   clearInterval(esperar);
   for(let i=1;i<5000;i++) clearInterval(i);
   try{ correrPruebas(); }catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; }

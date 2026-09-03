@@ -16,7 +16,11 @@ const reportar = () => {
 };
 
 const esperar = setInterval(() => {
-  if(!MODELOS.length || !document.querySelectorAll('.card').length) return;
+  if(!MODELOS.length) return;
+  // La portada muestra los rubros, no los productos. Para probar la grilla hay
+  // que pedirla, igual que hace el cliente cuando toca "Ver todo".
+  verTodoElCatalogo();
+  if(!document.querySelectorAll('.card').length) return;
   clearInterval(esperar);
   for(let i = 1; i < 5000; i++) clearInterval(i);
   try{ correrPruebas(); }catch(e){ R.push('EXCEPCION: ' + (e && e.stack || e)); fallas++; }

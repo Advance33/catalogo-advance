@@ -34,3 +34,5 @@ fotos-aceptadas.txt
 # backups) estuvieron publicadas hasta el 02/09: cualquiera con la
 # direccion las leia. Las fotos se publican; las notas al lado, no.
 fotos/*.txt
+fotos-sin-recortar/
+CANDIDATOS-DRIVE.txt

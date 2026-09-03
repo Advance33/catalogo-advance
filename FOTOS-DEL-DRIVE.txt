@@ -1,0 +1,71 @@
+FOTOS QUE SE PUEDEN SACAR DEL DRIVE "FOTOS Y PRODUCTOS WEB"
+https://drive.google.com/drive/folders/1HuWB50Gc6zC9TKw_l8G0MINfVESPN_sD
+
+Guardar cada una como  fotos/<ID>.jpg  ·  900x900 fondo blanco
+MIRAR LA FOTO ANTES DE GUARDARLA: el emparejamiento es por nombre.
+
+=== 15 CONFIABLES (marca, modelo y montura coinciden) ===
+
+[ ] CAM-NIK-017   USD 4400   Z8 Kit 24-120
+      buscar en:  IMÁGENES/Cámaras/  ->  NIKON Z8 KIT 24-120
+
+[ ] CAM-SON-019   USD 4016   FX3 Body
+      buscar en:  IMÁGENES/Cámaras/  ->  SONY FX3 BODY
+
+[ ] FIL-PAN-005   USD 3169   AG CX350 4K
+      buscar en:  IMÁGENES/Cámaras/  ->  PANASONIC AG CX350 4K
+
+[ ] CAM-SON-007   USD 2036   FX30 Body
+      buscar en:  IMÁGENES/Cámaras/  ->  SONY FX30 BODY
+
+[ ] LEN-TAM-011   USD 1871   35-150mm F/2-2.8 Nikon Z
+      buscar en:  IMÁGENES/Cámaras/  ->  TAMRON 35-150 F/2-2.8 NIKON Z
+
+[ ] LEN-CAN-022   USD 1750   RF 100mm F/2.8 L Macro IS USM
+      buscar en:  IMÁGENES/Cámaras/  ->  CANON RF 100 F2.8 L MACRO IS USM
+
+[ ] CAM-CAN-005   USD 1497   EOS R7 Body
+      buscar en:  IMÁGENES/Cámaras/  ->  CANON EOS R7 BODY
+
+[ ] LEN-CAN-020   USD 1287   RF 16-28mm F/2.8 IS STM
+      buscar en:  IMÁGENES/Cámaras/  ->  CANON RF 16-28 F/2.8 IS STM
+
+[ ] CAM-NIK-003   USD 1265   Z30 Kit 16-50/50-250 VR II
+      buscar en:  IMÁGENES/Cámaras/  ->  NIKON Z30 KIT 16-50/50-250 VR II
+
+[ ] CAM-SON-032   USD 1155   Alfa 6400 Kit 16-50 II
+      buscar en:  IMÁGENES/Cámaras/  ->  SONY ALFA A6400 KIT 16-50MM
+
+[ ] CAM-CAN-004   USD 1089   EOS R10 Body
+      buscar en:  IMÁGENES/Cámaras/  ->  CANON EOS R10 BODY
+
+[ ] CAM-CAN-028   USD 980    EOS R100 Kit 18-45 / 55-210
+      buscar en:  IMÁGENES/Cámaras/  ->  CANON EOS R100 KIT 18-45 / 55-210
+
+[ ] LEN-SIG-021   USD 881    18-35mm F/1.8 HSM Nikon
+      buscar en:  IMÁGENES/Cámaras/  ->  SIGMA 18-35 F/1.8 HSM NIKON
+
+[ ] LEN-TAM-013   USD 649    11-20mm F/2.8 Di III A RXD Sony E
+      buscar en:  IMÁGENES/Cámaras/  ->  TAMRON 11-20 F/2.8 DI III A RXD SONY E
+
+[ ] ACC-CAN-009   USD 132    Bateria Lp E6P Para R5 R6M2 R7 R5C R5II 5D 6D
+      buscar en:  IMÁGENES/Cámaras/  ->  BATERIA CANON LP E6P PARA R5 R6M2 R7 R5C R5II 5D 6D
+
+
+=== 5 DUDOSAS — NO usar sin mirar la foto ===
+
+[?] LEN-TAM-001   USD 660    11-20mm F/2.8 III Canon
+      el drive tiene: TAMRON 11-20 F/2.8 DI III A RXD SONY E   (montura distinta)
+
+[?] LEN-TAM-004   USD 826    18-300mm F/3.5-6.3 III Nikon
+      el drive tiene: TAMRON 18-300 F/3.5-6.3 DI III A VC VXD SONY   (montura distinta)
+
+[?] LEN-TAM-010   USD 1486   50-400mm F/4.5-6.3 III Nikon
+      el drive tiene: TAMRON 50-400 F/4.5-6.3 DI III VC VXD SONY   (montura distinta)
+
+[?] CEL-SAM-072   USD 860    Galaxy S26 FE 8/256GB (Graphite/Blueberry)
+      el drive tiene: SAMSUNG A26 8/256GB   (modelo distinto)
+
+[?] CEL-SAM-072   USD 860    Galaxy S26 FE 8/256GB (Graphite/Blueberry)
+      el drive tiene: SAMSUNG A26 8/256GB   (S26 FE no es A26)
+

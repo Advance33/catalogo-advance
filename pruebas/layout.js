@@ -27,6 +27,9 @@ function probar(){
     try{ f.contentWindow.pararOfertas?.(); }catch{}
     setTimeout(() => {
       try{ f.contentWindow.pararOfertas?.(); }catch{}
+      // La portada muestra rubros: lo que se mide aca es el layout de la
+      // grilla, asi que hay que pedirla como la pide el cliente.
+      try{ f.contentWindow.verTodoElCatalogo?.(); }catch{}
       medir(f, w); f.remove(); probar();
     }, 3500);
   };

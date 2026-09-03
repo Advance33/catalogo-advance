@@ -15,8 +15,11 @@ const reportar = () => {
 const esperar = setInterval(() => {
   // Esperar los datos no alcanza: MODELOS se llena un instante antes de que se
   // dibujen los chips y la grilla, y el test arrancaba en ese hueco.
-  if(!MODELOS.length || !document.querySelectorAll('.card').length
-     || !document.querySelectorAll('#cats .chip').length) return;
+  if(!MODELOS.length || !document.querySelectorAll('#cats .chip').length) return;
+  // La portada muestra los rubros, no los productos. Para probar la grilla hay
+  // que pedirla, igual que hace el cliente cuando toca "Ver todo".
+  verTodoElCatalogo();
+  if(!document.querySelectorAll('.card').length) return;
   clearInterval(esperar);
   for(let i = 1; i < 5000; i++) clearInterval(i);   // el reloj virtual dispara el refresco
   try{ correrPruebas(); }catch(e){ R.push('EXCEPCION: ' + (e && e.stack || e)); fallas++; }

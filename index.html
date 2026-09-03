@@ -2244,20 +2244,36 @@ function htmlColores(txt){
    WhatsApp. Acá se muestran TODOS los colores de la fila, también los que no
    están en la lista de hex (esos van rayados): que no sepamos pintarlos no es
    motivo para que no se puedan elegir. */
-function htmlColorFicha(p){
-  const lista = pintas(p.color);
+function htmlColorFicha(p, m){
+  /* En los modelos donde el precio depende del color, los puntitos dejan de
+     ser una muestra y pasan a ser EL selector: se juntan los colores de todas
+     las versiones y cada uno lleva el suyo, así tocar un color cambia también
+     el precio. En el resto de los modelos funciona como siempre, mostrando
+     sólo los colores de la fila que se está mirando. */
+  const hermanas = (p.hermanasColor || []).filter(x => x.color);
+  const porColor = hermanas.length > 1;
+  const lista = (porColor ? hermanas : [p]).flatMap(x =>
+    pintas(x.color).map(c => ({ ...c, k: clave(x), precio: x.precio })));
+
   // Con un solo color no hay nada que elegir: queda como estaba
   if(lista.length < 2) return htmlColores(p.color) + esc(p.color);
 
-  const eleg = colorDe(clave(p));
-  const puntos = lista.map(c =>
-    `<button type="button" data-color="${esc(c.nombre)}"${c.hex ? ` style="background:${c.hex}"` : ' class="sinhex"'}
-             aria-pressed="${eleg === c.nombre}" title="${esc(c.nombre)}"
-             aria-label="Elegir ${esc(c.nombre)}"></button>`).join('');
+  const aqui = clave(p);
+  // El color elegido sale del pedido si el producto ya está cargado; si no,
+  // del que se acaba de tocar en esta ficha.
+  const eleg = colorDe(aqui) || COLOR_FICHA;
+  const puntos = lista.map(c => {
+    const precio = porColor && c.precio !== null ? ' · USD ' + plata(c.precio) : '';
+    return `<button type="button" data-color="${esc(c.nombre)}" data-k="${esc(c.k)}"
+             ${c.hex ? `style="background:${c.hex}"` : 'class="sinhex"'}
+             aria-pressed="${eleg === c.nombre}" title="${esc(c.nombre + precio)}"
+             aria-label="Elegir ${esc(c.nombre + precio)}"></button>`;
+  }).join('');
 
+  const hint = porColor ? 'El precio cambia según el color' : 'Tocá un color para elegirlo';
   return `<div class="fi-pintas">${puntos}</div>
     <span class="fi-color-elegido" id="fi-color-txt">${eleg ? `<b>${esc(eleg)}</b>` : esc(p.color)}</span>
-    <span class="fi-hint" id="fi-color-hint"${eleg ? ' hidden' : ''}>Tocá un color para elegirlo</span>`;
+    <span class="fi-hint" id="fi-color-hint"${eleg && !porColor ? ' hidden' : ''}>${hint}</span>`;
 }
 
 /* Foto por color. La planilla trae una sola foto por producto, así que la del
@@ -2431,7 +2447,17 @@ function armarModelo(vs){
   const rep = vs.find(v => v.stock && v.precio === precioMin)
            || vs.find(v => v.precio === precioMin) || vs[0];
   const nombre = nombreGrupo(vs);
-  vs.forEach(v => { v.etiqueta = etiquetaVariante(v, nombre); });
+  vs.forEach(v => { v.etiqueta = etiquetaVariante(v, nombre); v.etiquetaBase = v.etiqueta; });
+
+  /* El precio puede depender del color, y el proveedor confirmó que es así de
+     verdad: el iPhone 17 Pro Max 512GB sale USD 1.490 en Orange y 1.520 en
+     Silver. Ojo que eso convive con las capacidades: ese mismo modelo tiene
+     256GB, 512GB, 1TB y 2TB, y sólo en algunas hay dos colores con precios
+     distintos. Por eso las "hermanas de color" se buscan por etiqueta base
+     (la misma capacidad) y no a nivel del modelo entero. */
+  vs.forEach(v => {
+    v.hermanasColor = vs.filter(x => norm(x.etiquetaBase) === norm(v.etiquetaBase));
+  });
 
   // Dos variantes con la misma etiqueta serían dos botones idénticos con
   // precios distintos, y el cliente no tendría cómo saber cuál es cuál. Pasa
@@ -3302,7 +3328,7 @@ function htmlDatosFicha(m, v){
   const filas = [
     ['Categoría',   v.cat],
     ['Modelo',      v.modelo],
-    ['Color',       v.color ? htmlColorFicha(v) : '', true],
+    ['Color',       v.color ? htmlColorFicha(v, m) : '', true],
     ['Condición',   v.condicion],
     ['Teclado',     idiomaTeclado(v.teclado)],
     ['Garantía',    v.garantia],
@@ -3395,8 +3421,13 @@ function abrirFicha(k, historia = true){
 function engancharFicha(d, m, v){
   engancharPedidoFicha(d, v);
   pintarSubFicha(d, v);
-  d.querySelectorAll('.fi-pintas button').forEach(b =>
-    b.onclick = () => elegirColorFicha(d, v, b.dataset.color));
+  d.querySelectorAll('.fi-pintas button').forEach(b => b.onclick = () => {
+    // Si el color pertenece a otra versión (precio por color), se cambia de
+    // versión y con eso cambia el precio; si no, sólo se cambia la foto.
+    const otra = m.variantes.find(x => clave(x) === b.dataset.k);
+    if(otra && clave(otra) !== FICHA) elegirVariante(d, m, otra, b.dataset.color);
+    else elegirColorFicha(d, v, b.dataset.color);
+  });
   d.querySelectorAll('.fi-op').forEach(b => b.onclick = () => {
     const otra = m.variantes.find(x => clave(x) === b.dataset.k);
     if(otra && clave(otra) !== FICHA) elegirVariante(d, m, otra);
@@ -3407,9 +3438,11 @@ function engancharFicha(d, m, v){
    producto de la planilla. Se redibujan los datos y se deja el link apuntando
    a la variante que se está mirando, así lo que se comparte es exactamente
    esto y no la versión más barata. */
-function elegirVariante(d, m, v){
+function elegirVariante(d, m, v, color){
   FICHA = clave(v);
-  COLOR_FICHA = colorDe(FICHA);
+  // `color` llega cuando se cambió de versión tocando un puntito: ese color
+  // es el que el cliente eligió y tiene que quedar marcado en la nueva.
+  COLOR_FICHA = color || colorDe(FICHA);
   d.querySelector('.fi-datos').innerHTML = htmlDatosFicha(m, v);
   pintarFotoFicha(d, v);
   engancharFicha(d, m, v);

@@ -2151,6 +2151,9 @@ const COLORES = {
   'black keys':'#1D1D1F', 'ice white':'#F0F4F6', 'shiny chalky grey':'#A8A69F',
   // La planilla escribe "Mate Black" con una sola t, y "chalky gray" con a
   'mate black':'#2A2A2D', 'shiny chalky gray':'#A8A69F',
+  // Colores del Galaxy S26 y del Magic Keyboard, que entraron el 03/09
+  blueberry:'#5B6BA8', pistacho:'#B8C99D',
+  'teclas blancas':'#F5F5F7', 'teclas negras':'#1D1D1F',
   // La planilla lo escribe sin la segunda e
   lavander:'#C3B2E8'
 };
@@ -2182,10 +2185,17 @@ function pintas(txt){
     })
     .map(n => {
       let hex = hexColor(n);
-      // Los Ray-Ban vienen "Mate Black - transitions grey": armazón y cristal.
-      // El cristal no es un color que sepamos pintar, pero el armazón sí, y es
-      // lo que se ve de frente. Se pinta con el primero y se muestra entero.
-      if(!hex && n.includes('-')) hex = hexColor(n.split('-')[0].trim());
+      /* Un solo producto de dos tonos, que la planilla escribe de dos formas:
+         "Mate Black - transitions grey" en los Ray-Ban (armazón y cristal) y
+         "Titanio Gris · Blanco" desde el 03/09 en los relojes (caja y correa).
+         El segundo tono no siempre es un color que sepamos pintar, pero el
+         primero sí, y es el que se ve de frente: se pinta con ese y se muestra
+         el nombre entero. Ojo que acá NO se separan en dos puntitos, porque no
+         son dos opciones a elegir sino un mismo producto. */
+      if(!hex){
+        const primero = n.split(/[-·]/)[0].trim();
+        if(primero && primero !== n) hex = hexColor(primero);
+      }
       return { nombre:n, hex };
     });
 }

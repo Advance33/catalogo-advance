@@ -188,9 +188,16 @@ def regla_color(filas, ctx):
                                'el nombre dice (%s) y la columna Color dice %s' % (ultimo, col)))
 
         for token in [t.strip() for t in col.split('/') if t.strip()]:
-            if norm(token) not in colores:
-                fallas.append(('AVISO', f['ID'],
-                               'color "%s" no está en el mapa COLORES: sale sin puntito' % token))
+            if norm(token) in colores:
+                continue
+            # Igual que pintas() en el catálogo: un producto de dos tonos
+            # ("Titanio Gris · Blanco", "Mate Black - transitions grey") se
+            # pinta con el primero, que es el que se ve de frente.
+            primero = re.split(r'[-·]', token)[0].strip()
+            if primero and primero != token and norm(primero) in colores:
+                continue
+            fallas.append(('AVISO', f['ID'],
+                           'color "%s" no está en el mapa COLORES: sale sin puntito' % token))
     return fallas
 
 

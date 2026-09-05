@@ -252,6 +252,37 @@
   .mos-todo i{font:500 11px/1 var(--mono);font-style:normal}
   .mos-todo:hover{color:var(--acento)}
 
+  /* ---------- Sugerencias del buscador ----------
+     Cuelga de .search, que es position:relative, y va por encima de todo lo
+     demas: la barra de categorias esta en z-index 21. */
+  .q-sug{
+    position:absolute;top:calc(100% + 7px);left:0;right:0;z-index:60;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    box-shadow:0 18px 44px rgba(24,18,38,.18);overflow:hidden auto;
+    max-height:min(60vh,430px);padding:5px;
+  }
+  .q-sug[hidden]{display:none}
+  .qs{
+    display:flex;align-items:center;gap:11px;width:100%;text-align:left;
+    background:transparent;border:0;border-radius:10px;padding:7px 9px;
+    cursor:pointer;color:var(--ink);
+  }
+  .qs:hover,.qs.marcada{background:var(--surface-2)}
+  .qs-foto{width:40px;height:40px;flex:none;border-radius:8px;
+           background:var(--foto-bg);display:block;overflow:hidden}
+  .qs-foto img{width:100%;height:100%;object-fit:contain;padding:3px;display:block}
+  .qs-ic{width:40px;height:40px;flex:none;border-radius:8px;display:grid;
+         place-items:center;background:var(--surface-2);color:var(--acento);font-size:13px}
+  .qs-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .qs-txt b{font:500 13px/1.3 var(--sans);overflow:hidden;text-overflow:ellipsis;
+            white-space:nowrap}
+  .qs-txt i{font:500 11px/1 var(--mono);font-style:normal;color:var(--faint)}
+  .qs-cat .qs-txt b{font-weight:600}
+  .qs-cat .qs-txt i{color:var(--acento)}
+
+  /* Sin stock el boton no invita a comprar: invita a que le avisen */
+  .cta-aviso{background:var(--muted) !important;border-color:var(--muted) !important}
+
   /* ---------- Los bloques de la portada ----------
      Debajo del mosaico. Todos son la misma idea: un rotulo y una fila que se
      desliza con el dedo. Comparten componente para que agregar uno mas sea
@@ -1448,6 +1479,8 @@
       </svg>
       <input id="q" type="search" placeholder="Buscar: iphone 17, macbook, canon r6…" autocomplete="off">
       <button class="clear" id="clear" hidden aria-label="Limpiar búsqueda">&times;</button>
+      <!-- Lo que va apareciendo mientras escribis -->
+      <div class="q-sug" id="q-sug" role="listbox" aria-label="Sugerencias" hidden></div>
     </div>
     <div class="stamp">
       <span class="dot live"></span><span id="stamp">Cargando…</span>
@@ -2060,8 +2093,7 @@ function filtrar(){
         return false;
     }
     if(!palabras.length) return true;
-    const heno = norm([p.desc,p.marca,p.modelo,p.cat,p.busq,p.color,p.id].join(' '));
-    return palabras.every(w => heno.includes(w));
+    return palabras.every(w => henoDe(p).includes(w));
   });
 
   const porNombre = (a,b) => a.desc.localeCompare(b.desc,'es');
@@ -2280,8 +2312,21 @@ const precioARS = p => (TC && p.precio) ? '$ ' + plata(Math.round(p.precio * TC)
 const nombreConMarca = p =>
   (!p.marca || norm(p.desc || '').startsWith(norm(p.marca))) ? p.desc : `${p.marca} ${p.desc}`;
 
+/* Todo el texto por el que se puede encontrar un producto. Lo usan el filtro
+   y las sugerencias del buscador: si fueran dos listas distintas, el buscador
+   sugeriria cosas que despues la grilla no encuentra. */
+const henoDe = p => norm([p.desc,p.marca,p.modelo,p.cat,p.busq,p.color,p.id].join(' '));
+
 function mensajeWA(p, color){
   return `Hola! Me interesa el ${nombreConMarca(p)}${color ? ` en ${color}` : ''}. ¿Me pasás info?`;
+}
+
+/* Sin stock el boton de siempre no sirve: el cliente pregunta por algo que no
+   hay y se va. Con este se lleva el pedido anotado y vos tenes a quien avisar
+   cuando entre. */
+function mensajeAviso(p, color){
+  return `Hola! El ${nombreConMarca(p)}${color ? ` en ${color}` : ''} figura sin stock. `
+       + `¿Me avisan cuando entre?`;
 }
 const linkWA = texto => WHATSAPP ? `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}` : '';
 
@@ -3875,7 +3920,9 @@ function htmlDatosFicha(m, v){
       <div class="sub" id="fi-sub" hidden></div>
     </div>
     <div class="botones fi-botones">
-      ${WHATSAPP ? `<a class="pri cta" href="${linkWA(mensajeWA(v, COLOR_FICHA))}" target="_blank" rel="noopener">${ICONO_WA}Consultar por WhatsApp</a>` : ''}
+      ${WHATSAPP ? (v.stock
+        ? `<a class="pri cta" href="${linkWA(mensajeWA(v, COLOR_FICHA))}" target="_blank" rel="noopener">${ICONO_WA}Consultar por WhatsApp</a>`
+        : `<a class="pri cta cta-aviso" href="${linkWA(mensajeAviso(v, COLOR_FICHA))}" target="_blank" rel="noopener">${ICONO_WA}Avisame cuando entre</a>`) : ''}
       <div id="fi-pedido-caja">${htmlPedidoFicha(clave(v))}</div>
     </div>
     <p class="fi-nota">Precio sujeto a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</p>`;
@@ -4038,7 +4085,14 @@ function elegirColorFicha(d, p, color){
   d.querySelector('#fi-color-hint')?.setAttribute('hidden', '');
   // El mensaje de WhatsApp de la ficha ya nombra el color
   const wa = d.querySelector('.fi-botones .cta');
-  if(wa) wa.href = linkWA(mensajeWA(p, color));
+  if(wa){
+    // El color puede ser de otra fila, con otro stock: el boton tiene que
+    // seguirlo, o queda ofreciendo aviso de algo que si hay (o al reves).
+    const hay = p.stock;
+    wa.href = linkWA(hay ? mensajeWA(p, color) : mensajeAviso(p, color));
+    wa.classList.toggle('cta-aviso', !hay);
+    wa.innerHTML = ICONO_WA + (hay ? 'Consultar por WhatsApp' : 'Avisame cuando entre');
+  }
 
   mostrarFotoColor(p, color, d);
 }
@@ -4237,6 +4291,93 @@ function abrirPedido(){
   montarModal(d);
 }
 
+/* ---------- Sugerencias del buscador ----------
+   El buscador filtraba la grilla y listo: para ver un producto habia que
+   escribir, mirar la grilla y despues buscarlo con el ojo. Ahora, mientras
+   escribis, aparecen los que coinciden con foto y precio y se abre la ficha de
+   una. Los rubros van arriba: si escribis "camara" queres el rubro, no la
+   primera camara de la lista. */
+
+const SUG_MAX = 7;
+let sugIdx = -1;        // cual esta marcada con las flechas
+
+function candidatosSug(txt){
+  const q = norm(txt).trim();
+  if(q.length < 2) return {cats: [], prods: []};
+  const partes = q.split(/\s+/);
+
+  const cats = [...new Set(MODELOS.filter(m => m.stock).map(m => m.cat))]
+    .filter(c => norm(plural(c)).includes(q) || norm(c).includes(q))
+    .slice(0, 2);
+
+  // El mismo heno que usa el filtro, para que sugerir y filtrar no discrepen
+  const prods = MODELOS
+    .filter(m => m.stock && partes.every(w => henoDe(m).includes(w)))
+    .sort((a, b) => (b.imagen ? 1 : 0) - (a.imagen ? 1 : 0) || a.idx - b.idx)
+    .slice(0, SUG_MAX);
+
+  return {cats, prods};
+}
+
+function pintarSug(){
+  const caja = $('q-sug');
+  if(!caja) return;
+  const {cats, prods} = candidatosSug($('q').value);
+  sugIdx = -1;
+
+  if(!cats.length && !prods.length){ cerrarSug(); return; }
+
+  caja.innerHTML =
+    cats.map(c => `<button class="qs qs-cat" type="button" data-cat="${esc(c)}">
+        <span class="qs-ic">▸</span>
+        <span class="qs-txt"><b>${esc(plural(c))}</b><i>ver el rubro completo</i></span>
+      </button>`).join('') +
+    prods.map(m => `<button class="qs" type="button" data-key="${esc(clave(m.rep))}">
+        <span class="qs-foto">${m.imagen
+          ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>
+        <span class="qs-txt"><b>${esc(m.desc)}</b><i>${esc(m.marca)} · ${
+          m.precio === null ? 'Consultar' : 'USD ' + plata(m.precio)}</i></span>
+      </button>`).join('');
+
+  caja.hidden = false;
+  $('q').setAttribute('aria-expanded', 'true');
+
+  caja.querySelectorAll('.qs').forEach(b => b.onclick = () => {
+    if(b.dataset.cat){
+      filtros.cat = b.dataset.cat;
+      filtros.q = ''; $('q').value = ''; $('clear').hidden = true;
+      rendirCintaAuto();
+      [...$('cats').children].forEach(x =>
+        x.setAttribute('aria-pressed', String(x.dataset.cat === filtros.cat)));
+      aplicarFiltro(true);
+    }else{
+      abrirFicha(b.dataset.key);
+    }
+    cerrarSug();
+  });
+}
+
+function cerrarSug(){
+  const caja = $('q-sug');
+  if(!caja) return;
+  caja.hidden = true;
+  caja.replaceChildren();
+  sugIdx = -1;
+  $('q').setAttribute('aria-expanded', 'false');
+}
+
+/* Flechas y Enter, para el que no suelta el teclado */
+function moverSug(paso){
+  const caja = $('q-sug');
+  if(!caja || caja.hidden) return false;
+  const btns = [...caja.querySelectorAll('.qs')];
+  if(!btns.length) return false;
+  sugIdx = (sugIdx + paso + btns.length + 1) % (btns.length + 1);
+  btns.forEach((b, i) => b.classList.toggle('marcada', i === sugIdx));
+  if(sugIdx >= 0) btns[sugIdx].scrollIntoView({block: 'nearest'});
+  return true;
+}
+
 /* ---------- Eventos ---------- */
 
 let t;
@@ -4245,10 +4386,27 @@ $('q').addEventListener('input', e => {
   $('clear').hidden = !e.target.value;
   // Easter egg escondido en el buscador: escribí "el primo"
   if(['primo','el primo'].includes(norm(e.target.value))) abrirPrimo();
-  clearTimeout(t); t = setTimeout(() => aplicarFiltro(false), 120);
+  clearTimeout(t); t = setTimeout(() => { aplicarFiltro(false); pintarSug(); }, 120);
+});
+// Flechas para elegir sin soltar el teclado; Enter abre lo marcado
+$('q').addEventListener('keydown', e => {
+  if(e.key === 'ArrowDown' && moverSug(1))  { e.preventDefault(); return; }
+  if(e.key === 'ArrowUp'   && moverSug(-1)) { e.preventDefault(); return; }
+  if(e.key === 'Escape'){ cerrarSug(); return; }
+  if(e.key === 'Enter'){
+    const m = $('q-sug').querySelector('.qs.marcada');
+    if(m){ e.preventDefault(); m.click(); }
+    else cerrarSug();     // sin nada marcado, Enter es "filtra y sacame esto de encima"
+  }
+});
+$('q').addEventListener('focus', pintarSug);
+// Un clic afuera la cierra. En 'pointerdown' y no en 'blur': con blur, el clic
+// sobre una sugerencia cerraba el panel antes de que llegara a contar.
+document.addEventListener('pointerdown', e => {
+  if(!e.target.closest('.search')) cerrarSug();
 });
 $('clear').onclick = () => {
-  $('q').value=''; filtros.q=''; $('clear').hidden=true; aplicarFiltro(false); $('q').focus();
+  $('q').value=''; filtros.q=''; $('clear').hidden=true; cerrarSug(); aplicarFiltro(false); $('q').focus();
 };
 $('orden').onchange     = e => { filtros.orden = e.target.value;    aplicarFiltro(true); };
 $('precio').onchange    = e => { filtros.rango = e.target.value;    aplicarFiltro(true); };

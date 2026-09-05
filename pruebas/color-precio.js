@@ -24,6 +24,14 @@ const esperar = setInterval(() => {
   clearInterval(esperar);
   for(let i = 1; i < 5000; i++) clearInterval(i);
   try{ correrPruebas(); }catch(e){ R.push('EXCEPCION: ' + (e && e.stack || e)); fallas++; }
+  // Las pruebas vuelven a pintar, y cada pintado reengancha los paseos de las
+  // pistas y el carrusel. Si queda alguno vivo, con el reloj acelerado del
+  // headless el navegador no cierra nunca y la tanda figura como que no llego
+  // a correr. Se frena todo DESPUES de correr, no antes.
+  try{ pararPaseos(); }catch(e){}
+  try{ pararOfertas(); }catch(e){}
+  for(let i=1;i<5000;i++) clearInterval(i);
+
   reportar();
 }, 120);
 

@@ -13,7 +13,7 @@ Si el servidor no esta levantado, este script lo levanta y lo baja al terminar.
 
 Devuelve 0 si pasa todo y 1 si algo falla, asi PUBLICAR.bat puede frenar.
 """
-import html
+import html, tempfile, shutil
 import io
 import os
 import re
@@ -36,7 +36,9 @@ BASE    = 'http://localhost:%d' % PUERTO
 # el catalogo entero cuatro veces (una por ancho) y espera a que cada una
 # termine de dibujar, asi que necesita bastante mas que las demas.
 ORDEN = ['agrupacion', 'portada', 'extras', 'precios', 'color-precio', 'sugeridos', 'destacada', 'carrusel', 'layout']
-PRESUPUESTO = {'layout': 200}   # segundos; el resto usa el de correr()
+PRESUPUESTO = {'layout': 200, 'extras': 150}   # segundos; el resto usa el de correr()
+# extras hace varios clicks y cada uno repinta la portada entera (seis filas
+# de doce productos con foto), asi que con los 90 de base no llegaba.
 
 CHROMES = [
     r'C:\Program Files\Google\Chrome\Application\chrome.exe',
@@ -85,14 +87,24 @@ def armar_probe(js):
 
 
 def correr(chrome, segundos=90):
-    """Abre _probe.html sin ventana y devuelve el texto del <pre id="RESULTADO">."""
+    """Abre _probe.html sin ventana y devuelve el texto del <pre id="RESULTADO">.
+
+    Cada tanda va con un perfil de Chrome recien creado. Todas se sirven desde
+    la misma URL (/_probe.html) y, compartiendo perfil, Chrome devolvia la copia
+    cacheada de la tanda anterior: una tanda llegaba a informar el resultado de
+    otra y los fallos parecian azarosos.
+    """
+    perfil = tempfile.mkdtemp(prefix='probe-')
     cmd = [chrome, '--headless', '--disable-gpu', '--window-size=1920,1080',
+           '--user-data-dir=' + perfil,
            '--virtual-time-budget=%d' % (segundos * 1000), '--dump-dom',
            BASE + '/_probe.html']
     try:
         dom = subprocess.run(cmd, capture_output=True, timeout=segundos + 90).stdout
     except subprocess.TimeoutExpired:
         return None
+    finally:
+        shutil.rmtree(perfil, ignore_errors=True)
     m = re.search(r'<pre id="RESULTADO">(.*?)</pre>', dom.decode('utf-8', 'replace'), re.S)
     return html.unescape(m.group(1)) if m else None
 
@@ -116,7 +128,10 @@ def main():
         print('Corriendo %d tandas contra la planilla de hoy...\n' % len(tandas))
         for nombre in tandas:
             armar_probe(os.path.join(AQUI, nombre + '.js'))
-            texto = correr(chrome, PRESUPUESTO.get(nombre, 90))
+            # 140 y no 90: desde que la portada dibuja seis filas de productos
+            # con foto, ademas de la grilla que piden las pruebas, con 90 varias
+            # tandas no llegaban a terminar y figuraban como caidas.
+            texto = correr(chrome, PRESUPUESTO.get(nombre, 140))
             if not texto:
                 sin_correr.append(nombre)
                 print('  %-14s NO LLEGO A CORRER' % nombre)
@@ -138,8 +153,12 @@ def main():
     finally:
         if os.path.exists(PROBE):
             os.remove(PROBE)
+        # El servidor queda levantado a proposito. Antes se bajaba al terminar,
+        # y a quien tenia el catalogo abierto en el navegador se le caian todas
+        # las fotos de golpe sin entender por que. Pesa nada y sirve para
+        # seguir trabajando; se apaga cerrando su ventana.
         if servidor:
-            servidor.terminate()
+            print('\n(el servidor local quedo andando en %s)' % BASE)
 
     print()
     if sin_correr:

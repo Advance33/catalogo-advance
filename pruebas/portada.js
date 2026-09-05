@@ -12,6 +12,14 @@ const esperar = setInterval(() => {
   clearInterval(esperar);
   for(let i=1;i<5000;i++) clearInterval(i);
   try{ correrPruebas(); }catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; }
+  // Las pruebas vuelven a pintar, y cada pintado reengancha los paseos de las
+  // pistas y el carrusel. Si queda alguno vivo, con el reloj acelerado del
+  // headless el navegador no cierra nunca y la tanda figura como que no llego
+  // a correr. Se frena todo DESPUES de correr, no antes.
+  try{ pararPaseos(); }catch(e){}
+  try{ pararOfertas(); }catch(e){}
+  for(let i=1;i<5000;i++) clearInterval(i);
+
   const pre=document.createElement('pre'); pre.id='RESULTADO';
   pre.textContent='\n===== '+(fallas?fallas+' FALLA(S)':'TODO OK')+' =====\n'+R.join('\n');
   document.body.appendChild(pre);
@@ -107,7 +115,14 @@ function correrPruebas(){
   /* ---- 7. La cinta se pasea sola, pero se rinde ---- */
   ok(typeof arrancarCintaAuto === 'function' && typeof rendirCintaAuto === 'function',
      'la cinta tiene su motor de paseo');
-  rendirCintaAuto();
+  const cinta = $('cats');
   arrancarCintaAuto();
-  ok(catsAuto === null, 'una vez que el cliente toma el control, no se mueve mas');
+  // Se prueba el comportamiento y no una variable interna: si el motor cambia
+  // por dentro, la prueba tiene que seguir valiendo.
+  rendirCintaAuto();
+  const antes = cinta.scrollLeft;
+  arrancarCintaAuto();
+  ok(!PASEOS.get(cinta) || PASEOS.get(cinta).timer === null,
+     'una vez que el cliente toma el control, la cinta no vuelve a moverse');
+  ok(cinta.scrollLeft === antes, 'y se queda donde estaba', cinta.scrollLeft);
 }

@@ -134,7 +134,25 @@
   /* El PNG es linea oscura sobre transparente: sobre grafito hay que invertirlo */
   .topbar .marca-btn img{filter:brightness(0) invert(1);opacity:.9}
   .topbar .marca-btn:hover img{opacity:1;filter:brightness(0) invert(1) drop-shadow(0 0 7px rgba(196,166,255,.7))}
-  .topbar .search{flex:1;max-width:520px;padding-bottom:0}
+  .lupa{
+    margin-left:auto;flex:none;width:38px;height:38px;border-radius:50%;
+    display:grid;place-items:center;cursor:pointer;
+    background:transparent;border:1px solid rgba(255,255,255,.18);
+    color:rgba(255,255,255,.75);transition:background .16s, border-color .16s, color .16s;
+  }
+  .lupa svg{width:17px;height:17px;display:block}
+  .lupa:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.35);color:#fff}
+  .lupa:focus-visible{outline:2px solid #A78BFA;outline-offset:2px}
+  /* Cerrada no ocupa lugar; abierta se lleva el centro de la barra */
+  .topbar .search{
+    flex:0 1 0;max-width:0;padding-bottom:0;opacity:0;pointer-events:none;
+    margin-left:auto;transition:max-width .26s cubic-bezier(.2,.7,.3,1), opacity .18s;
+    /* Sin esto el input de adentro sigue midiendo su ancho aunque la caja este
+       en 0, y en el celular empujaba la pagina 24px a lo ancho. */
+    overflow:hidden;
+  }
+  .topbar.buscando .search{flex:1 1 auto;max-width:520px;opacity:1;pointer-events:auto}
+  .topbar.buscando .lupa{display:none}
   .topbar .search svg{color:rgba(255,255,255,.5)}
   .topbar #q{
     background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);color:#fff;
@@ -145,13 +163,14 @@
                    box-shadow:0 0 0 4px rgba(167,139,250,.20)}
   .topbar .clear{color:rgba(255,255,255,.6)}
   .topbar .clear:hover{background:rgba(255,255,255,.14);color:#fff}
-  .topbar .stamp{margin-left:auto;color:rgba(255,255,255,.62)}
+  .topbar .stamp{margin-left:18px;color:rgba(255,255,255,.62)}
   .topbar #cfg-btn{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)}
   .topbar #cfg-btn:hover{border-color:#A78BFA;color:#C4A6FF}
   /* En el celular el buscador se lleva un renglon entero: es lo que mas se usa */
   @media (max-width:720px){
     .topbar .wrap{flex-wrap:wrap;gap:10px 14px}
-    .topbar .search{order:3;flex-basis:100%;max-width:none}
+    .topbar.buscando .search{order:3;flex-basis:100%;max-width:none}
+    .topbar .stamp{margin-left:auto}
     .topbar .stamp{font-size:10px;letter-spacing:.06em}
   }
   .logo{display:flex;align-items:center;gap:10px}
@@ -731,9 +750,14 @@
      la altura de la columna de datos. Con 1/1 quedaba clavado en 320px y
      dejaba un hueco muerto abajo, que es lo que pasa casi siempre porque los
      datos son mas altos. El min-height cubre el caso inverso: ficha corta. */
+  /* El lila se queda. Probé fondo blanco para que no se viera el escalón que
+     hace cada foto (casi todas vienen sobre blanco), pero la Xbox Series S
+     blanca y el AirTag se difuminan contra el borde: se pierde el contorno del
+     producto, que es peor que el escalón. Lo que sí bajó es el padding: el
+     producto ocupa la columna en vez de flotar en el medio. */
   .fi-foto{position:relative;background:var(--foto-bg);min-height:320px;
            display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .fi-foto img{width:100%;height:100%;object-fit:contain;padding:22px;display:block}
+  .fi-foto img{width:100%;height:100%;object-fit:contain;padding:14px;display:block}
   .fi-foto .badge{position:absolute;top:12px;left:12px}
   .fi-datos{padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
   .fi-marca{font:600 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--glow)}
@@ -745,9 +769,29 @@
             font-size:12.5px;border-top:1px solid var(--line);padding-top:13px}
   .fi-tabla dt{font:600 9.5px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
   .fi-tabla dd{margin:0;color:var(--ink);word-break:break-word}
-  .fi-precio{border-top:1px solid var(--line);padding-top:14px;margin-top:2px}
-  .fi-precio .usd{font:400 30px/1 var(--display)}
-  .fi-precio .ars{font:500 13px/1 var(--mono);color:var(--muted);margin-top:6px}
+
+  /* El precio subio al lado del titulo: es lo segundo que se busca despues de
+     saber que producto es. Los pesos dejaron de ser una nota al pie -es el
+     numero con el que la mayoria decide- y ahora acompanian al dolar. */
+  .fi-precio{margin-top:4px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .fi-precio .usd{font:400 32px/1 var(--display)}
+  .fi-precio .ars{font:500 17px/1 var(--mono);color:var(--muted)}
+  .fi-precio .sub{flex-basis:100%}
+
+  /* El color no es un dato mas de la tabla: es una decision. Sale de la lista y
+     se muestra como lo que es. En grilla y no apilado porque en columna se
+     llevaba cuatro renglones -rotulo, puntitos, nombre y la instruccion- para
+     decir "Black/Blue": el nombre va al lado de los puntitos, no debajo. */
+  /* minmax(0,auto) y no auto a secas: con `auto` la columna de los puntitos
+     toma su ancho sin cortar, asi que un producto de seis colores los pone
+     todos en una linea y empuja la ficha a lo ancho. Con el minimo en 0 la
+     columna cede y los puntitos, que ya son flex-wrap, bajan de renglon. */
+  .fi-color{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);
+            gap:3px 10px;align-items:center}
+  .fi-rotulo{grid-column:1/-1;font:600 9.5px/1.5 var(--mono);letter-spacing:.14em;
+             text-transform:uppercase;color:var(--faint)}
+  .fi-color .fi-pintas{margin-bottom:0}
+  .fi-color .fi-hint{grid-column:1/-1;font-size:11px;color:var(--faint)}
   .fi-nota{font-size:11px;color:var(--faint);margin:0}
 
   /* ---------- Elegir color en la ficha ----------
@@ -834,7 +878,16 @@
     padding:5px 8px;border-radius:6px;background:var(--surface-2);color:var(--muted);
     border:1px solid var(--line);white-space:nowrap;
   }
-  .fi-datos .specs span{font-size:10px;padding:6px 10px}
+  /* En la grilla los chips son una pista al pasar; en la ficha son EL dato:
+     entre dos Quest 3S lo unico que cambia es que uno dice 128GB y el otro
+     256GB. A 10px y en gris se leian como decoracion al lado del titulo, asi
+     que aca van mas grandes y con el color del texto, no el del margen. */
+  .fi-datos .specs{gap:7px}
+  .fi-datos .specs span{
+    font-size:12.5px;letter-spacing:.06em;padding:8px 13px;
+    color:var(--ink);background:#fff;border-color:var(--line);
+    box-shadow:0 1px 2px rgba(24,18,38,.04);
+  }
 
   /* ---------- Botones de la tarjeta ---------- */
   .acciones{display:flex;gap:8px}
@@ -1473,6 +1526,14 @@
       </button>
       <b>Advance <span>Tecno</span></b>
     </span>
+    <!-- La barra de busqueda ocupaba el centro de la cabecera todo el tiempo.
+         Ahora vive detras de la lupa: se abre cuando el cliente la pide y la
+         marca se queda sola, que es lo primero que tiene que verse. -->
+    <button class="lupa" id="lupa" type="button" aria-label="Buscar" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+      </svg>
+    </button>
     <div class="search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
         <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
@@ -3381,11 +3442,27 @@ function rubrosDestacados(){
     .slice(0, FILAS_RUBRO);
 }
 
+/* Los bloques se rehacian enteros en cada pintado, y cada uno son seis filas
+   de doce productos con foto: entrar a un rubro y volver rebajaba setenta
+   imagenes al pedo. Ahora se guardan armados y solo se rehacen cuando cambia
+   algo que los afecta. */
+let FIRMA_EXTRAS = '';
+
 function pintarExtras(){
   const caja = $('extras');
   if(!caja) return;
-  if(!enPortada()){ caja.hidden = true; caja.replaceChildren(); return; }
+  // Fuera de la portada se esconden pero NO se borran: volver es instantaneo.
+  if(!enPortada()){ caja.hidden = true; return; }
   caja.hidden = false;
+
+  // Lo unico que cambia entre pintados es la planilla y lo que el cliente miro
+  const firma = MODELOS.length + '|' + leerMirados().join(',');
+  if(firma === FIRMA_EXTRAS && caja.children.length){
+    // Se despiertan los paseos, que se frenaron al esconderse
+    caja.querySelectorAll('.fp-pista').forEach(el => activarPaseo(el));
+    return;
+  }
+  FIRMA_EXTRAS = firma;
 
   const partes = [];
 
@@ -3440,6 +3517,9 @@ function pintarExtras(){
   caja.innerHTML = partes.join('');
 
   /* --- Que hace cada cosa --- */
+  // Cada fila se pasea sola: son doce productos y en pantalla entran tres
+  caja.querySelectorAll('.fp-pista').forEach(el => activarPaseo(el));
+
   caja.querySelectorAll('.pc').forEach(b =>
     b.onclick = () => abrirFicha(b.dataset.key));
 
@@ -3694,6 +3774,9 @@ function pintarMarcas(){
 // abrir con un link filtrado y al tocar el botón Atrás del navegador.
 function sincronizarControles(){
   $('q').value = filtros.q;
+  // Con ?q= en la URL el buscador tiene que arrancar abierto, o el cliente
+  // ve resultados filtrados y ningun lugar donde diga por que.
+  if(filtros.q) document.querySelector('.topbar').classList.add('buscando');
   $('clear').hidden = !filtros.q;
   $('orden').value = filtros.orden;
   $('precio').value = filtros.rango;
@@ -3887,45 +3970,70 @@ function cerrarFicha(){
 /* Los datos de la ficha: todo lo que cambia cuando el cliente elige otra
    versión. Va aparte de la foto porque al cambiar de variante se redibuja
    entero, y la foto se toca solo si de verdad es otra imagen. */
+/* El título no repite lo que ya se muestra al lado. La marca está en el rótulo
+   de arriba, la capacidad en los chips y los colores en los puntitos: dejarlos
+   también acá hacía que "Apple iPhone 15 128GB SIM (Black/Blue)" dijera tres
+   veces lo mismo. Si sacar todo eso deja menos de dos palabras, se muestra el
+   nombre completo: mejor repetir que no nombrar el producto. */
+function nombreFicha(m, v){
+  const entero = m.desc || '';
+  let t = entero;
+
+  const marca = (v.marca || '').trim();
+  if(marca && norm(t).startsWith(norm(marca))) t = t.slice(marca.length);
+
+  // El paréntesis del final se va solo si TODO lo de adentro son colores. Ahí
+  // también viene lo que distingue un producto de otro ("(M4/M5)", "(CAJA DE
+  // KIT)") y eso tiene que quedar.
+  t = t.replace(/\s*\(([^)]*)\)\s*$/, (todo, dentro) => {
+    const lista = pintas(dentro);
+    return (lista.length && lista.every(c => c.hex)) ? ' ' : todo;
+  });
+
+  // Las palabras que ya son un chip ("128GB", "5G") no se repiten
+  const chips = new Set(specs(v).map(norm));
+  t = t.split(/\s+/).filter(p => p && !chips.has(norm(p))).join(' ');
+
+  return t.split(/\s+/).filter(Boolean).length >= 2 ? t.trim() : entero;
+}
+
 function htmlDatosFicha(m, v){
+  // Categoría y Modelo salieron de acá: al que está mirando un iPhone 15 no le
+  // dicen nada que el título no diga ya, y se llevaban las dos primeras filas.
+  // La cotización tampoco es una característica del producto: se fue al pie,
+  // con la nota del precio.
   const filas = [
-    ['Categoría',   v.cat],
-    ['Modelo',      v.modelo],
-    ['Color',       v.color ? htmlColorFicha(v, m) : '', true],
     ['Condición',   v.condicion],
     ['Teclado',     idiomaTeclado(v.teclado)],
-    ['Garantía',    v.garantia],
-    // La cotización con la que se calculó el precio en pesos de ESTA ficha.
-    // Si no hay pesos (no se pudo traer el dólar), la fila no aparece.
-    ['Cotización',  TC ? `$ ${plata(Math.round(TC))} por dólar` : '']
+    ['Garantía',    v.garantia]
   ].filter(([,x]) => x);
 
   const lista = specs(v);
   const ars   = precioARS(v);
+  const coti  = TC ? `Cotización: $ ${plata(Math.round(TC))} por dólar.` : '';
 
   return `
     <span class="fi-marca">${esc(v.marca)}</span>
-    <h3 class="fi-nombre">${esc(m.desc)}</h3>
+    <h3 class="fi-nombre">${esc(nombreFicha(m, v))}</h3>
     ${lista.length ? `<div class="specs">${lista.map(s=>`<span>${esc(s)}</span>`).join('')}</div>` : ''}
-    ${v.incluye ? `<div class="incluye">${esc(v.incluye)}</div>` : ''}
-    ${v.detalle ? `<p class="fi-detalle">${esc(v.detalle)}</p>` : ''}
-    ${filas.length ? `<dl class="fi-tabla">${filas.map(([t,x,crudo]) =>
-      // `crudo` marca las filas que ya vienen armadas como HTML (los
-      // puntitos de color). El resto se escapa, como siempre.
-      `<dt>${esc(t)}</dt><dd>${crudo ? x : esc(x)}</dd>`).join('')}</dl>` : ''}
-    ${htmlOpcionesFicha(m, v)}
     <div class="fi-precio">
       <div class="usd">${precioUSD(v)}</div>
       ${ars ? `<div class="ars">${ars}</div>` : ''}
       <div class="sub" id="fi-sub" hidden></div>
     </div>
+    ${htmlOpcionesFicha(m, v)}
+    ${v.color ? `<div class="fi-color"><span class="fi-rotulo">Color</span>${htmlColorFicha(v, m)}</div>` : ''}
+    ${v.incluye ? `<div class="incluye">${esc(v.incluye)}</div>` : ''}
+    ${v.detalle ? `<p class="fi-detalle">${esc(v.detalle)}</p>` : ''}
+    ${filas.length ? `<dl class="fi-tabla">${filas.map(([t,x]) =>
+      `<dt>${esc(t)}</dt><dd>${esc(x)}</dd>`).join('')}</dl>` : ''}
     <div class="botones fi-botones">
       ${WHATSAPP ? (v.stock
         ? `<a class="pri cta" href="${linkWA(mensajeWA(v, COLOR_FICHA))}" target="_blank" rel="noopener">${ICONO_WA}Consultar por WhatsApp</a>`
         : `<a class="pri cta cta-aviso" href="${linkWA(mensajeAviso(v, COLOR_FICHA))}" target="_blank" rel="noopener">${ICONO_WA}Avisame cuando entre</a>`) : ''}
       <div id="fi-pedido-caja">${htmlPedidoFicha(clave(v))}</div>
     </div>
-    <p class="fi-nota">Precio sujeto a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</p>`;
+    <p class="fi-nota">Precio sujeto a cambio sin previo aviso. Consultá disponibilidad antes de comprar.${coti ? ' ' + esc(coti) : ''}</p>`;
 }
 
 /* El selector de versiones. Cada botón lleva SU precio: es lo que el cliente
@@ -4400,6 +4508,38 @@ $('q').addEventListener('keydown', e => {
   }
 });
 $('q').addEventListener('focus', pintarSug);
+
+/* ---------- Abrir y cerrar el buscador ----------
+   Cerrado no se ve; se abre con la lupa o con "/" desde cualquier lado. Se
+   cierra solo cuando queda vacio, para no dejar media pantalla ocupada por un
+   campo que el cliente ya no usa. */
+const barraArriba = document.querySelector('.topbar');
+
+function abrirBuscador(){
+  barraArriba.classList.add('buscando');
+  $('lupa').setAttribute('aria-expanded', 'true');
+  $('q').focus();
+}
+
+function cerrarBuscador(){
+  if($('q').value) return;          // con algo escrito se queda abierto
+  barraArriba.classList.remove('buscando');
+  $('lupa').setAttribute('aria-expanded', 'false');
+  cerrarSug();
+}
+
+$('lupa').onclick = abrirBuscador;
+$('q').addEventListener('blur', () => setTimeout(cerrarBuscador, 140));
+addEventListener('keydown', e => {
+  // La barra de comandos de siempre: "/" abre el buscador
+  if(e.key === '/' && !/^(input|textarea|select)$/i.test(e.target.tagName)){
+    e.preventDefault(); abrirBuscador();
+  }
+  if(e.key === 'Escape' && barraArriba.classList.contains('buscando')){
+    $('q').value = ''; filtros.q = ''; $('clear').hidden = true;
+    cerrarSug(); cerrarBuscador(); aplicarFiltro(false);
+  }
+});
 // Un clic afuera la cierra. En 'pointerdown' y no en 'blur': con blur, el clic
 // sobre una sugerencia cerraba el panel antes de que llegara a contar.
 document.addEventListener('pointerdown', e => {
@@ -4565,39 +4705,75 @@ function abrirPrimo(){
     'primo', 9000, PRIMO_FIG);
 }
 
-/* ---------- La cinta de categorias se pasea sola ----------
-   Son 21 rubros y en el celular entran cuatro: sin esto el cliente no se
-   entera de que existe el resto. Se mueve muy despacio, va y vuelve, y se
-   frena apenas el cliente hace algo: la idea es mostrar, no pelearle el
-   control del dedo.
+/* ---------- Las pistas se pasean solas ----------
+   La cinta de categorias son 21 rubros y en el celular entran cuatro; las filas
+   de productos son doce y entran tres. Sin esto el cliente no se entera de que
+   hay mas a la derecha. Se mueven muy despacio, van y vuelven, y se frenan
+   apenas el cliente hace algo: la idea es mostrar, no pelearle el dedo.
+
+   Pasar el mouse por encima solo PAUSA (puede haber sido sin querer) y al salir
+   sigue. Tocar, arrastrar, usar la rueda o llegar con el teclado es tomar el
+   control: esa pista no se mueve mas en toda la visita.
+
    Va con setInterval y no con requestAnimationFrame a proposito: las pruebas
    headless limpian los intervalos, y con un rAF suelto el navegador nunca
    cierra y la tanda figura como "NO LLEGO A CORRER". */
-const CATS_PASO = 0.55;      // px por tick de 40ms: unos 14 px por segundo
-let catsAuto = null, catsDir = 1, catsRendido = false;
 
-function pararCintaAuto(){ clearInterval(catsAuto); catsAuto = null; }
+const PASEO_PASO = 0.55;     // px por tick de 40ms: unos 14 px por segundo
+const PASEOS = new Map();    // pista -> su estado
 
-/* El cliente tomo el control: no se mueve mas en toda la visita. */
-function rendirCintaAuto(){ catsRendido = true; pararCintaAuto(); }
+/* Frena todas. La usan las pruebas y los iframes de la tanda de layout. */
+function pararPaseos(){
+  PASEOS.forEach(e => { clearInterval(e.timer); e.timer = null; });
+}
+
+function activarPaseo(el, puedeArrancar){
+  let est = PASEOS.get(el);
+  if(est){ est.arrancar(); return est; }        // ya enganchada: solo despertarla
+
+  est = {timer: null, dir: 1, rendido: false};
+
+  est.parar = () => { clearInterval(est.timer); est.timer = null; };
+
+  est.arrancar = () => {
+    if(est.timer || est.rendido || quieto) return;
+    if(puedeArrancar && !puedeArrancar()) return;
+    if(el.scrollWidth - el.clientWidth <= 4) return;   // entra entera: nada que pasear
+    est.timer = setInterval(() => {
+      const max = el.scrollWidth - el.clientWidth;
+      if(max <= 4 || document.hidden) return;
+      // Al llegar a la punta se da vuelta. Volver de un salto al principio
+      // marea; el ida y vuelta deja ver los dos extremos.
+      if(est.dir > 0 && el.scrollLeft >= max - 1) est.dir = -1;
+      else if(est.dir < 0 && el.scrollLeft <= 1) est.dir = 1;
+      el.scrollLeft += PASEO_PASO * est.dir;
+    }, 40);
+  };
+
+  est.rendirse = () => { est.rendido = true; est.parar(); };
+
+  el.addEventListener('mouseenter', est.parar);
+  el.addEventListener('mouseleave', () => { if(!est.rendido) est.arrancar(); });
+  ['pointerdown', 'wheel', 'touchstart', 'focusin'].forEach(ev =>
+    el.addEventListener(ev, est.rendirse, {passive: true}));
+
+  PASEOS.set(el, est);
+  est.arrancar();
+  return est;
+}
+
+/* --- La cinta de categorias, que ademas mira si hay un rubro elegido --- */
+function estadoCinta(){ return PASEOS.get($('cats')); }
 
 function arrancarCintaAuto(){
-  if(catsAuto || catsRendido || quieto) return;
-  // Si llego con una categoria puesta (por la URL o por el historial), la
-  // cinta ya esta centrada en su chip: moverla seria perder ese lugar.
-  if(filtros.cat) return;
-  const cinta = $('cats');
-  if(cinta.scrollWidth - cinta.clientWidth <= 4) return;   // entra entera: nada que pasear
-  catsAuto = setInterval(() => {
-    const max = cinta.scrollWidth - cinta.clientWidth;
-    if(max <= 4 || document.hidden) return;
-    // Al llegar a la punta se da vuelta. Volver de un salto al principio
-    // marea; el ida y vuelta deja ver los dos extremos.
-    if(catsDir > 0 && cinta.scrollLeft >= max - 1) catsDir = -1;
-    else if(catsDir < 0 && cinta.scrollLeft <= 1) catsDir = 1;
-    cinta.scrollLeft += CATS_PASO * catsDir;
-  }, 40);
+  // Si llego con una categoria puesta (por la URL o por el historial), la cinta
+  // ya esta centrada en su chip: moverla seria perder ese lugar.
+  activarPaseo($('cats'), () => !filtros.cat);
 }
+
+function pararCintaAuto(){ pararPaseos(); }
+
+function rendirCintaAuto(){ estadoCinta()?.rendirse(); }
 
 /* ---------- Las cintas de chips se deslizan ----------
    Con overflow-x solo alcanza en el celular. En la compu la barra de scroll

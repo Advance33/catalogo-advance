@@ -25,10 +25,10 @@ function probar(){
      auto-plays deslizandose hacen que Chrome no llegue a terminar. */
   f.onload = () => {
     try{ f.contentWindow.pararOfertas?.(); }catch{}
-    try{ f.contentWindow.pararCintaAuto?.(); }catch{}
+    try{ f.contentWindow.pararPaseos?.(); }catch{}
     setTimeout(() => {
       try{ f.contentWindow.pararOfertas?.(); }catch{}
-    try{ f.contentWindow.pararCintaAuto?.(); }catch{}
+    try{ f.contentWindow.pararPaseos?.(); }catch{}
       // La portada muestra rubros: lo que se mide aca es el layout de la
       // grilla, asi que hay que pedirla como la pide el cliente.
       try{ f.contentWindow.verTodoElCatalogo?.(); }catch{}

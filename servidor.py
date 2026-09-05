@@ -21,8 +21,12 @@ class SinCache(http.server.SimpleHTTPRequestHandler):
 
 
 if __name__ == '__main__':
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(('', PUERTO), SinCache) as srv:
+    # Con hilos y no de a uno: una pagina del catalogo pide cientos de fotos y
+    # el navegador abre varias conexiones a la vez. Atendiendolas en fila se
+    # encolaban, alguna se colgaba y las pruebas figuraban como caidas.
+    socketserver.ThreadingTCPServer.allow_reuse_address = True
+    socketserver.ThreadingTCPServer.daemon_threads = True
+    with socketserver.ThreadingTCPServer(('', PUERTO), SinCache) as srv:
         print('Catalogo andando en http://localhost:%d' % PUERTO)
         print('Para apagarlo, cerra esta ventana.')
         try:

@@ -36,3 +36,5 @@ fotos-aceptadas.txt
 fotos/*.txt
 fotos-sin-recortar/
 CANDIDATOS-DRIVE.txt
+FOTOS-EQUIVOCADAS.txt
+fotos-mal-asignadas/

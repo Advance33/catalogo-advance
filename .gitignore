@@ -38,3 +38,7 @@ fotos-sin-recortar/
 CANDIDATOS-DRIVE.txt
 FOTOS-EQUIVOCADAS.txt
 fotos-mal-asignadas/
+
+# Salidas sueltas de comandos, no forman parte del sitio
+err.txt
+out.txt

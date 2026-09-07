@@ -333,13 +333,43 @@
   /* La pista se desliza sola con el dedo; en la compu la barra va oculta y se
      arrastra, igual que las cintas de chips. */
   .fp-pista{
-    display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;
-    padding:2px 0 6px;scroll-snap-type:x proximity;overscroll-behavior-x:contain;
+    display:flex;overflow-x:auto;scrollbar-width:none;
+    padding:2px 0 6px;overscroll-behavior-x:contain;
   }
   .fp-pista::-webkit-scrollbar{display:none}
 
+  /* La fila desfila sola, siempre para el mismo lado. El contenido va DUPLICADO
+     y la animacion corre exactamente el ancho de la primera copia: cuando
+     termina, vuelve a cero y como lo que se ve es identico, no hay corte. Antes
+     iba y volvia como un pendulo, y ese rebote se siente pesado.
+
+     Es una animacion CSS y no un temporizador de JavaScript a proposito: la
+     hace el compositor, va fluida aunque la pagina este ocupada, y no deja
+     timers vivos (con uno suelto el navegador headless de las pruebas no cierra
+     nunca y la tanda figura como que no llego a correr). */
+  .fp-tira{display:flex;gap:12px;width:max-content}
+  /* Los chips van mas juntos que las tarjetas de producto */
+  .chips > .fp-tira{gap:8px}
+  .fp-tira.desfila{
+    animation:desfilar var(--dur,60s) linear infinite;
+    animation-delay:var(--desde,0s);
+  }
+  /* Pasar el mouse por encima la frena donde esta, sin volantazos */
+  .fp-pista:hover .fp-tira.desfila{animation-play-state:paused}
+  @keyframes desfilar{
+    from{transform:translateX(0)}
+    to{transform:translateX(calc(var(--corrida,0px) * -1))}
+  }
+  /* Cuando el cliente toma el control, la tira deja de desfilar y la pista
+     vuelve a ser un scroll comun, con su enganche por tarjeta. */
+  .fp-pista.a-mano{scroll-snap-type:x proximity}
+  .fp-pista.a-mano .pc{scroll-snap-align:start}
+  @media (prefers-reduced-motion: reduce){
+    .fp-tira.desfila{animation:none}
+  }
+
   .pc{
-    flex:none;width:158px;scroll-snap-align:start;cursor:pointer;text-align:left;
+    flex:none;width:158px;cursor:pointer;text-align:left;
     background:var(--surface);border:1px solid var(--line);border-radius:12px;
     padding:0;overflow:hidden;color:var(--ink);
     transition:border-color .16s ease, transform .16s ease, box-shadow .16s ease;
@@ -3614,7 +3644,7 @@ function pintarMosaico(){
       rendirCintaAuto();
       // El chip de la cinta tiene que quedar marcado igual que si lo hubiera
       // tocado ahi: si no, el cliente ve el rubro abierto y la cinta en "Todo".
-      [...$('cats').children].forEach(x =>
+      [...$('cats').querySelectorAll('.chip')].forEach(x =>
         x.setAttribute('aria-pressed', String(x.dataset.cat === cat)));
       aplicarFiltro(true);
     };
@@ -3687,7 +3717,7 @@ function htmlFilaProd(titulo, lista, sub, verCat){
       ${sub ? `<span class="fp-sub">${esc(sub)}</span>` : ''}
       ${verCat ? `<button class="fp-ver" type="button" data-vercat="${esc(verCat)}">Ver todos</button>` : ''}
     </div>
-    <div class="fp-pista">${lista.map(htmlProdChico).join('')}</div>
+    <div class="fp-pista"><div class="fp-tira">${lista.map(htmlProdChico).join('')}</div></div>
   </section>`;
 }
 
@@ -3724,7 +3754,7 @@ function pintarExtras(){
   const firma = MODELOS.length + '|' + leerMirados().join(',');
   if(firma === FIRMA_EXTRAS && caja.children.length){
     // Se despiertan los paseos, que se frenaron al esconderse
-    caja.querySelectorAll('.fp-pista').forEach(el => activarPaseo(el, null, PASEO_PASO_PROD));
+    caja.querySelectorAll('.fp-pista').forEach(desfilar);
     return;
   }
   FIRMA_EXTRAS = firma;
@@ -3789,7 +3819,7 @@ function pintarExtras(){
 
   /* --- Que hace cada cosa --- */
   // Cada fila se pasea sola: son doce productos y en pantalla entran tres
-  caja.querySelectorAll('.fp-pista').forEach(el => activarPaseo(el, null, PASEO_PASO_PROD));
+  caja.querySelectorAll('.fp-pista').forEach(desfilar);
 
   caja.querySelectorAll('.pc').forEach(b =>
     b.onclick = () => abrirFicha(b.dataset.key));
@@ -3802,7 +3832,7 @@ function pintarExtras(){
       filtros.cat = b.dataset.vercat;
       filtros.marca = '';
       rendirCintaAuto();
-      [...$('cats').children].forEach(x =>
+      [...$('cats').querySelectorAll('.chip')].forEach(x =>
         x.setAttribute('aria-pressed', String(x.dataset.cat === filtros.cat)));
       aplicarFiltro(true);
     });
@@ -3958,6 +3988,11 @@ function armarFiltros(){
   $('cats').innerHTML = '';
   // El valor sigue siendo la categoría tal cual (el filtro y el link la usan);
   // lo que se pluraliza es únicamente el texto del chip.
+  // Los chips cuelgan de una tira, que es lo que desfila. Se arma aparte y se
+  // cuelga al final, de una: asi el navegador no re-calcula el ancho por chip.
+  const tiraCats = document.createElement('div');
+  tiraCats.className = 'fp-tira';
+
   [['','Todo'], ...cats.map(c => [c, plural(c)])].forEach(([val,txt]) => {
     const b = document.createElement('button');
     b.className='chip'; b.type='button'; b.textContent=txt;
@@ -3972,16 +4007,17 @@ function armarFiltros(){
       // ahí: sin esto la grilla quedaba vacía y parecía que no hay stock.
       if(filtros.marca && !MODELOS.some(p => (!val || p.cat === val) && p.marca === filtros.marca))
         filtros.marca = '';
-      [...$('cats').children].forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      [...$('cats').querySelectorAll('.chip')].forEach(x => x.setAttribute('aria-pressed', String(x === b)));
       aplicarFiltro(true);
       rendirCintaAuto();   // ya eligio: la cinta deja de pasearse sola
       // El chip elegido se centra en la fila
       b.scrollIntoView({ behavior: quieto ? 'auto' : 'smooth', block:'nearest', inline:'center' });
     };
-    $('cats').appendChild(b);
+    tiraCats.appendChild(b);
   });
   sincronizarCinta();   // recién ahora sabemos si la cinta se pasa de ancho
-  arrancarCintaAuto();  // y si sobra ancho, se pasea sola
+  $('cats').replaceChildren(tiraCats);
+  arrancarCintaAuto();  // y si sobra ancho, desfila sola
   sincronizarControles();
 }
 
@@ -4056,7 +4092,7 @@ function sincronizarControles(){
   $('precio').value = filtros.rango;
   $('soloStock').checked = filtros.soloStock;
   sincronizarLentes();
-  [...$('cats').children].forEach(b =>
+  [...$('cats').querySelectorAll('.chip')].forEach(b =>
     b.setAttribute('aria-pressed', String((b.dataset.cat || '') === filtros.cat)));
   [...$('marcas').children].forEach(b =>
     b.setAttribute('aria-pressed', String((b.dataset.marca || '') === filtros.marca)));
@@ -4732,7 +4768,7 @@ function pintarSug(){
       filtros.cat = b.dataset.cat;
       filtros.q = ''; $('q').value = ''; $('clear').hidden = true;
       rendirCintaAuto();
-      [...$('cats').children].forEach(x =>
+      [...$('cats').querySelectorAll('.chip')].forEach(x =>
         x.setAttribute('aria-pressed', String(x.dataset.cat === filtros.cat)));
       aplicarFiltro(true);
     }else{
@@ -4982,6 +5018,124 @@ function abrirPrimo(){
     'primo', 9000, PRIMO_FIG);
 }
 
+/* ---------- Las filas de productos desfilan solas ----------
+   Siempre para el mismo lado y sin corte: el contenido se duplica y la
+   animacion corre exactamente el ancho de la primera copia, asi que al
+   terminar vuelve a cero sobre una imagen identica. El pendulo de antes -ir y
+   volver- se sentia pesado.
+
+   Quien mueve es una animacion CSS, no un temporizador: va fluida y no deja
+   timers vivos, que es lo que trababa al navegador de las pruebas.
+
+   Pasar el mouse por encima la pausa donde esta (puede haber sido sin querer).
+   Tocar, arrastrar o usar la rueda horizontal es tomar el control: la tira deja
+   de desfilar, la posicion en la que iba se traduce a scroll comun para que no
+   pegue ningun salto, y vuelve a arrancar sola unos segundos despues. */
+
+const DESFILE_VEL = 42;      // px por segundo
+const DESFILE_VUELVE = 5000; // cuanto espera antes de retomar, tras un toque
+const DESFILES = new Map();  // pista -> su estado
+
+function pararPaseos(){
+  DESFILES.forEach(e => e.frenar());
+  PASEOS.forEach(e => {
+    clearInterval(e.timer); e.timer = null;
+    clearTimeout(e.despertar); e.despertar = null;
+  });
+}
+
+/* Cuanto hay que correr para que la segunda copia quede donde arrancó la
+   primera. Se mide en el DOM en vez de calcularlo: contempla el gap, los
+   redondeos y cualquier tarjeta de ancho distinto. */
+function medirCorrida(tira, cuantosOriginales){
+  const hijos = tira.children;
+  if(hijos.length <= cuantosOriginales) return 0;
+  return hijos[cuantosOriginales].offsetLeft - hijos[0].offsetLeft;
+}
+
+function desfilar(pista){
+  let est = DESFILES.get(pista);
+  if(est){ est.arrancar(); return est; }
+
+  const tira = pista.querySelector('.fp-tira');
+  if(!tira || !tira.children.length) return null;
+
+  est = {tira, pista, originales: tira.children.length, corrida: 0, dormida: null};
+
+  /* La copia es solo decorado: no la ven los lectores de pantalla y no se
+     llega con el tabulador, para no recorrer dos veces la misma fila. Los
+     clones no heredan los onclick, asi que cada uno reenvia al original. */
+  est.duplicar = () => {
+    if(tira.dataset.duplicada) return;
+    const originales = [...tira.children];
+    originales.forEach((n, i) => {
+      const c = n.cloneNode(true);
+      /* La clase 'clon' es la marca para todo lo que cuente: sin ella, contar
+         .chip o .pc daba el doble y no habia forma de distinguir el contenido
+         real de la copia que existe solo para que el desfile no corte. */
+      c.classList.add('clon');
+      c.setAttribute('aria-hidden', 'true');
+      c.tabIndex = -1;
+      c.addEventListener('click', e => { e.preventDefault(); originales[i].click(); });
+      tira.appendChild(c);
+    });
+    tira.dataset.duplicada = '1';
+  };
+
+  est.arrancar = () => {
+    if(quieto || est.rendida) return;
+    est.duplicar();
+    est.corrida = medirCorrida(tira, est.originales);
+    // Si entra entera no hay nada que desfilar
+    if(est.corrida <= 4 || est.corrida <= pista.clientWidth - 4){
+      tira.classList.remove('desfila');
+      return;
+    }
+    tira.style.setProperty('--corrida', est.corrida + 'px');
+    tira.style.setProperty('--dur', (est.corrida / DESFILE_VEL) + 's');
+    // Retoma donde iba: el retraso negativo arranca la animacion avanzada
+    const desde = pista.scrollLeft % est.corrida;
+    tira.style.setProperty('--desde', '-' + (desde / DESFILE_VEL) + 's');
+    pista.scrollLeft = 0;
+    pista.classList.remove('a-mano');
+    tira.classList.add('desfila');
+  };
+
+  est.frenar = () => {
+    clearTimeout(est.dormida); est.dormida = null;
+    tira.classList.remove('desfila');
+  };
+
+  /* El cliente toma el control. Lo que la animacion habia corrido se convierte
+     en scroll de verdad, asi la fila se queda EXACTAMENTE donde se veia y no
+     pega un salto al soltar. */
+  est.aMano = () => {
+    if(!tira.classList.contains('desfila')) return;
+    let x = 0;
+    try{
+      const m = new DOMMatrixReadOnly(getComputedStyle(tira).transform);
+      x = -m.m41;
+    }catch{}
+    tira.classList.remove('desfila');
+    pista.classList.add('a-mano');
+    pista.scrollLeft = x;
+    clearTimeout(est.dormida);
+    est.dormida = setTimeout(() => est.arrancar(), DESFILE_VUELVE);
+  };
+
+  ['pointerdown', 'touchstart', 'focusin'].forEach(ev =>
+    pista.addEventListener(ev, est.aMano, {passive: true}));
+  /* La rueda solo cuenta si es HORIZONTAL: bajando la pagina el evento cae
+     sobre la fila que este debajo del cursor, y eso no es tomar el control. */
+  pista.addEventListener('wheel', e => {
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)) est.aMano();
+  }, {passive: true});
+
+  DESFILES.set(pista, est);
+  est.arrancar();
+  return est;
+}
+
 /* ---------- Las pistas se pasean solas ----------
    La cinta de categorias son 21 rubros y en el celular entran cuatro; las filas
    de productos son doce y entran tres. Sin esto el cliente no se entera de que
@@ -5005,15 +5159,8 @@ const PASEO_PASO = 0.55;     // px por tick de 40ms: unos 14 px por segundo
 const PASEO_PASO_PROD = 1.7; // las filas de productos, unos 42 px por segundo
 const PASEOS = new Map();    // pista -> su estado
 
-/* Frena todas. La usan las pruebas y los iframes de la tanda de layout. */
-function pararPaseos(){
-  PASEOS.forEach(e => {
-    clearInterval(e.timer); e.timer = null;
-    // Tambien el despertador: si queda uno pendiente, revive el paseo despues
-    // de que las pruebas frenaron todo y el navegador headless no cierra nunca.
-    clearTimeout(e.despertar); e.despertar = null;
-  });
-}
+/* Frena todo. La usan las pruebas y los iframes de la tanda de layout.
+   Vive mas abajo, junto al desfile, porque frena las dos clases de paseo. */
 
 function activarPaseo(el, puedeArrancar, paso = PASEO_PASO){
   let est = PASEOS.get(el);
@@ -5081,18 +5228,21 @@ function activarPaseo(el, puedeArrancar, paso = PASEO_PASO){
   return est;
 }
 
-/* --- La cinta de categorias, que ademas mira si hay un rubro elegido --- */
-function estadoCinta(){ return PASEOS.get($('cats')); }
+/* --- La cinta de categorias --- */
+function estadoCinta(){ return DESFILES.get($('cats')); }
 
 function arrancarCintaAuto(){
   // Si llego con una categoria puesta (por la URL o por el historial), la cinta
   // ya esta centrada en su chip: moverla seria perder ese lugar.
-  activarPaseo($('cats'), () => !filtros.cat);
+  if(filtros.cat) return;
+  desfilar($('cats'));
 }
 
 function pararCintaAuto(){ pararPaseos(); }
 
-function rendirCintaAuto(){ estadoCinta()?.rendirse(); }
+/* El cliente eligio un rubro: la cinta pasa a scroll comun para que el chip
+   elegido se pueda centrar y quedarse quieto donde lo dejo. */
+function rendirCintaAuto(){ estadoCinta()?.aMano(); }
 
 /* ---------- Las cintas de chips se deslizan ----------
    Con overflow-x solo alcanza en el celular. En la compu la barra de scroll

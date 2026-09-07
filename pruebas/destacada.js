@@ -23,7 +23,10 @@ const esperar = setInterval(() => {
 
 function correrPruebas(){
   /* ---- El orden pedido ---- */
-  const cats = [...document.querySelectorAll('#cats .chip')].map(b => b.dataset.cat).filter(Boolean);
+  /* :not(.clon) porque la cinta duplica sus chips para desfilar sin corte;
+     los clones son decorado y contarlos daba el doble de categorias. */
+  const cats = [...document.querySelectorAll('#cats .chip:not(.clon)')]
+                 .map(b => b.dataset.cat).filter(Boolean);
   const esperado = ['Celular','Accesorio Apple','Auriculares','Consola','Accesorio Gaming',
                     'MacBook','iPad','Monitor','Desktop','Apple Watch','Tablet'];
   const presentes = esperado.filter(c => cats.includes(c));

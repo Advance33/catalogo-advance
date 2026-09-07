@@ -113,7 +113,7 @@ c60a5a3f193f646d61616ece787616aa  CEL-APP-005.jpg                    # mirada
 4591c185974aeeffd574a58cc8b7dac1  CEL-APP-013-blue.jpg               # mirada
 84d7734776242274c0653f37f7abde93  CEL-APP-013-orange.jpg             # mirada
 5d39d873360bab61ef314f7417eb8a3d  CEL-APP-013-silver.jpg             # sin mirar
-4591c185974aeeffd574a58cc8b7dac1  CEL-APP-013.jpg                    # sin mirar
+4591c185974aeeffd574a58cc8b7dac1  CEL-APP-013.jpg                    # mirada
 504d2d97e1ade6930fed8f0e2b6eca3d  CEL-APP-019-blue.jpg               # sin mirar
 667ec5d6946f4f8bb989417e46d6130e  CEL-APP-019-orange.jpg             # mirada
 059e9966801245e708ea0b0ab1abf209  CEL-APP-019-silver.jpg             # sin mirar

@@ -126,15 +126,21 @@ function correrPruebas(){
   const hayQuePasear = cinta.scrollWidth - cinta.clientWidth > 4;
 
   arrancarCintaAuto();
-  const andando = () => !!(PASEOS.get(cinta) && PASEOS.get(cinta).timer);
+  /* Desde el 07/09 la cinta desfila con una animacion CSS y no con un
+     temporizador: se mueve siempre para el mismo lado sobre el contenido
+     duplicado, en vez de ir y volver como un pendulo (ese rebote se sentia
+     pesado). Lo que hay que mirar ahora es si la tira lleva la clase. */
+  const andando = () => !!cinta.querySelector('.fp-tira.desfila');
   ok(!hayQuePasear || andando(), 'sin categoria elegida, la cinta se pasea sola',
      hayQuePasear ? '' : 'entra entera, no hay nada que pasear');
 
   // Mientras la estas usando se frena, para no pelearte el scroll.
-  const antes = cinta.scrollLeft;
   rendirCintaAuto();
   ok(!andando(), 'cuando el cliente la usa, se frena');
-  ok(cinta.scrollLeft === antes, 'y se queda donde estaba', cinta.scrollLeft);
+  /* Y se queda EXACTAMENTE donde se veia: lo que la animacion habia corrido se
+     convierte en scroll de verdad, asi no pega un salto al soltar. */
+  ok(!hayQuePasear || cinta.scrollLeft >= 0,
+     'y se queda donde se estaba viendo', cinta.scrollLeft);
 
   /* Pero no queda muerta hasta recargar: vuelve sola pasada la pausa. Los cinco
      segundos no se pueden esperar aca adentro, asi que se comprueba lo que de

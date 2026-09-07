@@ -46,6 +46,10 @@ echo       planilla = se le pide al equipo del sheet
 echo       codigo   = hay que tocar index.html
 echo       fotos    = falta producir la imagen
 echo.
+echo     Para lo de "planilla", el pedido ya redactado sale con:
+echo        python validar.py --pedido
+echo     Queda en PEDIDO-AL-SHEET.txt, listo para copiar y mandar.
+echo.
 echo     Cuando esten resueltos, volve a abrir este acceso directo.
 echo   ------------------------------------------------------------
 echo.

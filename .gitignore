@@ -27,6 +27,7 @@ logs/
 *-AL-SHEET*.csv
 Auditoria-*.pdf
 REVISAR-FOTOS.txt
+PEDIDO-AL-SHEET.txt
 # fotos-aceptadas.txt y fotos-revisadas.txt SI van al repositorio, aunque
 # antes no fuera asi. Son la memoria de que fotos ya se miraron contra el
 # producto: si viven solo en una maquina, cualquier copia del repo arranca

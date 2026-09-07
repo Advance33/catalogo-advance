@@ -2481,6 +2481,11 @@ const COLORES = {
   graphite:'#5B5B5F', charcoal:'#3E3E42', graygreen:'#7E8A7C',
   blue:'#2C6BED', blu:'#2C6BED', 'light blue':'#8FC7F0', lightblue:'#8FC7F0',
   'sky blue':'#9DC3DE', skyblue:'#9DC3DE', silverblue:'#B6C6D4',
+  /* correa del Watch Ultra 3: "Anchor Blue Ocean Band" empieza por el tono,
+     pero ni "anchor" ni "band" estaban, asi que salia sin puntito. Va tambien
+     la palabra sola porque hexColor prueba el nombre entero, la ultima palabra
+     y la primera: de "anchor blue ocean band" lo que le llega es "anchor". */
+  'anchor blue':'#2A4B7C', anchor:'#2A4B7C',
   'dark blue':'#1B3A6B', navy:'#22304C', 'anchor blue':'#38506B',
   ultramarine:'#3E4CD8', indigo:'#4B4B8F', 'rhythm blue':'#3F5C99',
   teal:'#4C9E9E', green:'#37A05A', gre:'#37A05A', 'dark green':'#1F5B37',
@@ -2531,12 +2536,27 @@ function hexColor(n){
   return COLORES[k] || COLORES[palabras[palabras.length-1]] || COLORES[palabras[0]] || null;
 }
 
+/* La barra separa opciones a elegir, salvo cuando es la medida de una correa:
+   "Midnight Sport Band M/L" es un solo color y un solo talle. Partiendo a lo
+   bruto quedaba un puntito llamado "L", sin color que pintarle y sin sentido
+   para el cliente. Cuando después de una barra viene sólo un talle, vuelve
+   con lo de antes. */
+const TALLE = /^(x{0,2}s|m|x{0,2}l)$/i;
+function partirColores(txt){
+  const salida = [];
+  for(const p of (txt || '').split('/').map(s => s.trim()).filter(Boolean)){
+    if(salida.length && TALLE.test(p)) salida[salida.length - 1] += '/' + p;
+    else salida.push(p);
+  }
+  return salida;
+}
+
 // "Midnight/Blue/Orange" → tres puntitos.
 // Algunas filas separan con guión en vez de barra ("Black-Silver"). Ese corte
 // se hace SOLO si los dos lados son colores conocidos: así "Rose-Gold" o
 // "Space-Gray" siguen siendo un color y no dos.
 function pintas(txt){
-  return (txt||'').split('/').map(s => s.trim()).filter(Boolean)
+  return partirColores(txt)
     .flatMap(n => {
       const partes = n.split('-').map(s => s.trim()).filter(Boolean);
       return partes.length > 1 && partes.every(hexColor) ? partes : [n];
@@ -2589,7 +2609,7 @@ function colorDeLaFila(col, desc){
   const par = colorDelParentesis(desc);
   if(!col) return par;
   if(!par) return col;
-  const conj = t => new Set(t.split('/').map(x => norm(x.trim())).filter(Boolean));
+  const conj = t => new Set(partirColores(t).map(x => norm(x)).filter(Boolean));
   const a = conj(par), b = conj(col);
   return (a.size < b.size && [...a].every(c => b.has(c))) ? par : col;
 }
@@ -2936,8 +2956,8 @@ function armarModelo(vs){
      con las palabras cambiadas de lugar, y encima los dos le prometen tres
      colores cuando en realidad cada fila es de uno. Es exactamente el caso del
      iPhone 17 PRO 256GB. */
-  const juegoColor = v => [...new Set((v.color || '').split('/')
-    .map(x => norm(x.trim())).filter(Boolean))].sort().join('/');
+  const juegoColor = v => [...new Set(partirColores(v.color)
+    .map(x => norm(x)).filter(Boolean))].sort().join('/');
 
   const porEtiqueta = () => {
     const m = {};
@@ -2982,7 +3002,7 @@ function armarModelo(vs){
   });
 
   const colores = [...new Set(
-    vs.flatMap(v => (v.color || '').split('/').map(s => s.trim()).filter(Boolean)))];
+    vs.flatMap(v => partirColores(v.color)))];
 
   return {
     ...rep,                                    // hereda foto, incluye, detalle, categoría…

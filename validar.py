@@ -12,10 +12,11 @@ Las listas de colores y de categorías NO se copian acá: se leen del propio
 index.html. Si mañana se agrega un color al mapa, el validador se entera
 solo y no hay dos verdades que mantener sincronizadas.
 """
-import csv, io, os, re, sys, json, unicodedata, collections, urllib.request
+import csv, io, os, re, sys, json, unicodedata, collections, datetime, textwrap, urllib.request
 
 AQUI      = os.path.dirname(os.path.abspath(__file__))
 INDEX     = os.path.join(AQUI, 'index.html')
+SALIDA_PEDIDO = os.path.join(AQUI, 'PEDIDO-AL-SHEET.txt')
 FOTOS     = os.path.join(AQUI, 'fotos')
 SHEET_ID  = '18xxslIKTBnVMrLixCGlQBJGje3vKBYQHXy0qvVp8tpQ'
 SHEET_GID = '482985525'
@@ -93,6 +94,38 @@ def bajar_csv(destino=None):
 # GRAVE = el cliente ve algo incorrecto.  AVISO = se puede mejorar.
 # --------------------------------------------------------------------------
 
+TALLE = re.compile(r'^(x{0,2}s|m|x{0,2}l)$', re.I)
+
+
+def partir_colores(txt):
+    """Igual que partirColores() en el catálogo.
+
+    La barra separa opciones, salvo cuando lo que sigue es la medida de una
+    correa: "Midnight Sport Band M/L" es un color con su talle, no dos.
+    """
+    salida = []
+    for t in [x.strip() for x in (txt or '').split('/') if x.strip()]:
+        if salida and TALLE.match(t):
+            salida[-1] += '/' + t
+        else:
+            salida.append(t)
+    return salida
+
+
+def pinta(token, colores):
+    """Igual que hexColor() en el catálogo: entero, última palabra, primera.
+
+    Sin esto el validador era más exigente que la página y pedía cargar
+    colores que en pantalla ya salían pintados: "Grey Transitions" se pinta
+    con "grey" y "Black Ocean Band" con "black".
+    """
+    k = norm(token)
+    if k in colores:
+        return True
+    palabras = k.split()
+    return bool(palabras) and (palabras[-1] in colores or palabras[0] in colores)
+
+
 def regla_ids_y_precios(filas, ctx):
     fallas = []
     vistos = collections.Counter(f['ID'].strip() for f in filas)
@@ -120,6 +153,22 @@ def regla_capacidad_repetida(filas, ctx):
     return fallas
 
 
+# Marcas que conviven en un mismo nombre a proposito. La primera es la de la
+# fila y la segunda la que aparece en el texto. No son errores de carga:
+#   "Ray-Ban Meta Wayfarer" es un producto de las dos marcas.
+#   "Sigma EF-630 Flash Nikon" es un Sigma con montura Nikon.
+# Sin esta lista el pedido a la planilla salia con trece Ray-Ban para
+# "corregir" que estaban bien, y un pedido con ruido se deja de leer.
+CONVIVEN = {
+    ('rayban', 'meta'),
+    ('sigma', 'nikon'), ('sigma', 'canon'), ('sigma', 'sony'), ('sigma', 'fujifilm'),
+    ('tamron', 'nikon'), ('tamron', 'canon'), ('tamron', 'sony'),
+    ('smallrig', 'sony'), ('smallrig', 'canon'), ('smallrig', 'nikon'),
+    ('saramonic', 'sony'), ('saramonic', 'canon'),
+    ('logitech', 'playstation'), ('logitech', 'xbox'),
+}
+
+
 def regla_marca_ajena(filas, ctx):
     """
     El nombre menciona una marca que no es la de la fila. Puede ser un error
@@ -142,6 +191,8 @@ def regla_marca_ajena(filas, ctx):
         d, propia = norm(f['Descripción completa']), norm(f['Marca'])
         otras = [m for m in marcas
                  if m and m != propia and re.search(r'\b%s\b' % re.escape(m), d)]
+        otras = [m for m in otras
+                 if (compacta(propia), compacta(m)) not in CONVIVEN]
         if not otras:
             continue
         # Siempre AVISO, nunca grave. Los nombres comerciales legítimos que
@@ -187,14 +238,14 @@ def regla_color(filas, ctx):
                 fallas.append(('GRAVE', f['ID'],
                                'el nombre dice (%s) y la columna Color dice %s' % (ultimo, col)))
 
-        for token in [t.strip() for t in col.split('/') if t.strip()]:
-            if norm(token) in colores:
+        for token in partir_colores(col):
+            if pinta(token, colores):
                 continue
             # Igual que pintas() en el catálogo: un producto de dos tonos
             # ("Titanio Gris · Blanco", "Mate Black - transitions grey") se
             # pinta con el primero, que es el que se ve de frente.
-            primero = re.split(r'[-·]', token)[0].strip()
-            if primero and primero != token and norm(primero) in colores:
+            primero = re.split(r'[-·—]', token)[0].strip()
+            if primero and primero != token and pinta(primero, colores):
                 continue
             fallas.append(('AVISO', f['ID'],
                            'color "%s" no está en el mapa COLORES: sale sin puntito' % token))
@@ -511,6 +562,41 @@ def regla_fotos(filas, ctx):
 # corta (se toca index.html) o una foto que falta (se produce la imagen).
 PLANILLA, CODIGO, FOTOS_ = 'planilla', 'código', 'fotos'
 
+
+# Que decirle al equipo que carga la planilla cuando una regla encuentra algo.
+# El pedido va como REGLA y no como correccion de celda: la carga diaria
+# reescribe la hoja desde la lista del proveedor, asi que arreglar la fila de
+# hoy no sirve para mañana. Cada texto tiene que poder aplicarse sin mirar el
+# caso puntual.
+PEDIDO = {
+    'IDs y precios':
+        'Cada fila necesita ID unico y precio numerico. Sin precio la ficha no '
+        'se puede mostrar y el producto queda afuera del catalogo.',
+    'Capacidad repetida':
+        'La capacidad va una sola vez. Si esta en la descripcion no se repite '
+        'en el nombre del modelo.',
+    'Marca equivocada':
+        'La marca de la columna tiene que ser la del fabricante del producto, '
+        'no la de la marca compatible. Un accesorio "para Nikon" hecho por '
+        'Sigma va con marca Sigma.',
+    'Notas internas':
+        'Lo que es nota para adentro no va en el nombre: el cliente lo lee tal '
+        'cual. Los agregados de venta van a la columna Incluye.',
+    'Colores':
+        'La columna Color lleva SOLO colores, separados por barra. Lo que no '
+        'es un color -una configuracion, una memoria, un "consultar"- va a '
+        'Detalle o a Incluye, o se deja vacio. Un texto que no es color sale '
+        'como una opcion sin punto de color y el cliente no entiende que elegir.',
+    'Color vs precio':
+        'Cuando dos filas del mismo producto valen distinto, cada una tiene que '
+        'traer SOLO su color. Si las dos traen la lista completa no hay forma '
+        'de saber cual color vale cuanto, y el catalogo termina mostrando dos '
+        'precios para el mismo color.',
+    'Nomenclatura lentes':
+        'Los lentes llevan la distancia focal con mm y la apertura con F/. La '
+        'montura va al final y completa.',
+}
+
 REGLAS = [
     ('IDs y precios',       regla_ids_y_precios,      PLANILLA),
     ('Capacidad repetida',  regla_capacidad_repetida, PLANILLA),
@@ -524,6 +610,49 @@ REGLAS = [
     ('Tarjetas',            regla_tarjetas,           CODIGO),
     ('Fotos',               regla_fotos,              FOTOS_),
 ]
+
+
+
+def escribir_pedido(graves, avisos):
+    """Arma el texto para mandarle al equipo que carga la planilla.
+
+    Agrupado por regla y no por fila: lo que se pide es como cargar de ahora
+    en mas, y los casos del dia van abajo como ejemplo de lo que quedo mal.
+    """
+    porregla = collections.OrderedDict()
+    for sev, lista in (('ARREGLAR', graves), ('CUANDO PUEDAN', avisos)):
+        for nombre, pid, msg, donde in lista:
+            if donde != PLANILLA:
+                continue
+            porregla.setdefault((sev, nombre), []).append((pid, msg))
+
+    L = ['PEDIDO PARA LA PLANILLA — %s' % datetime.date.today().strftime('%d/%m/%Y'), '']
+    if not porregla:
+        L.append('No hay nada para pedir: la planilla esta limpia.')
+    n = 0
+    for (sev, nombre), casos in porregla.items():
+        n += 1
+        L.append('%d) %s — %s (%d caso%s)'
+                 % (n, sev, nombre.upper(), len(casos), '' if len(casos) == 1 else 's'))
+        L.append('')
+        for linea in textwrap.wrap(PEDIDO.get(nombre, ''), 72):
+            L.append('   ' + linea)
+        L.append('')
+        L.append('   Lo que quedo asi hoy:')
+        for pid, msg in casos[:12]:
+            for i, linea in enumerate(textwrap.wrap('%s — %s' % (pid, msg), 68)):
+                L.append('     ' + linea if i == 0 else '       ' + linea)
+        if len(casos) > 12:
+            L.append('     ... y %d mas' % (len(casos) - 12))
+        L.append('')
+    L.append('Estos pedidos son de como cargar, no de corregir la fila de hoy:')
+    L.append('la carga de mañana vuelve a escribir la hoja.')
+    txt = chr(10).join(L)
+    io.open(SALIDA_PEDIDO, 'w', encoding='utf-8').write(txt)
+    print()
+    print(txt)
+    print()
+    print('(guardado en %s)' % SALIDA_PEDIDO)
 
 
 def main():
@@ -578,6 +707,9 @@ def main():
         print('╚' + '═' * 68)
         for nombre, pid, msg, donde in avisos:
             print('  [%-8s] %-14s %s' % (donde, pid, msg))
+
+    if '--pedido' in sys.argv:
+        escribir_pedido(graves, avisos)
 
     print()
     if graves:

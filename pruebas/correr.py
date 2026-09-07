@@ -152,7 +152,13 @@ def main():
                 print('       ' + l.strip())
     finally:
         if os.path.exists(PROBE):
-            os.remove(PROBE)
+            # En Windows, si quedo un Chrome colgado con el archivo abierto, el
+            # borrado tira PermissionError y se perdia el resumen entero de la
+            # corrida por no poder limpiar un temporal.
+            try:
+                os.remove(PROBE)
+            except OSError as e:
+                print('(no se pudo borrar %s: %s)' % (os.path.basename(PROBE), e))
         # El servidor queda levantado a proposito. Antes se bajaba al terminar,
         # y a quien tenia el catalogo abierto en el navegador se le caian todas
         # las fotos de golpe sin entender por que. Pesa nada y sirve para

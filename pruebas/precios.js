@@ -79,11 +79,17 @@ function correrPruebas(){
   ok(!!tach && /\d/.test(tach.textContent),
      'pero si se ve el precio anterior tachado', tach && tach.textContent);
   /* El rotulo dice "Ofertas" solo si TODAS las de la vidriera estan en baja.
-     Aca se marca una sola y el resto es relleno, asi que corresponde
-     "Destacados". Lo que esta tanda verifica es el precio, no el rotulo. */
-  ok(document.querySelector('#of-rotulo').textContent === 'Destacados',
-     'con una sola en baja el titulo sigue siendo "Destacados"',
-     document.querySelector('#of-rotulo').textContent);
+     No se compara contra un valor fijo: depende de que haya cargado en la
+     planilla ese dia. Antes esta prueba pedia "Destacados" y empezo a fallar el
+     dia que se cargaron ofertas de verdad, que es justo cuando NO tenia que
+     fallar. Lo que importa es que el rotulo no mienta. */
+  const enVidriera = [...document.querySelectorAll('#ofertas .of-slide')]
+    .map(s => buscarModelo(s.dataset.key)).filter(Boolean);
+  const rotulo = document.querySelector('#of-rotulo').textContent;
+  ok(rotulo === (enVidriera.every(enOferta) ? 'Ofertas' : 'Destacados'),
+     'el rotulo dice lo que de verdad hay en la vidriera',
+     rotulo + ' con ' + enVidriera.filter(enOferta).length + ' de ' +
+     enVidriera.length + ' en baja');
 
   // Con un "antes" escrito con punto de miles tambien tiene que funcionar
   m0.antes = num('8.500'); if(m0.rep) m0.rep.antes = m0.antes;

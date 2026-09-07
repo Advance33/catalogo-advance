@@ -86,6 +86,44 @@ function correrPruebas(){
     ok(marcado, 'el color elegido queda marcado despues de cambiar de version');
   }
 
+  /* ---- 3b. Ningun color se dibuja dos veces ----
+     Cuando el precio depende del color, la ficha junta los colores de TODAS
+     las hermanas. Si dos hermanas declaran el mismo color se dibujaba un
+     puntito por cada una: el iPhone 17 PRO 256GB son dos filas con los tres
+     colores cada una y salian SEIS puntitos para tres colores.
+
+     Ojo con como se elige el caso: la primera version de esta prueba miraba la
+     ficha que ya estaba abierta, que es la del primer modelo con precio por
+     color -un MacBook de cuatro colores distintos- y por eso daba OK aunque el
+     arreglo estuviera sacado. Hay que ir a buscar el modelo que de verdad
+     tiene hermanas con colores repetidos. */
+  const conRepe = MODELOS.filter(m => m.multi).find(m =>
+    m.variantes.some(v => {
+      const suyos = pintas(v.color).map(c => norm(c.nombre));
+      return (v.hermanasColor || []).some(h => h !== v &&
+        pintas(h.color).some(c => suyos.includes(norm(c.nombre))));
+    }));
+
+  if(!conRepe){
+    ok(true, 'no hay ningun modelo con hermanas que repitan color', 'nada que probar hoy');
+  } else {
+    abrirFicha(clave(conRepe.variantes[0]));
+    const ns = [...document.querySelectorAll('.fi-pintas button')].map(b => norm(b.dataset.color));
+    ok(ns.length > 0 && new Set(ns).size === ns.length,
+       'ningun color se repite en los puntitos, ni juntando hermanas',
+       conRepe.desc + ': ' + ns.join(' / '));
+    cerrarFicha();
+  }
+
+  // Y el caso de una sola celda, que aparece si alguien escribe "Black/Black"
+  const celdaRepetida = PRODUCTOS.filter(x => {
+    const ns = pintas(x.color).map(c => norm(c.nombre));
+    return new Set(ns).size !== ns.length;
+  });
+  ok(celdaRepetida.length === 0,
+     'pintas() no devuelve dos veces el mismo color de una celda',
+     celdaRepetida.slice(0, 3).map(x => x.id + ': ' + x.color).join(' | ') || 'ninguna');
+
   /* ---- 4. Los botones de version siguen estando ---- */
   // Un modelo puede tener varias capacidades Y precio por color a la vez: los
   // puntitos resuelven el color, los botones siguen resolviendo la capacidad.

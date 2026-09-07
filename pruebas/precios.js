@@ -78,8 +78,12 @@ function correrPruebas(){
   const tach = document.querySelector('.of-precio s');
   ok(!!tach && /\d/.test(tach.textContent),
      'pero si se ve el precio anterior tachado', tach && tach.textContent);
-  ok(document.querySelector('#of-rotulo').textContent === 'Ofertas',
-     'y el titulo pasa a "Ofertas"');
+  /* El rotulo dice "Ofertas" solo si TODAS las de la vidriera estan en baja.
+     Aca se marca una sola y el resto es relleno, asi que corresponde
+     "Destacados". Lo que esta tanda verifica es el precio, no el rotulo. */
+  ok(document.querySelector('#of-rotulo').textContent === 'Destacados',
+     'con una sola en baja el titulo sigue siendo "Destacados"',
+     document.querySelector('#of-rotulo').textContent);
 
   // Con un "antes" escrito con punto de miles tambien tiene que funcionar
   m0.antes = num('8.500'); if(m0.rep) m0.rep.antes = m0.antes;

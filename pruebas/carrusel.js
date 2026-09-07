@@ -51,22 +51,43 @@ function correrPruebas(){
   elegidos.forEach((m,i) => { const a = Math.round(m.precio/(1-pcts[i])); m.antes = a; m.rep.antes = a; });
   pintarOfertas();
 
-  ok($('of-rotulo').textContent === 'Ofertas', 'con precios anteriores pasa a "Ofertas"');
-  ok(slides().length === elegidos.length, 'muestra solo los que estan en promocion',
-     slides().length + ' de ' + MODELOS.length + ' modelos');
-  ok(slides().every(s => enOferta(buscarModelo(s.dataset.key))),
-     'ninguno sin precio anterior se cuela');
+  /* La vidriera se llena hasta OFERTAS_MAX: primero los que bajaron y, si
+     faltan, los que tienen regalo. Por eso el rotulo dice "Ofertas" SOLO
+     cuando todos los que se ven estan en baja; con la mezcla dice
+     "Destacados", que es lo unico honesto. */
+  const enPantalla = () => slides().map(s => buscarModelo(s.dataset.key));
+  const enBaja = () => enPantalla().filter(enOferta);
+
+  ok(enBaja().length === elegidos.length,
+     'los que estan en promocion aparecen todos', enBaja().length + ' de ' + elegidos.length);
+  ok(elegidos.every(m => enPantalla().includes(m)),
+     'y son exactamente los que se marcaron');
+  ok($('of-rotulo').textContent === (enPantalla().every(enOferta) ? 'Ofertas' : 'Destacados'),
+     'el rotulo dice lo que de verdad hay', $('of-rotulo').textContent);
+  // Como maximo dos del mismo rubro, para que la vidriera muestre variedad
+  const porRubro = {};
+  enPantalla().forEach(m => porRubro[m.cat] = (porRubro[m.cat] || 0) + 1);
+  const amontonados = Object.entries(porRubro).filter(([, n]) => n > POR_RUBRO_MAX);
+  ok(amontonados.length === 0 || Object.keys(porRubro).length === 1,
+     'no se amontonan mas de ' + POR_RUBRO_MAX + ' del mismo rubro',
+     Object.entries(porRubro).map(([c, n]) => c + ':' + n).join(' '));
   /* La etiqueta ya no dice cuanto bajo: en este rubro las bajas son chicas y
      un "4% OFF" resta mas de lo que suma. Queda el precio tachado al lado. */
-  const conNumero = slides().filter(s => {
+  // Se miran solo las que estan en baja: las de relleno no llevan etiqueta
+  const enBajaSlides = slides().filter(s => enOferta(buscarModelo(s.dataset.key)));
+  const conNumero = enBajaSlides.filter(s => {
     const off = s.querySelector('.of-off');
     return !off || /\d/.test(off.textContent);
   });
   ok(conNumero.length === 0, 'la etiqueta dice "Oferta", sin ningun numero',
-     slides().map(s => s.querySelector('.of-off') && s.querySelector('.of-off').textContent).join(' ')); 
-  ok(slides().every(s => s.querySelector('.of-precio s')), 'todos muestran el precio tachado');
+     enBajaSlides.map(s => s.querySelector('.of-off') && s.querySelector('.of-off').textContent).join(' '));
+  ok(enBajaSlides.every(s => s.querySelector('.of-precio s')),
+     'las que bajaron muestran el precio tachado');
+  ok(slides().filter(s => !enOferta(buscarModelo(s.dataset.key)))
+             .every(s => !s.querySelector('.of-off')),
+     'y las de relleno no se disfrazan de oferta');
   // El mas descontado primero: es lo que conviene mostrar de entrada
-  const offs = slides().map(s => { const m = buscarModelo(s.dataset.key);
+  const offs = enBajaSlides.map(s => { const m = buscarModelo(s.dataset.key);
     return Math.round((1 - m.precio/m.antes)*100); });
   ok(offs.every((o,i) => i===0 || offs[i-1] >= o), 'ordenados de mayor a menor descuento',
      offs.join(' > '));
@@ -75,8 +96,11 @@ function correrPruebas(){
   const m0 = elegidos[0], guardado = m0.antes;
   m0.antes = m0.precio - 50; m0.rep.antes = m0.antes;
   pintarOfertas();
-  ok(!slides().some(s => s.dataset.key === clave(m0.rep)),
+  // Puede seguir en la vidriera como relleno, pero NUNCA como oferta
+  const sl = slides().find(s => s.dataset.key === clave(m0.rep));
+  ok(!sl || !sl.querySelector('.of-off'),
      'si el "antes" es MENOR que el precio de hoy, no se muestra como oferta');
+  ok(!sl || !sl.querySelector('.of-precio s'), 'ni se le tacha ningun precio');
   m0.antes = guardado; m0.rep.antes = guardado;
   pintarOfertas();
 
@@ -140,4 +164,17 @@ function correrPruebas(){
      headless el auto-play dispara decenas de scrolls animados y Chrome no
      llega a cerrar dentro del tiempo que le da el runner. */
   pararOfertas();
+
+    /* ---- 5. Los que se piden a mano ---- */
+  ok(Array.isArray(VIDRIERA_FIJOS), 'hay una lista de fijos para la vidriera');
+  const candidato = MODELOS.find(m => m.stock && m.precio !== null && m.imagen
+                                   && !enOferta(m));
+  VIDRIERA_FIJOS.push(candidato.rep.id);
+  pintarOfertas();
+  ok(slides().some(s => buscarModelo(s.dataset.key) === candidato),
+     'un producto puesto a mano entra a la vidriera', candidato.desc.slice(0, 34));
+  ok(slides()[0] && buscarModelo(slides()[0].dataset.key) === candidato,
+     'y va primero, antes que las bajas automaticas');
+  VIDRIERA_FIJOS.length = 0;
+  pintarOfertas();
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Catálogo Advance — Stock y precios en vivo</title>
+<title>Catálogo Advance — Los precios de hoy</title>
 <meta name="description" content="Catálogo con stock y precios actualizados en tiempo real. Consultá por WhatsApp desde cualquier producto.">
 <link rel="icon" href="assets/logo-mark.png">
 <meta name="theme-color" content="#FFFFFF">
@@ -21,16 +21,16 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Advance Tecno">
 <meta property="og:locale" content="es_AR">
-<meta property="og:title" content="Catálogo Advance Tecno — Stock y precios en vivo">
-<meta property="og:description" content="Todo lo que tenemos disponible, actualizado al momento. Consultá por WhatsApp desde cualquier producto.">
+<meta property="og:title" content="Catálogo Advance Tecno — Los precios de hoy">
+<meta property="og:description" content="Sin listas viejas: se rehace todos los días con la planilla. Tocá un producto y el WhatsApp se abre con el modelo y el color ya escritos.">
 <meta property="og:image" content="https://advance33.github.io/catalogo-advance/assets/preview.png">          <!-- ← direccion publica del catalogo en GitHub Pages -->
 <meta property="og:url" content="https://advance33.github.io/catalogo-advance/">                            <!-- ← direccion publica del catalogo en GitHub Pages -->
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Catálogo Advance Tecno: stock y precios en tiempo real">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Catálogo Advance Tecno — Stock y precios en vivo">
-<meta name="twitter:description" content="Todo lo que tenemos disponible, actualizado al momento.">
+<meta name="twitter:title" content="Catálogo Advance Tecno — Los precios de hoy">
+<meta name="twitter:description" content="Sin listas viejas: se rehace todos los días con la planilla.">
 <meta name="twitter:image" content="https://advance33.github.io/catalogo-advance/assets/preview.png">         <!-- ← direccion publica del catalogo en GitHub Pages -->
 
 <style>
@@ -1580,8 +1580,8 @@
 <header>
   <div class="wrap">
     <span class="eyebrow">Catálogo</span>
-    <h1 class="titulo-h">Stock y precios<br><span>en tiempo real.</span></h1>
-    <p class="bajada">Todo lo que tenemos disponible, actualizado al momento. Consultá por WhatsApp desde cualquier producto.</p>
+    <h1 class="titulo-h">Los precios de hoy.<br><span>Hoy.</span></h1>
+    <p class="bajada">Sin listas viejas: se rehace todos los días con la planilla. Tocá un producto y el WhatsApp se abre con el modelo y el color ya escritos.</p>
   </div>
 </header>
 
@@ -2555,7 +2555,13 @@ function pintas(txt){
         if(primero && primero !== n) hex = hexColor(primero);
       }
       return { nombre:n, hex };
-    });
+    })
+    /* Un color no se dibuja dos veces. Hoy ninguna fila repite un color en su
+       propia celda, pero nada lo impide: el dia que alguien escriba
+       "Black/Black" o "Blue / blue" saldrian dos puntitos identicos y no
+       habria forma de darse cuenta mirando. Se compara normalizado, asi que
+       tambien caza las que solo difieren en mayusculas o acentos. */
+    .filter((c, i, todos) => todos.findIndex(x => norm(x.nombre) === norm(c.nombre)) === i);
 }
 
 /* Muchas filas dejan la columna Color vacía y ponen los colores entre
@@ -2608,8 +2614,24 @@ function htmlColorFicha(p, m){
      sólo los colores de la fila que se está mirando. */
   const hermanas = (p.hermanasColor || []).filter(x => x.color);
   const porColor = hermanas.length > 1;
-  const lista = (porColor ? hermanas : [p]).flatMap(x =>
+  const crudos = (porColor ? hermanas : [p]).flatMap(x =>
     pintas(x.color).map(c => ({ ...c, k: clave(x), precio: x.precio })));
+
+  /* Un mismo color puede venir en dos hermanas y entonces se dibujaba dos
+     veces. Pasa con el iPhone 17 PRO 256GB, que son dos filas declarando los
+     tres colores cada una: salian SEIS puntitos para tres colores, repetidos
+     y en desorden. Se deja uno por color, y entre los repetidos gana el mas
+     barato: si el mismo Orange esta a 1.190 y a 1.200, tocarlo tiene que
+     dejarte el de 1.190, no el que la planilla puso primero. */
+  const unicos = new Map();
+  crudos.forEach(c => {
+    const k = norm(c.nombre);
+    const antes = unicos.get(k);
+    const mejora = !antes || (c.precio !== null &&
+                   (antes.precio === null || c.precio < antes.precio));
+    if(mejora) unicos.set(k, c);
+  });
+  const lista = [...unicos.values()];
 
   // Con un solo color no hay nada que elegir: queda como estaba
   if(lista.length < 2) return htmlColores(p.color) + esc(p.color);
@@ -3017,17 +3039,27 @@ function dibujarTanda(){
 }
 
 /* ---------- El carrusel de ofertas ----------
-   Va arriba de todo, antes del catálogo: es la vidriera. Sale de la columna
-   "Oferta" de la planilla, donde se escribe el precio de ANTES sólo en los
-   productos que están en promoción. Con ese número se puede mostrar el tachado
-   y el porcentaje, que es lo que hace que una oferta se lea como oferta.
+   Va arriba de todo, antes del catálogo: es la vidriera. Lo que muestra sale de
+   tres lugares, en este orden:
 
-   Mientras esa columna no exista, muestra los que tienen un regalo cargado en
-   "Incluye", así la vidriera no queda vacía. Y si no hay ni una cosa ni la
-   otra, el carrusel directamente no aparece: mejor nada que un hueco. */
+   1. VIDRIERA_FIJOS, los que Pedro pide expresamente. Entran siempre.
+   2. Los que tienen precio anterior cargado en la planilla (columna "Oferta" /
+      "Precio anterior"). Los descuentos los decide Pedro: acá no se calcula ni
+      se deduce ninguno.
+   3. Si con eso no se llena, los que tienen un regalo cargado en "Incluye".
+
+   Si no hay nada de nada, el carrusel no aparece: mejor nada que un hueco. */
 
 const OFERTAS_MAX = 8;
 const OFERTAS_MS = 3000;   // cada 3 segundos
+const POR_RUBRO_MAX = 2;   // para que no sean seis celulares seguidos
+
+/* Los que Pedro pide que estén sí o sí. Va el ID de la fila de la planilla,
+   tal cual (el de la columna ID). Ejemplo:
+       const VIDRIERA_FIJOS = ['CEL-APP-072', 'NB-APP-090'];
+   Entran primero y no los saca la regla de variedad. Si el ID no existe o el
+   producto se quedó sin stock, se ignora solo. */
+const VIDRIERA_FIJOS = [];
 
 const enOferta = m => m.antes !== null && m.precio !== null && m.antes > m.precio;
 /* Sólo para ordenar: primero la baja más grande. El número no se muestra
@@ -3038,12 +3070,44 @@ const descuento = m => Math.round((1 - m.precio / m.antes) * 100);
 // ningún beneficio, así que sólo cuentan los que suman algo.
 const conRegalo = m => /^\s*\+|🎁/.test(m.incluye || '');
 
+/* Como mucho dos del mismo rubro mientras haya de otros: la vidriera tiene que
+   mostrar que hay de todo. Lo que se saltea vuelve al final, por si no alcanza
+   para llenar los ocho. */
+function variados(lista, tope, yaPuestos = []){
+  const out = [...yaPuestos], sobra = [];
+  for(const m of lista){
+    if(out.length >= tope) break;
+    if(out.includes(m)) continue;
+    if(out.filter(x => x.cat === m.cat).length >= POR_RUBRO_MAX){ sobra.push(m); continue; }
+    out.push(m);
+  }
+  for(const m of sobra){
+    if(out.length >= tope) break;
+    if(!out.includes(m)) out.push(m);
+  }
+  return out.slice(0, tope);
+}
+
 function ofertas(){
   const base = MODELOS.filter(m => m.stock && m.precio !== null && m.imagen);
-  const conPrecioAnterior = base.filter(enOferta)
-    .sort((a,b) => descuento(b) - descuento(a));
-  if(conPrecioAnterior.length) return conPrecioAnterior.slice(0, OFERTAS_MAX);
-  return base.filter(conRegalo).slice(0, OFERTAS_MAX);
+
+  // Los pedidos a mano: van primero y la regla de variedad no los toca
+  const fijos = VIDRIERA_FIJOS
+    .map(id => base.find(m => m.variantes.some(v => v.id === id)))
+    .filter((m, i, a) => m && a.indexOf(m) === i)
+    .slice(0, OFERTAS_MAX);
+
+  const enBaja = base.filter(m => enOferta(m) && !fijos.includes(m))
+                     .sort((a, b) => descuento(b) - descuento(a));
+
+  let out = variados(enBaja, OFERTAS_MAX, fijos);
+
+  // Recién si falta para llenar se recurre a los que tienen regalo
+  if(out.length < OFERTAS_MAX){
+    const conReg = base.filter(m => conRegalo(m) && !out.includes(m));
+    out = variados(conReg, OFERTAS_MAX, out);
+  }
+  return out;
 }
 
 let ofIndice = 0, ofTimer = null, OF = [];
@@ -3076,8 +3140,12 @@ function pintarOfertas(){
   caja.hidden = !OF.length;
   if(!OF.length) return;
 
-  const hayPrecios = OF.some(enOferta);
-  $('of-rotulo').textContent = hayPrecios ? 'Ofertas' : 'Destacados';
+  /* "Ofertas" solo si TODOS los que se ven estan en baja. Con uno solo que no
+     lo este, el rotulo pasa a "Destacados": una vidriera que dice Ofertas y
+     tiene cinco productos a precio de lista le miente al cliente. Los que si
+     bajaron muestran su tachado igual. */
+  const todasEnBaja = OF.every(enOferta);
+  $('of-rotulo').textContent = todasEnBaja ? 'Ofertas' : 'Destacados';
   $('of-pista').innerHTML = OF.map(htmlOferta).join('');
   $('of-dots').innerHTML = OF.map((_, i) =>
     `<button type="button" role="tab" aria-label="Oferta ${i+1} de ${OF.length}"

@@ -5,13 +5,28 @@ Baja la planilla Landing y compara contra la carpeta fotos/. Avisa de:
   2. Colores sin su foto (fotos/<ID>-<color>.jpg)
   3. Fotos huerfanas (el ID ya no esta en la planilla)
   4. Fotos con nombre de color que no existe en la planilla
-  5. MISMA FOTO en productos de modelos distintos  <- el chequeo importante
+  5. MISMA FOTO en productos de modelos distintos
   6. Fotos que no son 900x900
+  7. Fotos que CAMBIARON despues de haberse revisado
+  8. Fotos nuevas que nadie miro
+  9. Fotos viejas que quedaron por mirar
 
-El (5) es el que detecta el error grave: una ficha mostrando otro producto.
+El (5), el (7) y el (8) son los que detectan el error grave: una ficha
+mostrando otro producto. El (5) solo ve el caso de dos fichas con la misma
+imagen; una foto que esta mal ella sola -el iPhone 17 con la foto de un 16e-
+la agarran el (7) y el (8), que exigen que alguien haya mirado cada imagen y
+que siga siendo la misma. Esa es la parte que faltaba: la foto del 16e se
+saco varias veces y volvia sola en la siguiente copia por lote, porque nada
+comparaba la imagen de hoy contra la que se habia dado por buena.
 
 Se corre con doble clic en "VERIFICAR FOTOS.bat", o: python verificar-fotos.py
 Escribe el resultado en REVISAR-FOTOS.txt
+
+  python verificar-fotos.py --revisadas   anota TODAS las de hoy como miradas
+  python verificar-fotos.py --revisadas CEL-APP-077.jpg    anota solo esa
+  python verificar-fotos.py --sembrar     arranca el registro: lo ya mirado
+                                          queda mirado y el resto, pendiente
+  python verificar-fotos.py --aceptar     anota los duplicados como buenos
 """
 import csv, io, os, re, sys, hashlib, collections, unicodedata, urllib.request, datetime
 
@@ -21,6 +36,7 @@ AQUI   = os.path.dirname(os.path.abspath(__file__))
 FOTOS  = os.path.join(AQUI, 'fotos')
 SALIDA = os.path.join(AQUI, 'REVISAR-FOTOS.txt')
 ACEPTADAS = os.path.join(AQUI, 'fotos-aceptadas.txt')
+REVISADAS = os.path.join(AQUI, 'fotos-revisadas.txt')
 
 def norm(s):
     s = unicodedata.normalize('NFD', s or '')
@@ -32,6 +48,33 @@ def slug(s):
 
 def colores(r):
     return [c.strip() for c in (r.get('Color') or '').split('/') if c.strip()]
+
+def leer_revisadas():
+    """Lo que ya se miro: nombre de archivo -> huella que tenia ese dia.
+
+    El chequeo de duplicados no alcanza para una foto que esta mal ella sola.
+    El iPhone 17 mostro durante meses un 16e -una sola camara- y no habia dos
+    productos con la misma imagen, asi que nada lo marcaba. Se arreglaba, y en
+    la siguiente copia por lote volvia la mala sin que nadie se enterara.
+    Con esto, una foto que cambia deja de coincidir con su huella y el sitio no
+    se publica hasta que alguien la vuelva a mirar.
+
+    Cada linea es:  <huella>  <archivo>  # mirada | sin mirar
+
+    Las que dicen "sin mirar" son las que ya estaban en el catalogo cuando se
+    armo el registro: son un pendiente, no frenan la publicacion. Frena lo que
+    aparece o cambia DESPUES, que es por donde entra la foto equivocada.
+    """
+    reg = {}
+    if os.path.exists(REVISADAS):
+        with open(REVISADAS, encoding='utf-8') as fh:
+            for linea in fh:
+                datos, _, nota = linea.partition('#')
+                partes = datos.split()
+                if len(partes) == 2:
+                    reg[partes[1]] = (partes[0], 'sin mirar' not in nota)
+    return reg
+
 
 def bajar():
     url = (f'https://docs.google.com/spreadsheets/d/{SHEET_ID}'
@@ -94,9 +137,11 @@ def main():
 
     # el chequeo clave: misma imagen en productos de modelos distintos
     H = collections.defaultdict(list)
+    firma = {}
     for f in files:
         with open(os.path.join(FOTOS, f), 'rb') as fh:
-            H[hashlib.md5(fh.read()).hexdigest()].append(f)
+            firma[f] = hashlib.md5(fh.read()).hexdigest()
+        H[firma[f]].append(f)
     repetidas = []
     for fs in H.values():
         if len(fs) < 2:
@@ -131,6 +176,33 @@ def main():
         return 0
     nuevas = [r for r in repetidas if clave(r[1]) not in aceptadas]
 
+    # --- las fotos contra el registro de lo ya mirado ---
+    registro = leer_revisadas()
+    cambiadas  = sorted(f for f in files if f in registro and registro[f][0] != firma[f])
+    aparecidas = sorted(f for f in files if f not in registro)
+    pendientes = sorted(f for f in files if f in registro and not registro[f][1])
+
+    if '--revisadas' in sys.argv or '--sembrar' in sys.argv:
+        # "--revisadas" a secas marca todo; con nombres detras, solo esos.
+        sueltas = {a for a in sys.argv[1:] if not a.startswith('--')}
+        todas = '--revisadas' in sys.argv and not sueltas
+        with open(REVISADAS, 'w', encoding='utf-8') as fh:
+            fh.write('# Fotos miradas contra el producto que dice la planilla.' + chr(10))
+            fh.write('# Si una cambia, deja de coincidir y no se publica hasta mirarla.' + chr(10))
+            fh.write('# Anotar las miradas:  python verificar-fotos.py --revisadas' + chr(10))
+            fh.write('# Arrancar el registro: python verificar-fotos.py --sembrar' + chr(10))
+            hechas = 0
+            for f in sorted(files):
+                # al sembrar, lo que ya estaba mirado y no cambio sigue mirado
+                ok = (todas or f in sueltas
+                      or (f in registro and registro[f][1] and registro[f][0] == firma[f]))
+                hechas += ok
+                fh.write('%s  %-34s # %s%s'
+                         % (firma[f], f, 'mirada' if ok else 'sin mirar', chr(10)))
+        print('Registro escrito: %d fotos, %d miradas, %d pendientes  (%s)'
+              % (len(files), hechas, len(files) - hechas, REVISADAS))
+        return 0
+
     L = []
     w = L.append
     w('REVISAR FOTOS — chequeo automatico')
@@ -141,6 +213,9 @@ def main():
     w(f'  {len(sin_base):>4}  productos sin foto principal')
     w(f'  {len(sin_color):>4}  colores sin su foto')
     w(f'  {len(nuevas):>4}  MISMA FOTO en modelos distintos, SIN REVISAR  <-- mirar primero')
+    w(f'  {len(cambiadas):>4}  FOTOS QUE CAMBIARON sin pasar por revision   <-- mirar primero')
+    w(f'  {len(aparecidas):>4}  FOTOS NUEVAS que nadie miro todavia          <-- mirar primero')
+    w(f'  {len(pendientes):>4}  fotos viejas que quedaron por mirar')
     w(f'  {len(repetidas) - len(nuevas):>4}  duplicados ya revisados (fotos-aceptadas.txt)')
     w(f'  {len(mal_color):>4}  fotos con un color que no esta en la planilla')
     w(f'  {len(huerfanas):>4}  fotos huerfanas (ID que ya no existe)')
@@ -179,17 +254,27 @@ def main():
            '   O sobra la foto, o falta el color en la celda Color del Sheet.')
     bloque('5) FOTOS HUERFANAS (el ID ya no existe)', huerfanas)
     bloque('6) FOTOS QUE NO SON 900x900', tam)
+    bloque('7) FOTOS QUE CAMBIARON DESPUES DE REVISADAS', cambiadas,
+           '   El archivo no es el que se miro. Puede ser una mejora, o la foto'
+           + chr(10) + '   equivocada que volvio. Mirala y despues: python verificar-fotos.py --revisadas')
+    bloque('8) FOTOS NUEVAS SIN MIRAR', aparecidas,
+           '   Entraron despues del ultimo registro y nadie las comparo con el producto.')
+    bloque('9) FOTOS VIEJAS QUE QUEDARON POR MIRAR', pendientes,
+           '   Estaban antes de que existiera el registro. No frenan la publicacion,'
+           + chr(10) + '   pero son las que todavia podrian tener una imagen equivocada.')
 
     with open(SALIDA, 'w', encoding='utf-8') as fh:
         fh.write('\n'.join(L))
     print('\n'.join(L[:14]))
     print(f'...\nReporte completo en: {SALIDA}')
 
-    # Lo unico que frena una publicacion es (1): dos productos de modelos
-    # distintos mostrando la misma imagen. Lo demas son avisos -una foto que
-    # falta se ve como un recuadro con la marca y no engania a nadie; una
-    # ficha mostrando otro producto, si.
-    return 1 if nuevas else 0
+    # Frenan la publicacion las tres formas que tiene una ficha de mostrar otro
+    # producto: (1) dos modelos con la misma imagen, (7) una foto que cambio
+    # despues de revisada -asi es como volvia la mala cada vez- y (8) una foto
+    # que nadie miro nunca. Lo demas son avisos: una foto que falta se ve como
+    # un recuadro con la marca y no engania a nadie.
+    # Mientras no exista el registro no se frena por (8): serian todas.
+    return 1 if (nuevas or cambiadas or aparecidas) else 0
 
 if __name__ == '__main__':
     sys.exit(main())

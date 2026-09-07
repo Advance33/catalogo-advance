@@ -106,16 +106,22 @@ goto :fotos_listas
 :fotos_dudosas
 echo.
 echo   ------------------------------------------------------------
-echo     HAY FOTOS REPETIDAS SIN REVISAR
+echo     HAY FOTOS SIN REVISAR
 echo.
-echo     Dos productos de modelos distintos estan mostrando la
-echo     misma imagen. A veces esta bien (el mismo equipo en otra
-echo     capacidad) y a veces es una ficha con el producto
-echo     equivocado. El detalle esta en REVISAR-FOTOS.txt.
+echo     Puede ser una de tres cosas, y el detalle esta en
+echo     REVISAR-FOTOS.txt:
 echo.
-echo     Cuando las mires y esten todas bien, corre una vez:
-echo        python verificar-fotos.py --aceptar
-echo     y de ahi en mas solo avisa por las nuevas.
+echo      - Dos productos de modelos distintos con la misma imagen.
+echo        A veces esta bien (el mismo equipo en otra capacidad).
+echo        Si estan todas bien:  python verificar-fotos.py --aceptar
+echo.
+echo      - Una foto que CAMBIO despues de haberse revisado. Ojo con
+echo        esta: asi es como volvia la foto equivocada del iPhone 17.
+echo.
+echo      - Una foto NUEVA que nadie miro todavia.
+echo.
+echo     Para las dos ultimas: mira la foto, y si esta bien anotala
+echo        python verificar-fotos.py --revisadas NOMBRE.jpg
 echo   ------------------------------------------------------------
 echo.
 choice /c SN /n /m "   Publicar igual? [S = si, N = no]: "

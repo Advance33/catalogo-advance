@@ -27,9 +27,11 @@ logs/
 *-AL-SHEET*.csv
 Auditoria-*.pdf
 REVISAR-FOTOS.txt
-# Que duplicados de foto ya se miraron y se dieron por buenos. Es estado
-# de esta maquina, no del sitio: se regenera con verificar-fotos.py --aceptar.
-fotos-aceptadas.txt
+# fotos-aceptadas.txt y fotos-revisadas.txt SI van al repositorio, aunque
+# antes no fuera asi. Son la memoria de que fotos ya se miraron contra el
+# producto: si viven solo en una maquina, cualquier copia del repo arranca
+# sin esa memoria y una foto equivocada vuelve a entrar sin que nada avise.
+# Es justo lo que pasaba con la portada del iPhone 17.
 # La planilla de trabajo para elegir ofertas: el catalogo NO la lee, es
 # para completar a mano la columna de descuento. GitHub Pages sirve todo
 # lo versionado, asi que aca adentro se queda.

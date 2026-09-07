@@ -294,9 +294,11 @@ def regla_color_por_precio(filas, ctx):
     La regla: si dos filas comparten Grupo y tienen precios distintos, cada una
     tiene que declarar SU color, no la lista completa de la familia.
     """
+    def juego_set(f):
+        return {norm(c) for c in (f.get('Color') or '').split('/') if c.strip()}
+
     def juego(f):
-        partes = {norm(c) for c in (f.get('Color') or '').split('/') if c.strip()}
-        return '/'.join(sorted(partes))
+        return '/'.join(sorted(juego_set(f)))
 
     colores = ctx[0]
 
@@ -332,27 +334,39 @@ def regla_color_por_precio(filas, ctx):
     for g, fs in porgrupo.items():
         if len(fs) < 2:
             continue
-        # La clave es descripción-sin-color + colores. Sin la primera parte
-        # saltaba el Quest 3S de 128GB contra el de 256GB: ahí el precio
-        # distinto es por la capacidad y está perfecto. Lo que no puede pasar
-        # es que dos filas IDÉNTICAS salvo el precio digan los mismos colores.
+        # Se agrupa por descripción-sin-color: eso deja juntas las filas que solo
+        # se diferencian por el color. Sin esa parte saltaba el Quest 3S de
+        # 128GB contra el de 256GB, donde el precio distinto es por la capacidad
+        # y está perfecto.
         juntas = collections.defaultdict(list)
         for f in fs:
-            j = juego(f)
-            if j:
-                juntas[(sin_color(f), j)].append(f)
-        for (desc, j), iguales in juntas.items():
-            if len(iguales) < 2:
-                continue
-            precios = {(f.get('Precio USD') or '').strip() for f in iguales}
-            if len(precios) < 2:
-                continue          # mismo color y mismo precio: no hay ambigüedad
-            ids = ', '.join(f['ID'] for f in iguales)
-            fallas.append(('GRAVE', iguales[0]['ID'],
-                           'mismos colores (%s) y precios distintos (%s) en filas que por '
-                           'lo demas son iguales: %s. Cada una tiene que traer solo SU '
-                           'color, o no hay forma de saber cual vale cuanto'
-                           % (j, ' / '.join(sorted(precios)), ids)))
+            if juego(f):
+                juntas[sin_color(f)].append(f)
+        for desc, hermanas in juntas.items():
+            # Lo que rompe no es que dos filas digan los mismos colores: es que
+            # UN color aparezca en dos filas con precios distintos, porque
+            # entonces ese color tiene dos precios y no hay dato que diga cuál
+            # vale. Antes se pedían los colores EXACTAMENTE iguales y por eso el
+            # 17 Pro 512GB pasaba limpio: "Orange/Silver" a 1.400 contra
+            # "Silver" a 1.445 son conjuntos distintos, pero el Silver está en
+            # los dos. Comparar por intersección agarra los dos casos y sigue
+            # sin marcar los 6 modelos bien cargados, donde cada fila trae su
+            # color y ninguno se repite.
+            for i, a in enumerate(hermanas):
+                for b in hermanas[i + 1:]:
+                    if (a.get('Precio USD') or '').strip() == (b.get('Precio USD') or '').strip():
+                        continue          # mismo precio: no hay ambigüedad
+                    repetidos = juego_set(a) & juego_set(b)
+                    if not repetidos:
+                        continue          # colores repartidos: así tiene que ser
+                    fallas.append(('GRAVE', a['ID'],
+                                   '%s aparece en %s a USD %s y en %s a USD %s. Un mismo '
+                                   'color no puede tener dos precios: cada fila tiene que '
+                                   'traer solo SU color, o no hay forma de saber cual vale '
+                                   'cuanto'
+                                   % ('/'.join(sorted(repetidos)), a['ID'],
+                                      (a.get('Precio USD') or '?').strip(), b['ID'],
+                                      (b.get('Precio USD') or '?').strip())))
     return fallas
 
 

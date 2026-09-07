@@ -9,8 +9,9 @@ Baja la planilla Landing y compara contra la carpeta fotos/. Avisa de:
   6. Fotos que no son 900x900
   7. Fotos que CAMBIARON despues de haberse revisado
   8. Fotos nuevas que nadie miro
-  9. Portadas que no coinciden con ninguna foto de color del producto
- 10. Fotos viejas que quedaron por mirar
+  9. Mismo color con distinta foto en filas del mismo grupo
+ 10. Portadas que no coinciden con ninguna foto de color del producto
+ 11. Fotos viejas que quedaron por mirar
 
 El (5), el (7) y el (8) son los que detectan el error grave: una ficha
 mostrando otro producto. El (5) solo ve el caso de dos fichas con la misma
@@ -177,6 +178,32 @@ def main():
         return 0
     nuevas = [r for r in repetidas if clave(r[1]) not in aceptadas]
 
+    # Dentro de un mismo Grupo, el archivo de un color deberia ser el mismo en
+    # todas las filas: el iPhone 17 Pro naranja es el mismo aparato valga 1190
+    # o 1400. Cuando una fila se aparta de las demas, esa es la sospechosa.
+    # Asi se encontro CEL-APP-068-orange.jpg, que adentro tenia el plateado:
+    # el cliente elegia Orange y seguia viendo un telefono gris.
+    porgrupo = collections.defaultdict(lambda: collections.defaultdict(list))
+    for f in files:
+        rz = raiz(f)
+        if not rz:
+            continue
+        col = os.path.splitext(f)[0][len(rz):].lstrip('-')
+        g = (byid[rz].get('Grupo') or '').strip()
+        if col and g:
+            porgrupo[g][col].append(f)
+    color_disidente = []
+    for g, porcolor in sorted(porgrupo.items()):
+        for col, lista in sorted(porcolor.items()):
+            if len(lista) < 2:
+                continue
+            cuenta = collections.Counter(firma[a] for a in lista)
+            if len(cuenta) > 1:
+                mayoria = cuenta.most_common(1)[0][0]
+                raros = [a for a in lista if firma[a] != mayoria]
+                color_disidente.append('%-20s %-12s se aparta: %s'
+                                       % (g[:20], col, ', '.join(sorted(raros))))
+
     # La portada de un producto que tiene fotos de color deberia ser una de
     # ellas: es uno de los colores que se venden. Cuando no coincide con
     # ninguna suele ser el caso del iPhone 17, que en la grilla mostraba un
@@ -233,6 +260,7 @@ def main():
     w(f'  {len(aparecidas):>4}  FOTOS NUEVAS que nadie miro todavia          <-- mirar primero')
     w(f'  {len(pendientes):>4}  fotos viejas que quedaron por mirar')
     w(f'  {len(portada_suelta):>4}  portadas que no son ninguna de sus fotos de color')
+    w(f'  {len(color_disidente):>4}  mismo color con distinta foto dentro del grupo')
     w(f'  {len(repetidas) - len(nuevas):>4}  duplicados ya revisados (fotos-aceptadas.txt)')
     w(f'  {len(mal_color):>4}  fotos con un color que no esta en la planilla')
     w(f'  {len(huerfanas):>4}  fotos huerfanas (ID que ya no existe)')
@@ -276,13 +304,18 @@ def main():
            + chr(10) + '   equivocada que volvio. Mirala y despues: python verificar-fotos.py --revisadas')
     bloque('8) FOTOS NUEVAS SIN MIRAR', aparecidas,
            '   Entraron despues del ultimo registro y nadie las comparo con el producto.')
-    bloque('9) PORTADAS QUE NO SON NINGUNA DE SUS FOTOS DE COLOR', portada_suelta,
+    bloque('9) MISMO COLOR CON DISTINTA FOTO DENTRO DEL GRUPO', color_disidente,
+           '   El naranja del iPhone 17 Pro es el mismo valga 1190 o 1400. La fila'
+           + chr(10) + '   que se aparta suele ser la que tiene el archivo mal nombrado.')
+    bloque('10) PORTADAS QUE NO SON NINGUNA DE SUS FOTOS DE COLOR', portada_suelta,
            '   La ficha muestra una imagen por fuera y otra al tocar los colores.'
            + chr(10) + '   Asi se veia el iPhone 17: un Air en la grilla y el 17 real adentro.'
            + chr(10) + '   Puede ser legitimo (una foto general del producto), pero hay que mirarlo.')
-    bloque('10) FOTOS VIEJAS QUE QUEDARON POR MIRAR', pendientes,
+    bloque('11) FOTOS VIEJAS QUE QUEDARON POR MIRAR', pendientes,
            '   Estaban antes de que existiera el registro. No frenan la publicacion,'
-           + chr(10) + '   pero son las que todavia podrian tener una imagen equivocada.')
+           + chr(10) + '   pero son las que todavia podrian tener una imagen equivocada.'
+           + chr(10) + '   Para repartirlas entre agentes que las miren de a lotes:'
+           + chr(10) + '      python revisar-fotos-con-agentes.py --preparar')
 
     with open(SALIDA, 'w', encoding='utf-8') as fh:
         fh.write('\n'.join(L))

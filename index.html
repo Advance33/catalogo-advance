@@ -2651,7 +2651,7 @@ function htmlColorFicha(p, m){
   const hint = porColor ? 'El precio cambia según el color' : 'Tocá un color para elegirlo';
   return `<div class="fi-pintas">${puntos}</div>
     <span class="fi-color-elegido" id="fi-color-txt">${eleg ? `<b>${esc(eleg)}</b>` : esc(p.color)}</span>
-    <span class="fi-hint" id="fi-color-hint"${eleg && !porColor ? ' hidden' : ''}>${hint}</span>`;
+    <span class="fi-hint" id="fi-color-hint"${porColor ? ' data-precio="1"' : ''}${eleg && !porColor ? ' hidden' : ''}>${hint}</span>`;
 }
 
 /* Foto por color. La planilla trae una sola foto por producto, así que la del
@@ -2683,13 +2683,33 @@ function fotosDeColor(p, color){
 function mostrarFotoColor(p, color, d){
   const img = d.querySelector('.fi-foto img');
   if(!img) return;                                    // ficha sin foto: nada que cambiar
-  const volver = () => { if(p.imagen && img.getAttribute('src') !== p.imagen) img.src = p.imagen; };
+
+  /* Cuando no hay foto del color elegido se volvia a la principal sin decir
+     nada: el puntito naranja quedaba marcado, el texto decia "Orange" y la
+     foto seguia siendo la plateada. Parece la foto del color y no lo es.
+     Ahora se avisa abajo del nombre del color. */
+  const nota = d.querySelector('#fi-color-hint');
+  const avisar = falta => {
+    if(!nota) return;
+    if(nota.dataset.base === undefined) nota.dataset.base = nota.textContent;
+    const precio = nota.dataset.precio ? nota.dataset.base : '';
+    nota.textContent = falta
+      ? (precio ? precio + ' · sin foto de este color' : 'Sin foto de este color')
+      : nota.dataset.base;
+    // con precio por color el mensaje del precio tiene que seguir a la vista
+    nota.toggleAttribute('hidden', !(falta || nota.dataset.precio));
+  };
+
+  const volver = () => {
+    if(p.imagen && img.getAttribute('src') !== p.imagen) img.src = p.imagen;
+    avisar(true);
+  };
   const urls = fotosDeColor(p, color);
   if(!urls.length) return volver();
   (function probar(i){
     if(i >= urls.length) return volver();
     const prueba = new Image();
-    prueba.onload  = () => { img.src = urls[i]; img.classList.add('ok'); };
+    prueba.onload  = () => { img.src = urls[i]; img.classList.add('ok'); avisar(false); };
     prueba.onerror = () => probar(i + 1);
     prueba.src = urls[i];
   })(0);
@@ -2840,14 +2860,19 @@ function firmaVisible(v){
 }
 
 function colapsarIguales(vs){
+  /* El precio entra en la firma A PROPOSITO. Dos filas iguales CON el mismo
+     precio son un duplicado y esconder una no le cambia nada al cliente. Dos
+     filas iguales con precios DISTINTOS no son un duplicado: es el precio por
+     color mal cargado -pasa en 6 modelos bien cargados, donde cada fila trae
+     solo su color- y ahi la planilla no dice cual color vale cuanto. Si el
+     catalogo esconde una, esta eligiendo un precio que el negocio no definio:
+     le promete el Silver a 1.190 cuando capaz vale 1.200. Eso no lo decide el
+     codigo. Se muestran las dos, feo pero cierto, y validar.py lo marca GRAVE
+     y frena la publicacion hasta que la planilla lo aclare. */
   const porFirma = new Map();
   vs.forEach(v => {
-    const f = firmaVisible(v);
-    const antes = porFirma.get(f);
-    // Gana la mas barata; entre dos sin precio, la primera.
-    const mejor = !antes || (v.precio !== null &&
-                  (antes.precio === null || v.precio < antes.precio));
-    if(mejor) porFirma.set(f, v);
+    const f = firmaVisible(v) + '|' + v.precio;
+    if(!porFirma.has(f)) porFirma.set(f, v);
   });
   const quedan = [...porFirma.values()];
   /* Las descartadas NO se tiran: se devuelven aparte para que el modelo se las
@@ -2867,11 +2892,11 @@ function armarModelo(vs){
      botones con el mismo texto y dos precios, como si el cliente tuviera algo
      que elegir ahi.
 
-     Se queda la mas barata. No es una preferencia: si el negocio cargo dos
-     precios para lo mismo, el que vale es el menor, y hacerle pagar de mas al
-     que toco el boton equivocado seria culpa nuestra, no de la planilla.
-     validar.py lo marca como GRAVE aparte, asi que el error se arregla en el
-     Sheet igual; esto es para que mientras tanto no lo pague el cliente. */
+     Solo se colapsa cuando tambien coincide el PRECIO, o sea cuando la fila
+     esta cargada dos veces de verdad. Si los precios difieren no es un
+     duplicado sino el precio por color a medio cargar, y elegir cual mostrar
+     seria fijar un precio desde el codigo. Eso lo resuelve la planilla, no
+     esta funcion: validar.py lo marca GRAVE y frena la publicacion. */
   const colapso = colapsarIguales(vs);
   const gemelas = colapso.fuera;      // las que se ocultaron por ser lo mismo
   vs = colapso.quedan;
@@ -3120,7 +3145,17 @@ const POR_RUBRO_MAX = 2;   // para que no sean seis celulares seguidos
        const VIDRIERA_FIJOS = ['CEL-APP-072', 'NB-APP-090'];
    Entran primero y no los saca la regla de variedad. Si el ID no existe o el
    producto se quedó sin stock, se ignora solo. */
-const VIDRIERA_FIJOS = [];
+const VIDRIERA_FIJOS = [
+  'CEL-APP-078',   // iPhone 17 Pro Max 256GB (Blue) — es la variante que
+                   // manda el precio de la tarjeta "iPhone 17 Pro Max"
+  'CEL-APP-004',   // iPhone 15 128GB (Black/Blue)
+  'AUD-APP-002',   // AirPods 4
+  'CON-SON-003',   // PlayStation 5 Física 1TB
+  'SW-APP-044',    // Apple Watch Series 11 GPS 46mm (Jet Black)
+  'NB-APP-004',    // MacBook Air M4 15" 16/256GB (Midnight)
+  'TAB-APP-001',   // iPad 11" A16 128GB Wi-Fi
+  'DRO-DJI-009',   // DJI Mini 5 Pro (RC-N3) — la que manda el precio del grupo
+];
 
 const enOferta = m => m.antes !== null && m.precio !== null && m.antes > m.precio;
 /* Sólo para ordenar: primero la baja más grande. El número no se muestra
@@ -4409,7 +4444,10 @@ function elegirColorFicha(d, p, color){
     b.setAttribute('aria-pressed', String(b.dataset.color === color)));
   const t = d.querySelector('#fi-color-txt');
   if(t) t.innerHTML = `<b>${esc(color)}</b>`;
-  d.querySelector('#fi-color-hint')?.setAttribute('hidden', '');
+  // el aviso lo termina de acomodar mostrarFotoColor: con precio por color
+  // ese mensaje tiene que quedarse, y si falta la foto hay que decirlo
+  const nota = d.querySelector('#fi-color-hint');
+  if(nota && !nota.dataset.precio) nota.setAttribute('hidden', '');
   // El mensaje de WhatsApp de la ficha ya nombra el color
   const wa = d.querySelector('.fi-botones .cta');
   if(wa){

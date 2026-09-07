@@ -35,8 +35,8 @@ BASE    = 'http://localhost:%d' % PUERTO
 # El presupuesto es cuanto reloj virtual se le da a cada tanda: layout abre
 # el catalogo entero cuatro veces (una por ancho) y espera a que cada una
 # termine de dibujar, asi que necesita bastante mas que las demas.
-ORDEN = ['agrupacion', 'portada', 'extras', 'precios', 'color-precio', 'sugeridos', 'destacada', 'carrusel', 'layout']
-PRESUPUESTO = {'layout': 200, 'extras': 150}   # segundos; el resto usa el de correr()
+ORDEN = ['agrupacion', 'portada', 'extras', 'precios', 'color-precio', 'foto-color', 'sugeridos', 'destacada', 'carrusel', 'layout']
+PRESUPUESTO = {'layout': 200, 'extras': 150, 'foto-color': 150}   # segundos; el resto usa el de correr()
 # extras hace varios clicks y cada uno repinta la portada entera (seis filas
 # de doce productos con foto), asi que con los 90 de base no llegaba.
 

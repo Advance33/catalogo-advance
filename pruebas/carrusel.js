@@ -27,6 +27,16 @@ const esperar = setInterval(() => {
 }, 150);
 
 function correrPruebas(){
+  /* Los productos fijados a mano llenan la vidriera y taparian el mecanismo que
+     se quiere probar. Se apartan y se reponen al final: la tanda tiene que
+     valer igual el dia que haya ocho fijos que el dia que no haya ninguno. */
+  const FIJOS_DEL_DIA = [...VIDRIERA_FIJOS];
+  VIDRIERA_FIJOS.length = 0;
+  try{ pruebasDelCarrusel(); }
+  finally{ VIDRIERA_FIJOS.push(...FIJOS_DEL_DIA); pintarOfertas(); }
+}
+
+function pruebasDelCarrusel(){
   const caja = $('ofertas');
   const slides = () => [...document.querySelectorAll('.of-slide')];
 

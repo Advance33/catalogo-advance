@@ -144,20 +144,33 @@ function correrPruebas(){
   ok(repetidas.length === 0, 'en ningun modelo se repiten dos etiquetas',
      repetidas.map(m => m.desc + ': ' + m.variantes.map(v=>v.etiqueta).join('/')).join(' | ') || 'ninguno');
 
-  /* Dos filas que al cliente le llegan IGUALES no son dos versiones a elegir:
-     es la misma cosa cargada dos veces. Paso con el iPhone 17 PRO 256GB, dos
-     filas con el mismo incluye, el mismo stock y los mismos tres colores,
-     separadas solo por el precio (1.190 y 1.200) y por unas mayusculas en la
-     columna Modelo. El catalogo ofrecia los dos botones como si hubiera algo
-     que elegir. Ahora se queda la mas barata y esto lo vigila. */
-  const dobles = [];
+  /* Dos filas que al cliente le llegan iguales Y valen lo mismo son la misma
+     cosa cargada dos veces: el catalogo se queda con una sola y esto lo vigila.
+
+     Cuando ademas cambia el PRECIO la cosa es distinta y por eso se separan los
+     dos casos. Ahi no hay un duplicado: es el precio por color a medio cargar
+     -pasa con el iPhone 17 Pro 256GB, dos filas que declaran los mismos tres
+     colores a 1.190 y 1.200- y la planilla no dice que color vale cuanto. El
+     catalogo no puede resolverlo sin fijar un precio que el negocio no definio,
+     asi que no lo esconde: lo muestra y validar.py lo marca GRAVE y frena la
+     publicacion. Se listan igual, como aviso, para que esten a la vista; la
+     falla queda para lo que SI es responsabilidad del codigo. */
+  const dobles = [], sinDato = [];
   MODELOS.filter(m => m.multi).forEach(m => {
-    const firmas = m.variantes.map(firmaVisible);
-    if(new Set(firmas).size !== firmas.length)
-      dobles.push(m.desc + ': ' + m.variantes.map(v => v.id + ' USD ' + v.precio).join(' / '));
+    const vistas = new Map();
+    m.variantes.forEach(v => {
+      const f = firmaVisible(v), antes = vistas.get(f);
+      if(!antes) return vistas.set(f, v);
+      const linea = m.desc + ': ' + antes.id + ' USD ' + antes.precio +
+                    ' / ' + v.id + ' USD ' + v.precio;
+      (antes.precio === v.precio ? dobles : sinDato).push(linea);
+    });
   });
+  if(sinDato.length)
+    R.push('  --   ' + sinDato.length + ' par(es) con los mismos colores y distinto ' +
+           'precio, que validar.py frena en la planilla: ' + sinDato.join(' | '));
   ok(dobles.length === 0,
-     'ningun modelo ofrece dos versiones que al cliente le llegan iguales',
+     'ningun modelo ofrece dos versiones identicas al mismo precio',
      dobles.slice(0, 2).join(' | ') || 'ninguno');
 
   /* El ID no es para el cliente. Cuando dos filas no traen nada que las separe

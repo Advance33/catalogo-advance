@@ -49,3 +49,8 @@ fotos-mal-asignadas/
 err.txt
 out.txt
 fotos-de-productos-dados-de-baja/
+
+# Reparto de fotos entre agentes y su informe: trabajo intermedio, se
+# regenera con revisar-fotos-con-agentes.py --preparar
+lotes/
+FOTOS-QUE-ESTAN-MAL.txt

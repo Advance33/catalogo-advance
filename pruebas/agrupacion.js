@@ -90,10 +90,50 @@ function correrPruebas(){
   /* ---- 3. Invariantes de la agrupacion ---- */
   ok(MODELOS.length < PRODUCTOS.length, 'hay menos tarjetas que filas',
      PRODUCTOS.length + ' filas -> ' + MODELOS.length + ' tarjetas');
-  const suma = MODELOS.reduce((s,m) => s + m.variantes.length, 0);
+  /* Se cuentan las variantes MAS las gemelas: desde que dos filas identicas se
+     colapsan en una sola opcion, las escondidas siguen siendo filas del Sheet y
+     tienen que seguir estando en algun modelo. Contar solo las visibles hacia
+     que esta red -la que avisa si un bug deja productos afuera del catalogo-
+     empezara a dar falso positivo. */
+  const todas = m => m.variantes.length + (m.gemelas || []).length;
+  const suma = MODELOS.reduce((s,m) => s + todas(m), 0);
   ok(suma === PRODUCTOS.length, 'no se perdio ni se duplico ninguna fila', suma);
-  const ids = new Set(MODELOS.flatMap(m => m.variantes.map(v => v.id)));
+  const ids = new Set(MODELOS.flatMap(m =>
+    [...m.variantes, ...(m.gemelas || [])].map(v => v.id)));
   ok(ids.size === PRODUCTOS.length, 'cada fila esta en un solo grupo', ids.size);
+
+  /* Lo que se oculta tiene que ser DE VERDAD lo mismo. Escribiendo el colapso
+     me comi esta: la firma sacaba todos los parentesis del nombre, asi que
+     "Switch 2" y "Switch 2 (Choose One)" quedaban iguales y el bundle con el
+     juego desaparecia del catalogo, igual que la Z6 III (Español) detras de la
+     (Ingles). Aca se compara justamente lo que la firma descarta: si entre la
+     que se ve y la que se oculta hay un parentesis que NO es de colores, no son
+     la misma cosa y ocultarla es hacer desaparecer mercaderia. */
+  const parNoColor = v => ((v.desc || '').match(RE_PAREN) || []).filter(t => {
+    const dentro = t.slice(1, -1).trim();
+    const lista = pintas(dentro);
+    return !(lista.length && lista.every(c => c.hex));
+  }).map(norm).join(' ');
+
+  const ocultoDeMas = [];
+  MODELOS.filter(m => (m.gemelas || []).length).forEach(m => {
+    m.gemelas.forEach(g => {
+      const visible = m.variantes.find(v => firmaVisible(v) === firmaVisible(g));
+      if(visible && parNoColor(visible) !== parNoColor(g))
+        ocultoDeMas.push(g.id + ' ("' + g.desc + '") detras de ' + visible.id);
+    });
+  });
+  ok(ocultoDeMas.length === 0,
+     'no se oculta ningun producto que tenga algo que lo distinga',
+     ocultoDeMas.slice(0, 2).join(' | ') || 'ninguno');
+
+  /* Un link viejo tiene que seguir abriendo. Si alguien guardo ?p=CEL-APP-069 y
+     esa fila quedo colapsada detras de la 068, buscarModelo tiene que llevarlo
+     igual a la tarjeta. */
+  const conGemelas = MODELOS.filter(m => (m.gemelas || []).length);
+  ok(conGemelas.every(m => m.gemelas.every(v => buscarModelo(clave(v)) === m)),
+     'las filas colapsadas siguen abriendo su tarjeta desde un link viejo',
+     conGemelas.length ? conGemelas.length + ' modelos con gemelas' : 'ninguna colapsada hoy');
   ok(MODELOS.every(m => m.variantes.every(v => v.cat === m.cat && v.marca === m.marca)),
      'nunca se mezclan categorias ni marcas dentro de un grupo');
   ok(MODELOS.every(m => m.precio === null || m.variantes.some(v => v.precio === m.precio)),
@@ -103,6 +143,22 @@ function correrPruebas(){
   const repetidas = MODELOS.filter(m => new Set(m.variantes.map(v=>v.etiqueta)).size !== m.variantes.length);
   ok(repetidas.length === 0, 'en ningun modelo se repiten dos etiquetas',
      repetidas.map(m => m.desc + ': ' + m.variantes.map(v=>v.etiqueta).join('/')).join(' | ') || 'ninguno');
+
+  /* Dos filas que al cliente le llegan IGUALES no son dos versiones a elegir:
+     es la misma cosa cargada dos veces. Paso con el iPhone 17 PRO 256GB, dos
+     filas con el mismo incluye, el mismo stock y los mismos tres colores,
+     separadas solo por el precio (1.190 y 1.200) y por unas mayusculas en la
+     columna Modelo. El catalogo ofrecia los dos botones como si hubiera algo
+     que elegir. Ahora se queda la mas barata y esto lo vigila. */
+  const dobles = [];
+  MODELOS.filter(m => m.multi).forEach(m => {
+    const firmas = m.variantes.map(firmaVisible);
+    if(new Set(firmas).size !== firmas.length)
+      dobles.push(m.desc + ': ' + m.variantes.map(v => v.id + ' USD ' + v.precio).join(' / '));
+  });
+  ok(dobles.length === 0,
+     'ningun modelo ofrece dos versiones que al cliente le llegan iguales',
+     dobles.slice(0, 2).join(' | ') || 'ninguno');
 
   /* El ID no es para el cliente. Cuando dos filas no traen nada que las separe
      -el iPhone 17 PRO 256GB, con los mismos tres colores en las dos y precios

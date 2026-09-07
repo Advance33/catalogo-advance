@@ -2817,7 +2817,65 @@ function etiquetaVariante(p, nombre){
   return p.color || (par ? par[1].trim() : '') || 'Estándar';
 }
 
+/* La firma de lo que el cliente VE de una fila. Si dos filas comparten firma,
+   para el que mira son la misma cosa: mismo nombre sin los colores, mismo juego
+   de colores, mismo regalo, mismo teclado, misma condicion. El ID y el precio
+   quedan afuera a proposito: son justamente lo que las diferencia sin que se
+   note. */
+function firmaVisible(v){
+  /* Del nombre se saca el parentesis SOLO si todo lo de adentro son colores.
+     Sacandolos todos, "Switch 2" y "Switch 2 (Choose One)" quedaban con la
+     misma firma y el bundle con el juego DESAPARECIA del catalogo; lo mismo la
+     Z6 III (Español) detras de la (Ingles). Entre parentesis viene tanto el
+     color -que ya se elige con los puntitos- como lo unico que distingue a un
+     producto de otro, y confundirlos es hacer desaparecer mercaderia. */
+  const sinColor = (v.desc || '').replace(RE_PAREN, m => {
+    const dentro = m.slice(1, -1).trim();
+    const lista = pintas(dentro);
+    return (lista.length && lista.every(c => c.hex)) ? ' ' : ' ' + dentro + ' ';
+  });
+  const colores = [...new Set(pintas(v.color).map(c => norm(c.nombre)))].sort().join('/');
+  return [norm(sinColor).replace(/\s+/g, ' ').trim(), colores,
+          norm(v.incluye), norm(v.teclado), norm(v.condicion)].join('|');
+}
+
+function colapsarIguales(vs){
+  const porFirma = new Map();
+  vs.forEach(v => {
+    const f = firmaVisible(v);
+    const antes = porFirma.get(f);
+    // Gana la mas barata; entre dos sin precio, la primera.
+    const mejor = !antes || (v.precio !== null &&
+                  (antes.precio === null || v.precio < antes.precio));
+    if(mejor) porFirma.set(f, v);
+  });
+  const quedan = [...porFirma.values()];
+  /* Las descartadas NO se tiran: se devuelven aparte para que el modelo se las
+     guarde. Tirarlas rompia dos cosas: la cuenta de que ninguna fila del Sheet
+     se pierde por el camino -que es la red que avisa si un bug deja productos
+     afuera del catalogo- y los links viejos, porque quien tuviera guardado
+     ?p=CEL-APP-069 dejaba de encontrar nada. */
+  return { quedan, fuera: vs.filter(v => !quedan.includes(v)) };
+}
+
 function armarModelo(vs){
+  /* Dos filas que al cliente le llegan IGUALES no son dos versiones: es la
+     misma cosa cargada dos veces. Paso con el iPhone 17 PRO 256GB, que vino
+     como CEL-APP-068 a USD 1.190 y CEL-APP-069 a USD 1.200 sin una sola
+     diferencia real -mismo incluye, mismo stock, mismos tres colores, el
+     Modelo cambiaba solo en mayusculas- y el catalogo terminaba ofreciendo dos
+     botones con el mismo texto y dos precios, como si el cliente tuviera algo
+     que elegir ahi.
+
+     Se queda la mas barata. No es una preferencia: si el negocio cargo dos
+     precios para lo mismo, el que vale es el menor, y hacerle pagar de mas al
+     que toco el boton equivocado seria culpa nuestra, no de la planilla.
+     validar.py lo marca como GRAVE aparte, asi que el error se arregla en el
+     Sheet igual; esto es para que mientras tanto no lo pague el cliente. */
+  const colapso = colapsarIguales(vs);
+  const gemelas = colapso.fuera;      // las que se ocultaron por ser lo mismo
+  vs = colapso.quedan;
+
   const conPrecio = vs.filter(v => v.precio !== null);
   const precioMin = conPrecio.length ? Math.min(...conPrecio.map(v => v.precio)) : null;
   // El representante da la foto y los datos de la tarjeta. Elegimos el más
@@ -2910,6 +2968,7 @@ function armarModelo(vs){
     stock: vs.some(v => v.stock),              // con que una esté disponible, alcanza
     color: colores.join('/'),
     variantes: vs,
+    gemelas,                                   // filas iguales que no se muestran
     rep,
     multi: vs.length > 1,
     // Que el buscador encuentre por la capacidad, el color o el ID de CUALQUIER
@@ -2930,7 +2989,9 @@ function agrupar(prods){
 
 // El modelo que contiene esta variante. Sirve para abrir la ficha desde un link
 // viejo o desde el pedido, que guardan el ID de la variante.
-const buscarModelo = k => MODELOS.find(m => m.variantes.some(v => clave(v) === k));
+const buscarModelo = k => MODELOS.find(m =>
+  m.variantes.some(v => clave(v) === k) ||
+  (m.gemelas || []).some(v => clave(v) === k));
 
 // El + de la tarjeta se marca si el cliente cargó CUALQUIERA de las variantes,
 // no solo la que la tarjeta muestra de frente.

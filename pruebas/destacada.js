@@ -95,6 +95,10 @@ function correrPruebas(){
   filtros.cat = ''; pintar();
   /* ---- La fila de marcas entre los productos ---- */
   filtros.cat = ''; filtros.marca = ''; filtros.q = ''; pintar();
+  // Se comprueba lo que ve el cliente, no si el nodo existe: la fila vive
+  // adentro de los bloques de la portada, que se esconden enteros cuando hay
+  // un filtro puesto en vez de borrarse (asi volver es instantaneo).
+  const seVe = el => !!el && !!el.offsetParent;
   const fila = document.getElementById('fila-marcas');
   ok(!!fila, 'en "Todo" aparece la fila de marcas');
   if(fila){
@@ -124,12 +128,12 @@ function correrPruebas(){
          .every(c => buscarModelo(c.dataset.key)?.marca === marcaF),
        'y todo lo que queda es de esa marca',
        marcaF + ': ' + document.querySelectorAll('.card').length + ' tarjetas');
-    ok(!document.getElementById('fila-marcas'),
+    ok(!seVe(document.getElementById('fila-marcas')),
        'con la marca puesta la fila se retira (ya elegiste)');
     filtros.marca = ''; pintar();
   }
   filtros.cat = 'Celular'; pintar();
-  ok(!document.getElementById('fila-marcas'),
+  ok(!seVe(document.getElementById('fila-marcas')),
      'dentro de una categoria no aparece: las marcas ya estan en la columna');
   filtros.cat = ''; pintar();
 

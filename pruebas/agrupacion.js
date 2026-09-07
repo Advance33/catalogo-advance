@@ -103,6 +103,37 @@ function correrPruebas(){
   const repetidas = MODELOS.filter(m => new Set(m.variantes.map(v=>v.etiqueta)).size !== m.variantes.length);
   ok(repetidas.length === 0, 'en ningun modelo se repiten dos etiquetas',
      repetidas.map(m => m.desc + ': ' + m.variantes.map(v=>v.etiqueta).join('/')).join(' | ') || 'ninguno');
+
+  /* El ID no es para el cliente. Cuando dos filas no traen nada que las separe
+     -el iPhone 17 PRO 256GB, con los mismos tres colores en las dos y precios
+     distintos- el desempate caia en "· CEL-APP-068", que no le dice nada a
+     nadie. Ahora cae en el precio, que es con lo que va a decidir. */
+  const conId = [];
+  MODELOS.filter(m => m.multi).forEach(m => m.variantes.forEach(v => {
+    if(/·\s*[A-Z]{2,4}-[A-Z]{2,4}-\d+/.test(v.etiqueta)) conId.push(m.desc + ': ' + v.etiqueta);
+  }));
+  ok(conId.length === 0, 'ningun boton de version le muestra un ID al cliente',
+     conId.slice(0, 3).join(' | ') || 'ninguno');
+
+  /* Dos filas con los mismos colores escritos en otro orden ("Orange/Blue" y
+     "Blue/Orange") no se separan con el color: como texto la etiqueta queda
+     distinta, pero el cliente ve dos botones que dicen lo mismo. */
+  const juego = v => [...new Set((v.color || '').split('/')
+    .map(x => norm(x.trim())).filter(Boolean))].sort().join('/');
+  const mismoJuego = [];
+  MODELOS.filter(m => m.multi).forEach(m => {
+    const porBase = {};
+    m.variantes.forEach(v => { (porBase[v.etiquetaBase] = porBase[v.etiquetaBase] || []).push(v); });
+    Object.values(porBase).forEach(vs => {
+      if(vs.length < 2) return;
+      if(new Set(vs.map(juego)).size === 1 &&
+         vs.some(v => v.etiqueta.includes(' · ' + v.color)))
+        mismoJuego.push(m.desc + ': ' + vs.map(v => v.etiqueta).join(' / '));
+    });
+  });
+  ok(mismoJuego.length === 0,
+     'no se usa el color para separar dos versiones que tienen los mismos colores',
+     mismoJuego.slice(0, 2).join(' | ') || 'ninguno');
   /* Lo que distingue a dos versiones no puede perderse. Un parentesis que
      comparten TODAS las variantes es parte del nombre del modelo ("Garmin Epix
      Pro (Gen 2)") y ahi tiene que quedarse. Pero si lo trae una sola, es lo
@@ -135,7 +166,16 @@ function correrPruebas(){
   ok(lentes.every(m => !m.multi), 'ningun lente se agrupo',
      lentes.filter(m=>m.multi).map(m=>m.desc).join(' / ') || 'ninguno');
   ok(lentes.length === cuenta('Lente'), 'los lentes siguen 1 a 1', lentes.length);
-  ok(MODELOS.filter(m => m.cat === 'Cámara').every(m => !m.multi), 'ninguna camara se agrupo');
+  /* Las camaras no se agrupan por deduccion del texto -dos cuerpos parecidos
+     son productos distintos- pero SI cuando la planilla lo dice con la columna
+     Grupo. Es el caso de la Z6 III en ingles y en español: la misma camara con
+     otro idioma de menus, que sale como dos opciones con sus precios. Antes
+     esta prueba pedia que ninguna se agrupara nunca, y eso era cierto solo
+     mientras la agrupacion se deducia del nombre. */
+  const camsJuntas = MODELOS.filter(m => m.cat === 'Cámara' && m.multi);
+  ok(camsJuntas.every(m => m.variantes.every(v => (v.grupo || '').trim())),
+     'las camaras solo se agrupan si la planilla lo pide con la columna Grupo',
+     camsJuntas.map(m => m.desc).join(' / ') || 'ninguna agrupada');
 
   /* ---- 4. Los grupos que si se formaron son coherentes ---- */
   const multi = MODELOS.filter(m => m.multi);

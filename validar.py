@@ -279,6 +279,83 @@ def regla_specs_dual(filas, ctx):
     return fallas
 
 
+def regla_color_por_precio(filas, ctx):
+    """
+    Dos filas del mismo producto, con precios distintos y EXACTAMENTE los
+    mismos colores.
+
+    Es el caso del iPhone 17 PRO 256GB, que se arregló tres veces y volvió tres
+    veces. Cuando pasa, el catálogo dibuja dos botones que dicen lo mismo con
+    dos precios distintos, y el cliente no tiene cómo saber qué color le toca a
+    cuál. Y no es que el catálogo lo muestre mal: el dato de qué color vale
+    cuánto NO ESTÁ en ninguna parte de la planilla, así que no hay código que
+    pueda deducirlo. Por eso es GRAVE y frena la publicación.
+
+    La regla: si dos filas comparten Grupo y tienen precios distintos, cada una
+    tiene que declarar SU color, no la lista completa de la familia.
+    """
+    def juego(f):
+        partes = {norm(c) for c in (f.get('Color') or '').split('/') if c.strip()}
+        return '/'.join(sorted(partes))
+
+    colores = ctx[0]
+
+    def sin_color(f):
+        """La descripción sin el paréntesis de colores.
+
+        Se saca el paréntesis SOLO si todo lo de adentro son colores, el mismo
+        criterio que usa el catálogo. Borrándolos todos, "Switch 2" y "Switch 2
+        (Choose One)" quedaban iguales, y lo mismo el Z6 III (Ingles) contra el
+        (Español): tres avisos graves por filas que en realidad sí se
+        distinguen. Lo que va entre paréntesis y no es un color es justamente
+        lo que las separa.
+        """
+        def quitar(m):
+            partes = [p.strip() for p in m.group(1).split('/') if p.strip()]
+            son_colores = partes and all(norm(p) in colores for p in partes)
+            return ' ' if son_colores else m.group(0)
+        t = re.sub(r'\(([^)]*)\)', quitar, f.get('Descripción completa') or '')
+        # El regalo y la condición también distinguen: el Mini 5 Pro con cuatro
+        # baterías y el pelado son dos cosas distintas al mismo nombre.
+        extra = (f.get('Incluye') or '') + '|' + (f.get('Condición') or '')
+        return re.sub(r'\s+', ' ', norm(t)).strip() + ' || ' + norm(extra)
+
+    porgrupo = collections.defaultdict(list)
+    for f in filas:
+        g = (f.get('Grupo') or '').strip()
+        # Sin columna Grupo no hay forma barata de saber quién es hermano de
+        # quién: esta regla simplemente no aplica y no inventa falsos avisos.
+        if g:
+            porgrupo[norm(g)].append(f)
+
+    fallas = []
+    for g, fs in porgrupo.items():
+        if len(fs) < 2:
+            continue
+        # La clave es descripción-sin-color + colores. Sin la primera parte
+        # saltaba el Quest 3S de 128GB contra el de 256GB: ahí el precio
+        # distinto es por la capacidad y está perfecto. Lo que no puede pasar
+        # es que dos filas IDÉNTICAS salvo el precio digan los mismos colores.
+        juntas = collections.defaultdict(list)
+        for f in fs:
+            j = juego(f)
+            if j:
+                juntas[(sin_color(f), j)].append(f)
+        for (desc, j), iguales in juntas.items():
+            if len(iguales) < 2:
+                continue
+            precios = {(f.get('Precio USD') or '').strip() for f in iguales}
+            if len(precios) < 2:
+                continue          # mismo color y mismo precio: no hay ambigüedad
+            ids = ', '.join(f['ID'] for f in iguales)
+            fallas.append(('GRAVE', iguales[0]['ID'],
+                           'mismos colores (%s) y precios distintos (%s) en filas que por '
+                           'lo demas son iguales: %s. Cada una tiene que traer solo SU '
+                           'color, o no hay forma de saber cual vale cuanto'
+                           % (j, ' / '.join(sorted(precios)), ids)))
+    return fallas
+
+
 def _agrupar(filas, src):
     """
     Repite el agrupamiento del catálogo para ver las tarjetas que realmente
@@ -426,6 +503,7 @@ REGLAS = [
     ('Marca equivocada',    regla_marca_ajena,        PLANILLA),
     ('Notas internas',      regla_notas_internas,     PLANILLA),
     ('Colores',             regla_color,              PLANILLA),
+    ('Color vs precio',     regla_color_por_precio,   PLANILLA),
     ('Nomenclatura lentes', regla_lentes,             PLANILLA),
     ('Categorías',          regla_categorias,         CODIGO),
     ('Formato de memoria',  regla_specs_dual,         CODIGO),

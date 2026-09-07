@@ -134,25 +134,23 @@
   /* El PNG es linea oscura sobre transparente: sobre grafito hay que invertirlo */
   .topbar .marca-btn img{filter:brightness(0) invert(1);opacity:.9}
   .topbar .marca-btn:hover img{opacity:1;filter:brightness(0) invert(1) drop-shadow(0 0 7px rgba(196,166,255,.7))}
+  /* En la compu el buscador va SIEMPRE a la vista: es lo que mas se usa y ahi
+     sobra lugar en la barra. La lupa queda para el celular, donde cada pixel
+     de ancho cuenta y esconderlo si vale la pena. */
   .lupa{
+    display:none;                                  /* en la compu no hace falta */
     margin-left:auto;flex:none;width:38px;height:38px;border-radius:50%;
-    display:grid;place-items:center;cursor:pointer;
+    place-items:center;cursor:pointer;
     background:transparent;border:1px solid rgba(255,255,255,.18);
     color:rgba(255,255,255,.75);transition:background .16s, border-color .16s, color .16s;
   }
   .lupa svg{width:17px;height:17px;display:block}
   .lupa:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.35);color:#fff}
   .lupa:focus-visible{outline:2px solid #A78BFA;outline-offset:2px}
-  /* Cerrada no ocupa lugar; abierta se lleva el centro de la barra */
   .topbar .search{
-    flex:0 1 0;max-width:0;padding-bottom:0;opacity:0;pointer-events:none;
-    margin-left:auto;transition:max-width .26s cubic-bezier(.2,.7,.3,1), opacity .18s;
-    /* Sin esto el input de adentro sigue midiendo su ancho aunque la caja este
-       en 0, y en el celular empujaba la pagina 24px a lo ancho. */
-    overflow:hidden;
+    flex:1 1 auto;max-width:520px;padding-bottom:0;margin-left:auto;
+    transition:max-width .26s cubic-bezier(.2,.7,.3,1), opacity .18s;
   }
-  .topbar.buscando .search{flex:1 1 auto;max-width:520px;opacity:1;pointer-events:auto}
-  .topbar.buscando .lupa{display:none}
   .topbar .search svg{color:rgba(255,255,255,.5)}
   .topbar #q{
     background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);color:#fff;
@@ -166,12 +164,23 @@
   .topbar .stamp{margin-left:18px;color:rgba(255,255,255,.62)}
   .topbar #cfg-btn{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)}
   .topbar #cfg-btn:hover{border-color:#A78BFA;color:#C4A6FF}
-  /* En el celular el buscador se lleva un renglon entero: es lo que mas se usa */
+  /* En el celular si se pliega: aparece la lupa y el buscador se abre con ella,
+     llevandose un renglon entero, que es lo que mas se usa cuando se abre. */
   @media (max-width:720px){
     .topbar .wrap{flex-wrap:wrap;gap:10px 14px}
-    .topbar.buscando .search{order:3;flex-basis:100%;max-width:none}
-    .topbar .stamp{margin-left:auto}
-    .topbar .stamp{font-size:10px;letter-spacing:.06em}
+    .lupa{display:grid}
+    .topbar .search{
+      flex:0 1 0;max-width:0;opacity:0;pointer-events:none;margin-left:0;
+      /* Sin esto el input de adentro sigue midiendo su ancho aunque la caja
+         este en 0, y empujaba la pagina 24px a lo ancho. */
+      overflow:hidden;
+    }
+    .topbar.buscando .search{
+      flex:1 1 auto;max-width:none;opacity:1;pointer-events:auto;
+      order:3;flex-basis:100%;overflow:visible;
+    }
+    .topbar.buscando .lupa{display:none}
+    .topbar .stamp{margin-left:auto;font-size:10px;letter-spacing:.06em}
   }
   .logo{display:flex;align-items:center;gap:10px}
   /* El PNG ya es línea oscura sobre transparente: sobre el encabezado blanco
@@ -1229,6 +1238,17 @@
   }
   .of-foto img{width:100%;height:100%;object-fit:contain;padding:26px;display:block}
   .of-foto .sinfoto{color:#9A93AD}
+
+  /* La foto de la promo respira: se acerca y se aleja despacio, sin cortarse
+     nunca. Entre promo y promo la banda quedaba completamente quieta -son tres
+     segundos mirando una imagen fija- y este es el movimiento que la mantiene
+     viva sin robarle atencion al precio. Va con `alternate` para que vuelva
+     sola en vez de saltar al tamaño original, y a 1.06 porque mas que eso ya
+     empieza a recortar los productos anchos contra el borde de la caja. */
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes ofRespira{ from{transform:scale(1)} to{transform:scale(1.06)} }
+    .of-foto img{ animation:ofRespira 3.5s ease-in-out infinite alternate }
+  }
   .of-datos{
     display:flex;flex-direction:column;gap:14px;align-items:flex-start;
     min-width:0;padding:8px 0;
@@ -1318,7 +1338,9 @@
   .mk-cir{
     width:66px;height:66px;border-radius:50%;display:grid;place-items:center;
     background:var(--surface);border:1px solid var(--line);overflow:hidden;
-    transition:border-color .15s ease, transform .15s ease;padding:8px;
+    /* Poco padding: los logos son horizontales y adentro de un circulo ya
+       pierden alto; con 8px no se leian. */
+    transition:border-color .15s ease, transform .15s ease;padding:5px;
   }
   .mk-cir img{width:100%;height:100%;object-fit:contain;display:block}
   /* El nombre es el respaldo: si hay logo, la imagen lo tapa */
@@ -2802,9 +2824,31 @@ function armarModelo(vs){
     vs.forEach(v => { c[v.etiqueta] = (c[v.etiqueta] || 0) + 1; });
     return v => c[v.etiqueta] > 1;
   };
-  // Primero se prueba con el color, que es lo que el cliente entiende
+  /* El color como conjunto, no como texto. Dos filas pueden traer los mismos
+     colores en distinto orden -"Orange/Blue/Silver" y "Blue/Silver/Orange"- y
+     entonces el desempate por color PARECE funcionar: las etiquetas quedan
+     distintas como strings. Pero el cliente ve dos botones que dicen lo mismo
+     con las palabras cambiadas de lugar, y encima los dos le prometen tres
+     colores cuando en realidad cada fila es de uno. Es exactamente el caso del
+     iPhone 17 PRO 256GB. */
+  const juegoColor = v => [...new Set((v.color || '').split('/')
+    .map(x => norm(x.trim())).filter(Boolean))].sort().join('/');
+
+  const porEtiqueta = () => {
+    const m = {};
+    vs.forEach(v => { (m[v.etiqueta] = m[v.etiqueta] || []).push(v); });
+    return m;
+  };
+
+  // Primero se prueba con el color, que es lo que el cliente entiende. Sólo se
+  // usa cuando de verdad separa: si las repetidas tienen el mismo juego de
+  // colores, agregarlo no distingue nada y encima miente.
   let repetida = repetir();
-  vs.forEach(v => { if(repetida(v) && v.color) v.etiqueta += ' · ' + v.color; });
+  let grupos = porEtiqueta();
+  vs.forEach(v => {
+    if(!repetida(v) || !v.color) return;
+    if(new Set(grupos[v.etiqueta].map(juegoColor)).size > 1) v.etiqueta += ' · ' + v.color;
+  });
   /* Y si con el color TAMPOCO alcanza, va el ID. Pasa cuando dos filas tienen
      la misma capacidad y el mismo color: el MacBook Neo A18 tenía dos "512GB ·
      Citrus" con precios distintos. El código no es lindo, pero es único, y es
@@ -2816,8 +2860,21 @@ function armarModelo(vs){
   repetida = repetir();
   vs.forEach(v => { if(repetida(v) && v.teclado) v.etiqueta += ' · ' + nombreTeclado(v.teclado); });
 
+  /* Si después de todo eso siguen iguales, la planilla no trae NADA que las
+     separe y hay que elegir el mal menor. Antes iba el ID, y el cliente
+     terminaba eligiendo entre "CEL-APP-068" y "CEL-APP-069", que no le dice
+     nada. Va el precio: es lo único que de verdad difiere, es lo que va a
+     mirar para decidir, y deja las etiquetas únicas. El ID queda para el caso
+     sin salida: dos filas idénticas al mismo precio. */
   repetida = repetir();
-  vs.forEach(v => { if(repetida(v)) v.etiqueta += ' · ' + v.id; });
+  grupos = porEtiqueta();
+  vs.forEach(v => {
+    if(!repetida(v)) return;
+    const precios = new Set(grupos[v.etiqueta].map(x => x.precio));
+    v.etiqueta += precios.size > 1 && v.precio !== null
+      ? ' · USD ' + plata(v.precio)
+      : ' · ' + v.id;
+  });
 
   const colores = [...new Set(
     vs.flatMap(v => (v.color || '').split('/').map(s => s.trim()).filter(Boolean)))];
@@ -3038,14 +3095,38 @@ function pintarOfertas(){
 
 function irOferta(i, suave = true){
   if(!OF.length) return;
+  const desde = ofIndice;
   ofIndice = (i + OF.length) % OF.length;
   const pista = $('of-pista');
   const slide = pista.children[ofIndice];
   if(!slide) return;
+
+  /* La vuelta de la última a la primera es el único salto que va para el otro
+     lado, y con scroll suave se veía rebobinar la pista entera. Ese salto -y
+     sólo ese- va sin animación y tapado por un parpadeo de 160ms: el corte
+     queda escondido y la vidriera parece avanzar siempre para el mismo lado.
+     No se duplican slides justamente para que la pista siga teniendo una tarjeta
+     por oferta, que es lo que dan por sentado los puntitos y las pruebas. */
+  const vuelve = desde === OF.length - 1 && ofIndice === 0 && OF.length > 1;
+
   // scrollLeft en vez de scrollIntoView: scrollIntoView arrastra la página
   // entera y en el celular te saca de la vidriera.
-  pista.scrollTo({ left: slide.offsetLeft - pista.offsetLeft,
-                   behavior: (suave && !quieto) ? 'smooth' : 'auto' });
+  const saltar = () => pista.scrollTo({
+    left: slide.offsetLeft - pista.offsetLeft,
+    behavior: (suave && !quieto && !vuelve) ? 'smooth' : 'auto' });
+
+  if(vuelve && suave && !quieto){
+    // Baja a 0.18 y no a 0: apagando del todo, la banda queda un instante
+    // vacía y el hueco llama más la atención que el salto que venimos a tapar.
+    pista.style.transition = 'opacity .14s ease';
+    pista.style.opacity = '.18';
+    setTimeout(() => {
+      saltar();
+      pista.style.opacity = '1';
+    }, 140);
+  } else {
+    saltar();
+  }
   marcarOferta();
 }
 
@@ -4724,16 +4805,24 @@ const PASEOS = new Map();    // pista -> su estado
 
 /* Frena todas. La usan las pruebas y los iframes de la tanda de layout. */
 function pararPaseos(){
-  PASEOS.forEach(e => { clearInterval(e.timer); e.timer = null; });
+  PASEOS.forEach(e => {
+    clearInterval(e.timer); e.timer = null;
+    // Tambien el despertador: si queda uno pendiente, revive el paseo despues
+    // de que las pruebas frenaron todo y el navegador headless no cierra nunca.
+    clearTimeout(e.despertar); e.despertar = null;
+  });
 }
 
 function activarPaseo(el, puedeArrancar){
   let est = PASEOS.get(el);
   if(est){ est.arrancar(); return est; }        // ya enganchada: solo despertarla
 
-  est = {timer: null, dir: 1, rendido: false};
+  est = {timer: null, dir: 1, rendido: false, despertar: null};
 
-  est.parar = () => { clearInterval(est.timer); est.timer = null; };
+  est.parar = () => {
+    clearInterval(est.timer); est.timer = null;
+    clearTimeout(est.despertar); est.despertar = null;
+  };
 
   est.arrancar = () => {
     if(est.timer || est.rendido || quieto) return;
@@ -4750,10 +4839,18 @@ function activarPaseo(el, puedeArrancar){
     }, 40);
   };
 
-  est.rendirse = () => { est.rendido = true; est.parar(); };
+  /* Antes cualquier gesto -la rueda del mouse, un toque, elegir un chip- la
+     apagaba PARA SIEMPRE, y como eso pasa a los dos segundos de entrar, en la
+     practica la cinta no se paseaba nunca. Ahora se duerme un rato y vuelve
+     sola: se frena mientras la estas usando, que es lo que hacia falta, sin
+     quedar muerta hasta recargar la pagina. */
+  est.rendirse = () => {
+    est.parar();
+    est.despertar = setTimeout(() => est.arrancar(), 5000);
+  };
 
   el.addEventListener('mouseenter', est.parar);
-  el.addEventListener('mouseleave', () => { if(!est.rendido) est.arrancar(); });
+  el.addEventListener('mouseleave', () => est.arrancar());
   ['pointerdown', 'wheel', 'touchstart', 'focusin'].forEach(ev =>
     el.addEventListener(ev, est.rendirse, {passive: true}));
 

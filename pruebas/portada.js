@@ -112,17 +112,37 @@ function correrPruebas(){
   ok($$('.card').length > 0, 'y muestra los resultados', $$('.card').length);
   filtros.q = '';
 
-  /* ---- 7. La cinta se pasea sola, pero se rinde ---- */
+  /* ---- 7. La cinta se pasea sola, se frena cuando la usan y vuelve ----
+     Antes esta prueba pedia lo contrario: que una vez que el cliente tomaba el
+     control la cinta NO volviera a moverse nunca. Se cambio a proposito el
+     07/09. El problema de aquello era que "tomar el control" incluia pasar la
+     rueda del mouse por encima o tocar un chip, o sea que se apagaba a los dos
+     segundos de entrar y en la practica no se la veia pasear jamas. */
   ok(typeof arrancarCintaAuto === 'function' && typeof rendirCintaAuto === 'function',
      'la cinta tiene su motor de paseo');
   const cinta = $('cats');
+  // Sin categoria puesta y con chips de sobra: es cuando la cinta se pasea.
+  filtros.cat = '';
+  const hayQuePasear = cinta.scrollWidth - cinta.clientWidth > 4;
+
   arrancarCintaAuto();
-  // Se prueba el comportamiento y no una variable interna: si el motor cambia
-  // por dentro, la prueba tiene que seguir valiendo.
-  rendirCintaAuto();
+  const andando = () => !!(PASEOS.get(cinta) && PASEOS.get(cinta).timer);
+  ok(!hayQuePasear || andando(), 'sin categoria elegida, la cinta se pasea sola',
+     hayQuePasear ? '' : 'entra entera, no hay nada que pasear');
+
+  // Mientras la estas usando se frena, para no pelearte el scroll.
   const antes = cinta.scrollLeft;
-  arrancarCintaAuto();
-  ok(!PASEOS.get(cinta) || PASEOS.get(cinta).timer === null,
-     'una vez que el cliente toma el control, la cinta no vuelve a moverse');
+  rendirCintaAuto();
+  ok(!andando(), 'cuando el cliente la usa, se frena');
   ok(cinta.scrollLeft === antes, 'y se queda donde estaba', cinta.scrollLeft);
+
+  /* Pero no queda muerta hasta recargar: vuelve sola pasada la pausa. Los cinco
+     segundos no se pueden esperar aca adentro, asi que se comprueba lo que de
+     eso depende: que pedirle que arranque despues de rendirse la reviva. Con el
+     comportamiento viejo esto era imposible -rendirse ponia rendido=true y
+     arrancar() salia sin hacer nada-, asi que la prueba distingue los dos. */
+  arrancarCintaAuto();
+  ok(!hayQuePasear || andando(),
+     'y despues vuelve: no se apaga hasta recargar la pagina');
+  rendirCintaAuto();
 }

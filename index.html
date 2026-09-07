@@ -2079,6 +2079,39 @@ async function bajarCSV(){
   throw ultimoError;
 }
 
+/* Notas de carga que se cuelan en el nombre del producto. El cliente las lee
+   tal cual: "+ Capa" es funda en portugués y "C/C" quiere decir con cargador.
+   Se limpian acá y no sólo en la planilla porque la carga diaria la reescribe
+   desde la lista del proveedor: arreglar la celda de hoy no alcanza para
+   mañana, y mientras tanto el nombre sale con la nota puesta.
+   validar.py lee esta misma lista, así que las dos dicen lo mismo. */
+const NOTAS_DEL_NOMBRE = [
+  { busca:/\s*\(?\bC\/C\b\)?/i,         incluye:'+ Cargador',      que:'con cargador' },
+  { busca:/\s*\(?\bS\/C\b\)?/i,         incluye:'',                que:'sin cargador' },
+  { busca:/\s*\bCAJA DE KIT\b/i,        incluye:'',                que:'nota de depósito' },
+  { busca:/\s*\bCAJA BLANCA\b/i,        condicion:'Caja blanca',   que:'producto sin caja' },
+  { busca:/\s*\bIncluye solo lápiz\b/i, incluye:'+ Solo el lápiz', que:'contenido de caja' },
+  { busca:/\s*\+\s*Capa\b/i,            incluye:'+ Funda',         que:'funda, en portugués' },
+  { busca:/\s*\b(\d+)\s*BATT\b/i,       incluye:'+ $1 baterías',   que:'baterías incluidas' },
+];
+
+/* Saca la nota del nombre y la manda a donde va. Lo que ya declara la planilla
+   no se repite: si Incluye dice "+ Funda", no se agrega otra vez. */
+function sacarNotasDelNombre(p){
+  for(const n of NOTAS_DEL_NOMBRE){
+    const m = n.busca.exec(p.desc || '');
+    if(!m) continue;
+    p.desc = (p.desc || '').replace(n.busca, ' ').replace(/\s{2,}/g, ' ').trim();
+    if(n.incluye){
+      const suma = n.incluye.replace('$1', m[1] || '');
+      const yaEsta = norm(p.incluye || '').includes(norm(suma.replace(/^\+\s*/, '')));
+      if(!yaEsta) p.incluye = [p.incluye, suma].filter(Boolean).join(' ');
+    }
+    if(n.condicion && !limpio(p.condicion)) p.condicion = n.condicion;
+  }
+  return p;
+}
+
 async function cargar(){
   const filas = parseCSV(await bajarCSV()).filter(f => f.some(c => c.trim()));
   if(filas.length < 2) throw new Error('la planilla vino vacía');
@@ -2180,6 +2213,9 @@ async function cargar(){
     .filter(p => p.activo && p.desc)
     // Se deducen una vez al cargar, no en cada tecla del buscador: son dos
     // expresiones regulares por producto sobre una lista de 472.
+    // La limpieza va antes de deducir montura y apertura: esas dos leen el
+    // nombre, y conviene que lean el que de verdad ve el cliente.
+    .map(sacarNotasDelNombre)
     .map(p => { p.montura = monturaDe(p); p.apertura = aperturaDe(p); return p; });
   // Si la planilla tuviera "Proveedor" o "Costo USD", esos campos nunca se copian
   // acá. Lo que no existe en este objeto no puede filtrarse a la web.

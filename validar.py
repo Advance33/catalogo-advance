@@ -23,18 +23,9 @@ SHEET_GID = '482985525'
 CSV_URL   = ('https://docs.google.com/spreadsheets/d/%s/export?format=csv&gid=%s'
              % (SHEET_ID, SHEET_GID))
 
-# Notas internas que nunca tienen que llegar a la web. El texto va a la
-# columna que corresponda (Incluye, Condición, Términos de búsqueda).
-NOTAS_INTERNAS = [
-    (r'\(?\bC/C\b\)?',           'con cargador',      'Incluye'),
-    (r'\(?\bS/C\b\)?',           'sin cargador',      'Incluye'),
-    (r'CAJA DE KIT',             'nota de depósito',  '(borrar)'),
-    (r'CAJA BLANCA',             'producto sin caja', 'Condición'),
-    (r'Incluye solo lápiz',      'contenido de caja', 'Incluye'),
-    (r'\+ Capa',                 'funda, en portugués', 'Incluye'),
-    (r'\b\d+ BATT\b',            'baterías incluidas', 'Incluye'),
-]
-
+# Las notas internas que no tienen que llegar a la web (un "+ Capa", un
+# "C/C") viven en NOTAS_DEL_NOMBRE, dentro de index.html: el catálogo las
+# saca del nombre al cargar y este validador lee esa misma lista.
 # --------------------------------------------------------------------------
 
 def norm(s):
@@ -77,7 +68,29 @@ def leer_index():
         for viejo, nuevo in re.findall(r"'([^']+)'\s*:\s*'([^']+)'", bloque.group(1)):
             renombre[norm(viejo)] = nuevo
 
-    return colores, plurales, orden, renombre
+    # Las notas que el catálogo saca del nombre. Se leen de ahí y no se copian
+    # acá: si las dos listas viven en dos lados, el día que entra una nota
+    # nueva el validador pide arreglar algo que la página ya resolvió, o al
+    # revés, deja pasar lo que sí se ve.
+    notas = []
+    bloque = re.search('const NOTAS_DEL_NOMBRE = ' + re.escape('[') + '(.*?)' + chr(10) + re.escape('];'), src, re.S)
+    if bloque:
+        for linea in bloque.group(1).split(chr(10)):
+            m = re.search(r'busca:\s*/(.+?)/i', linea)
+            if not m:
+                continue
+            que = re.search(r"que:\s*'([^']*)'", linea)
+            if 'condicion:' in linea:
+                destino = 'Condición'
+            elif re.search(r"incluye:\s*'\S", linea):
+                destino = 'Incluye'
+            else:
+                destino = '(se borra)'
+            # en JavaScript la barra del patrón va escapada; en Python no
+            notas.append((m.group(1).replace(chr(92) + '/', '/'),
+                          que.group(1) if que else '', destino))
+
+    return colores, plurales, orden, renombre, notas
 
 
 def bajar_csv(destino=None):
@@ -211,14 +224,28 @@ def regla_marca_ajena(filas, ctx):
 
 
 def regla_notas_internas(filas, ctx):
+    """Notas de carga metidas en el nombre del producto.
+
+    Dejó de ser GRAVE: el catálogo las saca antes de mostrar, así que el
+    cliente ya no las lee. Se sigue avisando porque mientras estén en la hoja
+    dependemos de ese parche, y cualquier otro que lea la planilla -un pedido
+    por WhatsApp, una exportación- las ve tal cual están cargadas.
+    """
+    notas = ctx[4] if len(ctx) > 4 else []
+    if not notas:
+        return [('AVISO', '(index.html)',
+                 'no pude leer NOTAS_DEL_NOMBRE del catálogo: nadie está '
+                 'controlando las notas de carga en el nombre')]
     fallas = []
     for f in filas:
         d = f['Descripción completa']
-        for patron, que, destino in NOTAS_INTERNAS:
-            if re.search(patron, d, re.I):
-                fallas.append(('GRAVE', f['ID'],
-                               '%s (%s) en el nombre → va a %s' % (
-                                   re.search(patron, d, re.I).group(0), que, destino)))
+        for patron, que, destino in notas:
+            m = re.search(patron, d, re.I)
+            if m:
+                fallas.append((
+                    'AVISO', f['ID'],
+                    '"%s" (%s) en el nombre. El catálogo lo saca y lo manda a %s, '
+                    'pero conviene cargarlo ahí' % (m.group(0).strip(), que, destino)))
     return fallas
 
 
@@ -253,7 +280,7 @@ def regla_color(filas, ctx):
 
 
 def regla_categorias(filas, ctx):
-    _, plurales, orden, renombre = ctx
+    _, plurales, orden, renombre = ctx[:4]
     fallas = []
     # Comparar contra el nombre que el catálogo va a mostrar, no el de la planilla
     cats = set(renombre.get(norm(f['Categoría'].strip()), f['Categoría'].strip())

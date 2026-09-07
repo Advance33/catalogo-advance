@@ -78,7 +78,19 @@ function pruebasDelCarrusel(){
   const porRubro = {};
   enPantalla().forEach(m => porRubro[m.cat] = (porRubro[m.cat] || 0) + 1);
   const amontonados = Object.entries(porRubro).filter(([, n]) => n > POR_RUBRO_MAX);
-  ok(amontonados.length === 0 || Object.keys(porRubro).length === 1,
+  /* Repetir rubro esta permitido, pero solo cuando ya no quedaba nadie de otro
+     para poner: la vidriera prefiere ocho productos antes que variedad con
+     huecos, y variados() vuelve a meter lo que habia salteado.
+     Antes la excepcion era "que haya un solo rubro", y con eso ocho celulares
+     pasaban y siete celulares mas una tablet fallaban, siendo el mismo caso.
+     Ahora se comprueba lo que de verdad promete el codigo: si sobra alguien de
+     un rubro que todavia tiene lugar, amontonar no se justifica. */
+  const puestos = new Set(enPantalla());
+  const candidatos = MODELOS.filter(m => m.stock && m.precio !== null && m.imagen
+                                      && (enOferta(m) || conRegalo(m)));
+  const quedaronAfuera = candidatos.filter(m => !puestos.has(m)
+                                            && (porRubro[m.cat] || 0) < POR_RUBRO_MAX);
+  ok(amontonados.length === 0 || quedaronAfuera.length === 0,
      'no se amontonan mas de ' + POR_RUBRO_MAX + ' del mismo rubro',
      Object.entries(porRubro).map(([c, n]) => c + ':' + n).join(' '));
   /* La etiqueta ya no dice cuanto bajo: en este rubro las bajas son chicas y

@@ -9,7 +9,8 @@ Baja la planilla Landing y compara contra la carpeta fotos/. Avisa de:
   6. Fotos que no son 900x900
   7. Fotos que CAMBIARON despues de haberse revisado
   8. Fotos nuevas que nadie miro
-  9. Fotos viejas que quedaron por mirar
+  9. Portadas que no coinciden con ninguna foto de color del producto
+ 10. Fotos viejas que quedaron por mirar
 
 El (5), el (7) y el (8) son los que detectan el error grave: una ficha
 mostrando otro producto. El (5) solo ve el caso de dos fichas con la misma
@@ -176,6 +177,21 @@ def main():
         return 0
     nuevas = [r for r in repetidas if clave(r[1]) not in aceptadas]
 
+    # La portada de un producto que tiene fotos de color deberia ser una de
+    # ellas: es uno de los colores que se venden. Cuando no coincide con
+    # ninguna suele ser el caso del iPhone 17, que en la grilla mostraba un
+    # Air y adentro, al tocar los colores, aparecia el 17 de verdad.
+    portada_suelta = []
+    for r in rows:
+        pid = r['ID'].strip()
+        if pid + '.jpg' not in firma:
+            continue
+        suyas = [f for f in files if f.startswith(pid + '-')]
+        if suyas and firma[pid + '.jpg'] not in {firma[f] for f in suyas}:
+            portada_suelta.append('%-14s %s   (tiene %s)'
+                                  % (pid, r['Descripción completa'][:40],
+                                     ', '.join(f.replace(pid + '-', '') for f in sorted(suyas))))
+
     # --- las fotos contra el registro de lo ya mirado ---
     registro = leer_revisadas()
     cambiadas  = sorted(f for f in files if f in registro and registro[f][0] != firma[f])
@@ -216,6 +232,7 @@ def main():
     w(f'  {len(cambiadas):>4}  FOTOS QUE CAMBIARON sin pasar por revision   <-- mirar primero')
     w(f'  {len(aparecidas):>4}  FOTOS NUEVAS que nadie miro todavia          <-- mirar primero')
     w(f'  {len(pendientes):>4}  fotos viejas que quedaron por mirar')
+    w(f'  {len(portada_suelta):>4}  portadas que no son ninguna de sus fotos de color')
     w(f'  {len(repetidas) - len(nuevas):>4}  duplicados ya revisados (fotos-aceptadas.txt)')
     w(f'  {len(mal_color):>4}  fotos con un color que no esta en la planilla')
     w(f'  {len(huerfanas):>4}  fotos huerfanas (ID que ya no existe)')
@@ -259,7 +276,11 @@ def main():
            + chr(10) + '   equivocada que volvio. Mirala y despues: python verificar-fotos.py --revisadas')
     bloque('8) FOTOS NUEVAS SIN MIRAR', aparecidas,
            '   Entraron despues del ultimo registro y nadie las comparo con el producto.')
-    bloque('9) FOTOS VIEJAS QUE QUEDARON POR MIRAR', pendientes,
+    bloque('9) PORTADAS QUE NO SON NINGUNA DE SUS FOTOS DE COLOR', portada_suelta,
+           '   La ficha muestra una imagen por fuera y otra al tocar los colores.'
+           + chr(10) + '   Asi se veia el iPhone 17: un Air en la grilla y el 17 real adentro.'
+           + chr(10) + '   Puede ser legitimo (una foto general del producto), pero hay que mirarlo.')
+    bloque('10) FOTOS VIEJAS QUE QUEDARON POR MIRAR', pendientes,
            '   Estaban antes de que existiera el registro. No frenan la publicacion,'
            + chr(10) + '   pero son las que todavia podrian tener una imagen equivocada.')
 

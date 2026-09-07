@@ -29,12 +29,17 @@ function correrPruebas(){
   /* ---- 1. Atajos por presupuesto ---- */
   const atajos = [...$$('#extras .at')];
   ok(atajos.length >= 3, 'hay atajos por presupuesto', atajos.length);
-  // Si el numero que promete el atajo no es el que despues muestra la grilla,
-  // el cliente siente que le mentimos: por eso se compara contra el filtro real.
+  /* Si el numero que promete el atajo no es el que despues muestra la grilla,
+     el cliente siente que le mentimos. Se compara contra filtrar() DE VERDAD:
+     antes esta prueba re-implementaba la formula del catalogo, asi que validaba
+     el error en vez de encontrarlo, y por eso el desfasaje vivio meses dando
+     OK. Una prueba que copia la cuenta que quiere verificar no verifica nada. */
   const malCuenta = atajos.filter(b => {
-    const r = RANGOS.find(x => x[0] === b.dataset.rango);
-    const n = MODELOS.filter(m => m.stock && m.precio !== null
-                              && m.precio >= r[2] && m.precio <= r[3]).length;
+    const guardado = JSON.stringify(filtros);
+    Object.assign(filtros, { q:'', cat:'', marca:'', soloStock:false,
+                             rango:b.dataset.rango, montura:'', apertura:'' });
+    const n = filtrar().length;
+    Object.assign(filtros, JSON.parse(guardado));
     return !b.querySelector('i').textContent.startsWith(String(n));
   });
   ok(malCuenta.length === 0, 'cada atajo dice cuantos productos tiene de verdad',

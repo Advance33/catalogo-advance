@@ -3540,7 +3540,7 @@ function pintarExtras(){
   const firma = MODELOS.length + '|' + leerMirados().join(',');
   if(firma === FIRMA_EXTRAS && caja.children.length){
     // Se despiertan los paseos, que se frenaron al esconderse
-    caja.querySelectorAll('.fp-pista').forEach(el => activarPaseo(el));
+    caja.querySelectorAll('.fp-pista').forEach(el => activarPaseo(el, null, PASEO_PASO_PROD));
     return;
   }
   FIRMA_EXTRAS = firma;
@@ -3549,8 +3549,14 @@ function pintarExtras(){
 
   /* 1. Por cuanto queres gastar. Muchos no vienen por rubro sino por plata. */
   const atajos = RANGOS.map(([val, txt, min, max]) => {
-    const n = MODELOS.filter(m => m.stock && m.precio !== null
-                              && m.precio >= min && m.precio <= max).length;
+    /* Se cuenta con el MISMO criterio que filtrar(): por variantes y con el
+       tope excluido. Antes se contaba con m.precio, que es el precio MINIMO
+       del modelo, y con <= max: un modelo de 180 a 320 no aparecia en "USD 200
+       a 500" aunque el filtro si lo devolvia, y uno de 200 justos se contaba en
+       dos tramos a la vez. Tampoco se mira el stock, porque el clic solo pone
+       filtros.rango: el numero tiene que ser el que la grilla va a mostrar. */
+    const n = MODELOS.filter(m => m.variantes.some(v =>
+      v.precio !== null && v.precio >= min && v.precio < max)).length;
     return n ? `<button class="at" type="button" data-rango="${esc(val)}">
         <b>${esc(txt)}</b><i>${n} producto${n !== 1 ? 's' : ''}</i>
       </button>` : '';
@@ -3599,7 +3605,7 @@ function pintarExtras(){
 
   /* --- Que hace cada cosa --- */
   // Cada fila se pasea sola: son doce productos y en pantalla entran tres
-  caja.querySelectorAll('.fp-pista').forEach(el => activarPaseo(el));
+  caja.querySelectorAll('.fp-pista').forEach(el => activarPaseo(el, null, PASEO_PASO_PROD));
 
   caja.querySelectorAll('.pc').forEach(b =>
     b.onclick = () => abrirFicha(b.dataset.key));
@@ -3756,9 +3762,12 @@ function armarFiltros(){
   FIRMA_FILTROS = firma;
 
   // Con el número al lado se ve de una si conviene filtrar por ahí
+  // El numero dice cuantas TARJETAS vas a ver, no cuantas filas de la planilla
+  // hay. Contando PRODUCTOS, un objetivo con tres filas de color contaba tres:
+  // la opcion prometia "Canon RF (23)" y la grilla devolvia 14.
   $('montura').innerHTML = '<option value="">Cualquier montura</option>'
     + monturas.map(m => {
-        const n = PRODUCTOS.filter(p => p.montura === m).length;
+        const n = MODELOS.filter(p => p.montura === m).length;
         return `<option value="${esc(m)}">${esc(m)} (${n})</option>`;
       }).join('');
 
@@ -4800,7 +4809,13 @@ function abrirPrimo(){
    headless limpian los intervalos, y con un rAF suelto el navegador nunca
    cierra y la tanda figura como "NO LLEGO A CORRER". */
 
+/* Dos velocidades, porque no todas las pistas llevan lo mismo. Los chips de
+   categoria son angostos y con 14 px/s ya se ve que la cinta corre. Las
+   tarjetas de producto miden 158px mas 12 de separacion: a esa misma velocidad
+   una tarjeta tarda DOCE segundos en pasar, o sea que parece quieta. Con 1.7
+   pasa una cada cuatro segundos y medio, que se nota sin marear. */
 const PASEO_PASO = 0.55;     // px por tick de 40ms: unos 14 px por segundo
+const PASEO_PASO_PROD = 1.7; // las filas de productos, unos 42 px por segundo
 const PASEOS = new Map();    // pista -> su estado
 
 /* Frena todas. La usan las pruebas y los iframes de la tanda de layout. */
@@ -4813,7 +4828,7 @@ function pararPaseos(){
   });
 }
 
-function activarPaseo(el, puedeArrancar){
+function activarPaseo(el, puedeArrancar, paso = PASEO_PASO){
   let est = PASEOS.get(el);
   if(est){ est.arrancar(); return est; }        // ya enganchada: solo despertarla
 
@@ -4828,6 +4843,14 @@ function activarPaseo(el, puedeArrancar){
     if(est.timer || est.rendido || quieto) return;
     if(puedeArrancar && !puedeArrancar()) return;
     if(el.scrollWidth - el.clientWidth <= 4) return;   // entra entera: nada que pasear
+    /* El snap y el paseo no pueden convivir. Las filas de la portada tienen
+       scroll-snap-type:x proximity (337) para que el arrastre a mano caiga
+       prolijo en una tarjeta, pero eso mismo DEVUELVE cada empujon de 1.7px al
+       punto de anclaje: medido, la pista se quedaba en scrollLeft 0 mientras la
+       cinta de categorias -que no tiene snap- avanzaba 91px. Se apaga mientras
+       pasea solo y vuelve en cuanto el cliente toma el control, que es el mismo
+       patron de .chips.arrastrando (424). */
+    el.style.scrollSnapType = 'none';
     est.timer = setInterval(() => {
       const max = el.scrollWidth - el.clientWidth;
       if(max <= 4 || document.hidden) return;
@@ -4835,7 +4858,7 @@ function activarPaseo(el, puedeArrancar){
       // marea; el ida y vuelta deja ver los dos extremos.
       if(est.dir > 0 && el.scrollLeft >= max - 1) est.dir = -1;
       else if(est.dir < 0 && el.scrollLeft <= 1) est.dir = 1;
-      el.scrollLeft += PASEO_PASO * est.dir;
+      el.scrollLeft += paso * est.dir;
     }, 40);
   };
 
@@ -4846,13 +4869,25 @@ function activarPaseo(el, puedeArrancar){
      quedar muerta hasta recargar la pagina. */
   est.rendirse = () => {
     est.parar();
+    // El cliente toma el control: le devolvemos el snap para que el arrastre
+    // caiga prolijo en una tarjeta, que es para lo que esta puesto.
+    el.style.scrollSnapType = '';
     est.despertar = setTimeout(() => est.arrancar(), 5000);
   };
 
   el.addEventListener('mouseenter', est.parar);
   el.addEventListener('mouseleave', () => est.arrancar());
-  ['pointerdown', 'wheel', 'touchstart', 'focusin'].forEach(ev =>
+  ['pointerdown', 'touchstart', 'focusin'].forEach(ev =>
     el.addEventListener(ev, est.rendirse, {passive: true}));
+
+  /* La rueda va aparte, y solo cuenta si es HORIZONTAL. Bajando la pagina con
+     la rueda, el evento se dispara sobre lo que este debajo del cursor: en la
+     portada eso es siempre alguna de las filas, asi que cada vez que el cliente
+     bajaba, la fila que estaba mirando se dormia. Un scroll vertical no es
+     alguien tomando el control de la pista horizontal. */
+  el.addEventListener('wheel', e => {
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)) est.rendirse();
+  }, {passive: true});
 
   PASEOS.set(el, est);
   est.arrancar();

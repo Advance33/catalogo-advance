@@ -92,7 +92,7 @@ function juego(s) {
  * "(11ª Gen)" y los Ray-Ban "(601/T352)". Sacándolos todos, productos distintos
  * quedarían iguales y el aviso saltaría de más.
  */
-function sinColor(desc, incluye, condicion) {
+function sinColor(desc, incluye, teclado, condicion) {
   var t = String(desc == null ? '' : desc).replace(/\(([^)]*)\)/g, function (todo, dentro) {
     var partes = dentro.split('/').map(norm).filter(function (p) { return p; });
     var sonColores = partes.length > 0 && partes.every(function (p) {
@@ -100,7 +100,12 @@ function sinColor(desc, incluye, condicion) {
     });
     return sonColores ? ' ' : todo;
   });
-  return norm(t) + ' || ' + norm(incluye) + '|' + norm(condicion);
+  /* Incluye, Teclado y Condición van en la clave porque también distinguen: la
+     MacBook con teclado español sale más que la inglesa y comparten el Space
+     Black, que es el mismo color en dos productos distintos. Sin Teclado esto
+     marcaba cuatro MacBook bien cargadas. Son las mismas columnas que mira
+     firmaVisible() en index.html: si se separan, una de las dos miente. */
+  return norm(t) + ' || ' + norm(incluye) + '|' + norm(teclado) + '|' + norm(condicion);
 }
 
 function revisarColores() {
@@ -125,7 +130,8 @@ function revisarColores() {
       precio: String(f[col['Precio USD']] || '').trim(),
       colores: cs,
       clave: norm(f[col['Grupo']]) + ' || ' +
-             sinColor(f[col['Descripción completa']], f[col['Incluye']], f[col['Condición']])
+             sinColor(f[col['Descripción completa']], f[col['Incluye']],
+                      f[col['Teclado']], f[col['Condición']])
     });
   }
 

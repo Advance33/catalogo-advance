@@ -395,9 +395,19 @@ def regla_color_por_precio(filas, ctx):
             son_colores = partes and all(norm(p) in colores for p in partes)
             return ' ' if son_colores else m.group(0)
         t = re.sub(r'\(([^)]*)\)', quitar, f.get('Descripción completa') or '')
-        # El regalo y la condición también distinguen: el Mini 5 Pro con cuatro
-        # baterías y el pelado son dos cosas distintas al mismo nombre.
-        extra = (f.get('Incluye') or '') + '|' + (f.get('Condición') or '')
+        # El regalo, el teclado y la condición también distinguen: el Mini 5 Pro
+        # con cuatro baterías y el pelado son dos cosas distintas al mismo
+        # nombre, y la MacBook con teclado español sale más que la inglesa.
+        #
+        # Estas columnas son EXACTAMENTE las que mira firmaVisible() en
+        # index.html, y tienen que seguir siéndolo. El 08/09/2026 acá faltaba
+        # Teclado y saltaron cuatro GRAVES contra MacBook bien cargadas: la EN a
+        # 2.233 y la ES a 2.354 comparten el Space Black porque es el mismo
+        # color en dos productos distintos. El catálogo no se equivocaba; se
+        # equivocaba el control. Si las dos claves se separan, una de las dos le
+        # miente a alguien.
+        extra = ((f.get('Incluye') or '') + '|' + (f.get('Teclado') or '') +
+                 '|' + (f.get('Condición') or ''))
         return re.sub(r'\s+', ' ', norm(t)).strip() + ' || ' + norm(extra)
 
     porgrupo = collections.defaultdict(list)

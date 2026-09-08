@@ -114,43 +114,74 @@ def ids_de_validar():
     return ids
 
 
-"""Las filas del 17 Pro tal como estaban ROTAS el 07/09/2026, antes de que se
-repartieran los colores. Se vuelven a inyectar a propósito: si sólo se corriera
-contra la planilla del día, el día que esté todo bien el script no marcaría nada
-y la prueba diría OK sin haber comprobado absolutamente nada. Ya pasó con otra
-prueba de este repo que miraba una ficha que nunca tenía el problema."""
-ROTAS = {
-    'CEL-APP-068': ('iPhone 17 Pro 256GB E-Sim (Orange/Blue/Silver)', 'Orange/Blue/Silver'),
-    'CEL-APP-069': ('iPhone 17 Pro 256GB E-Sim (Blue/Silver/Orange)', 'Blue/Silver/Orange'),
-    'CEL-APP-071': ('iPhone 17 Pro 512GB (Orange/Silver)', 'Orange/Silver'),
-    'CEL-APP-072': ('iPhone 17 Pro 512GB (Silver)', 'Silver'),
-}
+"""Los casos de prueba, inventados a propósito.
 
-"""Las que una fórmula de Sheets marcaba mal y este script NO tiene que tocar.
-Son el motivo por el que el control lleva la lista de colores del catálogo: acá
-lo que separa a las filas es la correa, el código del armazón o la capacidad, no
-el color."""
+Si la prueba sólo corriera contra la planilla del día, el día que esté todo bien
+el script no marcaría nada y diría OK sin haber comprobado nada. Ya pasó con
+otra prueba de este repo que miraba una ficha que nunca tenía el problema.
+
+La primera versión de esto inyectaba el error sobre las filas reales del iPhone
+17 Pro. Duró un día: el 08/09/2026 se dio de baja el 512GB Silver y la prueba
+quedó trabada pidiendo un ID que ya no existe. Los casos van inventados, con
+IDs que no pueden chocar con la planilla, así que Pedro puede editar lo que
+quiera sin romper la prueba.
+
+Cada caso es (id, capacidad, precio, color, teclado, si_tiene_que_marcar)."""
+CASOS = [
+    # Dos filas idénticas con distinto precio: el color tiene dos precios.
+    ('ZZ-PRU-001', '256gb', '100', 'Orange', 'EN', True),
+    ('ZZ-PRU-002', '256gb', '110', 'Orange', 'EN', True),
+    # Los colores se SOLAPAN sin ser iguales: el Blue queda con dos precios.
+    # Es el caso que una comparación por igualdad exacta dejaba pasar.
+    ('ZZ-PRU-003', '512gb', '200', 'Orange/Blue', 'EN', True),
+    ('ZZ-PRU-004', '512gb', '210', 'Blue', 'EN', True),
+    # Mismo color y distinto precio, pero distinto TECLADO: son dos productos.
+    # Sin este caso, el 08/09/2026 el control marcó cuatro MacBook bien cargadas.
+    ('ZZ-PRU-005', '1tb', '300', 'Silver', 'EN', False),
+    ('ZZ-PRU-006', '1tb', '330', 'Silver', 'ES', False),
+    # Colores repartidos como corresponde: nadie comparte nada.
+    ('ZZ-PRU-007', '2tb', '400', 'Citrus', 'EN', False),
+    ('ZZ-PRU-008', '2tb', '420', 'Indigo', 'EN', False),
+]
+GRUPO_PRUEBA = 'zz-producto-de-prueba'
+DEBEN_MARCAR = {c[0] for c in CASOS if c[5]}
+
+"""Filas bien cargadas que el control NO tiene que tocar. Es el ancla de la
+prueba: comparar el script contra validar.py no alcanza, porque si los dos se
+equivocan igual coinciden y la prueba dice OK. Pasó el 08/09/2026 con las
+MacBook, cuando a los dos les faltaba mirar la columna Teclado.
+
+Las SW/GAF/TAB/CAM son las que una fórmula de Sheets marcaba mal: ahí lo que
+separa a las filas es la correa, el código del armazón o la capacidad, no el
+color. Las NB-APP son pares EN/ES: mismo color, distinto teclado, distinto
+precio, todo correcto."""
 BIEN = ['SW-APP-013', 'SW-APP-014', 'SW-APP-019', 'SW-APP-056',
         'GAF-RAY-023', 'GAF-RAY-025', 'GAF-RAY-026',
         'TAB-APP-001', 'TAB-APP-002', 'TAB-APP-042',
-        'CAM-NIK-015', 'CAM-NIK-020']
+        'CAM-NIK-015', 'CAM-NIK-020',
+        'NB-APP-001', 'NB-APP-088', 'NB-APP-002', 'NB-APP-089',
+        'NB-APP-018', 'NB-APP-093', 'NB-APP-021', 'NB-APP-094']
 
 
-def romper(matriz):
-    """Devuelve una copia con el 17 Pro cargado como estaba cuando fallaba."""
+def con_casos(matriz):
+    """La planilla del día más las filas de prueba, al final."""
     enc = [str(c).strip() for c in matriz[0]]
-    iid, ides, icol = (enc.index('ID'), enc.index('Descripción completa'),
-                       enc.index('Color'))
+    faltan = [c for c in ('ID', 'Descripción completa', 'Precio USD', 'Color',
+                          'Teclado', 'Condición', 'Incluye', 'Grupo') if c not in enc]
+    if faltan:
+        raise SystemExit('a la planilla le faltan columnas que el control necesita: %s'
+                         % ', '.join(faltan))
     copia = [list(f) for f in matriz]
-    tocadas = 0
-    for f in copia[1:]:
-        vieja = ROTAS.get(str(f[iid]).strip())
-        if vieja:
-            f[ides], f[icol] = vieja
-            tocadas += 1
-    if tocadas != len(ROTAS):
-        raise SystemExit('esperaba encontrar %d filas del 17 Pro y encontre %d: '
-                         'cambiaron los IDs en la planilla' % (len(ROTAS), tocadas))
+    for id_, capacidad, precio, color, teclado, _ in CASOS:
+        fila = [''] * len(enc)
+        fila[enc.index('ID')] = id_
+        fila[enc.index('Descripción completa')] = ('Producto De Prueba %s (%s)'
+                                                   % (capacidad, color))
+        fila[enc.index('Precio USD')] = precio
+        fila[enc.index('Color')] = color
+        fila[enc.index('Teclado')] = teclado
+        fila[enc.index('Grupo')] = GRUPO_PRUEBA
+        copia.append(fila)
     return copia
 
 
@@ -193,16 +224,21 @@ def main():
     matriz = bajar_matriz()
     fallas = []
 
-    # 1. Con la planilla rota a propósito: tiene que marcar los cuatro.
-    ids, texto = correr_gs(romper(matriz))
-    print('--- con el 17 Pro cargado mal (a proposito) ---')
+    # 1. Con los casos armados a mano: marca los que tienen el error y sólo esos.
+    ids, texto = correr_gs(con_casos(matriz))
+    print('--- con los casos de prueba puestos ---')
     print(texto)
-    if ids != set(ROTAS):
-        fallas.append('con el error puesto marco %s y esperaba %s'
-                      % (sorted(ids) or 'nada', sorted(ROTAS)))
+    marco = {i for i in ids if i.startswith('ZZ-PRU-')}
+    if marco != DEBEN_MARCAR:
+        de_menos = sorted(DEBEN_MARCAR - marco)
+        de_mas = sorted(marco - DEBEN_MARCAR)
+        if de_menos:
+            fallas.append('no marco el error en: %s' % ', '.join(de_menos))
+        if de_mas:
+            fallas.append('marco filas que estan bien: %s' % ', '.join(de_mas))
 
     # 2. Con la planilla de hoy: tiene que decir lo mismo que validar.py.
-    ids_hoy, texto_hoy = correr_gs(matriz)
+    ids_hoy, _ = correr_gs(matriz)
     del_py = ids_de_validar()
     print('\n--- con la planilla de hoy ---')
     print('  script del Sheet : %s' % (', '.join(sorted(ids_hoy)) or 'ninguno'))
@@ -211,7 +247,9 @@ def main():
         fallas.append('hoy el Sheet marca %s y validar.py %s'
                       % (sorted(ids_hoy) or 'nada', sorted(del_py) or 'nada'))
 
-    # 3. Y en ninguno de los dos casos puede tocar las que estan bien.
+    # 3. Y en ninguno de los dos casos puede tocar las que están bien. Esto no
+    #    depende de validar.py a propósito: si los dos se equivocan igual,
+    #    coinciden y el punto 2 no se entera.
     coladas = sorted((ids | ids_hoy) & set(BIEN))
     if coladas:
         fallas.append('marco de mas: %s' % ', '.join(coladas))
@@ -221,9 +259,10 @@ def main():
         for f in fallas:
             print('FALLA  %s' % f)
         return 1
-    print('OK  marca los 4 cuando el error esta')
+    print('OK  marca los %d casos con el error y no los %d que estan bien'
+          % (len(DEBEN_MARCAR), len(CASOS) - len(DEBEN_MARCAR)))
     print('OK  dice lo mismo que validar.py con la planilla de hoy')
-    print('OK  no toca las %d filas que una formula marcaba mal' % len(BIEN))
+    print('OK  no toca las %d filas reales que ya se marcaron mal alguna vez' % len(BIEN))
     return 0
 
 

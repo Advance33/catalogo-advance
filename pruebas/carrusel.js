@@ -93,16 +93,23 @@ function pruebasDelCarrusel(){
   ok(amontonados.length === 0 || quedaronAfuera.length === 0,
      'no se amontonan mas de ' + POR_RUBRO_MAX + ' del mismo rubro',
      Object.entries(porRubro).map(([c, n]) => c + ':' + n).join(' '));
-  /* La etiqueta ya no dice cuanto bajo: en este rubro las bajas son chicas y
-     un "4% OFF" resta mas de lo que suma. Queda el precio tachado al lado. */
-  // Se miran solo las que estan en baja: las de relleno no llevan etiqueta
+  /* La etiqueta dice la PLATA que se ahorra, no el porcentaje: con bajas de 15
+     o 20 dolares sobre productos de mil y pico, "1% OFF" no le dice nada a
+     nadie. Lo que no puede pasar es que ese numero no sea el real. */
   const enBajaSlides = slides().filter(s => enOferta(buscarModelo(s.dataset.key)));
-  const conNumero = enBajaSlides.filter(s => {
+  const conPorcentaje = enBajaSlides.filter(s => {
     const off = s.querySelector('.of-off');
-    return !off || /\d/.test(off.textContent);
+    return !off || /%/.test(off.textContent);
   });
-  ok(conNumero.length === 0, 'la etiqueta dice "Oferta", sin ningun numero',
-     enBajaSlides.map(s => s.querySelector('.of-off') && s.querySelector('.of-off').textContent).join(' '));
+  ok(conPorcentaje.length === 0, 'la etiqueta no muestra ningun porcentaje',
+     enBajaSlides.map(s => s.querySelector('.of-off') && s.querySelector('.of-off').textContent).join(' | '));
+  const malAhorro = enBajaSlides.filter(s => {
+    const m = buscarModelo(s.dataset.key);
+    const txt = s.querySelector('.of-off').textContent.replace(/[^\d]/g, '');
+    return +txt !== Math.round(m.antes - m.precio);
+  });
+  ok(malAhorro.length === 0, 'y el ahorro que dice es exactamente la resta',
+     malAhorro.map(s => s.querySelector('.of-off').textContent).join(' | ') || 'todos bien');
   ok(enBajaSlides.every(s => s.querySelector('.of-precio s')),
      'las que bajaron muestran el precio tachado');
   ok(slides().filter(s => !enOferta(buscarModelo(s.dataset.key)))

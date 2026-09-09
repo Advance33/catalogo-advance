@@ -124,7 +124,11 @@ echo        esta: asi es como volvia la foto equivocada del iPhone 17.
 echo.
 echo      - Una foto NUEVA que nadie miro todavia.
 echo.
-echo     Para las dos ultimas: mira la foto, y si esta bien anotala
+echo      - Una PORTADA que es la foto de un color que la fila ya no
+echo        vende: la fila cambio de color y la foto quedo. Se arregla
+echo        copiando la foto del primer color de hoy sobre ID.jpg.
+echo.
+echo     Para las ultimas: mira la foto, y si esta bien anotala
 echo        python verificar-fotos.py --revisadas NOMBRE.jpg
 echo   ------------------------------------------------------------
 echo.

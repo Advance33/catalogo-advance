@@ -572,9 +572,27 @@ def regla_tarjetas(filas, ctx):
 def regla_fotos(filas, ctx):
     if not os.path.isdir(FOTOS):
         return [('AVISO', '(fotos)', 'no existe la carpeta fotos/')]
-    archivos = set(os.path.splitext(n)[0] for n in os.listdir(FOTOS))
+    # Solo imagenes: en fotos/ conviven notas de trabajo (.txt) que no son
+    # fotos de nada y salian como quince "huerfanas" en cada revision.
+    nombres = [n for n in os.listdir(FOTOS) if n.lower().endswith(('.jpg', '.jpeg', '.png', '.webp'))]
+    archivos = set(os.path.splitext(n)[0] for n in nombres)
     ids = set(f['ID'].strip() for f in filas)
     fallas = []
+
+    # El indice que lee la web para elegir la portada tiene que ser el de la
+    # carpeta. Lo escribe verificar-fotos.py, que PUBLICAR.bat corre antes del
+    # commit; si alguien publico por afuera, la web elige con datos viejos.
+    indice = os.path.join(FOTOS, 'indice.json')
+    if not os.path.exists(indice):
+        fallas.append(('AVISO', '(fotos)', 'falta fotos/indice.json: corré verificar-fotos.py'))
+    else:
+        try:
+            en_indice = set(json.load(io.open(indice, encoding='utf-8')).get('archivos', []))
+            if en_indice != set(n for n in nombres if n.lower().endswith('.jpg')):
+                fallas.append(('AVISO', '(fotos)',
+                               'fotos/indice.json no coincide con la carpeta: corré verificar-fotos.py (PUBLICAR.bat lo hace solo)'))
+        except Exception:
+            fallas.append(('AVISO', '(fotos)', 'fotos/indice.json no se pudo leer'))
 
     for f in filas:
         if f['ID'].strip() not in archivos:

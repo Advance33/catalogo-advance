@@ -30,7 +30,7 @@ Escribe el resultado en REVISAR-FOTOS.txt
                                           queda mirado y el resto, pendiente
   python verificar-fotos.py --aceptar     anota los duplicados como buenos
 """
-import csv, io, os, re, sys, hashlib, collections, unicodedata, urllib.request, datetime
+import csv, io, os, re, sys, json, hashlib, collections, unicodedata, urllib.request, datetime
 
 SHEET_ID  = '18xxslIKTBnVMrLixCGlQBJGje3vKBYQHXy0qvVp8tpQ'
 SHEET_GID = '482985525'
@@ -39,6 +39,48 @@ FOTOS  = os.path.join(AQUI, 'fotos')
 SALIDA = os.path.join(AQUI, 'REVISAR-FOTOS.txt')
 ACEPTADAS = os.path.join(AQUI, 'fotos-aceptadas.txt')
 REVISADAS = os.path.join(AQUI, 'fotos-revisadas.txt')
+INDICE = os.path.join(FOTOS, 'indice.json')
+
+TALLE = re.compile(r'^(x{0,2}s|m|x{0,2}l)$', re.I)
+
+
+def _partir(txt):
+    """La barra separa opciones, salvo cuando lo que sigue es un talle."""
+    salida = []
+    for t in [x.strip() for x in txt.split('/') if x.strip()]:
+        if salida and TALLE.match(t):
+            salida[-1] += '/' + t
+        else:
+            salida.append(t)
+    return salida
+
+
+_COLORES_CONOCIDOS = None
+
+
+def colores_de_la_fila(r):
+    """Los colores que vende la fila, como los ve la web: la columna Color, y
+    si viene vacia el ultimo parentesis del nombre, pero ese SOLO cuenta si
+    todo lo de adentro es un color conocido. "(Rc-N3)" en un drone o "(Video)"
+    en una camara no son colores, y tomarlos como tales hacia que dos drones
+    con la misma foto parecieran mentir."""
+    global _COLORES_CONOCIDOS
+    txt = (r.get('Color') or '').strip()
+    if txt not in ('', '—', '-', '–'):
+        return _partir(txt)
+    par = re.findall(r'\(([^()]*)\)', r.get('Descripción completa') or '')
+    if not par:
+        return []
+    if _COLORES_CONOCIDOS is None:
+        try:
+            sys.path.insert(0, AQUI)
+            import validar                       # la misma lista que usa la pagina
+            _COLORES_CONOCIDOS = (validar.leer_index()[0], validar.pinta)
+        except Exception:
+            _COLORES_CONOCIDOS = (set(), lambda t, c: False)
+    conocidos, pinta = _COLORES_CONOCIDOS
+    opciones = _partir(par[-1])
+    return opciones if opciones and all(pinta(o, conocidos) for o in opciones) else []
 
 def norm(s):
     s = unicodedata.normalize('NFD', s or '')
@@ -95,6 +137,15 @@ def main():
     byid  = {r['ID'].strip(): r for r in rows}
     files = [f for f in os.listdir(FOTOS) if f.lower().endswith('.jpg')]
     have  = {os.path.splitext(f)[0] for f in files}
+
+    # El indice de fotos que lee la web (fotos/indice.json). Con el, la pagina
+    # sabe que archivos existen sin pedirlos uno por uno, y puede elegir la
+    # portada por el primer color del dia en vez de fijarla en <ID>.jpg. Se
+    # reescribe en cada corrida: PUBLICAR.bat corre este script antes del
+    # commit, asi que el indice publicado siempre es el de la carpeta.
+    with open(INDICE, 'w', encoding='utf-8') as fh:
+        json.dump({'generado': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
+                   'archivos': sorted(files)}, fh, ensure_ascii=False, indent=0)
 
     def raiz(f):
         p = os.path.splitext(f)[0].split('-')
@@ -178,6 +229,56 @@ def main():
         return 0
     nuevas = [r for r in repetidas if clave(r[1]) not in aceptadas]
 
+    # --- la portada no puede ser la foto de un color que la fila no vende ---
+    # Es la forma exacta que tuvieron los ocho errores del 09/09: la fila
+    # cambio de color bajo el mismo ID y la portada quedo. El chequeo 10 no lo
+    # veia porque la portada coincidia con una foto "suya". Aca se compara la
+    # huella de la portada con TODAS las fotos de color del catalogo: si es
+    # identica a una <X>-<color>.jpg y ese color no esta entre los que vende
+    # la fila, la portada miente, y eso frena la publicacion.
+    porhuella = collections.defaultdict(set)
+    for f in files:
+        m = re.match(r'^([A-Z]{2,3}-[A-Z?]{2,4}-\d{3})-(.+)\.jpg$', f)
+        if m:
+            porhuella[firma[f]].add(m.group(2).lower())
+    mentirosas = []
+    for r in rows:
+        pid = r['ID'].strip()
+        port = pid + '.jpg'
+        if port not in firma:
+            continue
+        vende = set()
+        for c in colores_de_la_fila(r):
+            s = slug(c)
+            vende.update({s, s.replace('-', '')})
+        if not vende:
+            continue
+        de_que_color = porhuella.get(firma[port], set())
+        if de_que_color and not (de_que_color & vende):
+            mentirosas.append('%-14s vende %-28s pero la portada es la foto %s'
+                              % (pid, '/'.join(colores_de_la_fila(r))[:28],
+                                 '/'.join(sorted(de_que_color))))
+    # La otra forma del mismo error: dos portadas identicas en filas cuyos
+    # colores no se tocan. SW-APP-056 (Black) era la misma imagen que
+    # SW-APP-014 (Natural): ninguna es un archivo "-color", pero una de las
+    # dos miente. Se avisa por las dos, que alguien decida cual.
+    vende_de = {}
+    for r in rows:
+        pid = r['ID'].strip()
+        if pid + '.jpg' in firma:
+            s = set()
+            for c in colores_de_la_fila(r):
+                s.update({slug(c), slug(c).replace('-', '')})
+            if s:
+                vende_de[pid] = s
+    for fs in H.values():
+        bases = [os.path.splitext(f)[0] for f in fs if os.path.splitext(f)[0] in vende_de]
+        for i, a in enumerate(bases):
+            for b in bases[i + 1:]:
+                if not (vende_de[a] & vende_de[b]):
+                    mentirosas.append('%-14s y %-14s tienen la misma portada y venden colores distintos (%s / %s)'
+                                      % (a, b, '/'.join(sorted(vende_de[a]))[:22], '/'.join(sorted(vende_de[b]))[:22]))
+
     # Dentro de un mismo Grupo, el archivo de un color deberia ser el mismo en
     # todas las filas: el iPhone 17 Pro naranja es el mismo aparato valga 1190
     # o 1400. Cuando una fila se aparta de las demas, esa es la sospechosa.
@@ -258,6 +359,7 @@ def main():
     w(f'  {len(nuevas):>4}  MISMA FOTO en modelos distintos, SIN REVISAR  <-- mirar primero')
     w(f'  {len(cambiadas):>4}  FOTOS QUE CAMBIARON sin pasar por revision   <-- mirar primero')
     w(f'  {len(aparecidas):>4}  FOTOS NUEVAS que nadie miro todavia          <-- mirar primero')
+    w(f'  {len(mentirosas):>4}  PORTADAS de un color que la fila no vende     <-- mirar primero')
     w(f'  {len(pendientes):>4}  fotos viejas que quedaron por mirar')
     w(f'  {len(portada_suelta):>4}  portadas que no son ninguna de sus fotos de color')
     w(f'  {len(color_disidente):>4}  mismo color con distinta foto dentro del grupo')
@@ -311,7 +413,11 @@ def main():
            '   La ficha muestra una imagen por fuera y otra al tocar los colores.'
            + chr(10) + '   Asi se veia el iPhone 17: un Air en la grilla y el 17 real adentro.'
            + chr(10) + '   Puede ser legitimo (una foto general del producto), pero hay que mirarlo.')
-    bloque('11) FOTOS VIEJAS QUE QUEDARON POR MIRAR', pendientes,
+    bloque('11) PORTADAS QUE SON LA FOTO DE UN COLOR QUE LA FILA NO VENDE', mentirosas,
+           '   El archivo <ID>.jpg es identico a una foto <X>-<color>.jpg y ese color'
+           + chr(10) + '   no esta en la fila de hoy. La fila cambio de color y la portada quedo.'
+           + chr(10) + '   Se arregla copiando la foto del primer color de hoy sobre <ID>.jpg.')
+    bloque('12) FOTOS VIEJAS QUE QUEDARON POR MIRAR', pendientes,
            '   Estaban antes de que existiera el registro. No frenan la publicacion,'
            + chr(10) + '   pero son las que todavia podrian tener una imagen equivocada.'
            + chr(10) + '   Para repartirlas entre agentes que las miren de a lotes:'
@@ -328,7 +434,7 @@ def main():
     # que nadie miro nunca. Lo demas son avisos: una foto que falta se ve como
     # un recuadro con la marca y no engania a nadie.
     # Mientras no exista el registro no se frena por (8): serian todas.
-    return 1 if (nuevas or cambiadas or aparecidas) else 0
+    return 1 if (nuevas or cambiadas or aparecidas or mentirosas) else 0
 
 if __name__ == '__main__':
     sys.exit(main())

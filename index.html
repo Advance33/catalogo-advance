@@ -548,7 +548,7 @@
   .row2.abierta select[hidden]{display:none}
 
   /* ---------- Grilla ---------- */
-  .grid{display:grid;gap:14px;padding:22px 0 64px;grid-template-columns:repeat(auto-fill,minmax(216px,1fr))}
+  .grid{display:grid;gap:16px;padding:22px 0 64px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
   .card{
     background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
     display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow);
@@ -572,7 +572,7 @@
 
   .foto{position:relative;aspect-ratio:1/1;background:var(--foto-bg);
         display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .foto img{width:100%;height:100%;object-fit:contain;padding:14px;display:block}
+  .foto img{width:100%;height:100%;object-fit:contain;padding:24px;display:block}
   .sinfoto{
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
     /* Oscuro a propósito: el fondo claro de .foto es para las fotos reales
@@ -600,8 +600,17 @@
   .foto .badge{position:absolute;top:10px;left:10px;z-index:2}
   .badge.si{background:var(--ok-soft);color:var(--ok)}
   .badge.no{background:var(--surface-2);color:var(--faint)}
+  /* El ahorro es lo unico que puede llevar el color de la marca en la foto:
+     es la razon por la que ese producto esta en la vidriera. */
+  .badge.ahorro{background:var(--acento);color:#fff;letter-spacing:.08em;
+                box-shadow:0 4px 12px rgba(124,58,237,.30)}
+  /* Si el producto ademas esta agotado, el ahorro baja un renglon para no
+     taparse con el otro cartel. */
+  .foto .badge.no + .badge.ahorro{top:38px}
+  /* El precio de antes, al lado del de hoy */
+  .pie s.antes{font:500 11.5px/1 var(--mono);color:var(--faint);margin-left:7px}
 
-  .cuerpo{padding:13px 14px 14px;display:flex;flex-direction:column;gap:7px;flex:1}
+  .cuerpo{padding:15px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
   .marca{
     font:600 9.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--faint);
     display:flex;align-items:center;justify-content:space-between;gap:8px;
@@ -1531,7 +1540,7 @@
   /* En un monitor muy ancho la grilla sola se estira demasiado y las tarjetas
      quedan enormes: mejor sumar columnas que agrandar cada una. */
   @media (min-width:1600px){
-    .columnas .grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+    .columnas .grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
   }
 
   /* ---------- Las recomendaciones en el celular ----------
@@ -1682,6 +1691,8 @@
       <select id="precio"><option value="">Cualquier precio</option></select>
       <!-- Montura y apertura solo tienen sentido en lentes: el script los
            muestra al elegir esa categoría y los esconde al salir. -->
+      <select id="capacidad" hidden><option value="">Cualquier capacidad</option></select>
+      <select id="ram" hidden><option value="">Cualquier memoria</option></select>
       <select id="montura" hidden><option value="">Cualquier montura</option></select>
       <select id="apertura" hidden>
         <option value="">Cualquier apertura</option>
@@ -1821,7 +1832,7 @@ let TC = null;              // cotización efectiva (número) o null si no hay
 // el catálogo vuelve a respetar el orden crudo de las filas de la planilla.
 const ORDEN_DEF = 'modelo';
 const filtros = { q:'', cat:'', marca:'', orden:ORDEN_DEF, soloStock:false,
-                  rango:'', montura:'', apertura:'' };
+                  rango:'', montura:'', apertura:'', capacidad:'', ram:'' };
 
 // Tramos de precio. Los cortes salen de cómo está repartido el catálogo, no de
 // números redondos porque sí: hasta 200 entran los accesorios, entre 500 y 2000
@@ -2061,6 +2072,66 @@ function probarFotos(prods, cuantas = 40, esperaMax = 4000){
   });
 }
 
+/* ---------- Que foto va en la portada ----------
+   La portada tiene que ser la foto del PRIMER color que la fila vende HOY.
+   Antes era fija: fotos/<ID>.jpg, elegida a mano un dia; cuando la planilla
+   rotaba los colores de la fila bajo el mismo ID, la foto quedaba mostrando
+   otro color (el 09/09/2026 pasaba en ocho productos, con los chequeos en
+   cero). Ahora se elige al cargar, con el indice de archivos que deja
+   verificar-fotos.py en fotos/indice.json (PUBLICAR.bat lo regenera):
+     1. fotos/<ID>-<primer color>.jpg, si existe
+     2. fotos/<ID>.jpg, si existe
+     3. nada: el placeholder con la marca
+   Sin indice (no llego, o es un despliegue viejo) vuelve el criterio de
+   siempre: <ID>.jpg y que el onerror decida. */
+let INDICE_FOTOS = null;          // Set de nombres de archivo, o null si no se leyo
+
+async function cargarIndiceFotos(){
+  if(!CARPETA_FOTOS) return null;
+  try{
+    const r = await fetch(CARPETA_FOTOS + 'indice.json?_=' + Date.now(), { cache:'no-store' });
+    if(!r.ok) return null;
+    const d = await r.json();
+    return new Set(Array.isArray(d) ? d : (d.archivos || []));
+  }catch(e){ return null; }
+}
+
+function fotoDeCarpeta(id, color){
+  if(!CARPETA_FOTOS || !id) return '';
+  const arma = n => urlFoto(CARPETA_FOTOS + encodeURIComponent(n) + EXT_FOTOS);
+  if(!INDICE_FOTOS) return arma(id);
+  const primero = partirColores(color)[0];
+  if(primero){
+    const s = slugColor(primero);
+    for(const f of [s, s.replace(/-/g, '')]){
+      if(INDICE_FOTOS.has(id + '-' + f + EXT_FOTOS)) return arma(id + '-' + f);
+    }
+  }
+  return INDICE_FOTOS.has(id + EXT_FOTOS) ? arma(id) : '';
+}
+
+/* ---------- El manifiesto de la planilla (hoja Meta) ----------
+   Desde el contrato landing/1.1 (09/09/2026) la planilla trae una segunda
+   hoja, Meta, con una fila "json" que cuenta como salio la corrida del dia:
+   con que version del contrato se escribio, hasta que fecha se verifico, que
+   IDs cambiaron de producto o de color, cuales estan en oferta. La web la lee
+   para no tener que adivinar: sin ella, el sello "Actualizado" no distinguia
+   "corrio con fecha de ayer" de "no corrio". Si no llega, todo sigue igual. */
+const META_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Meta&tqx=out:csv`;
+let META = null;
+
+async function bajarMeta(){
+  try{
+    const r = await fetch(META_URL + '&_=' + Date.now());
+    if(!r.ok) return null;
+    const fila = parseCSV(await r.text()).find(f => f[0] === 'json');
+    const m = fila ? JSON.parse(fila[1]) : null;
+    if(m && !/^landing\/1\./.test(m.contrato || ''))
+      console.warn('La planilla viene con un contrato que esta web no conoce:', m.contrato);
+    return m;
+  }catch(e){ return null; }
+}
+
 /* ---------- Carga de datos ---------- */
 
 async function bajarCSV(){
@@ -2113,7 +2184,11 @@ function sacarNotasDelNombre(p){
 }
 
 async function cargar(){
-  const filas = parseCSV(await bajarCSV()).filter(f => f.some(c => c.trim()));
+  // La planilla y el indice de fotos se piden a la vez; el indice hace falta
+  // antes de armar cada producto, porque decide su foto de portada.
+  const [crudo, indice] = await Promise.all([bajarCSV(), cargarIndiceFotos()]);
+  INDICE_FOTOS = indice;
+  const filas = parseCSV(crudo).filter(f => f.some(c => c.trim()));
   if(filas.length < 2) throw new Error('la planilla vino vacía');
 
   // Ubico cada columna por su nombre, así no se rompe si reordenás la planilla
@@ -2203,10 +2278,10 @@ async function cargar(){
         garantia: val(f,C.garantia),
         condicion:val(f,C.condicion),
         teclado:  val(f,C.teclado),
-        // Primero la columna Imagen; si está vacía, se prueba con la carpeta
-        // usando el ID. Si el archivo no existe, el onerror muestra el placeholder.
+        // Primero la columna Imagen; si está vacía, la carpeta: la foto del
+        // primer color de hoy si existe, si no la del ID (ver fotoDeCarpeta).
         imagen: urlFoto(val(f,C.imagen)) ||
-                (CARPETA_FOTOS && id ? urlFoto(CARPETA_FOTOS + encodeURIComponent(id) + EXT_FOTOS) : ''),
+                fotoDeCarpeta(id, colorDeLaFila(val(f,C.color), val(f,C.desc) || val(f,C.modelo))),
         activo: C.activo === -1 || val(f,C.activo) === '' || esSi(val(f,C.activo))
       };
     })
@@ -2231,6 +2306,12 @@ function filtrar(){
     if(filtros.marca && p.marca !== filtros.marca) return false;
     // Con que UNA variante tenga stock, el modelo se muestra
     if(filtros.soloStock && !p.stock)              return false;
+    // Por variante: un iPhone agrupado tiene 256, 512 y 1TB en la misma tarjeta,
+    // y buscando "256" tiene que aparecer igual.
+    if(filtros.capacidad && !p.variantes.some(v => capacidadDe(v) === filtros.capacidad))
+      return false;
+    if(filtros.ram && !p.variantes.some(v => ramDe(v) === filtros.ram))
+      return false;
     if(filtros.montura  && p.montura  !== filtros.montura)  return false;
     if(filtros.apertura && p.apertura !== filtros.apertura) return false;
     if(filtros.rango){
@@ -2341,7 +2422,9 @@ const ORDEN_CATS = [
   // Foto y video: cada cosa al lado de su accesorio
   'Filmadora', 'Cámara de Acción', 'Cámara', 'Accesorio Cámara',
   'Objetivo', 'Gafas Inteligentes',
-  'Drone', 'Accesorio Drone'
+  'Drone', 'Accesorio Drone',
+  // Lectura: entro en septiembre de 2026 y caia al final de la barra
+  'E-Reader'
 ];
 
 /* La marca que se pone adelante en cada categoría. NO filtra: aparece primera
@@ -2484,6 +2567,47 @@ const linkWA = texto => WHATSAPP ? `https://wa.me/${WHATSAPP}?text=${encodeURICo
    escritas ("SAMSUNG A56 12/256GB 5G"). En vez de pedirte que cargues 483
    fichas a mano, las leemos de ahí. Si algún día agregás una columna
    "Detalle" a la planilla, esa manda y se muestra completa en la ficha. */
+/* ---------- Capacidad y memoria, como filtro ----------
+   El dato ya se leia del nombre para los chips de la ficha ("256GB", "16GB
+   RAM"): aca se reusa la misma lectura para poder filtrar por eso, que es como
+   busca el que ya sabe lo que quiere ("un iPhone de 256").
+
+   Se devuelven normalizados y con su valor en GB, para poder ordenar 128 antes
+   que 1TB sin que el orden alfabetico ponga "1TB" primero. */
+
+function capacidadDe(p){
+  const txt = [p.desc, p.modelo].filter(Boolean).join(' ');
+  const dual = /(\d{1,2})\s*(?:GB)?\s*\/\s*(\d{3,4})\s*GB\b/i.exec(txt);
+  if(dual) return dual[2] + 'GB';
+  const tb = /(\d(?:[.,]\d)?)\s*TB\b/i.exec(txt);
+  if(tb) return tb[1].replace(',', '.') + 'TB';
+  const gb = /(?:^|[\s(/])(\d{2,4})\s*GB\b/i.exec(txt);
+  return gb ? gb[1] + 'GB' : null;
+}
+
+function ramDe(p){
+  const txt = [p.desc, p.modelo].filter(Boolean).join(' ');
+  // "12/256GB" y "16GB/256GB": el primer numero es la RAM
+  const dual = /(\d{1,2})\s*(?:GB)?\s*\/\s*(\d{3,4})\s*GB\b/i.exec(txt);
+  if(dual) return dual[1] + 'GB';
+  // "16ram", "24 RAM": como lo escribe la planilla en notebooks
+  const suelta = /\b(\d{1,2})\s*ram\b/i.exec(txt);
+  return suelta ? suelta[1] + 'GB' : null;
+}
+
+/* Para ordenar: 512GB va antes que 1TB, y alfabeticamente seria al reves. */
+const enGB = v => {
+  const m = /^([\d.]+)(GB|TB)$/i.exec(v || '');
+  if(!m) return 0;
+  return parseFloat(m[1]) * (m[2].toUpperCase() === 'TB' ? 1024 : 1);
+};
+
+/* Los rubros donde la capacidad significa algo. En una camara o un lente el
+   "128GB" que pueda aparecer en el nombre es de la tarjeta de memoria que
+   viene de regalo, no del producto: filtrar por eso confundiria. */
+const CATS_CON_CAPACIDAD = ['Celular', 'Tablet', 'iPad', 'Notebook', 'MacBook',
+                            'Desktop', 'Consola', 'E-Reader'];
+
 function specs(p){
   const txt = [p.desc, p.modelo].filter(Boolean).join(' ');
   const out = [];
@@ -3145,7 +3269,7 @@ function tarjeta(p){
   const opts  = htmlOpciones(p);
 
   el.innerHTML = `
-    ${CON_FOTOS ? `<div class="foto${p.imagen ? '' : ' vacia'}">${badge}${htmlFoto(p,'loading="lazy"')}</div>` : ''}
+    ${CON_FOTOS ? `<div class="foto${p.imagen ? '' : ' vacia'}">${badge}${htmlAhorro(p)}${htmlFoto(p,'loading="lazy"')}</div>` : ''}
     <div class="cuerpo">
       <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}</span>
       <h2 class="nombre">${esc(p.desc)}</h2>
@@ -3156,6 +3280,7 @@ function tarjeta(p){
       <div class="pie">
         <div>
           <span class="usd">${precioTarjeta(p)}</span>
+          ${ahorro(p) ? `<s class="antes">USD ${plata(p.antes)}</s>` : ''}
           ${ars ? `<div class="ars">${ars}</div>` : ''}
         </div>
         <div class="acciones">
@@ -3231,23 +3356,26 @@ const POR_RUBRO_MAX = 2;   // para que no sean seis celulares seguidos
        const VIDRIERA_FIJOS = ['CEL-APP-072', 'NB-APP-090'];
    Entran primero y no los saca la regla de variedad. Si el ID no existe o el
    producto se quedó sin stock, se ignora solo. */
-const VIDRIERA_FIJOS = [
-  'CEL-APP-078',   // iPhone 17 Pro Max 256GB (Blue) — es la variante que
-                   // manda el precio de la tarjeta "iPhone 17 Pro Max"
-  'CEL-APP-004',   // iPhone 15 128GB (Black/Blue)
-  'AUD-APP-002',   // AirPods 4
-  'CON-SON-003',   // PlayStation 5 Física 1TB
-  'SW-APP-044',    // Apple Watch Series 11 GPS 46mm (Jet Black)
-  'NB-APP-004',    // MacBook Air M4 15" 16/256GB (Midnight)
-  'TAB-APP-001',   // iPad 11" A16 128GB Wi-Fi
-  'DRO-DJI-009',   // DJI Mini 5 Pro (RC-N3) — la que manda el precio del grupo
-];
+/* Vacia a proposito desde el 09/09/2026. Tenia ocho IDs que eran exactamente
+   los ocho con "Precio anterior" en la planilla: no aportaba nada que la
+   columna no hiciera sola, y quedaba atada a IDs cuyo contenido cambia (el
+   comentario de SW-APP-044 decia "Jet Black" y la fila ya era Rose Gold). Las
+   ofertas las define la planilla (contrato landing/1.1, §6.1). El mecanismo
+   queda por si algun dia hay que clavar algo a mano un rato. */
+const VIDRIERA_FIJOS = [];
 
 const enOferta = m => m.antes !== null && m.precio !== null && m.antes > m.precio;
 /* Sólo para ordenar: primero la baja más grande. El número no se muestra
    porque en este rubro las diferencias son chicas y un "4% OFF" resta más de
    lo que suma; el precio tachado al lado del nuevo se entiende solo. */
 const descuento = m => Math.round((1 - m.precio / m.antes) * 100);
+/* Lo que se muestra es la PLATA que se ahorra, no el porcentaje. En este rubro
+   las bajas son de 15 o 20 dolares sobre productos de mil y pico: "1% OFF" no
+   le dice nada a nadie, "Ahorrás USD 20" si, y no depende de la proporcion. */
+const ahorro = m => (m.antes !== null && m.precio !== null && m.antes > m.precio)
+  ? Math.round(m.antes - m.precio) : 0;
+const htmlAhorro = m => ahorro(m)
+  ? `<span class="badge ahorro">Ahorrás USD ${plata(ahorro(m))}</span>` : '';
 // El regalo es el respaldo: "Sin cargador" también vive en esa columna y no es
 // ningún beneficio, así que sólo cuentan los que suman algo.
 const conRegalo = m => /^\s*\+|🎁/.test(m.incluye || '');
@@ -3303,7 +3431,7 @@ function htmlOferta(m){
       <div class="of-datos">
         <span class="of-marca">${esc(m.marca)}</span>
         <h3>${esc(m.desc)}</h3>
-        ${hay ? `<div class="of-tags"><span class="of-off">Oferta</span></div>` : ''}
+        ${hay ? `<div class="of-tags"><span class="of-off">Ahorrás USD ${plata(ahorro(m))}</span></div>` : ''}
         ${!hay && m.incluye ? `<div class="of-tags"><span class="of-regalo">${esc(m.incluye)}</span></div>` : ''}
         <div class="of-precio">
           ${hay ? `<s>USD ${plata(m.antes)}</s>` : ''}
@@ -3615,7 +3743,8 @@ let verTodo = false;
    cinta, por el buscador o por la URL) ya es una intencion y manda la grilla. */
 const enPortada = () => !verTodo && !filtros.cat && !filtros.q.trim() && !filtros.marca
                      && !filtros.rango && !filtros.soloStock
-                     && !filtros.montura && !filtros.apertura;
+                     && !filtros.montura && !filtros.apertura
+                     && !filtros.capacidad && !filtros.ram;
 
 /* Pedir la grilla completa a proposito: lo usa el boton del final del mosaico
    y tambien las pruebas, que necesitan los productos dibujados. */
@@ -4145,6 +4274,40 @@ function sincronizarLentes(){
   $('montura').hidden = $('apertura').hidden = !hayLentes;
   $('montura').value  = filtros.montura;
   $('apertura').value = filtros.apertura;
+  sincronizarCapacidad();
+}
+
+/* Capacidad y memoria salen del nombre, asi que las opciones se arman con lo
+   que hay HOY en el rubro abierto: sin esto, en Celulares aparecerian las
+   capacidades de las MacBook. Si queda una sola opcion el filtro no sirve para
+   elegir nada y se esconde. */
+function sincronizarCapacidad(){
+  const enJuego = MODELOS.filter(m =>
+    (!filtros.cat || m.cat === filtros.cat) &&
+    (!filtros.marca || m.marca === filtros.marca));
+  /* Solo DENTRO de un rubro. En "Todo" se mezclarian la capacidad de un iPhone
+     con la de una MacBook y la de una consola, que no se comparan entre si; y
+     ademas estiraba la columna de filtros hasta necesitar scroll propio. */
+  const sirve = !!filtros.cat && CATS_CON_CAPACIDAD.includes(filtros.cat);
+
+  const armar = (id, saca, rotulo) => {
+    const vals = [...new Set(enJuego.flatMap(m => m.variantes.map(saca)).filter(Boolean))]
+                   .sort((a, b) => enGB(a) - enGB(b));
+    const hay = sirve && vals.length > 1;
+    if(!hay) filtros[id] = '';
+    $(id).hidden = !hay;
+    if(hay){
+      const cuenta = v => enJuego.filter(m => m.variantes.some(x => saca(x) === v)).length;
+      $(id).innerHTML = `<option value="">${rotulo}</option>`
+        + vals.map(v => `<option value="${esc(v)}">${esc(v)} (${cuenta(v)})</option>`).join('');
+    }
+    // Lo elegido puede no existir mas al cambiar de rubro
+    if(filtros[id] && !vals.includes(filtros[id])) filtros[id] = '';
+    $(id).value = filtros[id];
+  };
+
+  armar('capacidad', capacidadDe, 'Cualquier capacidad');
+  armar('ram', ramDe, 'Cualquier memoria');
 }
 
 function error(e){
@@ -4198,14 +4361,16 @@ async function actualizar(primera){
   if(primera) grid.innerHTML = Array.from({length:10},()=>'<div class="skeleton"></div>').join('');
   try{
     // La cotización y el catálogo se piden a la vez, no uno después del otro
-    const [prods, tc] = await Promise.all([cargar(), traerCotizacion()]);
+    const [prods, tc, meta] = await Promise.all([cargar(), traerCotizacion(), bajarMeta()]);
     PRODUCTOS = prods;
     MODELOS   = agrupar(prods);   // las variantes del mismo modelo van a una sola tarjeta
     TC = tc;
+    META = meta;
     ULTIMA_OK = Date.now();
-    // Con columna "Imagen" la URL viene escrita, así que existe.
-    // Con carpeta hay que comprobar que los archivos estén de verdad.
-    CON_FOTOS = CARPETA_FOTOS
+    // Con columna "Imagen" la URL viene escrita, así que existe. Con el indice
+    // de la carpeta tambien se sabe. Solo sin ninguno de los dos hay que
+    // probar los archivos uno por uno.
+    CON_FOTOS = (CARPETA_FOTOS && !INDICE_FOTOS)
       ? await probarFotos(PRODUCTOS)
       : PRODUCTOS.some(p => p.imagen);
     armarFiltros();          // también en los refrescos: la planilla pudo cambiar
@@ -4214,7 +4379,11 @@ async function actualizar(primera){
     pintar();
     if(primera) abrirFichaDesdeURL();
     const fecha = fechaMasNueva(PRODUCTOS);
-    sello(fecha ? `Actualizado ${fecha}` : 'En vivo', true);
+    // Con manifiesto se sabe si la carga del dia corrio: "hoy" solo cuando la
+    // planilla lo confirma; si no, la fecha real de la fila mas nueva, que es
+    // lo que el cliente puede creer sin que le mientan.
+    sello(META && META.verificado_hoy ? 'Actualizado hoy'
+          : fecha ? `Actualizado ${fecha}` : 'En vivo', true);
   }catch(e){
     console.warn('No se pudo actualizar:', e);
     if(primera) error(e);
@@ -4899,6 +5068,8 @@ $('clear').onclick = () => {
 };
 $('orden').onchange     = e => { filtros.orden = e.target.value;    aplicarFiltro(true); };
 $('precio').onchange    = e => { filtros.rango = e.target.value;    aplicarFiltro(true); };
+$('capacidad').onchange = e => { filtros.capacidad = e.target.value; aplicarFiltro(true); };
+$('ram').onchange       = e => { filtros.ram = e.target.value;       aplicarFiltro(true); };
 $('montura').onchange   = e => { filtros.montura = e.target.value;  aplicarFiltro(true); };
 $('apertura').onchange  = e => { filtros.apertura = e.target.value; aplicarFiltro(true); };
 $('soloStock').onchange = e => { filtros.soloStock = e.target.checked; aplicarFiltro(true); };

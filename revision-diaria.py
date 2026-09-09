@@ -128,6 +128,40 @@ def preparar_salida():
         pass
 
 
+SHEET_ID = '18xxslIKTBnVMrLixCGlQBJGje3vKBYQHXy0qvVp8tpQ'
+META_URL = ('https://docs.google.com/spreadsheets/d/%s/gviz/tq?sheet=Meta&tqx=out:csv'
+            % SHEET_ID)
+
+
+def carga_vieja():
+    """Lee la hoja Meta y dice si la planilla dejo de actualizarse.
+
+    Devuelve un texto con el motivo, o None si esta al dia (o si no se pudo
+    leer: por falta de internet no se alarma a nadie).
+
+    La carga diaria corre cerca de las 13:00 y esta revision a las 09:30: a
+    esa hora lo normal es que la fila mas nueva sea de AYER. Se avisa recien
+    cuando tiene dos dias o mas, que es cuando de verdad falto una corrida.
+    """
+    import csv, io, json, urllib.request
+    try:
+        with urllib.request.urlopen(META_URL, timeout=30) as r:
+            txt = r.read().decode('utf-8')
+        fila = next((f for f in csv.reader(io.StringIO(txt)) if f and f[0] == 'json'), None)
+        if not fila:
+            return None
+        meta = json.loads(fila[1])
+        fecha = meta.get('fecha_verificacion_max') or ''
+        d, m, a = [int(x) for x in fecha.split('/')]
+        dias = (datetime.date.today() - datetime.date(a, m, d)).days
+        if dias >= 2:
+            return ('la fila mas nueva de la planilla es del %s (hace %d dias); '
+                    'la carga diaria no esta corriendo' % (fecha, dias))
+        return None
+    except Exception as e:
+        return None
+
+
 def main():
     preparar_salida()
 
@@ -175,7 +209,15 @@ def main():
             elif linea.strip().startswith('Se arreglan en'):
                 break
 
-    if r.returncode == 1 and graves:
+    # La planilla trae su propio manifiesto (hoja Meta, contrato landing/1.1)
+    # que dice hasta que fecha se verifico. Si la carga del dia no corrio, el
+    # sitio sigue mostrando precios viejos con toda naturalidad: esta es la
+    # unica forma de enterarse sin abrir la planilla.
+    vieja = carga_vieja()
+    with open(log, 'a', encoding='utf-8') as f:
+        f.write('\n\nCarga de la planilla: %s\n' % (vieja or 'al dia'))
+
+    if (r.returncode == 1 and graves) or vieja:
         with open(AVISO, 'w', encoding='utf-8') as f:
             f.write(
                 'EL CATALOGO TIENE ERRORES\n'
@@ -190,10 +232,13 @@ def main():
                 'El detalle completo esta en:\n%s\n\n'
                 'Cuando se resuelvan, este archivo desaparece solo\n'
                 'en la revision del dia siguiente.\n'
-                % (ahora, '=' * 60, '\n'.join(graves), '=' * 60, log))
+                % (ahora, '=' * 60,
+                   '\n'.join(graves + (['[planilla] LA PLANILLA NO SE ACTUALIZA: ' + vieja] if vieja else [])),
+                   '=' * 60, log))
         notificar('Catalogo Advance Tecno',
-                  '%d error(es) grave(s) en la planilla. Mira el aviso en el Escritorio.' % len(graves))
-        print('%d graves. Aviso dejado en el Escritorio.' % len(graves))
+                  ('%d error(es) grave(s) en la planilla. ' % len(graves) if graves else 'La planilla no se actualiza. ')
+                  + 'Mira el aviso en el Escritorio.')
+        print('%d graves%s. Aviso dejado en el Escritorio.' % (len(graves), ' + carga vieja' if vieja else ''))
         return 1
 
     if r.returncode == 2:

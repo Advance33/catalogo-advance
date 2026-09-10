@@ -165,7 +165,15 @@ def pinta(token, colores):
     if ',' in k:
         return False
     palabras = k.split()
-    return bool(palabras) and (palabras[-1] in colores or palabras[0] in colores)
+    if palabras and (palabras[-1] in colores or palabras[0] in colores):
+        return True
+    # Un producto de dos tonos: "Titanio Gris · Blanco" en los relojes,
+    # "Ice White · White Leather + White Silicone" en los Kieslect. Se pinta
+    # con el primero, que es el que se ve de frente. La página hace lo mismo
+    # en pintas(); sin esto el validador pedía cargar colores que en pantalla
+    # ya salían pintados.
+    primero = re.split(r'[-·]', k)[0].strip()
+    return bool(primero) and primero != k and primero in colores
 
 
 def regla_ids_y_precios(filas, ctx):

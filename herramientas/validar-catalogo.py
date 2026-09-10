@@ -10,11 +10,11 @@ scripts, asi que hay que mirarlo antes de cada publicacion.
 
 Lo que mira:
   1. Que se pueda leer y no tenga filas rotas.
-  2. Que cada CODIGO_COLOR sea unico y este bien formado.
+  2. Que cada CODIGO_VAR sea unico y este bien formado.
   3. Que un CODIGO no tenga dos productos distintos adentro.
-  4. Que el codigo de color exista en el diccionario.
-  5. Que ninguna escritura de color pertenezca a dos colores.
-  6. Que ningun codigo de color sea prefijo de otro.
+  4. Que las variantes de cada producto esten numeradas sin repetir.
+  5. Que dos variantes del mismo producto no se escriban igual.
+  6. Que las fusiones apunten a un codigo que existe y no den vueltas.
   7. Que el contador no haya retrocedido.
   8. Que NO HAYA DESAPARECIDO ningun codigo que estaba en la version
      anterior. Este es el importante: un codigo que se va se lleva las fotos
@@ -41,9 +41,9 @@ def version_anterior():
         if r.returncode != 0 or not r.stdout:
             return None
         import csv, io
-        return {f['CODIGO_COLOR'].strip()
+        return {f['CODIGO_VAR'].strip()
                 for f in csv.DictReader(io.StringIO(r.stdout.decode('utf-8')))
-                if (f.get('CODIGO_COLOR') or '').strip()}
+                if (f.get('CODIGO_VAR') or '').strip()}
     except Exception:
         return None
 
@@ -63,21 +63,25 @@ def main():
         return 0
 
     # 2. codigos unicos y bien formados
-    vistos = collections.Counter(f['CODIGO_COLOR'] for f in filas)
+    vistos = collections.Counter(f['CODIGO_VAR'] for f in filas)
     for c, n in vistos.items():
         if n > 1:
             graves.append('%s aparece %d veces' % (c, n))
     for f in filas:
-        cc, cod = f['CODIGO_COLOR'].strip(), (f.get('CODIGO') or '').strip()
+        cc, cod = f['CODIGO_VAR'].strip(), (f.get('CODIGO') or '').strip()
         p = CM.partir(cc)
         if not p:
             graves.append('%s no tiene la forma AT-0000 ni AT-0000-COL' % cc)
         elif p[0] != cod:
             graves.append('%s no empieza con su CODIGO (%s)' % (cc, cod))
-        elif p[1] != (f.get('CodigoColor') or '').strip():
-            avisos.append('%s: el sufijo y la columna CodigoColor no coinciden' % cc)
+        elif p[1] != (f.get('NumVar') or '').strip():
+            avisos.append('%s: el sufijo y la columna NumVar no coinciden' % cc)
 
     # 3. un codigo, un producto
+    idx = CM.indexar(filas)
+    por_codigo_filas = collections.defaultdict(list)
+    for f in filas:
+        por_codigo_filas[f['CODIGO']].append(f)
     por_codigo = collections.defaultdict(set)
     for f in filas:
         por_codigo[f['CODIGO']].add((f.get('Marca', ''), f.get('Categoria', ''), f.get('Producto', '')))
@@ -86,31 +90,34 @@ def main():
             graves.append('%s tiene %d productos distintos adentro: %s'
                           % (cod, len(datos), ' | '.join(sorted(d[2][:40] for d in datos))))
 
-    # 4 y 5. el diccionario de colores
-    dicc = CM.leer_colores()
-    codigos_color = {c for c, _ in dicc.values()}
-    for f in filas:
-        cc = (f.get('CodigoColor') or '').strip()
-        if cc and cc not in codigos_color:
-            graves.append('%s usa el color %s, que no esta en catalogo-colores.csv'
-                          % (f['CODIGO_COLOR'], cc))
-    dueños = collections.defaultdict(set)
-    import csv, io
-    if os.path.exists(CM.COLORES_CSV):
-        for f in csv.DictReader(io.open(CM.COLORES_CSV, encoding='utf-8', newline='')):
-            for e in [f['Color']] + [x for x in (f.get('Escrituras') or '').split('|') if x]:
-                if e.strip():
-                    dueños[CM.norm(e)].add(f['Codigo'])
-    for e, cods in dueños.items():
-        if len(cods) > 1:
-            graves.append('la escritura "%s" la reclaman %s' % (e, ', '.join(sorted(cods))))
+    # 4. las variantes de cada producto: numeradas sin repetir ni saltear
+    for cod, fs in por_codigo_filas.items():
+        nums = [(f.get('NumVar') or '').strip() for f in fs]
+        con = [x for x in nums if x]
+        if len(set(con)) != len(con):
+            graves.append('%s tiene dos variantes con el mismo numero' % cod)
+        if con and sorted(int(x) for x in con) != list(range(1, len(con) + 1)):
+            avisos.append('%s tiene la numeracion con huecos: %s' % (cod, ','.join(sorted(con))))
+        if len(fs) > 1 and '' in nums:
+            graves.append('%s mezcla una fila sin variante con otras que si la tienen' % cod)
 
-    # 6. ningun codigo de color prefijo de otro
-    todos = sorted(codigos_color)
-    for i, a in enumerate(todos):
-        for b in todos[i + 1:]:
-            if b.startswith(a):
-                avisos.append('los codigos de color %s y %s se confunden al leer' % (a, b))
+    # 5. dos variantes del mismo producto que se escriben igual
+    for cod, fs in por_codigo_filas.items():
+        dueño = {}
+        for f in fs:
+            for e in CM.escrituras_de(f):
+                if e in dueño and dueño[e] != f['CODIGO_VAR']:
+                    graves.append('en %s, "%s" la reclaman %s y %s'
+                                  % (cod, e, dueño[e], f['CODIGO_VAR']))
+                dueño[e] = f['CODIGO_VAR']
+
+    # 6. las fusiones apuntan a un codigo que existe y no hacen ciclo
+    for f in filas:
+        dest = (f.get('Fusionado_en') or '').strip().upper()
+        if dest and dest not in por_codigo_filas:
+            graves.append('%s dice estar fusionado en %s, que no existe' % (f['CODIGO_VAR'], dest))
+        elif dest and CM.seguir_fusion(f['CODIGO'], idx) == f['CODIGO'] and dest != f['CODIGO']:
+            graves.append('la fusion de %s da vueltas en circulo' % f['CODIGO'])
 
     # 7. el contador
     n_max = max((int(f['CODIGO'][3:]) for f in filas if CM.RE_CODIGO.match(f['CODIGO'])), default=0)
@@ -124,7 +131,7 @@ def main():
     if antes is None:
         avisos.append('no se pudo leer la version anterior (¿todavia no esta en git?)')
     else:
-        ahora = {f['CODIGO_COLOR'] for f in filas}
+        ahora = {f['CODIGO_VAR'] for f in filas}
         idos = sorted(antes - ahora)
         if idos:
             graves.append('%d codigo(s) que estaban en el commit anterior YA NO ESTAN: %s'
@@ -132,8 +139,8 @@ def main():
 
     print('CATALOGO MAESTRO — chequeo')
     print('=' * 62)
-    print('%d filas, %d productos, %d colores, contador en %d'
-          % (len(filas), len(por_codigo), len(codigos_color), contador))
+    print('%d variantes, %d productos, contador en %d'
+          % (len(filas), len(por_codigo), contador))
     print()
     for titulo, lista in (('GRAVE', graves), ('aviso', avisos)):
         print('%s (%d)' % (titulo, len(lista)))

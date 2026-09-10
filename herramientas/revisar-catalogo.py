@@ -5,7 +5,7 @@
 
 No toca nada: solo mira y cuenta. Sirve para dos cosas.
 
-Mientras el sheet no mande las columnas CODIGO y CODIGO_COLOR, esto dice si
+Mientras el sheet no mande las columnas CODIGO y CODIGO_VAR, esto dice si
 el puente sigue alcanzando: cuantas filas encuentran su producto por el
 vinculo guardado, cuantas son altas que necesitan codigo, y cuantas tienen
 un vinculo que dejo de ser de fiar (el ID quedo pegado a otro producto).
@@ -40,15 +40,13 @@ def main():
     pinta = validar.pinta
     cols = lambda f: FS.colores_de_la_fila(f, pinta, conocidos)
     idx = CM.indexar(maestro)
-    dicc = CM.leer_colores()
     por_codigo = {}
     for m in maestro:
         por_codigo.setdefault(m['CODIGO'], m)
-    existentes = {m['CODIGO_COLOR'] for m in maestro}
     fotos = {x for x in os.listdir(os.path.join(RAIZ, 'fotos')) if x.lower().endswith('.jpg')}
 
     cuenta = collections.Counter()
-    altas, dudosas, sin_esa_foto, color_nuevo, discrepan = [], [], [], [], []
+    altas, dudosas, sin_esa_foto, variante_nueva, discrepan = [], [], [], [], []
     for f in filas:
         codigo, de = CM.codigo_de_la_fila(f, idx, pinta, conocidos)
         cuenta[de] += 1
@@ -60,20 +58,16 @@ def main():
             (altas if de == 'falta' else dudosas).append(fila)
             continue
         for c in cols(f):
-            cc = CM.codigo_color(codigo, c, dicc)
-            if not cc:
-                color_nuevo.append((f['ID'].strip(), c))
-            elif cc not in existentes:
-                color_nuevo.append((f['ID'].strip(), '%s (falta %s en el catalogo)' % (c, cc)))
-        cand = CM.candidatos_foto(codigo, cols(f), dicc)
+            if not CM.variante_de(codigo, c, idx):
+                variante_nueva.append((f['ID'].strip(), '%s  (%s)' % (c, codigo)))
+        cand = CM.candidatos_foto(codigo, cols(f), idx)
         if cand and not any(c + '.jpg' in fotos for c in cand):
             sin_esa_foto.append((f['ID'].strip(), cand[0], (f.get('Descripción completa') or '')[:44]))
 
     productos = len({m['CODIGO'] for m in maestro})
     print('CATALOGO MAESTRO contra la planilla de hoy')
     print('=' * 66)
-    print('catalogo: %d productos, %d combinaciones con color, %d colores'
-          % (productos, len(maestro), len(set(dicc.values()))))
+    print('catalogo: %d productos, %d variantes' % (productos, len(maestro)))
     print('planilla: %d filas' % len(filas))
     print()
     print('  %4d  encontraron su producto por la columna CODIGO' % cuenta['columna'])
@@ -81,7 +75,7 @@ def main():
     print('  %4d  lo encontraron por el vinculo guardado con el SKU' % cuenta['sku'])
     print('  %4d  ALTAS: no estan en el catalogo y necesitan codigo' % len(altas))
     print('  %4d  DUDOSAS: el vinculo existe pero apunta a otro producto' % len(dudosas))
-    print('  %4d  colores que el catalogo no tiene' % len(color_nuevo))
+    print('  %4d  variantes que el catalogo no tiene' % len(variante_nueva))
     con_codigo = sum(1 for x in fotos if CM.partir(x[:-4]))
     if con_codigo:
         print('  %4d  productos cuya foto no esta en la carpeta' % len(sin_esa_foto))
@@ -108,7 +102,7 @@ def main():
     bloque('DUDOSAS: el vinculo ya no sirve, lo tiene que mirar una persona', dudosas)
     if discrepan:
         bloque('DISCREPAN: la planilla dice una cosa y el catalogo otra', discrepan)
-    bloque('COLORES QUE EL CATALOGO NO TIENE', color_nuevo)
+    bloque('VARIANTES QUE EL CATALOGO NO TIENE', variante_nueva)
 
     # una alta sin codigo es un producto sin foto: no rompe nada, pero si se
     # acumulan es que nadie esta asignando y el catalogo se queda atras

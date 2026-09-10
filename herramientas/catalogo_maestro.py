@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""El catalogo maestro: la identidad propia de cada producto y cada color.
+"""El catalogo maestro: la identidad propia de cada producto y cada variante.
 
 POR QUE EXISTE
 --------------
@@ -18,11 +18,23 @@ se le pone el día que entra y no cambia nunca más, pase lo que pase con su
 nombre, su precio, su ID o su SKU.
 
     AT-0142        el producto             (iPhone 17 Pro 256GB)
-    AT-0142-BLU    el producto en un color (iPhone 17 Pro 256GB azul)
-    fotos/AT-0142-BLU.jpg
+    AT-0142-01     una variante suya       (el azul)
+    fotos/AT-0142-01.jpg
 
-"AT" es Advance Tecno. El número es correlativo y no significa nada: esa es
-la gracia. No se puede volver a romper porque no depende de nada.
+"AT" es Advance Tecno. Los números son correlativos y no significan nada:
+esa es la gracia. No se pueden volver a romper porque no dependen de nada.
+
+POR QUE "VARIANTE" Y NO "COLOR"
+-------------------------------
+Porque la mitad de las veces no es un color. La planilla manda en la columna
+Color cosas como "Black Alpine Loop M" (una correa), "Transitions Green" (un
+cristal) o "Titanio Gris · Blanco" (dos tonos de un mismo reloj). Una banda
+no es un color: es un objeto.
+
+Numerando, el código no afirma nada sobre lo que hay adentro. AT-0450-01 es
+la primera variante del Watch Ultra 3, y el catálogo dice que se vende como
+"Black Alpine Loop M". El día que la planilla ponga la correa en su propia
+columna, cambia el texto de esa fila y no se renombra ni una foto.
 
 CÓMO SE MANTIENE
 ----------------
@@ -31,28 +43,28 @@ producto que se da de baja queda con fecha de baja, nunca se borra ni se
 reusa su código. Si el producto vuelve, vuelve con el mismo código y sus
 fotos lo están esperando.
 
+Cada fila guarda, además del texto de la variante, todas las formas en que
+vimos que el proveedor la escribe ("Sky Blue", "Skyblue", "SKY-BLUE"), así
+una escritura nueva se agrega sin tocar nada más y sin renombrar nada.
+
 Para que la planilla pueda poner el código en cada fila, el equipo del sheet
 mantiene la misma tabla en una hoja "Catalogo" del Sheet y escribe dos
-columnas nuevas en Landing: CODIGO y CODIGO_COLOR. Las filas nuevas que
+columnas nuevas en Landing: CODIGO y CODIGO_VAR. Las filas nuevas que
 todavía no tienen código salen listadas en el manifiesto y alguien se las
-asigna: hoy son unas tres por día.
+asigna.
 
-Mientras el sheet no tenga esas columnas, este módulo puede resolver el
-código de una fila por su cuenta, usando el vínculo guardado con el ID y con
-el SKU del día del alta. Es un puente, no la solución: la solución es que el
-código venga en la fila.
+Mientras el sheet no tenga esas columnas, este módulo resuelve el código de
+una fila por su cuenta, usando el vínculo guardado con el ID y con el SKU
+del día del alta. Es un puente, no la solución: la solución es que el código
+venga en la fila.
 
 ESTADO: BORRADOR, TODAVIA NO ESTA EN USO
 ----------------------------------------
-La numeración de catalogo-maestro.csv se generó el 10/09/2026 desde la
-planilla de ese día y es una PROPUESTA: nadie la lee todavía, ni la web ni
-los chequeos. Se puede regenerar entera mientras siga así.
-
-Deja de poder regenerarse el día que se acuerde con el equipo de la planilla
-(ver PROPUESTA-CODIGO-PROPIO-AL-SHEET.txt) y se renombren las fotos. A
-partir de ahí los códigos son para siempre, que es todo el punto. Antes de
-ese día hay que resolver a mano las fusiones de productos que el catálogo
-haya agrupado mal, porque después no se pueden cambiar.
+La numeración se generó el 10/09/2026 desde la planilla de ese día y es una
+PROPUESTA: nadie la lee todavía, ni la web ni los chequeos. Se puede
+regenerar entera mientras siga así. Deja de poder regenerarse el día que se
+acuerde con el equipo de la planilla (ver PROPUESTA-CODIGO-PROPIO-AL-SHEET.txt)
+y se renombren las fotos: a partir de ahí los códigos son para siempre.
 """
 import csv
 import io
@@ -62,16 +74,16 @@ import unicodedata
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 MAESTRO = os.path.join(AQUI, 'catalogo-maestro.csv')
-COLORES_CSV = os.path.join(AQUI, 'catalogo-colores.csv')
+CONTADOR = os.path.join(AQUI, 'catalogo-ultimo-codigo.txt')
 
 PREFIJO = 'AT'
 RE_CODIGO = re.compile(r'^AT-\d{4}$')
-RE_CODIGO_COLOR = re.compile(r'^(AT-\d{4})(?:-([A-Z0-9]{2,5}))?$')
+RE_CODIGO_VAR = re.compile(r'^(AT-\d{4})(?:-(\d{2}))?$')
+EXT = '.jpg'
 
-COLUMNAS = ['CODIGO', 'CODIGO_COLOR', 'Categoria', 'Marca', 'Producto',
-            'Color', 'CodigoColor', 'ID_alta', 'SKU_alta', 'Precio_alta',
-            'Alta', 'Baja', 'Fusionado_en', 'Nota']
-COLUMNAS_COLOR = ['Codigo', 'Color', 'Escrituras', 'Nota']
+COLUMNAS = ['CODIGO', 'CODIGO_VAR', 'Categoria', 'Marca', 'Producto',
+            'Variante', 'Escrituras', 'NumVar', 'ID_alta', 'SKU_alta',
+            'Precio_alta', 'Alta', 'Baja', 'Fusionado_en', 'Nota']
 
 
 def norm(s):
@@ -87,7 +99,7 @@ class CatalogoRoto(Exception):
 def leer(ruta=MAESTRO, tolerante=False):
     """El catálogo maestro como lista de filas. [] si todavía no existe.
 
-    Una fila sin CODIGO_COLOR es un archivo roto, no una fila que se saltea.
+    Una fila sin CODIGO_VAR es un archivo roto, no una fila que se saltea.
     Antes se descartaba en silencio: una celda pisada y un producto
     desaparecía del catálogo con su foto, sin un solo mensaje. Es la misma
     forma de fallar que ya costó dos rediseños, así que acá revienta.
@@ -96,58 +108,35 @@ def leer(ruta=MAESTRO, tolerante=False):
         return []
     with io.open(ruta, encoding='utf-8', newline='') as fh:
         filas = list(csv.DictReader(fh))
-    rotas = [i + 2 for i, f in enumerate(filas) if not (f.get('CODIGO_COLOR') or '').strip()]
+    rotas = [i + 2 for i, f in enumerate(filas) if not (f.get('CODIGO_VAR') or '').strip()]
     if rotas and not tolerante:
-        raise CatalogoRoto('%s: %d fila(s) sin CODIGO_COLOR (línea %s). '
-                           'Alguien lo edito mal: revisalo antes de seguir.'
+        raise CatalogoRoto('%s: %d fila(s) sin CODIGO_VAR (línea %s). '
+                           'Alguien lo editó mal: revisalo antes de seguir.'
                            % (os.path.basename(ruta), len(rotas),
                               ', '.join(str(x) for x in rotas[:5])))
-    return [f for f in filas if (f.get('CODIGO_COLOR') or '').strip()]
+    return [f for f in filas if (f.get('CODIGO_VAR') or '').strip()]
 
 
 def escribir(filas, ruta=MAESTRO):
     with io.open(ruta, 'w', encoding='utf-8', newline='') as fh:
         w = csv.DictWriter(fh, fieldnames=COLUMNAS, extrasaction='ignore')
         w.writeheader()
-        for f in sorted(filas, key=lambda x: x['CODIGO_COLOR']):
+        for f in sorted(filas, key=lambda x: x['CODIGO_VAR']):
             w.writerow({c: (f.get(c) or '') for c in COLUMNAS})
 
 
-def leer_colores(ruta=COLORES_CSV):
-    """Diccionario de colores: escritura -> (codigo, nombre canonico).
-
-    El proveedor escribe el mismo color de cinco formas ("Sky Blue",
-    "Skyblue", "SKY-BLUE"). Acá cada color tiene un código y la lista de
-    todas las formas en que lo vimos escrito, así una escritura nueva se
-    agrega sin tocar nada más.
-    """
-    mapa = {}
-    if not os.path.exists(ruta):
-        return mapa
-    with io.open(ruta, encoding='utf-8', newline='') as fh:
-        for f in csv.DictReader(fh):
-            cod, nombre = (f.get('Codigo') or '').strip(), (f.get('Color') or '').strip()
-            if not cod:
-                continue
-            for e in [nombre] + [x.strip() for x in (f.get('Escrituras') or '').split('|')]:
-                if e:
-                    mapa[norm(e)] = (cod, nombre)
-    return mapa
-
-
-def escribir_colores(filas, ruta=COLORES_CSV):
-    with io.open(ruta, 'w', encoding='utf-8', newline='') as fh:
-        w = csv.DictWriter(fh, fieldnames=COLUMNAS_COLOR, extrasaction='ignore')
-        w.writeheader()
-        for f in sorted(filas, key=lambda x: x['Codigo']):
-            w.writerow({c: (f.get(c) or '') for c in COLUMNAS_COLOR})
+def escrituras_de(fila):
+    """Todas las formas en que se puede escribir esa variante."""
+    salida = {norm(fila.get('Variante'))} if (fila.get('Variante') or '').strip() else set()
+    salida.update(norm(x) for x in (fila.get('Escrituras') or '').split('|') if x.strip())
+    return {x for x in salida if x}
 
 
 def indexar(filas):
     """Los índices que hacen falta para encontrar el código de una fila."""
-    idx = {'por_codigo_color': {}, 'por_id': {}, 'por_sku': {}, 'por_codigo': {}}
+    idx = {'por_var': {}, 'por_id': {}, 'por_sku': {}, 'por_codigo': {}}
     for f in filas:
-        idx['por_codigo_color'][f['CODIGO_COLOR']] = f
+        idx['por_var'][f['CODIGO_VAR']] = f
         idx['por_codigo'].setdefault(f['CODIGO'], []).append(f)
         if f.get('ID_alta'):
             idx['por_id'].setdefault(f['ID_alta'], []).append(f)
@@ -156,23 +145,19 @@ def indexar(filas):
     return idx
 
 
-def partir(codigo_color):
-    """"AT-0142-BLU" -> ("AT-0142", "BLU"). None si no tiene la forma."""
-    m = RE_CODIGO_COLOR.match((codigo_color or '').strip().upper())
+def partir(codigo_var):
+    """"AT-0142-01" -> ("AT-0142", "01"). None si no tiene la forma."""
+    m = RE_CODIGO_VAR.match((codigo_var or '').strip().upper())
     return (m.group(1), m.group(2) or '') if m else None
 
 
-def nombre_foto(codigo_color):
-    """El archivo de esa combinación producto+color."""
-    p = partir(codigo_color)
-    return (codigo_color.strip().upper() + '.jpg') if p else ''
-
-
-CONTADOR = os.path.join(AQUI, 'catalogo-ultimo-codigo.txt')
+def nombre_foto(codigo_var):
+    """El archivo de esa variante."""
+    return (codigo_var.strip().upper() + EXT) if partir(codigo_var) else ''
 
 
 def ultimo_asignado(ruta=CONTADOR):
-    """El último número que se entregó, guardado aparte del catálogo."""
+    """El último número de producto que se entregó, guardado aparte."""
     if not os.path.exists(ruta):
         return 0
     for linea in io.open(ruta, encoding='utf-8'):
@@ -208,6 +193,21 @@ def guardar_contador(n, ruta=CONTADOR):
         '%d\n' % n)
 
 
+def proxima_variante(codigo, idx):
+    """El siguiente número de variante libre DENTRO de un producto. Tampoco
+    se reusan: si el azul se deja de vender, su número no pasa al violeta."""
+    n = 0
+    for f in idx['por_codigo'].get(codigo) or []:
+        v = (f.get('NumVar') or '').strip()
+        if v.isdigit():
+            n = max(n, int(v))
+    return '%02d' % (n + 1)
+
+
+# --------------------------------------------------------------------------
+# Reconocer una fila de la planilla
+# --------------------------------------------------------------------------
+
 def palabras(s):
     return {p for p in re.split(r'[^a-z0-9]+', norm(s)) if p}
 
@@ -224,12 +224,18 @@ PARECIDO_MINIMO = 0.55
 PRECIO_TOLERANCIA = 0.10
 
 # Las palabras que separan un producto de otro dentro de la misma linea. No
-# alcanza con que aparezcan: hay que contarlas.
-# "gen" no entra: el numero de generacion ya cuenta por su lado, y la palabra
-# aparece o no segun el dia ("AirPods Max 2 Gen" y "AirPods Max USB-C 2").
+# alcanza con que aparezcan: hay que contarlas. "gen" no entra, porque el
+# numero de generacion ya cuenta por su lado y la palabra aparece o no segun
+# el dia ("AirPods Max 2 Gen" y "AirPods Max USB-C 2").
 GAMA = ('pro', 'max', 'plus', 'air', 'ultra', 'mini', 'neo', 'fe', 'lite',
         'se', 'cellular', 'wifi', 'body', 'kit')
 RE_MEDIDA = re.compile(r'^\d+(gb|tb|mm|in|ram|hz|mp|w)$|^\d+(\.\d+)?in$|^\d+$')
+
+# La referencia del fabricante que a veces viene entre parentesis:
+# "(601/1M52)", "(601ST350)", "(X730)". Tiene letras y numeros mezclados y
+# no es un chip (M3, M3/M4, A18) ni un año.
+RE_REFERENCIA = re.compile(r'^(?=.*\d)(?=.*[a-z])[a-z0-9][a-z0-9 /.\-]{2,}$')
+RE_CHIP = re.compile(r'^[ma]\d{1,2}([/\-][ma]?\d{1,2})*$')
 
 
 def firma_dura(nombre):
@@ -251,13 +257,28 @@ def firma_dura(nombre):
         # "16ram" y "16GB" tambien: el proveedor cambio de forma de escribir
         # la memoria y de un dia para otro dejo dudosas catorce notebooks
         p = re.sub(r'^(\d+)ram$', r'\1gb', p)
-        # un año no distingue un producto de otro ("Magic Trackpad 2" y
-        # "Magic Trackpad 2 (2024)" son el mismo)
+        # un año no distingue un producto de otro
         if re.match(r'^(19|20)\d\d$', p):
             continue
         if p and (p in GAMA or RE_MEDIDA.match(p)):
             cuenta[p] = cuenta.get(p, 0) + 1
     return tuple(sorted(cuenta.items()))
+
+
+def referencias(nombre):
+    """Las referencias de fábrica que trae el nombre entre paréntesis.
+
+    Los cuatro Ray-Ban Meta Skyler comparten SKU y son cuatro anteojos
+    distintos: lo único que los separa es "(601/T352)", "(T155 / S52)",
+    "(601/1M52)" y "(601/CH52)". Sin esto quedaban los cuatro con el mismo
+    código y la misma foto.
+    """
+    salida = set()
+    for m in re.finditer(r'\(([^()]*)\)', nombre or ''):
+        t = norm(m.group(1))
+        if RE_REFERENCIA.match(t) and not RE_CHIP.match(t):
+            salida.add(re.sub(r'[^a-z0-9]', '', t))
+    return salida
 
 
 def _precio(v):
@@ -282,9 +303,9 @@ def sin_los_colores(nombre, pinta=None, conocidos=None):
     Media planilla escribe los colores dentro del nombre: "Watch Series 11
     42mm GPS S/M (Rose Gold)". Cuando la fila cambia de color, ese paréntesis
     cambia entero y el nombre parece otro producto aunque sea el mismo. Se
-    saca sólo el paréntesis que es TODO color; el de los Ray-Ban, que trae el
-    código del fabricante ("601/1M50"), se conserva, porque ahí sí distingue
-    un anteojo de otro.
+    saca sólo el paréntesis que es TODO color; el de los Ray-Ban, que trae la
+    referencia de fábrica, se conserva, porque ahí sí distingue un anteojo de
+    otro.
     """
     texto = nombre or ''
     if not pinta:
@@ -300,9 +321,9 @@ def es_el_mismo(fila, entrada, pinta=None, conocidos=None):
     """Si una fila de la planilla y una del catálogo son el mismo producto.
 
     Esto existe porque la planilla REUTILIZA los IDs. Sin este control, el
-    dia que CEL-APP-085 deje de ser un iPhone y pase a ser un Samsung, el
-    vinculo guardado le daria el codigo del iPhone y la ficha del Samsung
-    mostraria la foto del iPhone: exactamente el error que todo esto existe
+    día que CEL-APP-085 deje de ser un iPhone y pase a ser un Samsung, el
+    vínculo guardado le daría el código del iPhone y la ficha del Samsung
+    mostraría la foto del iPhone: exactamente el error que todo esto existe
     para que no vuelva a pasar. Ante la duda no se resuelve, y la fila queda
     sin foto, que es el error barato.
     """
@@ -311,65 +332,21 @@ def es_el_mismo(fila, entrada, pinta=None, conocidos=None):
     if norm(fila.get('Categoría') or fila.get('Categoria')) != norm(entrada.get('Categoria')):
         return False
     a, b = fila.get('Descripción completa'), entrada.get('Producto')
-    # La firma dura manda: si cambio una capacidad, una medida o una palabra
-    # de gama, es otro producto por mas que el nombre se parezca.
+    # La firma dura manda: si cambió una capacidad, una medida o una palabra
+    # de gama, es otro producto por más que el nombre se parezca.
     if firma_dura(a) != firma_dura(b):
+        return False
+    # Y la referencia de fábrica, cuando los dos la traen.
+    ra, rb = referencias(a), referencias(b)
+    if ra and rb and not (ra & rb):
         return False
     if (parecido(a, b) >= PARECIDO_MINIMO
             or parecido(sin_los_colores(a, pinta, conocidos),
                         sin_los_colores(b, pinta, conocidos)) >= PARECIDO_MINIMO):
         return True
-    # El nombre se reescribio entero pero el precio no se movio: pasa cuando
-    # el proveedor cambia como escribe toda una linea de productos.
+    # El nombre se reescribió entero pero el precio no se movió: pasa cuando
+    # el proveedor cambia cómo escribe toda una línea de productos.
     return mismo_precio(fila.get('Precio USD'), entrada.get('Precio_alta')) is True
-
-
-def codigo_de_la_fila(fila, idx, pinta=None, conocidos=None):
-    """El código del PRODUCTO al que pertenece una fila de la planilla.
-
-      1. La columna CODIGO, si la planilla ya la trae. Esto es lo que tiene
-         que pasar siempre una vez que el sheet la mantenga.
-      2. El vínculo guardado con el ID del alta, si ademas es el mismo
-         producto (misma marca, misma categoria, nombre parecido).
-      3. Lo mismo con el SKU del alta.
-      4. Nada: o es un alta, o el vinculo ya no es de fiar. En los dos casos
-         hace falta que una persona lo resuelva.
-
-    Devuelve (codigo, de_donde). El "de donde" sirve para avisar cuando se
-    está resolviendo por el puente y no por la columna, y para distinguir un
-    alta ('falta') de un vinculo que dejo de servir ('dudoso').
-
-    Ojo con lo que NO hace: no devuelve el color. El color se lee de la fila
-    de HOY y se traduce con el diccionario. Si el color viajara con el
-    vinculo, un producto que rota sus colores heredaria el de ayer: la fila
-    que hoy vende White se quedaria con la foto Black porque asi entro al
-    catalogo. Medido contra la planilla del 09/09, eso pasaba en 113 filas.
-    """
-    dado = (fila.get('CODIGO') or '').strip().upper()
-    if dado and RE_CODIGO.match(dado):
-        return dado, 'columna'
-    dado = (fila.get('CODIGO_COLOR') or '').strip().upper()
-    if dado and partir(dado):
-        return partir(dado)[0], 'columna'
-    hubo_candidatos = False
-    for clave, donde in (((fila.get('ID') or '').strip(), 'id'),
-                         ((fila.get('SKU') or '').strip(), 'sku')):
-        if not clave:
-            continue
-        cands = idx['por_id' if donde == 'id' else 'por_sku'].get(clave) or []
-        # Un producto dado de baja que reaparece con su mismo ID es el caso
-        # MAS facil de reconocer, no uno para ignorar: en ocho dias, once
-        # productos se fueron y volvieron. Si se lo excluye, vuelve como alta,
-        # alguien le da un codigo nuevo y sus fotos se quedan esperando a
-        # nadie, que es justo lo que el catalogo promete que no pasa.
-        if not cands:
-            continue
-        hubo_candidatos = True
-        codigos = {seguir_fusion(c['CODIGO'], idx)
-                   for c in cands if es_el_mismo(fila, c, pinta, conocidos)}
-        if len(codigos) == 1:
-            return codigos.pop(), donde
-    return '', ('dudoso' if hubo_candidatos else 'falta')
 
 
 def seguir_fusion(codigo, idx):
@@ -382,8 +359,8 @@ def seguir_fusion(codigo, idx):
     visto = set()
     while codigo not in visto:
         visto.add(codigo)
-        filas = idx['por_codigo'].get(codigo) or []
-        destino = next((f.get('Fusionado_en', '').strip().upper() for f in filas
+        destino = next((f.get('Fusionado_en', '').strip().upper()
+                        for f in (idx['por_codigo'].get(codigo) or [])
                         if (f.get('Fusionado_en') or '').strip()), '')
         if not destino or destino == codigo:
             return codigo
@@ -391,29 +368,81 @@ def seguir_fusion(codigo, idx):
     return codigo
 
 
-def codigo_color(codigo, color, dicc_colores):
-    """Junta el producto con el color de HOY: ("AT-0142", "Blue") -> AT-0142-BLU.
+def codigo_de_la_fila(fila, idx, pinta=None, conocidos=None):
+    """El código del PRODUCTO al que pertenece una fila de la planilla.
 
-    Devuelve '' si el color no está en el diccionario: un color que no
-    conocemos no puede inventar un código, porque ese código seria el nombre
-    de un archivo y mañana, cuando el color se agregue bien, no coincidiria.
+      1. La columna CODIGO, si la planilla ya la trae. Esto es lo que tiene
+         que pasar siempre una vez que el sheet la mantenga.
+      2. El vínculo guardado con el ID del alta, si además es el mismo
+         producto (misma marca, misma categoría, misma firma dura).
+      3. Lo mismo con el SKU del alta.
+      4. Nada: o es un alta, o el vínculo ya no es de fiar. En los dos casos
+         hace falta que una persona lo resuelva.
+
+    Devuelve (codigo, de_donde). El "de dónde" sirve para avisar cuando se
+    está resolviendo por el puente y no por la columna, y para distinguir un
+    alta ('falta') de un vínculo que dejó de servir ('dudoso').
+
+    Ojo con lo que NO hace: no devuelve la variante. La variante se lee de la
+    fila de HOY. Si viajara con el vínculo, un producto que rota sus colores
+    heredaría el de ayer: la fila que hoy vende White se quedaría con la foto
+    Black porque así entró al catálogo. Medido contra la planilla del 09/09,
+    eso pasaba en 113 filas.
     """
+    dado = (fila.get('CODIGO') or '').strip().upper()
+    if dado and RE_CODIGO.match(dado):
+        return seguir_fusion(dado, idx), 'columna'
+    dado = (fila.get('CODIGO_VAR') or '').strip().upper()
+    if dado and partir(dado):
+        return seguir_fusion(partir(dado)[0], idx), 'columna'
+    hubo_candidatos = False
+    for clave, donde in (((fila.get('ID') or '').strip(), 'id'),
+                         ((fila.get('SKU') or '').strip(), 'sku')):
+        if not clave:
+            continue
+        # Un producto dado de baja que reaparece con su mismo ID es el caso
+        # MAS facil de reconocer, no uno para ignorar: en ocho dias, once
+        # productos se fueron y volvieron. Si se lo excluye, vuelve como alta,
+        # alguien le da un codigo nuevo y sus fotos se quedan esperando a
+        # nadie, que es justo lo que el catalogo promete que no pasa.
+        cands = idx['por_id' if donde == 'id' else 'por_sku'].get(clave) or []
+        if not cands:
+            continue
+        hubo_candidatos = True
+        codigos = {seguir_fusion(c['CODIGO'], idx)
+                   for c in cands if es_el_mismo(fila, c, pinta, conocidos)}
+        if len(codigos) == 1:
+            return codigos.pop(), donde
+    return '', ('dudoso' if hubo_candidatos else 'falta')
+
+
+def variante_de(codigo, texto, idx):
+    """El código de la variante de un producto, a partir de como la escribe
+    hoy la planilla. "" si esa variante todavia no esta en el catalogo, que
+    es un aviso y no un nombre de archivo inventado: un color que no
+    conocemos no puede estrenar un codigo, porque ese codigo seria el nombre
+    de una foto que nadie saco."""
     if not codigo:
         return ''
-    if not color:
-        return codigo
-    cod = (dicc_colores.get(norm(color)) or ('', ''))[0]
-    return '%s-%s' % (codigo, cod) if cod else ''
+    k = norm(texto)
+    filas = idx['por_codigo'].get(codigo) or []
+    if not k:
+        sin_var = next((f for f in filas if not (f.get('NumVar') or '').strip()), None)
+        return sin_var['CODIGO_VAR'] if sin_var else ''
+    for f in filas:
+        if k in escrituras_de(f):
+            return f['CODIGO_VAR']
+    return ''
 
 
-def candidatos_foto(codigo, colores_de_hoy, dicc_colores):
+def candidatos_foto(codigo, textos_de_hoy, idx):
     """Los archivos que la web prueba para la portada de una fila, en orden:
-    el primer color que vende hoy, después cualquier otro color que venda, y
-    al final el producto sin color. Mismo criterio que fotos_sku."""
+    la primera variante que vende hoy, después cualquier otra que venda, y al
+    final el producto sin variante."""
     if not codigo:
         return []
-    salida = [codigo_color(codigo, c, dicc_colores) for c in (colores_de_hoy or [])]
-    salida.append(codigo)
+    salida = [variante_de(codigo, t, idx) for t in (textos_de_hoy or [])]
+    salida.append(variante_de(codigo, '', idx) or codigo)
     vistos, out = set(), []
     for n in salida:
         if n and n not in vistos:

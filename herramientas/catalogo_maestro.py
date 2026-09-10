@@ -231,6 +231,17 @@ GAMA = ('pro', 'max', 'plus', 'air', 'ultra', 'mini', 'neo', 'fe', 'lite',
         'se', 'cellular', 'wifi', 'body', 'kit')
 RE_MEDIDA = re.compile(r'^\d+(gb|tb|mm|in|ram|hz|mp|w)$|^\d+(\.\d+)?in$|^\d+$')
 
+# El designador de modelo: letras y numeros pegados. "A37", "M4", "S26",
+# "X730", "R8", "P2425HE". Es lo que separa un Galaxy A37 de un A36 y un
+# iPad Air M4 de un M3, y sin contarlo el comparador daba esos pares como el
+# mismo producto: le habria dado al A37 la foto del A36.
+RE_MODELO = re.compile(r'^(?=.*[a-z])(?=.*\d)[a-z0-9]{2,}$')
+# Lo que parece un modelo y es la conectividad. "Galaxy A57 8/128GB" y
+# "Galaxy A57 8/128GB 5G" son el mismo telefono: el proveedor le agrego el 5G
+# al nombre un martes.
+NO_ES_MODELO = ('5g', '4g', '3g', '2g', 'lte', 'wifi6', 'wifi7', 'usbc', 'ipx8',
+                'x1', 'x2', 'x3', 'x4', 'x5')
+
 # La referencia del fabricante que a veces viene entre parentesis:
 # "(601/1M52)", "(601ST350)", "(X730)". Tiene letras y numeros mezclados y
 # no es un chip (M3, M3/M4, A18) ni un año.
@@ -260,7 +271,8 @@ def firma_dura(nombre):
         # un año no distingue un producto de otro
         if re.match(r'^(19|20)\d\d$', p):
             continue
-        if p and (p in GAMA or RE_MEDIDA.match(p)):
+        if p and (p in GAMA or RE_MEDIDA.match(p)
+                  or (RE_MODELO.match(p) and p not in NO_ES_MODELO)):
             cuenta[p] = cuenta.get(p, 0) + 1
     return tuple(sorted(cuenta.items()))
 

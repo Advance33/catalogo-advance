@@ -2075,20 +2075,82 @@ function probarFotos(prods, cuantas = 40, esperaMax = 4000){
 }
 
 /* ---------- Que foto va en la portada ----------
-   La portada tiene que ser la foto del PRIMER color que la fila vende HOY.
-   Antes era fija: fotos/<ID>.jpg, elegida a mano un dia; cuando la planilla
-   rotaba los colores de la fila bajo el mismo ID, la foto quedaba mostrando
-   otro color (el 09/09/2026 pasaba en ocho productos, con los chequeos en
-   cero). Ahora se elige al cargar, con el indice de archivos que deja
-   verificar-fotos.py en fotos/indice.json (PUBLICAR.bat lo regenera):
-     1. fotos/<SKU>-<primer color>.jpg, si existe
-     2. fotos/<SKU>-<otro color que la fila venda>.jpg
-     3. fotos/<SKU>.jpg (productos sin color)
-     4. lo mismo con el <ID>, para los nombres viejos que queden
+   Cada producto del catalogo tiene un codigo propio que se le asigno una vez
+   y no cambia nunca: AT-0142, y AT-0142-01 para cada variante. Las fotos se
+   llaman asi. Es el tercer intento: antes fue el ID de la planilla, que se
+   renumera, y despues el SKU, que se arma con las palabras del nombre y
+   cambio en 36 productos el dia que el proveedor escribio "5G" y "Sin
+   Cargador". Un nombre que sale de un texto ajeno no puede ser estable.
+
+   La planilla todavia no trae el codigo, asi que la web lo busca en el mapa
+   que viaja dentro de fotos/indice.json: por ID, y si no por SKU. Ese mapa
+   trae ademas la FIRMA de cada producto (marca, categoria, capacidades,
+   medidas y palabras de gama contadas). Si la firma de la fila de hoy no
+   coincide con la del codigo, el vinculo no se usa y el producto sale sin
+   foto. Es a proposito: sin foto es barato y con la foto de otro producto es
+   exactamente el error que veniamos arreglando. La planilla reutiliza IDs.
+
+   El orden para elegir la portada:
+     1. fotos/<CODIGO>-<variante del primer color de hoy>.jpg
+     2. la de cualquier otra variante que la fila venda hoy
+     3. fotos/<CODIGO>.jpg, para los productos sin variantes
+     4. los nombres viejos por SKU y por ID, mientras queden
      5. nada: el placeholder con la marca
-   Sin indice (no llego, o es un despliegue viejo) vuelve el criterio de
-   siempre: se pide el nombre canonico y que el onerror decida. */
+   Sin indice (no llego, o es un despliegue viejo) se pide el nombre por SKU
+   y que el onerror decida, que es como funcionaba antes. */
 let INDICE_FOTOS = null;          // Set de nombres de archivo, o null si no se leyo
+let CATALOGO = null;              // el mapa de codigos, o null
+
+/* La firma de un producto, igual que firma_dura() en catalogo_maestro.py.
+   Cuenta lo que no puede cambiar sin que sea otro producto: capacidades,
+   medidas, palabras de gama y codigos de modelo. Contadas, no juntadas:
+   "MacBook Pro M5 14" y "MacBook Pro M5 Pro 14" tienen las mismas palabras y
+   son dos maquinas con 400 dolares de diferencia. Si esto se cambia, se
+   cambia alla: las dos firmas tienen que dar identico. */
+const GAMA_FIRMA = new Set(['pro','max','plus','air','ultra','mini','neo','fe',
+                            'lite','se','cellular','wifi','body','kit']);
+const NO_ES_MODELO = new Set(['5g','4g','3g','2g','lte','wifi6','wifi7','usbc',
+                              'ipx8','x1','x2','x3','x4','x5']);
+const RE_MEDIDA_FIRMA = /^\d+(gb|tb|mm|in|ram|hz|mp|w)$|^\d+(\.\d+)?in$|^\d+$/;
+const RE_MODELO_FIRMA = /^(?=.*[a-z])(?=.*\d)[a-z0-9]{2,}$/;
+function firmaDura(nombre){
+  const cuenta = new Map();
+  for(let p of norm(nombre).split(/[^a-z0-9]+/)){
+    p = p.replace(/^(\d+)(ta|to|da|do|ra|ro|er|a|o)$/, '$1')
+         .replace(/^(\d+)ram$/, '$1gb');
+    if(!p || /^(19|20)\d\d$/.test(p)) continue;
+    if(GAMA_FIRMA.has(p) || RE_MEDIDA_FIRMA.test(p)
+       || (RE_MODELO_FIRMA.test(p) && !NO_ES_MODELO.has(p)))
+      cuenta.set(p, (cuenta.get(p) || 0) + 1);
+  }
+  return [...cuenta.entries()].sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
+                              .map(([k, n]) => k + ':' + n).join(',');
+}
+
+/* El codigo del producto de una fila. Primero la columna, cuando la planilla
+   la traiga; despues el mapa, verificando la firma. */
+function codigoDeLaFila(f){
+  const dado = ((f.codigo || '') + '').trim().toUpperCase();
+  if(/^AT-\d{4}$/.test(dado)) return dado;
+  if(!CATALOGO) return '';
+  const firmaHoy = norm(f.marca) + '|' + norm(f.catPlanilla || f.cat) + '|' + firmaDura(f.desc);
+  for(const clave of [f.id, f.sku]){
+    const cod = clave && CATALOGO.ids && (CATALOGO.ids[clave] || (CATALOGO.skus || {})[clave]);
+    if(cod && CATALOGO.firmas[cod] === firmaHoy) return cod;
+  }
+  return '';
+}
+
+/* El archivo de una variante: el texto del color de hoy traducido al numero
+   que le puso el catalogo. Si esa variante no esta registrada devuelve vacio
+   y no se inventa un nombre, porque ese nombre seria el de una foto que
+   nadie saco. */
+function archivoDeVariante(codigo, texto){
+  if(!codigo || !CATALOGO) return '';
+  const tabla = (CATALOGO.vars || {})[codigo];
+  if(!tabla) return '';
+  return tabla[norm(texto || '')] || '';
+}
 
 async function cargarIndiceFotos(){
   if(!CARPETA_FOTOS) return null;
@@ -2102,38 +2164,57 @@ async function cargarIndiceFotos(){
        imagenes y en silencio, porque un Set vacio es igual de valido que
        uno lleno. Ante la duda se sigue sin indice: se pide el nombre
        canonico y el onerror decide, que es como funcionaba antes. */
-    return lista.length ? new Set(lista) : null;
+    if(!lista.length) return null;
+    /* El mapa del catalogo viaja en el mismo archivo y del mismo momento: un
+       indice nuevo con un mapa viejo mostraria fotos que ya no son de ese
+       producto. Si falta, la web sigue con los nombres por SKU. */
+    return { archivos: new Set(lista), catalogo: d.catalogo || null };
   }catch(e){ return null; }
 }
 
-/* Desde el contrato landing/1.2 las fotos se llaman por SKU: la identidad del
-   producto sin sus colores, que sobrevive a que la planilla renumere. Las
-   hermanas de color comparten SKU, asi que la portada de cada fila es
-     fotos/<SKU>-<primer color de la fila>.jpg
-   y solo los productos sin color usan fotos/<SKU>.jpg. Los nombres por ID
-   quedan como respaldo mientras dure la transicion. La misma regla vive en
-   herramientas/fotos_sku.py para los chequeos: si se cambia aca, se cambia alla. */
-function fotoDeCarpeta(id, sku, color){
-  if(!CARPETA_FOTOS || !(sku || id)) return '';
-  const arma = n => urlFoto(CARPETA_FOTOS + encodeURIComponent(n) + EXT_FOTOS);
-  const colores = partirColores(color);
-  const primero = colores[0] ? slugColor(colores[0]) : '';
-  // Sin indice no hay forma de saber que existe: se pide el nombre canonico
-  // y el onerror decide.
-  if(!INDICE_FOTOS) return arma(sku ? (primero ? sku + '-' + primero : sku) : id);
-  /* En orden: el primer color; si no esta, cualquier otro color que la fila
-     venda (es del producto y la ficha lo muestra con su puntito: mejor que
-     nada y no es mentira); despues la foto sin color; y los nombres viejos
-     por ID de respaldo. Igual que candidatos_portada() en fotos_sku.py. */
-  const candidatos = [];
-  for(const base of [sku, id].filter(Boolean)){
+/* Los nombres de archivo que le corresponden a una fila, en orden de
+   preferencia. Primero por codigo del catalogo, que es la identidad de
+   verdad; despues por SKU y por ID, que son los nombres de las dos etapas
+   anteriores y siguen sirviendo mientras queden archivos con esa forma. La
+   misma lista la arma candidatos_foto() del lado de Python: si se cambia
+   aca, se cambia alla. */
+function nombresDeFoto(f, colores, soloDeColor){
+  const salida = [], pelados = [];
+  // ya resuelto al cargar: ver el .map() de cargar()
+  const codigo = f.codigo || codigoDeLaFila(f);
+  if(codigo){
+    for(const c of colores){
+      const v = archivoDeVariante(codigo, c);
+      if(v) salida.push(v);
+    }
+    // el archivo del producto que no tiene variantes, y el codigo a secas
+    const sinVar = archivoDeVariante(codigo, '');
+    if(sinVar) pelados.push(sinVar);
+    pelados.push(codigo);
+  }
+  for(const base of [f.sku, f.id].filter(Boolean)){
     for(const c of colores){
       const s = slugColor(c);
-      for(const f of new Set([s, s.replace(/-/g, '')])) candidatos.push(base + '-' + f);
+      for(const x of new Set([s, s.replace(/-/g, '')])) salida.push(base + '-' + x);
     }
-    candidatos.push(base);
+    pelados.push(base);
   }
-  const hay = candidatos.find(n => INDICE_FOTOS.has(n + EXT_FOTOS));
+  /* Los "pelados" son la foto del producto, no la de un color. Sirven para la
+     portada, pero no cuando alguien toca un puntito: ahi mostrar la foto
+     general es justo lo que hacia parecer que era la del color elegido. */
+  return [...new Set(soloDeColor ? salida : salida.concat(pelados))];
+}
+
+function fotoDeCarpeta(f, color){
+  if(!CARPETA_FOTOS) return '';
+  const arma = n => urlFoto(CARPETA_FOTOS + encodeURIComponent(n) + EXT_FOTOS);
+  const colores = partirColores(color);
+  const nombres = nombresDeFoto(f, colores);
+  if(!nombres.length) return '';
+  // Sin indice no hay forma de saber que existe: se pide el primer nombre
+  // canonico y el onerror decide.
+  if(!INDICE_FOTOS) return arma(nombres[0]);
+  const hay = nombres.find(n => INDICE_FOTOS.has(n + EXT_FOTOS));
   return hay ? arma(hay) : '';
 }
 
@@ -2214,7 +2295,8 @@ async function cargar(){
   // La planilla y el indice de fotos se piden a la vez; el indice hace falta
   // antes de armar cada producto, porque decide su foto de portada.
   const [crudo, indice] = await Promise.all([bajarCSV(), cargarIndiceFotos()]);
-  INDICE_FOTOS = indice;
+  INDICE_FOTOS = indice && indice.archivos;
+  CATALOGO = indice && indice.catalogo;
   const filas = parseCSV(crudo).filter(f => f.some(c => c.trim()));
   if(filas.length < 2) throw new Error('la planilla vino vacía');
 
@@ -2258,6 +2340,10 @@ async function cargar(){
     // Es el nombre de sus fotos: fotos/<SKU>-<color>.jpg. Sobrevive a que el
     // proveedor reescriba el nombre y a que el catalogo renumere los IDs.
     sku:col('sku'),
+    // El codigo propio del catalogo: la identidad que se asigna una vez y no
+    // cambia nunca. Todavia no viene en la planilla; mientras tanto la web lo
+    // busca en el mapa de fotos/indice.json (ver codigoDeLaFila).
+    codigo:col('codigo'),
     // El precio de antes, para los que están en promoción. Si la columna no
     // existe, el catálogo anda igual y el carrusel usa los que tienen regalo.
     antes:col('oferta','precio anterior','antes','precio lista')
@@ -2296,6 +2382,11 @@ async function cargar(){
       return {
         idx:i, id,
         cat:    categoriaReal(val(f,C.cat), val(f,C.marca), val(f,C.desc)),
+        // la categoria TAL CUAL la escribe la planilla. La de arriba esta
+        // renombrada para mostrarla ("Lente" se muestra "Objetivo"), y la
+        // firma que verifica el codigo se calcula con la original: usando la
+        // renombrada, la mitad del catalogo se quedaba sin foto.
+        catPlanilla: val(f,C.cat),
         grupo:  val(f,C.grupo),
         sku:    val(f,C.sku),
         marca:  val(f,C.marca),
@@ -2318,14 +2409,28 @@ async function cargar(){
         garantia: val(f,C.garantia),
         condicion:val(f,C.condicion),
         teclado:  val(f,C.teclado),
-        // Primero la columna Imagen; si está vacía, la carpeta: la foto del
-        // primer color de hoy si existe, si no la del ID (ver fotoDeCarpeta).
-        imagen: urlFoto(val(f,C.imagen)) ||
-                fotoDeCarpeta(id, val(f,C.sku), colorDeLaFila(val(f,C.color), val(f,C.desc) || val(f,C.modelo))),
+        codigo: val(f,C.codigo),
+        imagen: val(f,C.imagen),          // la columna Imagen; si viene vacia manda la carpeta
         activo: C.activo === -1 || val(f,C.activo) === '' || esSi(val(f,C.activo))
       };
     })
     .filter(p => p.activo && p.desc)
+    /* La foto se elige con la fila entera, no solo con el ID: hace falta la
+       marca, la categoria y el nombre para verificar que el codigo guardado
+       siga siendo de este producto. Va ANTES de sacarNotasDelNombre porque la
+       firma se calcula sobre la descripcion tal cual viene de la planilla,
+       que es la misma que uso el catalogo del lado de Python. */
+    .map(p => {
+      /* El codigo se resuelve UNA vez, con la fila tal cual vino de la
+         planilla, y se guarda. Recalcularlo despues daba distinto: para
+         entonces sacarNotasDelNombre ya limpio la descripcion, y la firma
+         que verifica el vinculo se calcula sobre el nombre original. Mitad
+         del catalogo se quedaba sin foto por eso. */
+      p.codigo = p.codigo || codigoDeLaFila(p);
+      p.imagen = urlFoto(p.imagen) ||
+                 fotoDeCarpeta(p, colorDeLaFila(p.color, p.desc || p.modelo));
+      return p;
+    })
     // Se deducen una vez al cargar, no en cada tecla del buscador: son dos
     // expresiones regulares por producto sobre una lista de 472.
     // La limpieza va antes de deducir montura y apertura: esas dos leen el
@@ -2921,20 +3026,18 @@ const slugColor = s => norm(s).replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')
    proveedor ese día. Se prueban las dos formas antes de darse por vencido. */
 function fotosDeColor(p, color){
   const s = slugColor(color || '');
-  if(!CARPETA_FOTOS || !(p.sku || p.id) || !s) return [];
-  const formas = [...new Set([s, s.replace(/-/g,'')])];
-  const arma = base => formas.map(f => base + '-' + f);
+  if(!CARPETA_FOTOS || !s) return [];
   /* Si esta fila no tiene la foto de ese color, se busca en sus hermanas: es
      el mismo producto y la foto sirve igual. El MacBook Neo de 8/256GB trae
      solo la Citrus, asi que al elegir Indigo volvia a mostrar la amarilla
      aunque la Indigo estuviera cargada en la fila de 8/512GB.
-     Con nombres por SKU las hermanas de color ya comparten archivo (mismo
-     SKU); las de otra capacidad tienen otro SKU y se prueban despues. Los
-     nombres por ID quedan al final, como respaldo. */
+     Primero la fila propia y despues las hermanas, y dentro de cada una
+     primero el codigo del catalogo y despues los nombres viejos. */
   const modelo = buscarModelo(clave(p));
   const hermanas = modelo ? modelo.variantes.filter(v => v.id !== p.id) : [];
-  const bases = [...new Set([p.sku, ...hermanas.map(v => v.sku), p.id, ...hermanas.map(v => v.id)].filter(Boolean))];
-  let nombres = bases.flatMap(arma);
+  let nombres = [];
+  for(const fila of [p, ...hermanas]) nombres.push(...nombresDeFoto(fila, [color], true));
+  nombres = [...new Set(nombres)];
   // Con indice no se pide lo que no existe: cada URL que falla es un pedido
   // de mas y un onerror que esperar.
   if(INDICE_FOTOS) nombres = nombres.filter(n => INDICE_FOTOS.has(n + EXT_FOTOS));

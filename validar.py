@@ -16,7 +16,8 @@ import csv, io, os, re, sys, json, unicodedata, collections, datetime, textwrap,
 
 AQUI      = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(AQUI, 'herramientas'))
-import fotos_sku as FS       # como se llaman las fotos: por SKU (contrato landing/1.2)
+import fotos_sku as FS       # los nombres de foto de antes del catalogo
+import catalogo_maestro as CM   # la identidad propia de cada producto
 INDEX     = os.path.join(AQUI, 'index.html')
 SALIDA_PEDIDO = os.path.join(AQUI, 'PEDIDO-AL-SHEET.txt')
 FOTOS     = os.path.join(AQUI, 'fotos')
@@ -631,36 +632,55 @@ def regla_fotos(filas, ctx):
         except Exception:
             fallas.append(('AVISO', '(fotos)', 'fotos/indice.json no se pudo leer'))
 
-    # Las fotos se llaman por SKU: <SKU>-<color>.jpg, y la portada de una fila
-    # es la foto de su PRIMER color (<SKU>.jpg solo si no vende colores). Los
-    # nombres viejos por ID se aceptan como respaldo y se avisa para migrarlos.
-    # La regla vive en herramientas/fotos_sku.py, la misma que usa la web.
+    # Las fotos se llaman por el codigo del catalogo maestro: AT-0142-01.jpg
+    # para una variante, AT-0142.jpg para un producto que no tiene. El codigo
+    # se le asigno al producto una vez y no cambia aunque el proveedor le
+    # reescriba el nombre. La regla vive en herramientas/catalogo_maestro.py,
+    # la misma que usa la web.
     conocidos = ctx[0]
-    skus = set(FS.sku_de(f) for f in filas if FS.sku_de(f))
+    maestro = CM.leer() if os.path.exists(CM.MAESTRO) else []
+    if not maestro:
+        fallas.append(('AVISO', '(fotos)', 'no hay catalogo maestro: no se puede saber'
+                       ' de que producto es cada foto'))
+        return fallas
+    cidx = CM.indexar(maestro)
+    validos = set(m['CODIGO_VAR'] for m in maestro)
+    sin_codigo = 0
     for f in filas:
-        pid, sku = f['ID'].strip(), FS.sku_de(f)
+        cod, _ = CM.codigo_de_la_fila(f, cidx, pinta, conocidos)
+        if not cod:
+            sin_codigo += 1
+            continue
         cols = FS.colores_de_la_fila(f, pinta, conocidos)
-        cand = FS.candidatos_portada(f, pinta, conocidos)
+        cand = CM.candidatos_foto(cod, cols, cidx)
         if cand and not any(c in archivos for c in cand):
             fallas.append(('AVISO', f['ID'], 'sin foto de portada (%s.jpg)' % cand[0]))
-        for c in cols[1:]:                        # el primero es la portada
-            formas = FS.formas(c)
-            cand = ([sku + '-' + x for x in formas] if sku else []) + [pid + '-' + x for x in formas]
-            if not any(x in archivos for x in cand):
+        for c in cols[1:]:                        # la primera es la portada
+            v = CM.variante_de(cod, c, cidx)
+            if v and v not in archivos:
                 fallas.append(('AVISO', f['ID'],
-                               'ofrece el color "%s" y falta %s-%s.jpg' % (c, sku or pid, formas[0])))
+                               'ofrece "%s" y falta %s.jpg' % (c, v)))
+    if sin_codigo:
+        fallas.append(('AVISO', '(fotos)',
+                       '%d fila(s) sin codigo del catalogo, asi que no pueden tener foto:'
+                       ' python herramientas/revisar-catalogo.py' % sin_codigo))
 
-    viejas = []
+    viejas, sueltas = [], []
     for a in sorted(archivos):
-        r = FS.resolver(a, skus, ids)
-        if r is None:
-            fallas.append(('AVISO', '(fotos)', 'foto huérfana: %s.jpg sin producto en la planilla' % a))
-        elif r['tipo'] == 'id':
+        if a in validos:
+            continue
+        if CM.partir(a):
+            sueltas.append(a)             # tiene forma de codigo pero no esta
+        else:
             viejas.append(a)
     if viejas:
         fallas.append(('AVISO', '(fotos)',
-                       '%d foto(s) con nombre viejo por ID (%s.jpg…): python herramientas/migrar-fotos-a-sku.py --aplicar'
+                       '%d foto(s) con nombre de antes del catalogo (%s.jpg…):'
+                       ' python herramientas/migrar-fotos-a-codigo.py --aplicar'
                        % (len(viejas), viejas[0])))
+    for a in sueltas:
+        fallas.append(('AVISO', '(fotos)',
+                       '%s.jpg tiene forma de codigo pero no esta en el catalogo maestro' % a))
     return fallas
 
 

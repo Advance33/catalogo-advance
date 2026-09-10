@@ -47,6 +47,7 @@ AQUI   = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, AQUI)
 sys.path.insert(0, os.path.join(AQUI, 'herramientas'))
 import fotos_sku as FS                        # la unica verdad sobre nombres de foto
+import catalogo_maestro as CM                 # la identidad propia de cada producto
 import validar                                # la lista de colores del catalogo
 
 SHEET_ID  = '18xxslIKTBnVMrLixCGlQBJGje3vKBYQHXy0qvVp8tpQ'
@@ -113,84 +114,122 @@ def main():
     # primer color del dia. Se reescribe en cada corrida: PUBLICAR.bat corre
     # este script antes del commit, asi que el indice publicado siempre es el
     # de la carpeta.
+    # Y con el, el mapa del catalogo maestro: como llega la web del producto
+    # de la planilla al nombre de su foto. Van juntos a proposito, porque
+    # tienen que ser del mismo momento: un indice nuevo con un mapa viejo
+    # muestra fotos que ya no son de ese producto.
+    indice = {'generado': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
+              'archivos': sorted(files)}
+    try:
+        maestro = CM.leer()
+        if maestro:
+            indice['catalogo'] = CM.mapa_para_la_web(maestro)
+    except CM.CatalogoRoto as e:
+        print('OJO: el catalogo maestro esta roto, el indice va sin el.')
+        print('   %s' % e)
     with open(INDICE, 'w', encoding='utf-8') as fh:
-        json.dump({'generado': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
-                   'archivos': sorted(files)}, fh, ensure_ascii=False, indent=0)
+        json.dump(indice, fh, ensure_ascii=False, indent=0)
+
+    # ---- el codigo de cada fila de la planilla ----
+    # Es la identidad de verdad: se le asigno al producto una vez y no cambia
+    # aunque el proveedor le reescriba el nombre. Mientras la planilla no
+    # traiga la columna, se resuelve con el vinculo guardado y se verifica que
+    # el producto siga siendo el mismo.
+    maestro = CM.leer() if os.path.exists(CM.MAESTRO) else []
+    cidx = CM.indexar(maestro)
+    validos = {m['CODIGO_VAR'] for m in maestro}
+    codigo_de, sin_codigo = {}, []
+    for r in rows:
+        cod, de = (CM.codigo_de_la_fila(r, cidx, pinta, conocidos) if maestro else ('', 'falta'))
+        if cod:
+            codigo_de[r['ID'].strip()] = cod
+        else:
+            sin_codigo.append('%-14s %-50s %s'
+                              % (r['ID'].strip(), r['Descripción completa'][:50],
+                                 'no esta en el catalogo' if de == 'falta'
+                                 else 'el vinculo apunta a otro producto'))
+    por_codigo = collections.defaultdict(list)
+    for r in rows:
+        c = codigo_de.get(r['ID'].strip())
+        if c:
+            por_codigo[c].append(r)
 
     # ---- a que producto pertenece cada archivo ----
     usuarios, color_de, viejos, huerfanas = {}, {}, [], []
     for f in files:
         base = os.path.splitext(f)[0]
+        cv = CM.partir(base)
+        if cv and base in validos:
+            entrada = cidx['por_var'][base]
+            color_de[f] = entrada.get('Variante') or ''
+            filas_cod = por_codigo.get(CM.seguir_fusion(cv[0], cidx)) or []
+            # La variante la venden las filas que hoy la ofrecen. Si ninguna
+            # (un color que roto y quedo la foto), es de todas las del
+            # producto, y el chequeo (4) lo avisa.
+            venden = [x for x in filas_cod
+                      if any(CM.norm(c) in CM.escrituras_de(entrada) for c in colores(x))]
+            usuarios[f] = venden or filas_cod
+            if not filas_cod:
+                huerfanas.append(f)
+            continue
+        # los nombres de las dos etapas anteriores, que ya no deberian quedar
         r = FS.resolver(base, skus, ids)
         if r is None:
             huerfanas.append(f)
             continue
+        viejos.append(f)
         color_de[f] = r['color']
-        if r['tipo'] == 'sku':
-            # El SKU lo comparten las hermanas de otro color: la foto de un
-            # color es de las filas que venden ese color. Si ninguna lo vende
-            # (un color que roto y quedo la foto), es de todas, y el chequeo
-            # (4) lo avisa.
-            filas_sku = por_sku[r['clave']]
-            venden = [x for x in filas_sku if FS.color_coincide(r['color'], colores(x))] if r['color'] else []
-            usuarios[f] = venden or filas_sku
-        else:
-            usuarios[f] = [byid[r['clave']]]
-            viejos.append(f)
+        usuarios[f] = (por_sku[r['clave']] if r['tipo'] == 'sku' else [byid[r['clave']]])
 
-    # ---- 3b: de que producto era cada huerfana, y cuales se rescatan ----
-    # La planilla con la que se nombraron los archivos dice de que producto
-    # era cada foto que hoy no resuelve. Si ese producto sigue hoy con otro
-    # SKU (el 10/09/2026 cambiaron 36 de un dia para otro sin aviso), la foto
-    # se renombra con un comando; mientras no se haga, la web muestra ese
-    # producto sin foto, asi que frena la publicacion.
-    antes_filas = FS.leer_planilla(PLANILLA_NOMBRES)
-    antes = FS.indexar(antes_filas) if antes_filas else None
-    puente = FS.puente_de_ids(validar.bajar_meta()) if antes else {}
-    hoy_idx = {'byid': byid, 'skus': skus, 'por_sku': por_sku}
+    # ---- 3b: las fotos de un producto que hoy no tiene fila ----
+    # No se pierden ni se mueven: el codigo sale del producto y no puede
+    # colgarse de otro. Se quedan esperando a que el producto vuelva, que es
+    # lo que antes no pasaba: cada cambio de nombre las dejaba sin dueño.
     perdidas, huerfanas_expl = [], []
     for f in huerfanas:
-        d = (FS.destino_hoy(f[:-len(FS.EXT)], antes, hoy_idx, puente, pinta, conocidos) if antes
-             else {'estado': 'desconocida', 'antes': None, 'hoy': []})
-        era = d['antes']
-        quien = ('era %s «%s»' % ((era.get('ID') or '').strip(), (era.get('Descripción completa') or '')[:48])
-                 if era is not None else 'no estaba ni en la planilla de los nombres')
-        if d['estado'] == 'renombrar':
-            perdidas.append('%-62s -> %s' % (f, d['nombre'] + FS.EXT))
-        elif d['estado'] == 'ambigua':
-            huerfanas_expl.append('%-62s AMBIGUA: hoy cae en %s' % (f, ', '.join(sorted({FS.sku_de(x) for x in d['hoy']}))))
-        else:
-            huerfanas_expl.append('%-62s %s' % (f, quien))
+        entrada = cidx['por_var'].get(os.path.splitext(f)[0])
+        huerfanas_expl.append('%-16s %s' % (
+            f, (entrada.get('Producto') or '')[:56] if entrada is not None
+            else 'no esta en el catalogo maestro'))
 
     def existe(base):
         return base in bases
 
+    def candidatos(r):
+        c = codigo_de.get(r['ID'].strip())
+        return CM.candidatos_foto(c, colores(r), cidx) if c else []
+
     # ---- 1 y 2: lo que le falta a cada fila ----
     sin_base, sin_color = [], []
     for r in rows:
-        pid, sku = r['ID'].strip(), FS.sku_de(r)
+        pid = r['ID'].strip()
         cols = colores(r)
+        cand = candidatos(r)
         # la portada: lo mismo que prueba la web, en el mismo orden
-        if not any(existe(c) for c in FS.candidatos_portada(r, pinta, conocidos)):
-            sin_base.append(f"{pid:<15} {r['Descripción completa'][:60]}")
+        if cand and not any(existe(c) for c in cand):
+            sin_base.append('%-14s %-14s %s' % (pid, cand[0], r['Descripción completa'][:46]))
         if len(cols) > 1:
+            cod = codigo_de.get(pid)
             for c in cols:
-                formas = FS.formas(c)
-                cand = ([sku + '-' + x for x in formas] if sku else []) + [pid + '-' + x for x in formas]
-                if not any(existe(x) for x in cand):
-                    sin_color.append(f"{(sku or pid)}-{formas[0]}.jpg   ({r['Descripción completa'][:44]})")
+                v = CM.variante_de(cod, c, cidx) if cod else ''
+                if v and not existe(v):
+                    sin_color.append('%-14s %-18s (%s)' % (v + '.jpg', c[:18], r['Descripción completa'][:40]))
 
-    # ---- 4: un color que ninguna fila del SKU vende ----
+    # ---- 4: una variante que ninguna fila del producto vende hoy ----
+    # No es un error: un producto deja de vender un color y su foto se queda
+    # esperando, que es justo lo que el catalogo vino a permitir. Se lista
+    # para saber que hay, no para arreglar nada.
     mal_color = []
     for f in files:
         if f not in usuarios or not color_de[f]:
             continue
         vende = set()
         for r in usuarios[f]:
-            for c in colores(r):
-                vende.update(FS.formas(c))
-        if color_de[f] not in vende:
-            mal_color.append(f"{f}   (la planilla dice: {' | '.join((r.get('Color') or '(vacio)') for r in usuarios[f])})")
+            vende.update(CM.norm(c) for c in colores(r))
+        if CM.norm(color_de[f]) not in vende:
+            mal_color.append('%-16s %-24s la planilla dice: %s'
+                             % (f, color_de[f][:24],
+                                ' | '.join((r.get('Color') or '(vacio)') for r in usuarios[f])[:40]))
 
     # ---- 6: tamano ----
     tam = []
@@ -341,12 +380,12 @@ def main():
     # solo producto; el (9) tampoco, porque son colores distintos. En la ficha
     # el cliente toca un puntito y ve la foto del otro color.
     mismo_color = []
-    por_clave = collections.defaultdict(dict)          # clave -> color -> archivo
+    por_clave = collections.defaultdict(dict)          # producto -> variante -> archivo
     for f in files:
         if f in usuarios and color_de[f]:
-            r = FS.resolver(f[:-len(FS.EXT)], skus, ids)
-            if r:
-                por_clave[r['clave']][color_de[f]] = f
+            cv = CM.partir(os.path.splitext(f)[0])
+            if cv:
+                por_clave[cv[0]][color_de[f]] = f
     for cl, porcolor in sorted(por_clave.items()):
         vistas = collections.defaultdict(list)
         for col, f in sorted(porcolor.items()):
@@ -409,7 +448,7 @@ def main():
     w('REVISAR FOTOS — chequeo automatico')
     w('=' * 62)
     w(f'Generado: {datetime.datetime.now():%d/%m/%Y %H:%M}')
-    w(f'Productos en la planilla: {len(rows)}   ·   fotos en la carpeta: {len(files)}   ·   nombres por SKU: {len(files) - len(viejos) - len(huerfanas)}')
+    w(f'Productos en la planilla: {len(rows)}   ·   fotos en la carpeta: {len(files)}   ·   con nombre de codigo: {len(files) - len(viejos)}')
     w('')
     w(f'  {len(sin_base):>4}  productos sin foto de portada')
     w(f'  {len(sin_color):>4}  colores sin su foto')
@@ -419,7 +458,8 @@ def main():
     w(f'  {len(mentirosas):>4}  PORTADAS de un color que la fila no vende     <-- mirar primero')
     w(f'  {len(perdidas):>4}  FOTOS QUE PERDIERON SU PRODUCTO (cambio el SKU) <-- un comando las rescata')
     w(f'  {len(pendientes):>4}  fotos viejas que quedaron por mirar')
-    w(f'  {len(viejos):>4}  fotos con nombre viejo por ID, sin migrar')
+    w(f'  {len(viejos):>4}  fotos con nombre viejo (por SKU o por ID), sin migrar')
+    w(f'  {len(sin_codigo):>4}  filas de la planilla sin codigo del catalogo')
     w(f'  {len(color_disidente):>4}  mismo color con distinta foto dentro del grupo')
     w(f'  {len(mismo_color):>4}  dos colores del mismo producto con la MISMA foto')
     w(f'  {len(repetidas) - len(nuevas):>4}  duplicados ya revisados (fotos-aceptadas.txt)')
@@ -456,8 +496,13 @@ def main():
 
     bloque('2) PRODUCTOS SIN FOTO DE PORTADA', sin_base)
     bloque('3) COLORES SIN SU FOTO', sin_color)
-    bloque('4) FOTOS CON UN COLOR QUE NINGUNA FILA DEL SKU VENDE', mal_color,
-           '   O sobra la foto, o falta el color en la celda Color del Sheet.')
+    bloque('4) FOTOS DE UNA VARIANTE QUE HOY NO SE VENDE', mal_color,
+           '   No hay nada que arreglar: la foto se queda esperando a que el color'
+           + chr(10) + '   vuelva. Antes esto era una foto perdida; ahora es una foto guardada.')
+    bloque('4b) FILAS DE LA PLANILLA SIN CODIGO DEL CATALOGO', sin_codigo,
+           '   Sin codigo no hay foto. Son altas a las que hay que asignarles uno, o'
+           + chr(10) + '   vinculos que dejaron de ser de fiar porque el ID paso a otro producto:'
+           + chr(10) + '      python herramientas/revisar-catalogo.py')
     bloque('5) FOTOS HUERFANAS (ni el SKU ni el ID estan en la planilla)', huerfanas_expl,
            '   Se quedan en la carpeta: el SKU sale del producto y no puede colgarse'
            + chr(10) + '   de otra cosa. Si el producto vuelve, la foto lo espera.')

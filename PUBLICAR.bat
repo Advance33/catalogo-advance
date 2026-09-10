@@ -76,6 +76,28 @@ echo.
 goto :revision_lista
 
 :revision_lista
+echo   Revisando el catalogo de codigos...
+echo.
+python herramientas\validar-catalogo.py
+if errorlevel 1 goto :catalogo_roto
+goto :catalogo_listo
+
+:catalogo_roto
+echo.
+echo   ------------------------------------------------------------
+echo     EL CATALOGO DE CODIGOS TIENE ERRORES
+echo.
+echo     Ahi vive la identidad de cada producto: si se rompe, las
+echo     fotos se quedan sin dueno y no hay como reconstruirlo.
+echo     Mirar el detalle de arriba antes de seguir.
+echo   ------------------------------------------------------------
+echo.
+choice /c SN /n /m "   Publicar igual? [S = si, N = no]: "
+if errorlevel 2 goto :cancelado
+echo.
+
+:catalogo_listo
+echo.
 echo   Revisando las fotos...
 echo.
 python verificar-fotos.py

@@ -447,6 +447,43 @@ def variante_de(codigo, texto, idx):
     return ''
 
 
+def firma_de_producto(marca, categoria, nombre):
+    """La huella de un producto, para que la web pueda verificar un vinculo
+    sin repetir todo el comparador. Marca, categoria y la firma dura."""
+    return '%s|%s|%s' % (norm(marca), norm(categoria),
+                         ','.join('%s:%d' % x for x in firma_dura(nombre)))
+
+
+def mapa_para_la_web(filas, idx=None):
+    """Lo que la web necesita para llegar del producto de la planilla al
+    nombre de su foto, sin poder correr Python.
+
+    Va adentro de fotos/indice.json y se regenera en cada publicacion. Lleva
+    la firma de cada producto justamente para que un vinculo viejo no alcance:
+    si la planilla reutiliza un ID para otra cosa, la firma no coincide, la
+    web no usa ese codigo y el producto sale sin foto. Sin foto es barato;
+    con la foto de otro producto es el error que venimos arreglando.
+    """
+    idx = idx or indexar(filas)
+    ids, skus, firmas, variantes = {}, {}, {}, {}
+    for f in filas:
+        if (f.get('Baja') or '').strip():
+            continue
+        cod = seguir_fusion(f['CODIGO'], idx)
+        if f.get('ID_alta'):
+            ids[f['ID_alta'].strip()] = cod
+        if f.get('SKU_alta'):
+            skus[f['SKU_alta'].strip()] = cod
+        firmas[cod] = firma_de_producto(f.get('Marca'), f.get('Categoria'), f.get('Producto'))
+        if f.get('NumVar'):
+            tabla = variantes.setdefault(cod, {})
+            for e in escrituras_de(f):
+                tabla[e] = f['CODIGO_VAR']
+        else:
+            variantes.setdefault(cod, {})[''] = f['CODIGO_VAR']
+    return {'ids': ids, 'skus': skus, 'firmas': firmas, 'vars': variantes}
+
+
 def candidatos_foto(codigo, textos_de_hoy, idx):
     """Los archivos que la web prueba para la portada de una fila, en orden:
     la primera variante que vende hoy, después cualquier otra que venda, y al

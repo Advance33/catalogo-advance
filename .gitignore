@@ -55,3 +55,7 @@ fotos-de-productos-dados-de-baja/
 # regenera con revisar-fotos-con-agentes.py --preparar
 lotes/
 FOTOS-QUE-ESTAN-MAL.txt
+
+# Notas de trabajo con links del Drive: no van al sitio
+FOTOS-DEL-DRIVE.txt
+FOTOS-POR-MARCA.txt

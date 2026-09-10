@@ -8,8 +8,9 @@ mira la planilla todos los días y avisa solo cuando hay algo grave.
 
 Cómo avisa:
   - Siempre deja el detalle en logs\\revision-AAAA-MM-DD.txt
-  - Si hay errores graves, pone un archivo bien visible en el Escritorio
-    y muestra una notificación.
+  - Si hay errores graves, la planilla no se actualiza, o las fotos tienen
+    algo que frenaría la publicación (verificar-fotos.py), pone un archivo
+    bien visible en el Escritorio y muestra una notificación.
   - Cuando los errores se resuelven, el archivo del Escritorio se borra solo.
 
 Se instala con instalar-revision-diaria.bat (una sola vez).
@@ -217,7 +218,24 @@ def main():
     with open(log, 'a', encoding='utf-8') as f:
         f.write('\n\nCarga de la planilla: %s\n' % (vieja or 'al dia'))
 
-    if (r.returncode == 1 and graves) or vieja:
+    # Las fotos. verificar-fotos.py frena por las cuatro formas que tiene una
+    # ficha de mostrar otro producto y por las fotos que perdieron su producto
+    # al cambiar el SKU (el 10/09/2026 cambiaron 36 de un dia para otro sin
+    # aviso en el manifiesto). Sin esto, eso se ve recien al publicar.
+    rf = subprocess.run([exe, 'verificar-fotos.py'],
+                        cwd=AQUI, capture_output=True, text=True,
+                        encoding='utf-8', errors='replace',
+                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+    fotos_mal = []
+    for linea in (rf.stdout or '').split('\n'):
+        if '<--' in linea:
+            n = linea.strip().split()[0]
+            if n.isdigit() and int(n) > 0:
+                fotos_mal.append('[fotos] ' + ' '.join(linea.split('<--')[0].split()))
+    with open(log, 'a', encoding='utf-8') as f:
+        f.write('\nFotos (verificar-fotos.py, salida %s):\n%s\n' % (rf.returncode, rf.stdout or rf.stderr or ''))
+
+    if (r.returncode == 1 and graves) or vieja or fotos_mal:
         with open(AVISO, 'w', encoding='utf-8') as f:
             f.write(
                 'EL CATALOGO TIENE ERRORES\n'
@@ -228,17 +246,21 @@ def main():
                 'Cada linea dice donde se arregla:\n'
                 '  planilla = se le pide al equipo del sheet\n'
                 '  codigo   = hay que tocar index.html\n'
-                '  fotos    = falta producir la imagen\n\n'
+                '  fotos    = falta producir la imagen, o correr el comando\n'
+                '             que dice REVISAR-FOTOS.txt\n\n'
                 'El detalle completo esta en:\n%s\n\n'
                 'Cuando se resuelvan, este archivo desaparece solo\n'
                 'en la revision del dia siguiente.\n'
                 % (ahora, '=' * 60,
-                   '\n'.join(graves + (['[planilla] LA PLANILLA NO SE ACTUALIZA: ' + vieja] if vieja else [])),
+                   '\n'.join(graves + (['[planilla] LA PLANILLA NO SE ACTUALIZA: ' + vieja] if vieja else []) + fotos_mal),
                    '=' * 60, log))
         notificar('Catalogo Advance Tecno',
-                  ('%d error(es) grave(s) en la planilla. ' % len(graves) if graves else 'La planilla no se actualiza. ')
+                  ('%d error(es) grave(s) en la planilla. ' % len(graves) if graves else '')
+                  + ('La planilla no se actualiza. ' if vieja else '')
+                  + ('Hay fotos que mirar. ' if fotos_mal else '')
                   + 'Mira el aviso en el Escritorio.')
-        print('%d graves%s. Aviso dejado en el Escritorio.' % (len(graves), ' + carga vieja' if vieja else ''))
+        print('%d graves%s%s. Aviso dejado en el Escritorio.'
+              % (len(graves), ' + carga vieja' if vieja else '', ' + fotos' if fotos_mal else ''))
         return 1
 
     if r.returncode == 2:

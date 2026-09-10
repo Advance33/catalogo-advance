@@ -76,6 +76,15 @@ echo.
 goto :revision_lista
 
 :revision_lista
+echo   Revisando las fotos...
+echo.
+python verificar-fotos.py
+set FOTOS=%errorlevel%
+if "%FOTOS%"=="1" goto :fotos_dudosas
+goto :fotos_listas
+
+:probar_catalogo
+echo.
 echo   Probando el catalogo...
 echo.
 python pruebas\correr.py
@@ -97,15 +106,7 @@ echo.
 choice /c SN /n /m "   Publicar igual? [S = si, N = no]: "
 if errorlevel 2 goto :cancelado
 echo.
-
-:pruebas_listas
-echo.
-echo   Revisando las fotos...
-echo.
-python verificar-fotos.py
-set FOTOS=%errorlevel%
-if "%FOTOS%"=="1" goto :fotos_dudosas
-goto :fotos_listas
+goto :pruebas_listas
 
 :fotos_dudosas
 echo.
@@ -125,8 +126,8 @@ echo.
 echo      - Una foto NUEVA que nadie miro todavia.
 echo.
 echo      - Una PORTADA que es la foto de un color que la fila ya no
-echo        vende: la fila cambio de color y la foto quedo. Se arregla
-echo        copiando la foto del primer color de hoy sobre ID.jpg.
+echo        vende. Las fotos se llaman SKU-color.jpg y la portada es
+echo        la del primer color: alguien copio mal un archivo.
 echo.
 echo     Para las ultimas: mira la foto, y si esta bien anotala
 echo        python verificar-fotos.py --revisadas NOMBRE.jpg
@@ -137,6 +138,9 @@ if errorlevel 2 goto :cancelado
 echo.
 
 :fotos_listas
+goto :probar_catalogo
+
+:pruebas_listas
 git status --porcelain > "%TEMP%\_pub.txt" 2>nul
 for /f %%A in ('type "%TEMP%\_pub.txt" ^| find /c /v ""') do set CANT=%%A
 

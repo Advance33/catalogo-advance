@@ -55,7 +55,12 @@ async function correrPruebas(){
       if(cols.length < 2 || !v.id) continue;
       const vistos = new Map();
       for(const c of cols){
-        const urls = fotosDeColor(v, c).filter(u => u.includes('/' + v.id + '-'));
+        // solo los archivos propios (por SKU o, de respaldo, por ID): los de
+        // las hermanas de otra capacidad no cuentan para este chequeo
+        const s = slugColor(c);
+        const propias = new Set([v.sku, v.id].filter(Boolean).flatMap(b =>
+          [s, s.replace(/-/g, '')].map(f => urlFoto(CARPETA_FOTOS + encodeURIComponent(b + '-' + f) + EXT_FOTOS))));
+        const urls = fotosDeColor(v, c).filter(u => propias.has(u));
         if(!urls.length) continue;
         const url = urls[0];
         if(!(await existe(url))) continue;

@@ -24,6 +24,10 @@ los vuelca al registro de fotos revisadas.
 import collections, csv, hashlib, io, json, os, re, sys, unicodedata, urllib.request
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, AQUI)
+sys.path.insert(0, os.path.join(AQUI, 'herramientas'))
+import fotos_sku as FS       # como se llaman las fotos: por SKU (contrato landing/1.2)
+import validar               # la lista de colores del catalogo
 FOTOS = os.path.join(AQUI, 'fotos')
 LOTES = os.path.join(AQUI, 'lotes')
 REVISADAS = os.path.join(AQUI, 'fotos-revisadas.txt')
@@ -76,29 +80,43 @@ def escribir_registro(reg):
 def datos_de_las_fotos():
     """Cada foto con lo que hay que saber para juzgarla."""
     filas = bajar()
+    conocidos = validar.leer_index()[0]
+    pinta = validar.pinta
     byid = {x['ID'].strip(): x for x in filas}
+    skus = set(FS.sku_de(x) for x in filas if FS.sku_de(x))
+    por_sku = collections.defaultdict(list)
+    for x in filas:
+        if FS.sku_de(x):
+            por_sku[FS.sku_de(x)].append(x)
     archivos = [a for a in sorted(os.listdir(FOTOS)) if a.lower().endswith('.jpg')]
     firma = {a: hashlib.md5(open(os.path.join(FOTOS, a), 'rb').read()).hexdigest()
              for a in archivos}
 
+    # Cada archivo se llama <SKU>-<color> (o <ID>-<color> si todavia no se
+    # migro). El SKU lo comparten las hermanas de otro color, asi que un
+    # archivo puede ser de varias filas: se juzga contra la que vende ese color.
     def partir(a):
-        base = os.path.splitext(a)[0]
-        p = base.split('-')
-        for i in range(len(p), 0, -1):
-            cand = '-'.join(p[:i])
-            if cand in byid:
-                return cand, base[len(cand):].lstrip('-')
-        return None, ''
+        r = FS.resolver(os.path.splitext(a)[0], skus, byid.keys())
+        if r is None:
+            return None, [], ''
+        filas_a = por_sku[r['clave']] if r['tipo'] == 'sku' else [byid[r['clave']]]
+        return (r['tipo'], r['clave']), filas_a, r['color']
+
+    def fila_de(filas_a, col):
+        for x in filas_a:
+            if col and FS.color_coincide(col, FS.colores_de_la_fila(x, pinta, conocidos)):
+                return x
+        return filas_a[0]
 
     # senal de riesgo: dentro de un grupo, el mismo color deberia ser la misma
     # foto en todas las filas; la que se aparta es la sospechosa
     porgrupo = collections.defaultdict(lambda: collections.defaultdict(list))
     for a in archivos:
-        pid, col = partir(a)
-        if pid and col:
-            g = (byid[pid].get('Grupo') or '').strip()
-            if g:
-                porgrupo[g][col].append(a)
+        clave, filas_a, col = partir(a)
+        if clave and col:
+            for g in {(x.get('Grupo') or '').strip() for x in filas_a}:
+                if g:
+                    porgrupo[g][col].append(a)
     disidentes = set()
     for porcolor in porgrupo.values():
         for lista in porcolor.values():
@@ -109,33 +127,47 @@ def datos_de_las_fotos():
                 mayoria = cuenta.most_common(1)[0][0]
                 disidentes.update(a for a in lista if firma[a] != mayoria)
 
-    # otra senal: la portada que no coincide con ninguna foto de color suya
+    # otra senal: una foto sin color (<SKU>.jpg o <ID>.jpg) que no coincide
+    # con ninguna foto de color del mismo producto
+    de_cada = collections.defaultdict(lambda: {'sin_color': [], 'con_color': []})
+    for a in archivos:
+        clave, filas_a, col = partir(a)
+        if clave:
+            de_cada[clave]['con_color' if col else 'sin_color'].append(a)
     portada_suelta = set()
-    for pid, x in byid.items():
-        port = pid + '.jpg'
-        if port not in firma:
-            continue
-        suyas = [a for a in archivos if a.startswith(pid + '-')]
-        if suyas and firma[port] not in {firma[a] for a in suyas}:
-            portada_suelta.add(port)
+    for d in de_cada.values():
+        con = {firma[a] for a in d['con_color']}
+        for a in d['sin_color']:
+            if con and firma[a] not in con:
+                portada_suelta.add(a)
 
     salida = []
     for a in archivos:
-        pid, col = partir(a)
-        if not pid:
+        clave, filas_a, col = partir(a)
+        if not clave:
             continue
-        x = byid[pid]
-        riesgo = (2 if a in disidentes else 0) + (1 if a in portada_suelta else 0)
+        x = fila_de(filas_a, col)
+        # Que ninguna fila del producto venda el color que dice el archivo es
+        # la senal mas fuerte que hay: o la foto es de otro producto, o el
+        # nombre esta mal. Va primera en la cola.
+        nadie = bool(col) and not FS.vende_color(filas_a, col, pinta, conocidos)
+        riesgo = ((3 if nadie else 0) + (2 if a in disidentes else 0)
+                  + (1 if a in portada_suelta else 0))
         salida.append({
             'archivo': a,
             'ruta': os.path.join(FOTOS, a),
-            'id': pid,
+            'id': x['ID'].strip(),
+            'sku': FS.sku_de(x),
+            'ids_del_sku': [y['ID'].strip() for y in filas_a],
             'producto': x['Descripción completa'],
             'marca': x.get('Marca', ''),
             'categoria': x.get('Categoría', ''),
-            'colores_que_vende': x.get('Color', ''),
-            'color_del_nombre': col or '(es la portada)',
+            'colores_que_vende': ' | '.join('/'.join(FS.colores_de_la_fila(y, pinta, conocidos)) or '(sin color)'
+                                            for y in filas_a),
+            'color_del_nombre': col or '(sin color: es la unica foto del producto)',
             'precio_usd': x.get('Precio USD', ''),
+            'nombre_viejo_por_id': clave[0] == 'id',
+            'nadie_vende_ese_color': nadie,
             'riesgo': riesgo,
         })
     return salida
@@ -149,7 +181,8 @@ nombre del archivo termina en un color, que color deberia mostrar.
 Marca una foto como MAL cuando:
   - muestra otro aparato (otro modelo, otra generacion, otro tipo de cosa)
   - el nombre del archivo dice un color y en la imagen se ve otro
-  - es la portada y el aparato no tiene ninguno de los colores que se venden
+  - el archivo dice un color que la planilla no vende (viene marcado con
+    "nadie_vende_ese_color": ahi hay que mirar con mas atencion)
   - muestra un accesorio o una caja en vez del producto
 
 No la marques mal por:
@@ -168,14 +201,21 @@ def preparar(todas, por_lote):
     fotos = datos_de_las_fotos()
     reg = leer_registro()
     if not todas:
-        fotos = [f for f in fotos if not reg.get(f['archivo'], ('', False))[1]]
+        # "Mirada" vale solo si la imagen sigue siendo la que se miro: una foto
+        # que cambio despues de revisada es justo la que hay que volver a ver.
+        def falta(f):
+            h, mirada = reg.get(f['archivo'], ('', False))
+            return not mirada or h != hashlib.md5(open(f['ruta'], 'rb').read()).hexdigest()
+        fotos = [f for f in fotos if falta(f)]
     fotos.sort(key=lambda f: (-f['riesgo'], f['archivo']))
     if not fotos:
         print('No queda ninguna foto por mirar.')
         return 0
     os.makedirs(LOTES, exist_ok=True)
+    # Se van tambien los veredictos de la tanda anterior: con nombres nuevos,
+    # un veredicto viejo se aplica en silencio sobre archivos que ya no estan.
     for viejo in os.listdir(LOTES):
-        if re.match(r'lote-\d+\.json$', viejo):
+        if re.match(r'(lote|veredicto)s?-?\d*\.json$', viejo):
             os.remove(os.path.join(LOTES, viejo))
     n = 0
     for i in range(0, len(fotos), por_lote):

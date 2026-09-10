@@ -91,14 +91,14 @@ def main():
     print('=== %d SE ARREGLAN RECORTANDO (hay pixeles de sobra) ===' % len(recortables))
     for oc, n, tam, b in recortables[:25]:
         px = max(b[2] - b[0], b[3] - b[1])
-        print('  %-26s ocupa %3d%%  producto %4dpx  (%dx%d)' % (n[:26], oc * 100, px, tam[0], tam[1]))
+        print('  %s%s     ocupa %3d%%  producto %4dpx  (%dx%d)' % (n, chr(10) + ' ' * 4, oc * 100, px, tam[0], tam[1]))
     if len(recortables) > 25:
         print('  ... y %d mas' % (len(recortables) - 25))
 
     print('\n=== %d NECESITAN OTRA FOTO (recortar las dejaria borrosas) ===' % len(chicas))
     for oc, n, tam, b in chicas[:25]:
         px = max(b[2] - b[0], b[3] - b[1])
-        print('  %-26s ocupa %3d%%  producto %4dpx  (%dx%d)' % (n[:26], oc * 100, px, tam[0], tam[1]))
+        print('  %s%s     ocupa %3d%%  producto %4dpx  (%dx%d)' % (n, chr(10) + ' ' * 4, oc * 100, px, tam[0], tam[1]))
     if len(chicas) > 25:
         print('  ... y %d mas' % (len(chicas) - 25))
 
@@ -113,10 +113,10 @@ def main():
         try:
             arreglar(ruta, b)
             im = Image.open(ruta)
-            print('  %-26s %3d%% -> %3d%%' % (n[:26], oc * 100, ocupacion(im)[0] * 100))
+            print('  %s  %3d%% -> %3d%%' % (n, oc * 100, ocupacion(im)[0] * 100))
         except Exception as e:
             shutil.copy2(os.path.join(BACKUP, n), ruta)
-            print('  %-26s ERROR, se dejo como estaba: %s' % (n[:26], e))
+            print('  %s  ERROR, se dejo como estaba: %s' % (n, e))
     print('\n%d fotos recortadas. Los originales quedaron en fotos-sin-recortar/' % len(recortables))
     if chicas:
         print('Las otras %d quedaron intactas: hay que conseguirles otra foto.' % len(chicas))

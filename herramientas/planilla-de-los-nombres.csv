@@ -1,0 +1,535 @@
+ID,SKU,Color,Descripción completa
+CEL-APP-004,celular~apple~15-iphone~128gb,Black,iPhone 15 128GB (Black)
+CEL-APP-005,celular~apple~16-iphone~128gb,Black/Ultramarine/Teal,iPhone 16 128GB (Black/Ultramarine/Teal)
+CEL-SAM-041,celular~samsung~a57-galaxy~8gb-128gb-5g,Gray,Galaxy A57 8/128GB 5G (Gray)
+CEL-SAM-046,celular~samsung~galaxy-s25-ultra~12gb-256gb-5g,Gray/Whitesilver/Silverblue,Galaxy S25 Ultra 12/256GB 5G (Gray/Whitesilver/Silverblue)
+CEL-SAM-047,celular~samsung~galaxy-s25-ultra~12gb-512gb-5g,Gray/Whitesilver/Silverblue,Galaxy S25 Ultra 12/512GB 5G (Gray/Whitesilver/Silverblue)
+CEL-SAM-053,celular~samsung~galaxy-s26~12gb-512gb,Black/White/Skyblue,Galaxy S26 12/512GB (Black/White/Skyblue)
+CEL-SAM-054,celular~samsung~galaxy-s26-ultra~16gb-1tb-5g,White/Skyblue,Galaxy S26 Ultra 16/1TB 5G (White/Skyblue)
+AUD-APP-002,auriculares~apple~4-airpods,—,AirPods 4
+AUD-APP-005,auriculares~apple~airpods-max-usb-c,Blue,AirPods Max USB-C (Blue)
+NB-APP-007,notebook~apple~air-m5-macbook~13in-16gb-1tb-tecladoen,Midnight,"MacBook Air M5 13.6"" 16GB/1TB (Midnight)"
+NB-APP-001,notebook~apple~a18-macbook-neo~13in-8gb-256gb-tecladoen,Citrus/Indigo,"MacBook Neo A18 13"" 8GB/256GB (Citrus/Indigo)"
+NB-APP-002,notebook~apple~a18-macbook-neo~13in-8gb-512gb-tecladoen,Citrus,"MacBook Neo A18 13"" 8GB/512GB (Citrus)"
+NB-APP-013,notebook~apple~m4pro-macbook-pro~14in-24gb-512gb-tecladoen,Silver,"MacBook Pro M4 Pro 14"" 24GB/512GB (Silver)"
+NB-APP-034,notebook~apple~m4pro-macbook-pro~14in-24gb-1tb-tecladoen,Space Black/Silver,"MacBook Pro M4 Pro 14"" 24GB/1TB (Space Black/Silver)"
+NB-APP-018,notebook~apple~m5-macbook-pro~14in-16gb-1tb-tecladoen,Silver,"MacBook Pro M5 14"" 16GB/1TB (Silver)"
+NB-APP-019,notebook~apple~m5-macbook-pro~14in-24gb-1tb-tecladoen,Space Black,"MacBook Pro M5 14"" 24GB/1TB (Space Black)"
+NB-APP-021,notebook~apple~m5pro-macbook-pro~14in-24gb-1tb-tecladoen,Space Black/Silver,"MacBook Pro M5 Pro 14"" 24GB/1TB (Space Black/Silver)"
+NB-APP-022,notebook~apple~m5pro-macbook-pro~14in-24gb-2tb-tecladoen,Space Black,"MacBook Pro M5 Pro 14"" 24GB/2TB (Space Black)"
+NB-APP-023,notebook~apple~m5max-macbook-pro~14in-36gb-2tb-tecladoen,Silver/Midnight,"MacBook Pro M5 Max 14"" 36GB/2TB (Silver/Midnight)"
+NB-APP-024,notebook~apple~m5pro-macbook-pro~16in-24gb-1tb-tecladoen,Space Black,"MacBook Pro M5 Pro 16"" 24GB/1TB (Space Black)"
+NB-APP-025,notebook~apple~m5pro-macbook-pro~16in-48gb-1tb-tecladoen,Space Black,"MacBook Pro M5 Pro 16"" 48GB/1TB (Space Black)"
+NB-APP-026,notebook~apple~m5max-macbook-pro~16in-36gb-2tb-tecladoen,Silver,"MacBook Pro M5 Max 16"" 36GB/2TB (Silver)"
+NB-APP-027,notebook~apple~m5max-macbook-pro~16in-48gb-2tb-tecladoen,Space Black,"MacBook Pro M5 Max 16"" 48GB/2TB (Space Black)"
+TAB-APP-001,tablet~apple~a16-ipad~11in-128gb,Blue/Silver,"iPad 11"" A16 128GB (Blue/Silver)"
+TAB-APP-002,tablet~apple~a16-ipad~11in-256gb,Blue,"iPad 11"" A16 256GB (Blue)"
+TAB-APP-003,tablet~apple~ipad-mini~gen7-128gb,Space Gray,iPad Mini 7MA Gen 128GB (Space Gray)
+TAB-APP-004,tablet~apple~ipad-mini~gen7-256gb,Space Gray,iPad Mini 7ma Gen 256gb (Space Gray)
+TAB-APP-006,tablet~apple~air-ipad-m4~11in-128gb,Space Gray/Purple,"iPad Air 11"" M4 128GB (Space Gray/Purple)"
+TAB-APP-008,tablet~apple~air-ipad-m4~13in-128gb,Space Gray,"iPad Air 13"" M4 128GB (Space Gray)"
+TAB-APP-010,tablet~apple~ipad-m4-pro~11in-256gb,Space Black,"iPad Pro 11"" M4 256GB (Space Black)"
+TAB-APP-011,tablet~apple~air-ipad-m4~11in-512gb,Space Gray,"iPad Air 11"" M4 512GB (Space Gray)"
+TAB-APP-012,tablet~apple~ipad-m4-pro~11in-2tb,Space Black,"iPad Pro 11"" M4 2TB (Space Black)"
+TAB-APP-013,tablet~apple~ipad-m4-pro~13in-256gb,Silver,"iPad Pro 13"" M4 256GB (Silver)"
+TAB-APP-015,tablet~apple~ipad-m5-pro~11in-256gb,Space Black,"iPad Pro 11"" M5 256GB (Space Black)"
+TAB-APP-018,tablet~apple~ipad-m5-pro~13in-256gb,Space Black/Silver,"iPad Pro 13"" M5 256GB (Space Black/Silver)"
+TAB-APP-019,tablet~apple~ipad-m5-pro~13in-512gb,Space Black,"iPad Pro 13"" M5 512GB (Space Black)"
+ACC-APP-003,accesorio-apple~apple~pencil-usb-c,—,Pencil USB-C
+ACC-APP-004,accesorio-apple~apple~pencil-pro,—,Pencil Pro
+ACC-APP-001,accesorio-apple~apple~airtag-x1,—,Airtag x1
+ACC-APP-034,accesorio-apple~apple~folio-ipad-keyboard-magic~gen10-tecladoen,White,Magic Keyboard Folio iPad 10TH Gen Inglés (White)
+ACC-APP-035,accesorio-apple~apple~air-ipad-keyboard-m3-m4-magic~11in-tecladoen,Black,"Magic Keyboard iPad Air M3/M4 11"" Inglés (Black)"
+ACC-APP-037,accesorio-apple~apple~air-ipad-keyboard-m3-m4-magic~13in-tecladoen,Black,"Magic Keyboard iPad Air M3/M4 13"" Inglés (Black)"
+ACC-APP-036,accesorio-apple~apple~ipad-keyboard-m4-m5-magic-pro~11in-tecladoen,Black,"Magic Keyboard iPad Pro M4/M5 11"" Inglés (Black)"
+ACC-APP-039,accesorio-apple~apple~ipad-keyboard-m4-m5-magic-pro~13in-tecladoen,White,"Magic Keyboard iPad Pro M4/M5 13"" Inglés (White)"
+ACC-APP-005,accesorio-apple~apple~2-magic-mouse,White,Magic Mouse 2 (White)
+ACC-APP-041,accesorio-apple~apple~2-magic-mouse,Black,Magic Mouse 2 (Black)
+ACC-APP-008,accesorio-apple~apple~2-magic-trackpad,Black,Magic Trackpad 2 (2024) (Black)
+PC-APP-001,desktop~apple~m4-mac-mini~16gb-256gb,—,Mac Mini M4 16GB/256GB
+PC-APP-002,desktop~apple~m4-mac-mini~16gb-512gb,—,Mac Mini M4 16GB/512GB
+PC-APP-004,desktop~apple~m4pro-mac-mini~24gb-512gb,—,Mac Mini M4 Pro 24GB/512GB
+SW-APP-004,smartwatch~apple~3-se-watch~40mm-sm-gps,Midnight/Starlight,Watch SE 3 40mm GPS S/M (Midnight/Starlight)
+SW-APP-005,smartwatch~apple~3-se-watch~44mm-ml-gps,Midnight/Starlight,Watch SE 3 44mm GPS M/L (Midnight/Starlight)
+SW-APP-039,smartwatch~apple~11-series-watch~42mm-sm-gps,Jet Black/Silver/Space Gray,Watch Series 11 42mm GPS S/M (Jet Black/Silver/Space Gray)
+SW-APP-021,smartwatch~apple~11-series-watch~42mm-sm-gps,Rose Gold,Watch Series 11 42mm GPS S/M (Rose Gold)
+SW-APP-013,smartwatch~apple~3-ultra-watch~49mm-m,"Black/Black Ocean Band, Natural/Blue Trail Loop M/L, Natural/Anchor Blue Ocean Band","Watch Ultra 3 49mm (Black/Black Ocean Band, Natural/Blue Trail Loop M/L, Natural/Anchor Blue Ocean Band)"
+SW-APP-014,smartwatch~apple~3-ultra-watch~49mm-m,Black/Black Alpine Loop M,Watch Ultra 3 49mm (Black/Black Alpine Loop M)
+CON-SON-010,consola~sony~5-digital-playstation~825gb,—,PlayStation 5 Digital 825GB
+CON-SON-011,consola~sony~5-playstation-pro~2tb,—,PlayStation 5 Pro 2tb
+CON-NIN-001,consola~nintendo~2-switch,—,Switch 2
+CON-NIN-002,consola~nintendo~2-choose-one-switch,—,Switch 2 (Choose One)
+CON-NIN-003,consola~nintendo~2-kart-mario-switch,—,Switch 2 + Mario Kart
+CON-MIC-007,consola~microsoft~s-series-xbox~1tb,—,Xbox Series S 1TB
+CON-MIC-008,consola~microsoft~digital-series-x-xbox~1tb,White,Xbox Series X 1TB Digital (White)
+CON-MIC-009,consola~microsoft~series-x-xbox~1tb,Black,Xbox Series X 1tb (Black)
+FIL-PAN-001,filmadora~panasonic~24x-camcorder-hc-v900-hd-zoom,—,HC-V900 HD Camcorder HD 24X Zoom
+FIL-PAN-002,filmadora~panasonic~24x-4k-camcorder-hc-vx3-uhd-zoom,—,HC-VX3 UHD Camcorder 4K 24X Zoom
+FIL-PAN-006,filmadora~panasonic~24x-4k-hc-hdmi-x1200,—,HC X1200 4K HDMI 24X
+FIL-PAN-003,filmadora~panasonic~24x-3g-4k-hc-hdmi-pro-sdi-uhd-with-x2100,—,HC X2100 4K UHD 3G/SDI/HDMI Pro With 24X
+FIL-PAN-004,filmadora~panasonic~4k-ag-cx20,—,AG-CX20 4K
+FIL-CAN-001,filmadora~canon~4k-camcoder-hfg70-uhd-vixia,—,HFG70 Vixia UHD 4K Camcoder
+FIL-SON-001,filmadora~sony~1incmos-4k-hxr-nx800-nxcam-sensor,—,"HXR-NX800 4K 1""CMOS Sensor NXCAM"
+FIL-SON-002,filmadora~sony~1incmos-4k-pxw-sensor-xdcam-z200,—,"PXW Z200 4K 1""CMOS Sensor XDCAM"
+CAM-GOP-002,camara-de-accion~gopro~13-go-hero-pro,—,Go Pro Hero 13 Black
+CAM-GOP-003,camara-de-accion~gopro~12-bundle-go-hero-pro-special,—,Go Pro Hero 12 Black Special Bundle
+CAM-GOP-005,camara-de-accion~gopro~1-8k-go-mission-pro-sensor,—,Go Pro Mission 1 Sensor 8K
+ACC-GOP-001,accesorio-camara~gopro~10-11-12-9-bateria-go-pro-recargable,—,Bateria Recargable Go Pro 9/10/11/12
+CAM-INS-001,camara-de-accion~insta360~360-ace-insta-pro,—,Insta 360 Ace Pro
+CAM-CAN-028,camara~canon~18-45-55-210-eos-r100~kit,—,EOS R100 Kit 18-45 / 55-210
+CAM-CAN-003,camara~canon~eos-rp~body,—,EOS RP Body
+CAM-CAN-032,camara~canon~24-105-4-7.1-eos-f-is-rp-stm~kit,—,EOS RP 24-105 F/4-7.1 IS STM Kit
+CAM-CAN-004,camara~canon~eos-r10~body,—,EOS R10 Body
+CAM-CAN-008,camara~canon~eos-iii-mark-r6~body,—,EOS R6 Mark III Body
+CAM-CAN-011,camara~canon~24-105-eos-f4-7.1-iii-is-mark-r6-stm~kit,—,EOS R6 Mark III Kit 24-105 F4-7.1 IS STM
+CAM-CAN-014,camara~canon~20-50-4usm-eos-f-pz-r6-v-video~kit,—,EOS R6 V Kit 20-50 F/4USM PZ (Video)
+CAM-CAN-009,camara~canon~eos-r5~body,—,EOS R5 Body
+CAM-CAN-010,camara~canon~c-cinema-eos-r5,—,EOS R5 C Cinema
+CAM-CAN-015,camara~canon~eos-r3~body,—,EOS R3 Body
+CAM-CAN-016,camara~canon~eos-r1~body,—,EOS R1 Body
+CAM-CAN-018,camara~canon~18-55-2000d-eos-iii-t7~kit,—,EOS 2000D Kit 18-55 III (T7)
+CAM-CAN-020,camara~canon~18-55-4000d-eos-iii~kit,—,EOS 4000D Kit 18-55 III (T100)
+CAM-CAN-021,camara~canon~5d-eos-iv-mark~body,—,EOS 5D Mark IV Body
+ACC-CAN-006,accesorio-camara~canon~ad-e1-adaptador-multifuncion-zapata,—,Adaptador AD-E1 Zapata Multifuncion
+ACC-CAN-001,accesorio-camara~canon~2-5d-6d-7d-bat-bateria-car-lp-e6nh-r5-r6-smallrig-x~kit,—,Bateria Smallrig Lp-E6NH Kit (2 X Bat + Car) (90D 7D 6D 5D R5 R6)
+ACC-CAN-002,accesorio-camara~canon~adapter-ef-eos-mount-r,—,Mount Adapter EF-EOS R
+ACC-CAN-004,accesorio-camara~canon~bateria-bg-r20-grip,—,Bateria Grip BG-R20
+ACC-CAN-005,accesorio-camara~canon~canon-el-5-flash-speedlite,—,Flash Canon Speedlite EL-5
+ACC-CAN-007,accesorio-camara~canon~ef-630-electronic-flash,—,Flash EF-630 Electronic
+CAM-NIK-001,camara~nikon~16-50-mm-z30~kit,—,Z30 Kit 16-50 Mm
+CAM-NIK-002,camara~nikon~18-140-vr-z30~kit,—,Z30 Kit 18-140 VR
+CAM-NIK-003,camara~nikon~16-50-50-250-ii-vr-z30~kit,—,Z30 Kit 16-50/50-250 VR II
+CAM-NIK-004,camara~nikon~ii-z6~body-tecladoen,—,Z6 II Body (Ingles)
+CAM-NIK-016,camara~nikon~24-120mm-iii-z6~kit-tecladoen,—,Z6 III Kit 24-120MM (Ingles)
+CAM-NIK-015,camara~nikon~iii-z6~body-tecladoen,—,Z6 III Body (Ingles)
+CAM-NIK-006,camara~nikon~ii-z7~body-tecladoes,—,Z7 II Body Español
+CAM-NIK-010,camara~nikon~z8~body,—,Z8 Body
+CAM-NIK-017,camara~nikon~24-120-z8~kit,—,Z8 Kit 24-120
+CAM-NIK-009,camara~nikon~6k-cinema-zr,—,ZR 6K Cinema
+ACC-NIK-001,accesorio-camara~nikon~bateria-en-el20a-nikon,—,Bateria Nikon EN-EL20A
+ACC-NIK-002,accesorio-camara~nikon~control-ml-l7-nikon-remoto,—,Control Remoto Nikon ML-L7
+ACC-NIK-006,accesorio-camara~nikon~memoria-nikon-xqd~64gb,—,Memoria Nikon 64GB XQD
+ACC-NIK-004,accesorio-camara~nikon~adaptador-ftz-ii,—,Adaptador FTZ II
+ACC-NIK-005,accesorio-camara~nikon~18d-3300mha-bateria-en-el-nikon,—,Bateria Nikon EN-EL 18D 3300MHA
+CAM-SON-003,camara~sony~ii-zv-e10~body,WHI,ZV-E10 II Body (WHI)
+CAM-SON-005,camara~sony~7c-alfa~body,—,Alfa 7C Body
+CAM-SON-006,camara~sony~7-alfa-iii~body,BLACK,Alfa 7 III Body (Black)
+CAM-SON-027,camara~sony~28-70-7-alfa-iii~kit,—,Alfa 7 III Kit 28-70
+CAM-SON-009,camara~sony~7-alfa-cii~body,—,Alfa 7 Cii Body
+CAM-SON-013,camara~sony~7cr-alfa~body,BLACK/SILVER,Alfa 7CR Body (Black/Silver)
+CAM-SON-010,camara~sony~28-70-7-alfa-iv~kit,—,Alfa 7 IV Kit 28-70
+CAM-SON-015,camara~sony~7-alfa-v~body,—,Alfa 7 V Body
+CAM-SON-017,camara~sony~28-70-7-alfa-v~kit,—,Alfa 7 V Kit 28-70
+CAM-SON-008,camara~sony~7r-alfa-iii~body,—,Alfa 7R III Body
+CAM-SON-012,camara~sony~7r-alfa-iv~body,BLACK,Alfa 7R IV Body (Black)
+CAM-SON-018,camara~sony~7r-alfa-v~body,—,Alfa 7R V Body
+CAM-SON-020,camara~sony~7r-alfa-vi~body,—,Alfa 7R VI Body
+CAM-SON-016,camara~sony~7s-alfa-iii~body,BLACK,Alfa 7S III Body (Black)
+CAM-SON-021,camara~sony~9-alfa-iii-mk,—,Alfa 9 MK III
+CAM-SON-023,camara~sony~1-alfa-ii~body,—,Alfa 1 II Body
+CAM-SON-007,camara~sony~fx30~body,—,FX30 Body
+CAM-SON-014,camara~sony~fx2~body,—,FX2 Body
+CAM-SON-019,camara~sony~fx3~body,—,FX3 Body
+CAM-SON-022,camara~sony~fx6-v,—,FX6 V
+CAM-SON-024,camara~sony~dsc-rx100-vii,—,DSC RX100 VII
+ACC-SON-004,accesorio-camara~sony~2-bat-bateria-car-fw-50-smallrig-usb-c-x,—,Batería Smallrig USB-C FW-50 (2 X Bat + Car)
+ACC-SON-005,accesorio-camara~sony~bateria-np-fz100-sony,—,Bateria Sony NP-FZ100
+ACC-SON-006,accesorio-camara~sony~bateria-fz-100-rechargable-smallrig-usb-c,—,Batería Smallrig USB-C FZ-100 (Rechargable)
+ACC-SON-007,accesorio-camara~sony~grip-shooting-vct-sgr1,—,Shooting Grip VCT-SGR1
+ACC-SON-008,accesorio-camara~sony~bateria-bc-qz1-cargador-sony,—,Bateria Cargador Sony Bc-QZ1
+ACC-SON-009,accesorio-camara~sony~digital-ecm-b10-mic-mount-shotgun,—,Shotgun Mic Mount Digital ECM-B10
+LEN-CAN-038,lente~canon~ef-s~24-f2.8-stm,—,EF S 24mm F/2.8 STM
+LEN-CAN-047,lente~canon~5.6-ef-s~10-18-f4.5-is-stm,—,EF S 10-18mm F/4.5-5.6 IS STM
+LEN-CAN-001,lente~canon~rf~50-f1.8-stm,—,RF 50mm F/1.8 STM
+LEN-CAN-003,lente~canon~rf~16-f2.8-stm,—,RF 16mm F/2.8 STM
+LEN-CAN-004,lente~canon~rf~28-f2.8,—,RF 28mm F/2.8
+LEN-CAN-005,lente~canon~5.6-rf~75-300-f4,—,RF 75-300mm F/4-5.6
+LEN-CAN-006,lente~canon~6.3-rf-s~10-18-f4.5,—,RF-S 10-18mm F/4.5-6.3
+LEN-CAN-039,lente~canon~ef~50-f1.4-usm,—,EF 50mm F/1.4 USM
+LEN-CAN-042,lente~canon~7-rf-s~55-210-f5-condcajablanca,—,RF-S 55-210mm F/5-7
+LEN-CAN-007,lente~canon~6.3-rf~15-30-f4.5-is,—,RF 15-30mm F/4.5-6.3 IS
+LEN-CAN-013,lente~canon~6.3-rf-s~18-150-f3.5-is-stm,—,RF-S 18-150mm F/3.5-6.3 IS STM
+LEN-CAN-008,lente~canon~7.1-rf~24-105-f4-is-stm,—,RF 24-105mm F/4-7.1 IS STM
+LEN-CAN-010,lente~canon~7-dual-rf-s~8-f4-stm,—,RF-S 7.8mm F/4 STM Dual
+LEN-CAN-011,lente~canon~macro-rf~24-f1.8-is-stm,—,RF 24mm F/1.8 Macro IS STM
+LEN-CAN-012,lente~canon~11l-f-rf~600-is-stm,—,RF 600mm F/11L IS STM
+LEN-CAN-014,lente~canon~rf~45-f1.2,—,RF 45mm F/1.2
+LEN-CAN-015,lente~canon~macro-rf~85-f2-is-stm,—,RF 85mm F/2 Macro IS STM
+LEN-CAN-016,lente~canon~8-rf~100-400-f5.6-is-usm,—,RF 100-400mm F/5.6-8 IS USM
+LEN-CAN-018,lente~canon~rf~800-f11-is-stm,—,RF 800mm F/11 IS STM
+LEN-CAN-017,lente~canon~4l-ef-f~16-35-is-usm,—,EF 16-35mm F/4L IS USM
+LEN-CAN-019,lente~canon~6.3-rf~24-240-f4-is-usm,—,RF 24-240mm F/4-6.3 IS USM
+LEN-CAN-020,lente~canon~rf~16-28-f2.8-is-stm,—,RF 16-28mm F/2.8 IS STM
+LEN-CAN-021,lente~canon~3-dual-fisheye-rf-s~9-f3.5-stm,—,RF-S 3.9mm F/3.5 Dual Fisheye STM
+LEN-CAN-044,lente~canon~4l-f-rf~14-35-is-usm,—,RF 14-35mm F/4L IS USM
+LEN-CAN-023,lente~canon~4l-f-rf~70-200-is,—,RF 70-200mm F/4L IS
+LEN-CAN-022,lente~canon~l-macro-rf~100-f2.8-is-usm,—,RF 100mm F/2.8 L Macro IS USM
+LEN-CAN-049,lente~canon~box-rf~24-105-f4-is-usm,—,RF 24-105mm F/4 IS USM White Box
+LEN-CAN-024,lente~canon~l-rf-vcm~35-f1.4,—,RF 35mm F/1.4 L Vcm
+LEN-CAN-025,lente~canon~rf-vcm~24-f1.4,—,RF 24mm F/1.4 Vcm
+LEN-CAN-026,lente~canon~l-rf-vcm~20-f1.4,—,RF 20mm F/1.4 L Vcm
+LEN-CAN-027,lente~canon~ef-ii~24-70-f2.8-usm,—,EF 24-70mm F/2.8 II USM
+LEN-CAN-029,lente~canon~3.5-fisheye-l-rf~7-14-f2.8-stm,—,RF 7-14mm F/2.8-3.5 L Fisheye STM
+LEN-CAN-030,lente~canon~rf~135-f1.8-is-usm,—,RF 135mm F/1.8 IS USM
+LEN-CAN-031,lente~canon~rf~10-20-f4-stm,—,RF 10-20mm F/4 STM
+LEN-CAN-050,lente~canon~rf~24-70-f2.8-is-usm,—,RF 24-70mm F/2.8 IS USM
+LEN-CAN-034,lente~canon~l-rf~28-70-f2-usm,—,RF 28-70mm F/2 L USM
+LEN-CAN-035,lente~canon~rf-z~70-200-f2.8-is-usm,—,RF 70-200mm F/2.8 IS USM Z Black
+LEN-SIG-001,lente~sigma~dc~30-f1.4-ef-art-hsm,—,30mm F/1.4 Dc HSM ART Canon EF
+LEN-SIG-002,lente~sigma~canon-contemporary-dc-dn~56-f1.4,—,56mm F/1.4 Dc DN Contemporary Canon
+LEN-SIG-003,lente~sigma~contemporary-dc-dn-m-mount~16-f1.4-ef,—,16mm F/1.4 Dc DN Contemporary Canon EF-M Mount
+LEN-SIG-005,lente~sigma~af-canon-dg-ex~85-f1.4,—,85mm F/1.4 Ex DG Canon AF
+LEN-SIG-006,lente~sigma~c-canon~10-18-f2.8,—,10-18mm F/2.8 C Canon
+LEN-SIG-008,lente~sigma~contemporary~12-f1.4-rf,—,12mm F/1.4 Contemporary Canon RF
+LEN-SIG-007,lente~sigma~canon-dg~50-f1.4-art-hsm,—,50mm F/1.4 DG HSM ART Canon
+LEN-SIG-009,lente~sigma~canon~18-35-f1.8-art-hsm,—,18-35mm F/1.8 ART HSM Canon
+LEN-SIG-010,lente~sigma~canon-dg~35-f1.4-art-hsm,—,35mm F/1.4 DG ART HSM Canon
+LEN-SIG-011,lente~sigma~mount~17-40-f1.8-rf-art,—,17-40mm F/1.8 ART Canon RF Mount
+LEN-SIG-013,lente~sigma~canon-dc~50-100-f1.8-art-hsm,—,50-100mm F/1.8 ART Dc HSM Canon
+LEN-SIG-014,lente~sigma~canon-dg-ef~85-f1.4-art-hsm,—,85mm F/1.4 DG HSM ART EF Canon
+LEN-SIG-015,lente~sigma~canon~12-24-f4-art-hsm,—,12-24mm F/4 HSM ART Canon
+LEN-SIG-017,lente~sigma~canon~14-24-f2.8-hsm,—,14-24mm F/2.8 HSM Canon
+LEN-TAM-001,lente~tamron~canon-iii~11-20-f2.8,—,11-20mm F/2.8 III Canon
+LEN-TAM-002,lente~tamron~18-300-rf,—,18-300mm Canon RF
+LEN-NIK-001,lente~nikon~af-s-g~35-f1.8,—,AF-S 35mm F/1.8 G
+LEN-NIK-002,lente~nikon~af-s-g~50-f1.8,—,AF-S 50mm F/1.8 G
+LEN-NIK-003,lente~nikon~z~28-f2.8,—,Z 28mm F/2.8
+LEN-NIK-004,lente~nikon~dx-z~24-f1.7,—,Z DX 24mm F/1.7
+LEN-NIK-005,lente~nikon~z~40-f2,—,Z 40mm F/2
+LEN-NIK-006,lente~nikon~5.6-dx-pz-z~12-28-f3.5-vr,—,Z 12-28mm DX F/3.5 5.6 PZ VR
+LEN-NIK-036,lente~nikon~5.6-pz-z~12-28-f3.5-vr,—,Z 12-28mm F/3.5-5.6 PZ VR
+LEN-NIK-007,lente~nikon~z~26-f2.8,—,Z 26mm F/2.8
+LEN-NIK-008,lente~nikon~z~50-f1.4,—,Z 50mm F/1.4
+LEN-NIK-010,lente~nikon~s-z~50-f1.8,—,Z 50mm F/1.8 S
+LEN-NIK-011,lente~nikon~macro-mc-z~50-f2.8,—,Z MC 50mm F/2.8 Macro
+LEN-NIK-012,lente~nikon~7.1-z~24-105-f4,—,Z 24-105mm F/4-7.1
+LEN-NIK-013,lente~nikon~4s-f-z~24-70,—,Z 24-70mm F/4S
+LEN-NIK-014,lente~nikon~6.3-z~24-200-f4-vr,—,Z 24-200mm F/4-6.3 VR
+LEN-NIK-015,lente~nikon~s-z~35-f1.8,—,Z 35mm F/1.8 S
+LEN-NIK-017,lente~nikon~macro-mc-z~105-f2.8-vr,—,Z MC 105mm F/2.8 VR Macro
+LEN-NIK-018,lente~nikon~z~24-f1.8,—,Z 24mm F/1.8
+LEN-NIK-019,lente~nikon~af-dx-if-zoom~12-24-f4,—,AF DX Zoom 12-24mm F/4 If
+LEN-NIK-021,lente~nikon~s-z~14-30-f4,—,Z 14-30mm F/4 S
+LEN-NIK-022,lente~nikon~z~17-28-f2.8,—,Z 17-28mm F/2.8
+LEN-NIK-023,lente~nikon~z~70-180-f2.8,—,Z 70-180mm F/2.8
+LEN-NIK-024,lente~nikon~s-z~50-f1.2,—,Z 50mm F/1.2 S
+LEN-NIK-026,lente~nikon~6.3-z~180-600-f5.6,—,Z 180-600mm F/5.6-6.3
+LEN-NIK-027,lente~nikon~plena-s-z~135-f1.8,—,Z 135mm F/1.8 S Plena
+LEN-NIK-028,lente~nikon~s-z~35-f1.2,—,Z 35mm F/1.2 S
+LEN-NIK-030,lente~nikon~z~85-f1.2,—,Z 85mm F/1.2
+LEN-NIK-031,lente~nikon~ii-z~24-70-f2.8,—,Z 24-70mm F/2.8 II
+LEN-NIK-032,lente~nikon~pz-z~28-135-f4,—,Z 28-135mm F/4 PZ
+LEN-NIK-034,lente~nikon~ii-s-z~70-200-f2.8-vr,—,Z 70-200mm F/2.8 VR S II
+LEN-SIG-018,lente~sigma~contemporary-dc-dn~56-f1.4-nz,—,56mm F/1.4 Dc DN Contemporary Nikon Z
+LEN-SIG-019,lente~sigma~contemporary-dc-dn~16-f1.4-nz,—,16mm F/1.4 Dc DN Contemporary Nikon Z
+LEN-SIG-020,lente~sigma~d-dg-ex-nikon~85-f1.4,—,85mm F/1.4 Ex DG Nikon D
+LEN-SIG-021,lente~sigma~nikon~18-35-f1.8-hsm,—,18-35mm F/1.8 HSM Nikon
+LEN-SIG-022,lente~sigma~dg-nikon~24-f1.4-art,—,24mm F/1.4 DG ART Nikon
+LEN-SIG-023,lente~sigma~dg-nikon~50-f1.4-art-hsm,—,50mm F/1.4 DG HSM ART Nikon
+LEN-SIG-024,lente~sigma~af-dg-nikon~85-f1.4-art-hsm,—,85mm F/1.4 DG HSM ART AF Nikon
+LEN-SIG-026,lente~sigma~dg-nikon~12-24-f4-art-hsm,—,12-24mm F/4 DG HSM ART Nikon
+LEN-TAM-003,lente~tamron~6.3~70-300-f4.5-nz-di-iii-rxd,—,70-300mm F/4.5-6.3 Di III RXD Nikon Z
+LEN-TAM-004,lente~tamron~6.3-iii-nikon~18-300-f3.5,—,18-300mm F/3.5-6.3 III Nikon
+LEN-TAM-005,lente~tamron~iii-nikon~16-30-f2.8-g2,—,16-30mm F/2.8 III G2 Nikon
+LEN-TAM-028,lente~tamron~iii-nikon~17-70-f2.8,—,17-70mm F/2.8 III Nikon
+LEN-TAM-006,lente~tamron~iii-nikon~28-75-f2.8-g2,—,28-75mm F/2.8 III G2 Nikon
+LEN-TAM-007,lente~tamron~nikon~35-100-f2.8-di-iii-vxd,—,35-100mm F/2.8 Di III VXD Nikon
+LEN-TAM-008,lente~tamron~nikon~24-70-f2.8-g2,—,24-70mm F/2.8 G2 Nikon
+LEN-TAM-009,lente~tamron~iii-nikon~70-180-f2.8-g2,—,70-180mm F/2.8 III G2 Nikon
+LEN-TAM-010,lente~tamron~6.3-iii-nikon~50-400-f4.5,—,50-400mm F/4.5-6.3 III Nikon
+LEN-TAM-011,lente~tamron~2.8~35-150-f2-nz,—,35-150mm F/2-2.8 Nikon Z
+LEN-SON-002,lente~sony~fe~50-f1.8,—,FE 50mm F/1.8
+LEN-SON-004,lente~sony~5.6-fe~28-70-f3.5-condcajablanca,—,FE 28-70mm F/3.5-5.6
+LEN-SON-005,lente~sony~fe~28-f2,—,FE 28mm F/2
+LEN-SON-006,lente~sony~fe~85-f1.8,—,FE 85mm F/1.8
+LEN-SON-007,lente~sony~fe-za~55-f1.8,—,FE 55mm F/1.8 Za
+LEN-SON-008,lente~sony~fe-g-macro-oss~90-f2.8,—,FE 90mm F/2.8 Macro G OSS
+LEN-SON-010,lente~sony~fe-g~20-f1.8,—,FE 20mm F/1.8 G
+LEN-SON-012,lente~sony~6.3g-e~70-350-f4.5,—,E 70-350mm F/4.5-6.3G
+LEN-SON-011,lente~sony~a-f-fe-tessar-vario~24-70,—,FE 24-70mm F/A Vario Tessar
+LEN-SON-013,lente~sony~fe~20-70-f4-gm,—,FE 20-70mm F/4 GM
+LEN-SON-014,lente~sony~distagon-fe-t~35-f1.4,—,FE 35mm F/1.4 Distagon T
+LEN-SON-016,lente~sony~fe~24-f1.4-gm,—,FE 24mm F/1.4 GM
+LEN-SON-018,lente~sony~fe-g~16-25-f2.8,—,FE 16-25mm F/2.8 G
+LEN-SON-019,lente~sony~fe-planar-t~50-f1.4,—,FE 50mm F/1.4 Planar T
+LEN-SON-020,lente~sony~fe~50-f1.4-gm,—,FE 50mm F/1.4 GM
+LEN-SON-021,lente~sony~fe~35-f1.4-gm,—,FE 35mm F/1.4 GM
+LEN-SON-023,lente~sony~fe-oss~100-f2.8-gm,—,FE 100mm F/2.8 GM OSS
+LEN-SON-022,lente~sony~fe~14-f1.8-gm,—,FE 14mm F/1.8 GM
+LEN-SON-026,lente~sony~fe~24-70-f2.8-gm,—,FE 24-70mm F/2.8 GM
+LEN-SON-024,lente~sony~fe~50-f1.2-gm,—,FE 50mm F/1.2 GM
+LEN-SON-025,lente~sony~fe~16-35-f2.8-gm,—,FE 16-35mm F/2.8 GM
+LEN-SON-027,lente~sony~fe-g-ii-macro-oss~70-200-f4,—,FE 70-200mm F/4 Macro G OSS II
+LEN-SON-028,lente~sony~fe-ii~85-f1.4-gm,—,FE 85mm F/1.4 GM II
+LEN-SON-029,lente~sony~fe~135-f1.8-gm,—,FE 135mm F/1.8 GM
+LEN-SON-032,lente~sony~fe-ii~16-35-f2.8-gm,—,FE 16-35mm F/2.8 GM II
+LEN-SON-031,lente~sony~e-f-oss-pz~28-135-4g,—,E PZ 28-135mm F/4 G OSS
+LEN-SON-033,lente~sony~6.3-fe-g-oss~200-600-f5.6,—,FE 200-600mm F/5.6-6.3 G OSS
+LEN-SON-034,lente~sony~5.6-fe~100-400-f4.5-gm,—,FE 100-400mm F/4.5-5.6 GM
+LEN-SON-035,lente~sony~8-fe-g-oss~400-800-f6.3,—,FE 400-800mm F/6.3-8 G OSS
+LEN-SON-036,lente~sony~fe~12-24-f2.8-gm,—,FE 12-24mm F/2.8 GM
+LEN-SON-040,lente~sony~fe-ii~70-200-f2.8-gm,—,FE 70-200mm F/2.8 GM II
+LEN-SON-037,lente~sony~fe~28-70-f2-gm,—,FE 28-70mm F/2 GM
+LEN-SON-038,lente~sony~fe~50-150-f2-gm,—,FE 50-150mm F/2 GM
+LEN-SIG-027,lente~sigma~contemporary-dc-dn-sony~30-f1.4,—,30mm F/1.4 Dc DN Contemporary Sony
+LEN-SIG-028,lente~sigma~cont-dc-dn~56-f1.4-fe,—,56mm F/1.4 Dc DN Cont Sony E
+LEN-SIG-029,lente~sigma~contemporary-dc-dn-sony~16-f1.4,—,16mm F/1.4 Dc DN Contemporary P/Sony
+LEN-SIG-030,lente~sigma~contemporary-sony~17-f4-dg-dn,—,17mm F/4 DG DN Contemporary Sony
+LEN-SIG-031,lente~sigma~dg-sony~28-f1.4-art-hsm,—,28mm F/1.4 DG HSM ART Sony
+LEN-SIG-032,lente~sigma~contemporary-dc-dn-sony~10-18-f2.8,—,10-18mm F/2.8 Dc DN Contemporary Sony
+LEN-SIG-033,lente~sigma~contemporary-sony~12-f1.4,—,12mm F/1.4 Contemporary Sony
+LEN-SIG-035,lente~sigma~macro-sony~105-f2.8-art-dg-dn,—,105mm F/2.8 DG DN ART Macro Sony
+LEN-SIG-036,lente~sigma~dg-sony~35-f1.4-art-hsm,—,35mm F/1.4 DG HSM ART Sony
+LEN-SIG-037,lente~sigma~sony~50-f1.4-art-dg-dn,—,50mm F/1.4 DG DN ART Sony
+LEN-SIG-038,lente~sigma~6.7-contemporary-sony~16-300-f3.5,—,16-300mm F/3.5-6.7 Contemporary Sony
+LEN-SIG-039,lente~sigma~sony~24-f1.4-art,—,24mm F/1.4 ART Sony
+LEN-SIG-040,lente~sigma~contemporary-sony~16-28-f2.8-dg-dn,—,16-28mm F/2.8 DG DN Contemporary Sony
+LEN-SIG-054,lente~sigma~sony~17-40-f1.8-art,—,17-40mm F/1.8 ART Sony
+LEN-SIG-042,lente~sigma~6.3-contemporary-dg-sony~100-400-f5-hsm,—,100-400mm F/5-6.3 DG HSM Contemporary Sony
+LEN-SIG-043,lente~sigma~6.3-contemporary~20-200-f3.5-fe,—,20-200mm F/3.5-6.3 Contemporary Sony E
+LEN-SIG-041,lente~sigma~sony~85-f1.4-art-dg-dn,—,85mm F/1.4 DG DN ART Sony
+LEN-SIG-045,lente~sigma~sony~28-45-f1.8-art-dg-dn,—,28-45mm F/1.8 DG DN ART Sony
+LEN-SIG-046,lente~sigma~28-105-f2.8-art-dg-dn,—,28-105mm F/2.8 DG DN ART
+LEN-SIG-047,lente~sigma~sony~35-f1.2-art,—,35mm F/1.2 ART Sony
+LEN-SIG-048,lente~sigma~6.3-sony-sports~150-600-f5-dg-dn,—,150-600mm F/5-6.3 DG DN Sports Sony
+LEN-SIG-050,lente~sigma~6.3-sony-sports~60-600-f4.5,—,60-600mm F/4.5-6.3 Sports Sony
+LEN-TAM-012,lente~tamron~6.3-sony~70-300-f4.5-di-iii-rxd,—,70-300mm F/4.5-6.3 Di III RXD Sony
+LEN-TAM-013,lente~tamron~a~11-20-f2.8-fe-di-iii-rxd,—,11-20mm F/2.8 Di III A RXD Sony E
+LEN-TAM-030,lente~tamron~di-iii-sony~17-50-f4,—,17-50mm F/4 Di. III Sony
+LEN-TAM-014,lente~tamron~sony~17-28-f2.8-di-iii-rxd,—,17-28mm F/2.8 Di III RXD Sony
+LEN-TAM-015,lente~tamron~6.3-a-sony~18-300-f3.5-di-iii-vc-vxd,—,18-300mm F/3.5-6.3 Di III A Vc VXD Sony
+LEN-TAM-016,lente~tamron~sony~20-40-f2.8-di-iii,—,20-40mm F/2.8 Di III Sony
+LEN-TAM-031,lente~tamron~5.6-sony~28-200-f2.8-di-iii-rxd,—,28-200mm F/2.8-5.6 Di III RXD Sony
+LEN-TAM-017,lente~tamron~iii-macro-sony~90-f2.8,—,90mm F/2.8 III Macro Sony
+LEN-TAM-018,lente~tamron~iii-sony~16-30-f2.8-g2,—,16-30mm F/2.8 III G2 Sony
+LEN-TAM-020,lente~tamron~6.3-iii-sony~50-300-f4.5,—,50-300mm F/4.5-6.3 III Sony
+LEN-TAM-021,lente~tamron~sony~28-75-f2.8-di-iii-rxd,—,28-75mm F/2.8 Di III RXD Sony
+LEN-TAM-022,lente~tamron~7.1-iii-sony~28-300-f4,—,28-300mm F/4-7.1 III Sony
+LEN-TAM-023,lente~tamron~sony~35-100-f2.8-di-iii-vxd,—,35-100mm F/2.8 Di III VXD Sony
+LEN-TAM-024,lente~tamron~iii-sony~70-180-f2.8-g2,—,70-180mm F/2.8 III G2 Sony
+LEN-TAM-026,lente~tamron~6.7-sony~150-500-f5-di-iii-vxd,—,150-500mm F/5-6.7 Di III VXD Sony
+LEN-TAM-027,lente~tamron~6.3-sony~50-400-f4.5-di-iii-vc-vxd,—,50-400mm F/4.5-6.3 Di III Vc VXD Sony
+LEN-TAM-025,lente~tamron~2.8~35-150-f2-fe-di-iii-vxd,—,35-150mm F/2-2.8 Di III VXD Sony E
+DRO-DJI-001,drone~dji~5-dji-drone-mini-pro,—,Drone DJI Mini 5 Pro
+DRO-ANT-001,drone~antigravity~360-8k-a1-antigravity-bundle-drone-explorer,—,Drone Antigravity A1 Explorer 8K 360 Bundle
+DRO-DJI-002,drone~dji~avata-dji-drone-pro-solo-view,—,Drone DJI Avata Pro View (Solo Drone)
+ACC-DJI-001,accesorio-drone~dji~3-acc-dji-helices-mini-pro,—,Acc DJI Helices (Mini 3 Pro)
+ACC-DJI-002,accesorio-drone~dji~3-acc-camara-dji-filtro-mini-pro,—,Acc DJI Filtro Camara (Mini 3 Pro)
+ACC-DJI-004,accesorio-drone~dji~2-avata-control-motion-rc,—,Control P/Avata Rc Motion 2
+ACC-DJI-005,accesorio-drone~dji~acc-control-dji-rc-screen-w,—,Acc DJI Control Rc W/ Screen
+ACC-DJI-006,accesorio-drone~dji~2-googles,—,Googles 2
+CEL-APP-066,celular~apple~17e-iphone~256gb,Negro,iPhone 17e 256GB (Negro)
+CEL-APP-068,celular~apple~17-iphone-pro~256gb,Silver/Blue/Orange,iPhone 17 Pro 256GB (Silver/Blue/Orange)
+CEL-SAM-056,celular~samsung~galaxy-plus-s26~512gb-5g,Black/Skyblue/Violet,Galaxy S26 Plus 512GB 5G (Black/Skyblue/Violet)
+CEL-XIA-088,celular~xiaomi~15c-redmi~4gb-128gb,Black/Green,Redmi 15C 4/128GB (Black/Green)
+CEL-XIA-092,celular~xiaomi~15-note-pro-redmi~8gb-256gb,black,Redmi Note 15 Pro 8/256GB (Black)
+CEL-XIA-093,celular~xiaomi~15-note-pro-redmi~12gb-512gb,Black/Purple,Redmi Note 15 Pro 12/512GB (Black/Purple)
+CEL-XIA-095,celular~xiaomi~c81-poco-pro~4gb-128gb,Gold/Green,Poco C81 Pro 4/128GB (Gold/Green)
+CEL-XIA-096,celular~xiaomi~poco-pro-x8~8gb-256gb-5g,Green,Poco X8 Pro 8/256GB 5G (Green)
+CEL-XIA-097,celular~xiaomi~poco-pro-x8~8gb-512gb-5g,Green,Poco X8 Pro 8/512GB 5G (Green)
+CEL-XIA-098,celular~xiaomi~max-poco-pro-x8~12gb-256gb-5g,White,Poco X8 Pro Max 12/256GB 5G (White)
+CEL-XIA-099,celular~xiaomi~max-poco-pro-x8~12gb-512gb-5g,Blue,Poco X8 Pro Max 12/512GB 5G (Blue)
+CEL-MOT-067,celular~motorola~g06-power~4gb-64gb-sincargador,Laurel Oak,G06 Power 4/64GB Sin Cargador (Laurel Oak)
+CEL-MOT-070,celular~motorola~g17~4gb-256gb-sincargador,Pink,G17 4/256GB Sin Cargador (Pink)
+CEL-MOT-071,celular~motorola~g57~8gb-256gb-5g-sincargador,Green,G57 8/256GB 5G Sin Cargador (Green)
+TAB-APP-009,tablet~apple~air-ipad-m4~13in-256gb,Space Gray/Starlight,"iPad Air 13"" M4 256GB (Space Gray/Starlight)"
+TAB-APP-042,tablet~apple~11-a16-ipad~512gb,Blue,iPad 11 A16 512gb (Blue)
+CON-SON-013,accesorio-gaming~sony~ps5-vr2,—,PS5 VR2
+CON-MET-006,consola~meta~3s-quest~128gb,—,Quest 3S 128GB
+CON-MET-007,consola~meta~3s-batman-quest~128gb,—,Quest 3S 128GB + Batman
+CON-MET-001,consola~meta~3s-quest~256gb,—,Quest 3S 256GB
+CON-MET-009,consola~meta~3s-batman-quest~256gb,—,Quest 3S 256GB + Batman
+CON-MET-002,consola~meta~3-quest~512gb,—,Quest 3 512GB
+ACC-MIC-001,accesorio-gaming~microsoft~joystick-s-x-xbox,Black,Joystick Xbox S/X (Black)
+ACC-MIC-002,accesorio-gaming~microsoft~joystick-s-usb-c-x-xbox,Black,Joystick Xbox S/X + USB-C (Black)
+ACC-LOG-001,accesorio-gaming~logitech~g29-logitech-pc-ps4-ps5-volante,—,Volante Logitech G29 PS5/PS4/Pc
+CAM-CAN-034,camara~canon~18-150-eos-r10~kit,—,EOS R10 18-150 Kit
+LEN-CAN-051,lente~canon~l-rf~50-f1.2-usm,—,RF 50mm F/1.2 L USM
+LEN-NIK-038,lente~nikon~6.3-dx-z~18-140-f3.5-vr,—,Z 18-140mm DX F/3.5-6.3 VR
+LEN-NIK-039,lente~nikon~8-z~28-400-f4-vr,—,Z 28-400mm F/4-8 VR
+LEN-SON-041,lente~sony~f-fe~24-105-4g,—,FE 24-105mm F/4 G
+LEN-SON-017,lente~sony~fe-g~24-50-f2.8,—,FE 24-50mm F/2.8 G
+LEN-SIG-057,lente~sigma~sony~14-24-f2.8-art-dg-dn,—,14-24mm F/2.8 DG DN ART Sony
+CEL-APP-071,celular~apple~17-iphone-pro~512gb,Orange,iPhone 17 Pro 512GB (Orange)
+CAM-CAN-036,camara~canon~24-105-4-eos-f-iii-l-mark-r6-usm,—,EOS R6 Mark III 24-105 F/4 L USM
+CAM-SON-032,camara~sony~16-50-6400-alfa-ii~kit,—,Alfa 6400 Kit 16-50 II
+LEN-SON-015,lente~sony~fe-pz~16-35-f4,—,FE PZ 16-35mm F/4
+CEL-XIA-094,celular~xiaomi~15-note-redmi~8gb-256gb,black,Redmi Note 15 8/256GB (Black)
+CEL-MOT-075,celular~motorola~g06-power~4gb-256gb-concargador,Blue,G06 Power 4/256GB Con Cargador (Blue)
+TAB-SAM-014,tablet~samsung~fe-galaxy-pencil-s10-tab~8gb-128gb,Gray,Galaxy Tab S10 FE Wifi 8/128GB +Pencil (Gray)
+NB-APP-035,notebook~apple~air-m5-macbook~15in-16gb-512gb-tecladoen,Starlight/Sky Blue/Silver,"MacBook Air M5 15"" 16GB/512GB (Starlight/Sky Blue/Silver)"
+TAB-APP-007,tablet~apple~air-ipad-m4~11in-256gb,Starlight,"iPad Air 11"" M4 256GB (Starlight)"
+CON-SON-003,consola~sony~5-fisica-playstation~1tb,—,PlayStation 5 Física 1tb
+ACC-SON-001,accesorio-gaming~sony~consultar-joystick-ps5,—,Joystick PS5 (Consultar Colores)
+ACC-SON-003,accesorio-gaming~sony~edicion-especial-joystick-ps5,Rhythm Blue/Techno Red/Astrobot/Remix Green,Joystick PS5 Edición Especial (Rhythm Blue/Techno Red/Astrobot/Remix Green)
+CEL-SAM-063,celular~samsung~fe-galaxy-s25~256gb,Jetblack/Navy/Icyblue,Galaxy S25 FE 256GB (Jetblack/Navy/Icyblue)
+CEL-SAM-064,celular~samsung~fe-galaxy-s25~512gb,White/Navy/Icyblue,Galaxy S25 FE 512GB (White/Navy/Icyblue)
+CON-MIC-006,consola~microsoft~s-series-xbox~512gb,—,Xbox Series S 512gb
+AUD-APP-009,auriculares~apple~airpods-max-usb-c~gen2,Midnight/Purple,AirPods Max 2ª Gen USB-C (Midnight/Purple)
+CAM-CAN-037,camara~canon~eos-r6-v-video~body,—,EOS R6 V Body (Video)
+ACC-NIK-008,accesorio-camara~sigma~ef-630-flash-nikon,—,EF-630 Flash Nikon
+CAM-INS-003,camara-de-accion~insta360~2-360-bater-bundle-insta-lente-stick-tapa-x5,—,Insta 360 X5 Bundle (Stick+2 Bater + Tapa Lente)
+CEL-APP-077,celular~apple~17-iphone~256gb,Blue/Sage/Lavender/White,iPhone 17 256GB (Blue/Sage/Lavender/White)
+CEL-XIA-102,celular~xiaomi~13-note-redmi~6gb-128gb,Black/Blue/Green,Redmi Note 13 6/128GB (Black/Blue/Green)
+CEL-XIA-103,celular~xiaomi~15-note-plus-pro-redmi~8gb-256gb-5g,Black/Blue,Redmi Note 15 Pro Plus 8/256GB 5G (Black/Blue)
+CEL-XIA-105,celular~xiaomi~f6-poco~8gb-256gb,Green,Poco F6 8/256GB (Green)
+CEL-XIA-106,celular~xiaomi~f6-poco-pro~12gb-256gb,Black,Poco F6 Pro 12/256GB (Black)
+TAB-APP-046,tablet~apple~ipad-m4-pro~11in-512gb,—,"iPad Pro 11"" M4 512GB"
+TAB-APP-047,tablet~apple~ipad-m5-pro~11in-512gb,Space Black,"iPad Pro 11"" M5 512GB (Space Black)"
+PC-APP-013,desktop~apple~4.5k-imac-m4-retina~24in-16gb-256gb,Blue,"iMac 24"" 4.5K Retina M4 16GB/256GB (Blue)"
+AUD-JBL-001,auriculares~jbl~earbuds-flex-nc-tune-wireless,White,Earbuds Tune Flex Wireless Nc (White)
+AUD-KIE-001,auriculares~kieslect~adjustable-earbuds,Black,Adjustable Earbuds (Black)
+AUD-SAM-001,auriculares~samsung~3-buds-galaxy,White,Galaxy Buds 3 (White)
+ACC-MIC-003,accesorio-gaming~logitech~g923-logitech-pc-volante-xbox,—,Volante Logitech G923 Pc/Xbox
+TAB-XIA-007,tablet~xiaomi~2-pad-pro-redmi~12in-6gb-128gb,Gris,"Redmi Pad 2 Pro 12"" 6/128GB (Gris)"
+AUD-JBL-002,parlante~jbl~6-charge,Camo,Charge 6 (Camo)
+SW-GAR-001,smartwatch~garmin~2s-instinct-solar,Grafito,Instinct 2S Solar (Grafito)
+SW-GAR-002,smartwatch~garmin~2-epix-gen-pro~42mm,Blanco,Epix Pro (Gen 2) 42mm Sapphire (Blanco)
+SW-GAR-003,smartwatch~garmin~2-epix-gen-pro~51mm,Titanio Gris · Blanco,Epix Pro (Gen 2) 51mm Sapphire (Titanio Gris · Blanco)
+SW-GAR-004,smartwatch~garmin~approach-s70~42mm,Black Ceramic · Black Peach,Approach S70 42mm (Black Ceramic · Black Peach)
+SW-KIE-001,smartwatch~kieslect~3-calling-kr-watch,Denim · Denim + Milky White Silicone,Calling Watch Kr 3 (Denim · Denim + Milky White Silicone)
+SW-KIE-002,smartwatch~kieslect~3-calling-kr-ultra-watch,Ice White · White Leather + White Silicone,Calling Watch Kr Ultra 3 (Ice White · White Leather + White Silicone)
+SW-KIE-003,smartwatch~kieslect~elfin-lady-watch,Graphite Black · Black Metal + Brown Leather / Rose Gold · Gold Metal + White / Moonlit Silver · Silver Metal + Purple Silicone,Lady Watch Elfin (Graphite Black · Black Metal + Brown Leather / Rose Gold · Gold Metal + White / Moonlit Silver · Silver Metal + Purple Silicone)
+SW-KIE-004,smartwatch~kieslect~2-ai-elite-watch,Titan Black · Black Leather,AI Watch Elite 2 (Titan Black · Black Leather)
+TAB-SAM-027,tablet~samsung~fe-galaxy-pencil-plus-s10-tab~8gb-128gb,Gray,Galaxy Tab S10 FE Plus Wifi 8/128GB +Pencil (Gray)
+ACC-CAN-009,accesorio-camara~canon~5d-6d-bateria-e6p-lp-r5-r5c-r5ii-r6m2-r7,—,Bateria Lp E6P Para R5 R6M2 R7 R5C R5II 5D 6D
+CAM-FUJ-001,camara~fujifilm~12-instax-mini,PIN/WHI/PUR/GRE/BLU,Instax Mini 12 (Pin/WHI/Pur/Gre/Blu)
+CAM-FUJ-008,accesorio-camara~fujifilm~10-2-film-fuji-instax-mini-repuesto-rollo-twin-x,—,Fuji Instax Mini Twin Film Rollo Repuesto (2 X 10)
+ACC-SAR-001,accesorio-camara~saramonic~2-blink-me-microfono-saramonic-wireless,—,Microfono Saramonic Blink Me 2 Wireless
+CEL-SAM-068,celular~samsung~galaxy-s26~256gb,Black,Galaxy S26 256GB (Black)
+NB-APP-082,notebook~apple~air-m5-macbook~13in-24gb-1tb-tecladoen,Sky Blue,"MacBook Air M5 13.6"" 24GB/1TB (Sky Blue)"
+NB-APP-084,notebook~apple~air-m5-macbook~15in-24gb-1tb-tecladoen,Sky Blue,"MacBook Air M5 15"" 24GB/1TB (Sky Blue)"
+CEL-SAM-003,celular~samsung~a17-galaxy~8gb-256gb,Gray/Blue,Galaxy A17 8/256GB (Gray/Blue)
+CEL-SAM-070,celular~samsung~galaxy-s25-ultra~1tb,Gray/Whitesilver/Silverblue,Galaxy S25 Ultra 1TB (Gray/Whitesilver/Silverblue)
+CEL-SAM-050,celular~samsung~galaxy-plus-s26~256gb-5g,White,Galaxy S26 Plus 256GB 5G (White)
+SW-APP-001,smartwatch~apple~se-watch~gen2-40mm-ml-gps,Midnight,Watch SE 2ND Gen 40mm GPS M/L (Midnight)
+SW-APP-002,smartwatch~apple~se-watch~gen2-44mm-sl-gps,Midnight,Watch SE 2ND Gen 44mm GPS S/L (Midnight)
+SW-APP-056,smartwatch~apple~3-ultra-watch~49mm-l,Natural/Natural Milanese Loop L,Watch Ultra 3 49mm (Natural/Natural Milanese Loop L)
+CAM-DJI-002,camara-de-accion~dji~nano-osmo~64gb,—,Osmo Nano 64GB
+CAM-DJI-003,camara-de-accion~dji~combo-nano-osmo-standard~124gb,—,Osmo Nano Standard Combo 124GB
+ACC-DJI-011,accesorio-camara~dji~8p-combo-creator-mobile-osmo,—,Osmo Mobile 8P Creator Combo
+ACC-DJI-012,accesorio-drone~dji~2-combo-dji-drone-fly-more-neo,—,Drone DJI Neo 2 + Fly More Combo
+ACC-DJI-015,accesorio-drone~dji~combo-dji-drone-fly-lito-more-rc-n3-x1,—,Drone DJI Lito X1 (Rc-N3) + Fly More Combo
+DRO-DJI-009,drone~dji~5-dji-drone-mini-pro-rc-n3,—,Drone DJI Mini 5 Pro (Rc-N3)
+DRO-DJI-010,drone~dji~2-5-combo-dji-drone-fly-mini-more-pro-rc,—,Drone DJI Mini 5 Pro (Rc 2) + Combo More Fly
+DRO-DJI-011,drone~dji~2-5-combo-dji-drone-fly-mini-more-plus-pro-rc,—,Drone DJI Mini 5 Pro (Rc 2) + Combo More Fly Plus
+ACC-DJI-017,accesorio-drone~dji~3s-air-combo-dji-drone-fly-more-rc2,—,Drone DJI Air 3S (RC2) + Fly More Combo
+DRO-DJI-012,drone~dji~4-combo-creator-dji-drone-mavic-pro~512gb,—,Drone DJI Mavic 4 Pro + Creator Combo 512GB
+CEL-APP-085,celular~apple~17-iphone-max-pro~1tb-esim,Silver,iPhone 17 Pro Max 1TB E-Sim (Silver)
+CEL-SAM-036,celular~samsung~a27-galaxy~6gb-128gb-5g,Black,Galaxy A27 6/128GB 5G (Black)
+CEL-SAM-071,celular~samsung~fe-galaxy-s26~8gb-128gb,Graphite/Blueberry,Galaxy S26 FE 8/128GB (Graphite/Blueberry)
+CEL-SAM-072,celular~samsung~fe-galaxy-s26~8gb-256gb,Graphite/Blueberry/Pistacho,Galaxy S26 FE 8/256GB (Graphite/Blueberry/Pistacho)
+CEL-SAM-073,celular~samsung~fe-galaxy-s26~8gb-512gb,Graphite/Blueberry,Galaxy S26 FE 8/512GB (Graphite/Blueberry)
+AUD-APP-008,auriculares~apple~earpods-lightning,—,EarPods Lightning
+AUD-APP-007,auriculares~apple~earpods-usb-c,—,EarPods USB-C
+GAF-RAY-020,lentes-inteligentes~ray-ban~meta-wayfarer,Black/Polarized Gradient Graphite,Meta Wayfarer (601ST350) (Black/Polarized Gradient Graphite)
+GAF-RAY-021,lentes-inteligentes~ray-ban~meta-wayfarer,Matte Black/Grey Transitions,Meta Wayfarer (601S1Z50) (Matte Black/Grey Transitions)
+GAF-RAY-022,lentes-inteligentes~ray-ban~meta-wayfarer,Shiny Black/Graphite Green Transitions,Meta Wayfarer (601/1M50) (Shiny Black/Graphite Green Transitions)
+GAF-RAY-023,lentes-inteligentes~ray-ban~meta-skyler,Shiny Black/Polarized Gradient Graphite,Meta Skyler (601/T352) (Shiny Black/Polarized Gradient Graphite)
+GAF-RAY-024,lentes-inteligentes~ray-ban~meta-skyler,Shinny Chalky Grey/Transitions Sapphire,Meta Skyler (T155 / S52) (Shinny Chalky Grey/Transitions Sapphire)
+GAF-RAY-025,lentes-inteligentes~ray-ban~meta-skyler,Shiny Black/Transitions Green,Meta Skyler (601/1M52) (Shiny Black/Transitions Green)
+GAF-RAY-026,lentes-inteligentes~ray-ban~meta-skyler,Shiny Black/Transitions Amethyst,Meta Skyler (601/CH52) (Shiny Black/Transitions Amethyst)
+TAB-SAM-035,tablet~samsung~a11-galaxy-plus-tab~6gb-128gb,—,Galaxy Tab A11+ 6/128GB
+TAB-SAM-036,tablet~samsung~a11-galaxy-plus-tab~6gb-128gb-5g,Gray,Galaxy Tab A11+ 5G 6/128GB (Gray)
+TAB-SAM-037,tablet~samsung~galaxy-lite-s10-tab~10in-6gb-128gb,Gray,"Galaxy Tab S10 Lite 10.9"" Wi-Fi 6/128GB (Gray)"
+TAB-SAM-022,tablet~samsung~fe-galaxy-pencil-plus-s10-tab~13in-256gb,Silver,"Galaxy Tab S10 FE Plus 13.1"" 256GB +Pencil (Silver)"
+TAB-SAM-038,tablet~samsung~galaxy-pencil-s11-tab~12gb-128gb,Gray,Galaxy Tab S11 Wifi 12/128GB +Pencil (Gray)
+LEN-CAN-009,lente~canon~1.4x-extender-rf,—,RF 1.4X Extender
+LEN-CAN-043,lente~canon~2.0x-extender-rf,—,RF 2.0X Extender
+LEN-CAN-052,lente~canon~9-rf~200-800-f6.3-is-usm,—,RF 200-800mm F/6.3-9 IS USM
+LEN-NIK-009,lente~nikon~tc-2x-teleconverter-z,—,Z Teleconverter TC-2X
+LEN-SON-039,lente~sony~2x-fe-teleconverter,—,FE 2X Teleconverter
+CEL-APP-013,celular~apple~17-iphone-pro~1tb,Silver/Orange,iPhone 17 Pro 1TB (Silver/Orange)
+CEL-APP-078,celular~apple~17-iphone-max-pro~256gb-esim,Silver/Blue/Orange,iPhone 17 Pro Max 256GB E-Sim (Silver/Blue/Orange)
+CEL-SAM-076,celular~samsung~8-fold-galaxy-z~512gb,Garphite,Galaxy Z Fold 8 512GB (Garphite)
+SW-APP-045,smartwatch~apple~11-series-watch~46mm-ml-gps,Jet Black/Silver/Space Gray/Rose Gold,Watch Series 11 46mm GPS M/L (Jet Black/Silver/Space Gray/Rose Gold)
+NB-APP-020,notebook~apple~m5-macbook-pro~14in-32gb-1tb-tecladoen,Space Black,"MacBook Pro M5 14"" 32GB/1TB (Space Black)"
+TAB-APP-058,tablet~apple~air-ipad-m3~13in-128gb,Blue/Purple,"iPad Air 13"" M3 128GB (Blue/Purple)"
+TAB-APP-059,tablet~apple~cell-glass-ipad-m5-pro-standard~11in-512gb-5g-cellular,Space Black,"iPad Pro 11"" M5 512GB Cell 5G LTE + Wi-Fi (Standard Glass) (Space Black)"
+MON-SAM-005,monitor~samsung~curvo-g5-odyssey~27in,165Hz,"Odyssey G5 27"" Curvo (165Hz)"
+MON-SAM-006,monitor~samsung~essential~24in,FHD/100Hz,"Essential 24"" (FHD/100Hz)"
+AUD-APP-013,auriculares~apple~4-airpods-anc-cancelacion-ruido,—,AirPods 4 Con Cancelación De Ruido (ANC)
+ERD-AMZ-004,e-reader~amazon~11-gen-kindle~16gb,Black,Kindle Gen 11 16GB (Black)
+ERD-AMZ-005,e-reader~amazon~12-gen-kindle-paperwhite~16gb,Black,Kindle Paperwhite Gen 12 16GB (Black)
+ERD-AMZ-006,e-reader~amazon~12-edition-gen-kindle-paperwhite-signature~32gb,Metallic Black,Kindle Paperwhite Gen 12 32GB Signature Edition (Metallic Black)
+TAB-SAM-039,tablet~samsung~a11-galaxy-tab~4gb-64gb,Gray,Galaxy Tab A11 Wifi 4/64GB (Gray)
+TAB-SAM-040,tablet~samsung~a11-galaxy-tab~4gb-64gb-4g-cellular,Gray,Galaxy Tab A11 4G LTE 4/64GB (Gray)
+TAB-SAM-041,tablet~samsung~fe-galaxy-pencil-s10-tab~12gb-256gb,Lightblue,Galaxy Tab S10 FE Wifi 12/256GB +Pencil (Lightblue)
+TAB-SAM-042,tablet~samsung~book-cover-fe-galaxy-pencil-s10-tab~8gb-128gb-5g,Gray,Galaxy Tab S10 FE 5G 8/128GB Book Cover +Pencil (Gray)
+TAB-SAM-043,tablet~samsung~fe-galaxy-pencil-plus-s10-tab~12gb-256gb,Lightblue,Galaxy Tab S10 FE Plus Wifi 12/256GB +Pencil (Lightblue)
+TAB-SAM-044,tablet~samsung~galaxy-pencil-s11-tab-ultra~12gb-256gb,Gray,Galaxy Tab S11 Ultra Wifi 12/256GB +Pencil (Gray)
+CAM-DJI-005,camara-de-accion~dji~6-action-combo-osmo-standard,—,Osmo Action 6 Standard Combo
+CAM-NIK-020,camara~nikon~iii-z6~body-tecladoes,—,Z6 III Body (Español)
+LEN-NIK-040,lente~nikon~s-z~400-f4.5-vr,—,Z 400mm F/4.5 VR S
+NB-APP-088,notebook~apple~a18-macbook-neo~13in-8gb-256gb-tecladoes,Silver/Citrus,"MacBook Neo A18 13"" 8GB/256GB (Silver/Citrus)"
+CEL-APP-003,celular~apple~14-iphone~128gb,Blue/Purple/Red/Star/Yellow,iPhone 14 128GB (Blue/Purple/Red/Star/Yellow)
+CEL-APP-006,celular~apple~16-iphone-max-pro~256gb,Black,iPhone 16 Pro Max 256GB (Black)
+CEL-APP-088,celular~apple~16-iphone-max-pro~256gb,Desert Titanium/Natural Titanium/White Titanium,iPhone 16 Pro Max 256GB (Desert Titanium/Natural Titanium/White Titanium)
+CEL-APP-074,celular~apple~16-iphone-max-pro~512gb,Desert Titanium,iPhone 16 Pro Max 512GB (Desert Titanium)
+CEL-SAM-077,celular~samsung~8-flip-galaxy-z~512gb,Garphite,Galaxy Z Flip 8 512GB (Garphite)
+CEL-SAM-078,celular~samsung~8-fold-galaxy-z~256gb,Garphite,Galaxy Z Fold 8 256GB (Garphite)
+CEL-SAM-079,celular~samsung~8-fold-galaxy-ultra-z~256gb,—,Galaxy Z Fold 8 Ultra 256GB
+CEL-SAM-080,celular~samsung~8-fold-galaxy-ultra-z~512gb,Graphite/Violet,Galaxy Z Fold 8 Ultra 512GB (Graphite/Violet)
+CEL-XIA-107,celular~xiaomi~15-note-plus-pro-redmi~12gb-512gb-5g,Blue,Redmi Note 15 Pro Plus 12/512GB 5G (Blue)
+AUD-APP-004,auriculares~apple~airpods-pro~gen3,—,AirPods Pro 3ra Gen
+AUD-APP-006,auriculares~apple~airpods-max-usb-c~gen2,Blue/Orange,AirPods Max 2ª Gen USB-C (Blue/Orange)
+NB-APP-094,notebook~apple~m5pro-macbook-pro~14in-24gb-1tb-tecladoes,Space Black,"MacBook Pro M5 Pro 14"" 24GB/1TB (Space Black)"
+ACC-APP-056,accesorio-apple~apple~id-keyboard-magic-numeric-pad-touch,Inglés/White,Magic Keyboard Con Touch Id + Numeric Pad (Inglés/White)
+ACC-APP-057,accesorio-apple~apple~air-folio-ipad-keyboard-pro-smart,—,"Smart Keyboard Folio (iPad Pro 12.9"" / iPad Air M2-M3)"
+ACC-APP-058,accesorio-apple~apple~ipad-keyboard-m2-magic-pro~11in-tecladoen,Black,"Magic Keyboard iPad Pro M2 11"" Inglés (Black)"
+MON-DEL-006,monitor~dell~24-p2425he-plus-pro~23in,FHD 1920x1080/100Hz,"Pro 24 Plus 23.8"" P2425HE (FHD 1920x1080/100Hz)"
+CEL-APP-090,celular~apple~15-iphone-plus~128gb,Yellow,iPhone 15 Plus 128GB (Yellow)
+CEL-APP-091,celular~apple~15-iphone-plus~128gb,Black,iPhone 15 Plus 128GB (Black)
+CEL-APP-092,celular~apple~air-iphone~1tb,Black/White,iPhone Air 1TB (Black/White)
+CEL-SAM-025,celular~samsung~a17-galaxy-u-x5~4gb-128gb,x5 u$235,Galaxy A17 4/128GB (x5 U$235)
+CEL-SAM-085,celular~samsung~a37-galaxy~8gb-256gb,Gray/Green/Violet,Galaxy A37 8/256GB (Gray/Green/Violet)
+CEL-SAM-086,celular~samsung~a56-galaxy~8gb-256gb,Gray/Green,Galaxy A56 8/256GB (Gray/Green)
+CEL-SAM-087,celular~samsung~a56-galaxy~12gb-256gb,Black/Green/Pink,Galaxy A56 12/256GB (Black/Green/Pink)
+CEL-SAM-088,celular~samsung~a57-galaxy~8gb-256gb,Dark Blue,Galaxy A57 8/256GB (Dark Blue)
+CEL-SAM-057,celular~samsung~galaxy-s26-ultra~256gb-5g,Black/White/Skyblue/Violet,Galaxy S26 Ultra 256GB 5G (Black/White/Skyblue/Violet)
+NB-APP-098,notebook~apple~a18-macbook-neo~13in-8gb-512gb-tecladoen,Blush,"MacBook Neo A18 13"" 8GB/512GB (Blush)"
+NB-APP-099,notebook~apple~m5-macbook-pro~14in-24gb-1tb-tecladoen,Silver,"MacBook Pro M5 14"" 24GB/1TB (Silver)"
+NB-APP-100,notebook~apple~m5max-macbook-pro~16in-36gb-2tb-tecladoen,Space Black,"MacBook Pro M5 Max 16"" 36GB/2TB (Space Black)"
+TAB-APP-062,tablet~apple~air-ipad-m4~11in-256gb,Space Gray,"iPad Air 11"" M4 256GB (Space Gray)"
+TAB-APP-063,tablet~apple~air-ipad-m4~13in-128gb,Blue,"iPad Air 13"" M4 128GB (Blue)"
+SW-APP-036,smartwatch~apple~3-ultra-watch~49mm-l,Black/Black Milanese Loop L,Watch Ultra 3 49mm (Black/Black Milanese Loop L)
+ACC-APP-066,accesorio-apple~apple~air-ipad-keyboard-m3-m4-magic~13in-tecladoen,White,"Magic Keyboard iPad Air M3/M4 13"" Inglés (White)"
+ACC-APP-067,accesorio-apple~apple~ipad-keyboard-m2-magic-pro~12in-tecladoes,White,"Magic Keyboard iPad Pro M2 12.9"" Español (White)"
+ACC-APP-068,accesorio-apple~apple~ipad-keyboard-m4-m5-magic-pro~11in-tecladoen,White,"Magic Keyboard iPad Pro M4/M5 11"" Inglés (White)"
+ACC-APP-069,accesorio-apple~apple~ipad-keyboard-m4-m5-magic-pro~13in-tecladoen,Black,"Magic Keyboard iPad Pro M4/M5 13"" Inglés (Black)"
+ACC-APP-070,accesorio-apple~apple~airtag-pack-x4,—,Airtag Pack x4
+MON-APP-004,monitor~apple~display-glass-height-standard-studio-tilt~27in,—,"Studio Display 27"" (Standard Glass/Tilt & Height)"
+TAB-SAM-046,tablet~samsung~galaxy-pencil-s11-tab-ultra~256gb,Black,Galaxy Tab S11 Ultra 256GB +Pencil (Black)
+MON-DEL-009,monitor~dell~dp-p2425h~24in,FHD 1920x1080/DP/HDMI/VGA/USB,"24"" P2425H (FHD 1920x1080/Dp/HDMI/Vga/USB)"
+MON-DEL-010,monitor~dell~3y-dp-p2725h~27in,FHD 1920x1080/DP/HDMI/VGA/USB/3Y Garantía,"27"" P2725H (FHD 1920x1080/Dp/HDMI/Vga/USB/3Y Garantía)"
+MON-MSI-013,monitor~msi~272f-flat-ips-mag-rapid~27in,FHD/200Hz/0.5ms GTG/Adaptive Sync/HDR,"Mag 272F 27"" Flat Rapid Ips (FHD/200Hz/0.5ms Gtg/Adaptive Sync/Hdr)"
+MON-MSI-014,monitor~msi~1500r-276cxf-curved-mag-rapid-va~27in,FHD/280Hz/0.5ms GTG/Adaptive Sync/HDR,"Mag 276CXF 27"" Curved 1500R Rapid Va (FHD/280Hz/0.5ms Gtg/Adaptive Sync/Hdr)"
+MON-MSI-015,monitor~msi~274qf-flat-ips-mag-rapid-x24~27in,WQHD/240Hz/0.5ms GTG/Adaptive Sync/HDR,"Mag 274QF X24 27"" Flat Rapid Ips (Wqhd/240Hz/0.5ms Gtg/Adaptive Sync/Hdr)"
+CAM-CAN-006,camara~canon~18-150-eor-r7~kit,—,Eor R7 Kit 18-150
+CAM-CAN-012,camara~canon~eos-ii-mark-r5~body,—,EOS R5 Mark II Body
+CAM-CAN-022,camara~canon~powershot-sx740,SILVER,PowerShot SX740 (Silver)
+CAM-CAN-024,camara~canon~g7-iii-mark-powershot-x,BLA,PowerShot G7 X Mark III (BLA)
+LEN-CAN-056,lente~canon~5.6-ef-s~18-135-f3.5-is-usm,—,EF S 18-135mm F/3.5-5.6 IS USM
+LEN-CAN-057,lente~canon~rf~28-70-f2.8-stm,—,RF 28-70mm F/2.8 STM
+LEN-CAN-058,lente~canon~rf~15-35-f2.8-is-usm,—,RF 15-35mm F/2.8 IS USM
+LEN-TAM-032,lente~tamron~sony~17-70-f2.8-di-iii,—,17-70mm F/2.8 Di III Sony
+CEL-SAM-037,celular~samsung~a27-galaxy~8gb-256gb,Black,Galaxy A27 8/256GB (Black)
+CEL-SAM-041,celular~samsung~a57-galaxy~8gb-128gb,Gray,Galaxy A57 8/128GB (Gray)
+CEL-SAM-046,celular~samsung~galaxy-s25-ultra~12gb-256gb,Gray/Silverblue/Whitesilver,Galaxy S25 Ultra 12/256GB (Gray/Silverblue/Whitesilver)
+CEL-SAM-047,celular~samsung~galaxy-s25-ultra~12gb-512gb,Whitesilver/Gray/Black/Silverblue,Galaxy S25 Ultra 12/512GB (Whitesilver/Gray/Black/Silverblue)
+NB-APP-006,notebook~apple~air-m5-macbook~13in-16gb-512gb-tecladoen,Silver/Midnight,"MacBook Air M5 13.6"" 16ram 512gb (Silver/Midnight)"
+TAB-APP-020,tablet~apple~ipad-m5-pro~13in-1tb,Space Black,"iPad Pro M5 13"" 1tb (Space Black)"
+CAM-CAN-027,camara~canon~24-50-4.5-6.3-eos-f-is-r8-stm~kit,—,EOS R8 Kit 24-50 F/4.5-6.3 IS STM
+CEL-SAM-056,celular~samsung~galaxy-plus-s26~512gb,Black/Skyblue/Violet,Galaxy S26 Plus 512GB (Black/Skyblue/Violet)
+CEL-MOT-067,celular~motorola~g06-power~4gb-64gb,Laurel Oak,G06 Power 4/64GB (Laurel Oak)
+CEL-MOT-070,celular~motorola~g17~4gb-256gb,pink,G17 4/256GB (Pink)
+CEL-MOT-072,celular~motorola~g86~8gb-256gb-5g,Dark Blue,G86 5G 8/256GB (Dark Blue)
+CAM-SON-031,camara~sony~16-50mm-a6700-alfa-ii~kit,—,Alfa A6700 Kit 16-50MM II
+CEL-MOT-075,celular~motorola~g06-power~4gb-256gb,blue,G06 Power 4/256GB (Blue)
+CEL-SAM-065,celular~samsung~galaxy-s26-ultra~12gb-512gb-5g,Skyblue,Galaxy S26 Ultra 12/512GB 5G (Skyblue)
+ACC-APP-048,accesorio-apple~apple~air-ipad-keyboard-m3-magic~13in-tecladoen,White,"Magic Keyboard P/ iPad Air 13"" (M3) - Inglés (White)"
+NB-APP-085,notebook~apple~m4-macbook-pro~14in-16gb-512gb-tecladoen,Space Black,"MacBook Pro M4 14"" 16ram 512gb (Space Black)"
+CEL-APP-084,celular~apple~17-iphone-max-pro~512gb-esim,Blue/Orange,iPhone 17 Pro Max 512GB E-Sim (Blue/Orange)
+CEL-SAM-036,celular~samsung~a27-galaxy~6gb-128gb,Black,Galaxy A27 6/128GB (Black)
+NB-APP-004,notebook~apple~air-m4-macbook~15in-16gb-256gb-tecladoen,Midnight,"MacBook Air M4 15"" 16ram 256gb (Midnight)"
+MON-APP-001,monitor~apple~adjustable-display-glass-height-stand-standard-studio-tilt~27in,—,"27"" Studio Display (Standard Glass, Tilt & Height Adjustable Stand)"

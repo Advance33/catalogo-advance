@@ -15,6 +15,8 @@ solo y no hay dos verdades que mantener sincronizadas.
 import csv, io, os, re, sys, json, unicodedata, collections, datetime, textwrap, urllib.request
 
 AQUI      = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(AQUI, 'herramientas'))
+import fotos_sku as FS       # como se llaman las fotos: por SKU (contrato landing/1.2)
 INDEX     = os.path.join(AQUI, 'index.html')
 SALIDA_PEDIDO = os.path.join(AQUI, 'PEDIDO-AL-SHEET.txt')
 FOTOS     = os.path.join(AQUI, 'fotos')
@@ -46,7 +48,10 @@ def leer_index():
     bloque = re.search(r'const COLORES = \{(.*?)\n\};', src, re.S)
     colores = set()
     if bloque:
-        for m in re.finditer(r"'?([A-Za-z][A-Za-z ]*)'?\s*:", bloque.group(1)):
+        # El valor tiene que ser un color de verdad ('#RRGGBB'): sin eso, el
+        # texto de los comentarios de al lado entraba como color y `pinta`
+        # daba por bueno cualquier cosa ("s", "y la primera", "py").
+        for m in re.finditer(r"""'?([A-Za-z][A-Za-z0-9 ]*)'?\s*:\s*'#""", bloque.group(1)):
             colores.add(norm(m.group(1)))
 
     bloque = re.search(r'const CATS_PLURAL = \{(.*?)\n\};', src, re.S)
@@ -98,8 +103,26 @@ def bajar_csv(destino=None):
     with urllib.request.urlopen(req, timeout=60) as r:
         datos = r.read().decode('utf-8')
     if destino:
-        io.open(destino, 'w', encoding='utf-8').write(datos)
+        io.open(destino, 'w', encoding='utf-8', newline='').write(datos)
     return list(csv.DictReader(io.StringIO(datos)))
+
+
+META_URL = ('https://docs.google.com/spreadsheets/d/%s/gviz/tq?sheet=Meta&tqx=out:csv'
+            % SHEET_ID)
+
+
+def bajar_meta():
+    """El manifiesto de la hoja Meta (contrato landing/1.x): la fila cuya
+    primera celda es "json". None si no se pudo leer: el que llama decide si
+    puede seguir sin él."""
+    try:
+        req = urllib.request.Request(META_URL, headers={'User-Agent': 'validar.py'})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            txt = r.read().decode('utf-8')
+        fila = next((f for f in csv.reader(io.StringIO(txt)) if f and f[0] == 'json'), None)
+        return json.loads(fila[1]) if fila else None
+    except Exception:
+        return None
 
 
 # --------------------------------------------------------------------------
@@ -135,6 +158,12 @@ def pinta(token, colores):
     k = norm(token)
     if k in colores:
         return True
+    # Una coma adentro de un token nunca es un color: "Black Ocean Band,
+    # Natural" son dos cosas mal separadas en la planilla, no un color con
+    # nombre largo. Sin esto la ultima palabra ("natural") lo daba por bueno
+    # y el validador pedia la foto <SKU>-black-ocean-band-natural.jpg.
+    if ',' in k:
+        return False
     palabras = k.split()
     return bool(palabras) and (palabras[-1] in colores or palabras[0] in colores)
 
@@ -594,21 +623,36 @@ def regla_fotos(filas, ctx):
         except Exception:
             fallas.append(('AVISO', '(fotos)', 'fotos/indice.json no se pudo leer'))
 
+    # Las fotos se llaman por SKU: <SKU>-<color>.jpg, y la portada de una fila
+    # es la foto de su PRIMER color (<SKU>.jpg solo si no vende colores). Los
+    # nombres viejos por ID se aceptan como respaldo y se avisa para migrarlos.
+    # La regla vive en herramientas/fotos_sku.py, la misma que usa la web.
+    conocidos = ctx[0]
+    skus = set(FS.sku_de(f) for f in filas if FS.sku_de(f))
     for f in filas:
-        if f['ID'].strip() not in archivos:
-            fallas.append(('AVISO', f['ID'], 'sin foto principal'))
-        col = limpio(f['Color'])
-        partes = [c.strip() for c in col.split('/') if c.strip()]
-        for c in partes[1:]:                      # el primero es la foto principal
-            slug = re.sub(r'[^a-z0-9]+', '-', norm(c)).strip('-')
-            if '%s-%s' % (f['ID'].strip(), slug) not in archivos:
+        pid, sku = f['ID'].strip(), FS.sku_de(f)
+        cols = FS.colores_de_la_fila(f, pinta, conocidos)
+        cand = FS.candidatos_portada(f, pinta, conocidos)
+        if cand and not any(c in archivos for c in cand):
+            fallas.append(('AVISO', f['ID'], 'sin foto de portada (%s.jpg)' % cand[0]))
+        for c in cols[1:]:                        # el primero es la portada
+            formas = FS.formas(c)
+            cand = ([sku + '-' + x for x in formas] if sku else []) + [pid + '-' + x for x in formas]
+            if not any(x in archivos for x in cand):
                 fallas.append(('AVISO', f['ID'],
-                               'ofrece el color "%s" y falta %s-%s.jpg' % (c, f['ID'].strip(), slug)))
+                               'ofrece el color "%s" y falta %s-%s.jpg' % (c, sku or pid, formas[0])))
 
+    viejas = []
     for a in sorted(archivos):
-        raiz = '-'.join(a.split('-')[:3])
-        if raiz not in ids:
-            fallas.append(('AVISO', raiz, 'foto huérfana: %s.jpg sin producto en la planilla' % a))
+        r = FS.resolver(a, skus, ids)
+        if r is None:
+            fallas.append(('AVISO', '(fotos)', 'foto huérfana: %s.jpg sin producto en la planilla' % a))
+        elif r['tipo'] == 'id':
+            viejas.append(a)
+    if viejas:
+        fallas.append(('AVISO', '(fotos)',
+                       '%d foto(s) con nombre viejo por ID (%s.jpg…): python herramientas/migrar-fotos-a-sku.py --aplicar'
+                       % (len(viejas), viejas[0])))
     return fallas
 
 

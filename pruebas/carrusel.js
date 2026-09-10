@@ -56,7 +56,15 @@ function pruebasDelCarrusel(){
      'no entra ningun "Sin cargador" como si fuera un regalo');
 
   /* ---- 2. Con la columna cargada ---- */
-  const elegidos = MODELOS.filter(m => m.stock && m.precio !== null && m.imagen).slice(0, 4);
+  /* Cuatro modelos de rubros DISTINTOS: la vidriera no deja mas de
+     POR_RUBRO_MAX por categoria y manda al final a los que sobran, asi que
+     con tres celulares seguidos el orden por descuento se rompe a proposito.
+     Eligiendo uno por rubro, lo que se ve es solo el orden del descuento. */
+  const elegidos = [];
+  for(const m of MODELOS.filter(m => m.stock && m.precio !== null && m.imagen)){
+    if(!elegidos.some(x => x.cat === m.cat)) elegidos.push(m);
+    if(elegidos.length === 4) break;
+  }
   const pcts = [0.25, 0.15, 0.40, 0.10];
   elegidos.forEach((m,i) => { const a = Math.round(m.precio/(1-pcts[i])); m.antes = a; m.rep.antes = a; });
   pintarOfertas();

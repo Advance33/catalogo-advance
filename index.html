@@ -1797,9 +1797,11 @@ const RECARGO_FIJO = 20;
 // ---------- FOTOS ----------
 //
 // A) Columna "Imagen" en el Sheet con el link completo. Tiene prioridad.
-// B) Por carpeta (menos trabajo): subís las fotos nombradas con el ID del
-//    producto (CEL-APP-004.jpg) y poné acá la carpeta, terminada en barra.
-//    Vacío = desactivado.
+// B) Por carpeta (menos trabajo): subís las fotos nombradas con el SKU del
+//    producto y su color (celular~apple~17-iphone-pro~256gb-blue.jpg) y
+//    poné acá la carpeta, terminada en barra. Vacío = desactivado.
+//    El nombre exacto lo arma herramientas/fotos_sku.py; los nombres
+//    viejos por ID (CEL-APP-004.jpg) se siguen entendiendo.
 const CARPETA_FOTOS = 'fotos/';
 const EXT_FOTOS = '.jpg';
 
@@ -2079,11 +2081,13 @@ function probarFotos(prods, cuantas = 40, esperaMax = 4000){
    otro color (el 09/09/2026 pasaba en ocho productos, con los chequeos en
    cero). Ahora se elige al cargar, con el indice de archivos que deja
    verificar-fotos.py en fotos/indice.json (PUBLICAR.bat lo regenera):
-     1. fotos/<ID>-<primer color>.jpg, si existe
-     2. fotos/<ID>.jpg, si existe
-     3. nada: el placeholder con la marca
+     1. fotos/<SKU>-<primer color>.jpg, si existe
+     2. fotos/<SKU>-<otro color que la fila venda>.jpg
+     3. fotos/<SKU>.jpg (productos sin color)
+     4. lo mismo con el <ID>, para los nombres viejos que queden
+     5. nada: el placeholder con la marca
    Sin indice (no llego, o es un despliegue viejo) vuelve el criterio de
-   siempre: <ID>.jpg y que el onerror decida. */
+   siempre: se pide el nombre canonico y que el onerror decida. */
 let INDICE_FOTOS = null;          // Set de nombres de archivo, o null si no se leyo
 
 async function cargarIndiceFotos(){
@@ -2092,22 +2096,45 @@ async function cargarIndiceFotos(){
     const r = await fetch(CARPETA_FOTOS + 'indice.json?_=' + Date.now(), { cache:'no-store' });
     if(!r.ok) return null;
     const d = await r.json();
-    return new Set(Array.isArray(d) ? d : (d.archivos || []));
+    const lista = Array.isArray(d) ? d : (d.archivos || []);
+    /* Un indice vacio no es "no hay ninguna foto": es un indice roto. Sin
+       esto, un indice.json con la lista vacia dejaba TODO el catalogo sin
+       imagenes y en silencio, porque un Set vacio es igual de valido que
+       uno lleno. Ante la duda se sigue sin indice: se pide el nombre
+       canonico y el onerror decide, que es como funcionaba antes. */
+    return lista.length ? new Set(lista) : null;
   }catch(e){ return null; }
 }
 
-function fotoDeCarpeta(id, color){
-  if(!CARPETA_FOTOS || !id) return '';
+/* Desde el contrato landing/1.2 las fotos se llaman por SKU: la identidad del
+   producto sin sus colores, que sobrevive a que la planilla renumere. Las
+   hermanas de color comparten SKU, asi que la portada de cada fila es
+     fotos/<SKU>-<primer color de la fila>.jpg
+   y solo los productos sin color usan fotos/<SKU>.jpg. Los nombres por ID
+   quedan como respaldo mientras dure la transicion. La misma regla vive en
+   herramientas/fotos_sku.py para los chequeos: si se cambia aca, se cambia alla. */
+function fotoDeCarpeta(id, sku, color){
+  if(!CARPETA_FOTOS || !(sku || id)) return '';
   const arma = n => urlFoto(CARPETA_FOTOS + encodeURIComponent(n) + EXT_FOTOS);
-  if(!INDICE_FOTOS) return arma(id);
-  const primero = partirColores(color)[0];
-  if(primero){
-    const s = slugColor(primero);
-    for(const f of [s, s.replace(/-/g, '')]){
-      if(INDICE_FOTOS.has(id + '-' + f + EXT_FOTOS)) return arma(id + '-' + f);
+  const colores = partirColores(color);
+  const primero = colores[0] ? slugColor(colores[0]) : '';
+  // Sin indice no hay forma de saber que existe: se pide el nombre canonico
+  // y el onerror decide.
+  if(!INDICE_FOTOS) return arma(sku ? (primero ? sku + '-' + primero : sku) : id);
+  /* En orden: el primer color; si no esta, cualquier otro color que la fila
+     venda (es del producto y la ficha lo muestra con su puntito: mejor que
+     nada y no es mentira); despues la foto sin color; y los nombres viejos
+     por ID de respaldo. Igual que candidatos_portada() en fotos_sku.py. */
+  const candidatos = [];
+  for(const base of [sku, id].filter(Boolean)){
+    for(const c of colores){
+      const s = slugColor(c);
+      for(const f of new Set([s, s.replace(/-/g, '')])) candidatos.push(base + '-' + f);
     }
+    candidatos.push(base);
   }
-  return INDICE_FOTOS.has(id + EXT_FOTOS) ? arma(id) : '';
+  const hay = candidatos.find(n => INDICE_FOTOS.has(n + EXT_FOTOS));
+  return hay ? arma(hay) : '';
 }
 
 /* ---------- El manifiesto de la planilla (hoja Meta) ----------
@@ -2193,9 +2220,17 @@ async function cargar(){
 
   // Ubico cada columna por su nombre, así no se rompe si reordenás la planilla
   const cab = filas[0].map(norm);
+  /* Primero el nombre exacto en TODA la fila de encabezados, y recien
+     despues el que empieza igual. Sin eso, el dia que la planilla ponga
+     SKU_COLOR antes que SKU, col('sku') devolveria la columna con los
+     colores adentro y ninguna foto se encontraria mas. */
   const col = (...nombres) => {
     for(const n of nombres){
-      const i = cab.findIndex(h => h === norm(n) || h.startsWith(norm(n)));
+      const i = cab.indexOf(norm(n));
+      if(i !== -1) return i;
+    }
+    for(const n of nombres){
+      const i = cab.findIndex(h => h.startsWith(norm(n)));
       if(i !== -1) return i;
     }
     return -1;
@@ -2219,6 +2254,10 @@ async function cargar(){
     // Si dos filas llevan el mismo texto acá, van juntas en la misma tarjeta.
     // Es la forma de corregir a mano lo que el agrupado automático no acierte.
     grupo:col('grupo','familia'),
+    // Identidad estable del producto sin sus colores (contrato landing/1.2).
+    // Es el nombre de sus fotos: fotos/<SKU>-<color>.jpg. Sobrevive a que el
+    // proveedor reescriba el nombre y a que el catalogo renumere los IDs.
+    sku:col('sku'),
     // El precio de antes, para los que están en promoción. Si la columna no
     // existe, el catálogo anda igual y el carrusel usa los que tienen regalo.
     antes:col('oferta','precio anterior','antes','precio lista')
@@ -2258,6 +2297,7 @@ async function cargar(){
         idx:i, id,
         cat:    categoriaReal(val(f,C.cat), val(f,C.marca), val(f,C.desc)),
         grupo:  val(f,C.grupo),
+        sku:    val(f,C.sku),
         marca:  val(f,C.marca),
         modelo: val(f,C.modelo),
         desc:   val(f,C.desc) || val(f,C.modelo),
@@ -2281,7 +2321,7 @@ async function cargar(){
         // Primero la columna Imagen; si está vacía, la carpeta: la foto del
         // primer color de hoy si existe, si no la del ID (ver fotoDeCarpeta).
         imagen: urlFoto(val(f,C.imagen)) ||
-                fotoDeCarpeta(id, colorDeLaFila(val(f,C.color), val(f,C.desc) || val(f,C.modelo))),
+                fotoDeCarpeta(id, val(f,C.sku), colorDeLaFila(val(f,C.color), val(f,C.desc) || val(f,C.modelo))),
         activo: C.activo === -1 || val(f,C.activo) === '' || esSi(val(f,C.activo))
       };
     })
@@ -2865,7 +2905,7 @@ function htmlColorFicha(p, m){
 }
 
 /* Foto por color. La planilla trae una sola foto por producto, así que la del
-   color se busca por convención de nombre: fotos/<ID>-<color>.jpg — por
+   color se busca por convención de nombre: fotos/<SKU>-<color>.jpg — por
    ejemplo CEL-APP-066-black.jpg o CEL-APP-066-space-gray.jpg. Se pide recién
    cuando el cliente toca el puntito (si no, serían cinco pedidos fallidos cada
    vez que se abre una ficha) y la foto se cambia solo si el archivo existe:
@@ -2878,21 +2918,44 @@ const slugColor = s => norm(s).replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')
    proveedor ese día. Se prueban las dos formas antes de darse por vencido. */
 function fotosDeColor(p, color){
   const s = slugColor(color || '');
-  if(!CARPETA_FOTOS || !p.id || !s) return [];
+  if(!CARPETA_FOTOS || !(p.sku || p.id) || !s) return [];
   const formas = [...new Set([s, s.replace(/-/g,'')])];
-  const arma = id => formas.map(f => urlFoto(CARPETA_FOTOS + encodeURIComponent(id + '-' + f) + EXT_FOTOS));
+  const arma = base => formas.map(f => base + '-' + f);
   /* Si esta fila no tiene la foto de ese color, se busca en sus hermanas: es
      el mismo producto y la foto sirve igual. El MacBook Neo de 8/256GB trae
      solo la Citrus, asi que al elegir Indigo volvia a mostrar la amarilla
-     aunque la Indigo estuviera cargada en la fila de 8/512GB. */
+     aunque la Indigo estuviera cargada en la fila de 8/512GB.
+     Con nombres por SKU las hermanas de color ya comparten archivo (mismo
+     SKU); las de otra capacidad tienen otro SKU y se prueban despues. Los
+     nombres por ID quedan al final, como respaldo. */
   const modelo = buscarModelo(clave(p));
-  const hermanas = modelo ? modelo.variantes.filter(v => v.id && v.id !== p.id) : [];
-  return [...arma(p.id), ...hermanas.flatMap(v => arma(v.id))];
+  const hermanas = modelo ? modelo.variantes.filter(v => v.id !== p.id) : [];
+  const bases = [...new Set([p.sku, ...hermanas.map(v => v.sku), p.id, ...hermanas.map(v => v.id)].filter(Boolean))];
+  let nombres = bases.flatMap(arma);
+  // Con indice no se pide lo que no existe: cada URL que falla es un pedido
+  // de mas y un onerror que esperar.
+  if(INDICE_FOTOS) nombres = nombres.filter(n => INDICE_FOTOS.has(n + EXT_FOTOS));
+  return nombres.map(n => urlFoto(CARPETA_FOTOS + encodeURIComponent(n) + EXT_FOTOS));
 }
 
 function mostrarFotoColor(p, color, d){
-  const img = d.querySelector('.fi-foto img');
-  if(!img) return;                                    // ficha sin foto: nada que cambiar
+  const caja = d.querySelector('.fi-foto');
+  let img = caja && caja.querySelector('img');
+  /* Puede no haber <img>: la fila no tiene foto de su primer color y la
+     ficha abrio con el placeholder. Pero si tiene la foto de OTRO color
+     que vende, elegir ese color tiene que mostrarla. Antes se salia sin
+     hacer nada y el puntito quedaba muerto. */
+  if(!img){
+    if(!caja) return;
+    const urls0 = fotosDeColor(p, color);
+    if(!urls0.length) return;
+    const hueco = caja.querySelector('.sinfoto');
+    img = document.createElement('img');
+    img.alt = nombreConMarca(p);
+    img.decoding = 'async';
+    img.onload = () => img.classList.add('ok');
+    if(hueco) hueco.replaceWith(img); else caja.appendChild(img);
+  }
 
   /* Cuando no hay foto del color elegido se volvia a la principal sin decir
      nada: el puntito naranja quedaba marcado, el texto decia "Orange" y la

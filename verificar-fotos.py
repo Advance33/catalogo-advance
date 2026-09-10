@@ -1,113 +1,72 @@
 """Chequeo automatico de las fotos del catalogo.
 
-Baja la planilla Landing y compara contra la carpeta fotos/. Avisa de:
-  1. Productos sin foto principal
-  2. Colores sin su foto (fotos/<ID>-<color>.jpg)
-  3. Fotos huerfanas (el ID ya no esta en la planilla)
-  4. Fotos con nombre de color que no existe en la planilla
-  5. MISMA FOTO en productos de modelos distintos
+Baja la planilla Landing y compara contra la carpeta fotos/. Desde el
+contrato landing/1.2 las fotos se llaman por SKU (herramientas/fotos_sku.py):
+    fotos/<SKU>-<color>.jpg     la foto de ese color; la portada de una fila es
+                                la de su PRIMER color
+    fotos/<SKU>.jpg             solo productos sin color
+Los nombres viejos por ID se siguen entendiendo, y se avisa para migrarlos.
+
+Avisa de:
+  1. Productos sin foto de portada
+  2. Colores sin su foto
+  3. Fotos huerfanas (ni el SKU ni el ID estan en la planilla)
+ 3b. Fotos que perdieron su producto porque le cambiaron el SKU
+  4. Fotos con nombre de color que ninguna fila del SKU vende
+  5. MISMA FOTO en productos distintos (distinto Modelo Y distinto SKU)
   6. Fotos que no son 900x900
   7. Fotos que CAMBIARON despues de haberse revisado
   8. Fotos nuevas que nadie miro
   9. Mismo color con distinta foto en filas del mismo grupo
- 10. Portadas que no coinciden con ninguna foto de color del producto
- 11. Fotos viejas que quedaron por mirar
+ 10. Fotos con nombre viejo (por ID): faltan migrar
+ 11. Portadas que son la foto de un color que la fila no vende
+ 12. Fotos viejas que quedaron por mirar
+ 13. Dos colores del MISMO producto con la misma imagen
 
-El (5), el (7) y el (8) son los que detectan el error grave: una ficha
-mostrando otro producto. El (5) solo ve el caso de dos fichas con la misma
-imagen; una foto que esta mal ella sola -el iPhone 17 con la foto de un 16e-
-la agarran el (7) y el (8), que exigen que alguien haya mirado cada imagen y
-que siga siendo la misma. Esa es la parte que faltaba: la foto del 16e se
-saco varias veces y volvia sola en la siguiente copia por lote, porque nada
-comparaba la imagen de hoy contra la que se habia dado por buena.
+Frenan la publicacion el (5), el (7), el (8), el (11) y el (3b): son las
+formas que tiene una ficha de mostrar otro producto, o ninguno. El (7) y el
+(8) exigen que alguien haya mirado cada imagen y que siga siendo la misma;
+el (11) mira que la portada sea del color que la fila vende HOY, que es como
+volvian los errores cuando la planilla rotaba colores bajo el mismo ID; y el
+(3b) atrapa las fotos que quedan colgadas cuando la planilla le cambia el
+SKU a un producto que sigue vivo (el 10/09/2026 le paso a 36 de golpe).
 
 Se corre con doble clic en "VERIFICAR FOTOS.bat", o: python verificar-fotos.py
-Escribe el resultado en REVISAR-FOTOS.txt
+Escribe el resultado en REVISAR-FOTOS.txt y el indice fotos/indice.json que
+lee la web para elegir la portada.
 
   python verificar-fotos.py --revisadas   anota TODAS las de hoy como miradas
-  python verificar-fotos.py --revisadas CEL-APP-077.jpg    anota solo esa
+  python verificar-fotos.py --revisadas X.jpg    anota solo esa
   python verificar-fotos.py --sembrar     arranca el registro: lo ya mirado
                                           queda mirado y el resto, pendiente
   python verificar-fotos.py --aceptar     anota los duplicados como buenos
 """
-import csv, io, os, re, sys, json, hashlib, collections, unicodedata, urllib.request, datetime
+import csv, io, os, re, sys, json, hashlib, collections, urllib.request, datetime
+
+AQUI   = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, AQUI)
+sys.path.insert(0, os.path.join(AQUI, 'herramientas'))
+import fotos_sku as FS                        # la unica verdad sobre nombres de foto
+import validar                                # la lista de colores del catalogo
 
 SHEET_ID  = '18xxslIKTBnVMrLixCGlQBJGje3vKBYQHXy0qvVp8tpQ'
 SHEET_GID = '482985525'
-AQUI   = os.path.dirname(os.path.abspath(__file__))
 FOTOS  = os.path.join(AQUI, 'fotos')
 SALIDA = os.path.join(AQUI, 'REVISAR-FOTOS.txt')
 ACEPTADAS = os.path.join(AQUI, 'fotos-aceptadas.txt')
 REVISADAS = os.path.join(AQUI, 'fotos-revisadas.txt')
 INDICE = os.path.join(FOTOS, 'indice.json')
+PLANILLA_NOMBRES = os.path.join(AQUI, 'herramientas', 'planilla-de-los-nombres.csv')
 
-TALLE = re.compile(r'^(x{0,2}s|m|x{0,2}l)$', re.I)
-
-
-def _partir(txt):
-    """La barra separa opciones, salvo cuando lo que sigue es un talle."""
-    salida = []
-    for t in [x.strip() for x in txt.split('/') if x.strip()]:
-        if salida and TALLE.match(t):
-            salida[-1] += '/' + t
-        else:
-            salida.append(t)
-    return salida
-
-
-_COLORES_CONOCIDOS = None
-
-
-def colores_de_la_fila(r):
-    """Los colores que vende la fila, como los ve la web: la columna Color, y
-    si viene vacia el ultimo parentesis del nombre, pero ese SOLO cuenta si
-    todo lo de adentro es un color conocido. "(Rc-N3)" en un drone o "(Video)"
-    en una camara no son colores, y tomarlos como tales hacia que dos drones
-    con la misma foto parecieran mentir."""
-    global _COLORES_CONOCIDOS
-    txt = (r.get('Color') or '').strip()
-    if txt not in ('', '—', '-', '–'):
-        return _partir(txt)
-    par = re.findall(r'\(([^()]*)\)', r.get('Descripción completa') or '')
-    if not par:
-        return []
-    if _COLORES_CONOCIDOS is None:
-        try:
-            sys.path.insert(0, AQUI)
-            import validar                       # la misma lista que usa la pagina
-            _COLORES_CONOCIDOS = (validar.leer_index()[0], validar.pinta)
-        except Exception:
-            _COLORES_CONOCIDOS = (set(), lambda t, c: False)
-    conocidos, pinta = _COLORES_CONOCIDOS
-    opciones = _partir(par[-1])
-    return opciones if opciones and all(pinta(o, conocidos) for o in opciones) else []
-
-def norm(s):
-    s = unicodedata.normalize('NFD', s or '')
-    s = ''.join(c for c in s if unicodedata.category(c) != 'Mn')
-    return s.lower().strip()
-
-def slug(s):
-    return re.sub(r'^-+|-+$', '', re.sub(r'[^a-z0-9]+', '-', norm(s)))
-
-def colores(r):
-    return [c.strip() for c in (r.get('Color') or '').split('/') if c.strip()]
 
 def leer_revisadas():
-    """Lo que ya se miro: nombre de archivo -> huella que tenia ese dia.
+    """Lo que ya se miro: nombre de archivo -> (huella, mirada).
 
     El chequeo de duplicados no alcanza para una foto que esta mal ella sola.
-    El iPhone 17 mostro durante meses un 16e -una sola camara- y no habia dos
-    productos con la misma imagen, asi que nada lo marcaba. Se arreglaba, y en
-    la siguiente copia por lote volvia la mala sin que nadie se enterara.
-    Con esto, una foto que cambia deja de coincidir con su huella y el sitio no
-    se publica hasta que alguien la vuelva a mirar.
-
-    Cada linea es:  <huella>  <archivo>  # mirada | sin mirar
-
-    Las que dicen "sin mirar" son las que ya estaban en el catalogo cuando se
-    armo el registro: son un pendiente, no frenan la publicacion. Frena lo que
-    aparece o cambia DESPUES, que es por donde entra la foto equivocada.
+    El iPhone 17 mostro durante meses un Air y no habia dos productos con la
+    misma imagen, asi que nada lo marcaba. Con esto, una foto que cambia deja
+    de coincidir con su huella y el sitio no se publica hasta que alguien la
+    vuelva a mirar. Las que dicen "sin mirar" son un pendiente, no frenan.
     """
     reg = {}
     if os.path.exists(REVISADAS):
@@ -132,50 +91,109 @@ def bajar():
         raise SystemExit('ERROR: la planilla vino vacia')
     return filas
 
+
 def main():
     rows  = bajar()
     byid  = {r['ID'].strip(): r for r in rows}
-    files = [f for f in os.listdir(FOTOS) if f.lower().endswith('.jpg')]
-    have  = {os.path.splitext(f)[0] for f in files}
+    ids   = set(byid)
+    skus  = {FS.sku_de(r) for r in rows if FS.sku_de(r)}
+    por_sku = collections.defaultdict(list)
+    for r in rows:
+        if FS.sku_de(r):
+            por_sku[FS.sku_de(r)].append(r)
+    conocidos = validar.leer_index()[0]
+    pinta = validar.pinta
+    colores = lambda r: FS.colores_de_la_fila(r, pinta, conocidos)
 
-    # El indice de fotos que lee la web (fotos/indice.json). Con el, la pagina
-    # sabe que archivos existen sin pedirlos uno por uno, y puede elegir la
-    # portada por el primer color del dia en vez de fijarla en <ID>.jpg. Se
-    # reescribe en cada corrida: PUBLICAR.bat corre este script antes del
-    # commit, asi que el indice publicado siempre es el de la carpeta.
+    files = [f for f in os.listdir(FOTOS) if f.lower().endswith(FS.EXT)]
+    bases = {os.path.splitext(f)[0] for f in files}
+
+    # El indice que lee la web (fotos/indice.json). Con el, la pagina sabe que
+    # archivos existen sin pedirlos uno por uno, y elige la portada por el
+    # primer color del dia. Se reescribe en cada corrida: PUBLICAR.bat corre
+    # este script antes del commit, asi que el indice publicado siempre es el
+    # de la carpeta.
     with open(INDICE, 'w', encoding='utf-8') as fh:
         json.dump({'generado': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
                    'archivos': sorted(files)}, fh, ensure_ascii=False, indent=0)
 
-    def raiz(f):
-        p = os.path.splitext(f)[0].split('-')
-        for i in range(len(p), 0, -1):
-            cand = '-'.join(p[:i])
-            if cand in byid:
-                return cand
-        return None
-
-    sin_base, sin_color, mal_color, huerfanas, tam = [], [], [], [], []
-    for r in rows:
-        pid = r['ID'].strip()
-        if pid not in have:
-            sin_base.append(f"{pid:<15} {r['Descripción completa'][:60]}")
-        cols = colores(r)
-        if len(cols) > 1:
-            for c in cols:
-                if f'{pid}-{slug(c)}' not in have:
-                    sin_color.append(f"{pid}-{slug(c)}.jpg   ({r['Descripción completa'][:44]})")
-
+    # ---- a que producto pertenece cada archivo ----
+    usuarios, color_de, viejos, huerfanas = {}, {}, [], []
     for f in files:
         base = os.path.splitext(f)[0]
-        rz = raiz(f)
-        if rz is None:
+        r = FS.resolver(base, skus, ids)
+        if r is None:
             huerfanas.append(f)
             continue
-        resto = base[len(rz):].lstrip('-')
-        if resto and resto not in {slug(c) for c in colores(byid[rz])}:
-            mal_color.append(f"{f}   (la planilla dice: {byid[rz].get('Color','') or '(vacio)'})")
+        color_de[f] = r['color']
+        if r['tipo'] == 'sku':
+            # El SKU lo comparten las hermanas de otro color: la foto de un
+            # color es de las filas que venden ese color. Si ninguna lo vende
+            # (un color que roto y quedo la foto), es de todas, y el chequeo
+            # (4) lo avisa.
+            filas_sku = por_sku[r['clave']]
+            venden = [x for x in filas_sku if FS.color_coincide(r['color'], colores(x))] if r['color'] else []
+            usuarios[f] = venden or filas_sku
+        else:
+            usuarios[f] = [byid[r['clave']]]
+            viejos.append(f)
 
+    # ---- 3b: de que producto era cada huerfana, y cuales se rescatan ----
+    # La planilla con la que se nombraron los archivos dice de que producto
+    # era cada foto que hoy no resuelve. Si ese producto sigue hoy con otro
+    # SKU (el 10/09/2026 cambiaron 36 de un dia para otro sin aviso), la foto
+    # se renombra con un comando; mientras no se haga, la web muestra ese
+    # producto sin foto, asi que frena la publicacion.
+    antes_filas = FS.leer_planilla(PLANILLA_NOMBRES)
+    antes = FS.indexar(antes_filas) if antes_filas else None
+    puente = FS.puente_de_ids(validar.bajar_meta()) if antes else {}
+    hoy_idx = {'byid': byid, 'skus': skus, 'por_sku': por_sku}
+    perdidas, huerfanas_expl = [], []
+    for f in huerfanas:
+        d = (FS.destino_hoy(f[:-len(FS.EXT)], antes, hoy_idx, puente, pinta, conocidos) if antes
+             else {'estado': 'desconocida', 'antes': None, 'hoy': []})
+        era = d['antes']
+        quien = ('era %s «%s»' % ((era.get('ID') or '').strip(), (era.get('Descripción completa') or '')[:48])
+                 if era is not None else 'no estaba ni en la planilla de los nombres')
+        if d['estado'] == 'renombrar':
+            perdidas.append('%-62s -> %s' % (f, d['nombre'] + FS.EXT))
+        elif d['estado'] == 'ambigua':
+            huerfanas_expl.append('%-62s AMBIGUA: hoy cae en %s' % (f, ', '.join(sorted({FS.sku_de(x) for x in d['hoy']}))))
+        else:
+            huerfanas_expl.append('%-62s %s' % (f, quien))
+
+    def existe(base):
+        return base in bases
+
+    # ---- 1 y 2: lo que le falta a cada fila ----
+    sin_base, sin_color = [], []
+    for r in rows:
+        pid, sku = r['ID'].strip(), FS.sku_de(r)
+        cols = colores(r)
+        # la portada: lo mismo que prueba la web, en el mismo orden
+        if not any(existe(c) for c in FS.candidatos_portada(r, pinta, conocidos)):
+            sin_base.append(f"{pid:<15} {r['Descripción completa'][:60]}")
+        if len(cols) > 1:
+            for c in cols:
+                formas = FS.formas(c)
+                cand = ([sku + '-' + x for x in formas] if sku else []) + [pid + '-' + x for x in formas]
+                if not any(existe(x) for x in cand):
+                    sin_color.append(f"{(sku or pid)}-{formas[0]}.jpg   ({r['Descripción completa'][:44]})")
+
+    # ---- 4: un color que ninguna fila del SKU vende ----
+    mal_color = []
+    for f in files:
+        if f not in usuarios or not color_de[f]:
+            continue
+        vende = set()
+        for r in usuarios[f]:
+            for c in colores(r):
+                vende.update(FS.formas(c))
+        if color_de[f] not in vende:
+            mal_color.append(f"{f}   (la planilla dice: {' | '.join((r.get('Color') or '(vacio)') for r in usuarios[f])})")
+
+    # ---- 6: tamano ----
+    tam = []
     try:
         from PIL import Image
         for f in files:
@@ -188,7 +206,7 @@ def main():
     except ImportError:
         tam.append('(Pillow no instalado: no se pudo chequear el tamano)')
 
-    # el chequeo clave: misma imagen en productos de modelos distintos
+    # ---- 5: la misma imagen en productos de modelos distintos ----
     H = collections.defaultdict(list)
     firma = {}
     for f in files:
@@ -199,128 +217,146 @@ def main():
     for fs in H.values():
         if len(fs) < 2:
             continue
-        ids = {raiz(x) for x in fs} - {None}
-        if len(ids) < 2:
+        rs = [r for f in fs for r in usuarios.get(f, [])]
+        ids_r = {r['ID'].strip() for r in rs}
+        if len(ids_r) < 2:
             continue
-        mods = {(byid[i]['Modelo'] or '').strip().upper() for i in ids}
-        if len(mods) > 1:
-            repetidas.append((sorted(mods), sorted(ids), sorted(fs)))
+        # Tienen que ser productos distintos por los DOS lados:
+        #   - distinto Modelo, porque el mismo equipo en otra capacidad usa la
+        #     misma foto y esta bien (Galaxy S25 FE de 256 y de 512GB);
+        #   - y distinto SKU, porque las hermanas de color del mismo producto
+        #     tambien la comparten: los tres Ray-Ban Skyler tienen tres codigos
+        #     de Modelo distintos ("601/1M52", "601/CH52", "601/T352") y salian
+        #     como error todos los dias siendo el mismo anteojo.
+        ident = {FS.sku_de(r) or r['ID'].strip() for r in rs}
+        mods = {(r['Modelo'] or '').strip().upper() for r in rs}
+        if len(mods) > 1 and len(ident) > 1:
+            repetidas.append((sorted(mods), sorted(ids_r), sorted(fs), firma[fs[0]]))
 
-    # Un duplicado puede ser correcto: el mismo equipo en otra capacidad usa
-    # la misma foto y esta bien. Los que ya se miraron y se dieron por buenos
-    # quedan anotados en fotos-aceptadas.txt (se agregan con --aceptar), asi
-    # el chequeo solo frena por lo que aparecio DESPUES de la ultima revision.
-    # Sin esto la alarma suena siempre y se termina ignorando.
-    aceptadas = set()
+    # Un duplicado puede ser correcto: el mismo equipo en otra capacidad usa la
+    # misma foto y esta bien. Los que ya se miraron y se dieron por buenos
+    # quedan en fotos-aceptadas.txt (--aceptar), asi el chequeo solo frena por
+    # lo que aparecio DESPUES. Sin esto la alarma suena siempre y se ignora.
+    #
+    # La clave es la huella de la imagen y en cuantos modelos aparece: los IDs
+    # se renumeran y los SKU cambian (el 10/09/2026 la misma lista de
+    # duplicados salio "nueva" cinco veces solo por eso), la imagen no. Si
+    # manana la misma foto aparece en un modelo MAS, vuelve a sonar. Las
+    # claves viejas por lista de IDs se siguen entendiendo.
+    aceptadas_md5, aceptadas_ids = {}, set()
     if os.path.exists(ACEPTADAS):
         with open(ACEPTADAS, encoding='utf-8') as fh:
             for linea in fh:
                 linea = linea.split('#')[0].strip()
-                if linea:
-                    aceptadas.add(linea)
-    clave = lambda ids: ','.join(sorted(ids))
+                p = linea.split()
+                if len(p) == 2 and re.fullmatch(r'[0-9a-f]{32}', p[0]) and p[1].isdigit():
+                    aceptadas_md5[p[0]] = int(p[1])
+                elif linea:
+                    aceptadas_ids.add(linea)
+    clave = lambda ids_: ','.join(sorted(ids_))
     if '--aceptar' in sys.argv:
         with open(ACEPTADAS, 'w', encoding='utf-8') as fh:
-            fh.write('# Duplicados de foto ya revisados y dados por buenos.' + chr(10))
+            fh.write('# Duplicados de foto ya revisados y dados por buenos:' + chr(10))
+            fh.write('# huella de la imagen, en cuantos modelos aparece, y cuales.' + chr(10))
             fh.write('# Se regenera con: python verificar-fotos.py --aceptar' + chr(10))
-            for mods, ids, fs in repetidas:
-                fh.write('%-40s # %s%s' % (clave(ids), ' | '.join(mods)[:60], chr(10)))
+            for mods, ids_, fs, h in repetidas:
+                fh.write('%s  %d   # %s%s' % (h, len(mods), ' | '.join(mods)[:70], chr(10)))
         print('Anotados %d duplicados como revisados en %s' % (len(repetidas), ACEPTADAS))
         return 0
-    nuevas = [r for r in repetidas if clave(r[1]) not in aceptadas]
+    nuevas = [r for r in repetidas
+              if not (aceptadas_md5.get(r[3], 0) >= len(r[0]) or clave(r[1]) in aceptadas_ids)]
 
-    # --- la portada no puede ser la foto de un color que la fila no vende ---
-    # Es la forma exacta que tuvieron los ocho errores del 09/09: la fila
-    # cambio de color bajo el mismo ID y la portada quedo. El chequeo 10 no lo
-    # veia porque la portada coincidia con una foto "suya". Aca se compara la
-    # huella de la portada con TODAS las fotos de color del catalogo: si es
-    # identica a una <X>-<color>.jpg y ese color no esta entre los que vende
-    # la fila, la portada miente, y eso frena la publicacion.
-    porhuella = collections.defaultdict(set)
+    # ---- 9: dentro de un Grupo, el mismo color deberia ser la misma foto ----
+    # El iPhone 17 Pro naranja es el mismo aparato valga 1190 o 1400. La fila
+    # que se aparta suele ser la que tiene el archivo mal nombrado.
+    porgrupo = collections.defaultdict(lambda: collections.defaultdict(set))
     for f in files:
-        m = re.match(r'^([A-Z]{2,3}-[A-Z?]{2,4}-\d{3})-(.+)\.jpg$', f)
-        if m:
-            porhuella[firma[f]].add(m.group(2).lower())
+        if f in usuarios and color_de[f]:
+            for r in usuarios[f]:
+                g = (r.get('Grupo') or '').strip()
+                if g:
+                    porgrupo[g][color_de[f]].add(f)
+    color_disidente = []
+    for g, porcolor in sorted(porgrupo.items()):
+        for col, fs in sorted(porcolor.items()):
+            fs = sorted(fs)
+            if len(fs) < 2:
+                continue
+            cuenta = collections.Counter(firma[a] for a in fs)
+            if len(cuenta) > 1:
+                # Con dos archivos y dos huellas no hay mayoria: hay que
+                # elegir igual, y tiene que salir SIEMPRE el mismo, porque
+                # el orden de un set de Python cambia en cada corrida y el
+                # informe decia un archivo distinto cada vez.
+                primero = {}
+                for a in fs:
+                    primero.setdefault(firma[a], a)
+                mayoria = min(cuenta, key=lambda h: (-cuenta[h], primero[h]))
+                raros = [a for a in fs if firma[a] != mayoria]
+                color_disidente.append('%s / %s%s   se aparta: %s'
+                                       % (g, col, chr(10) + ' ' * 6, (chr(10) + ' ' * 6).join(raros)))
+
+    # ---- 11: la portada no puede ser la foto de un color que la fila no vende ----
+    # Es la forma exacta que tuvieron los ocho errores del 09/09/2026: la fila
+    # cambio de color bajo el mismo ID y la portada quedo. Con nombres por
+    # SKU la portada ES la foto del primer color, asi que esto solo puede
+    # pasar si alguien copio mal un archivo; igual se mira, porque es el
+    # error que mas cuesta ver a ojo.
+    porhuella = collections.defaultdict(set)      # huella -> colores de archivo
+    for f in files:
+        if f in usuarios and color_de[f]:
+            porhuella[firma[f]].add(color_de[f])
     mentirosas = []
+    portada_de = {}
     for r in rows:
-        pid = r['ID'].strip()
-        port = pid + '.jpg'
-        if port not in firma:
+        pid, sku = r['ID'].strip(), FS.sku_de(r)
+        cols = colores(r)
+        if not cols:
             continue
         vende = set()
-        for c in colores_de_la_fila(r):
-            s = slug(c)
-            vende.update({s, s.replace('-', '')})
-        if not vende:
+        for c in cols:
+            vende.update(FS.formas(c))
+        port = next((c + FS.EXT for c in FS.candidatos_portada(r, pinta, conocidos) if existe(c)), None)
+        if not port:
             continue
+        portada_de[pid] = (port, vende)
         de_que_color = porhuella.get(firma[port], set())
         if de_que_color and not (de_que_color & vende):
             mentirosas.append('%-14s vende %-28s pero la portada es la foto %s'
-                              % (pid, '/'.join(colores_de_la_fila(r))[:28],
-                                 '/'.join(sorted(de_que_color))))
-    # La otra forma del mismo error: dos portadas identicas en filas cuyos
-    # colores no se tocan. SW-APP-056 (Black) era la misma imagen que
-    # SW-APP-014 (Natural): ninguna es un archivo "-color", pero una de las
-    # dos miente. Se avisa por las dos, que alguien decida cual.
-    vende_de = {}
-    for r in rows:
-        pid = r['ID'].strip()
-        if pid + '.jpg' in firma:
-            s = set()
-            for c in colores_de_la_fila(r):
-                s.update({slug(c), slug(c).replace('-', '')})
-            if s:
-                vende_de[pid] = s
-    for fs in H.values():
-        bases = [os.path.splitext(f)[0] for f in fs if os.path.splitext(f)[0] in vende_de]
-        for i, a in enumerate(bases):
-            for b in bases[i + 1:]:
-                if not (vende_de[a] & vende_de[b]):
+                              % (pid, '/'.join(cols)[:28], '/'.join(sorted(de_que_color))))
+    # y dos portadas identicas en filas cuyos colores no se tocan
+    por_portada = collections.defaultdict(list)
+    for pid, (port, vende) in portada_de.items():
+        por_portada[firma[port]].append((pid, vende))
+    for lst in por_portada.values():
+        for i, (a, va) in enumerate(lst):
+            for b, vb in lst[i + 1:]:
+                if not (va & vb):
                     mentirosas.append('%-14s y %-14s tienen la misma portada y venden colores distintos (%s / %s)'
-                                      % (a, b, '/'.join(sorted(vende_de[a]))[:22], '/'.join(sorted(vende_de[b]))[:22]))
+                                      % (a, b, '/'.join(sorted(va))[:22], '/'.join(sorted(vb))[:22]))
 
-    # Dentro de un mismo Grupo, el archivo de un color deberia ser el mismo en
-    # todas las filas: el iPhone 17 Pro naranja es el mismo aparato valga 1190
-    # o 1400. Cuando una fila se aparta de las demas, esa es la sospechosa.
-    # Asi se encontro CEL-APP-068-orange.jpg, que adentro tenia el plateado:
-    # el cliente elegia Orange y seguia viendo un telefono gris.
-    porgrupo = collections.defaultdict(lambda: collections.defaultdict(list))
+    # ---- 13: dos colores del MISMO producto con la misma imagen ----
+    # Si el silver y el space black del mismo SKU son el mismo archivo, uno de
+    # los dos miente, y no lo ve ningun otro chequeo: el (5) no, porque es un
+    # solo producto; el (9) tampoco, porque son colores distintos. En la ficha
+    # el cliente toca un puntito y ve la foto del otro color.
+    mismo_color = []
+    por_clave = collections.defaultdict(dict)          # clave -> color -> archivo
     for f in files:
-        rz = raiz(f)
-        if not rz:
-            continue
-        col = os.path.splitext(f)[0][len(rz):].lstrip('-')
-        g = (byid[rz].get('Grupo') or '').strip()
-        if col and g:
-            porgrupo[g][col].append(f)
-    color_disidente = []
-    for g, porcolor in sorted(porgrupo.items()):
-        for col, lista in sorted(porcolor.items()):
-            if len(lista) < 2:
-                continue
-            cuenta = collections.Counter(firma[a] for a in lista)
-            if len(cuenta) > 1:
-                mayoria = cuenta.most_common(1)[0][0]
-                raros = [a for a in lista if firma[a] != mayoria]
-                color_disidente.append('%-20s %-12s se aparta: %s'
-                                       % (g[:20], col, ', '.join(sorted(raros))))
+        if f in usuarios and color_de[f]:
+            r = FS.resolver(f[:-len(FS.EXT)], skus, ids)
+            if r:
+                por_clave[r['clave']][color_de[f]] = f
+    for cl, porcolor in sorted(por_clave.items()):
+        vistas = collections.defaultdict(list)
+        for col, f in sorted(porcolor.items()):
+            vistas[firma[f]].append((col, f))
+        for lst in vistas.values():
+            if len(lst) > 1:
+                mismo_color.append('%s: %s son la misma imagen (%s)'
+                                   % (cl[:40], ' y '.join(c for c, _ in lst), lst[0][1]))
 
-    # La portada de un producto que tiene fotos de color deberia ser una de
-    # ellas: es uno de los colores que se venden. Cuando no coincide con
-    # ninguna suele ser el caso del iPhone 17, que en la grilla mostraba un
-    # Air y adentro, al tocar los colores, aparecia el 17 de verdad.
-    portada_suelta = []
-    for r in rows:
-        pid = r['ID'].strip()
-        if pid + '.jpg' not in firma:
-            continue
-        suyas = [f for f in files if f.startswith(pid + '-')]
-        if suyas and firma[pid + '.jpg'] not in {firma[f] for f in suyas}:
-            portada_suelta.append('%-14s %s   (tiene %s)'
-                                  % (pid, r['Descripción completa'][:40],
-                                     ', '.join(f.replace(pid + '-', '') for f in sorted(suyas))))
-
-    # --- las fotos contra el registro de lo ya mirado ---
+    # ---- 7, 8, 12: las fotos contra el registro de lo ya mirado ----
     registro = leer_revisadas()
     cambiadas  = sorted(f for f in files if f in registro and registro[f][0] != firma[f])
     aparecidas = sorted(f for f in files if f not in registro)
@@ -330,42 +366,65 @@ def main():
         # "--revisadas" a secas marca todo; con nombres detras, solo esos.
         sueltas = {a for a in sys.argv[1:] if not a.startswith('--')}
         todas = '--revisadas' in sys.argv and not sueltas
+        fantasma = sorted(n for n in sueltas if n not in files)
+        if fantasma:
+            print('OJO: no existe ninguna foto con ese nombre: %s' % ', '.join(fantasma))
+            print('El nombre va tal cual esta en fotos/ (ahora son nombres largos por SKU).')
+            return 2
+        hechas, congeladas = 0, 0
         with open(REVISADAS, 'w', encoding='utf-8') as fh:
             fh.write('# Fotos miradas contra el producto que dice la planilla.' + chr(10))
             fh.write('# Si una cambia, deja de coincidir y no se publica hasta mirarla.' + chr(10))
             fh.write('# Anotar las miradas:  python verificar-fotos.py --revisadas' + chr(10))
             fh.write('# Arrancar el registro: python verificar-fotos.py --sembrar' + chr(10))
-            hechas = 0
             for f in sorted(files):
-                # al sembrar, lo que ya estaba mirado y no cambio sigue mirado
-                ok = (todas or f in sueltas
-                      or (f in registro and registro[f][1] and registro[f][0] == firma[f]))
+                previo = registro.get(f)
+                if todas or f in sueltas:
+                    h, ok = firma[f], True
+                elif previo and previo[0] != firma[f]:
+                    # Cambio y NO se la miro: se conserva la huella vieja para
+                    # que siga saliendo como "cambiada" y siga frenando. Antes
+                    # se escribia la huella nueva como "sin mirar", y una foto
+                    # equivocada que entraba de contrabando dejaba de frenar
+                    # apenas alguien anotaba OTRA foto. Es justo el agujero
+                    # por el que volvia la foto del iPhone 17.
+                    h, ok = previo[0], previo[1]
+                    congeladas += 1
+                elif previo:
+                    h, ok = firma[f], previo[1]
+                else:
+                    h, ok = firma[f], False
                 hechas += ok
                 fh.write('%s  %-34s # %s%s'
-                         % (firma[f], f, 'mirada' if ok else 'sin mirar', chr(10)))
+                         % (h, f, 'mirada' if ok else 'sin mirar', chr(10)))
         print('Registro escrito: %d fotos, %d miradas, %d pendientes  (%s)'
               % (len(files), hechas, len(files) - hechas, REVISADAS))
+        if congeladas:
+            print('%d foto(s) cambiaron y no se marcaron: siguen frenando hasta que las mires.' % congeladas)
         return 0
 
+    # ---- el informe ----
     L = []
     w = L.append
     w('REVISAR FOTOS — chequeo automatico')
     w('=' * 62)
     w(f'Generado: {datetime.datetime.now():%d/%m/%Y %H:%M}')
-    w(f'Productos en la planilla: {len(rows)}   ·   fotos en la carpeta: {len(files)}')
+    w(f'Productos en la planilla: {len(rows)}   ·   fotos en la carpeta: {len(files)}   ·   nombres por SKU: {len(files) - len(viejos) - len(huerfanas)}')
     w('')
-    w(f'  {len(sin_base):>4}  productos sin foto principal')
+    w(f'  {len(sin_base):>4}  productos sin foto de portada')
     w(f'  {len(sin_color):>4}  colores sin su foto')
     w(f'  {len(nuevas):>4}  MISMA FOTO en modelos distintos, SIN REVISAR  <-- mirar primero')
     w(f'  {len(cambiadas):>4}  FOTOS QUE CAMBIARON sin pasar por revision   <-- mirar primero')
     w(f'  {len(aparecidas):>4}  FOTOS NUEVAS que nadie miro todavia          <-- mirar primero')
     w(f'  {len(mentirosas):>4}  PORTADAS de un color que la fila no vende     <-- mirar primero')
+    w(f'  {len(perdidas):>4}  FOTOS QUE PERDIERON SU PRODUCTO (cambio el SKU) <-- un comando las rescata')
     w(f'  {len(pendientes):>4}  fotos viejas que quedaron por mirar')
-    w(f'  {len(portada_suelta):>4}  portadas que no son ninguna de sus fotos de color')
+    w(f'  {len(viejos):>4}  fotos con nombre viejo por ID, sin migrar')
     w(f'  {len(color_disidente):>4}  mismo color con distinta foto dentro del grupo')
+    w(f'  {len(mismo_color):>4}  dos colores del mismo producto con la MISMA foto')
     w(f'  {len(repetidas) - len(nuevas):>4}  duplicados ya revisados (fotos-aceptadas.txt)')
     w(f'  {len(mal_color):>4}  fotos con un color que no esta en la planilla')
-    w(f'  {len(huerfanas):>4}  fotos huerfanas (ID que ya no existe)')
+    w(f'  {len(huerfanas_expl):>4}  fotos huerfanas (ni SKU ni ID en la planilla)')
     w(f'  {len(tam):>4}  fotos que no son 900x900')
     w('')
 
@@ -385,9 +444,9 @@ def main():
     w('   mostrando otro producto. Hay que MIRARLAS.')
     w('=' * 62)
     if repetidas:
-        for mods, ids, fs in repetidas:
+        for mods, ids_, fs, h in repetidas:
             w(f'   modelos: {" | ".join(mods)}')
-            for i in ids:
+            for i in ids_:
                 w(f'      {i:<15} {byid[i]["Descripción completa"][:56]}')
             w(f'      archivos: {", ".join(fs)}')
             w('')
@@ -395,11 +454,17 @@ def main():
         w('   (ninguna)')
         w('')
 
-    bloque('2) PRODUCTOS SIN FOTO PRINCIPAL', sin_base)
+    bloque('2) PRODUCTOS SIN FOTO DE PORTADA', sin_base)
     bloque('3) COLORES SIN SU FOTO', sin_color)
-    bloque('4) FOTOS CON UN COLOR QUE NO ESTA EN LA PLANILLA', mal_color,
+    bloque('4) FOTOS CON UN COLOR QUE NINGUNA FILA DEL SKU VENDE', mal_color,
            '   O sobra la foto, o falta el color en la celda Color del Sheet.')
-    bloque('5) FOTOS HUERFANAS (el ID ya no existe)', huerfanas)
+    bloque('5) FOTOS HUERFANAS (ni el SKU ni el ID estan en la planilla)', huerfanas_expl,
+           '   Se quedan en la carpeta: el SKU sale del producto y no puede colgarse'
+           + chr(10) + '   de otra cosa. Si el producto vuelve, la foto lo espera.')
+    bloque('5b) FOTOS QUE PERDIERON SU PRODUCTO PORQUE CAMBIO EL SKU', perdidas,
+           '   El producto sigue en la planilla con otro SKU (mismo ID, o el ID nuevo'
+           + chr(10) + '   que dice la hoja Meta). Hasta renombrarlas, la web lo muestra sin foto:'
+           + chr(10) + '      python herramientas/migrar-fotos-a-sku.py --aplicar')
     bloque('6) FOTOS QUE NO SON 900x900', tam)
     bloque('7) FOTOS QUE CAMBIARON DESPUES DE REVISADAS', cambiadas,
            '   El archivo no es el que se miro. Puede ser una mejora, o la foto'
@@ -409,14 +474,15 @@ def main():
     bloque('9) MISMO COLOR CON DISTINTA FOTO DENTRO DEL GRUPO', color_disidente,
            '   El naranja del iPhone 17 Pro es el mismo valga 1190 o 1400. La fila'
            + chr(10) + '   que se aparta suele ser la que tiene el archivo mal nombrado.')
-    bloque('10) PORTADAS QUE NO SON NINGUNA DE SUS FOTOS DE COLOR', portada_suelta,
-           '   La ficha muestra una imagen por fuera y otra al tocar los colores.'
-           + chr(10) + '   Asi se veia el iPhone 17: un Air en la grilla y el 17 real adentro.'
-           + chr(10) + '   Puede ser legitimo (una foto general del producto), pero hay que mirarlo.')
+    bloque('10) FOTOS CON NOMBRE VIEJO POR ID', viejos,
+           '   Todavia se entienden, pero conviene pasarlas a <SKU>-<color>.jpg:'
+           + chr(10) + '      python herramientas/migrar-fotos-a-sku.py --aplicar')
     bloque('11) PORTADAS QUE SON LA FOTO DE UN COLOR QUE LA FILA NO VENDE', mentirosas,
-           '   El archivo <ID>.jpg es identico a una foto <X>-<color>.jpg y ese color'
-           + chr(10) + '   no esta en la fila de hoy. La fila cambio de color y la portada quedo.'
-           + chr(10) + '   Se arregla copiando la foto del primer color de hoy sobre <ID>.jpg.')
+           '   La portada es identica a una foto de otro color, o dos filas con'
+           + chr(10) + '   colores distintos comparten portada. Alguien copio mal un archivo.')
+    bloque('13) DOS COLORES DEL MISMO PRODUCTO CON LA MISMA FOTO', mismo_color,
+           '   El cliente toca un puntito y ve la foto del otro color. Una de las'
+           + chr(10) + '   dos esta mal nombrada, o falta producir una de las dos imagenes.')
     bloque('12) FOTOS VIEJAS QUE QUEDARON POR MIRAR', pendientes,
            '   Estaban antes de que existiera el registro. No frenan la publicacion,'
            + chr(10) + '   pero son las que todavia podrian tener una imagen equivocada.'
@@ -425,16 +491,17 @@ def main():
 
     with open(SALIDA, 'w', encoding='utf-8') as fh:
         fh.write('\n'.join(L))
-    print('\n'.join(L[:14]))
+    print('\n'.join(L[:21]))          # el resumen entero, hasta el ultimo contador
     print(f'...\nReporte completo en: {SALIDA}')
 
-    # Frenan la publicacion las tres formas que tiene una ficha de mostrar otro
-    # producto: (1) dos modelos con la misma imagen, (7) una foto que cambio
-    # despues de revisada -asi es como volvia la mala cada vez- y (8) una foto
-    # que nadie miro nunca. Lo demas son avisos: una foto que falta se ve como
-    # un recuadro con la marca y no engania a nadie.
-    # Mientras no exista el registro no se frena por (8): serian todas.
-    return 1 if (nuevas or cambiadas or aparecidas or mentirosas) else 0
+    # Frenan la publicacion las cuatro formas que tiene una ficha de mostrar
+    # otro producto: (1) dos modelos con la misma imagen, (7) una foto que
+    # cambio despues de revisada, (8) una foto que nadie miro nunca y (11)
+    # una portada de un color que la fila no vende; y (5b) una foto que la web
+    # dejaria de mostrar porque el SKU cambio, que se arregla con un comando.
+    # Lo demas son avisos.
+    return 1 if (nuevas or cambiadas or aparecidas or mentirosas or perdidas) else 0
+
 
 if __name__ == '__main__':
     sys.exit(main())

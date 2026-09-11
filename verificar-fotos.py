@@ -130,6 +130,38 @@ def main():
     with open(INDICE, 'w', encoding='utf-8') as fh:
         json.dump(indice, fh, ensure_ascii=False, indent=0)
 
+    # Las columnas CODIGO y CODIGO_VAR del contrato landing/1.3. Las escribe
+    # el otro proyecto con el mismo catalogo maestro que tenemos aca, asi que
+    # tienen que dar lo mismo. Cuando dejen de dar lo mismo es que una de las
+    # dos puntas cambio y la otra no se entero, y eso no se ve mirando la
+    # pagina: se ve cuando un cliente abre una ficha con la foto de otro.
+    choques, corridas, fantasma = [], [], []
+    try:
+        maestro_idx = CM.indexar(CM.leer())
+    except CM.CatalogoRoto:
+        maestro_idx = None
+    if maestro_idx:
+        for r in rows:
+            suyo = (r.get('CODIGO') or '').strip().upper()
+            if not suyo:
+                continue
+            if suyo not in maestro_idx['por_codigo']:
+                fantasma.append('%s -> %s' % (r['ID'].strip(), suyo))
+                continue
+            crudo = dict(r, CODIGO='', CODIGO_VAR='')      # sin la columna
+            mio = CM.codigo_de_la_fila(crudo, maestro_idx, pinta, conocidos)[0]
+            if mio and mio != suyo:
+                choques.append('%s: la planilla dice %s y el catalogo dice %s'
+                               % (r['ID'].strip(), suyo, mio))
+            # Y que la celda de variantes tenga tantas posiciones como colores:
+            # una celda corrida le da a un color el codigo del color de al lado.
+            cols = colores(r)
+            celda = (r.get('CODIGO_VAR') or '').strip()
+            partes = [x.strip() for x in celda.split('/')] if celda else []
+            if cols and partes and len(partes) != len(cols):
+                corridas.append('%s: %d color(es) y %d codigo(s) de variante'
+                                % (r['ID'].strip(), len(cols), len(partes)))
+
     # ---- el codigo de cada fila de la planilla ----
     # Es la identidad de verdad: se le asigno al producto una vez y no cambia
     # aunque el proveedor le reescriba el nombre. Mientras la planilla no
@@ -539,13 +571,32 @@ def main():
     print('\n'.join(L[:21]))          # el resumen entero, hasta el ultimo contador
     print(f'...\nReporte completo en: {SALIDA}')
 
+    if choques or fantasma or corridas:
+        print()
+        print('LAS COLUMNAS DE LA PLANILLA NO COINCIDEN CON EL CATALOGO')
+        print('=' * 62)
+        for x in choques:
+            print('   choque: %s' % x)
+        for x in fantasma:
+            print('   codigo que no existe en el catalogo: %s' % x)
+        for x in corridas:
+            print('   celda corrida: %s' % x)
+        print()
+        print('   Las dos puntas salen del mismo catalogo maestro, asi que esto')
+        print('   significa que una de las dos cambio y la otra no se entero.')
+        print('   Hay que resolverlo con el equipo de la planilla ANTES de publicar.')
+
     # Frenan la publicacion las cuatro formas que tiene una ficha de mostrar
     # otro producto: (1) dos modelos con la misma imagen, (7) una foto que
     # cambio despues de revisada, (8) una foto que nadie miro nunca y (11)
     # una portada de un color que la fila no vende; y (5b) una foto que la web
     # dejaria de mostrar porque el SKU cambio, que se arregla con un comando.
+    # Y las columnas del contrato 1.3 en desacuerdo con el catalogo, que es la
+    # misma clase de error una etapa antes: ahi la ficha todavia no esta mal,
+    # pero va a estarlo en la proxima corrida.
     # Lo demas son avisos.
-    return 1 if (nuevas or cambiadas or aparecidas or mentirosas or perdidas) else 0
+    return 1 if (nuevas or cambiadas or aparecidas or mentirosas or perdidas
+                 or choques or fantasma or corridas) else 0
 
 
 if __name__ == '__main__':

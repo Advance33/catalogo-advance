@@ -1,0 +1,156 @@
+EL CRUCE NO DABA IGUAL, Y EL QUE ESTABA MAL ERA EL NUESTRO
+================================================================
+Advance Tecno al equipo de la planilla · 11/09/2026, segunda
+Responde al cruce_para_la_web.json y al reconocer.py
+
+
+0) EN UNA FRASE
+------------------------------------------------------------
+Corrimos el cruce. Sus 8 sin codigo contra nuestros 3: resolviamos 5 de mas,
+y DOS DE ESOS CINCO ESTABAN MAL. Tenian razon en abstenerse. Ya esta
+arreglado y los 8 quedaron resueltos a mano; ahora las dos puntas dan 509 de
+509.
+
+Gracias por insistir con el cruce antes de publicar. Si las columnas salian
+con nuestro criterio, dos fichas de anteojos de 535 dolares mostraban la foto
+del anteojo equivocado y nadie se enteraba.
+
+
+1) QUE HACIAMOS MAL
+------------------------------------------------------------
+Los tres Wayfarer nos resolvian TODOS al mismo codigo:
+
+    GAF-RAY-036  Matte Black · Grey Transitions            -> AT-0418   MAL
+    GAF-RAY-037  Shiny Black · Graphite Green Transitions  -> AT-0418   MAL
+    GAF-RAY-038  Black · Polarized Gradient Graphite       -> AT-0418   bien
+
+Lo correcto era AT-0417, AT-0416 y AT-0418.
+
+La causa es un arreglo nuestro de ayer. Como el SKU lo derivamos del nombre,
+cuando el proveedor escribe igual a dos productos distintos comparten SKU;
+para taparlo le pedimos a la via SKU que ademas cerrara el precio. Con los
+tres Wayfarer a 535 hoy y 535, 595 y 605 en el catalogo, el precio dejo pasar
+exactamente uno. Y "exactamente uno" es lo que nuestro codigo lee como "lo
+identifique".
+
+O sea: el chequeo de precio convirtio una abstencion correcta (tres
+candidatos, no se cual es) en una respuesta equivocada. Es peor que no tener
+el chequeo. Ustedes se abstuvieron y nosotros contestamos cualquier cosa.
+
+
+2) LOS DOS ARREGLOS
+------------------------------------------------------------
+a) Si el nombre ya no distingue, la variante tiene que distinguir.
+
+   Cuando una clave lleva a mas de un codigo, esa clave no identifica a
+   nadie. En ese caso ahora exigimos que alguna variante de la fila de hoy
+   sea una que ese producto ya tiene registrada (contando las Escrituras y
+   las partes de una variante escrita junta). Con eso:
+
+       GAF-RAY-036  "Matte Black · Grey Transitions"       -> no resuelve
+       GAF-RAY-038  "Black · Polarized Gradient Graphite"  -> AT-0418
+
+   La segunda resuelve porque ese texto ya estaba anotado como escritura de
+   AT-0418-01. La primera no, y queda esperando a una persona, que es lo
+   correcto.
+
+   Es la misma idea que ya usabamos con la referencia de fabrica: cuando el
+   nombre no alcanza, tiene que alcanzar otra cosa, y si no alcanza nada, no
+   se resuelve.
+
+b) El mapa que publicamos para la web ya no lleva claves ambiguas.
+
+   Este era peor y no lo habiamos visto. El mapa guarda clave -> codigo, una
+   sola por clave, asi que con siete anteojos compartiendo dos SKU la ultima
+   pisaba a las demas y la web le daba a los siete el codigo del ultimo
+   hermano. Ahora una clave que lleva a mas de un codigo simplemente NO ENTRA
+   al mapa: esos productos salen sin foto hasta que alguien confirme el
+   vinculo.
+
+   Sin foto se arregla al dia siguiente. Con la foto de otro producto no se
+   entera nadie.
+
+
+3) EL BUG DE LA RAM: A NOSOTROS NO NOS PEGABA, Y LO MEDIMOS
+------------------------------------------------------------
+Tenian razon en el diagnostico, pero de nuestro lado ya estaba cubierto por
+otro camino. El 11/09 a la manana nos paso lo inverso: el proveedor saco el
+PRIMER GB ("16GB/256GB" paso a "16/256GB") y 30 filas dejaron de reconocerse.
+Lo arreglamos normalizando al reves que ustedes: todo giga se cuenta por su
+numero, asi que "16gb" y "16" son la misma cosa. Los TB no se tocan, que 1TB
+y 1GB son muy distintos.
+
+    ustedes   "8/256GB"  ->  8gb 256gb        (le ponen la unidad al primero)
+    nosotros  "8GB/256GB" ->  8 256           (se la sacan a los dos)
+
+Escriben la firma distinto, asi que NO se pueden comparar las firmas entre
+las dos puntas. Lo que importa es que den el mismo veredicto, y eso si lo
+medimos: tomamos los 638 nombres distintos que hay hoy entre la planilla y el
+catalogo y los agrupamos con las dos versiones.
+
+    grupos con la nuestra: 412
+    grupos con la de ustedes: 412
+    agrupaciones distintas: 0
+
+Las dos parten los 638 nombres exactamente igual. No hace falta que ninguno
+cambie al otro; si en algun momento uno de los dos toca esa funcion,
+volvemos a correr esta comparacion.
+
+
+4) LOS 8 SIN CODIGO: RESUELTOS, Y ASI QUEDARON
+------------------------------------------------------------
+Los siete anteojos se identifican por el color, que es exactamente lo que
+quedo cuando el proveedor saco la referencia de fabrica. Los confirmamos a
+mano uno por uno; van con el precio para que los puedan verificar:
+
+    ID de hoy     color                                     codigo   precio
+    GAF-RAY-036   Matte Black · Grey Transitions            AT-0417  535 (era 605)
+    GAF-RAY-037   Shiny Black · Graphite Green Transitions  AT-0416  535 (era 595)
+    GAF-RAY-038   Black · Polarized Gradient Graphite       AT-0418  535
+    GAF-RAY-040   Shiny Black · Polarized Gradient Graphite AT-0414  525
+    GAF-RAY-041   Shiny Black · Transitions Green           AT-0412  595
+    GAF-RAY-042   Shiny Black · Transitions Amethyst        AT-0413  595
+    TAB-SAM-046   Galaxy Tab S11 Ultra 256GB · Incluye      AT-0496  1230
+                  Solo S-Pen (Black)
+
+Los dos primeros bajaron de precio: 605 -> 535 y 595 -> 535. Es una baja, no
+un producto distinto; el color coincide letra por letra con el del catalogo.
+
+El octavo de su lista, GAF-RAY-010, ya resolvia de nuestro lado (AT-0415) y
+sigue resolviendo.
+
+Los siete quedaron anotados en Otros_IDs, Otros_SKUs y Nombres_vistos, asi
+que no hay que volver a confirmarlos aunque el proveedor renumere otra vez.
+El CSV actualizado va adjunto: son las mismas 659 filas y los mismos 507
+productos, con esas anotaciones nuevas.
+
+
+5) POR QUE USTEDES NO RESOLVIAN GAF-RAY-010 NI TAB-SAM-046
+------------------------------------------------------------
+Los dos resuelven de nuestro lado por el ID, que no cambio, y pasan porque el
+nombre de hoy coincide con uno de los Nombres_vistos que ya estaban en el
+CSV. Es una sospecha, no una afirmacion: el reconocer.py que mandaron compara
+contra UN nombre (el campo Descripcion del candidato), no contra la lista.
+
+Si su es_el_mismo del catalogo hace lo mismo, las cuatro columnas nuevas
+estan en COLUMNAS pero no se estan leyendo al comparar, y entonces confirmar
+a mano sigue valiendo un dia en vez de para siempre, que era el punto. Vale
+la pena que lo miren: son los dos unicos casos en los que sus 8 y nuestros
+resueltos difieren por algo que no es el bug nuestro.
+
+
+6) DONDE QUEDAMOS
+------------------------------------------------------------
+    nuestro cruce:  509 filas · 509 con codigo · 0 sin codigo
+    la web:         509 filas · 509 con codigo · 0 sin codigo
+    las 13 tandas de prueba pasan contra la planilla de hoy
+
+Corran el cruce otra vez con el CSV nuevo. Si les da 509 y 0, estamos iguales
+y pueden publicar las columnas cuando quieran.
+
+Una sola cosa antes: la planilla se movio tres veces mientras haciamos esto
+(509 -> 514 -> 509) y los IDs de los Ray-Ban se renumeraron de 029/030/031 a
+036/037/038 en el dia. Mientras eso siga pasando, el cruce de la manana no
+vale a la tarde. No es un bloqueo para publicar -- el codigo propio esta
+hecho justamente para aguantar eso -- pero conviene que la corrida que
+publique las columnas sea la misma que hizo el cruce, y no una anterior.

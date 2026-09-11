@@ -1,0 +1,205 @@
+EL CSV, LA RESPUESTA DE CODIGO_VAR Y CUATRO COSAS DE SU IMPLEMENTACION
+================================================================
+Advance Tecno al equipo de la planilla · 11/09/2026
+Responde a su mensaje del 11/09 sobre el contrato landing/1.2.1
+
+
+0) LO PRIMERO: VA EL CSV, Y CRECIO HOY
+------------------------------------------------------------
+Adjunto: herramientas/catalogo-maestro.csv
+
+No son 639 filas / AT-0001..AT-0499 como decia el documento del 10/09. Hoy
+quedo en:
+
+    659 filas   ·   507 productos   ·   AT-0001 .. AT-0508
+    proximo codigo libre: AT-0509
+
+Perdon por el numero movido: el 11/09 el proveedor cambio bastante y el
+catalogo crecio en el mismo dia en que se los mandabamos. Lo que siembren
+tiene que ser ESTE archivo, no el conteo del documento anterior.
+
+Van a notar que hay 507 productos pero el ultimo es AT-0508: falta el
+AT-0500. No es un error del archivo. Ese numero se entrego en una corrida y
+el producto no quedo; como los numeros NO SE REUSAN, el hueco se queda ahi
+para siempre. Un maestro sano tiene huecos.
+
+Por lo mismo, tomen el contador del archivo aparte y no del maximo de las
+filas: guardamos el ultimo numero entregado en
+herramientas/catalogo-ultimo-codigo.txt (hoy 508). Si el proximo se deduce
+del maximo de las filas, el dia que se caiga la ultima el numero se reusa, y
+un numero reusado son dos productos distintos peleandose la misma foto.
+
+
+1) EL CSV TIENE CUATRO COLUMNAS QUE SU COLUMNAS NO LISTA
+------------------------------------------------------------
+Esto es BLOQUEANTE y es la primera linea que hay que tocar, porque su
+guardar() usa:
+
+    csv.DictWriter(f, fieldnames=COLUMNAS, extrasaction="ignore")
+
+Con "ignore", la primera vez que reescriban el maestro esas cuatro columnas
+DESAPARECEN, en silencio y sin error. Hoy tienen dato en:
+
+    Otros_IDs           32 filas
+    Otros_SKUs          37 filas
+    Nombres_vistos      35 filas
+    Otras_Categorias     4 filas
+
+Que guardan y por que existen. Cuando una persona confirma a mano que una
+fila que no se reconocia es un producto que ya esta, ahi queda anotado el
+ID, el SKU, el nombre y la categoria con que vino ESE dia. Es lo que hace
+que confirmar valga para siempre en vez de valer un dia: sin eso, el mismo
+producto vuelve a caer en la lista de dudosos manana, y pasado, y el dia que
+nadie lo mire estrena un codigo nuevo y sus fotos quedan partidas en dos.
+
+Ayer eran teoricas. Hoy se llenaron de golpe porque el proveedor:
+
+  · movio cuatro extenders y teleconverters de "Lente" a "Accesorio Camara",
+    con el nombre y el precio intactos;
+  · le agrego "GEN2" a los siete Ray-Ban Meta;
+  · reescribio otra media docena de nombres ("Sonybc-QZ1" por "Sony Bc-QZ1",
+    "Kindle Touch (2024)" por "Kindle Gen 11", el 13.1" que se cayo del
+    Galaxy Tab S10 FE Plus).
+
+Son 26 productos que ya existian y que sin esas columnas habrian estrenado
+codigo. El pedido concreto: sumen las cuatro a COLUMNAS en el orden del
+archivo, y no las pisen aunque su codigo todavia no las use.
+
+
+2) EL BUG QUE NOS PREOCUPA: buscar_por_alta() NO VERIFICA EL PRODUCTO
+------------------------------------------------------------
+Su comentario dice:
+
+    "Es una BUSQUEDA, no un calculo: ante la duda no elige. Nunca puede
+     darle a una fila el codigo de otro producto."
+
+La primera mitad es cierta. La segunda no, y es justo el error que el codigo
+propio existe para que no vuelva a pasar.
+
+La duda que contemplan es "dos codigos para la misma clave". La que rompe es
+otra: UNA sola clave que apunta a otro producto. Pasa cada vez que la
+planilla reutiliza un ID, que es exactamente lo que hace. En su propio
+manifiesto de hoy:
+
+    ambiguos: { "CEL-APP-070": ["CEL-APP-068", "CEL-APP-069"], ... }
+
+Lo corrimos con los datos de hoy. Si manana la planilla le da CEL-APP-068 a
+otra cosa:
+
+    fila de hoy : MacBook Air M5 13.6" 24/1TB (Sky Blue)
+    su ID ahora : CEL-APP-068
+    en el maestro, CEL-APP-068 es AT-0072 = iPhone 17 Pro 256GB
+
+    buscar_por_alta()      -> AT-0072   (la foto del iPhone en el MacBook)
+    nuestro codigo_de_la_fila() -> AT-0429  (el MacBook, por su SKU)
+
+No es que uno falle y el otro se abstenga: el nuestro encuentra el correcto,
+porque antes de aceptar un vinculo verifica que sea el mismo producto.
+
+El arreglo son unas quince lineas. Antes de devolver el codigo, comparen:
+
+    a. misma marca;
+    b. misma categoria, contra Categoria Y Otras_Categorias (ver punto 1:
+       el proveedor tambien mueve la categoria);
+    c. misma FIRMA DURA del nombre, contra Producto Y Nombres_vistos.
+
+La firma dura es lo unico que no puede aflojarse: las capacidades, medidas,
+codigos de modelo y palabras de gama del nombre, CONTADAS con su
+multiplicidad, no juntadas en un conjunto. Sin contar, "MacBook Pro M5 14""
+y "MacBook Pro M5 Pro 14"" dan igual, y son 400 dolares de diferencia. Sin
+los codigos de modelo, un Galaxy A37 pasa por A36.
+
+Esta entera y comentada en herramientas/catalogo_maestro.py (firma_dura y
+es_el_mismo), con sus 20 casos en herramientas/probar-comparador.py. Copienla
+tal cual: si las dos puntas la calculan distinto, los codigos dejan de
+resolver del lado de la web y el producto sale sin foto.
+
+Y una regla que no se negocia: ante la duda, NO se resuelve. La celda queda
+vacia y el ID entra en sin_codigo. Sin foto es barato; con la foto de otro
+producto es el error que ya costo tres redisenos.
+
+Falta ademas seguir Fusionado_en antes de devolver el codigo. Hoy no hay
+ninguna fila fusionada, asi que no corre apuro, pero el dia que se descubra
+que dos codigos son el mismo producto el que quede marcado devuelve al
+muerto.
+
+
+3) CODIGO_VAR POR FILA: SI, SU PROPUESTA, CON UN CAMBIO DE UNA LINEA
+------------------------------------------------------------
+Un codigo por color, separados por "/", en el mismo orden que Color. Nos
+sirve tal cual: ya hacemos split("/") sobre Color y el "·" de dos tonos (y
+el de armazon · cristal de 1.2.1) queda adentro de un solo color, que es un
+solo codigo. Cerrado asi.
+
+El cambio: NO FILTREN LAS POSICIONES VACIAS. Su resolver() hace
+
+    codigos_var.append("/".join(v for v in vars_ if v))
+
+y ese "if v" desalinea la celda. Con datos de hoy, CEL-APP-078:
+
+    Color      = Orange/Silver/Blue
+    CODIGO_VAR = AT-0075-03/AT-0075-01/AT-0075-02      <- bien
+
+Si el del medio no resolviera, sale:
+
+    Color      = Orange/Silver/Blue
+    CODIGO_VAR = AT-0075-03/AT-0075-02
+
+Tres colores contra dos codigos: alineando por posicion, Silver se lleva el
+codigo del Blue y la ficha del Silver muestra la foto azul. Manteniendo el
+hueco no hay forma de que pase:
+
+    CODIGO_VAR = AT-0075-03//AT-0075-02
+
+Es sacar el "if v" del join. Nosotros leemos la posicion vacia como "esa
+variante todavia no tiene codigo" y esa fila sale sin foto, que es el
+resultado correcto.
+
+
+4) LO DE LAS VARIANTES QUE ANTICIPARON YA ESTA RESUELTO
+------------------------------------------------------------
+Tenian razon y el caso es real: si el maestro dice "Black Alpine Loop M" y
+la celda dice "Black · Black Alpine Loop M", no matchea.
+
+Lo arreglamos hoy, porque nos paso con los Ray-Ban: el proveedor cambio el
+separador de "/" a "·", y los siete anteojos pasaron de dos variantes
+sueltas ("Matte Black" y "Grey Transitions") a una sola escrita junta
+("Matte Black · Grey Transitions"). Cada uno pedia estrenar una tercera
+variante al lado de las dos que ya tenia, y el numero de variante es el
+nombre del archivo: la foto vieja se quedaba sin nadie que la pida.
+
+La regla que agregamos: si el texto, partido por "/" y "·", da partes que YA
+son variantes conocidas de ese producto, no es una variante nueva sino otra
+forma de escribir la primera de ellas, y va a Escrituras. Esta en
+catalogo_maestro.py como variante_por_partes(). Con eso, siete de los ocho
+Ray-Ban de su ids_color_cambiado de hoy se resolvieron solos y no estrenaron
+nada. El octavo, GAF-RAY-032, si estreno codigo (AT-0507) pero por otro
+motivo: el Headliner no estaba en el catalogo, es un modelo nuevo de verdad.
+
+Igual les tomamos el ofrecimiento: crucen el CSV contra la planilla del dia
+y mandennos la lista de los que no encuentran variante ANTES de publicar.
+Nosotros la corremos del otro lado y comparamos: si las dos listas no dan
+igual, es que la comparacion de variantes se separo entre las dos puntas y
+conviene verlo antes y no despues.
+
+
+5) DONDE QUEDAMOS NOSOTROS
+------------------------------------------------------------
+Con el maestro de hoy, las 509 filas de la planilla resuelven su codigo por
+el puente (506 por ID, 3 por SKU). La web ya lo lee: va en fotos/indice.json
+con todas las claves y todas las firmas de cada producto, y pasan las 13
+tandas de pruebas contra la planilla real.
+
+O sea que la columna no nos urge: publiquenla cuando el maestro este
+sembrado y los puntos 1, 2 y 3 esten cerrados. Preferimos esperar a que
+salga bien que tenerla la semana que viene.
+
+Del punto 2 en particular: si lo publican sin la verificacion de producto,
+el primer ID reutilizado nos pone la foto equivocada en una ficha, y ese es
+el unico error que no queremos volver a cometer. Mientras tanto seguimos
+resolviendo por el puente, que ya lo verifica.
+
+Lo demas de su mensaje, tomado: ids_sku_cambiado y desde_ultima_verificacion
+con las cadenas compuestas es exactamente lo que haciamos falta, y los 33 IDs
+sin destino efectivamente dejan de ser un problema con el codigo propio.
+Gracias por las 11 fotos.

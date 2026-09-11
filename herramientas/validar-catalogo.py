@@ -133,6 +133,16 @@ def main():
     else:
         ahora = {f['CODIGO_VAR'] for f in filas}
         idos = sorted(antes - ahora)
+        # Un producto que se sembro sin colores y estrena el primero pasa de
+        # "AT-0082" a "AT-0082-01": no desaparecio, se numero. Eso es un aviso
+        # y no un error, porque hay una foto que renombrar y conviene decirlo,
+        # pero nada quedo huerfano.
+        numerados = sorted(x for x in idos if x + '-01' in ahora)
+        idos = [x for x in idos if x not in set(numerados)]
+        if numerados:
+            avisos.append('%d producto(s) estrenaron su primera variante: %s. '
+                          'Si tenian foto <CODIGO>.jpg hay que renombrarla a <CODIGO>-01.jpg'
+                          % (len(numerados), ', '.join(numerados[:8])))
         if idos:
             graves.append('%d codigo(s) que estaban en el commit anterior YA NO ESTAN: %s'
                           % (len(idos), ', '.join(idos[:8])))

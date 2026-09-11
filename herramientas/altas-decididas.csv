@@ -1,0 +1,42 @@
+ID,Decision,Fecha,Nota
+ACC-APP-071,AT-0008,2026-09-11,el proveedor escribe "Pro 12.9 (M1/M2)" donde antes decia "iPad Pro M2 12.9"; mismo precio 410
+ACC-CAN-015,AT-0229,2026-09-11,nombre identico; el proveedor lo paso de Lente a Accesorio Camara y le cambio el ID
+ACC-CAN-016,AT-0239,2026-09-11,nombre identico; el proveedor lo paso de Lente a Accesorio Camara y le cambio el ID
+ACC-NIK-010,AT-0299,2026-09-11,nombre identico; el proveedor lo paso de Lente a Accesorio Camara y le cambio el ID
+ACC-SON-020,AT-0366,2026-09-11,nombre identico; el proveedor lo paso de Lente a Accesorio Camara y le cambio el ID
+ACC-SON-008,AT-0033,2026-09-11,"""Sonybc-QZ1"" es ""Sony Bc-QZ1"" sin el espacio; el precio subio de 154 a 190"
+CEL-APP-070,AT-0072,2026-09-11,segunda fila del mismo iPhone 17 Pro 256GB: la otra (CEL-APP-068) trae Orange y esta Silver/Blue
+CEL-SAM-025,AT-0082,2026-09-11,"el nombre del alta traia pegada la nota de mayorista ""(x5 U$235)"", ahora trae los colores"
+ERD-AMZ-007,AT-0212,2026-09-11,"el Kindle base volvio como ""Kindle Touch (2024)"" con ID nuevo; ERD-AMZ-004 ya no esta"
+GAF-RAY-010,AT-0415,2026-09-11,"Skyler Shinny Chalky Grey/Transitions Sapphire; el proveedor cambio la referencia de fabrica por ""GEN2"""
+GAF-RAY-029,AT-0417,2026-09-11,"Wayfarer Matte Black/Grey Transitions, era la referencia 601S1Z50"
+GAF-RAY-030,AT-0416,2026-09-11,"Wayfarer Shiny Black/Graphite Green, era la referencia 601/1M50"
+GAF-RAY-031,AT-0418,2026-09-11,"Wayfarer Black/Polarized Gradient, era la referencia 601ST350"
+GAF-RAY-033,AT-0414,2026-09-11,"Skyler Shiny Black/Polarized Gradient, era la referencia 601/T352; mismo precio 525"
+GAF-RAY-034,AT-0412,2026-09-11,"Skyler Shiny Black/Transitions Green, era la referencia 601/1M52; mismo precio 595"
+GAF-RAY-035,AT-0413,2026-09-11,"Skyler Shiny Black/Transitions Amethyst, era la referencia 601/CH52; mismo precio 595"
+MON-APP-006,AT-0419,2026-09-11,el mismo nombre dado vuelta; mismo precio 2920
+MON-DEL-006,AT-0422,2026-09-11,el proveedor saco la resolucion 1920x1080 del nombre; mismo precio 540
+MON-DEL-011,AT-0420,2026-09-11,el proveedor saco la resolucion 1920x1080 del nombre; mismo precio 380
+MON-DEL-012,AT-0421,2026-09-11,el proveedor saco la resolucion 1920x1080 del nombre; mismo precio 450
+MON-SAM-006,AT-0426,2026-09-11,"ahora dice el 24"" dos veces y saco el FHD; mismo precio 310"
+SW-APP-016,AT-0455,2026-09-11,"Watch Ultra 3 49mm, correa Blue Trail Loop; AT-0455 ya junta Alpine Loop y Ocean Band al mismo precio"
+SW-APP-017,AT-0455,2026-09-11,"Watch Ultra 3 49mm, correa Anchor Blue Ocean; AT-0455 ya trae la Black Ocean Band a 800"
+TAB-APP-058,AT-0471,2026-09-11,"el proveedor agrego ""7a Gen""; mismo precio 930"
+TAB-APP-064,AT-0467,2026-09-11,"segunda fila del mismo iPad 11 A16 256GB: la otra trae Blue y esta Silver"
+TAB-SAM-022,AT-0490,2026-09-11,"el proveedor saco el 13.1"" del nombre; mismo precio 850"
+ACC-SON-019,NUEVO,2026-09-11,cargador a 110; la bateria FZ-100 (AT-0035) se sigue vendiendo aparte a 130
+CEL-APP-017,NUEVO,2026-09-11,iPhone 17 Pro Max 512GB; el catalogo tiene el de 256GB y el de 1TB pero no este
+CEL-SAM-089,NUEVO,2026-09-11,no hay ningun Galaxy A16 en el catalogo
+CEL-SAM-091,NUEVO,2026-09-11,"A27 8/256GB a 380; el A27 del catalogo (AT-0084) es el 6/128GB a 330"
+CEL-SAM-092,NUEVO,2026-09-11,no hay ningun Galaxy A36 en el catalogo
+GAF-RAY-032,NUEVO,2026-09-11,no hay ningun Headliner en el catalogo; los Wayfarer y Skyler si estaban
+NB-APP-101,NUEVO,2026-09-11,"MacBook Air M5 24/512GB; el catalogo tiene el 16GB/1TB y el 24GB/1TB, no este"
+TAB-APP-020,NUEVO,2026-09-11,iPad Pro M5 13\" 1TB; el catalogo tiene el de 256GB y el de 512GB pero no este
+GAF-RAY-036,AT-0417,2026-09-11,"el proveedor saco la referencia 601S1Z50 del nombre y renumero el ID; el color Matte Black · Grey Transitions lo identifica. Bajo de 605 a 535"
+GAF-RAY-037,AT-0416,2026-09-11,"saco la referencia 601/1M50 y renumero el ID; el color Shiny Black · Graphite Green Transitions lo identifica. Bajo de 595 a 535"
+GAF-RAY-038,AT-0418,2026-09-11,"saco la referencia 601ST350 y renumero el ID; mismo color y mismo precio 535"
+GAF-RAY-040,AT-0414,2026-09-11,"saco la referencia 601/T352 y renumero el ID; mismo color y mismo precio 525"
+GAF-RAY-041,AT-0412,2026-09-11,"saco la referencia 601/1M52 y renumero el ID; mismo color y mismo precio 595"
+GAF-RAY-042,AT-0413,2026-09-11,"saco la referencia 601/CH52 y renumero el ID; mismo color y mismo precio 595"
+TAB-SAM-046,AT-0496,2026-09-11,"cambio ""+Pencil"" por ""· Incluye Solo S-Pen""; mismo ID y mismo precio 1230"

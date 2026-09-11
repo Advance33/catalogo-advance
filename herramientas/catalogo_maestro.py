@@ -47,24 +47,49 @@ Cada fila guarda, además del texto de la variante, todas las formas en que
 vimos que el proveedor la escribe ("Sky Blue", "Skyblue", "SKY-BLUE"), así
 una escritura nueva se agrega sin tocar nada más y sin renombrar nada.
 
-Para que la planilla pueda poner el código en cada fila, el equipo del sheet
-mantiene la misma tabla en una hoja "Catalogo" del Sheet y escribe dos
-columnas nuevas en Landing: CODIGO y CODIGO_VAR. Las filas nuevas que
-todavía no tienen código salen listadas en el manifiesto y alguien se las
-asigna.
+El equipo del sheet mantiene la misma tabla en una hoja "Catalogo" del Sheet
+y desde el contrato landing/1.3 (11/09/2026) escribe dos columnas en Landing:
+CODIGO y CODIGO_VAR. Las 509 filas vienen con código; las que no lo tuvieran
+van con las celdas vacías y salen en sin_codigo del manifiesto.
 
-Mientras el sheet no tenga esas columnas, este módulo resuelve el código de
-una fila por su cuenta, usando el vínculo guardado con el ID y con el SKU
-del día del alta. Es un puente, no la solución: la solución es que el código
-venga en la fila.
+CODIGO_VAR trae un código por color, en el MISMO ORDEN que la columna Color,
+y las posiciones vacías se mantienen: si una variante no tiene código, esa
+posición va vacía en vez de desaparecer. Una celda corrida le daría a un
+color la foto del color de al lado.
 
-ESTADO: BORRADOR, TODAVIA NO ESTA EN USO
-----------------------------------------
-La numeración se generó el 10/09/2026 desde la planilla de ese día y es una
-PROPUESTA: nadie la lee todavía, ni la web ni los chequeos. Se puede
-regenerar entera mientras siga así. Deja de poder regenerarse el día que se
-acuerde con el equipo de la planilla (ver PROPUESTA-CODIGO-PROPIO-AL-SHEET.txt)
-y se renombren las fotos: a partir de ahí los códigos son para siempre.
+El puente sigue acá abajo y sigue sirviendo: resuelve el código de una fila
+por el vínculo guardado con el ID y con el SKU del alta. Se usa cuando la
+columna no viene, y sobre todo se usa para VERIFICAR: verificar-fotos.py
+compara lo que manda la planilla contra lo que resuelve el puente y frena la
+publicación si no coinciden. Las dos puntas salen del mismo catálogo maestro,
+así que tienen que dar lo mismo; el día que no den lo mismo es que una cambió
+y la otra no se enteró.
+
+ESTADO: EN USO. LOS CODIGOS YA NO SE PUEDEN REGENERAR
+-----------------------------------------------------
+La numeración se generó el 10/09/2026 desde la planilla de ese día. Desde el
+11/09 la lee la web (va en fotos/indice.json) y las fotos se llaman así, de
+manera que estos códigos son para siempre: regenerarlos desde cero dejaría
+todas las fotos apuntando a productos equivocados.
+
+El acuerdo con el equipo de la planilla está cerrado: el contrato landing/1.3
+trae CODIGO y CODIGO_VAR en cada fila, y el 11/09 las 509 filas resuelven por
+la columna, no por el puente.
+
+CUANDO EL PROVEEDOR CAMBIA COMO ESCRIBE ALGO
+--------------------------------------------
+Pasa seguido, y el puente no puede adivinar. El 11/09 movió cuatro productos
+de categoría, le agregó "GEN2" a siete anteojos y reescribió media docena de
+nombres. Para eso está el trabajo diario:
+
+    python herramientas/altas-catalogo.py     lista lo que no reconoce
+    (una persona escribe la decisión en herramientas/altas-decididas.csv)
+    python herramientas/confirmar-altas.py --aplicar
+    python herramientas/altas-catalogo.py --aplicar
+
+Confirmar no es sólo destrabar el día: el ID, el SKU, el nombre y la
+categoría con que vino quedan anotados en el producto, así que el mismo
+cambio no vuelve a preguntarse nunca más.
 """
 import csv
 import io
@@ -82,8 +107,18 @@ RE_CODIGO_VAR = re.compile(r'^(AT-\d{4})(?:-(\d{2}))?$')
 EXT = '.jpg'
 
 COLUMNAS = ['CODIGO', 'CODIGO_VAR', 'Categoria', 'Marca', 'Producto',
-            'Variante', 'Escrituras', 'NumVar', 'ID_alta', 'SKU_alta',
-            'Precio_alta', 'Alta', 'Baja', 'Fusionado_en', 'Nota']
+            'Variante', 'Escrituras', 'NumVar', 'ID_alta', 'Otros_IDs',
+            'SKU_alta', 'Otros_SKUs', 'Nombres_vistos', 'Otras_Categorias',
+            'Precio_alta',
+            'Alta', 'Baja', 'Fusionado_en', 'Nota']
+
+# Otros_IDs, Otros_SKUs, Nombres_vistos y Otras_Categorias empiezan vacias y
+# se llenan solas: cada vez que una persona confirma que una fila rara es un
+# producto que ya esta, el ID, el SKU, el nombre y la categoria con que vino
+# hoy quedan anotados ahi. Sin eso, confirmar no serviria de nada: el mismo
+# producto vuelve a caer en la lista de sin resolver manana, y pasado, y el
+# dia que nadie mire se le da un codigo nuevo y sus fotos se parten en dos.
+APRENDIDAS = {'ID_alta': 'Otros_IDs', 'SKU_alta': 'Otros_SKUs'}
 
 
 def norm(s):
@@ -123,6 +158,26 @@ def escribir(filas, ruta=MAESTRO):
         w.writeheader()
         for f in sorted(filas, key=lambda x: x['CODIGO_VAR']):
             w.writerow({c: (f.get(c) or '') for c in COLUMNAS})
+    if ruta == MAESTRO:
+        sincronizar_contador(filas)
+
+
+def sincronizar_contador(filas):
+    """Deja el contador en el número más alto que se haya entregado.
+
+    Desde el contrato landing/1.3 los códigos los reparte el equipo de la
+    planilla, así que de este lado el contador dejó de ser una reserva y pasó
+    a ser un espejo: si no se actualizara, el día que el sheet entregue el
+    AT-0509 el chequeo diría que el contador retrocedió y frenaría la
+    publicación por algo que está bien.
+
+    Nunca baja. Un número que se entregó queda entregado aunque su producto
+    se borre del archivo, porque su foto puede seguir en la carpeta.
+    """
+    alto = max((int(f['CODIGO'][3:]) for f in filas
+                if RE_CODIGO.match((f.get('CODIGO') or '').strip())), default=0)
+    if alto > ultimo_asignado():
+        guardar_contador(alto)
 
 
 def escrituras_de(fila):
@@ -132,16 +187,82 @@ def escrituras_de(fila):
     return {x for x in salida if x}
 
 
+def lista(fila, campo):
+    """Un campo que guarda varios valores, separados por barra vertical."""
+    return [x.strip() for x in (fila.get(campo) or '').split('|') if x.strip()]
+
+
+def todos(fila, campo):
+    """El valor del alta mas todos los que se aprendieron despues."""
+    otros = APRENDIDAS.get(campo)
+    uno = (fila.get(campo) or '').strip()
+    salida = [uno] if uno else []
+    for x in (lista(fila, otros) if otros else []):
+        if x not in salida:
+            salida.append(x)
+    return salida
+
+
+def aprender(fila, campo, valor):
+    """Anota una clave nueva para este producto. Devuelve si agrego algo."""
+    valor = (valor or '').strip()
+    if not valor or valor in todos(fila, campo):
+        return False
+    fila[APRENDIDAS[campo]] = '|'.join(lista(fila, APRENDIDAS[campo]) + [valor])
+    return True
+
+
+def nombres_de(fila):
+    """Todos los nombres con los que se vio el producto, el del alta primero."""
+    salida = [(fila.get('Producto') or '').strip()]
+    for x in lista(fila, 'Nombres_vistos'):
+        if x not in salida:
+            salida.append(x)
+    return [x for x in salida if x]
+
+
+def aprender_nombre(fila, nombre):
+    """Anota un nombre nuevo del producto. Devuelve si agrego algo."""
+    nombre = (nombre or '').strip()
+    if not nombre or nombre in nombres_de(fila):
+        return False
+    fila['Nombres_vistos'] = '|'.join(lista(fila, 'Nombres_vistos') + [nombre])
+    return True
+
+
+def categorias_de(fila):
+    """Todas las categorias en las que se vio el producto."""
+    salida = [(fila.get('Categoria') or '').strip()]
+    for x in lista(fila, 'Otras_Categorias'):
+        if x not in salida:
+            salida.append(x)
+    return [x for x in salida if x]
+
+
+def aprender_categoria(fila, categoria):
+    """Anota una categoria nueva. Devuelve si agrego algo."""
+    categoria = (categoria or '').strip()
+    if not categoria or norm(categoria) in {norm(x) for x in categorias_de(fila)}:
+        return False
+    fila['Otras_Categorias'] = '|'.join(lista(fila, 'Otras_Categorias') + [categoria])
+    return True
+
+
 def indexar(filas):
-    """Los índices que hacen falta para encontrar el código de una fila."""
+    """Los índices que hacen falta para encontrar el código de una fila.
+
+    Se busca por TODOS los IDs y SKUs con los que se vio el producto, no solo
+    por el del alta. La planilla renumera y el proveedor reescribe; cada clave
+    que alguien confirma a mano queda anotada y sirve para siempre.
+    """
     idx = {'por_var': {}, 'por_id': {}, 'por_sku': {}, 'por_codigo': {}}
     for f in filas:
         idx['por_var'][f['CODIGO_VAR']] = f
         idx['por_codigo'].setdefault(f['CODIGO'], []).append(f)
-        if f.get('ID_alta'):
-            idx['por_id'].setdefault(f['ID_alta'], []).append(f)
-        if f.get('SKU_alta'):
-            idx['por_sku'].setdefault(f['SKU_alta'], []).append(f)
+        for i in todos(f, 'ID_alta'):
+            idx['por_id'].setdefault(i, []).append(f)
+        for s in todos(f, 'SKU_alta'):
+            idx['por_sku'].setdefault(s, []).append(f)
     return idx
 
 
@@ -346,9 +467,27 @@ def es_el_mismo(fila, entrada, pinta=None, conocidos=None):
     """
     if norm(fila.get('Marca')) != norm(entrada.get('Marca')):
         return False
-    if norm(fila.get('Categoría') or fila.get('Categoria')) != norm(entrada.get('Categoria')):
+    # La categoría también la escribe el proveedor, y también la cambia: el
+    # 11/09 movió los cuatro extenders de "Lente" a "Accesorio Cámara" con el
+    # nombre y el precio intactos. Como requisito duro, ese cambio bastaba
+    # para desconocer el producto, que es el mismo error que usar el nombre
+    # como identidad. Así que se compara contra todas las categorías en las
+    # que se lo vio, igual que con los nombres.
+    if norm(fila.get('Categoría') or fila.get('Categoria')) not in {
+            norm(x) for x in categorias_de(entrada)}:
         return False
-    a, b = fila.get('Descripción completa'), entrada.get('Producto')
+    a = fila.get('Descripción completa')
+    # Contra cada nombre que tuvo el producto, entero: el del alta y todos
+    # los que se le anotaron después. El 11/09 el proveedor le agregó "GEN2"
+    # a los Ray-Ban y los siete dejaron de reconocerse. Que alcance con
+    # pasar la comparación contra CUALQUIERA de sus nombres es lo que hace
+    # que confirmarlo una vez a mano valga para siempre.
+    return any(_mismo_nombre(fila, entrada, a, b, pinta, conocidos)
+               for b in nombres_de(entrada))
+
+
+def _mismo_nombre(fila, entrada, a, b, pinta=None, conocidos=None):
+    """Un nombre de hoy contra un nombre conocido del producto."""
     # La firma dura manda: si cambió una capacidad, una medida o una palabra
     # de gama, es otro producto por más que el nombre se parezca.
     if firma_dura(a) != firma_dura(b):
@@ -426,10 +565,31 @@ def codigo_de_la_fila(fila, idx, pinta=None, conocidos=None):
         if not cands:
             continue
         hubo_candidatos = True
+        # El SKU lo derivamos NOSOTROS del nombre, asi que dos productos
+        # distintos que el proveedor escribe igual comparten SKU. Si esta
+        # clave lleva a mas de un codigo, no identifica a nadie: lo unico
+        # que queda para distinguirlos es la variante.
+        cuantos = {seguir_fusion(c['CODIGO'], idx) for c in cands}
         codigos = {seguir_fusion(c['CODIGO'], idx)
-                   for c in cands if es_el_mismo(fila, c, pinta, conocidos)}
+                   for c in cands if es_el_mismo(fila, c, pinta, conocidos)
+                   # El 11/09 los Ray-Ban Meta pasaron a llamarse todos
+                   # "Rayban Meta GEN2 Wayfarer": el proveedor saco la
+                   # referencia de fabrica, que era lo unico que los
+                   # separaba. Por eso esta via, y solo esta, pide ademas
+                   # que el precio cierre. El ID no lo necesita: ese lo pone
+                   # el proveedor y no lo inventamos.
+                   and (donde != 'sku' or mismo_precio(
+                       fila.get('Precio USD'), c.get('Precio_alta')) is not False)}
         if len(codigos) == 1:
-            return codigos.pop(), donde
+            unico = next(iter(codigos))
+            # Y si el nombre ya no distingue, la variante tiene que hacerlo.
+            # Sin esto, de los tres Wayfarer a 535, 595 y 605 dolares el
+            # precio dejaba pasar uno solo y los TRES se llevaban su codigo:
+            # dos de cada tres fichas con la foto del anteojo equivocado.
+            # Quedarse corto sale una foto; equivocarse sale la de otro.
+            if len(cuantos) > 1 and not variante_conocida(unico, fila, idx):
+                continue
+            return unico, donde
     return '', ('dudoso' if hubo_candidatos else 'falta')
 
 
@@ -452,6 +612,51 @@ def variante_de(codigo, texto, idx):
     return ''
 
 
+def variante_por_partes(codigo, texto, idx):
+    """La variante que ya existe, cuando hoy la escriben toda junta.
+
+    Un anteojo es una sola cosa: montura y cristal. Cuando el proveedor
+    escribia "Matte Black/Grey Transitions" se partia en dos variantes, y el
+    11/09 paso a escribir "Matte Black . Grey Transitions", que no se parte:
+    el mismo anteojo pedia estrenar un tercer numero al lado de los dos que
+    ya tenia. Y ese numero es el nombre de la foto, asi que la que estaba
+    colgada del primero se quedaba sin nadie que la pidiera.
+
+    Si todas las partes del texto ya son variantes de este producto, esto no
+    es una variante nueva sino otra forma de escribir la primera de ellas.
+    Devuelve esa variante; "" si no aplica.
+    """
+    partes = [x.strip() for x in re.split(r'[/·]', texto or '') if x.strip()]
+    if len(partes) < 2:
+        return ''
+    encontradas = [variante_de(codigo, x, idx) for x in partes]
+    if not all(encontradas):
+        return ''
+    return min(encontradas)
+
+
+def variantes_de_la_fila(fila):
+    """Las variantes que vende hoy esa fila de la planilla.
+
+    La barra separa opciones; el punto medio NO, que ahi va un solo objeto de
+    dos tonos ("Matte Black . Grey Transitions" es un anteojo, no dos).
+    """
+    return [x.strip() for x in (fila.get('Color') or '').split('/') if x.strip()]
+
+
+def variante_conocida(codigo, fila, idx):
+    """Si alguna variante de hoy es una que ese producto ya tiene registrada.
+
+    Sirve para desempatar cuando el nombre dejo de distinguir un producto de
+    su hermano. Una fila sin colores no tiene con que desempatar: devuelve
+    False, y el que llama decide no resolver, que es el lado barato.
+    """
+    for v in variantes_de_la_fila(fila):
+        if variante_de(codigo, v, idx) or variante_por_partes(codigo, v, idx):
+            return True
+    return False
+
+
 def firma_de_producto(marca, categoria, nombre):
     """La huella de un producto, para que la web pueda verificar un vinculo
     sin repetir todo el comparador. Marca, categoria y la firma dura."""
@@ -468,6 +673,12 @@ def mapa_para_la_web(filas, idx=None):
     si la planilla reutiliza un ID para otra cosa, la firma no coincide, la
     web no usa ese codigo y el producto sale sin foto. Sin foto es barato;
     con la foto de otro producto es el error que venimos arreglando.
+
+    Cada producto va con TODAS sus claves y TODAS sus firmas, una por cada
+    nombre y cada categoria en que se lo vio. Si fuera una sola, la web
+    desconoceria justo los productos que alguien ya se tomo el trabajo de
+    confirmar a mano: el dia que el proveedor reescribe el nombre, el
+    catalogo lo reconoce y la web no, y la ficha sale sin foto igual.
     """
     idx = idx or indexar(filas)
     ids, skus, firmas, variantes = {}, {}, {}, {}
@@ -475,18 +686,34 @@ def mapa_para_la_web(filas, idx=None):
         if (f.get('Baja') or '').strip():
             continue
         cod = seguir_fusion(f['CODIGO'], idx)
-        if f.get('ID_alta'):
-            ids[f['ID_alta'].strip()] = cod
-        if f.get('SKU_alta'):
-            skus[f['SKU_alta'].strip()] = cod
-        firmas[cod] = firma_de_producto(f.get('Marca'), f.get('Categoria'), f.get('Producto'))
+        for i in todos(f, 'ID_alta'):
+            ids.setdefault(i, set()).add(cod)
+        for s in todos(f, 'SKU_alta'):
+            skus.setdefault(s, set()).add(cod)
+        # Se SUMAN las de todas sus variantes, no se pisan: lo aprendido
+        # queda anotado en la fila que estaba el dia que alguien lo confirmo,
+        # y las hermanas que se agreguen despues siguen teniendo el nombre
+        # viejo. Pisando, la ultima fila borraba lo que sabia la primera.
+        firmas.setdefault(cod, set()).update(
+            firma_de_producto(f.get('Marca'), cat, nom)
+            for cat in categorias_de(f)
+            for nom in nombres_de(f))
         if f.get('NumVar'):
             tabla = variantes.setdefault(cod, {})
             for e in escrituras_de(f):
                 tabla[e] = f['CODIGO_VAR']
         else:
             variantes.setdefault(cod, {})[''] = f['CODIGO_VAR']
-    return {'ids': ids, 'skus': skus, 'firmas': firmas, 'vars': variantes}
+    # Una clave que lleva a MAS DE UN codigo no identifica a nadie, asi que
+    # no entra en el mapa. Antes se guardaba una sola por clave y la ultima
+    # pisaba a las demas: el 11/09 el proveedor saco la referencia de fabrica
+    # de los Ray-Ban y siete anteojos quedaron compartiendo dos SKU. La web
+    # les habria dado a todos el codigo del ultimo hermano, o sea la foto del
+    # anteojo equivocado en seis de siete fichas. Se van sin foto, que es el
+    # error que se arregla al dia siguiente en vez del que nadie ve.
+    solo = lambda d: {k: next(iter(v)) for k, v in d.items() if len(v) == 1}
+    return {'ids': solo(ids), 'skus': solo(skus), 'vars': variantes,
+            'firmas': {k: sorted(v) for k, v in firmas.items()}}
 
 
 def candidatos_foto(codigo, textos_de_hoy, idx):

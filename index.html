@@ -2117,7 +2117,11 @@ function firmaDura(nombre){
   const cuenta = new Map();
   for(let p of norm(nombre).split(/[^a-z0-9]+/)){
     p = p.replace(/^(\d+)(ta|to|da|do|ra|ro|er|a|o)$/, '$1')
-         .replace(/^(\d+)ram$/, '$1gb');
+         .replace(/^(\d+)ram$/, '$1gb')
+         /* El 11/09 el proveedor paso de "16GB/256GB" a "16/256GB": los gigas
+            se cuentan por el numero y da igual como escriba la unidad. Los TB
+            NO se tocan, que 1TB y 1GB son cosas muy distintas. */
+         .replace(/^(\d+)gb$/, '$1');
     if(!p || /^(19|20)\d\d$/.test(p)) continue;
     if(GAMA_FIRMA.has(p) || RE_MEDIDA_FIRMA.test(p)
        || (RE_MODELO_FIRMA.test(p) && !NO_ES_MODELO.has(p)))
@@ -2136,7 +2140,13 @@ function codigoDeLaFila(f){
   const firmaHoy = norm(f.marca) + '|' + norm(f.catPlanilla || f.cat) + '|' + firmaDura(f.desc);
   for(const clave of [f.id, f.sku]){
     const cod = clave && CATALOGO.ids && (CATALOGO.ids[clave] || (CATALOGO.skus || {})[clave]);
-    if(cod && CATALOGO.firmas[cod] === firmaHoy) return cod;
+    /* Varias firmas por producto: una por cada nombre y cada categoria con
+       que se lo vio. El proveedor reescribe el nombre y mueve la categoria
+       (el 11/09 paso los extenders de Lente a Accesorio Camara), y con una
+       sola firma la web desconoceria justo lo que alguien ya confirmo. */
+    const firmas = cod && CATALOGO.firmas ? CATALOGO.firmas[cod] : null;
+    if(!firmas) continue;
+    if(Array.isArray(firmas) ? firmas.includes(firmaHoy) : firmas === firmaHoy) return cod;
   }
   return '';
 }
@@ -2145,6 +2155,22 @@ function codigoDeLaFila(f){
    que le puso el catalogo. Si esa variante no esta registrada devuelve vacio
    y no se inventa un nombre, porque ese nombre seria el de una foto que
    nadie saco. */
+/* La variante que manda la planilla para ese color: la celda CODIGO_VAR trae
+   un codigo por color, en el mismo orden que Color (contrato landing/1.3).
+   Es el dato bueno, porque lo resolvio el catalogo y no lo dedujimos del
+   texto. Se usa solo si la celda esta ALINEADA -- tantos codigos como colores
+   -- y si el codigo es una variante del producto de esta fila: una celda
+   corrida le daria a un color la foto del color de al lado, que es
+   exactamente el error que el codigo propio vino a terminar. Si algo no
+   cierra devuelve vacio y decide archivoDeVariante(), como antes. */
+function varianteDeLaColumna(f, codigo, color, colores){
+  if(!f || !f.codigoVar || !codigo) return '';
+  const lista = String(f.codigoVar).split('/').map(x => x.trim());
+  if(lista.length !== colores.length) return '';
+  const v = lista[colores.indexOf(color)] || '';
+  return v.startsWith(codigo + '-') && /^AT-\d{4}-\d{2}$/.test(v) ? v : '';
+}
+
 function archivoDeVariante(codigo, texto){
   if(!codigo || !CATALOGO) return '';
   const tabla = (CATALOGO.vars || {})[codigo];
@@ -2184,7 +2210,7 @@ function nombresDeFoto(f, colores, soloDeColor){
   const codigo = f.codigo || codigoDeLaFila(f);
   if(codigo){
     for(const c of colores){
-      const v = archivoDeVariante(codigo, c);
+      const v = varianteDeLaColumna(f, codigo, c, colores) || archivoDeVariante(codigo, c);
       if(v) salida.push(v);
     }
     // el archivo del producto que no tiene variantes, y el codigo a secas
@@ -2341,9 +2367,13 @@ async function cargar(){
     // proveedor reescriba el nombre y a que el catalogo renumere los IDs.
     sku:col('sku'),
     // El codigo propio del catalogo: la identidad que se asigna una vez y no
-    // cambia nunca. Todavia no viene en la planilla; mientras tanto la web lo
-    // busca en el mapa de fotos/indice.json (ver codigoDeLaFila).
+    // cambia nunca. Desde el contrato landing/1.3 viene en la planilla; si
+    // faltara, codigoDeLaFila lo busca en el mapa de fotos/indice.json.
     codigo:col('codigo'),
+    // Un codigo de variante por color, en el MISMO ORDEN que la columna Color.
+    // Es la variante resuelta por el catalogo: mejor que deducirla del texto,
+    // que es de donde vinieron todos los problemas.
+    codigoVar:col('codigo_var','codigo var','codigovar'),
     // El precio de antes, para los que están en promoción. Si la columna no
     // existe, el catálogo anda igual y el carrusel usa los que tienen regalo.
     antes:col('oferta','precio anterior','antes','precio lista')
@@ -2410,6 +2440,7 @@ async function cargar(){
         condicion:val(f,C.condicion),
         teclado:  val(f,C.teclado),
         codigo: val(f,C.codigo),
+        codigoVar: val(f,C.codigoVar),
         imagen: val(f,C.imagen),          // la columna Imagen; si viene vacia manda la carpeta
         activo: C.activo === -1 || val(f,C.activo) === '' || esSi(val(f,C.activo))
       };

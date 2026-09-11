@@ -2,4 +2,4 @@
 # Si este archivo se pierde, se reconstruye con el maximo del
 # catalogo, pero entonces se pierden los codigos de los productos
 # que se dieron de baja y se borraron: por eso no se borra ninguno.
-499
+508

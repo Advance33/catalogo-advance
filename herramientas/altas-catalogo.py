@@ -1,32 +1,47 @@
 # -*- coding: utf-8 -*-
-"""Le da codigo a los productos y variantes que entraron al catalogo.
+"""Pone al dia las variantes del catalogo y avisa lo que falta.
 
-    python herramientas/altas-catalogo.py             muestra que agregaria
-    python herramientas/altas-catalogo.py --aplicar   lo agrega
+    python herramientas/altas-catalogo.py             muestra que haria
+    python herramientas/altas-catalogo.py --aplicar   lo hace
 
-Es el trabajo de todos los dias, y es lo unico que mantiene vivo al catalogo
-maestro. Un producto sin codigo no puede tener foto, asi que si nadie corre
-esto, cada dia hay mas fichas sin imagen y nadie se entera hasta que un
-cliente la ve vacia.
+Es el trabajo de todos los dias. Un producto sin su variante registrada no
+puede tener foto, asi que si nadie corre esto, cada dia hay mas fichas sin
+imagen y nadie se entera hasta que un cliente la ve vacia.
 
-Hace dos cosas, las dos que SUMAN y ninguna que pise:
+LO QUE HACE SOLO
+  · Variante nueva de un producto que ya tiene codigo: le da el proximo
+    numero libre DE ESE PRODUCTO. Los numeros no se reusan, asi que si un
+    color se deja de vender y despues vuelve, vuelve con el suyo. Agregar un
+    color no crea una identidad nueva, por eso puede salir solo.
+  · Una variante que ya existe escrita de otra forma: la anota en Escrituras
+    y NO estrena numero. El numero es el nombre del archivo, y una variante
+    de mas deja la foto vieja sin nadie que la pida.
+  · Un producto que se sembro sin colores y estrena el primero: la fila sin
+    variante se convierte en la 01.
 
-  1. Producto nuevo: se le da el proximo AT-#### libre y se agregan todas
-     sus variantes de hoy.
-  2. Variante nueva de un producto que ya tiene codigo: se le da el proximo
-     numero libre DE ESE PRODUCTO. Los numeros no se reusan, asi que si el
-     azul se dejo de vender y despues vuelve, vuelve con el suyo.
+LO QUE NO HACE, Y POR QUE
+Repartir codigos AT-####. Los reparte el equipo de la planilla, que es quien
+genera las filas, y desde el contrato landing/1.3 vienen en la columna
+CODIGO. Tiene que numerar UN SOLO lado: si numeramos los dos, dos altas del
+mismo dia se llevan el mismo AT-#### y la foto de una tapa a la otra. Es el
+riesgo que nosotros mismos les escribimos en la propuesta, y estuvo abierto
+hasta el 11/09 porque se acordo que asignaban ellos pero este script seguia
+asignando igual.
 
-Lo que NO hace, nunca: tocar un codigo que ya existe. Esa es toda la
-promesa del catalogo; si esto empezara a reescribir codigos, seria otra
-identidad derivada del texto y estariamos de vuelta en el principio.
+Asi que una fila sin codigo sale listada y nada mas. Sale sin foto hasta que
+el sheet le ponga el suyo, que es el error barato: se arregla al dia
+siguiente y no ensucia nada.
 
-Tampoco toca las DUDOSAS: las filas cuyo vinculo apunta a un producto que
-ya no se le parece. Esas las mira una persona, porque una de dos: o el
-producto cambio de gama y hay que darle codigo nuevo, o la planilla
-reutilizo un ID y hay que arreglar el vinculo. Salen listadas al final.
+Lo que si conviene mirar de esa lista: si alguna es un producto que YA esta
+con otro nombre. El proveedor reescribe seguido -- el 11/09 movio cuatro
+productos de categoria, le agrego "GEN2" a siete anteojos y saco las
+referencias de fabrica. Confirmar el vinculo en altas-decididas.csv y correr
+confirmar-altas.py deja anotados el ID, el SKU, el nombre y la categoria de
+ese dia, y el mismo cambio no se vuelve a preguntar nunca mas.
 """
+import csv
 import datetime
+import io
 import os
 import sys
 
@@ -39,6 +54,22 @@ import fotos_sku as FS                        # noqa: E402
 import validar                                # noqa: E402
 
 APLICAR = '--aplicar' in sys.argv
+DECISIONES = os.path.join(AQUI, 'altas-decididas.csv')
+
+
+def leer_decisiones():
+    """Lo que una persona ya resolvio: ID de la planilla -> AT-#### o NUEVO."""
+    if not os.path.exists(DECISIONES):
+        return {}
+    with io.open(DECISIONES, encoding='utf-8', newline='') as fh:
+        filas = list(csv.DictReader(fh))
+    salida = {}
+    for f in filas:
+        i = (f.get('ID') or '').strip()
+        d = (f.get('Decision') or '').strip().upper()
+        if i and d:
+            salida[i] = d
+    return salida
 
 
 def main():
@@ -55,71 +86,95 @@ def main():
     cols = lambda f: FS.colores_de_la_fila(f, pinta, conocidos)
     idx = CM.indexar(maestro)
     hoy = datetime.date.today().isoformat()
+    decidido = leer_decisiones()
 
-    nuevos_prod, nuevas_var, dudosas, aconfirmar = [], [], [], []
-    n = int(CM.proximo_codigo(maestro)[3:])
+    # Los productos que hoy no aparecen en ninguna fila. Un producto que se
+    # fue y una fila que no se reconoce, de la misma marca y al mismo precio,
+    # casi siempre son la misma cosa con el nombre cambiado: ese es el par
+    # que conviene mirar primero.
+    tomados = set()
+    for f in filas:
+        c, _ = CM.codigo_de_la_fila(f, idx, pinta, conocidos)
+        if c:
+            tomados.add(c)
 
-    # Un producto nuevo que se parece demasiado a uno que ya tiene codigo casi
-    # nunca es nuevo: es el mismo con el nombre reescrito. El 11/09 el
-    # proveedor le agrego "GEN2" a los Ray-Ban y dio vuelta "27\" Studio
-    # Display" por "Studio Display 27\"", y los dos habrian estrenado codigo
-    # al lado del que ya tenian. Un codigo de mas es para siempre y parte las
-    # fotos de ese producto en dos, asi que ante el parecido NO se crea: se
-    # lista para que una persona diga si es el mismo o no.
-    por_mc = {}
+    por_marca = {}
     for m in maestro:
-        por_mc.setdefault((CM.norm(m['Marca']), CM.norm(m['Categoria'])), {})[m['CODIGO']] = m
+        por_marca.setdefault(CM.norm(m['Marca']), {})[m['CODIGO']] = m
 
-    def se_parece_a_uno_que_ya_esta(f):
+    def candidatos(f, cuantos=3):
+        """Los productos del catalogo que mas se parecen a esta fila.
+
+        Se busca por marca sola, NO por marca y categoria: la categoria la
+        escribe el proveedor y la cambia. Los cuatro extenders se escaparon
+        justo por eso.
+        """
         d = f.get('Descripción completa') or ''
-        mejor, cuanto = None, 0
-        for m in (por_mc.get((CM.norm(f.get('Marca')),
-                              CM.norm(f.get('Categoría'))), {}) or {}).values():
+        sin_col = CM.sin_los_colores(d, pinta, conocidos)
+        puntos = []
+        for m in (por_marca.get(CM.norm(f.get('Marca'))) or {}).values():
             p = max(CM.parecido(d, m['Producto']),
-                    CM.parecido(CM.sin_los_colores(d, pinta, conocidos),
-                                CM.sin_los_colores(m['Producto'], pinta, conocidos)))
-            if p > cuanto:
-                cuanto, mejor = p, m
-        return (mejor, cuanto) if mejor and cuanto >= 0.6 else (None, cuanto)
+                    CM.parecido(sin_col, CM.sin_los_colores(m['Producto'], pinta, conocidos)))
+            precio = CM.mismo_precio(f.get('Precio USD'), m.get('Precio_alta'))
+            # Un producto que hoy no esta en la planilla y cuyo precio cierra
+            # pesa mas que uno que se sigue vendiendo: el que se fue es el
+            # candidato natural del que llego.
+            if m['CODIGO'] not in tomados and precio is True:
+                p += 0.15
+            puntos.append((p, precio, m))
+        puntos.sort(key=lambda x: -x[0])
+        return puntos[:cuantos]
+
+    nuevas_var, sin_resolver, escrituras, convertidas, esperando = [], [], [], [], []
 
     for f in filas:
-        cod, de = CM.codigo_de_la_fila(f, idx, pinta, conocidos)
-        if not cod and de == 'dudoso':
-            cands = idx['por_id'].get((f.get('ID') or '').strip()) or []
-            dudosas.append((f, cands[0] if cands else None))
-            continue
+        idf = (f.get('ID') or '').strip()
+        cod, _de = CM.codigo_de_la_fila(f, idx, pinta, conocidos)
         base = {'Categoria': (f.get('Categoría') or '').strip(),
                 'Marca': (f.get('Marca') or '').strip(),
                 'Producto': (f.get('Descripción completa') or '').strip(),
-                'ID_alta': (f.get('ID') or '').strip(),
-                'SKU_alta': FS.sku_de(f),
+                'ID_alta': idf, 'Otros_IDs': '',
+                'SKU_alta': FS.sku_de(f), 'Otros_SKUs': '', 'Nombres_vistos': '',
                 'Precio_alta': (f.get('Precio USD') or '').strip(),
                 'Alta': hoy, 'Baja': '', 'Fusionado_en': '', 'Nota': ''}
         if not cod:
-            parecido_a, cuanto = se_parece_a_uno_que_ya_esta(f)
-            if parecido_a is not None:
-                aconfirmar.append((f, parecido_a, cuanto))
-                continue
-            # producto nuevo: codigo propio y todas sus variantes de hoy
-            cod = '%s-%04d' % (CM.PREFIJO, n + 1)
-            n += 1
-            base['CODIGO'] = cod
-            variantes = cols(f)
-            if not variantes:
-                nuevos_prod.append(dict(base, CODIGO_VAR=cod, Variante='',
-                                        Escrituras='', NumVar=''))
-            else:
-                for k, v in enumerate(variantes, 1):
-                    nuevos_prod.append(dict(base, CODIGO_VAR='%s-%02d' % (cod, k),
-                                            Variante=v, Escrituras='',
-                                            NumVar='%02d' % k))
-            # para que las filas hermanas de mas abajo lo encuentren
-            maestro.extend(x for x in nuevos_prod if x['CODIGO'] == cod)
-            idx = CM.indexar(maestro)
+            # NO se le da un codigo desde aca. Los reparte el equipo de la
+            # planilla, que es el que genera las filas, y tiene que repartirlos
+            # UN SOLO lado: si los dos numeramos, dos altas del mismo dia se
+            # llevan el mismo AT-#### y la foto de una tapa a la otra. Esa fila
+            # queda sin codigo hasta que el sheet se lo ponga, y sin codigo sale
+            # sin foto, que es el error barato.
+            esperando.append((f, candidatos(f)))
             continue
         # producto conocido: ¿trae alguna variante que el catalogo no tenga?
         for v in cols(f):
             if CM.variante_de(cod, v, idx):
+                continue
+            # Puede ser una que ya esta, escrita de otra forma. Eso se anota
+            # como escritura y NO estrena numero: el numero es el nombre de
+            # la foto, y una variante de mas deja la foto vieja sin nadie que
+            # la pida.
+            ya = CM.variante_por_partes(cod, v, idx)
+            if ya:
+                fila = idx['por_var'][ya]
+                fila['Escrituras'] = '|'.join(
+                    [x for x in (fila.get('Escrituras') or '').split('|') if x.strip()] + [v])
+                escrituras.append((ya, v, fila))
+                continue
+            # Un producto que se sembro sin colores y hoy trae el primero: la
+            # fila sin variante ES ese color, no una hermana suya. Si se
+            # agregara al lado, el producto quedaria con una fila sin numero
+            # y otras con numero, que es justo lo que el chequeo llama grave:
+            # la portada se vuelve ambigua y no hay forma de saber si la foto
+            # AT-0082.jpg es la del Black o la de todos.
+            suelta = next((x for x in (idx['por_codigo'].get(cod) or [])
+                           if not (x.get('NumVar') or '').strip()), None)
+            if suelta is not None and len(idx['por_codigo'][cod]) == 1:
+                convertidas.append((cod, v, suelta))
+                suelta['CODIGO_VAR'] = '%s-01' % cod
+                suelta['NumVar'] = '01'
+                suelta['Variante'] = v
+                idx = CM.indexar(maestro)
                 continue
             num = CM.proxima_variante(cod, idx)
             modelo = (idx['por_codigo'].get(cod) or [{}])[0]
@@ -134,63 +189,77 @@ def main():
             idx = CM.indexar(maestro)
 
     print('ALTAS DEL CATALOGO')
-    print('=' * 66)
+    print('=' * 74)
     print('planilla: %d filas   ·   catalogo: %d productos'
           % (len(filas), len({m['CODIGO'] for m in maestro})))
     print()
-    print('  %4d  productos nuevos, con %d variantes entre todos'
-          % (len({x['CODIGO'] for x in nuevos_prod}), len(nuevos_prod)))
     print('  %4d  variantes nuevas de productos que ya estaban' % len(nuevas_var))
-    print('  %4d  A CONFIRMAR: se parecen a uno que ya tiene codigo' % len(aconfirmar))
-    print('  %4d  DUDOSAS: no se tocan, las mira una persona' % len(dudosas))
+    print('  %4d  variantes que ya estaban, escritas de otra forma' % len(escrituras))
+    print('  %4d  productos que estrenan su primera variante' % len(convertidas))
+    print('  %4d  ESPERANDO CODIGO del sheet' % len(esperando))
     print()
-    if nuevos_prod:
-        print('--- productos nuevos ---')
-        visto = set()
-        for x in nuevos_prod:
-            if x['CODIGO'] in visto:
-                print('  %-14s %-46s %s' % ('', '', x['Variante'][:24]))
-                continue
-            visto.add(x['CODIGO'])
-            print('  %-14s %-46s %s' % (x['CODIGO'], x['Producto'][:46], x['Variante'][:24]))
     if nuevas_var:
-        print()
         print('--- variantes nuevas ---')
         for x in nuevas_var:
             print('  %-14s %-46s %s' % (x['CODIGO_VAR'], x['Producto'][:46], x['Variante'][:24]))
-    if aconfirmar:
         print()
-        print('--- A CONFIRMAR antes de darles codigo nuevo ---')
-        print('    Si es el mismo producto, hay que anotarle el ID de hoy al codigo')
-        print('    que ya tiene. Si de verdad es otro, se le da uno nuevo a mano.')
-        for f, m, c in sorted(aconfirmar, key=lambda x: -x[2]):
-            print('  %-13s %-46s' % ((f.get('ID') or '').strip(),
-                                     (f.get('Descripción completa') or '')[:46]))
-            print('  %-13s se parece %3.0f%% a %s  %s'
-                  % ('', c * 100, m['CODIGO'], (m.get('Producto') or '')[:40]))
-    if dudosas:
+    if convertidas:
+        print('--- productos que estrenan su primera variante ---')
+        print('    La fila sin variante pasa a ser la 01. Si tenian una foto')
+        print('    <CODIGO>.jpg, hay que renombrarla a <CODIGO>-01.jpg.')
+        for cod, v, fila in convertidas:
+            print('  %-9s -> %-12s %-34s %s'
+                  % (cod, cod + '-01', (fila.get('Producto') or '')[:34], v[:22]))
         print()
-        print('--- DUDOSAS: el vinculo apunta a otro producto ---')
-        print('    O el producto cambio de gama y necesita codigo nuevo, o la')
-        print('    planilla reutilizo un ID. Hay que mirarlas de a una.')
-        for f, e in dudosas:
-            print('  %-13s hoy: %s' % ((f.get('ID') or '').strip(),
-                                       (f.get('Descripción completa') or '')[:48]))
-            if e is not None:
-                print('  %-13s cat: %s  (%s)' % ('', (e.get('Producto') or '')[:48], e.get('CODIGO', '')))
+    if escrituras:
+        print('--- otra forma de escribir una variante que ya esta ---')
+        for cv, v, fila in escrituras:
+            print('  %-14s %-30s ahora tambien: %s'
+                  % (cv, (fila.get('Variante') or '')[:30], v[:34]))
+        print()
+    if esperando:
+        print('--- SIN CODIGO ---')
+        print('    Los codigos los reparte el equipo de la planilla: un solo lado')
+        print('    numera, o dos altas del mismo dia se llevan el mismo AT-####.')
+        print('    Estas filas salen sin foto hasta que el sheet les ponga el suyo.')
+        print()
+        print('    Si alguna es un producto que YA esta con otro nombre, se le anota')
+        print('    el vinculo y deja de necesitar codigo nuevo. Va en')
+        print('    herramientas/altas-decididas.csv como  <ID>,AT-####  y despues:')
+        print('      python herramientas/confirmar-altas.py --aplicar')
+        print()
+        for f, cands in sorted(esperando, key=lambda x: x[0]['ID']):
+            idf = (f.get('ID') or '').strip()
+            marca = '  (ya la miramos: es nueva)' if decidido.get(idf) == 'NUEVO' else ''
+            print('  %-13s %-44s %8s  %s%s' % (
+                idf, (f.get('Descripción completa') or '')[:44],
+                (f.get('Precio USD') or '').strip(),
+                (f.get('Categoría') or '').strip()[:16], marca))
+            if decidido.get(idf) == 'NUEVO':
+                print()
+                continue
+            for p, precio, m in cands:
+                aviso = ''
+                if CM.norm(m['Categoria']) != CM.norm(f.get('Categoría')):
+                    aviso += ' · cambio de categoria (%s)' % m['Categoria'][:14]
+                if precio is False:
+                    aviso += ' · OTRO PRECIO'
+                if m['CODIGO'] not in tomados:
+                    aviso += ' · hoy no se vende'
+                print('  %-13s %3.0f%%  %-9s %-38s %7s%s' % (
+                    '', p * 100, m['CODIGO'], (m.get('Producto') or '')[:38],
+                    (m.get('Precio_alta') or ''), aviso))
+            print()
 
     if not APLICAR:
-        print()
-        print('Simulacion. Para agregarlos:  python herramientas/altas-catalogo.py --aplicar')
+        print('Simulacion. Para agregarlas:  python herramientas/altas-catalogo.py --aplicar')
         return 0
-    if not nuevos_prod and not nuevas_var:
+    if not nuevas_var and not escrituras and not convertidas:
         print('No hay nada que agregar.')
         return 0
 
     CM.escribir(maestro)
-    CM.guardar_contador(max(n, CM.ultimo_asignado()))
-    print()
-    print('Agregados. El catalogo queda con %d productos y %d variantes.'
+    print('Agregadas. El catalogo queda con %d productos y %d variantes.'
           % (len({m['CODIGO'] for m in maestro}), len(maestro)))
     print('Ahora conviene regenerar el indice:  python verificar-fotos.py')
     return 0

@@ -1,5 +1,5 @@
 {
-"generado": "2026-09-11T09:30:05",
+"generado": "2026-09-11T15:51:46",
 "archivos": [
 "AT-0002.jpg",
 "AT-0004-01.jpg",
@@ -413,6 +413,7 @@
 "ACC-APP-066": "AT-0006",
 "ACC-APP-058": "AT-0007",
 "ACC-APP-067": "AT-0008",
+"ACC-APP-071": "AT-0008",
 "ACC-APP-036": "AT-0009",
 "ACC-APP-068": "AT-0009",
 "ACC-APP-069": "AT-0010",
@@ -483,6 +484,7 @@
 "CEL-APP-077": "AT-0070",
 "CEL-APP-013": "AT-0071",
 "CEL-APP-068": "AT-0072",
+"CEL-APP-070": "AT-0072",
 "CEL-APP-071": "AT-0073",
 "CEL-APP-085": "AT-0074",
 "CEL-APP-078": "AT-0075",
@@ -623,6 +625,7 @@
 "DRO-DJI-011": "AT-0210",
 "DRO-DJI-009": "AT-0211",
 "ERD-AMZ-004": "AT-0212",
+"ERD-AMZ-007": "AT-0212",
 "ERD-AMZ-005": "AT-0213",
 "ERD-AMZ-006": "AT-0214",
 "FIL-CAN-001": "AT-0215",
@@ -640,6 +643,7 @@
 "LEN-CAN-056": "AT-0227",
 "LEN-CAN-038": "AT-0228",
 "LEN-CAN-009": "AT-0229",
+"ACC-CAN-015": "AT-0229",
 "LEN-CAN-031": "AT-0230",
 "LEN-CAN-016": "AT-0231",
 "LEN-CAN-022": "AT-0232",
@@ -650,6 +654,7 @@
 "LEN-CAN-020": "AT-0237",
 "LEN-CAN-003": "AT-0238",
 "LEN-CAN-043": "AT-0239",
+"ACC-CAN-016": "AT-0239",
 "LEN-CAN-052": "AT-0240",
 "LEN-CAN-026": "AT-0241",
 "LEN-CAN-049": "AT-0242",
@@ -710,6 +715,7 @@
 "LEN-NIK-017": "AT-0297",
 "LEN-NIK-011": "AT-0298",
 "LEN-NIK-009": "AT-0299",
+"ACC-NIK-010": "AT-0299",
 "LEN-SIG-006": "AT-0300",
 "LEN-SIG-032": "AT-0301",
 "LEN-SIG-042": "AT-0302",
@@ -777,6 +783,7 @@
 "LEN-SON-004": "AT-0364",
 "LEN-SON-005": "AT-0365",
 "LEN-SON-039": "AT-0366",
+"ACC-SON-020": "AT-0366",
 "LEN-SON-014": "AT-0367",
 "LEN-SON-021": "AT-0368",
 "LEN-SON-035": "AT-0369",
@@ -823,15 +830,31 @@
 "LEN-TAM-012": "AT-0410",
 "LEN-TAM-017": "AT-0411",
 "GAF-RAY-025": "AT-0412",
+"GAF-RAY-034": "AT-0412",
+"GAF-RAY-041": "AT-0412",
 "GAF-RAY-026": "AT-0413",
+"GAF-RAY-035": "AT-0413",
+"GAF-RAY-042": "AT-0413",
 "GAF-RAY-023": "AT-0414",
+"GAF-RAY-033": "AT-0414",
+"GAF-RAY-040": "AT-0414",
 "GAF-RAY-024": "AT-0415",
+"GAF-RAY-010": "AT-0415",
 "GAF-RAY-022": "AT-0416",
+"GAF-RAY-030": "AT-0416",
+"GAF-RAY-037": "AT-0416",
 "GAF-RAY-021": "AT-0417",
+"GAF-RAY-029": "AT-0417",
+"GAF-RAY-036": "AT-0417",
 "GAF-RAY-020": "AT-0418",
+"GAF-RAY-031": "AT-0418",
+"GAF-RAY-038": "AT-0418",
 "MON-APP-004": "AT-0419",
+"MON-APP-006": "AT-0419",
 "MON-DEL-009": "AT-0420",
+"MON-DEL-011": "AT-0420",
 "MON-DEL-010": "AT-0421",
+"MON-DEL-012": "AT-0421",
 "MON-DEL-006": "AT-0422",
 "MON-MSI-013": "AT-0423",
 "MON-MSI-015": "AT-0424",
@@ -870,6 +893,8 @@
 "SW-APP-021": "AT-0453",
 "SW-APP-045": "AT-0454",
 "SW-APP-014": "AT-0455",
+"SW-APP-016": "AT-0455",
+"SW-APP-017": "AT-0455",
 "SW-APP-013": "AT-0455",
 "SW-APP-036": "AT-0456",
 "SW-APP-056": "AT-0456",
@@ -882,8 +907,10 @@
 "SW-KIE-002": "AT-0463",
 "SW-KIE-003": "AT-0464",
 "TAB-APP-042": "AT-0465",
+"TAB-APP-065": "AT-0465",
 "TAB-APP-001": "AT-0466",
 "TAB-APP-002": "AT-0467",
+"TAB-APP-064": "AT-0467",
 "TAB-APP-006": "AT-0468",
 "TAB-APP-062": "AT-0469",
 "TAB-APP-007": "AT-0469",
@@ -917,7 +944,15 @@
 "TAB-SAM-046": "AT-0496",
 "TAB-SAM-044": "AT-0497",
 "TAB-SAM-038": "AT-0498",
-"TAB-XIA-007": "AT-0499"
+"TAB-XIA-007": "AT-0499",
+"CEL-APP-017": "AT-0501",
+"CEL-SAM-089": "AT-0502",
+"CEL-SAM-091": "AT-0503",
+"CEL-SAM-092": "AT-0504",
+"NB-APP-101": "AT-0505",
+"TAB-APP-020": "AT-0506",
+"GAF-RAY-032": "AT-0507",
+"ACC-SON-019": "AT-0508"
 },
 "skus": {
 "accesorio-apple~apple~airtag-pack-x4": "AT-0001",
@@ -928,6 +963,7 @@
 "accesorio-apple~apple~air-ipad-keyboard-m3-m4-magic~13in-tecladoen": "AT-0006",
 "accesorio-apple~apple~ipad-keyboard-m2-magic-pro~11in-tecladoen": "AT-0007",
 "accesorio-apple~apple~ipad-keyboard-m2-magic-pro~12in-tecladoes": "AT-0008",
+"accesorio-apple~apple~keyboard-m1-m2-magic-pro~12in-tecladoes": "AT-0008",
 "accesorio-apple~apple~ipad-keyboard-m4-m5-magic-pro~11in-tecladoen": "AT-0009",
 "accesorio-apple~apple~ipad-keyboard-m4-m5-magic-pro~13in-tecladoen": "AT-0010",
 "accesorio-apple~apple~2-magic-mouse": "AT-0011",
@@ -953,6 +989,7 @@
 "accesorio-camara~saramonic~2-blink-me-microfono-saramonic-wireless": "AT-0031",
 "accesorio-camara~sigma~ef-630-flash-nikon": "AT-0032",
 "accesorio-camara~sony~bateria-bc-qz1-cargador-sony": "AT-0033",
+"accesorio-camara~sony~bateria-cargador-sonybc-qz1": "AT-0033",
 "accesorio-camara~sony~2-bat-bateria-car-fw-50-smallrig-usb-c-x": "AT-0034",
 "accesorio-camara~sony~bateria-fz-100-rechargable-smallrig-usb-c": "AT-0035",
 "accesorio-camara~sony~bateria-np-fz100-sony": "AT-0036",
@@ -992,6 +1029,7 @@
 "celular~apple~17-iphone~256gb": "AT-0070",
 "celular~apple~17-iphone-pro~1tb": "AT-0071",
 "celular~apple~17-iphone-pro~256gb": "AT-0072",
+"celular~apple~17-iphone-pro~256gb-esim": "AT-0072",
 "celular~apple~17-iphone-pro~512gb": "AT-0073",
 "celular~apple~17-iphone-max-pro~1tb-esim": "AT-0074",
 "celular~apple~17-iphone-max-pro~256gb-esim": "AT-0075",
@@ -1002,6 +1040,7 @@
 "celular~motorola~g17~4gb-256gb-sincargador": "AT-0080",
 "celular~motorola~g57~8gb-256gb-5g-sincargador": "AT-0081",
 "celular~samsung~a17-galaxy-u-x5~4gb-128gb": "AT-0082",
+"celular~samsung~a17-galaxy~4gb-128gb": "AT-0082",
 "celular~samsung~a17-galaxy~8gb-256gb": "AT-0083",
 "celular~samsung~a27-galaxy~6gb-128gb-5g": "AT-0084",
 "celular~samsung~a37-galaxy~8gb-256gb": "AT-0085",
@@ -1132,6 +1171,7 @@
 "drone~dji~2-5-combo-dji-drone-fly-mini-more-plus-pro-rc": "AT-0210",
 "drone~dji~5-dji-drone-mini-pro-rc-n3": "AT-0211",
 "e-reader~amazon~11-gen-kindle~16gb": "AT-0212",
+"e-reader~amazon~kindle-touch~16gb": "AT-0212",
 "e-reader~amazon~12-gen-kindle-paperwhite~16gb": "AT-0213",
 "e-reader~amazon~12-edition-gen-kindle-paperwhite-signature~32gb": "AT-0214",
 "filmadora~canon~4k-camcoder-hfg70-uhd-vixia": "AT-0215",
@@ -1149,6 +1189,7 @@
 "lente~canon~5.6-ef-s~18-135-f3.5-is-usm": "AT-0227",
 "lente~canon~ef-s~24-f2.8-stm": "AT-0228",
 "lente~canon~1.4x-extender-rf": "AT-0229",
+"accesorio-camara~canon~1.4x-extender-rf": "AT-0229",
 "lente~canon~rf~10-20-f4-stm": "AT-0230",
 "lente~canon~8-rf~100-400-f5.6-is-usm": "AT-0231",
 "lente~canon~l-macro-rf~100-f2.8-is-usm": "AT-0232",
@@ -1159,6 +1200,7 @@
 "lente~canon~rf~16-28-f2.8-is-stm": "AT-0237",
 "lente~canon~rf~16-f2.8-stm": "AT-0238",
 "lente~canon~2.0x-extender-rf": "AT-0239",
+"accesorio-camara~canon~2.0x-extender-rf": "AT-0239",
 "lente~canon~9-rf~200-800-f6.3-is-usm": "AT-0240",
 "lente~canon~l-rf-vcm~20-f1.4": "AT-0241",
 "lente~canon~box-rf~24-105-f4-is-usm": "AT-0242",
@@ -1219,6 +1261,7 @@
 "lente~nikon~macro-mc-z~105-f2.8-vr": "AT-0297",
 "lente~nikon~macro-mc-z~50-f2.8": "AT-0298",
 "lente~nikon~tc-2x-teleconverter-z": "AT-0299",
+"accesorio-camara~nikon~tc-2x-teleconverter-z": "AT-0299",
 "lente~sigma~c-canon~10-18-f2.8": "AT-0300",
 "lente~sigma~contemporary-dc-dn-sony~10-18-f2.8": "AT-0301",
 "lente~sigma~6.3-contemporary-dg-sony~100-400-f5-hsm": "AT-0302",
@@ -1286,6 +1329,7 @@
 "lente~sony~5.6-fe~28-70-f3.5-condcajablanca": "AT-0364",
 "lente~sony~fe~28-f2": "AT-0365",
 "lente~sony~2x-fe-teleconverter": "AT-0366",
+"accesorio-camara~sony~2x-fe-teleconverter": "AT-0366",
 "lente~sony~distagon-fe-t~35-f1.4": "AT-0367",
 "lente~sony~fe~35-f1.4-gm": "AT-0368",
 "lente~sony~8-fe-g-oss~400-800-f6.3": "AT-0369",
@@ -1331,16 +1375,19 @@
 "lente~tamron~6.3~70-300-f4.5-nz-di-iii-rxd": "AT-0409",
 "lente~tamron~6.3-sony~70-300-f4.5-di-iii-rxd": "AT-0410",
 "lente~tamron~iii-macro-sony~90-f2.8": "AT-0411",
-"lentes-inteligentes~ray-ban~meta-skyler": "AT-0415",
-"lentes-inteligentes~ray-ban~meta-wayfarer": "AT-0418",
 "monitor~apple~display-glass-height-standard-studio-tilt~27in": "AT-0419",
+"monitor~apple~adjustable-display-glass-height-stand-standard-studio-tilt~27in": "AT-0419",
 "monitor~dell~dp-p2425h~24in": "AT-0420",
+"monitor~dell~dp-fhd-hdmi-p2425h-usb-vesa-vga~24in": "AT-0420",
 "monitor~dell~3y-dp-p2725h~27in": "AT-0421",
+"monitor~dell~3-anos-dp-fhd-garantia-hdmi-p2725h-usb-vesa-vga~27in": "AT-0421",
 "monitor~dell~24-p2425he-plus-pro~23in": "AT-0422",
+"monitor~dell~100hz-24-fhd-p2425he-plus-pro~23in": "AT-0422",
 "monitor~msi~272f-flat-ips-mag-rapid~27in": "AT-0423",
 "monitor~msi~274qf-flat-ips-mag-rapid-x24~27in": "AT-0424",
 "monitor~msi~1500r-276cxf-curved-mag-rapid-va~27in": "AT-0425",
 "monitor~samsung~essential~24in": "AT-0426",
+"monitor~samsung~100hz-essential~24in": "AT-0426",
 "monitor~samsung~curvo-g5-odyssey~27in": "AT-0427",
 "notebook~apple~air-m5-macbook~13in-16gb-1tb-tecladoen": "AT-0428",
 "notebook~apple~air-m5-macbook~13in-24gb-1tb-tecladoen": "AT-0429",
@@ -1352,6 +1399,7 @@
 "notebook~apple~m4pro-macbook-pro~14in-24gb-1tb-tecladoen": "AT-0435",
 "notebook~apple~m4pro-macbook-pro~14in-24gb-512gb-tecladoen": "AT-0436",
 "notebook~apple~m5-macbook-pro~14in-16gb-1tb-tecladoen": "AT-0437",
+"notebook~apple~esp-m5-macbook-pro~14in-16gb-1tb-tecladoen": "AT-0437",
 "notebook~apple~m5-macbook-pro~14in-24gb-1tb-tecladoen": "AT-0438",
 "notebook~apple~m5-macbook-pro~14in-32gb-1tb-tecladoen": "AT-0439",
 "notebook~apple~m5max-macbook-pro~14in-36gb-2tb-tecladoen": "AT-0440",
@@ -1370,6 +1418,8 @@
 "smartwatch~apple~11-series-watch~42mm-sm-gps": "AT-0453",
 "smartwatch~apple~11-series-watch~46mm-ml-gps": "AT-0454",
 "smartwatch~apple~3-ultra-watch~49mm-m": "AT-0455",
+"smartwatch~apple~3-ultra-watch~49mm-trailloop-ml": "AT-0455",
+"smartwatch~apple~3-ultra-watch~49mm-oceanband": "AT-0455",
 "smartwatch~apple~3-ultra-watch~49mm-l": "AT-0456",
 "smartwatch~garmin~approach-s70~42mm": "AT-0457",
 "smartwatch~garmin~2-epix-gen-pro~42mm": "AT-0458",
@@ -1382,6 +1432,7 @@
 "tablet~apple~11-a16-ipad~512gb": "AT-0465",
 "tablet~apple~a16-ipad~11in-128gb": "AT-0466",
 "tablet~apple~a16-ipad~11in-256gb": "AT-0467",
+"tablet~apple~11-a16-ipad~256gb": "AT-0467",
 "tablet~apple~air-ipad-m4~11in-128gb": "AT-0468",
 "tablet~apple~air-ipad-m4~11in-256gb": "AT-0469",
 "tablet~apple~air-ipad-m4~11in-512gb": "AT-0470",
@@ -1405,516 +1456,25 @@
 "tablet~samsung~a11-galaxy-plus-tab~6gb-128gb": "AT-0488",
 "tablet~samsung~book-cover-fe-galaxy-pencil-s10-tab~8gb-128gb-5g": "AT-0489",
 "tablet~samsung~fe-galaxy-pencil-plus-s10-tab~13in-256gb": "AT-0490",
+"tablet~samsung~fe-galaxy-incluye-plus-s-pen-s10-solo-tab~256gb": "AT-0490",
 "tablet~samsung~fe-galaxy-pencil-plus-s10-tab~12gb-256gb": "AT-0491",
 "tablet~samsung~fe-galaxy-pencil-plus-s10-tab~8gb-128gb": "AT-0492",
 "tablet~samsung~fe-galaxy-pencil-s10-tab~12gb-256gb": "AT-0493",
 "tablet~samsung~fe-galaxy-pencil-s10-tab~8gb-128gb": "AT-0494",
 "tablet~samsung~galaxy-lite-s10-tab~10in-6gb-128gb": "AT-0495",
 "tablet~samsung~galaxy-pencil-s11-tab-ultra~256gb": "AT-0496",
+"tablet~samsung~galaxy-incluye-s-pen-s11-solo-tab-ultra~256gb": "AT-0496",
 "tablet~samsung~galaxy-pencil-s11-tab-ultra~12gb-256gb": "AT-0497",
 "tablet~samsung~galaxy-pencil-s11-tab~12gb-128gb": "AT-0498",
-"tablet~xiaomi~2-pad-pro-redmi~12in-6gb-128gb": "AT-0499"
-},
-"firmas": {
-"AT-0001": "apple|accesorio apple|",
-"AT-0002": "apple|accesorio apple|",
-"AT-0003": "apple|accesorio apple|",
-"AT-0004": "apple|accesorio apple|10th:1",
-"AT-0005": "apple|accesorio apple|11:1,air:1,m3:1,m4:1",
-"AT-0006": "apple|accesorio apple|13:1,air:1,m3:1,m4:1",
-"AT-0007": "apple|accesorio apple|11:1,m2:1,pro:1",
-"AT-0008": "apple|accesorio apple|12:1,9:1,m2:1,pro:1",
-"AT-0009": "apple|accesorio apple|11:1,m4:1,m5:1,pro:1",
-"AT-0010": "apple|accesorio apple|13:1,m4:1,m5:1,pro:1",
-"AT-0011": "apple|accesorio apple|2:1",
-"AT-0012": "apple|accesorio apple|2:1",
-"AT-0013": "apple|accesorio apple|pro:1",
-"AT-0014": "apple|accesorio apple|",
-"AT-0015": "apple|accesorio apple|12:1,9:1,air:1,m2:1,m3:1,pro:1",
-"AT-0016": "canon|accesorio camara|e1:1",
-"AT-0017": "canon|accesorio camara|r20:1",
-"AT-0018": "canon|accesorio camara|5d:1,6d:1,e6p:1,r5:1,r5c:1,r5ii:1,r6m2:1,r7:1",
-"AT-0019": "canon|accesorio camara|2:1,5d:1,6d:1,7d:1,90d:1,e6nh:1,kit:1,r5:1,r6:1",
-"AT-0020": "canon|accesorio camara|5:1",
-"AT-0021": "canon|accesorio camara|630:1",
-"AT-0022": "canon|accesorio camara|",
-"AT-0023": "dji|accesorio camara|8p:1",
-"AT-0024": "fujifilm|accesorio camara|10:1,2:1,mini:1",
-"AT-0025": "gopro|accesorio camara|10:1,11:1,12:1,9:1,pro:1",
-"AT-0026": "nikon|accesorio camara|",
-"AT-0027": "nikon|accesorio camara|18d:1,3300mha:1",
-"AT-0028": "nikon|accesorio camara|el20a:1",
-"AT-0029": "nikon|accesorio camara|l7:1",
-"AT-0030": "nikon|accesorio camara|64gb:1",
-"AT-0031": "saramonic|accesorio camara|2:1",
-"AT-0032": "sigma|accesorio camara|630:1",
-"AT-0033": "sony|accesorio camara|qz1:1",
-"AT-0034": "sony|accesorio camara|2:1,50:1",
-"AT-0035": "sony|accesorio camara|100:1",
-"AT-0036": "sony|accesorio camara|fz100:1",
-"AT-0037": "sony|accesorio camara|sgr1:1",
-"AT-0038": "sony|accesorio camara|b10:1",
-"AT-0039": "dji|accesorio drone|",
-"AT-0040": "dji|accesorio drone|3:1,mini:1,pro:1",
-"AT-0041": "dji|accesorio drone|3:1,mini:1,pro:1",
-"AT-0042": "dji|accesorio drone|2:1",
-"AT-0043": "dji|accesorio drone|3s:1,air:1,rc2:1",
-"AT-0044": "dji|accesorio drone|n3:1",
-"AT-0045": "dji|accesorio drone|2:1,neo:1",
-"AT-0046": "dji|accesorio drone|2:1",
-"AT-0047": "logitech|accesorio gaming|g29:1,ps4:1,ps5:1",
-"AT-0048": "logitech|accesorio gaming|g923:1",
-"AT-0049": "microsoft|accesorio gaming|",
-"AT-0050": "microsoft|accesorio gaming|",
-"AT-0051": "sony|accesorio gaming|ps5:1",
-"AT-0052": "sony|accesorio gaming|ps5:1",
-"AT-0053": "sony|accesorio gaming|ps5:1,vr2:1",
-"AT-0054": "apple|auriculares|4:1",
-"AT-0055": "apple|auriculares|4:1",
-"AT-0056": "apple|auriculares|2:1,max:1",
-"AT-0057": "apple|auriculares|max:1",
-"AT-0058": "apple|auriculares|3:1,pro:1",
-"AT-0059": "apple|auriculares|",
-"AT-0060": "apple|auriculares|",
-"AT-0061": "jbl|auriculares|",
-"AT-0062": "kieslect|auriculares|",
-"AT-0063": "samsung|auriculares|3:1",
-"AT-0064": "apple|celular|128gb:1,14:1",
-"AT-0065": "apple|celular|128gb:1,15:1",
-"AT-0066": "apple|celular|128gb:1,15:1,plus:1",
-"AT-0067": "apple|celular|128gb:1,16:1",
-"AT-0068": "apple|celular|16:1,256gb:1,max:1,pro:1",
-"AT-0069": "apple|celular|16:1,512gb:1,max:1,pro:1",
-"AT-0070": "apple|celular|17:1,256gb:1",
-"AT-0071": "apple|celular|17:1,1tb:1,pro:1",
-"AT-0072": "apple|celular|17:1,256gb:1,pro:1",
-"AT-0073": "apple|celular|17:1,512gb:1,pro:1",
-"AT-0074": "apple|celular|17:1,1tb:1,max:1,pro:1",
-"AT-0075": "apple|celular|17:1,256gb:1,max:1,pro:1",
-"AT-0076": "apple|celular|17e:1,256gb:1",
-"AT-0077": "apple|celular|1tb:1,air:1",
-"AT-0078": "motorola|celular|256gb:1,4:1,g06:1",
-"AT-0079": "motorola|celular|4:1,64gb:1,g06:1",
-"AT-0080": "motorola|celular|256gb:1,4:1,g17:1",
-"AT-0081": "motorola|celular|256gb:1,8:1,g57:1",
-"AT-0082": "samsung|celular|128gb:1,235:1,4:1,a17:1",
-"AT-0083": "samsung|celular|256gb:1,8:1,a17:1",
-"AT-0084": "samsung|celular|128gb:1,6:1,a27:1",
-"AT-0085": "samsung|celular|256gb:1,8:1,a37:1",
-"AT-0086": "samsung|celular|12:1,256gb:1,a56:1",
-"AT-0087": "samsung|celular|256gb:1,8:1,a56:1",
-"AT-0088": "samsung|celular|128gb:1,8:1,a57:1",
-"AT-0089": "samsung|celular|256gb:1,8:1,a57:1",
-"AT-0090": "samsung|celular|256gb:1,fe:1,s25:1",
-"AT-0091": "samsung|celular|512gb:1,fe:1,s25:1",
-"AT-0092": "samsung|celular|12:1,256gb:1,s25:1,ultra:1",
-"AT-0093": "samsung|celular|12:1,512gb:1,s25:1,ultra:1",
-"AT-0094": "samsung|celular|1tb:1,s25:1,ultra:1",
-"AT-0095": "samsung|celular|12:1,512gb:1,s26:1",
-"AT-0096": "samsung|celular|256gb:1,s26:1",
-"AT-0097": "samsung|celular|128gb:1,8:1,fe:1,s26:1",
-"AT-0098": "samsung|celular|256gb:1,8:1,fe:1,s26:1",
-"AT-0099": "samsung|celular|512gb:1,8:1,fe:1,s26:1",
-"AT-0100": "samsung|celular|256gb:1,plus:1,s26:1",
-"AT-0101": "samsung|celular|512gb:1,plus:1,s26:1",
-"AT-0102": "samsung|celular|16:1,1tb:1,s26:1,ultra:1",
-"AT-0103": "samsung|celular|256gb:1,s26:1,ultra:1",
-"AT-0104": "samsung|celular|512gb:1,8:1",
-"AT-0105": "samsung|celular|256gb:1,8:1",
-"AT-0106": "samsung|celular|512gb:1,8:1",
-"AT-0107": "samsung|celular|256gb:1,8:1,ultra:1",
-"AT-0108": "samsung|celular|512gb:1,8:1,ultra:1",
-"AT-0109": "xiaomi|celular|128gb:1,4:1,c81:1,pro:1",
-"AT-0110": "xiaomi|celular|256gb:1,8:1,f6:1",
-"AT-0111": "xiaomi|celular|12:1,256gb:1,f6:1,pro:1",
-"AT-0112": "xiaomi|celular|256gb:1,8:1,pro:1,x8:1",
-"AT-0113": "xiaomi|celular|512gb:1,8:1,pro:1,x8:1",
-"AT-0114": "xiaomi|celular|12:1,256gb:1,max:1,pro:1,x8:1",
-"AT-0115": "xiaomi|celular|12:1,512gb:1,max:1,pro:1,x8:1",
-"AT-0116": "xiaomi|celular|128gb:1,15c:1,4:1",
-"AT-0117": "xiaomi|celular|128gb:1,13:1,6:1",
-"AT-0118": "xiaomi|celular|15:1,256gb:1,8:1",
-"AT-0119": "xiaomi|celular|12:1,15:1,512gb:1,pro:1",
-"AT-0120": "xiaomi|celular|15:1,256gb:1,8:1,pro:1",
-"AT-0121": "xiaomi|celular|12:1,15:1,512gb:1,plus:1,pro:1",
-"AT-0122": "xiaomi|celular|15:1,256gb:1,8:1,plus:1,pro:1",
-"AT-0123": "meta|consola|3:1,512gb:1",
-"AT-0124": "meta|consola|128gb:1,3s:1",
-"AT-0125": "meta|consola|128gb:1,3s:1",
-"AT-0126": "meta|consola|256gb:1,3s:1",
-"AT-0127": "meta|consola|256gb:1,3s:1",
-"AT-0128": "microsoft|consola|1tb:1",
-"AT-0129": "microsoft|consola|512gb:1",
-"AT-0130": "microsoft|consola|1tb:1",
-"AT-0131": "microsoft|consola|1tb:1",
-"AT-0132": "nintendo|consola|2:1",
-"AT-0133": "nintendo|consola|2:1",
-"AT-0134": "nintendo|consola|2:1",
-"AT-0135": "sony|consola|5:1,825gb:1",
-"AT-0136": "sony|consola|1tb:1,5:1",
-"AT-0137": "sony|consola|2tb:1,5:1,pro:1",
-"AT-0138": "canon|camara|150:1,18:1,kit:1,r7:1",
-"AT-0139": "canon|camara|18:1,2000d:1,55:1,kit:1,t7:1",
-"AT-0140": "canon|camara|18:1,4000d:1,55:1,kit:1,t100:1",
-"AT-0141": "canon|camara|5d:1,body:1",
-"AT-0142": "canon|camara|body:1,r1:1",
-"AT-0143": "canon|camara|150:1,18:1,kit:1,r10:1",
-"AT-0144": "canon|camara|body:1,r10:1",
-"AT-0145": "canon|camara|18:1,210:1,45:1,55:1,kit:1,r100:1",
-"AT-0146": "canon|camara|body:1,r3:1",
-"AT-0147": "canon|camara|body:1,r5:1",
-"AT-0148": "canon|camara|r5:1",
-"AT-0149": "canon|camara|body:1,r5:1",
-"AT-0150": "canon|camara|105:1,24:1,4:1,r6:1",
-"AT-0151": "canon|camara|body:1,r6:1",
-"AT-0152": "canon|camara|1:1,105:1,24:1,7:1,f4:1,kit:1,r6:1",
-"AT-0153": "canon|camara|body:1,r6:1",
-"AT-0154": "canon|camara|20:1,4usm:1,50:1,kit:1,r6:1",
-"AT-0155": "canon|camara|1:1,105:1,24:1,4:1,7:1,kit:1",
-"AT-0156": "canon|camara|body:1",
-"AT-0157": "canon|camara|g7:1",
-"AT-0158": "canon|camara|sx740:1",
-"AT-0159": "fujifilm|camara|12:1,mini:1",
-"AT-0160": "nikon|camara|16:1,50:1,kit:1,z30:1",
-"AT-0161": "nikon|camara|16:1,250:1,50:2,kit:1,z30:1",
-"AT-0162": "nikon|camara|140:1,18:1,kit:1,z30:1",
-"AT-0163": "nikon|camara|body:1,z6:1",
-"AT-0164": "nikon|camara|body:1,z6:1",
-"AT-0165": "nikon|camara|body:1,z6:1",
-"AT-0166": "nikon|camara|120mm:1,24:1,kit:1,z6:1",
-"AT-0167": "nikon|camara|body:1,z7:1",
-"AT-0168": "nikon|camara|body:1,z8:1",
-"AT-0169": "nikon|camara|120:1,24:1,kit:1,z8:1",
-"AT-0170": "nikon|camara|6k:1",
-"AT-0171": "sony|camara|1:1,body:1",
-"AT-0172": "sony|camara|16:1,50:1,6400:1,kit:1",
-"AT-0173": "sony|camara|7:1,body:1",
-"AT-0174": "sony|camara|7:1,body:1",
-"AT-0175": "sony|camara|28:1,7:1,70:1,kit:1",
-"AT-0176": "sony|camara|28:1,7:1,70:1,kit:1",
-"AT-0177": "sony|camara|7:1,body:1",
-"AT-0178": "sony|camara|28:1,7:1,70:1,kit:1",
-"AT-0179": "sony|camara|7c:1,body:1",
-"AT-0180": "sony|camara|7cr:1,body:1",
-"AT-0181": "sony|camara|7r:1,body:1",
-"AT-0182": "sony|camara|7r:1,body:1",
-"AT-0183": "sony|camara|7r:1,body:1",
-"AT-0184": "sony|camara|7r:1,body:1",
-"AT-0185": "sony|camara|7s:1,body:1",
-"AT-0186": "sony|camara|9:1",
-"AT-0187": "sony|camara|rx100:1",
-"AT-0188": "sony|camara|body:1,fx2:1",
-"AT-0189": "sony|camara|body:1,fx3:1",
-"AT-0190": "sony|camara|body:1,fx30:1",
-"AT-0191": "sony|camara|fx6:1",
-"AT-0192": "sony|camara|body:1,e10:1",
-"AT-0193": "dji|camara de accion|6:1",
-"AT-0194": "dji|camara de accion|64gb:1",
-"AT-0195": "dji|camara de accion|124gb:1",
-"AT-0196": "gopro|camara de accion|12:1,pro:1",
-"AT-0197": "gopro|camara de accion|13:1,pro:1",
-"AT-0198": "gopro|camara de accion|1:1,8k:1,pro:1",
-"AT-0199": "insta360|camara de accion|360:1,pro:1",
-"AT-0200": "insta360|camara de accion|2:1,360:1",
-"AT-0201": "apple|desktop|16gb:1,24:1,256gb:1,4:1,5k:1,m4:1",
-"AT-0202": "apple|desktop|16gb:1,256gb:1,m4:1,mini:1",
-"AT-0203": "apple|desktop|16gb:1,512gb:1,m4:1,mini:1",
-"AT-0204": "apple|desktop|24gb:1,512gb:1,m4:1,mini:1,pro:1",
-"AT-0205": "antigravity|drone|360:1,8k:1,a1:1",
-"AT-0206": "dji|drone|pro:1",
-"AT-0207": "dji|drone|4:1,512gb:1,pro:1",
-"AT-0208": "dji|drone|5:1,mini:1,pro:1",
-"AT-0209": "dji|drone|2:1,5:1,mini:1,pro:1",
-"AT-0210": "dji|drone|2:1,5:1,mini:1,plus:1,pro:1",
-"AT-0211": "dji|drone|5:1,mini:1,n3:1,pro:1",
-"AT-0212": "amazon|e-reader|11:1,16gb:1",
-"AT-0213": "amazon|e-reader|12:1,16gb:1",
-"AT-0214": "amazon|e-reader|12:1,32gb:1",
-"AT-0215": "canon|filmadora|4k:1,hfg70:1",
-"AT-0216": "panasonic|filmadora|4k:1,cx20:1",
-"AT-0217": "panasonic|filmadora|24x:1,4k:1,x1200:1",
-"AT-0218": "panasonic|filmadora|24x:1,4k:1,pro:1,x2100:1",
-"AT-0219": "panasonic|filmadora|24x:1,v900:1",
-"AT-0220": "panasonic|filmadora|24x:1,4k:1,vx3:1",
-"AT-0221": "sony|filmadora|1:1,4k:1,nx800:1",
-"AT-0222": "sony|filmadora|1:1,4k:1,z200:1",
-"AT-0223": "canon|lente|16:1,35mm:1,4l:1",
-"AT-0224": "canon|lente|2:1,24:1,70mm:1,8:1",
-"AT-0225": "canon|lente|1:1,4:1,50mm:1",
-"AT-0226": "canon|lente|10:1,18mm:1,4:1,5:2,6:1",
-"AT-0227": "canon|lente|135mm:1,18:1,3:1,5:2,6:1",
-"AT-0228": "canon|lente|2:1,24mm:1,8:1",
-"AT-0229": "canon|lente|1:1,4x:1",
-"AT-0230": "canon|lente|10:1,20mm:1,4:1",
-"AT-0231": "canon|lente|100:1,400mm:1,5:1,6:1,8:1",
-"AT-0232": "canon|lente|100mm:1,2:1,8:1",
-"AT-0233": "canon|lente|1:1,135mm:1,8:1",
-"AT-0234": "canon|lente|14:1,35mm:1,4l:1",
-"AT-0235": "canon|lente|15:1,3:1,30mm:1,4:1,5:1,6:1",
-"AT-0236": "canon|lente|15:1,2:1,35mm:1,8:1",
-"AT-0237": "canon|lente|16:1,2:1,28mm:1,8:1",
-"AT-0238": "canon|lente|16mm:1,2:1,8:1",
-"AT-0239": "canon|lente|0x:1,2:1",
-"AT-0240": "canon|lente|200:1,3:1,6:1,800mm:1,9:1",
-"AT-0241": "canon|lente|1:1,20mm:1,4:1",
-"AT-0242": "canon|lente|105mm:1,24:1,4:1",
-"AT-0243": "canon|lente|1:1,105mm:1,24:1,4:1,7:1",
-"AT-0244": "canon|lente|24:1,240mm:1,3:1,4:1,6:1",
-"AT-0245": "canon|lente|2:1,24:1,70mm:1,8:1",
-"AT-0246": "canon|lente|1:1,24mm:1,4:1",
-"AT-0247": "canon|lente|1:1,24mm:1,8:1",
-"AT-0248": "canon|lente|2:1,28:1,70mm:1",
-"AT-0249": "canon|lente|2:1,28:1,70mm:1,8:1",
-"AT-0250": "canon|lente|2:1,28mm:1,8:1",
-"AT-0251": "canon|lente|1:1,35mm:1,4:1",
-"AT-0252": "canon|lente|1:1,2:1,45mm:1",
-"AT-0253": "canon|lente|1:1,2:1,50mm:1",
-"AT-0254": "canon|lente|1:1,50mm:1,8:1",
-"AT-0255": "canon|lente|11l:1,600mm:1",
-"AT-0256": "canon|lente|14mm:1,2:1,3:1,5:1,7:1,8:1",
-"AT-0257": "canon|lente|2:1,200mm:1,70:1,8:1",
-"AT-0258": "canon|lente|200mm:1,4l:1,70:1",
-"AT-0259": "canon|lente|300mm:1,4:1,5:1,6:1,75:1",
-"AT-0260": "canon|lente|11:1,800mm:1",
-"AT-0261": "canon|lente|2:1,85mm:1",
-"AT-0262": "canon|lente|10:1,18mm:1,3:1,4:1,5:1,6:1",
-"AT-0263": "canon|lente|150mm:1,18:1,3:2,5:1,6:1",
-"AT-0264": "canon|lente|3:2,5:1,9mm:1",
-"AT-0265": "canon|lente|210mm:1,5:1,55:1,7:1",
-"AT-0266": "canon|lente|4:1,7:1,8mm:1",
-"AT-0267": "nikon|lente|12:1,24mm:1,4:1",
-"AT-0268": "nikon|lente|1:1,35mm:1,8:1",
-"AT-0269": "nikon|lente|1:1,50mm:1,8:1",
-"AT-0270": "nikon|lente|12:1,28mm:1,3:1,5:2,6:1",
-"AT-0271": "nikon|lente|12:1,28mm:1,3:1,5:2,6:1",
-"AT-0272": "nikon|lente|1:1,135mm:1,8:1",
-"AT-0273": "nikon|lente|14:1,30mm:1,4:1",
-"AT-0274": "nikon|lente|17:1,2:1,28mm:1,8:1",
-"AT-0275": "nikon|lente|140mm:1,18:1,3:2,5:1,6:1",
-"AT-0276": "nikon|lente|180:1,3:1,5:1,6:2,600mm:1",
-"AT-0277": "nikon|lente|1:1,105mm:1,24:1,4:1,7:1",
-"AT-0278": "nikon|lente|200mm:1,24:1,3:1,4:1,6:1",
-"AT-0279": "nikon|lente|2:1,24:1,70mm:1,8:1",
-"AT-0280": "nikon|lente|24:1,4s:1,70mm:1",
-"AT-0281": "nikon|lente|1:1,24mm:1,8:1",
-"AT-0282": "nikon|lente|2:1,26mm:1,8:1",
-"AT-0283": "nikon|lente|135mm:1,28:1,4:1",
-"AT-0284": "nikon|lente|28:1,4:1,400mm:1,8:1",
-"AT-0285": "nikon|lente|2:1,28mm:1,8:1",
-"AT-0286": "nikon|lente|1:1,2:1,35mm:1",
-"AT-0287": "nikon|lente|1:1,35mm:1,8:1",
-"AT-0288": "nikon|lente|4:1,400mm:1,5:1",
-"AT-0289": "nikon|lente|2:1,40mm:1",
-"AT-0290": "nikon|lente|1:1,2:1,50mm:1",
-"AT-0291": "nikon|lente|1:1,4:1,50mm:1",
-"AT-0292": "nikon|lente|1:1,50mm:1,8:1",
-"AT-0293": "nikon|lente|180mm:1,2:1,70:1,8:1",
-"AT-0294": "nikon|lente|2:1,200mm:1,70:1,8:1",
-"AT-0295": "nikon|lente|1:1,2:1,85mm:1",
-"AT-0296": "nikon|lente|1:1,24mm:1,7:1",
-"AT-0297": "nikon|lente|105mm:1,2:1,8:1",
-"AT-0298": "nikon|lente|2:1,50mm:1,8:1",
-"AT-0299": "nikon|lente|2x:1",
-"AT-0300": "sigma|lente|10:1,18mm:1,2:1,8:1",
-"AT-0301": "sigma|lente|10:1,18mm:1,2:1,8:1",
-"AT-0302": "sigma|lente|100:1,3:1,400mm:1,5:1,6:1",
-"AT-0303": "sigma|lente|105mm:1,2:1,8:1",
-"AT-0304": "sigma|lente|12:1,24mm:1,4:1",
-"AT-0305": "sigma|lente|12:1,24mm:1,4:1",
-"AT-0306": "sigma|lente|1:1,12mm:1,4:1",
-"AT-0307": "sigma|lente|1:1,12mm:1,4:1",
-"AT-0308": "sigma|lente|14:1,2:1,24mm:1,8:1",
-"AT-0309": "sigma|lente|14:1,2:1,24mm:1,8:1",
-"AT-0310": "sigma|lente|150:1,3:1,5:1,6:1,600mm:1",
-"AT-0311": "sigma|lente|16:1,2:1,28mm:1,8:1",
-"AT-0312": "sigma|lente|16:1,3:1,300mm:1,5:1,6:1,7:1",
-"AT-0313": "sigma|lente|1:1,16mm:1,4:1",
-"AT-0314": "sigma|lente|1:1,16mm:1,4:1",
-"AT-0315": "sigma|lente|1:1,16mm:1,4:1",
-"AT-0316": "sigma|lente|1:1,17:1,40mm:1,8:1",
-"AT-0317": "sigma|lente|1:1,17:1,40mm:1,8:1",
-"AT-0318": "sigma|lente|17mm:1,4:1",
-"AT-0319": "sigma|lente|1:1,18:1,35mm:1,8:1",
-"AT-0320": "sigma|lente|1:1,18:1,35mm:1,8:1",
-"AT-0321": "sigma|lente|20:1,200mm:1,3:2,5:1,6:1",
-"AT-0322": "sigma|lente|1:1,24mm:1,4:1",
-"AT-0323": "sigma|lente|1:1,24mm:1,4:1",
-"AT-0324": "sigma|lente|105mm:1,2:1,28:1,8:1",
-"AT-0325": "sigma|lente|1:1,28:1,45mm:1,8:1",
-"AT-0326": "sigma|lente|1:1,28mm:1,4:1",
-"AT-0327": "sigma|lente|1:1,30mm:1,4:1",
-"AT-0328": "sigma|lente|1:1,30mm:1,4:1",
-"AT-0329": "sigma|lente|1:1,2:1,35mm:1",
-"AT-0330": "sigma|lente|1:1,35mm:1,4:1",
-"AT-0331": "sigma|lente|1:1,35mm:1,4:1",
-"AT-0332": "sigma|lente|1:1,100mm:1,50:1,8:1",
-"AT-0333": "sigma|lente|1:1,4:1,50mm:1",
-"AT-0334": "sigma|lente|1:1,4:1,50mm:1",
-"AT-0335": "sigma|lente|1:1,4:1,50mm:1",
-"AT-0336": "sigma|lente|1:1,4:1,56mm:1",
-"AT-0337": "sigma|lente|1:1,4:1,56mm:1",
-"AT-0338": "sigma|lente|1:1,4:1,56mm:1",
-"AT-0339": "sigma|lente|3:1,4:1,5:1,6:1,60:1,600mm:1",
-"AT-0340": "sigma|lente|1:1,4:1,85mm:1",
-"AT-0341": "sigma|lente|1:1,4:1,85mm:1",
-"AT-0342": "sigma|lente|1:1,4:1,85mm:1",
-"AT-0343": "sigma|lente|1:1,4:1,85mm:1",
-"AT-0344": "sigma|lente|1:1,4:1,85mm:1",
-"AT-0345": "sony|lente|350mm:1,4:1,5:1,6:1,70:1",
-"AT-0346": "sony|lente|135mm:1,28:1,4:1",
-"AT-0347": "sony|lente|100:1,4:1,400mm:1,5:2,6:1,fe:1",
-"AT-0348": "sony|lente|100mm:1,2:1,8:1,fe:1",
-"AT-0349": "sony|lente|12:1,2:1,24mm:1,8:1,fe:1",
-"AT-0350": "sony|lente|1:1,135mm:1,8:1,fe:1",
-"AT-0351": "sony|lente|1:1,14mm:1,8:1,fe:1",
-"AT-0352": "sony|lente|16:1,2:1,25mm:1,8:1,fe:1",
-"AT-0353": "sony|lente|16:1,2:1,35mm:1,8:1,fe:1",
-"AT-0354": "sony|lente|16:1,2:1,35mm:1,8:1,fe:1",
-"AT-0355": "sony|lente|20:1,4:1,70mm:1,fe:1",
-"AT-0356": "sony|lente|200:1,3:1,5:1,6:2,600mm:1,fe:1",
-"AT-0357": "sony|lente|1:1,20mm:1,8:1,fe:1",
-"AT-0358": "sony|lente|105mm:1,24:1,4:1,fe:1",
-"AT-0359": "sony|lente|2:1,24:1,50mm:1,8:1,fe:1",
-"AT-0360": "sony|lente|2:1,24:1,70mm:1,8:1,fe:1",
-"AT-0361": "sony|lente|24:1,70mm:1,fe:1",
-"AT-0362": "sony|lente|1:1,24mm:1,4:1,fe:1",
-"AT-0363": "sony|lente|2:1,28:1,70mm:1,fe:1",
-"AT-0364": "sony|lente|28:1,3:1,5:2,6:1,70mm:1,fe:1",
-"AT-0365": "sony|lente|2:1,28mm:1,fe:1",
-"AT-0366": "sony|lente|2x:1,fe:1",
-"AT-0367": "sony|lente|1:1,35mm:1,4:1,fe:1",
-"AT-0368": "sony|lente|1:1,35mm:1,4:1,fe:1",
-"AT-0369": "sony|lente|3:1,400:1,6:1,8:1,800mm:1,fe:1",
-"AT-0370": "sony|lente|150mm:1,2:1,50:1,fe:1",
-"AT-0371": "sony|lente|1:1,2:1,50mm:1,fe:1",
-"AT-0372": "sony|lente|1:1,4:1,50mm:1,fe:1",
-"AT-0373": "sony|lente|1:1,4:1,50mm:1,fe:1",
-"AT-0374": "sony|lente|1:1,50mm:1,8:1,fe:1",
-"AT-0375": "sony|lente|1:1,55mm:1,8:1,fe:1",
-"AT-0376": "sony|lente|2:1,200mm:1,70:1,8:1,fe:1",
-"AT-0377": "sony|lente|200mm:1,4:1,70:1,fe:1",
-"AT-0378": "sony|lente|1:1,4:1,85mm:1,fe:1",
-"AT-0379": "sony|lente|1:1,8:1,85mm:1,fe:1",
-"AT-0380": "sony|lente|2:1,8:1,90mm:1,fe:1",
-"AT-0381": "sony|lente|16:1,35mm:1,4:1,fe:1",
-"AT-0382": "tamron|lente|11:1,2:1,20mm:1,8:1",
-"AT-0383": "tamron|lente|11:1,2:1,20mm:1,8:1",
-"AT-0384": "tamron|lente|150:1,5:1,500mm:1,6:1,7:1",
-"AT-0385": "tamron|lente|16:1,2:1,30mm:1,8:1,g2:1",
-"AT-0386": "tamron|lente|16:1,2:1,30mm:1,8:1,g2:1",
-"AT-0387": "tamron|lente|17:1,2:1,28mm:1,8:1",
-"AT-0388": "tamron|lente|17:1,4:1,50mm:1",
-"AT-0389": "tamron|lente|17:1,2:1,70mm:1,8:1",
-"AT-0390": "tamron|lente|17:1,2:1,70mm:1,8:1",
-"AT-0391": "tamron|lente|18:1,300mm:1",
-"AT-0392": "tamron|lente|18:1,3:2,300mm:1,5:1,6:1",
-"AT-0393": "tamron|lente|18:1,3:2,300mm:1,5:1,6:1",
-"AT-0394": "tamron|lente|2:1,20:1,40mm:1,8:1",
-"AT-0395": "tamron|lente|2:1,24:1,70mm:1,8:1,g2:1",
-"AT-0396": "tamron|lente|2:1,200mm:1,28:1,5:1,6:1,8:1",
-"AT-0397": "tamron|lente|1:1,28:1,300mm:1,4:1,7:1",
-"AT-0398": "tamron|lente|2:1,28:1,75mm:1,8:1",
-"AT-0399": "tamron|lente|2:1,28:1,75mm:1,8:1,g2:1",
-"AT-0400": "tamron|lente|100mm:1,2:1,35:1,8:1",
-"AT-0401": "tamron|lente|100mm:1,2:1,35:1,8:1",
-"AT-0402": "tamron|lente|150mm:1,2:2,35:1,8:1",
-"AT-0403": "tamron|lente|150mm:1,2:2,35:1,8:1",
-"AT-0404": "tamron|lente|3:1,300mm:1,4:1,5:1,50:1,6:1",
-"AT-0405": "tamron|lente|3:1,4:1,400mm:1,5:1,50:1,6:1",
-"AT-0406": "tamron|lente|3:1,4:1,400mm:1,5:1,50:1,6:1",
-"AT-0407": "tamron|lente|180mm:1,2:1,70:1,8:1,g2:1",
-"AT-0408": "tamron|lente|180mm:1,2:1,70:1,8:1,g2:1",
-"AT-0409": "tamron|lente|3:1,300mm:1,4:1,5:1,6:1,70:1",
-"AT-0410": "tamron|lente|3:1,300mm:1,4:1,5:1,6:1,70:1",
-"AT-0411": "tamron|lente|2:1,8:1,90mm:1",
-"AT-0412": "ray-ban|lentes inteligentes|1m52:1,601:1",
-"AT-0413": "ray-ban|lentes inteligentes|601:1,ch52:1",
-"AT-0414": "ray-ban|lentes inteligentes|601:1,t352:1",
-"AT-0415": "ray-ban|lentes inteligentes|s52:1,t155:1",
-"AT-0416": "ray-ban|lentes inteligentes|1m50:1,601:1",
-"AT-0417": "ray-ban|lentes inteligentes|601s1z50:1",
-"AT-0418": "ray-ban|lentes inteligentes|601st350:1",
-"AT-0419": "apple|monitor|27:1",
-"AT-0420": "dell|monitor|1920x1080:1,24:1,p2425h:1",
-"AT-0421": "dell|monitor|1920x1080:1,27:1,3y:1,p2725h:1",
-"AT-0422": "dell|monitor|100hz:1,1920x1080:1,23:1,24:1,8:1,p2425he:1,plus:1,pro:1",
-"AT-0423": "msi|monitor|0:1,200hz:1,27:1,272f:1,5ms:1",
-"AT-0424": "msi|monitor|0:1,240hz:1,27:1,274qf:1,5ms:1,x24:1",
-"AT-0425": "msi|monitor|0:1,1500r:1,27:1,276cxf:1,280hz:1,5ms:1",
-"AT-0426": "samsung|monitor|100hz:1,24:1",
-"AT-0427": "samsung|monitor|165hz:1,27:1,g5:1",
-"AT-0428": "apple|notebook|13:1,16gb:1,1tb:1,6:1,air:1,m5:1",
-"AT-0429": "apple|notebook|13:1,1tb:1,24gb:1,6:1,air:1,m5:1",
-"AT-0430": "apple|notebook|15:1,16gb:1,512gb:1,air:1,m5:1",
-"AT-0431": "apple|notebook|15:1,1tb:1,24gb:1,air:1,m5:1",
-"AT-0432": "apple|notebook|13:1,256gb:1,8gb:1,a18:1,neo:1",
-"AT-0433": "apple|notebook|13:1,256gb:1,8gb:1,a18:1,neo:1",
-"AT-0434": "apple|notebook|13:1,512gb:1,8gb:1,a18:1,neo:1",
-"AT-0435": "apple|notebook|14:1,1tb:1,24gb:1,m4:1,pro:2",
-"AT-0436": "apple|notebook|14:1,24gb:1,512gb:1,m4:1,pro:2",
-"AT-0437": "apple|notebook|14:1,16gb:1,1tb:1,m5:1,pro:1",
-"AT-0438": "apple|notebook|14:1,1tb:1,24gb:1,m5:1,pro:1",
-"AT-0439": "apple|notebook|14:1,1tb:1,32gb:1,m5:1,pro:1",
-"AT-0440": "apple|notebook|14:1,2tb:1,36gb:1,m5:1,max:1,pro:1",
-"AT-0441": "apple|notebook|16:1,2tb:1,36gb:1,m5:1,max:1,pro:1",
-"AT-0442": "apple|notebook|16:1,2tb:1,48gb:1,m5:1,max:1,pro:1",
-"AT-0443": "apple|notebook|14:1,1tb:1,24gb:1,m5:1,pro:2",
-"AT-0444": "apple|notebook|14:1,1tb:1,24gb:1,m5:1,pro:2",
-"AT-0445": "apple|notebook|14:1,24gb:1,2tb:1,m5:1,pro:2",
-"AT-0446": "apple|notebook|16:1,1tb:1,24gb:1,m5:1,pro:2",
-"AT-0447": "apple|notebook|16:1,1tb:1,48gb:1,m5:1,pro:2",
-"AT-0448": "jbl|parlante|6:1",
-"AT-0449": "apple|smartwatch|2nd:1,40mm:1,se:1",
-"AT-0450": "apple|smartwatch|2nd:1,44mm:1,se:1",
-"AT-0451": "apple|smartwatch|3:1,40mm:1,se:1",
-"AT-0452": "apple|smartwatch|3:1,44mm:1,se:1",
-"AT-0453": "apple|smartwatch|11:1,42mm:1",
-"AT-0454": "apple|smartwatch|11:1,46mm:1",
-"AT-0455": "apple|smartwatch|3:1,49mm:1,ultra:1",
-"AT-0456": "apple|smartwatch|3:1,49mm:1,ultra:1",
-"AT-0457": "garmin|smartwatch|42mm:1,s70:1",
-"AT-0458": "garmin|smartwatch|2:1,42mm:1,pro:1",
-"AT-0459": "garmin|smartwatch|2:1,51mm:1,pro:1",
-"AT-0460": "garmin|smartwatch|2s:1",
-"AT-0461": "kieslect|smartwatch|2:1",
-"AT-0462": "kieslect|smartwatch|3:1",
-"AT-0463": "kieslect|smartwatch|3:1,ultra:1",
-"AT-0464": "kieslect|smartwatch|",
-"AT-0465": "apple|tablet|11:1,512gb:1,a16:1",
-"AT-0466": "apple|tablet|11:1,128gb:1,a16:1",
-"AT-0467": "apple|tablet|11:1,256gb:1,a16:1",
-"AT-0468": "apple|tablet|11:1,128gb:1,air:1,m4:1",
-"AT-0469": "apple|tablet|11:1,256gb:1,air:1,m4:1",
-"AT-0470": "apple|tablet|11:1,512gb:1,air:1,m4:1",
-"AT-0471": "apple|tablet|128gb:1,13:1,air:1,m3:1",
-"AT-0472": "apple|tablet|128gb:1,13:1,air:1,m4:1",
-"AT-0473": "apple|tablet|13:1,256gb:1,air:1,m4:1",
-"AT-0474": "apple|tablet|128gb:1,7ma:1,mini:1",
-"AT-0475": "apple|tablet|256gb:1,7ma:1,mini:1",
-"AT-0476": "apple|tablet|11:1,256gb:1,m4:1,pro:1",
-"AT-0477": "apple|tablet|11:1,2tb:1,m4:1,pro:1",
-"AT-0478": "apple|tablet|11:1,512gb:1,m4:1,pro:1",
-"AT-0479": "apple|tablet|11:1,256gb:1,m5:1,pro:1",
-"AT-0480": "apple|tablet|11:1,512gb:1,m5:1,pro:1",
-"AT-0481": "apple|tablet|11:1,512gb:1,m5:1,pro:1",
-"AT-0482": "apple|tablet|13:1,256gb:1,m4:1,pro:1",
-"AT-0483": "apple|tablet|13:1,256gb:1,m5:1,pro:1",
-"AT-0484": "apple|tablet|13:1,512gb:1,m5:1,pro:1",
-"AT-0485": "samsung|tablet|4:1,64gb:1,a11:1",
-"AT-0486": "samsung|tablet|4:1,64gb:1,a11:1,wifi:1",
-"AT-0487": "samsung|tablet|128gb:1,6:1,a11:1",
-"AT-0488": "samsung|tablet|128gb:1,6:1,a11:1",
-"AT-0489": "samsung|tablet|128gb:1,8:1,fe:1,s10:1",
-"AT-0490": "samsung|tablet|1:1,13:1,256gb:1,fe:1,plus:1,s10:1",
-"AT-0491": "samsung|tablet|12:1,256gb:1,fe:1,plus:1,s10:1,wifi:1",
-"AT-0492": "samsung|tablet|128gb:1,8:1,fe:1,plus:1,s10:1,wifi:1",
-"AT-0493": "samsung|tablet|12:1,256gb:1,fe:1,s10:1,wifi:1",
-"AT-0494": "samsung|tablet|128gb:1,8:1,fe:1,s10:1,wifi:1",
-"AT-0495": "samsung|tablet|10:1,128gb:1,6:1,9:1,lite:1,s10:1",
-"AT-0496": "samsung|tablet|256gb:1,s11:1,ultra:1",
-"AT-0497": "samsung|tablet|12:1,256gb:1,s11:1,ultra:1,wifi:1",
-"AT-0498": "samsung|tablet|12:1,128gb:1,s11:1,wifi:1",
-"AT-0499": "xiaomi|tablet|12:1,128gb:1,2:1,6:1,pro:1"
+"tablet~xiaomi~2-pad-pro-redmi~12in-6gb-128gb": "AT-0499",
+"celular~apple~17-iphone-max-pro~512gb-esim": "AT-0501",
+"celular~samsung~a16-galaxy~4gb-128gb-4g": "AT-0502",
+"celular~samsung~a27-galaxy~8gb-256gb-5g": "AT-0503",
+"celular~samsung~a36-galaxy~8gb-256gb-5g": "AT-0504",
+"notebook~apple~air-m5-macbook~13in-24gb-512gb-tecladoen": "AT-0505",
+"tablet~apple~ipad-m5-pro~13in-1tb": "AT-0506",
+"lentes-inteligentes~ray-ban~gen2-headliner-meta-rayban": "AT-0507",
+"accesorio-camara~sony~cargador-fz-100-smallrig": "AT-0508"
 },
 "vars": {
 "AT-0001": {
@@ -1924,94 +1484,94 @@
 "": "AT-0002"
 },
 "AT-0003": {
-"blanco": "AT-0003-01",
-"teclas blancas": "AT-0003-01",
 "whites": "AT-0003-01",
+"blanco": "AT-0003-01",
 "whi": "AT-0003-01",
-"white": "AT-0003-01"
+"white": "AT-0003-01",
+"teclas blancas": "AT-0003-01"
 },
 "AT-0004": {
-"blanco": "AT-0004-01",
-"teclas blancas": "AT-0004-01",
 "whites": "AT-0004-01",
+"blanco": "AT-0004-01",
 "whi": "AT-0004-01",
-"white": "AT-0004-01"
+"white": "AT-0004-01",
+"teclas blancas": "AT-0004-01"
 },
 "AT-0005": {
-"negro": "AT-0005-01",
-"bla": "AT-0005-01",
-"black keys": "AT-0005-01",
+"teclas negras": "AT-0005-01",
 "black": "AT-0005-01",
-"teclas negras": "AT-0005-01"
+"black keys": "AT-0005-01",
+"negro": "AT-0005-01",
+"bla": "AT-0005-01"
 },
 "AT-0006": {
+"teclas negras": "AT-0006-01",
+"black": "AT-0006-01",
+"black keys": "AT-0006-01",
 "negro": "AT-0006-01",
 "bla": "AT-0006-01",
-"black keys": "AT-0006-01",
-"black": "AT-0006-01",
-"teclas negras": "AT-0006-01",
-"blanco": "AT-0006-02",
-"teclas blancas": "AT-0006-02",
 "whites": "AT-0006-02",
+"blanco": "AT-0006-02",
 "whi": "AT-0006-02",
-"white": "AT-0006-02"
+"white": "AT-0006-02",
+"teclas blancas": "AT-0006-02"
 },
 "AT-0007": {
-"negro": "AT-0007-01",
-"bla": "AT-0007-01",
-"black keys": "AT-0007-01",
+"teclas negras": "AT-0007-01",
 "black": "AT-0007-01",
-"teclas negras": "AT-0007-01"
+"black keys": "AT-0007-01",
+"negro": "AT-0007-01",
+"bla": "AT-0007-01"
 },
 "AT-0008": {
-"blanco": "AT-0008-01",
-"teclas blancas": "AT-0008-01",
 "whites": "AT-0008-01",
+"blanco": "AT-0008-01",
 "whi": "AT-0008-01",
-"white": "AT-0008-01"
+"white": "AT-0008-01",
+"teclas blancas": "AT-0008-01"
 },
 "AT-0009": {
+"teclas negras": "AT-0009-01",
+"black": "AT-0009-01",
+"black keys": "AT-0009-01",
 "negro": "AT-0009-01",
 "bla": "AT-0009-01",
-"black keys": "AT-0009-01",
-"black": "AT-0009-01",
-"teclas negras": "AT-0009-01",
-"blanco": "AT-0009-02",
-"teclas blancas": "AT-0009-02",
 "whites": "AT-0009-02",
+"blanco": "AT-0009-02",
 "whi": "AT-0009-02",
-"white": "AT-0009-02"
+"white": "AT-0009-02",
+"teclas blancas": "AT-0009-02"
 },
 "AT-0010": {
+"teclas negras": "AT-0010-01",
+"black": "AT-0010-01",
+"black keys": "AT-0010-01",
 "negro": "AT-0010-01",
 "bla": "AT-0010-01",
-"black keys": "AT-0010-01",
-"black": "AT-0010-01",
-"teclas negras": "AT-0010-01",
-"blanco": "AT-0010-02",
-"teclas blancas": "AT-0010-02",
 "whites": "AT-0010-02",
+"blanco": "AT-0010-02",
 "whi": "AT-0010-02",
-"white": "AT-0010-02"
+"white": "AT-0010-02",
+"teclas blancas": "AT-0010-02"
 },
 "AT-0011": {
+"teclas negras": "AT-0011-01",
+"black": "AT-0011-01",
+"black keys": "AT-0011-01",
 "negro": "AT-0011-01",
 "bla": "AT-0011-01",
-"black keys": "AT-0011-01",
-"black": "AT-0011-01",
-"teclas negras": "AT-0011-01",
-"blanco": "AT-0011-02",
-"teclas blancas": "AT-0011-02",
 "whites": "AT-0011-02",
+"blanco": "AT-0011-02",
 "whi": "AT-0011-02",
-"white": "AT-0011-02"
+"white": "AT-0011-02",
+"teclas blancas": "AT-0011-02"
 },
 "AT-0012": {
-"negro": "AT-0012-01",
-"bla": "AT-0012-01",
-"black keys": "AT-0012-01",
+"teclas negras": "AT-0012-01",
 "black": "AT-0012-01",
-"teclas negras": "AT-0012-01"
+"black keys": "AT-0012-01",
+"negro": "AT-0012-01",
+"bla": "AT-0012-01"
 },
 "AT-0013": {
 "": "AT-0013"
@@ -2122,18 +1682,18 @@
 "": "AT-0048"
 },
 "AT-0049": {
-"negro": "AT-0049-01",
-"bla": "AT-0049-01",
-"black keys": "AT-0049-01",
+"teclas negras": "AT-0049-01",
 "black": "AT-0049-01",
-"teclas negras": "AT-0049-01"
+"black keys": "AT-0049-01",
+"negro": "AT-0049-01",
+"bla": "AT-0049-01"
 },
 "AT-0050": {
-"negro": "AT-0050-01",
-"bla": "AT-0050-01",
-"black keys": "AT-0050-01",
+"teclas negras": "AT-0050-01",
 "black": "AT-0050-01",
-"teclas negras": "AT-0050-01"
+"black keys": "AT-0050-01",
+"negro": "AT-0050-01",
+"bla": "AT-0050-01"
 },
 "AT-0051": {
 "": "AT-0051"
@@ -2158,8 +1718,8 @@
 "blu": "AT-0056-01",
 "orange": "AT-0056-02",
 "midnight": "AT-0056-03",
-"pur": "AT-0056-04",
 "purple": "AT-0056-04",
+"pur": "AT-0056-04",
 "starlight": "AT-0056-05"
 },
 "AT-0057": {
@@ -2176,66 +1736,67 @@
 "": "AT-0060"
 },
 "AT-0061": {
-"blanco": "AT-0061-01",
-"teclas blancas": "AT-0061-01",
 "whites": "AT-0061-01",
+"blanco": "AT-0061-01",
 "whi": "AT-0061-01",
-"white": "AT-0061-01"
+"white": "AT-0061-01",
+"teclas blancas": "AT-0061-01"
 },
 "AT-0062": {
-"negro": "AT-0062-01",
-"bla": "AT-0062-01",
-"black keys": "AT-0062-01",
+"teclas negras": "AT-0062-01",
 "black": "AT-0062-01",
-"teclas negras": "AT-0062-01"
+"black keys": "AT-0062-01",
+"negro": "AT-0062-01",
+"bla": "AT-0062-01"
 },
 "AT-0063": {
-"blanco": "AT-0063-01",
-"teclas blancas": "AT-0063-01",
 "whites": "AT-0063-01",
+"blanco": "AT-0063-01",
 "whi": "AT-0063-01",
-"white": "AT-0063-01"
+"white": "AT-0063-01",
+"teclas blancas": "AT-0063-01"
 },
 "AT-0064": {
 "blue": "AT-0064-01",
 "blu": "AT-0064-01",
-"pur": "AT-0064-02",
 "purple": "AT-0064-02",
+"pur": "AT-0064-02",
 "red": "AT-0064-03",
 "yellow": "AT-0064-04"
 },
 "AT-0065": {
+"teclas negras": "AT-0065-01",
+"black": "AT-0065-01",
+"black keys": "AT-0065-01",
 "negro": "AT-0065-01",
 "bla": "AT-0065-01",
-"black keys": "AT-0065-01",
-"black": "AT-0065-01",
-"teclas negras": "AT-0065-01",
 "blue": "AT-0065-02"
 },
 "AT-0066": {
+"teclas negras": "AT-0066-01",
+"black": "AT-0066-01",
+"black keys": "AT-0066-01",
 "negro": "AT-0066-01",
 "bla": "AT-0066-01",
-"black keys": "AT-0066-01",
-"black": "AT-0066-01",
-"teclas negras": "AT-0066-01",
 "yellow": "AT-0066-02"
 },
 "AT-0067": {
+"teclas negras": "AT-0067-01",
+"black": "AT-0067-01",
+"black keys": "AT-0067-01",
 "negro": "AT-0067-01",
 "bla": "AT-0067-01",
-"black keys": "AT-0067-01",
-"black": "AT-0067-01",
-"teclas negras": "AT-0067-01",
 "ultramarine": "AT-0067-02",
 "teal": "AT-0067-03",
-"white": "AT-0067-04"
+"white": "AT-0067-04",
+"pink": "AT-0067-05"
 },
 "AT-0068": {
+"teclas negras": "AT-0068-01",
+"black": "AT-0068-01",
+"black keys": "AT-0068-01",
 "negro": "AT-0068-01",
 "bla": "AT-0068-01",
-"black keys": "AT-0068-01",
-"black": "AT-0068-01",
-"teclas negras": "AT-0068-01",
 "desert titanium": "AT-0068-02",
 "natural titanium": "AT-0068-03",
 "white titanium": "AT-0068-04"
@@ -2247,13 +1808,13 @@
 "blue": "AT-0070-01",
 "blu": "AT-0070-01",
 "sage": "AT-0070-02",
-"lavander": "AT-0070-03",
 "lavender": "AT-0070-03",
-"blanco": "AT-0070-04",
-"teclas blancas": "AT-0070-04",
+"lavander": "AT-0070-03",
 "whites": "AT-0070-04",
+"blanco": "AT-0070-04",
 "whi": "AT-0070-04",
 "white": "AT-0070-04",
+"teclas blancas": "AT-0070-04",
 "black": "AT-0070-05"
 },
 "AT-0071": {
@@ -2288,25 +1849,25 @@
 "orange": "AT-0075-03"
 },
 "AT-0076": {
+"teclas negras": "AT-0076-01",
+"black": "AT-0076-01",
+"black keys": "AT-0076-01",
 "negro": "AT-0076-01",
 "bla": "AT-0076-01",
-"black keys": "AT-0076-01",
-"black": "AT-0076-01",
-"teclas negras": "AT-0076-01",
 "pink": "AT-0076-02",
 "white": "AT-0076-03"
 },
 "AT-0077": {
+"teclas negras": "AT-0077-01",
+"black": "AT-0077-01",
+"black keys": "AT-0077-01",
 "negro": "AT-0077-01",
 "bla": "AT-0077-01",
-"black keys": "AT-0077-01",
-"black": "AT-0077-01",
-"teclas negras": "AT-0077-01",
-"blanco": "AT-0077-02",
-"teclas blancas": "AT-0077-02",
 "whites": "AT-0077-02",
+"blanco": "AT-0077-02",
 "whi": "AT-0077-02",
-"white": "AT-0077-02"
+"white": "AT-0077-02",
+"teclas blancas": "AT-0077-02"
 },
 "AT-0078": {
 "blue": "AT-0078-01",
@@ -2320,62 +1881,65 @@
 "pink": "AT-0080-01"
 },
 "AT-0081": {
-"gre": "AT-0081-01",
-"green": "AT-0081-01"
+"green": "AT-0081-01",
+"gre": "AT-0081-01"
 },
 "AT-0082": {
-"": "AT-0082"
+"black": "AT-0082-01",
+"blue": "AT-0082-02",
+"gray": "AT-0082-03"
 },
 "AT-0083": {
-"grey": "AT-0083-01",
 "cinza": "AT-0083-01",
-"gris": "AT-0083-01",
+"grey": "AT-0083-01",
 "gray": "AT-0083-01",
+"gris": "AT-0083-01",
 "blue": "AT-0083-02",
 "blu": "AT-0083-02",
 "black": "AT-0083-03"
 },
 "AT-0084": {
-"negro": "AT-0084-01",
-"bla": "AT-0084-01",
-"black keys": "AT-0084-01",
+"teclas negras": "AT-0084-01",
 "black": "AT-0084-01",
-"teclas negras": "AT-0084-01"
+"black keys": "AT-0084-01",
+"negro": "AT-0084-01",
+"bla": "AT-0084-01"
 },
 "AT-0085": {
-"grey": "AT-0085-01",
 "cinza": "AT-0085-01",
-"gris": "AT-0085-01",
+"grey": "AT-0085-01",
 "gray": "AT-0085-01",
-"gre": "AT-0085-02",
+"gris": "AT-0085-01",
 "green": "AT-0085-02",
+"gre": "AT-0085-02",
 "violet": "AT-0085-03",
-"violeta": "AT-0085-03"
+"violeta": "AT-0085-03",
+"charcoal": "AT-0085-04"
 },
 "AT-0086": {
+"teclas negras": "AT-0086-01",
+"black": "AT-0086-01",
+"black keys": "AT-0086-01",
 "negro": "AT-0086-01",
 "bla": "AT-0086-01",
-"black keys": "AT-0086-01",
-"black": "AT-0086-01",
-"teclas negras": "AT-0086-01",
-"gre": "AT-0086-02",
 "green": "AT-0086-02",
+"gre": "AT-0086-02",
 "pin": "AT-0086-03",
 "pink": "AT-0086-03"
 },
 "AT-0087": {
-"grey": "AT-0087-01",
 "cinza": "AT-0087-01",
-"gris": "AT-0087-01",
+"grey": "AT-0087-01",
 "gray": "AT-0087-01",
-"gre": "AT-0087-02",
-"green": "AT-0087-02"
+"gris": "AT-0087-01",
+"green": "AT-0087-02",
+"gre": "AT-0087-02"
 },
 "AT-0088": {
-"grey": "AT-0088-01",
 "cinza": "AT-0088-01",
-"gris": "AT-0088-01",
-"gray": "AT-0088-01"
+"grey": "AT-0088-01",
+"gray": "AT-0088-01",
+"gris": "AT-0088-01"
 },
 "AT-0089": {
 "dark blue": "AT-0089-01"
@@ -2384,242 +1948,242 @@
 "jetblack": "AT-0090-01",
 "jet black": "AT-0090-01",
 "navy": "AT-0090-02",
-"icy blue": "AT-0090-03",
-"icyblue": "AT-0090-03"
+"icyblue": "AT-0090-03",
+"icy blue": "AT-0090-03"
 },
 "AT-0091": {
-"blanco": "AT-0091-01",
-"teclas blancas": "AT-0091-01",
 "whites": "AT-0091-01",
+"blanco": "AT-0091-01",
 "whi": "AT-0091-01",
 "white": "AT-0091-01",
+"teclas blancas": "AT-0091-01",
 "navy": "AT-0091-02",
-"icy blue": "AT-0091-03",
-"icyblue": "AT-0091-03"
+"icyblue": "AT-0091-03",
+"icy blue": "AT-0091-03"
 },
 "AT-0092": {
-"grey": "AT-0092-01",
 "cinza": "AT-0092-01",
-"gris": "AT-0092-01",
+"grey": "AT-0092-01",
 "gray": "AT-0092-01",
+"gris": "AT-0092-01",
 "whitesilver": "AT-0092-02",
 "silverblue": "AT-0092-03"
 },
 "AT-0093": {
-"grey": "AT-0093-01",
 "cinza": "AT-0093-01",
-"gris": "AT-0093-01",
+"grey": "AT-0093-01",
 "gray": "AT-0093-01",
+"gris": "AT-0093-01",
 "whitesilver": "AT-0093-02",
 "silverblue": "AT-0093-03"
 },
 "AT-0094": {
-"grey": "AT-0094-01",
 "cinza": "AT-0094-01",
-"gris": "AT-0094-01",
+"grey": "AT-0094-01",
 "gray": "AT-0094-01",
+"gris": "AT-0094-01",
 "whitesilver": "AT-0094-02",
 "silverblue": "AT-0094-03"
 },
 "AT-0095": {
+"teclas negras": "AT-0095-01",
+"black": "AT-0095-01",
+"black keys": "AT-0095-01",
 "negro": "AT-0095-01",
 "bla": "AT-0095-01",
-"black keys": "AT-0095-01",
-"black": "AT-0095-01",
-"teclas negras": "AT-0095-01",
-"blanco": "AT-0095-02",
-"teclas blancas": "AT-0095-02",
 "whites": "AT-0095-02",
+"blanco": "AT-0095-02",
 "whi": "AT-0095-02",
 "white": "AT-0095-02",
-"skyblue": "AT-0095-03",
+"teclas blancas": "AT-0095-02",
 "sky blue": "AT-0095-03",
+"skyblue": "AT-0095-03",
 "violet": "AT-0095-04"
 },
 "AT-0096": {
-"negro": "AT-0096-01",
-"bla": "AT-0096-01",
-"black keys": "AT-0096-01",
+"teclas negras": "AT-0096-01",
 "black": "AT-0096-01",
-"teclas negras": "AT-0096-01"
+"black keys": "AT-0096-01",
+"negro": "AT-0096-01",
+"bla": "AT-0096-01"
 },
 "AT-0097": {
 "graphite": "AT-0097-01",
-"garphite": "AT-0097-01",
 "grafito": "AT-0097-01",
+"garphite": "AT-0097-01",
 "blueberry": "AT-0097-02"
 },
 "AT-0098": {
 "graphite": "AT-0098-01",
-"garphite": "AT-0098-01",
 "grafito": "AT-0098-01",
+"garphite": "AT-0098-01",
 "blueberry": "AT-0098-02",
 "pistacho": "AT-0098-03"
 },
 "AT-0099": {
 "graphite": "AT-0099-01",
-"garphite": "AT-0099-01",
 "grafito": "AT-0099-01",
+"garphite": "AT-0099-01",
 "blueberry": "AT-0099-02"
 },
 "AT-0100": {
-"blanco": "AT-0100-01",
-"teclas blancas": "AT-0100-01",
 "whites": "AT-0100-01",
+"blanco": "AT-0100-01",
 "whi": "AT-0100-01",
-"white": "AT-0100-01"
+"white": "AT-0100-01",
+"teclas blancas": "AT-0100-01"
 },
 "AT-0101": {
+"teclas negras": "AT-0101-01",
+"black": "AT-0101-01",
+"black keys": "AT-0101-01",
 "negro": "AT-0101-01",
 "bla": "AT-0101-01",
-"black keys": "AT-0101-01",
-"black": "AT-0101-01",
-"teclas negras": "AT-0101-01",
-"skyblue": "AT-0101-02",
 "sky blue": "AT-0101-02",
+"skyblue": "AT-0101-02",
 "violet": "AT-0101-03",
 "violeta": "AT-0101-03"
 },
 "AT-0102": {
-"blanco": "AT-0102-01",
-"teclas blancas": "AT-0102-01",
 "whites": "AT-0102-01",
+"blanco": "AT-0102-01",
 "whi": "AT-0102-01",
 "white": "AT-0102-01",
-"skyblue": "AT-0102-02",
+"teclas blancas": "AT-0102-01",
 "sky blue": "AT-0102-02",
+"skyblue": "AT-0102-02",
 "black": "AT-0102-03",
 "violet": "AT-0102-04"
 },
 "AT-0103": {
+"teclas negras": "AT-0103-01",
+"black": "AT-0103-01",
+"black keys": "AT-0103-01",
 "negro": "AT-0103-01",
 "bla": "AT-0103-01",
-"black keys": "AT-0103-01",
-"black": "AT-0103-01",
-"teclas negras": "AT-0103-01",
-"blanco": "AT-0103-02",
-"teclas blancas": "AT-0103-02",
 "whites": "AT-0103-02",
+"blanco": "AT-0103-02",
 "whi": "AT-0103-02",
 "white": "AT-0103-02",
-"skyblue": "AT-0103-03",
+"teclas blancas": "AT-0103-02",
 "sky blue": "AT-0103-03",
+"skyblue": "AT-0103-03",
 "violet": "AT-0103-04",
 "violeta": "AT-0103-04"
 },
 "AT-0104": {
 "graphite": "AT-0104-01",
-"garphite": "AT-0104-01",
-"grafito": "AT-0104-01"
+"grafito": "AT-0104-01",
+"garphite": "AT-0104-01"
 },
 "AT-0105": {
 "graphite": "AT-0105-01",
-"garphite": "AT-0105-01",
-"grafito": "AT-0105-01"
+"grafito": "AT-0105-01",
+"garphite": "AT-0105-01"
 },
 "AT-0106": {
 "graphite": "AT-0106-01",
-"garphite": "AT-0106-01",
-"grafito": "AT-0106-01"
+"grafito": "AT-0106-01",
+"garphite": "AT-0106-01"
 },
 "AT-0107": {
-"": "AT-0107"
+"cream": "AT-0107-01"
 },
 "AT-0108": {
 "graphite": "AT-0108-01",
-"garphite": "AT-0108-01",
 "grafito": "AT-0108-01",
+"garphite": "AT-0108-01",
 "violet": "AT-0108-02",
 "violeta": "AT-0108-02"
 },
 "AT-0109": {
 "gold": "AT-0109-01",
-"gre": "AT-0109-02",
-"green": "AT-0109-02"
+"green": "AT-0109-02",
+"gre": "AT-0109-02"
 },
 "AT-0110": {
-"gre": "AT-0110-01",
-"green": "AT-0110-01"
+"green": "AT-0110-01",
+"gre": "AT-0110-01"
 },
 "AT-0111": {
-"negro": "AT-0111-01",
-"bla": "AT-0111-01",
-"black keys": "AT-0111-01",
+"teclas negras": "AT-0111-01",
 "black": "AT-0111-01",
-"teclas negras": "AT-0111-01"
+"black keys": "AT-0111-01",
+"negro": "AT-0111-01",
+"bla": "AT-0111-01"
 },
 "AT-0112": {
-"gre": "AT-0112-01",
-"green": "AT-0112-01"
+"green": "AT-0112-01",
+"gre": "AT-0112-01"
 },
 "AT-0113": {
-"gre": "AT-0113-01",
-"green": "AT-0113-01"
+"green": "AT-0113-01",
+"gre": "AT-0113-01"
 },
 "AT-0114": {
-"blanco": "AT-0114-01",
-"teclas blancas": "AT-0114-01",
 "whites": "AT-0114-01",
+"blanco": "AT-0114-01",
 "whi": "AT-0114-01",
-"white": "AT-0114-01"
+"white": "AT-0114-01",
+"teclas blancas": "AT-0114-01"
 },
 "AT-0115": {
 "blue": "AT-0115-01",
 "blu": "AT-0115-01"
 },
 "AT-0116": {
+"teclas negras": "AT-0116-01",
+"black": "AT-0116-01",
+"black keys": "AT-0116-01",
 "negro": "AT-0116-01",
 "bla": "AT-0116-01",
-"black keys": "AT-0116-01",
-"black": "AT-0116-01",
-"teclas negras": "AT-0116-01",
-"gre": "AT-0116-02",
-"green": "AT-0116-02"
+"green": "AT-0116-02",
+"gre": "AT-0116-02"
 },
 "AT-0117": {
+"teclas negras": "AT-0117-01",
+"black": "AT-0117-01",
+"black keys": "AT-0117-01",
 "negro": "AT-0117-01",
 "bla": "AT-0117-01",
-"black keys": "AT-0117-01",
-"black": "AT-0117-01",
-"teclas negras": "AT-0117-01",
 "blue": "AT-0117-02",
 "blu": "AT-0117-02",
-"gre": "AT-0117-03",
-"green": "AT-0117-03"
+"green": "AT-0117-03",
+"gre": "AT-0117-03"
 },
 "AT-0118": {
-"negro": "AT-0118-01",
-"bla": "AT-0118-01",
-"black keys": "AT-0118-01",
+"teclas negras": "AT-0118-01",
 "black": "AT-0118-01",
-"teclas negras": "AT-0118-01"
+"black keys": "AT-0118-01",
+"negro": "AT-0118-01",
+"bla": "AT-0118-01"
 },
 "AT-0119": {
+"teclas negras": "AT-0119-01",
+"black": "AT-0119-01",
+"black keys": "AT-0119-01",
 "negro": "AT-0119-01",
 "bla": "AT-0119-01",
-"black keys": "AT-0119-01",
-"black": "AT-0119-01",
-"teclas negras": "AT-0119-01",
-"pur": "AT-0119-02",
-"purple": "AT-0119-02"
+"purple": "AT-0119-02",
+"pur": "AT-0119-02"
 },
 "AT-0120": {
-"negro": "AT-0120-01",
-"bla": "AT-0120-01",
-"black keys": "AT-0120-01",
+"teclas negras": "AT-0120-01",
 "black": "AT-0120-01",
-"teclas negras": "AT-0120-01"
+"black keys": "AT-0120-01",
+"negro": "AT-0120-01",
+"bla": "AT-0120-01"
 },
 "AT-0121": {
 "blue": "AT-0121-01",
 "blu": "AT-0121-01"
 },
 "AT-0122": {
+"teclas negras": "AT-0122-01",
+"black": "AT-0122-01",
+"black keys": "AT-0122-01",
 "negro": "AT-0122-01",
 "bla": "AT-0122-01",
-"black keys": "AT-0122-01",
-"black": "AT-0122-01",
-"teclas negras": "AT-0122-01",
 "blue": "AT-0122-02",
 "blu": "AT-0122-02",
 "brown": "AT-0122-03"
@@ -2646,18 +2210,18 @@
 "": "AT-0129"
 },
 "AT-0130": {
-"negro": "AT-0130-01",
-"bla": "AT-0130-01",
-"black keys": "AT-0130-01",
+"teclas negras": "AT-0130-01",
 "black": "AT-0130-01",
-"teclas negras": "AT-0130-01"
+"black keys": "AT-0130-01",
+"negro": "AT-0130-01",
+"bla": "AT-0130-01"
 },
 "AT-0131": {
-"blanco": "AT-0131-01",
-"teclas blancas": "AT-0131-01",
 "whites": "AT-0131-01",
+"blanco": "AT-0131-01",
 "whi": "AT-0131-01",
-"white": "AT-0131-01"
+"white": "AT-0131-01",
+"teclas blancas": "AT-0131-01"
 },
 "AT-0132": {
 "": "AT-0132"
@@ -2735,11 +2299,11 @@
 "": "AT-0156"
 },
 "AT-0157": {
-"negro": "AT-0157-01",
-"bla": "AT-0157-01",
-"black keys": "AT-0157-01",
+"teclas negras": "AT-0157-01",
 "black": "AT-0157-01",
-"teclas negras": "AT-0157-01"
+"black keys": "AT-0157-01",
+"negro": "AT-0157-01",
+"bla": "AT-0157-01"
 },
 "AT-0158": {
 "silver": "AT-0158-01",
@@ -2748,13 +2312,13 @@
 "AT-0159": {
 "pin": "AT-0159-01",
 "pink": "AT-0159-01",
+"whites": "AT-0159-02",
 "blanco": "AT-0159-02",
 "whi": "AT-0159-02",
-"teclas blancas": "AT-0159-02",
-"whites": "AT-0159-02",
 "white": "AT-0159-02",
-"pur": "AT-0159-03",
+"teclas blancas": "AT-0159-02",
 "purple": "AT-0159-03",
+"pur": "AT-0159-03",
 "gre": "AT-0159-04",
 "green": "AT-0159-04",
 "blue": "AT-0159-05",
@@ -2803,11 +2367,11 @@
 "": "AT-0173"
 },
 "AT-0174": {
-"negro": "AT-0174-01",
-"bla": "AT-0174-01",
-"black keys": "AT-0174-01",
+"teclas negras": "AT-0174-01",
 "black": "AT-0174-01",
-"teclas negras": "AT-0174-01"
+"black keys": "AT-0174-01",
+"negro": "AT-0174-01",
+"bla": "AT-0174-01"
 },
 "AT-0175": {
 "": "AT-0175"
@@ -2825,11 +2389,11 @@
 "": "AT-0179"
 },
 "AT-0180": {
+"teclas negras": "AT-0180-01",
+"black": "AT-0180-01",
+"black keys": "AT-0180-01",
 "negro": "AT-0180-01",
 "bla": "AT-0180-01",
-"black keys": "AT-0180-01",
-"black": "AT-0180-01",
-"teclas negras": "AT-0180-01",
 "silver": "AT-0180-02",
 "sil": "AT-0180-02"
 },
@@ -2837,11 +2401,11 @@
 "": "AT-0181"
 },
 "AT-0182": {
-"negro": "AT-0182-01",
-"bla": "AT-0182-01",
-"black keys": "AT-0182-01",
+"teclas negras": "AT-0182-01",
 "black": "AT-0182-01",
-"teclas negras": "AT-0182-01"
+"black keys": "AT-0182-01",
+"negro": "AT-0182-01",
+"bla": "AT-0182-01"
 },
 "AT-0183": {
 "": "AT-0183"
@@ -2850,11 +2414,11 @@
 "": "AT-0184"
 },
 "AT-0185": {
-"negro": "AT-0185-01",
-"bla": "AT-0185-01",
-"black keys": "AT-0185-01",
+"teclas negras": "AT-0185-01",
 "black": "AT-0185-01",
-"teclas negras": "AT-0185-01"
+"black keys": "AT-0185-01",
+"negro": "AT-0185-01",
+"bla": "AT-0185-01"
 },
 "AT-0186": {
 "": "AT-0186"
@@ -2875,11 +2439,11 @@
 "": "AT-0191"
 },
 "AT-0192": {
+"whites": "AT-0192-01",
 "blanco": "AT-0192-01",
 "whi": "AT-0192-01",
-"teclas blancas": "AT-0192-01",
-"whites": "AT-0192-01",
-"white": "AT-0192-01"
+"white": "AT-0192-01",
+"teclas blancas": "AT-0192-01"
 },
 "AT-0193": {
 "": "AT-0193"
@@ -2940,18 +2504,18 @@
 "": "AT-0211"
 },
 "AT-0212": {
-"negro": "AT-0212-01",
-"bla": "AT-0212-01",
-"black keys": "AT-0212-01",
+"teclas negras": "AT-0212-01",
 "black": "AT-0212-01",
-"teclas negras": "AT-0212-01"
+"black keys": "AT-0212-01",
+"negro": "AT-0212-01",
+"bla": "AT-0212-01"
 },
 "AT-0213": {
-"negro": "AT-0213-01",
-"bla": "AT-0213-01",
-"black keys": "AT-0213-01",
+"teclas negras": "AT-0213-01",
 "black": "AT-0213-01",
-"teclas negras": "AT-0213-01"
+"black keys": "AT-0213-01",
+"negro": "AT-0213-01",
+"bla": "AT-0213-01"
 },
 "AT-0214": {
 "metallic black": "AT-0214-01"
@@ -3549,35 +3113,42 @@
 },
 "AT-0412": {
 "shiny black": "AT-0412-01",
+"shiny black · transitions green": "AT-0412-01",
 "transitions green": "AT-0412-02"
 },
 "AT-0413": {
 "shiny black": "AT-0413-01",
+"shiny black · transitions amethyst": "AT-0413-01",
 "transitions amethyst": "AT-0413-02"
 },
 "AT-0414": {
 "shiny black": "AT-0414-01",
+"shiny black · polarized gradient graphite": "AT-0414-01",
 "polarized gradient graphite": "AT-0414-02"
 },
 "AT-0415": {
 "shinny chalky grey": "AT-0415-01",
+"shiny chalky grey · transitions sapphire": "AT-0415-01",
 "shiny chalky grey": "AT-0415-01",
 "transitions sapphire": "AT-0415-02"
 },
 "AT-0416": {
 "shiny black": "AT-0416-01",
+"shiny black · graphite green transitions": "AT-0416-01",
 "graphite green transitions": "AT-0416-02"
 },
 "AT-0417": {
 "matte black": "AT-0417-01",
+"matte black · grey transitions": "AT-0417-01",
 "grey transitions": "AT-0417-02"
 },
 "AT-0418": {
+"black · polarized gradient graphite": "AT-0418-01",
+"teclas negras": "AT-0418-01",
+"black": "AT-0418-01",
+"black keys": "AT-0418-01",
 "negro": "AT-0418-01",
 "bla": "AT-0418-01",
-"black keys": "AT-0418-01",
-"black": "AT-0418-01",
-"teclas negras": "AT-0418-01",
 "polarized gradient graphite": "AT-0418-02"
 },
 "AT-0419": {
@@ -3654,7 +3225,8 @@
 },
 "AT-0437": {
 "silver": "AT-0437-01",
-"sil": "AT-0437-01"
+"sil": "AT-0437-01",
+"space black": "AT-0437-02"
 },
 "AT-0438": {
 "silver": "AT-0438-01",
@@ -3727,21 +3299,22 @@
 "rose gold": "AT-0454-04"
 },
 "AT-0455": {
+"teclas negras": "AT-0455-01",
+"black": "AT-0455-01",
+"black keys": "AT-0455-01",
 "negro": "AT-0455-01",
 "bla": "AT-0455-01",
-"black keys": "AT-0455-01",
-"black": "AT-0455-01",
-"teclas negras": "AT-0455-01",
 "black alpine loop m": "AT-0455-02",
 "blue trail loop m": "AT-0455-03",
-"anchor blue ocean band": "AT-0455-04"
+"anchor blue ocean band": "AT-0455-04",
+"blue": "AT-0455-05"
 },
 "AT-0456": {
+"teclas negras": "AT-0456-01",
+"black": "AT-0456-01",
+"black keys": "AT-0456-01",
 "negro": "AT-0456-01",
 "bla": "AT-0456-01",
-"black keys": "AT-0456-01",
-"black": "AT-0456-01",
-"teclas negras": "AT-0456-01",
 "black milanese loop l": "AT-0456-02",
 "natural": "AT-0456-03",
 "natural milanese loop l": "AT-0456-04"
@@ -3750,11 +3323,11 @@
 "black ceramic · black peach": "AT-0457-01"
 },
 "AT-0458": {
-"blanco": "AT-0458-01",
-"teclas blancas": "AT-0458-01",
 "whites": "AT-0458-01",
+"blanco": "AT-0458-01",
 "whi": "AT-0458-01",
-"white": "AT-0458-01"
+"white": "AT-0458-01",
+"teclas blancas": "AT-0458-01"
 },
 "AT-0459": {
 "titanio gris · blanco": "AT-0459-01"
@@ -3779,7 +3352,8 @@
 },
 "AT-0465": {
 "blue": "AT-0465-01",
-"blu": "AT-0465-01"
+"blu": "AT-0465-01",
+"silver": "AT-0465-02"
 },
 "AT-0466": {
 "blue": "AT-0466-01",
@@ -3790,19 +3364,21 @@
 "AT-0467": {
 "blue": "AT-0467-01",
 "blu": "AT-0467-01",
-"yellow": "AT-0467-02"
+"yellow": "AT-0467-02",
+"silver": "AT-0467-03"
 },
 "AT-0468": {
 "space gray": "AT-0468-01",
-"pur": "AT-0468-02",
 "purple": "AT-0468-02",
+"pur": "AT-0468-02",
 "blue": "AT-0468-03",
 "starlight": "AT-0468-04"
 },
 "AT-0469": {
 "space gray": "AT-0469-01",
 "starlight": "AT-0469-02",
-"blue": "AT-0469-03"
+"blue": "AT-0469-03",
+"purple": "AT-0469-04"
 },
 "AT-0470": {
 "space gray": "AT-0470-01"
@@ -3810,8 +3386,8 @@
 "AT-0471": {
 "blue": "AT-0471-01",
 "blu": "AT-0471-01",
-"pur": "AT-0471-02",
-"purple": "AT-0471-02"
+"purple": "AT-0471-02",
+"pur": "AT-0471-02"
 },
 "AT-0472": {
 "blue": "AT-0472-01",
@@ -3825,7 +3401,9 @@
 "blue": "AT-0473-03"
 },
 "AT-0474": {
-"space gray": "AT-0474-01"
+"space gray": "AT-0474-01",
+"starlight": "AT-0474-02",
+"purple": "AT-0474-03"
 },
 "AT-0475": {
 "space gray": "AT-0475-01"
@@ -3862,31 +3440,31 @@
 "space black": "AT-0484-01"
 },
 "AT-0485": {
-"grey": "AT-0485-01",
 "cinza": "AT-0485-01",
-"gris": "AT-0485-01",
-"gray": "AT-0485-01"
+"grey": "AT-0485-01",
+"gray": "AT-0485-01",
+"gris": "AT-0485-01"
 },
 "AT-0486": {
-"grey": "AT-0486-01",
 "cinza": "AT-0486-01",
-"gris": "AT-0486-01",
-"gray": "AT-0486-01"
+"grey": "AT-0486-01",
+"gray": "AT-0486-01",
+"gris": "AT-0486-01"
 },
 "AT-0487": {
-"grey": "AT-0487-01",
 "cinza": "AT-0487-01",
-"gris": "AT-0487-01",
-"gray": "AT-0487-01"
+"grey": "AT-0487-01",
+"gray": "AT-0487-01",
+"gris": "AT-0487-01"
 },
 "AT-0488": {
 "": "AT-0488"
 },
 "AT-0489": {
-"grey": "AT-0489-01",
 "cinza": "AT-0489-01",
-"gris": "AT-0489-01",
-"gray": "AT-0489-01"
+"grey": "AT-0489-01",
+"gray": "AT-0489-01",
+"gris": "AT-0489-01"
 },
 "AT-0490": {
 "silver": "AT-0490-01",
@@ -3897,52 +3475,1620 @@
 "lightblue": "AT-0491-01"
 },
 "AT-0492": {
-"grey": "AT-0492-01",
 "cinza": "AT-0492-01",
-"gris": "AT-0492-01",
-"gray": "AT-0492-01"
+"grey": "AT-0492-01",
+"gray": "AT-0492-01",
+"gris": "AT-0492-01"
 },
 "AT-0493": {
 "light blue": "AT-0493-01",
 "lightblue": "AT-0493-01"
 },
 "AT-0494": {
-"grey": "AT-0494-01",
 "cinza": "AT-0494-01",
-"gris": "AT-0494-01",
-"gray": "AT-0494-01"
+"grey": "AT-0494-01",
+"gray": "AT-0494-01",
+"gris": "AT-0494-01"
 },
 "AT-0495": {
-"grey": "AT-0495-01",
 "cinza": "AT-0495-01",
-"gris": "AT-0495-01",
-"gray": "AT-0495-01"
+"grey": "AT-0495-01",
+"gray": "AT-0495-01",
+"gris": "AT-0495-01"
 },
 "AT-0496": {
-"negro": "AT-0496-01",
-"bla": "AT-0496-01",
-"black keys": "AT-0496-01",
+"teclas negras": "AT-0496-01",
 "black": "AT-0496-01",
-"teclas negras": "AT-0496-01"
+"black keys": "AT-0496-01",
+"negro": "AT-0496-01",
+"bla": "AT-0496-01"
 },
 "AT-0497": {
-"grey": "AT-0497-01",
 "cinza": "AT-0497-01",
-"gris": "AT-0497-01",
-"gray": "AT-0497-01"
+"grey": "AT-0497-01",
+"gray": "AT-0497-01",
+"gris": "AT-0497-01"
 },
 "AT-0498": {
-"grey": "AT-0498-01",
 "cinza": "AT-0498-01",
-"gris": "AT-0498-01",
-"gray": "AT-0498-01"
+"grey": "AT-0498-01",
+"gray": "AT-0498-01",
+"gris": "AT-0498-01"
 },
 "AT-0499": {
-"gris": "AT-0499-01",
 "cinza": "AT-0499-01",
+"gray": "AT-0499-01",
 "grey": "AT-0499-01",
-"gray": "AT-0499-01"
+"gris": "AT-0499-01"
+},
+"AT-0501": {
+"orange": "AT-0501-01"
+},
+"AT-0502": {
+"black": "AT-0502-01",
+"green": "AT-0502-02"
+},
+"AT-0503": {
+"black": "AT-0503-01"
+},
+"AT-0504": {
+"black": "AT-0504-01"
+},
+"AT-0505": {
+"silver": "AT-0505-01"
+},
+"AT-0506": {
+"space black": "AT-0506-01"
+},
+"AT-0507": {
+"shiny black · transitions graph green": "AT-0507-01"
+},
+"AT-0508": {
+"": "AT-0508"
 }
+},
+"firmas": {
+"AT-0001": [
+"apple|accesorio apple|"
+],
+"AT-0002": [
+"apple|accesorio apple|"
+],
+"AT-0003": [
+"apple|accesorio apple|"
+],
+"AT-0004": [
+"apple|accesorio apple|10th:1"
+],
+"AT-0005": [
+"apple|accesorio apple|11:1,air:1,m3:1,m4:1"
+],
+"AT-0006": [
+"apple|accesorio apple|13:1,air:1,m3:1,m4:1"
+],
+"AT-0007": [
+"apple|accesorio apple|11:1,m2:1,pro:1"
+],
+"AT-0008": [
+"apple|accesorio apple|12:1,9:1,m1:1,m2:1,pro:1",
+"apple|accesorio apple|12:1,9:1,m2:1,pro:1"
+],
+"AT-0009": [
+"apple|accesorio apple|11:1,m4:1,m5:1,pro:1"
+],
+"AT-0010": [
+"apple|accesorio apple|13:1,m4:1,m5:1,pro:1"
+],
+"AT-0011": [
+"apple|accesorio apple|2:1"
+],
+"AT-0012": [
+"apple|accesorio apple|2:1"
+],
+"AT-0013": [
+"apple|accesorio apple|pro:1"
+],
+"AT-0014": [
+"apple|accesorio apple|"
+],
+"AT-0015": [
+"apple|accesorio apple|12:1,9:1,air:1,m2:1,m3:1,pro:1"
+],
+"AT-0016": [
+"canon|accesorio camara|e1:1"
+],
+"AT-0017": [
+"canon|accesorio camara|r20:1"
+],
+"AT-0018": [
+"canon|accesorio camara|5d:1,6d:1,e6p:1,r5:1,r5c:1,r5ii:1,r6m2:1,r7:1"
+],
+"AT-0019": [
+"canon|accesorio camara|2:1,5d:1,6d:1,7d:1,90d:1,e6nh:1,kit:1,r5:1,r6:1"
+],
+"AT-0020": [
+"canon|accesorio camara|5:1"
+],
+"AT-0021": [
+"canon|accesorio camara|630:1"
+],
+"AT-0022": [
+"canon|accesorio camara|"
+],
+"AT-0023": [
+"dji|accesorio camara|8p:1"
+],
+"AT-0024": [
+"fujifilm|accesorio camara|10:1,2:1,mini:1"
+],
+"AT-0025": [
+"gopro|accesorio camara|10:1,11:1,12:1,9:1,pro:1"
+],
+"AT-0026": [
+"nikon|accesorio camara|"
+],
+"AT-0027": [
+"nikon|accesorio camara|18d:1,3300mha:1"
+],
+"AT-0028": [
+"nikon|accesorio camara|el20a:1"
+],
+"AT-0029": [
+"nikon|accesorio camara|l7:1"
+],
+"AT-0030": [
+"nikon|accesorio camara|64:1"
+],
+"AT-0031": [
+"saramonic|accesorio camara|2:1"
+],
+"AT-0032": [
+"sigma|accesorio camara|630:1"
+],
+"AT-0033": [
+"sony|accesorio camara|qz1:1"
+],
+"AT-0034": [
+"sony|accesorio camara|2:1,50:1"
+],
+"AT-0035": [
+"sony|accesorio camara|100:1"
+],
+"AT-0036": [
+"sony|accesorio camara|fz100:1"
+],
+"AT-0037": [
+"sony|accesorio camara|sgr1:1"
+],
+"AT-0038": [
+"sony|accesorio camara|b10:1"
+],
+"AT-0039": [
+"dji|accesorio drone|"
+],
+"AT-0040": [
+"dji|accesorio drone|3:1,mini:1,pro:1"
+],
+"AT-0041": [
+"dji|accesorio drone|3:1,mini:1,pro:1"
+],
+"AT-0042": [
+"dji|accesorio drone|2:1"
+],
+"AT-0043": [
+"dji|accesorio drone|3s:1,air:1,rc2:1"
+],
+"AT-0044": [
+"dji|accesorio drone|n3:1"
+],
+"AT-0045": [
+"dji|accesorio drone|2:1,neo:1"
+],
+"AT-0046": [
+"dji|accesorio drone|2:1"
+],
+"AT-0047": [
+"logitech|accesorio gaming|g29:1,ps4:1,ps5:1"
+],
+"AT-0048": [
+"logitech|accesorio gaming|g923:1"
+],
+"AT-0049": [
+"microsoft|accesorio gaming|"
+],
+"AT-0050": [
+"microsoft|accesorio gaming|"
+],
+"AT-0051": [
+"sony|accesorio gaming|ps5:1"
+],
+"AT-0052": [
+"sony|accesorio gaming|ps5:1"
+],
+"AT-0053": [
+"sony|accesorio gaming|ps5:1,vr2:1"
+],
+"AT-0054": [
+"apple|auriculares|4:1"
+],
+"AT-0055": [
+"apple|auriculares|4:1"
+],
+"AT-0056": [
+"apple|auriculares|2:1,max:1"
+],
+"AT-0057": [
+"apple|auriculares|max:1"
+],
+"AT-0058": [
+"apple|auriculares|3:1,pro:1"
+],
+"AT-0059": [
+"apple|auriculares|"
+],
+"AT-0060": [
+"apple|auriculares|"
+],
+"AT-0061": [
+"jbl|auriculares|"
+],
+"AT-0062": [
+"kieslect|auriculares|"
+],
+"AT-0063": [
+"samsung|auriculares|3:1"
+],
+"AT-0064": [
+"apple|celular|128:1,14:1"
+],
+"AT-0065": [
+"apple|celular|128:1,15:1"
+],
+"AT-0066": [
+"apple|celular|128:1,15:1,plus:1"
+],
+"AT-0067": [
+"apple|celular|128:1,16:1"
+],
+"AT-0068": [
+"apple|celular|16:1,256:1,max:1,pro:1"
+],
+"AT-0069": [
+"apple|celular|16:1,512:1,max:1,pro:1"
+],
+"AT-0070": [
+"apple|celular|17:1,256:1"
+],
+"AT-0071": [
+"apple|celular|17:1,1tb:1,pro:1"
+],
+"AT-0072": [
+"apple|celular|17:1,256:1,pro:1"
+],
+"AT-0073": [
+"apple|celular|17:1,512:1,pro:1"
+],
+"AT-0074": [
+"apple|celular|17:1,1tb:1,max:1,pro:1"
+],
+"AT-0075": [
+"apple|celular|17:1,256:1,max:1,pro:1"
+],
+"AT-0076": [
+"apple|celular|17e:1,256:1"
+],
+"AT-0077": [
+"apple|celular|1tb:1,air:1"
+],
+"AT-0078": [
+"motorola|celular|256:1,4:1,g06:1"
+],
+"AT-0079": [
+"motorola|celular|4:1,64:1,g06:1"
+],
+"AT-0080": [
+"motorola|celular|256:1,4:1,g17:1"
+],
+"AT-0081": [
+"motorola|celular|256:1,8:1,g57:1"
+],
+"AT-0082": [
+"samsung|celular|128:1,235:1,4:1,a17:1",
+"samsung|celular|128:1,4:1,a17:1"
+],
+"AT-0083": [
+"samsung|celular|256:1,8:1,a17:1"
+],
+"AT-0084": [
+"samsung|celular|128:1,6:1,a27:1"
+],
+"AT-0085": [
+"samsung|celular|256:1,8:1,a37:1"
+],
+"AT-0086": [
+"samsung|celular|12:1,256:1,a56:1"
+],
+"AT-0087": [
+"samsung|celular|256:1,8:1,a56:1"
+],
+"AT-0088": [
+"samsung|celular|128:1,8:1,a57:1"
+],
+"AT-0089": [
+"samsung|celular|256:1,8:1,a57:1"
+],
+"AT-0090": [
+"samsung|celular|256:1,fe:1,s25:1"
+],
+"AT-0091": [
+"samsung|celular|512:1,fe:1,s25:1"
+],
+"AT-0092": [
+"samsung|celular|12:1,256:1,s25:1,ultra:1"
+],
+"AT-0093": [
+"samsung|celular|12:1,512:1,s25:1,ultra:1"
+],
+"AT-0094": [
+"samsung|celular|1tb:1,s25:1,ultra:1"
+],
+"AT-0095": [
+"samsung|celular|12:1,512:1,s26:1"
+],
+"AT-0096": [
+"samsung|celular|256:1,s26:1"
+],
+"AT-0097": [
+"samsung|celular|128:1,8:1,fe:1,s26:1"
+],
+"AT-0098": [
+"samsung|celular|256:1,8:1,fe:1,s26:1"
+],
+"AT-0099": [
+"samsung|celular|512:1,8:1,fe:1,s26:1"
+],
+"AT-0100": [
+"samsung|celular|256:1,plus:1,s26:1"
+],
+"AT-0101": [
+"samsung|celular|512:1,plus:1,s26:1"
+],
+"AT-0102": [
+"samsung|celular|16:1,1tb:1,s26:1,ultra:1"
+],
+"AT-0103": [
+"samsung|celular|256:1,s26:1,ultra:1"
+],
+"AT-0104": [
+"samsung|celular|512:1,8:1"
+],
+"AT-0105": [
+"samsung|celular|256:1,8:1"
+],
+"AT-0106": [
+"samsung|celular|512:1,8:1"
+],
+"AT-0107": [
+"samsung|celular|256:1,8:1,ultra:1"
+],
+"AT-0108": [
+"samsung|celular|512:1,8:1,ultra:1"
+],
+"AT-0109": [
+"xiaomi|celular|128:1,4:1,c81:1,pro:1"
+],
+"AT-0110": [
+"xiaomi|celular|256:1,8:1,f6:1"
+],
+"AT-0111": [
+"xiaomi|celular|12:1,256:1,f6:1,pro:1"
+],
+"AT-0112": [
+"xiaomi|celular|256:1,8:1,pro:1,x8:1"
+],
+"AT-0113": [
+"xiaomi|celular|512:1,8:1,pro:1,x8:1"
+],
+"AT-0114": [
+"xiaomi|celular|12:1,256:1,max:1,pro:1,x8:1"
+],
+"AT-0115": [
+"xiaomi|celular|12:1,512:1,max:1,pro:1,x8:1"
+],
+"AT-0116": [
+"xiaomi|celular|128:1,15c:1,4:1"
+],
+"AT-0117": [
+"xiaomi|celular|128:1,13:1,6:1"
+],
+"AT-0118": [
+"xiaomi|celular|15:1,256:1,8:1"
+],
+"AT-0119": [
+"xiaomi|celular|12:1,15:1,512:1,pro:1"
+],
+"AT-0120": [
+"xiaomi|celular|15:1,256:1,8:1,pro:1"
+],
+"AT-0121": [
+"xiaomi|celular|12:1,15:1,512:1,plus:1,pro:1"
+],
+"AT-0122": [
+"xiaomi|celular|15:1,256:1,8:1,plus:1,pro:1"
+],
+"AT-0123": [
+"meta|consola|3:1,512:1"
+],
+"AT-0124": [
+"meta|consola|128:1,3s:1"
+],
+"AT-0125": [
+"meta|consola|128:1,3s:1"
+],
+"AT-0126": [
+"meta|consola|256:1,3s:1"
+],
+"AT-0127": [
+"meta|consola|256:1,3s:1"
+],
+"AT-0128": [
+"microsoft|consola|1tb:1"
+],
+"AT-0129": [
+"microsoft|consola|512:1"
+],
+"AT-0130": [
+"microsoft|consola|1tb:1"
+],
+"AT-0131": [
+"microsoft|consola|1tb:1"
+],
+"AT-0132": [
+"nintendo|consola|2:1"
+],
+"AT-0133": [
+"nintendo|consola|2:1"
+],
+"AT-0134": [
+"nintendo|consola|2:1"
+],
+"AT-0135": [
+"sony|consola|5:1,825:1"
+],
+"AT-0136": [
+"sony|consola|1tb:1,5:1"
+],
+"AT-0137": [
+"sony|consola|2tb:1,5:1,pro:1"
+],
+"AT-0138": [
+"canon|camara|150:1,18:1,kit:1,r7:1"
+],
+"AT-0139": [
+"canon|camara|18:1,2000d:1,55:1,kit:1,t7:1"
+],
+"AT-0140": [
+"canon|camara|18:1,4000d:1,55:1,kit:1,t100:1"
+],
+"AT-0141": [
+"canon|camara|5d:1,body:1"
+],
+"AT-0142": [
+"canon|camara|body:1,r1:1"
+],
+"AT-0143": [
+"canon|camara|150:1,18:1,kit:1,r10:1"
+],
+"AT-0144": [
+"canon|camara|body:1,r10:1"
+],
+"AT-0145": [
+"canon|camara|18:1,210:1,45:1,55:1,kit:1,r100:1"
+],
+"AT-0146": [
+"canon|camara|body:1,r3:1"
+],
+"AT-0147": [
+"canon|camara|body:1,r5:1"
+],
+"AT-0148": [
+"canon|camara|r5:1"
+],
+"AT-0149": [
+"canon|camara|body:1,r5:1"
+],
+"AT-0150": [
+"canon|camara|105:1,24:1,4:1,r6:1"
+],
+"AT-0151": [
+"canon|camara|body:1,r6:1"
+],
+"AT-0152": [
+"canon|camara|1:1,105:1,24:1,7:1,f4:1,kit:1,r6:1"
+],
+"AT-0153": [
+"canon|camara|body:1,r6:1"
+],
+"AT-0154": [
+"canon|camara|20:1,4usm:1,50:1,kit:1,r6:1"
+],
+"AT-0155": [
+"canon|camara|1:1,105:1,24:1,4:1,7:1,kit:1"
+],
+"AT-0156": [
+"canon|camara|body:1"
+],
+"AT-0157": [
+"canon|camara|g7:1"
+],
+"AT-0158": [
+"canon|camara|sx740:1"
+],
+"AT-0159": [
+"fujifilm|camara|12:1,mini:1"
+],
+"AT-0160": [
+"nikon|camara|16:1,50:1,kit:1,z30:1"
+],
+"AT-0161": [
+"nikon|camara|16:1,250:1,50:2,kit:1,z30:1"
+],
+"AT-0162": [
+"nikon|camara|140:1,18:1,kit:1,z30:1"
+],
+"AT-0163": [
+"nikon|camara|body:1,z6:1"
+],
+"AT-0164": [
+"nikon|camara|body:1,z6:1"
+],
+"AT-0165": [
+"nikon|camara|body:1,z6:1"
+],
+"AT-0166": [
+"nikon|camara|120mm:1,24:1,kit:1,z6:1"
+],
+"AT-0167": [
+"nikon|camara|body:1,z7:1"
+],
+"AT-0168": [
+"nikon|camara|body:1,z8:1"
+],
+"AT-0169": [
+"nikon|camara|120:1,24:1,kit:1,z8:1"
+],
+"AT-0170": [
+"nikon|camara|6k:1"
+],
+"AT-0171": [
+"sony|camara|1:1,body:1"
+],
+"AT-0172": [
+"sony|camara|16:1,50:1,6400:1,kit:1"
+],
+"AT-0173": [
+"sony|camara|7:1,body:1"
+],
+"AT-0174": [
+"sony|camara|7:1,body:1"
+],
+"AT-0175": [
+"sony|camara|28:1,7:1,70:1,kit:1"
+],
+"AT-0176": [
+"sony|camara|28:1,7:1,70:1,kit:1"
+],
+"AT-0177": [
+"sony|camara|7:1,body:1"
+],
+"AT-0178": [
+"sony|camara|28:1,7:1,70:1,kit:1"
+],
+"AT-0179": [
+"sony|camara|7c:1,body:1"
+],
+"AT-0180": [
+"sony|camara|7cr:1,body:1"
+],
+"AT-0181": [
+"sony|camara|7r:1,body:1"
+],
+"AT-0182": [
+"sony|camara|7r:1,body:1"
+],
+"AT-0183": [
+"sony|camara|7r:1,body:1"
+],
+"AT-0184": [
+"sony|camara|7r:1,body:1"
+],
+"AT-0185": [
+"sony|camara|7s:1,body:1"
+],
+"AT-0186": [
+"sony|camara|9:1"
+],
+"AT-0187": [
+"sony|camara|rx100:1"
+],
+"AT-0188": [
+"sony|camara|body:1,fx2:1"
+],
+"AT-0189": [
+"sony|camara|body:1,fx3:1"
+],
+"AT-0190": [
+"sony|camara|body:1,fx30:1"
+],
+"AT-0191": [
+"sony|camara|fx6:1"
+],
+"AT-0192": [
+"sony|camara|body:1,e10:1"
+],
+"AT-0193": [
+"dji|camara de accion|6:1"
+],
+"AT-0194": [
+"dji|camara de accion|64:1"
+],
+"AT-0195": [
+"dji|camara de accion|124:1"
+],
+"AT-0196": [
+"gopro|camara de accion|12:1,pro:1"
+],
+"AT-0197": [
+"gopro|camara de accion|13:1,pro:1"
+],
+"AT-0198": [
+"gopro|camara de accion|1:1,8k:1,pro:1"
+],
+"AT-0199": [
+"insta360|camara de accion|360:1,pro:1"
+],
+"AT-0200": [
+"insta360|camara de accion|2:1,360:1"
+],
+"AT-0201": [
+"apple|desktop|16:1,24:1,256:1,4:1,5k:1,m4:1"
+],
+"AT-0202": [
+"apple|desktop|16:1,256:1,m4:1,mini:1"
+],
+"AT-0203": [
+"apple|desktop|16:1,512:1,m4:1,mini:1"
+],
+"AT-0204": [
+"apple|desktop|24:1,512:1,m4:1,mini:1,pro:1"
+],
+"AT-0205": [
+"antigravity|drone|360:1,8k:1,a1:1"
+],
+"AT-0206": [
+"dji|drone|pro:1"
+],
+"AT-0207": [
+"dji|drone|4:1,512:1,pro:1"
+],
+"AT-0208": [
+"dji|drone|5:1,mini:1,pro:1"
+],
+"AT-0209": [
+"dji|drone|2:1,5:1,mini:1,pro:1"
+],
+"AT-0210": [
+"dji|drone|2:1,5:1,mini:1,plus:1,pro:1"
+],
+"AT-0211": [
+"dji|drone|5:1,mini:1,n3:1,pro:1"
+],
+"AT-0212": [
+"amazon|e-reader|11:1,16:1",
+"amazon|e-reader|16:1"
+],
+"AT-0213": [
+"amazon|e-reader|12:1,16:1"
+],
+"AT-0214": [
+"amazon|e-reader|12:1,32:1"
+],
+"AT-0215": [
+"canon|filmadora|4k:1,hfg70:1"
+],
+"AT-0216": [
+"panasonic|filmadora|4k:1,cx20:1"
+],
+"AT-0217": [
+"panasonic|filmadora|24x:1,4k:1,x1200:1"
+],
+"AT-0218": [
+"panasonic|filmadora|24x:1,4k:1,pro:1,x2100:1"
+],
+"AT-0219": [
+"panasonic|filmadora|24x:1,v900:1"
+],
+"AT-0220": [
+"panasonic|filmadora|24x:1,4k:1,vx3:1"
+],
+"AT-0221": [
+"sony|filmadora|1:1,4k:1,nx800:1"
+],
+"AT-0222": [
+"sony|filmadora|1:1,4k:1,z200:1"
+],
+"AT-0223": [
+"canon|lente|16:1,35mm:1,4l:1"
+],
+"AT-0224": [
+"canon|lente|2:1,24:1,70mm:1,8:1"
+],
+"AT-0225": [
+"canon|lente|1:1,4:1,50mm:1"
+],
+"AT-0226": [
+"canon|lente|10:1,18mm:1,4:1,5:2,6:1"
+],
+"AT-0227": [
+"canon|lente|135mm:1,18:1,3:1,5:2,6:1"
+],
+"AT-0228": [
+"canon|lente|2:1,24mm:1,8:1"
+],
+"AT-0229": [
+"canon|accesorio camara|1:1,4x:1",
+"canon|lente|1:1,4x:1"
+],
+"AT-0230": [
+"canon|lente|10:1,20mm:1,4:1"
+],
+"AT-0231": [
+"canon|lente|100:1,400mm:1,5:1,6:1,8:1"
+],
+"AT-0232": [
+"canon|lente|100mm:1,2:1,8:1"
+],
+"AT-0233": [
+"canon|lente|1:1,135mm:1,8:1"
+],
+"AT-0234": [
+"canon|lente|14:1,35mm:1,4l:1"
+],
+"AT-0235": [
+"canon|lente|15:1,3:1,30mm:1,4:1,5:1,6:1"
+],
+"AT-0236": [
+"canon|lente|15:1,2:1,35mm:1,8:1"
+],
+"AT-0237": [
+"canon|lente|16:1,2:1,28mm:1,8:1"
+],
+"AT-0238": [
+"canon|lente|16mm:1,2:1,8:1"
+],
+"AT-0239": [
+"canon|accesorio camara|0x:1,2:1",
+"canon|lente|0x:1,2:1"
+],
+"AT-0240": [
+"canon|lente|200:1,3:1,6:1,800mm:1,9:1"
+],
+"AT-0241": [
+"canon|lente|1:1,20mm:1,4:1"
+],
+"AT-0242": [
+"canon|lente|105mm:1,24:1,4:1"
+],
+"AT-0243": [
+"canon|lente|1:1,105mm:1,24:1,4:1,7:1"
+],
+"AT-0244": [
+"canon|lente|24:1,240mm:1,3:1,4:1,6:1"
+],
+"AT-0245": [
+"canon|lente|2:1,24:1,70mm:1,8:1"
+],
+"AT-0246": [
+"canon|lente|1:1,24mm:1,4:1"
+],
+"AT-0247": [
+"canon|lente|1:1,24mm:1,8:1"
+],
+"AT-0248": [
+"canon|lente|2:1,28:1,70mm:1"
+],
+"AT-0249": [
+"canon|lente|2:1,28:1,70mm:1,8:1"
+],
+"AT-0250": [
+"canon|lente|2:1,28mm:1,8:1"
+],
+"AT-0251": [
+"canon|lente|1:1,35mm:1,4:1"
+],
+"AT-0252": [
+"canon|lente|1:1,2:1,45mm:1"
+],
+"AT-0253": [
+"canon|lente|1:1,2:1,50mm:1"
+],
+"AT-0254": [
+"canon|lente|1:1,50mm:1,8:1"
+],
+"AT-0255": [
+"canon|lente|11l:1,600mm:1"
+],
+"AT-0256": [
+"canon|lente|14mm:1,2:1,3:1,5:1,7:1,8:1"
+],
+"AT-0257": [
+"canon|lente|2:1,200mm:1,70:1,8:1"
+],
+"AT-0258": [
+"canon|lente|200mm:1,4l:1,70:1"
+],
+"AT-0259": [
+"canon|lente|300mm:1,4:1,5:1,6:1,75:1"
+],
+"AT-0260": [
+"canon|lente|11:1,800mm:1"
+],
+"AT-0261": [
+"canon|lente|2:1,85mm:1"
+],
+"AT-0262": [
+"canon|lente|10:1,18mm:1,3:1,4:1,5:1,6:1"
+],
+"AT-0263": [
+"canon|lente|150mm:1,18:1,3:2,5:1,6:1"
+],
+"AT-0264": [
+"canon|lente|3:2,5:1,9mm:1"
+],
+"AT-0265": [
+"canon|lente|210mm:1,5:1,55:1,7:1"
+],
+"AT-0266": [
+"canon|lente|4:1,7:1,8mm:1"
+],
+"AT-0267": [
+"nikon|lente|12:1,24mm:1,4:1"
+],
+"AT-0268": [
+"nikon|lente|1:1,35mm:1,8:1"
+],
+"AT-0269": [
+"nikon|lente|1:1,50mm:1,8:1"
+],
+"AT-0270": [
+"nikon|lente|12:1,28mm:1,3:1,5:2,6:1"
+],
+"AT-0271": [
+"nikon|lente|12:1,28mm:1,3:1,5:2,6:1"
+],
+"AT-0272": [
+"nikon|lente|1:1,135mm:1,8:1"
+],
+"AT-0273": [
+"nikon|lente|14:1,30mm:1,4:1"
+],
+"AT-0274": [
+"nikon|lente|17:1,2:1,28mm:1,8:1"
+],
+"AT-0275": [
+"nikon|lente|140mm:1,18:1,3:2,5:1,6:1"
+],
+"AT-0276": [
+"nikon|lente|180:1,3:1,5:1,6:2,600mm:1"
+],
+"AT-0277": [
+"nikon|lente|1:1,105mm:1,24:1,4:1,7:1"
+],
+"AT-0278": [
+"nikon|lente|200mm:1,24:1,3:1,4:1,6:1"
+],
+"AT-0279": [
+"nikon|lente|2:1,24:1,70mm:1,8:1"
+],
+"AT-0280": [
+"nikon|lente|24:1,4s:1,70mm:1"
+],
+"AT-0281": [
+"nikon|lente|1:1,24mm:1,8:1"
+],
+"AT-0282": [
+"nikon|lente|2:1,26mm:1,8:1"
+],
+"AT-0283": [
+"nikon|lente|135mm:1,28:1,4:1"
+],
+"AT-0284": [
+"nikon|lente|28:1,4:1,400mm:1,8:1"
+],
+"AT-0285": [
+"nikon|lente|2:1,28mm:1,8:1"
+],
+"AT-0286": [
+"nikon|lente|1:1,2:1,35mm:1"
+],
+"AT-0287": [
+"nikon|lente|1:1,35mm:1,8:1"
+],
+"AT-0288": [
+"nikon|lente|4:1,400mm:1,5:1"
+],
+"AT-0289": [
+"nikon|lente|2:1,40mm:1"
+],
+"AT-0290": [
+"nikon|lente|1:1,2:1,50mm:1"
+],
+"AT-0291": [
+"nikon|lente|1:1,4:1,50mm:1"
+],
+"AT-0292": [
+"nikon|lente|1:1,50mm:1,8:1"
+],
+"AT-0293": [
+"nikon|lente|180mm:1,2:1,70:1,8:1"
+],
+"AT-0294": [
+"nikon|lente|2:1,200mm:1,70:1,8:1"
+],
+"AT-0295": [
+"nikon|lente|1:1,2:1,85mm:1"
+],
+"AT-0296": [
+"nikon|lente|1:1,24mm:1,7:1"
+],
+"AT-0297": [
+"nikon|lente|105mm:1,2:1,8:1"
+],
+"AT-0298": [
+"nikon|lente|2:1,50mm:1,8:1"
+],
+"AT-0299": [
+"nikon|accesorio camara|2x:1",
+"nikon|lente|2x:1"
+],
+"AT-0300": [
+"sigma|lente|10:1,18mm:1,2:1,8:1"
+],
+"AT-0301": [
+"sigma|lente|10:1,18mm:1,2:1,8:1"
+],
+"AT-0302": [
+"sigma|lente|100:1,3:1,400mm:1,5:1,6:1"
+],
+"AT-0303": [
+"sigma|lente|105mm:1,2:1,8:1"
+],
+"AT-0304": [
+"sigma|lente|12:1,24mm:1,4:1"
+],
+"AT-0305": [
+"sigma|lente|12:1,24mm:1,4:1"
+],
+"AT-0306": [
+"sigma|lente|1:1,12mm:1,4:1"
+],
+"AT-0307": [
+"sigma|lente|1:1,12mm:1,4:1"
+],
+"AT-0308": [
+"sigma|lente|14:1,2:1,24mm:1,8:1"
+],
+"AT-0309": [
+"sigma|lente|14:1,2:1,24mm:1,8:1"
+],
+"AT-0310": [
+"sigma|lente|150:1,3:1,5:1,6:1,600mm:1"
+],
+"AT-0311": [
+"sigma|lente|16:1,2:1,28mm:1,8:1"
+],
+"AT-0312": [
+"sigma|lente|16:1,3:1,300mm:1,5:1,6:1,7:1"
+],
+"AT-0313": [
+"sigma|lente|1:1,16mm:1,4:1"
+],
+"AT-0314": [
+"sigma|lente|1:1,16mm:1,4:1"
+],
+"AT-0315": [
+"sigma|lente|1:1,16mm:1,4:1"
+],
+"AT-0316": [
+"sigma|lente|1:1,17:1,40mm:1,8:1"
+],
+"AT-0317": [
+"sigma|lente|1:1,17:1,40mm:1,8:1"
+],
+"AT-0318": [
+"sigma|lente|17mm:1,4:1"
+],
+"AT-0319": [
+"sigma|lente|1:1,18:1,35mm:1,8:1"
+],
+"AT-0320": [
+"sigma|lente|1:1,18:1,35mm:1,8:1"
+],
+"AT-0321": [
+"sigma|lente|20:1,200mm:1,3:2,5:1,6:1"
+],
+"AT-0322": [
+"sigma|lente|1:1,24mm:1,4:1"
+],
+"AT-0323": [
+"sigma|lente|1:1,24mm:1,4:1"
+],
+"AT-0324": [
+"sigma|lente|105mm:1,2:1,28:1,8:1"
+],
+"AT-0325": [
+"sigma|lente|1:1,28:1,45mm:1,8:1"
+],
+"AT-0326": [
+"sigma|lente|1:1,28mm:1,4:1"
+],
+"AT-0327": [
+"sigma|lente|1:1,30mm:1,4:1"
+],
+"AT-0328": [
+"sigma|lente|1:1,30mm:1,4:1"
+],
+"AT-0329": [
+"sigma|lente|1:1,2:1,35mm:1"
+],
+"AT-0330": [
+"sigma|lente|1:1,35mm:1,4:1"
+],
+"AT-0331": [
+"sigma|lente|1:1,35mm:1,4:1"
+],
+"AT-0332": [
+"sigma|lente|1:1,100mm:1,50:1,8:1"
+],
+"AT-0333": [
+"sigma|lente|1:1,4:1,50mm:1"
+],
+"AT-0334": [
+"sigma|lente|1:1,4:1,50mm:1"
+],
+"AT-0335": [
+"sigma|lente|1:1,4:1,50mm:1"
+],
+"AT-0336": [
+"sigma|lente|1:1,4:1,56mm:1"
+],
+"AT-0337": [
+"sigma|lente|1:1,4:1,56mm:1"
+],
+"AT-0338": [
+"sigma|lente|1:1,4:1,56mm:1"
+],
+"AT-0339": [
+"sigma|lente|3:1,4:1,5:1,6:1,60:1,600mm:1"
+],
+"AT-0340": [
+"sigma|lente|1:1,4:1,85mm:1"
+],
+"AT-0341": [
+"sigma|lente|1:1,4:1,85mm:1"
+],
+"AT-0342": [
+"sigma|lente|1:1,4:1,85mm:1"
+],
+"AT-0343": [
+"sigma|lente|1:1,4:1,85mm:1"
+],
+"AT-0344": [
+"sigma|lente|1:1,4:1,85mm:1"
+],
+"AT-0345": [
+"sony|lente|350mm:1,4:1,5:1,6:1,70:1"
+],
+"AT-0346": [
+"sony|lente|135mm:1,28:1,4:1"
+],
+"AT-0347": [
+"sony|lente|100:1,4:1,400mm:1,5:2,6:1,fe:1"
+],
+"AT-0348": [
+"sony|lente|100mm:1,2:1,8:1,fe:1"
+],
+"AT-0349": [
+"sony|lente|12:1,2:1,24mm:1,8:1,fe:1"
+],
+"AT-0350": [
+"sony|lente|1:1,135mm:1,8:1,fe:1"
+],
+"AT-0351": [
+"sony|lente|1:1,14mm:1,8:1,fe:1"
+],
+"AT-0352": [
+"sony|lente|16:1,2:1,25mm:1,8:1,fe:1"
+],
+"AT-0353": [
+"sony|lente|16:1,2:1,35mm:1,8:1,fe:1"
+],
+"AT-0354": [
+"sony|lente|16:1,2:1,35mm:1,8:1,fe:1"
+],
+"AT-0355": [
+"sony|lente|20:1,4:1,70mm:1,fe:1"
+],
+"AT-0356": [
+"sony|lente|200:1,3:1,5:1,6:2,600mm:1,fe:1"
+],
+"AT-0357": [
+"sony|lente|1:1,20mm:1,8:1,fe:1"
+],
+"AT-0358": [
+"sony|lente|105mm:1,24:1,4:1,fe:1"
+],
+"AT-0359": [
+"sony|lente|2:1,24:1,50mm:1,8:1,fe:1"
+],
+"AT-0360": [
+"sony|lente|2:1,24:1,70mm:1,8:1,fe:1"
+],
+"AT-0361": [
+"sony|lente|24:1,70mm:1,fe:1"
+],
+"AT-0362": [
+"sony|lente|1:1,24mm:1,4:1,fe:1"
+],
+"AT-0363": [
+"sony|lente|2:1,28:1,70mm:1,fe:1"
+],
+"AT-0364": [
+"sony|lente|28:1,3:1,5:2,6:1,70mm:1,fe:1"
+],
+"AT-0365": [
+"sony|lente|2:1,28mm:1,fe:1"
+],
+"AT-0366": [
+"sony|accesorio camara|2x:1,fe:1",
+"sony|lente|2x:1,fe:1"
+],
+"AT-0367": [
+"sony|lente|1:1,35mm:1,4:1,fe:1"
+],
+"AT-0368": [
+"sony|lente|1:1,35mm:1,4:1,fe:1"
+],
+"AT-0369": [
+"sony|lente|3:1,400:1,6:1,8:1,800mm:1,fe:1"
+],
+"AT-0370": [
+"sony|lente|150mm:1,2:1,50:1,fe:1"
+],
+"AT-0371": [
+"sony|lente|1:1,2:1,50mm:1,fe:1"
+],
+"AT-0372": [
+"sony|lente|1:1,4:1,50mm:1,fe:1"
+],
+"AT-0373": [
+"sony|lente|1:1,4:1,50mm:1,fe:1"
+],
+"AT-0374": [
+"sony|lente|1:1,50mm:1,8:1,fe:1"
+],
+"AT-0375": [
+"sony|lente|1:1,55mm:1,8:1,fe:1"
+],
+"AT-0376": [
+"sony|lente|2:1,200mm:1,70:1,8:1,fe:1"
+],
+"AT-0377": [
+"sony|lente|200mm:1,4:1,70:1,fe:1"
+],
+"AT-0378": [
+"sony|lente|1:1,4:1,85mm:1,fe:1"
+],
+"AT-0379": [
+"sony|lente|1:1,8:1,85mm:1,fe:1"
+],
+"AT-0380": [
+"sony|lente|2:1,8:1,90mm:1,fe:1"
+],
+"AT-0381": [
+"sony|lente|16:1,35mm:1,4:1,fe:1"
+],
+"AT-0382": [
+"tamron|lente|11:1,2:1,20mm:1,8:1"
+],
+"AT-0383": [
+"tamron|lente|11:1,2:1,20mm:1,8:1"
+],
+"AT-0384": [
+"tamron|lente|150:1,5:1,500mm:1,6:1,7:1"
+],
+"AT-0385": [
+"tamron|lente|16:1,2:1,30mm:1,8:1,g2:1"
+],
+"AT-0386": [
+"tamron|lente|16:1,2:1,30mm:1,8:1,g2:1"
+],
+"AT-0387": [
+"tamron|lente|17:1,2:1,28mm:1,8:1"
+],
+"AT-0388": [
+"tamron|lente|17:1,4:1,50mm:1"
+],
+"AT-0389": [
+"tamron|lente|17:1,2:1,70mm:1,8:1"
+],
+"AT-0390": [
+"tamron|lente|17:1,2:1,70mm:1,8:1"
+],
+"AT-0391": [
+"tamron|lente|18:1,300mm:1"
+],
+"AT-0392": [
+"tamron|lente|18:1,3:2,300mm:1,5:1,6:1"
+],
+"AT-0393": [
+"tamron|lente|18:1,3:2,300mm:1,5:1,6:1"
+],
+"AT-0394": [
+"tamron|lente|2:1,20:1,40mm:1,8:1"
+],
+"AT-0395": [
+"tamron|lente|2:1,24:1,70mm:1,8:1,g2:1"
+],
+"AT-0396": [
+"tamron|lente|2:1,200mm:1,28:1,5:1,6:1,8:1"
+],
+"AT-0397": [
+"tamron|lente|1:1,28:1,300mm:1,4:1,7:1"
+],
+"AT-0398": [
+"tamron|lente|2:1,28:1,75mm:1,8:1"
+],
+"AT-0399": [
+"tamron|lente|2:1,28:1,75mm:1,8:1,g2:1"
+],
+"AT-0400": [
+"tamron|lente|100mm:1,2:1,35:1,8:1"
+],
+"AT-0401": [
+"tamron|lente|100mm:1,2:1,35:1,8:1"
+],
+"AT-0402": [
+"tamron|lente|150mm:1,2:2,35:1,8:1"
+],
+"AT-0403": [
+"tamron|lente|150mm:1,2:2,35:1,8:1"
+],
+"AT-0404": [
+"tamron|lente|3:1,300mm:1,4:1,5:1,50:1,6:1"
+],
+"AT-0405": [
+"tamron|lente|3:1,4:1,400mm:1,5:1,50:1,6:1"
+],
+"AT-0406": [
+"tamron|lente|3:1,4:1,400mm:1,5:1,50:1,6:1"
+],
+"AT-0407": [
+"tamron|lente|180mm:1,2:1,70:1,8:1,g2:1"
+],
+"AT-0408": [
+"tamron|lente|180mm:1,2:1,70:1,8:1,g2:1"
+],
+"AT-0409": [
+"tamron|lente|3:1,300mm:1,4:1,5:1,6:1,70:1"
+],
+"AT-0410": [
+"tamron|lente|3:1,300mm:1,4:1,5:1,6:1,70:1"
+],
+"AT-0411": [
+"tamron|lente|2:1,8:1,90mm:1"
+],
+"AT-0412": [
+"ray-ban|lentes inteligentes|1m52:1,601:1",
+"ray-ban|lentes inteligentes|gen2:1"
+],
+"AT-0413": [
+"ray-ban|lentes inteligentes|601:1,ch52:1",
+"ray-ban|lentes inteligentes|gen2:1"
+],
+"AT-0414": [
+"ray-ban|lentes inteligentes|601:1,t352:1",
+"ray-ban|lentes inteligentes|gen2:1"
+],
+"AT-0415": [
+"ray-ban|lentes inteligentes|gen2:1",
+"ray-ban|lentes inteligentes|s52:1,t155:1"
+],
+"AT-0416": [
+"ray-ban|lentes inteligentes|1m50:1,601:1",
+"ray-ban|lentes inteligentes|gen2:1"
+],
+"AT-0417": [
+"ray-ban|lentes inteligentes|601s1z50:1",
+"ray-ban|lentes inteligentes|gen2:1"
+],
+"AT-0418": [
+"ray-ban|lentes inteligentes|601st350:1",
+"ray-ban|lentes inteligentes|gen2:1"
+],
+"AT-0419": [
+"apple|monitor|27:1"
+],
+"AT-0420": [
+"dell|monitor|1920x1080:1,24:1,p2425h:1",
+"dell|monitor|24:1,p2425h:1"
+],
+"AT-0421": [
+"dell|monitor|1920x1080:1,27:1,3y:1,p2725h:1",
+"dell|monitor|27:1,3:1,p2725h:1"
+],
+"AT-0422": [
+"dell|monitor|100hz:1,1920x1080:1,23:1,24:1,8:1,p2425he:1,plus:1,pro:1",
+"dell|monitor|100hz:1,23:1,24:1,8:1,p2425he:1,plus:1,pro:1"
+],
+"AT-0423": [
+"msi|monitor|0:1,200hz:1,27:1,272f:1,5ms:1"
+],
+"AT-0424": [
+"msi|monitor|0:1,240hz:1,27:1,274qf:1,5ms:1,x24:1"
+],
+"AT-0425": [
+"msi|monitor|0:1,1500r:1,27:1,276cxf:1,280hz:1,5ms:1"
+],
+"AT-0426": [
+"samsung|monitor|100hz:1,24:1",
+"samsung|monitor|100hz:1,24:2"
+],
+"AT-0427": [
+"samsung|monitor|165hz:1,27:1,g5:1"
+],
+"AT-0428": [
+"apple|notebook|13:1,16:1,1tb:1,6:1,air:1,m5:1"
+],
+"AT-0429": [
+"apple|notebook|13:1,1tb:1,24:1,6:1,air:1,m5:1"
+],
+"AT-0430": [
+"apple|notebook|15:1,16:1,512:1,air:1,m5:1"
+],
+"AT-0431": [
+"apple|notebook|15:1,1tb:1,24:1,air:1,m5:1"
+],
+"AT-0432": [
+"apple|notebook|13:1,256:1,8:1,a18:1,neo:1"
+],
+"AT-0433": [
+"apple|notebook|13:1,256:1,8:1,a18:1,neo:1"
+],
+"AT-0434": [
+"apple|notebook|13:1,512:1,8:1,a18:1,neo:1"
+],
+"AT-0435": [
+"apple|notebook|14:1,1tb:1,24:1,m4:1,pro:2"
+],
+"AT-0436": [
+"apple|notebook|14:1,24:1,512:1,m4:1,pro:2"
+],
+"AT-0437": [
+"apple|notebook|14:1,16:1,1tb:1,m5:1,pro:1"
+],
+"AT-0438": [
+"apple|notebook|14:1,1tb:1,24:1,m5:1,pro:1"
+],
+"AT-0439": [
+"apple|notebook|14:1,1tb:1,32:1,m5:1,pro:1"
+],
+"AT-0440": [
+"apple|notebook|14:1,2tb:1,36:1,m5:1,max:1,pro:1"
+],
+"AT-0441": [
+"apple|notebook|16:1,2tb:1,36:1,m5:1,max:1,pro:1"
+],
+"AT-0442": [
+"apple|notebook|16:1,2tb:1,48:1,m5:1,max:1,pro:1"
+],
+"AT-0443": [
+"apple|notebook|14:1,1tb:1,24:1,m5:1,pro:2"
+],
+"AT-0444": [
+"apple|notebook|14:1,1tb:1,24:1,m5:1,pro:2"
+],
+"AT-0445": [
+"apple|notebook|14:1,24:1,2tb:1,m5:1,pro:2"
+],
+"AT-0446": [
+"apple|notebook|16:1,1tb:1,24:1,m5:1,pro:2"
+],
+"AT-0447": [
+"apple|notebook|16:1,1tb:1,48:1,m5:1,pro:2"
+],
+"AT-0448": [
+"jbl|parlante|6:1"
+],
+"AT-0449": [
+"apple|smartwatch|2nd:1,40mm:1,se:1"
+],
+"AT-0450": [
+"apple|smartwatch|2nd:1,44mm:1,se:1"
+],
+"AT-0451": [
+"apple|smartwatch|3:1,40mm:1,se:1"
+],
+"AT-0452": [
+"apple|smartwatch|3:1,44mm:1,se:1"
+],
+"AT-0453": [
+"apple|smartwatch|11:1,42mm:1"
+],
+"AT-0454": [
+"apple|smartwatch|11:1,46mm:1"
+],
+"AT-0455": [
+"apple|smartwatch|3:1,49mm:1,ultra:1"
+],
+"AT-0456": [
+"apple|smartwatch|3:1,49mm:1,ultra:1"
+],
+"AT-0457": [
+"garmin|smartwatch|42mm:1,s70:1"
+],
+"AT-0458": [
+"garmin|smartwatch|2:1,42mm:1,pro:1"
+],
+"AT-0459": [
+"garmin|smartwatch|2:1,51mm:1,pro:1"
+],
+"AT-0460": [
+"garmin|smartwatch|2s:1"
+],
+"AT-0461": [
+"kieslect|smartwatch|2:1"
+],
+"AT-0462": [
+"kieslect|smartwatch|3:1"
+],
+"AT-0463": [
+"kieslect|smartwatch|3:1,ultra:1"
+],
+"AT-0464": [
+"kieslect|smartwatch|"
+],
+"AT-0465": [
+"apple|tablet|11:1,512:1,a16:1"
+],
+"AT-0466": [
+"apple|tablet|11:1,128:1,a16:1"
+],
+"AT-0467": [
+"apple|tablet|11:1,256:1,a16:1"
+],
+"AT-0468": [
+"apple|tablet|11:1,128:1,air:1,m4:1"
+],
+"AT-0469": [
+"apple|tablet|11:1,256:1,air:1,m4:1"
+],
+"AT-0470": [
+"apple|tablet|11:1,512:1,air:1,m4:1"
+],
+"AT-0471": [
+"apple|tablet|128:1,13:1,7:1,air:1,m3:1",
+"apple|tablet|128:1,13:1,air:1,m3:1"
+],
+"AT-0472": [
+"apple|tablet|128:1,13:1,air:1,m4:1"
+],
+"AT-0473": [
+"apple|tablet|13:1,256:1,air:1,m4:1"
+],
+"AT-0474": [
+"apple|tablet|128:1,7ma:1,mini:1"
+],
+"AT-0475": [
+"apple|tablet|256:1,7ma:1,mini:1"
+],
+"AT-0476": [
+"apple|tablet|11:1,256:1,m4:1,pro:1"
+],
+"AT-0477": [
+"apple|tablet|11:1,2tb:1,m4:1,pro:1"
+],
+"AT-0478": [
+"apple|tablet|11:1,512:1,m4:1,pro:1"
+],
+"AT-0479": [
+"apple|tablet|11:1,256:1,m5:1,pro:1"
+],
+"AT-0480": [
+"apple|tablet|11:1,512:1,m5:1,pro:1"
+],
+"AT-0481": [
+"apple|tablet|11:1,512:1,m5:1,pro:1"
+],
+"AT-0482": [
+"apple|tablet|13:1,256:1,m4:1,pro:1"
+],
+"AT-0483": [
+"apple|tablet|13:1,256:1,m5:1,pro:1"
+],
+"AT-0484": [
+"apple|tablet|13:1,512:1,m5:1,pro:1"
+],
+"AT-0485": [
+"samsung|tablet|4:1,64:1,a11:1"
+],
+"AT-0486": [
+"samsung|tablet|4:1,64:1,a11:1,wifi:1"
+],
+"AT-0487": [
+"samsung|tablet|128:1,6:1,a11:1"
+],
+"AT-0488": [
+"samsung|tablet|128:1,6:1,a11:1"
+],
+"AT-0489": [
+"samsung|tablet|128:1,8:1,fe:1,s10:1"
+],
+"AT-0490": [
+"samsung|tablet|1:1,13:1,256:1,fe:1,plus:1,s10:1",
+"samsung|tablet|256:1,fe:1,plus:1,s10:1"
+],
+"AT-0491": [
+"samsung|tablet|12:1,256:1,fe:1,plus:1,s10:1,wifi:1"
+],
+"AT-0492": [
+"samsung|tablet|128:1,8:1,fe:1,plus:1,s10:1,wifi:1"
+],
+"AT-0493": [
+"samsung|tablet|12:1,256:1,fe:1,s10:1,wifi:1"
+],
+"AT-0494": [
+"samsung|tablet|128:1,8:1,fe:1,s10:1,wifi:1"
+],
+"AT-0495": [
+"samsung|tablet|10:1,128:1,6:1,9:1,lite:1,s10:1"
+],
+"AT-0496": [
+"samsung|tablet|256:1,s11:1,ultra:1"
+],
+"AT-0497": [
+"samsung|tablet|12:1,256:1,s11:1,ultra:1,wifi:1"
+],
+"AT-0498": [
+"samsung|tablet|12:1,128:1,s11:1,wifi:1"
+],
+"AT-0499": [
+"xiaomi|tablet|12:1,128:1,2:1,6:1,pro:1"
+],
+"AT-0501": [
+"apple|celular|17:1,512:1,max:1,pro:1"
+],
+"AT-0502": [
+"samsung|celular|128:1,4:1,a16:1"
+],
+"AT-0503": [
+"samsung|celular|256:1,8:1,a27:1"
+],
+"AT-0504": [
+"samsung|celular|256:1,8:1,a36:1"
+],
+"AT-0505": [
+"apple|notebook|13:1,24:1,512:1,6:1,air:1,m5:1"
+],
+"AT-0506": [
+"apple|tablet|13:1,1tb:1,m5:1,pro:1"
+],
+"AT-0507": [
+"ray-ban|lentes inteligentes|gen2:1"
+],
+"AT-0508": [
+"sony|accesorio camara|100:1"
+]
 }
 }
 }

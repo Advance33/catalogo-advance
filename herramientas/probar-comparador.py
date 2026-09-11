@@ -29,6 +29,12 @@ CASOS = [
     ('Galaxy A56 8/256GB (Gray)', 'Galaxy A27 5G 8/256GB (Black)', '450', '450', False),
     ('iPad Air 13" M4 128GB (Blue)', 'iPad Air M3 13" 128gb (Blue)', '990', '990', False),
     ('Galaxy Tab S11 12/128GB (X730)', 'Galaxy Tab S10 12/128GB (X730)', '700', '700', False),
+    # el proveedor saca el primer GB: "16GB/256GB" -> "16/256GB" (11/09/2026)
+    ('Mac Mini M4 16/256GB', 'Mac Mini M4 16GB/256GB', '700', '700', True),
+    ('MacBook Pro M5 14" 24/1TB (Space Black)', 'MacBook Pro M5 14" 24GB/1TB (Silver)', '2563', '2563', True),
+    ('MacBook Neo A18 13" 8/512GB (Citrus)', 'MacBook Neo A18 13" 8GB/512GB (Blush)', '957', '957', True),
+    # pero un TB no es un GB
+    ('MacBook Pro M5 14" 24/1TB', 'MacBook Pro M5 14" 24/1GB', '2563', '2563', False),
     # los que SI son el mismo producto y tienen que seguir pasando
     ('Galaxy A57 8/128GB 5G (Gray)', 'Galaxy A57 8/128GB (Gray)', '380', '380', True),
     ('G06 Power 4/64GB Sin Cargador (Laurel Oak)', 'G06 Power 4/64GB (Laurel Oak)', '150', '150', True),

@@ -268,6 +268,11 @@ def firma_dura(nombre):
         # "16ram" y "16GB" tambien: el proveedor cambio de forma de escribir
         # la memoria y de un dia para otro dejo dudosas catorce notebooks
         p = re.sub(r'^(\d+)ram$', r'\1gb', p)
+        # Y el 11/09 volvio a cambiar: "16GB/256GB" paso a "16/256GB", sin el
+        # primer GB, y treinta filas dejaron de reconocerse. Los gigas se
+        # cuentan por el numero y da igual como escriba la unidad. Los TB NO
+        # se tocan: 1TB y 1GB son cosas muy distintas.
+        p = re.sub(r'^(\d+)gb$', r'\1', p)
         # un año no distingue un producto de otro
         if re.match(r'^(19|20)\d\d$', p):
             continue

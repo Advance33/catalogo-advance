@@ -68,6 +68,20 @@ function correrPruebas(){
   ok(limpio.desc === 'iPhone 17 Pro 256GB (Orange)', 'un nombre sin notas queda igual');
   ok(limpio.incluye === '+ Cargador 20W', 'y su Incluye tampoco se toca');
 
+  /* La garantía es un dato, no parte del nombre. La planilla la trae pegada al
+     título (antes estaba metida en la columna Color); la ficha ya tiene su
+     renglón, así que va ahí. */
+  const gar = sacarNotasDelNombre({ desc: 'P2725H 27" FHD · Vesa / Dp · Garantía 3 Años', garantia: '' });
+  ok(!/garant/i.test(gar.desc), 'saca la garantía del nombre', gar.desc);
+  ok(/3/.test(gar.garantia || ''), 'y se acuerda de cuántos años eran', gar.garantia);
+
+  const garVieja = sacarNotasDelNombre({ desc: '27" P2725H (FHD/USB/3Y Garantía)', garantia: '' });
+  ok(!/garant/i.test(garVieja.desc), 'también en la forma vieja "3Y Garantía"', garVieja.desc);
+
+  const garPropia = sacarNotasDelNombre({ desc: 'Monitor X · Garantía 2 Años', garantia: '5 años' });
+  ok(garPropia.garantia === '5 años',
+     'y si la planilla ya trae su columna Garantía, esa manda', garPropia.garantia);
+
   /* ---- 3. El catalogo de hoy ---- */
   const todos = MODELOS.flatMap(m => m.variantes || [m]);
   const sucios = todos.filter(v => NOTAS_DEL_NOMBRE.some(n => n.busca.test(v.desc || '')));

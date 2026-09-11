@@ -2298,6 +2298,12 @@ const NOTAS_DEL_NOMBRE = [
   { busca:/\s*\bIncluye solo lápiz\b/i, incluye:'+ Solo el lápiz', que:'contenido de caja' },
   { busca:/\s*\+\s*Capa\b/i,            incluye:'+ Funda',         que:'funda, en portugués' },
   { busca:/\s*\b(\d+)\s*BATT\b/i,       incluye:'+ $1 baterías',   que:'baterías incluidas' },
+  /* La garantía no es parte del nombre del producto: es un dato, y la ficha ya
+     tiene su renglón para mostrarlo. El 10/09 le pedimos al sheet que la
+     sacara de la columna Color y la movieron al nombre, así que sigue
+     estorbando, sólo que en otro lado. Se saca acá y se manda a donde va. */
+  { busca:/\s*·?\s*\bGarant[íi]a\s+(\d+)\s*A[ñn]os?\b/i, garantia:'$1 años', que:'garantía en el nombre' },
+  { busca:/\s*·?\s*\b(\d+)\s*Y\s+Garant[íi]a\b/i,        garantia:'$1 años', que:'garantía en el nombre' },
 ];
 
 /* Saca la nota del nombre y la manda a donde va. Lo que ya declara la planilla
@@ -2313,6 +2319,7 @@ function sacarNotasDelNombre(p){
       if(!yaEsta) p.incluye = [p.incluye, suma].filter(Boolean).join(' ');
     }
     if(n.condicion && !limpio(p.condicion)) p.condicion = n.condicion;
+    if(n.garantia && !limpio(p.garantia)) p.garantia = n.garantia.replace('$1', m[1] || '');
   }
   return p;
 }

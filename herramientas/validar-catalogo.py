@@ -101,10 +101,14 @@ def main():
         if len(fs) > 1 and '' in nums:
             graves.append('%s mezcla una fila sin variante con otras que si la tienen' % cod)
 
-    # 5. dos variantes del mismo producto que se escriben igual
+    # 5. dos variantes del mismo producto que se escriben igual.
+    #    Las dadas de baja no cuentan: cuando se descubre que un texto no era
+    #    un color nuevo sino otra forma de escribir uno que ya estaba, la de
+    #    mas se da de baja y su texto pasa a Escrituras de la buena. Las dos
+    #    quedan con el mismo texto a proposito, y sola una responde.
     for cod, fs in por_codigo_filas.items():
         dueño = {}
-        for f in fs:
+        for f in [x for x in fs if not (x.get('Baja') or '').strip()]:
             for e in CM.escrituras_de(f):
                 if e in dueño and dueño[e] != f['CODIGO_VAR']:
                     graves.append('en %s, "%s" la reclaman %s y %s'

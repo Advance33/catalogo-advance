@@ -19,23 +19,27 @@ LO QUE HACE SOLO
   · Un producto que se sembro sin colores y estrena el primero: la fila sin
     variante se convierte en la 01.
 
-LO QUE NO HACE, Y POR QUE
-Repartir codigos AT-####. Los reparte el equipo de la planilla, que es quien
-genera las filas, y desde el contrato landing/1.3 vienen en la columna
-CODIGO. Tiene que numerar UN SOLO lado: si numeramos los dos, dos altas del
-mismo dia se llevan el mismo AT-#### y la foto de una tapa a la otra. Es el
-riesgo que nosotros mismos les escribimos en la propuesta, y estuvo abierto
-hasta el 11/09 porque se acordo que asignaban ellos pero este script seguia
-asignando igual.
+QUIEN NUMERA: ESTE LADO, Y SOLO CON UNA PERSONA DE ACUERDO
+Desde el 14/09/2026 el maestro tiene UN SOLO escritor y somos nosotros. Lo
+propuso el equipo de la planilla y tiene sentido: confirmar que una fila es
+tal producto es una decision sobre que foto se muestra, y las fotos estan
+aca. Ellos siembran nuestro archivo y publican las columnas.
 
-Asi que una fila sin codigo sale listada y nada mas. Sale sin foto hasta que
-el sheet le ponga el suyo, que es el error barato: se arregla al dia
-siguiente y no ensucia nada.
+Antes estaba al reves y quedo a medias: se acordo que asignaban ellos, pero
+este script siguio numerando variantes igual. Ese es justo el riesgo que
+nosotros mismos les habiamos escrito -- si numeran los dos, dos altas del
+mismo dia se llevan el mismo AT-#### y una foto tapa a la otra.
 
-Lo que si conviene mirar de esa lista: si alguna es un producto que YA esta
-con otro nombre. El proveedor reescribe seguido -- el 11/09 movio cuatro
+Pero numerar sigue necesitando que una persona lo diga. Un producto solo
+estrena codigo si esta escrito como NUEVO en altas-decididas.csv. El 14/09,
+de 92 filas sin codigo, 76 eran el mismo lente cargado con otra marca:
+numerarlas todas habria sido el peor dia del catalogo.
+
+Lo que conviene mirar de la lista que sale: si alguna es un producto que YA
+esta con otro nombre. El proveedor reescribe seguido -- el 11/09 movio cuatro
 productos de categoria, le agrego "GEN2" a siete anteojos y saco las
-referencias de fabrica. Confirmar el vinculo en altas-decididas.csv y correr
+referencias de fabrica; el 14/09 empezo a mandar la referencia adelante con
+una barra. Confirmar el vinculo en altas-decididas.csv y correr
 confirmar-altas.py deja anotados el ID, el SKU, el nombre y la categoria de
 ese dia, y el mismo cambio no se vuelve a preguntar nunca mas.
 """
@@ -126,6 +130,8 @@ def main():
         return puntos[:cuantos]
 
     nuevas_var, sin_resolver, escrituras, convertidas, esperando = [], [], [], [], []
+    nuevos_prod = []
+    n = int(CM.proximo_codigo(maestro)[3:])
 
     for f in filas:
         idf = (f.get('ID') or '').strip()
@@ -138,13 +144,35 @@ def main():
                 'Precio_alta': (f.get('Precio USD') or '').strip(),
                 'Alta': hoy, 'Baja': '', 'Fusionado_en': '', 'Nota': ''}
         if not cod:
-            # NO se le da un codigo desde aca. Los reparte el equipo de la
-            # planilla, que es el que genera las filas, y tiene que repartirlos
-            # UN SOLO lado: si los dos numeramos, dos altas del mismo dia se
-            # llevan el mismo AT-#### y la foto de una tapa a la otra. Esa fila
-            # queda sin codigo hasta que el sheet se lo ponga, y sin codigo sale
-            # sin foto, que es el error barato.
-            esperando.append((f, candidatos(f)))
+            if decidido.get(idf) != 'NUEVO':
+                esperando.append((f, candidatos(f)))
+                continue
+            # Desde el 14/09 numeramos nosotros. Se acordo con el equipo de la
+            # planilla que hay UN SOLO escritor del maestro y que somos este
+            # lado: las confirmaciones son decisiones sobre fotos, y las fotos
+            # estan aca. Ellos siembran nuestro archivo y publican.
+            #
+            # Pero sigue haciendo falta que una persona lo diga: un codigo de
+            # mas parte las fotos de un producto en dos y es para siempre. Por
+            # eso solo se numera lo que esta escrito como NUEVO en
+            # altas-decididas.csv. El 14/09, de 92 filas sin codigo, 76 eran
+            # duplicados que el proveedor cargo con otra marca: numerarlas a
+            # todas habria sido el peor dia del catalogo.
+            cod = '%s-%04d' % (CM.PREFIJO, n + 1)
+            n += 1
+            base['CODIGO'] = cod
+            base['Nota'] = 'alta confirmada a mano el ' + hoy
+            variantes = cols(f)
+            if not variantes:
+                nuevos_prod.append(dict(base, CODIGO_VAR=cod, Variante='',
+                                        Escrituras='', NumVar=''))
+            else:
+                for k, v in enumerate(variantes, 1):
+                    nuevos_prod.append(dict(base, CODIGO_VAR='%s-%02d' % (cod, k),
+                                            Variante=v, Escrituras='',
+                                            NumVar='%02d' % k))
+            maestro.extend(x for x in nuevos_prod if x['CODIGO'] == cod)
+            idx = CM.indexar(maestro)
             continue
         # producto conocido: ¿trae alguna variante que el catalogo no tenga?
         for v in cols(f):
@@ -193,11 +221,22 @@ def main():
     print('planilla: %d filas   ·   catalogo: %d productos'
           % (len(filas), len({m['CODIGO'] for m in maestro})))
     print()
+    print('  %4d  productos nuevos, confirmados a mano' % len({x['CODIGO'] for x in nuevos_prod}))
     print('  %4d  variantes nuevas de productos que ya estaban' % len(nuevas_var))
     print('  %4d  variantes que ya estaban, escritas de otra forma' % len(escrituras))
     print('  %4d  productos que estrenan su primera variante' % len(convertidas))
     print('  %4d  ESPERANDO CODIGO del sheet' % len(esperando))
     print()
+    if nuevos_prod:
+        print('--- productos nuevos ---')
+        visto = set()
+        for x in nuevos_prod:
+            if x['CODIGO'] in visto:
+                print('  %-14s %-46s %s' % ('', '', x['Variante'][:24]))
+                continue
+            visto.add(x['CODIGO'])
+            print('  %-14s %-46s %s' % (x['CODIGO'], x['Producto'][:46], x['Variante'][:24]))
+        print()
     if nuevas_var:
         print('--- variantes nuevas ---')
         for x in nuevas_var:
@@ -254,12 +293,12 @@ def main():
     if not APLICAR:
         print('Simulacion. Para agregarlas:  python herramientas/altas-catalogo.py --aplicar')
         return 0
-    if not nuevas_var and not escrituras and not convertidas:
+    if not nuevos_prod and not nuevas_var and not escrituras and not convertidas:
         print('No hay nada que agregar.')
         return 0
 
     CM.escribir(maestro)
-    print('Agregadas. El catalogo queda con %d productos y %d variantes.'
+    print('Agregados. El catalogo queda con %d productos y %d variantes.'
           % (len({m['CODIGO'] for m in maestro}), len(maestro)))
     print('Ahora conviene regenerar el indice:  python verificar-fotos.py')
     return 0

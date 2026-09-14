@@ -204,8 +204,21 @@ function correrPruebas(){
       if(porTexto && partes[i]) cruzadas++;
     });
   }
-  ok(distintas.length === 0, 'y la variante de cada color coincide con la del mapa',
-     distintas.slice(0, 3).join(' | ') || cruzadas + ' colores cruzados');
+  /* Que la planilla mande una variante que despues se dio de baja es normal:
+     se siembra cada tanto, y entre medio se corrige. Lo que no puede pasar es
+     que la web la use, porque esa foto no se publica. Asi que lo que se exige
+     no es que coincidan siempre, sino que cuando difieran gane el mapa. */
+  const usadas = distintas.filter(d => {
+    const p = PRODUCTOS.find(x => d.startsWith(x.id + ' '));
+    if(!p) return true;
+    const cols = partirColores(p.color);
+    return cols.some(c => varianteDeLaColumna(p, p.codigo, c, cols) &&
+                          varianteDeLaColumna(p, p.codigo, c, cols) !== archivoDeVariante(p.codigo, c));
+  });
+  ok(usadas.length === 0,
+     'cuando la planilla y el mapa difieren en la variante, la web usa la del mapa',
+     usadas.slice(0, 3).join(' | ') || cruzadas + ' colores cruzados, ' +
+     distintas.length + ' con la planilla atrasada');
 
   /* Las dos guardas de varianteDeLaColumna(), probadas a mano: una celda
      corrida y un codigo que es de otro producto NO se usan. Son las dos

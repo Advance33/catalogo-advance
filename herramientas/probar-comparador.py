@@ -42,6 +42,15 @@ CASOS = [
     ('AirPods 4ta Con Cancelación De Ruido (ANC)', 'AirPods 4 Con Cancelación De Ruido (ANC)', '180', '180', True),
     ('Batería Smallrig USB-C FZ-100 (Rechargable)', 'Batería Smallrig USB-C FZ-100 (Recargable)', '60', '60', True),
     ('Watch Series 11 42mm GPS S/M (Rose Gold)', 'Watch Series 11 42mm GPS S/M (Jet Black/Silver)', '450', '450', True),
+    # "Cell" y "Cellular" son la misma palabra, y eso corta para los dos lados.
+    # Agregar celular hace OTRO producto, y en el Watch SE 3 son 55 dolares:
+    ('Watch SE 3 Gen 44MM +Cell (Mid)', 'Watch SE 3 44mm GPS M/L (Midnight)', '405', '350', False),
+    # pero escribirlo distinto NO, y asi vino el iPad Pro dos dias seguidos:
+    ('iPad Pro M5 11" 512GB Cellular 5G + Wi-Fi (Space Black)',
+     'iPad Pro 11" M5 512GB Cell 5G LTE + Wi-Fi (Space Black)', '1720', '1720', True),
+    # El 5G tampoco separa por si solo -- lo tiene medio catalogo -- pero
+    # cuando el proveedor vende las dos versiones, el precio lo dice:
+    ('Redmi Note 15 Pro 12/512GB (Black/Purple)', 'Redmi Note 15 Pro 12/512GB (Black)', '375', '375', True),
 ]
 print('%-52s %-52s  esperado  dio' % ('planilla', 'catalogo'))
 print('-' * 130)

@@ -1,0 +1,197 @@
+ACEPTAMOS SER EL UNICO ESCRITOR, Y LAS ALTAS YA ESTAN NUMERADAS
+================================================================
+Advance Tecno al equipo de la planilla · 14/09/2026, segunda
+Responde a todo el mensaje sobre el sin_codigo
+
+
+1) QUIEN ESCRIBE EL MAESTRO: NOSOTROS. ACEPTADO
+------------------------------------------------------------
+Tienen razon en las dos mitades.
+
+En que estaba a medias: se acordo el 10/09 que asignaban ustedes, y este
+lado siguio numerando variantes igual. Las doce que encontraron son
+nuestras. No choco de casualidad, no por diseno.
+
+Y en cual de los dos lados conviene: confirmar que una fila es tal producto
+es una decision sobre QUE FOTO SE MUESTRA, y las fotos estan aca. Al reves
+tendriamos que pedirles permiso para anotar que una imagen es de tal
+producto, que es lo unico que ustedes no pueden decidir.
+
+Desde hoy entonces: escribimos nosotros -- codigos, variantes y anotaciones
+-- y ustedes siembran nuestro archivo y publican. Queda de este lado el
+trabajo de numerar las altas, que antes esperaba en ustedes.
+
+Una consecuencia para tener presente: cada vez que corrijamos algo, su copia
+queda atras hasta la proxima siembra. Ya paso hoy, y esta en el punto 3.
+
+
+2) LAS TRES VARIANTES: CORREGIDAS. TENIAN RAZON
+------------------------------------------------------------
+    AT-0452-03  "Mid"                           -> baja
+    AT-0481-02  "Space Black - Standard Glass"  -> baja
+    AT-0064-05  "Star"                          -> pasa a llamarse Starlight
+
+Las dos primeras se dan de baja y su texto pasa a Escrituras de la variante
+buena: "Mid" ahora lo reconoce AT-0452-01 y "Space Black - Standard Glass"
+lo reconoce AT-0481-01. El numero NO se reusa -- el maestro solo crece, y
+una variante que existio se queda con el suyo aunque no se use mas.
+
+No usamos Fusionado_en como proponian. Esa columna la lee seguir_fusion(),
+que trabaja sobre CODIGO de producto, no sobre variantes; hacerla andar a
+nivel variante era tocar el resolvedor para un caso que Baja + Escrituras ya
+cubre. Si les resulta mas comodo Fusionado_en, lo hablamos.
+
+La tercera no es baja sino correccion de nombre: "Star" era la variante y
+pasa a ser su escritura. Variante y Escrituras son descriptivas y se pueden
+corregir; CODIGO_VAR y NumVar no.
+
+Ninguna de las tres tenia foto, asi que no se movio ningun archivo.
+
+AT-0070-06 "Green" la dejamos como esta. Puede ser el Sage del iPhone 17 y
+puede no serlo, y sin foto no le molesta a nadie. Si el proveedor confirma
+que es el mismo verde, la damos de baja como las otras dos.
+
+DOS ARREGLOS QUE SALIERON DE ESTO, y que conviene que copien:
+
+  · variante_de() ya no devuelve una variante dada de baja. Sin eso, la
+    muerta seguia respondiendo y la foto iba a un numero que no se publica.
+  · El chequeo de "dos variantes se escriben igual" saltea las de baja: las
+    dos comparten el texto A PROPOSITO, y solo una responde.
+
+
+3) SU COPIA DE AT-0452 QUEDO ATRASADA, Y LO ENCONTRO UNA PRUEBA
+------------------------------------------------------------
+Al dar de baja AT-0452-03, la planilla que ustedes ya publicaron quedo
+mandando esa variante para SW-APP-005 "Mid". Nuestra prueba lo vio sola:
+
+    SW-APP-005 Mid: planilla AT-0452-03, mapa AT-0452-01
+
+Lo arreglamos de los dos modos:
+
+  a) La web ahora ignora un CODIGO_VAR que no este vivo en el catalogo y
+     cae al texto del color, que da con la variante buena. Asi una planilla
+     atrasada no deja una ficha sin foto.
+  b) La prueba dejo de exigir que las dos puntas coincidan siempre -- no van
+     a coincidir entre siembra y siembra -- y ahora exige que cuando
+     difieran GANE EL MAPA.
+
+Cuando resiembren, AT-0452-03 les va a aparecer con fecha de Baja y la
+planilla deberia mandar AT-0452-01 para ese color.
+
+
+4) LOS 76 DUPLICADOS: CONFIRMADO, Y NOS DA EXACTO
+------------------------------------------------------------
+Los cruzamos por nuestra cuenta antes de leer su desglose:
+
+    LEN-SON-   41      LEN-NIK-   18      LEN-CAN-   16      ACC-DJI-   1
+
+Mismo nombre y mismo precio que el original, solo cambia la marca:
+
+    LEN-CAN-059  "30mm F/1.4 Dc HSM ART Canon EF"  352
+    AT-0328      "30mm F/1.4 Dc HSM ART Canon EF"  352   (Sigma)
+
+Gracias por frenarlos. Numerar 76 duplicados habria sido el peor dia del
+catalogo: 76 codigos para siempre, cada uno partiendo en dos las fotos de un
+lente que ya las tenia. Y vimos que ya limpiaron: la planilla paso de 606 a
+530 filas, que son exactamente las 76.
+
+
+5) LAS 16 A REVISAR: RESUELTAS
+------------------------------------------------------------
+El Kindle y los dos Dell bajaron unos 20 dolares y siguen siendo el mismo
+producto:
+
+    ERD-AMZ-008  Kindle Touch 2024 | 16GB   200  ->  AT-0212  (era 215)
+    MON-DEL-013  P2425H | Dell 24"          360  ->  AT-0420  (era 380)
+    MON-DEL-014  P2725H | Dell 27"          430  ->  AT-0421  (era 450)
+    SW-APP-059   SE 3 44mm Starlight        370  ->  AT-0452, variante 02
+    SW-APP-062   Ultra 3 (GPS + Cellular)   800  ->  AT-0455, ya anotado
+
+El SW-APP-059: el AT-0452 ya tiene Starlight como variante 02, y la otra
+fila del mismo reloj (SW-APP-005) es el Midnight a 350. Son dos filas del
+mismo producto, una por color, con 20 dolares entre ellas.
+
+Coincidimos con sus dos "probable alta", y con el mismo argumento:
+
+    CEL-XIA-100  Redmi Note 15 Pro 12/512 5G  430  ->  ALTA
+                 El AT-0119 es el mismo SIN 5G a 375 y hoy lo usa
+                 CEL-XIA-093. El proveedor vende las dos versiones: aca el
+                 5G si separa, y lo dice el precio.
+    ACC-DJI-013  Neo 2 MOTION + Fly More      825  ->  ALTA
+                 El AT-0045 es el Neo 2 + Fly More a 528. El Motion trae el
+                 control de movimiento.
+    SW-APP-048   SE 3 44MM +Cell              405  ->  ALTA
+
+
+LAS 11 ALTAS, NUMERADAS DE AT-0510 A AT-0520
+
+    AT-0510   iPhone 16E 128GB (Black)                          680
+    AT-0511   Galaxy A36 6/128GB (Black/Lima/White/Lavander)     355
+    AT-0512   Galaxy S26 Ultra 512GB 5G (White/Violet)          1145
+    AT-0513   Edge 60 Fusion 5G (Blue/Gray)                      320
+    AT-0514   Redmi Note 15 Pro 12/512GB 5G (Black/Titanium)     430
+    AT-0515   MacBook Air M5 15" 16GB/1TB (Midnight)            2156
+    AT-0516   Watch SE 3 Gen 44MM +Cell (Mid)                    405
+    AT-0517   D7500 Kit 18-140                                  1210
+    AT-0518   Osmo Pocket 3                                      640
+    AT-0519   Osmo Pocket 4P Standard                            979
+    AT-0520   Drone DJI Neo 2 Motion + Fly More Combo            825
+
+Una aclaracion sobre el numero: les dijimos que el proximo libre era el
+AT-0509 y las altas arrancaron en el AT-0510. El 0509 se habia entregado en
+una corrida anterior y su producto no quedo; como los numeros no se reusan,
+el hueco se queda ahi. Un maestro sano tiene huecos.
+
+Estan en el archivo adjunto. Con eso, las 530 filas de la planilla resuelven
+su codigo: CERO sin codigo.
+
+
+6) "CELL": SU DIAGNOSTICO SI, SU ARREGLO ARREGLA LA MITAD
+------------------------------------------------------------
+El hueco existe y esta bien encontrado. Medimos su propuesta contra los dos
+casos que hay hoy en la planilla:
+
+                                              hoy    cell en GAMA   cell=cellular
+    Watch SE 3 +Cell contra sin Cell
+    (405 y 350, DEBEN separarse)              mal        BIEN           BIEN
+    iPad Pro "Cell 5G LTE" contra "Cellular 5G"
+    (1720 los dos, DEBEN juntarse)            mal        mal            BIEN
+
+Sumar "cell" a GAMA separa el Watch, pero deja de reconocer al iPad Pro, que
+ayer vino "Cell 5G LTE" y hoy "Cellular 5G". Es TAB-APP-059 / AT-0481: uno
+de los que tuvimos que confirmar a mano justamente hoy.
+
+Unificando las dos palabras -- "cell" se normaliza a "cellular" antes de
+contar -- andan los dos casos: el que agrega celular se separa, y el que lo
+escribe distinto se junta.
+
+Ya esta en las dos puntas nuestras (Python y la web), con tres casos nuevos
+en probar-comparador.py, que pasa 23 de 23. Copienlo asi y corramos las dos
+tandas.
+
+
+7) LA BARRA ESCAPADA: SI, ES LA CONVENCION
+------------------------------------------------------------
+Confirmado, y perdon: el bug era nuestro y lo tuvieron que descubrir ustedes.
+Cuando anotamos un nombre que trae una barra vertical, la guardamos con una
+contrabarra adelante, y al leer se corta solo en la barra que NO la tiene.
+Una contrabarra literal se escribe dos veces.
+
+Aplica a los cinco campos de lista: Nombres_vistos, Otros_IDs, Otros_SKUs,
+Otras_Categorias y Escrituras.
+
+De nuestro lado estaba igual de roto que del suyo: MON-SAM-006 habia quedado
+anotado como "LS24D300GALXZB" a secas y MON-DEL-006 como "P2425HE". O sea
+que les dijimos que los habiamos confirmado y lo confirmado no servia.
+Arreglado, con los tres nombres reparados.
+
+
+8) DONDE QUEDA
+------------------------------------------------------------
+    530 filas · 530 con codigo · 0 sin codigo
+    518 productos · AT-0001 a AT-0520 · proximo libre AT-0521
+    0 graves · 23 de 23 en el comparador · 13 tandas de prueba en verde
+
+Resiembren el adjunto y publiquen. Cuando lo hagan, lo unico que deberia
+cambiar en Landing son las columnas de las 11 altas y el CODIGO_VAR de
+SW-APP-005.

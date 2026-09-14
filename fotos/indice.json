@@ -1,5 +1,5 @@
 {
-"generado": "2026-09-14T13:15:01",
+"generado": "2026-09-14T15:57:28",
 "archivos": [
 "AT-0001.jpg",
 "AT-0002.jpg",
@@ -770,6 +770,7 @@
 "DRO-DJI-009": "AT-0211",
 "ERD-AMZ-004": "AT-0212",
 "ERD-AMZ-007": "AT-0212",
+"ERD-AMZ-008": "AT-0212",
 "ERD-AMZ-005": "AT-0213",
 "ERD-AMZ-006": "AT-0214",
 "FIL-CAN-001": "AT-0215",
@@ -997,8 +998,10 @@
 "MON-APP-006": "AT-0419",
 "MON-DEL-009": "AT-0420",
 "MON-DEL-011": "AT-0420",
+"MON-DEL-013": "AT-0420",
 "MON-DEL-010": "AT-0421",
 "MON-DEL-012": "AT-0421",
+"MON-DEL-014": "AT-0421",
 "MON-DEL-006": "AT-0422",
 "MON-MSI-013": "AT-0423",
 "MON-MSI-015": "AT-0424",
@@ -1033,12 +1036,14 @@
 "SW-APP-002": "AT-0450",
 "SW-APP-004": "AT-0451",
 "SW-APP-005": "AT-0452",
+"SW-APP-059": "AT-0452",
 "SW-APP-039": "AT-0453",
 "SW-APP-021": "AT-0453",
 "SW-APP-045": "AT-0454",
 "SW-APP-014": "AT-0455",
 "SW-APP-016": "AT-0455",
 "SW-APP-017": "AT-0455",
+"SW-APP-062": "AT-0455",
 "SW-APP-013": "AT-0455",
 "SW-APP-036": "AT-0456",
 "SW-APP-056": "AT-0456",
@@ -1098,7 +1103,18 @@
 "NB-APP-101": "AT-0505",
 "TAB-APP-020": "AT-0506",
 "GAF-RAY-032": "AT-0507",
-"ACC-SON-019": "AT-0508"
+"ACC-SON-019": "AT-0508",
+"CEL-APP-093": "AT-0510",
+"CEL-SAM-098": "AT-0511",
+"CEL-SAM-100": "AT-0512",
+"CEL-MOT-077": "AT-0513",
+"CEL-XIA-100": "AT-0514",
+"NB-APP-103": "AT-0515",
+"SW-APP-048": "AT-0516",
+"CAM-NIK-011": "AT-0517",
+"CAM-DJI-007": "AT-0518",
+"CAM-DJI-008": "AT-0519",
+"ACC-DJI-013": "AT-0520"
 },
 "skus": {
 "accesorio-apple~apple~airtag-pack-x4": "AT-0001",
@@ -1321,6 +1337,7 @@
 "drone~dji~5-dji-drone-mini-pro-rc-n3": "AT-0211",
 "e-reader~amazon~11-gen-kindle~16gb": "AT-0212",
 "e-reader~amazon~kindle-touch~16gb": "AT-0212",
+"e-reader~amazon~2024-kindle-pantalla-spec-touch-us~6in-16gb": "AT-0212",
 "e-reader~amazon~12-gen-kindle-paperwhite~16gb": "AT-0213",
 "e-reader~amazon~300ppi-kindle-pantalla-paperwhite~gen12-7in-16gb": "AT-0213",
 "e-reader~amazon~12-edition-gen-kindle-paperwhite-signature~32gb": "AT-0214",
@@ -1529,8 +1546,10 @@
 "monitor~apple~adjustable-display-glass-height-stand-standard-studio-tilt~27in": "AT-0419",
 "monitor~dell~dp-p2425h~24in": "AT-0420",
 "monitor~dell~dp-fhd-hdmi-p2425h-usb-vesa-vga~24in": "AT-0420",
+"monitor~dell~dell-dp-full-hd-hdmi-p2425h-usb-vesa-vga~24in": "AT-0420",
 "monitor~dell~3y-dp-p2725h~27in": "AT-0421",
 "monitor~dell~3-anos-dp-fhd-garantia-hdmi-p2725h-usb-vesa-vga~27in": "AT-0421",
+"monitor~dell~3-anos-dell-dp-full-garantia-hd-hdmi-p2725h-usb-vesa-vga~27in": "AT-0421",
 "monitor~dell~24-p2425he-plus-pro~23in": "AT-0422",
 "monitor~dell~100hz-24-fhd-p2425he-plus-pro~23in": "AT-0422",
 "monitor~dell~100hz-24-dell-full-hd-p2425he-plus-pro~23in": "AT-0422",
@@ -1569,12 +1588,14 @@
 "smartwatch~apple~se-watch~gen3-40mm": "AT-0451",
 "smartwatch~apple~3-se-watch~44mm-ml-gps": "AT-0452",
 "smartwatch~apple~se-watch~gen3-44mm": "AT-0452",
+"smartwatch~apple~se-watch~gen3-44mm-sportband": "AT-0452",
 "smartwatch~apple~11-series-watch~42mm-sm-gps": "AT-0453",
 "smartwatch~apple~s11-watch~42mm": "AT-0453",
 "smartwatch~apple~11-series-watch~46mm-ml-gps": "AT-0454",
 "smartwatch~apple~3-ultra-watch~49mm-m": "AT-0455",
 "smartwatch~apple~3-ultra-watch~49mm-trailloop-ml": "AT-0455",
 "smartwatch~apple~3-ultra-watch~49mm-oceanband": "AT-0455",
+"smartwatch~apple~3-ultra-watch~49mm-cellular-gps": "AT-0455",
 "smartwatch~apple~3-ultra-watch~49mm-l": "AT-0456",
 "smartwatch~garmin~approach-s70~42mm": "AT-0457",
 "smartwatch~garmin~2-epix-gen-pro~42mm": "AT-0458",
@@ -1633,7 +1654,18 @@
 "notebook~apple~air-m5-macbook~13in-24gb-512gb-tecladoen": "AT-0505",
 "tablet~apple~ipad-m5-pro~13in-1tb": "AT-0506",
 "lentes-inteligentes~ray-ban~gen2-headliner-meta-rayban": "AT-0507",
-"accesorio-camara~sony~cargador-fz-100-smallrig": "AT-0508"
+"accesorio-camara~sony~cargador-fz-100-smallrig": "AT-0508",
+"celular~apple~16e-iphone~128gb": "AT-0510",
+"celular~samsung~a36-galaxy~6gb-128gb": "AT-0511",
+"celular~samsung~galaxy-s26-ultra~512gb-5g": "AT-0512",
+"celular~motorola~60-edge-fusion~5g": "AT-0513",
+"celular~xiaomi~15-note-pro-redmi~12gb-512gb-5g": "AT-0514",
+"notebook~apple~air-m5-macbook~15in-16gb-1tb-tecladoen": "AT-0515",
+"smartwatch~apple~cell-se-watch~gen3-44mm": "AT-0516",
+"camara~nikon~18-140-d7500~kit": "AT-0517",
+"camara-de-accion~dji~3-osmo-pocket": "AT-0518",
+"camara-de-accion~dji~4p-osmo-pocket-standard": "AT-0519",
+"accesorio-drone~dji~2-combo-dji-drone-fly-more-motion-neo": "AT-0520"
 },
 "vars": {
 "AT-0001": {
@@ -1643,94 +1675,94 @@
 "": "AT-0002"
 },
 "AT-0003": {
-"teclas blancas": "AT-0003-01",
-"whites": "AT-0003-01",
-"blanco": "AT-0003-01",
 "white": "AT-0003-01",
-"whi": "AT-0003-01"
+"teclas blancas": "AT-0003-01",
+"whi": "AT-0003-01",
+"whites": "AT-0003-01",
+"blanco": "AT-0003-01"
 },
 "AT-0004": {
-"teclas blancas": "AT-0004-01",
-"whites": "AT-0004-01",
-"blanco": "AT-0004-01",
 "white": "AT-0004-01",
-"whi": "AT-0004-01"
+"teclas blancas": "AT-0004-01",
+"whi": "AT-0004-01",
+"whites": "AT-0004-01",
+"blanco": "AT-0004-01"
 },
 "AT-0005": {
-"black": "AT-0005-01",
-"black keys": "AT-0005-01",
 "teclas negras": "AT-0005-01",
 "bla": "AT-0005-01",
-"negro": "AT-0005-01"
+"negro": "AT-0005-01",
+"black": "AT-0005-01",
+"black keys": "AT-0005-01"
 },
 "AT-0006": {
-"black": "AT-0006-01",
-"black keys": "AT-0006-01",
 "teclas negras": "AT-0006-01",
 "bla": "AT-0006-01",
 "negro": "AT-0006-01",
-"teclas blancas": "AT-0006-02",
-"whites": "AT-0006-02",
-"blanco": "AT-0006-02",
+"black": "AT-0006-01",
+"black keys": "AT-0006-01",
 "white": "AT-0006-02",
-"whi": "AT-0006-02"
+"teclas blancas": "AT-0006-02",
+"whi": "AT-0006-02",
+"whites": "AT-0006-02",
+"blanco": "AT-0006-02"
 },
 "AT-0007": {
-"black": "AT-0007-01",
-"black keys": "AT-0007-01",
 "teclas negras": "AT-0007-01",
 "bla": "AT-0007-01",
-"negro": "AT-0007-01"
+"negro": "AT-0007-01",
+"black": "AT-0007-01",
+"black keys": "AT-0007-01"
 },
 "AT-0008": {
-"teclas blancas": "AT-0008-01",
-"whites": "AT-0008-01",
-"blanco": "AT-0008-01",
 "white": "AT-0008-01",
-"whi": "AT-0008-01"
+"teclas blancas": "AT-0008-01",
+"whi": "AT-0008-01",
+"whites": "AT-0008-01",
+"blanco": "AT-0008-01"
 },
 "AT-0009": {
-"black": "AT-0009-01",
-"black keys": "AT-0009-01",
 "teclas negras": "AT-0009-01",
 "bla": "AT-0009-01",
 "negro": "AT-0009-01",
-"teclas blancas": "AT-0009-02",
-"whites": "AT-0009-02",
-"blanco": "AT-0009-02",
+"black": "AT-0009-01",
+"black keys": "AT-0009-01",
 "white": "AT-0009-02",
-"whi": "AT-0009-02"
+"teclas blancas": "AT-0009-02",
+"whi": "AT-0009-02",
+"whites": "AT-0009-02",
+"blanco": "AT-0009-02"
 },
 "AT-0010": {
-"black": "AT-0010-01",
-"black keys": "AT-0010-01",
 "teclas negras": "AT-0010-01",
 "bla": "AT-0010-01",
 "negro": "AT-0010-01",
-"teclas blancas": "AT-0010-02",
-"whites": "AT-0010-02",
-"blanco": "AT-0010-02",
+"black": "AT-0010-01",
+"black keys": "AT-0010-01",
 "white": "AT-0010-02",
-"whi": "AT-0010-02"
+"teclas blancas": "AT-0010-02",
+"whi": "AT-0010-02",
+"whites": "AT-0010-02",
+"blanco": "AT-0010-02"
 },
 "AT-0011": {
-"black": "AT-0011-01",
-"black keys": "AT-0011-01",
 "teclas negras": "AT-0011-01",
 "bla": "AT-0011-01",
 "negro": "AT-0011-01",
-"teclas blancas": "AT-0011-02",
-"whites": "AT-0011-02",
-"blanco": "AT-0011-02",
+"black": "AT-0011-01",
+"black keys": "AT-0011-01",
 "white": "AT-0011-02",
-"whi": "AT-0011-02"
+"teclas blancas": "AT-0011-02",
+"whi": "AT-0011-02",
+"whites": "AT-0011-02",
+"blanco": "AT-0011-02"
 },
 "AT-0012": {
-"black": "AT-0012-01",
-"black keys": "AT-0012-01",
 "teclas negras": "AT-0012-01",
 "bla": "AT-0012-01",
-"negro": "AT-0012-01"
+"negro": "AT-0012-01",
+"black": "AT-0012-01",
+"black keys": "AT-0012-01"
 },
 "AT-0013": {
 "": "AT-0013"
@@ -1841,18 +1873,18 @@
 "": "AT-0048"
 },
 "AT-0049": {
-"black": "AT-0049-01",
-"black keys": "AT-0049-01",
 "teclas negras": "AT-0049-01",
 "bla": "AT-0049-01",
-"negro": "AT-0049-01"
+"negro": "AT-0049-01",
+"black": "AT-0049-01",
+"black keys": "AT-0049-01"
 },
 "AT-0050": {
-"black": "AT-0050-01",
-"black keys": "AT-0050-01",
 "teclas negras": "AT-0050-01",
 "bla": "AT-0050-01",
-"negro": "AT-0050-01"
+"negro": "AT-0050-01",
+"black": "AT-0050-01",
+"black keys": "AT-0050-01"
 },
 "AT-0051": {
 "": "AT-0051"
@@ -1896,25 +1928,25 @@
 "": "AT-0060"
 },
 "AT-0061": {
-"teclas blancas": "AT-0061-01",
-"whites": "AT-0061-01",
-"blanco": "AT-0061-01",
 "white": "AT-0061-01",
-"whi": "AT-0061-01"
+"teclas blancas": "AT-0061-01",
+"whi": "AT-0061-01",
+"whites": "AT-0061-01",
+"blanco": "AT-0061-01"
 },
 "AT-0062": {
-"black": "AT-0062-01",
-"black keys": "AT-0062-01",
 "teclas negras": "AT-0062-01",
 "bla": "AT-0062-01",
-"negro": "AT-0062-01"
+"negro": "AT-0062-01",
+"black": "AT-0062-01",
+"black keys": "AT-0062-01"
 },
 "AT-0063": {
-"teclas blancas": "AT-0063-01",
-"whites": "AT-0063-01",
-"blanco": "AT-0063-01",
 "white": "AT-0063-01",
-"whi": "AT-0063-01"
+"teclas blancas": "AT-0063-01",
+"whi": "AT-0063-01",
+"whites": "AT-0063-01",
+"blanco": "AT-0063-01"
 },
 "AT-0064": {
 "blue": "AT-0064-01",
@@ -1923,41 +1955,42 @@
 "pur": "AT-0064-02",
 "red": "AT-0064-03",
 "yellow": "AT-0064-04",
-"star": "AT-0064-05"
+"star": "AT-0064-05",
+"starlight": "AT-0064-05"
 },
 "AT-0065": {
-"black": "AT-0065-01",
-"black keys": "AT-0065-01",
 "teclas negras": "AT-0065-01",
 "bla": "AT-0065-01",
 "negro": "AT-0065-01",
+"black": "AT-0065-01",
+"black keys": "AT-0065-01",
 "blue": "AT-0065-02"
 },
 "AT-0066": {
-"black": "AT-0066-01",
-"black keys": "AT-0066-01",
 "teclas negras": "AT-0066-01",
 "bla": "AT-0066-01",
 "negro": "AT-0066-01",
+"black": "AT-0066-01",
+"black keys": "AT-0066-01",
 "yellow": "AT-0066-02"
 },
 "AT-0067": {
-"black": "AT-0067-01",
-"black keys": "AT-0067-01",
 "teclas negras": "AT-0067-01",
 "bla": "AT-0067-01",
 "negro": "AT-0067-01",
+"black": "AT-0067-01",
+"black keys": "AT-0067-01",
 "ultramarine": "AT-0067-02",
 "teal": "AT-0067-03",
 "white": "AT-0067-04",
 "pink": "AT-0067-05"
 },
 "AT-0068": {
-"black": "AT-0068-01",
-"black keys": "AT-0068-01",
 "teclas negras": "AT-0068-01",
 "bla": "AT-0068-01",
 "negro": "AT-0068-01",
+"black": "AT-0068-01",
+"black keys": "AT-0068-01",
 "desert titanium": "AT-0068-02",
 "natural titanium": "AT-0068-03",
 "white titanium": "AT-0068-04"
@@ -1971,23 +2004,23 @@
 "sage": "AT-0070-02",
 "lavender": "AT-0070-03",
 "lavander": "AT-0070-03",
+"white": "AT-0070-04",
 "teclas blancas": "AT-0070-04",
+"whi": "AT-0070-04",
 "whites": "AT-0070-04",
 "blanco": "AT-0070-04",
-"white": "AT-0070-04",
-"whi": "AT-0070-04",
 "black": "AT-0070-05",
 "green": "AT-0070-06"
 },
 "AT-0071": {
-"silver": "AT-0071-01",
 "sil": "AT-0071-01",
+"silver": "AT-0071-01",
 "orange": "AT-0071-02",
 "blue": "AT-0071-03"
 },
 "AT-0072": {
-"silver": "AT-0072-01",
 "sil": "AT-0072-01",
+"silver": "AT-0072-01",
 "blue": "AT-0072-02",
 "blu": "AT-0072-02",
 "orange": "AT-0072-03"
@@ -1998,38 +2031,38 @@
 "silver": "AT-0073-03"
 },
 "AT-0074": {
-"silver": "AT-0074-01",
 "sil": "AT-0074-01",
+"silver": "AT-0074-01",
 "blue": "AT-0074-02",
 "orange": "AT-0074-03"
 },
 "AT-0075": {
-"silver": "AT-0075-01",
 "sil": "AT-0075-01",
+"silver": "AT-0075-01",
 "blue": "AT-0075-02",
 "blu": "AT-0075-02",
 "orange": "AT-0075-03"
 },
 "AT-0076": {
-"black": "AT-0076-01",
-"black keys": "AT-0076-01",
 "teclas negras": "AT-0076-01",
 "bla": "AT-0076-01",
 "negro": "AT-0076-01",
+"black": "AT-0076-01",
+"black keys": "AT-0076-01",
 "pink": "AT-0076-02",
 "white": "AT-0076-03"
 },
 "AT-0077": {
-"black": "AT-0077-01",
-"black keys": "AT-0077-01",
 "teclas negras": "AT-0077-01",
 "bla": "AT-0077-01",
 "negro": "AT-0077-01",
-"teclas blancas": "AT-0077-02",
-"whites": "AT-0077-02",
-"blanco": "AT-0077-02",
+"black": "AT-0077-01",
+"black keys": "AT-0077-01",
 "white": "AT-0077-02",
-"whi": "AT-0077-02"
+"teclas blancas": "AT-0077-02",
+"whi": "AT-0077-02",
+"whites": "AT-0077-02",
+"blanco": "AT-0077-02"
 },
 "AT-0078": {
 "blue": "AT-0078-01",
@@ -2039,12 +2072,12 @@
 "laurel oak": "AT-0079-01"
 },
 "AT-0080": {
-"pin": "AT-0080-01",
-"pink": "AT-0080-01"
+"pink": "AT-0080-01",
+"pin": "AT-0080-01"
 },
 "AT-0081": {
-"green": "AT-0081-01",
-"gre": "AT-0081-01"
+"gre": "AT-0081-01",
+"green": "AT-0081-01"
 },
 "AT-0082": {
 "black": "AT-0082-01",
@@ -2052,58 +2085,58 @@
 "gray": "AT-0082-03"
 },
 "AT-0083": {
-"grey": "AT-0083-01",
 "gris": "AT-0083-01",
-"cinza": "AT-0083-01",
+"grey": "AT-0083-01",
 "gray": "AT-0083-01",
+"cinza": "AT-0083-01",
 "blue": "AT-0083-02",
 "blu": "AT-0083-02",
 "black": "AT-0083-03"
 },
 "AT-0084": {
-"black": "AT-0084-01",
-"black keys": "AT-0084-01",
 "teclas negras": "AT-0084-01",
 "bla": "AT-0084-01",
 "negro": "AT-0084-01",
+"black": "AT-0084-01",
+"black keys": "AT-0084-01",
 "blue": "AT-0084-02",
 "pink": "AT-0084-03"
 },
 "AT-0085": {
-"grey": "AT-0085-01",
 "gris": "AT-0085-01",
-"cinza": "AT-0085-01",
+"grey": "AT-0085-01",
 "gray": "AT-0085-01",
-"green": "AT-0085-02",
+"cinza": "AT-0085-01",
 "gre": "AT-0085-02",
+"green": "AT-0085-02",
 "violet": "AT-0085-03",
 "violeta": "AT-0085-03",
 "charcoal": "AT-0085-04"
 },
 "AT-0086": {
-"black": "AT-0086-01",
-"black keys": "AT-0086-01",
 "teclas negras": "AT-0086-01",
 "bla": "AT-0086-01",
 "negro": "AT-0086-01",
-"green": "AT-0086-02",
+"black": "AT-0086-01",
+"black keys": "AT-0086-01",
 "gre": "AT-0086-02",
-"pin": "AT-0086-03",
-"pink": "AT-0086-03"
+"green": "AT-0086-02",
+"pink": "AT-0086-03",
+"pin": "AT-0086-03"
 },
 "AT-0087": {
-"grey": "AT-0087-01",
 "gris": "AT-0087-01",
-"cinza": "AT-0087-01",
+"grey": "AT-0087-01",
 "gray": "AT-0087-01",
-"green": "AT-0087-02",
-"gre": "AT-0087-02"
+"cinza": "AT-0087-01",
+"gre": "AT-0087-02",
+"green": "AT-0087-02"
 },
 "AT-0088": {
-"grey": "AT-0088-01",
 "gris": "AT-0088-01",
-"cinza": "AT-0088-01",
-"gray": "AT-0088-01"
+"grey": "AT-0088-01",
+"gray": "AT-0088-01",
+"cinza": "AT-0088-01"
 },
 "AT-0089": {
 "dark blue": "AT-0089-01"
@@ -2112,231 +2145,231 @@
 "jet black": "AT-0090-01",
 "jetblack": "AT-0090-01",
 "navy": "AT-0090-02",
-"icy blue": "AT-0090-03",
-"icyblue": "AT-0090-03"
+"icyblue": "AT-0090-03",
+"icy blue": "AT-0090-03"
 },
 "AT-0091": {
+"white": "AT-0091-01",
 "teclas blancas": "AT-0091-01",
+"whi": "AT-0091-01",
 "whites": "AT-0091-01",
 "blanco": "AT-0091-01",
-"white": "AT-0091-01",
-"whi": "AT-0091-01",
 "navy": "AT-0091-02",
-"icy blue": "AT-0091-03",
-"icyblue": "AT-0091-03"
+"icyblue": "AT-0091-03",
+"icy blue": "AT-0091-03"
 },
 "AT-0092": {
-"grey": "AT-0092-01",
 "gris": "AT-0092-01",
-"cinza": "AT-0092-01",
+"grey": "AT-0092-01",
 "gray": "AT-0092-01",
+"cinza": "AT-0092-01",
 "whitesilver": "AT-0092-02",
 "silverblue": "AT-0092-03"
 },
 "AT-0093": {
-"grey": "AT-0093-01",
 "gris": "AT-0093-01",
-"cinza": "AT-0093-01",
+"grey": "AT-0093-01",
 "gray": "AT-0093-01",
+"cinza": "AT-0093-01",
 "whitesilver": "AT-0093-02",
 "silverblue": "AT-0093-03"
 },
 "AT-0094": {
-"grey": "AT-0094-01",
 "gris": "AT-0094-01",
-"cinza": "AT-0094-01",
+"grey": "AT-0094-01",
 "gray": "AT-0094-01",
+"cinza": "AT-0094-01",
 "whitesilver": "AT-0094-02",
 "silverblue": "AT-0094-03"
 },
 "AT-0095": {
-"black": "AT-0095-01",
-"black keys": "AT-0095-01",
 "teclas negras": "AT-0095-01",
 "bla": "AT-0095-01",
 "negro": "AT-0095-01",
+"black": "AT-0095-01",
+"black keys": "AT-0095-01",
+"white": "AT-0095-02",
 "teclas blancas": "AT-0095-02",
+"whi": "AT-0095-02",
 "whites": "AT-0095-02",
 "blanco": "AT-0095-02",
-"white": "AT-0095-02",
-"whi": "AT-0095-02",
-"skyblue": "AT-0095-03",
 "sky blue": "AT-0095-03",
+"skyblue": "AT-0095-03",
 "violet": "AT-0095-04"
 },
 "AT-0096": {
-"black": "AT-0096-01",
-"black keys": "AT-0096-01",
 "teclas negras": "AT-0096-01",
 "bla": "AT-0096-01",
-"negro": "AT-0096-01"
+"negro": "AT-0096-01",
+"black": "AT-0096-01",
+"black keys": "AT-0096-01"
 },
 "AT-0097": {
 "grafito": "AT-0097-01",
-"garphite": "AT-0097-01",
 "graphite": "AT-0097-01",
+"garphite": "AT-0097-01",
 "blueberry": "AT-0097-02"
 },
 "AT-0098": {
 "grafito": "AT-0098-01",
-"garphite": "AT-0098-01",
 "graphite": "AT-0098-01",
+"garphite": "AT-0098-01",
 "blueberry": "AT-0098-02",
 "pistacho": "AT-0098-03"
 },
 "AT-0099": {
 "grafito": "AT-0099-01",
-"garphite": "AT-0099-01",
 "graphite": "AT-0099-01",
+"garphite": "AT-0099-01",
 "blueberry": "AT-0099-02"
 },
 "AT-0100": {
-"teclas blancas": "AT-0100-01",
-"whites": "AT-0100-01",
-"blanco": "AT-0100-01",
 "white": "AT-0100-01",
-"whi": "AT-0100-01"
+"teclas blancas": "AT-0100-01",
+"whi": "AT-0100-01",
+"whites": "AT-0100-01",
+"blanco": "AT-0100-01"
 },
 "AT-0101": {
-"black": "AT-0101-01",
-"black keys": "AT-0101-01",
 "teclas negras": "AT-0101-01",
 "bla": "AT-0101-01",
 "negro": "AT-0101-01",
-"skyblue": "AT-0101-02",
+"black": "AT-0101-01",
+"black keys": "AT-0101-01",
 "sky blue": "AT-0101-02",
+"skyblue": "AT-0101-02",
 "violet": "AT-0101-03",
 "violeta": "AT-0101-03"
 },
 "AT-0102": {
+"white": "AT-0102-01",
 "teclas blancas": "AT-0102-01",
+"whi": "AT-0102-01",
 "whites": "AT-0102-01",
 "blanco": "AT-0102-01",
-"white": "AT-0102-01",
-"whi": "AT-0102-01",
-"skyblue": "AT-0102-02",
 "sky blue": "AT-0102-02",
+"skyblue": "AT-0102-02",
 "black": "AT-0102-03",
 "violet": "AT-0102-04"
 },
 "AT-0103": {
-"black": "AT-0103-01",
-"black keys": "AT-0103-01",
 "teclas negras": "AT-0103-01",
 "bla": "AT-0103-01",
 "negro": "AT-0103-01",
+"black": "AT-0103-01",
+"black keys": "AT-0103-01",
+"white": "AT-0103-02",
 "teclas blancas": "AT-0103-02",
+"whi": "AT-0103-02",
 "whites": "AT-0103-02",
 "blanco": "AT-0103-02",
-"white": "AT-0103-02",
-"whi": "AT-0103-02",
-"skyblue": "AT-0103-03",
 "sky blue": "AT-0103-03",
+"skyblue": "AT-0103-03",
 "violet": "AT-0103-04",
 "violeta": "AT-0103-04"
 },
 "AT-0104": {
 "grafito": "AT-0104-01",
-"garphite": "AT-0104-01",
-"graphite": "AT-0104-01"
+"graphite": "AT-0104-01",
+"garphite": "AT-0104-01"
 },
 "AT-0105": {
 "grafito": "AT-0105-01",
-"garphite": "AT-0105-01",
-"graphite": "AT-0105-01"
+"graphite": "AT-0105-01",
+"garphite": "AT-0105-01"
 },
 "AT-0106": {
 "grafito": "AT-0106-01",
-"garphite": "AT-0106-01",
-"graphite": "AT-0106-01"
+"graphite": "AT-0106-01",
+"garphite": "AT-0106-01"
 },
 "AT-0107": {
 "cream": "AT-0107-01"
 },
 "AT-0108": {
 "grafito": "AT-0108-01",
-"garphite": "AT-0108-01",
 "graphite": "AT-0108-01",
+"garphite": "AT-0108-01",
 "violet": "AT-0108-02",
 "violeta": "AT-0108-02"
 },
 "AT-0109": {
 "gold": "AT-0109-01",
-"green": "AT-0109-02",
-"gre": "AT-0109-02"
+"gre": "AT-0109-02",
+"green": "AT-0109-02"
 },
 "AT-0110": {
-"green": "AT-0110-01",
-"gre": "AT-0110-01"
+"gre": "AT-0110-01",
+"green": "AT-0110-01"
 },
 "AT-0111": {
-"black": "AT-0111-01",
-"black keys": "AT-0111-01",
 "teclas negras": "AT-0111-01",
 "bla": "AT-0111-01",
-"negro": "AT-0111-01"
+"negro": "AT-0111-01",
+"black": "AT-0111-01",
+"black keys": "AT-0111-01"
 },
 "AT-0112": {
-"green": "AT-0112-01",
-"gre": "AT-0112-01"
+"gre": "AT-0112-01",
+"green": "AT-0112-01"
 },
 "AT-0113": {
-"green": "AT-0113-01",
-"gre": "AT-0113-01"
+"gre": "AT-0113-01",
+"green": "AT-0113-01"
 },
 "AT-0114": {
-"teclas blancas": "AT-0114-01",
-"whites": "AT-0114-01",
-"blanco": "AT-0114-01",
 "white": "AT-0114-01",
-"whi": "AT-0114-01"
+"teclas blancas": "AT-0114-01",
+"whi": "AT-0114-01",
+"whites": "AT-0114-01",
+"blanco": "AT-0114-01"
 },
 "AT-0115": {
 "blue": "AT-0115-01",
 "blu": "AT-0115-01"
 },
 "AT-0116": {
-"black": "AT-0116-01",
-"black keys": "AT-0116-01",
 "teclas negras": "AT-0116-01",
 "bla": "AT-0116-01",
 "negro": "AT-0116-01",
-"green": "AT-0116-02",
-"gre": "AT-0116-02"
+"black": "AT-0116-01",
+"black keys": "AT-0116-01",
+"gre": "AT-0116-02",
+"green": "AT-0116-02"
 },
 "AT-0117": {
-"black": "AT-0117-01",
-"black keys": "AT-0117-01",
 "teclas negras": "AT-0117-01",
 "bla": "AT-0117-01",
 "negro": "AT-0117-01",
+"black": "AT-0117-01",
+"black keys": "AT-0117-01",
 "blue": "AT-0117-02",
 "blu": "AT-0117-02",
-"green": "AT-0117-03",
-"gre": "AT-0117-03"
+"gre": "AT-0117-03",
+"green": "AT-0117-03"
 },
 "AT-0118": {
-"black": "AT-0118-01",
-"black keys": "AT-0118-01",
 "teclas negras": "AT-0118-01",
 "bla": "AT-0118-01",
-"negro": "AT-0118-01"
+"negro": "AT-0118-01",
+"black": "AT-0118-01",
+"black keys": "AT-0118-01"
 },
 "AT-0119": {
-"black": "AT-0119-01",
-"black keys": "AT-0119-01",
 "teclas negras": "AT-0119-01",
 "bla": "AT-0119-01",
 "negro": "AT-0119-01",
+"black": "AT-0119-01",
+"black keys": "AT-0119-01",
 "purple": "AT-0119-02",
 "pur": "AT-0119-02"
 },
 "AT-0120": {
-"black": "AT-0120-01",
-"black keys": "AT-0120-01",
 "teclas negras": "AT-0120-01",
 "bla": "AT-0120-01",
-"negro": "AT-0120-01"
+"negro": "AT-0120-01",
+"black": "AT-0120-01",
+"black keys": "AT-0120-01"
 },
 "AT-0121": {
 "blue": "AT-0121-01",
@@ -2344,11 +2377,11 @@
 "black": "AT-0121-02"
 },
 "AT-0122": {
-"black": "AT-0122-01",
-"black keys": "AT-0122-01",
 "teclas negras": "AT-0122-01",
 "bla": "AT-0122-01",
 "negro": "AT-0122-01",
+"black": "AT-0122-01",
+"black keys": "AT-0122-01",
 "blue": "AT-0122-02",
 "blu": "AT-0122-02",
 "brown": "AT-0122-03"
@@ -2375,18 +2408,18 @@
 "": "AT-0129"
 },
 "AT-0130": {
-"black": "AT-0130-01",
-"black keys": "AT-0130-01",
 "teclas negras": "AT-0130-01",
 "bla": "AT-0130-01",
-"negro": "AT-0130-01"
+"negro": "AT-0130-01",
+"black": "AT-0130-01",
+"black keys": "AT-0130-01"
 },
 "AT-0131": {
-"teclas blancas": "AT-0131-01",
-"whites": "AT-0131-01",
-"blanco": "AT-0131-01",
 "white": "AT-0131-01",
-"whi": "AT-0131-01"
+"teclas blancas": "AT-0131-01",
+"whi": "AT-0131-01",
+"whites": "AT-0131-01",
+"blanco": "AT-0131-01"
 },
 "AT-0132": {
 "": "AT-0132"
@@ -2464,28 +2497,28 @@
 "": "AT-0156"
 },
 "AT-0157": {
-"black": "AT-0157-01",
-"black keys": "AT-0157-01",
 "teclas negras": "AT-0157-01",
 "bla": "AT-0157-01",
-"negro": "AT-0157-01"
+"negro": "AT-0157-01",
+"black": "AT-0157-01",
+"black keys": "AT-0157-01"
 },
 "AT-0158": {
-"silver": "AT-0158-01",
-"sil": "AT-0158-01"
+"sil": "AT-0158-01",
+"silver": "AT-0158-01"
 },
 "AT-0159": {
-"pin": "AT-0159-01",
 "pink": "AT-0159-01",
+"pin": "AT-0159-01",
+"white": "AT-0159-02",
 "teclas blancas": "AT-0159-02",
+"whi": "AT-0159-02",
 "whites": "AT-0159-02",
 "blanco": "AT-0159-02",
-"white": "AT-0159-02",
-"whi": "AT-0159-02",
-"pur": "AT-0159-03",
 "purple": "AT-0159-03",
-"green": "AT-0159-04",
+"pur": "AT-0159-03",
 "gre": "AT-0159-04",
+"green": "AT-0159-04",
 "blue": "AT-0159-05",
 "blu": "AT-0159-05"
 },
@@ -2532,11 +2565,11 @@
 "": "AT-0173"
 },
 "AT-0174": {
-"black": "AT-0174-01",
-"black keys": "AT-0174-01",
 "teclas negras": "AT-0174-01",
 "bla": "AT-0174-01",
-"negro": "AT-0174-01"
+"negro": "AT-0174-01",
+"black": "AT-0174-01",
+"black keys": "AT-0174-01"
 },
 "AT-0175": {
 "": "AT-0175"
@@ -2554,23 +2587,23 @@
 "": "AT-0179"
 },
 "AT-0180": {
-"black": "AT-0180-01",
-"black keys": "AT-0180-01",
 "teclas negras": "AT-0180-01",
 "bla": "AT-0180-01",
 "negro": "AT-0180-01",
-"silver": "AT-0180-02",
-"sil": "AT-0180-02"
+"black": "AT-0180-01",
+"black keys": "AT-0180-01",
+"sil": "AT-0180-02",
+"silver": "AT-0180-02"
 },
 "AT-0181": {
 "": "AT-0181"
 },
 "AT-0182": {
-"black": "AT-0182-01",
-"black keys": "AT-0182-01",
 "teclas negras": "AT-0182-01",
 "bla": "AT-0182-01",
-"negro": "AT-0182-01"
+"negro": "AT-0182-01",
+"black": "AT-0182-01",
+"black keys": "AT-0182-01"
 },
 "AT-0183": {
 "": "AT-0183"
@@ -2579,11 +2612,11 @@
 "": "AT-0184"
 },
 "AT-0185": {
-"black": "AT-0185-01",
-"black keys": "AT-0185-01",
 "teclas negras": "AT-0185-01",
 "bla": "AT-0185-01",
-"negro": "AT-0185-01"
+"negro": "AT-0185-01",
+"black": "AT-0185-01",
+"black keys": "AT-0185-01"
 },
 "AT-0186": {
 "": "AT-0186"
@@ -2604,11 +2637,11 @@
 "": "AT-0191"
 },
 "AT-0192": {
-"teclas blancas": "AT-0192-01",
-"whites": "AT-0192-01",
-"blanco": "AT-0192-01",
 "white": "AT-0192-01",
-"whi": "AT-0192-01"
+"teclas blancas": "AT-0192-01",
+"whi": "AT-0192-01",
+"whites": "AT-0192-01",
+"blanco": "AT-0192-01"
 },
 "AT-0193": {
 "": "AT-0193"
@@ -2669,18 +2702,18 @@
 "": "AT-0211"
 },
 "AT-0212": {
-"black": "AT-0212-01",
-"black keys": "AT-0212-01",
 "teclas negras": "AT-0212-01",
 "bla": "AT-0212-01",
-"negro": "AT-0212-01"
+"negro": "AT-0212-01",
+"black": "AT-0212-01",
+"black keys": "AT-0212-01"
 },
 "AT-0213": {
-"black": "AT-0213-01",
-"black keys": "AT-0213-01",
 "teclas negras": "AT-0213-01",
 "bla": "AT-0213-01",
-"negro": "AT-0213-01"
+"negro": "AT-0213-01",
+"black": "AT-0213-01",
+"black keys": "AT-0213-01"
 },
 "AT-0214": {
 "metallic black": "AT-0214-01"
@@ -3277,13 +3310,13 @@
 "": "AT-0411"
 },
 "AT-0412": {
-"shiny black · transitions green": "AT-0412-01",
 "shiny black": "AT-0412-01",
+"shiny black · transitions green": "AT-0412-01",
 "transitions green": "AT-0412-02"
 },
 "AT-0413": {
-"shiny black · transitions amethyst": "AT-0413-01",
 "shiny black": "AT-0413-01",
+"shiny black · transitions amethyst": "AT-0413-01",
 "transitions amethyst": "AT-0413-02"
 },
 "AT-0414": {
@@ -3292,8 +3325,8 @@
 "polarized gradient graphite": "AT-0414-02"
 },
 "AT-0415": {
-"shinny chalky grey": "AT-0415-01",
 "shiny chalky grey · transitions sapphire": "AT-0415-01",
+"shinny chalky grey": "AT-0415-01",
 "shiny chalky grey": "AT-0415-01",
 "transitions sapphire": "AT-0415-02"
 },
@@ -3308,12 +3341,12 @@
 "grey transitions": "AT-0417-02"
 },
 "AT-0418": {
-"black": "AT-0418-01",
-"black keys": "AT-0418-01",
 "teclas negras": "AT-0418-01",
-"black · polarized gradient graphite": "AT-0418-01",
 "bla": "AT-0418-01",
 "negro": "AT-0418-01",
+"black": "AT-0418-01",
+"black · polarized gradient graphite": "AT-0418-01",
+"black keys": "AT-0418-01",
 "polarized gradient graphite": "AT-0418-02"
 },
 "AT-0419": {
@@ -3361,8 +3394,8 @@
 "star": "AT-0430-01",
 "starlight": "AT-0430-01",
 "sky blue": "AT-0430-02",
-"silver": "AT-0430-03",
 "sil": "AT-0430-03",
+"silver": "AT-0430-03",
 "midnight": "AT-0430-04"
 },
 "AT-0431": {
@@ -3373,8 +3406,8 @@
 "indigo": "AT-0432-02"
 },
 "AT-0433": {
-"silver": "AT-0433-01",
 "sil": "AT-0433-01",
+"silver": "AT-0433-01",
 "citrus": "AT-0433-02"
 },
 "AT-0434": {
@@ -3384,34 +3417,34 @@
 },
 "AT-0435": {
 "space black": "AT-0435-01",
-"silver": "AT-0435-02",
-"sil": "AT-0435-02"
+"sil": "AT-0435-02",
+"silver": "AT-0435-02"
 },
 "AT-0436": {
-"silver": "AT-0436-01",
-"sil": "AT-0436-01"
+"sil": "AT-0436-01",
+"silver": "AT-0436-01"
 },
 "AT-0437": {
-"silver": "AT-0437-01",
 "sil": "AT-0437-01",
+"silver": "AT-0437-01",
 "space black": "AT-0437-02"
 },
 "AT-0438": {
-"silver": "AT-0438-01",
 "sil": "AT-0438-01",
+"silver": "AT-0438-01",
 "space black": "AT-0438-02"
 },
 "AT-0439": {
 "space black": "AT-0439-01"
 },
 "AT-0440": {
-"silver": "AT-0440-01",
 "sil": "AT-0440-01",
+"silver": "AT-0440-01",
 "midnight": "AT-0440-02"
 },
 "AT-0441": {
-"silver": "AT-0441-01",
 "sil": "AT-0441-01",
+"silver": "AT-0441-01",
 "space black": "AT-0441-02"
 },
 "AT-0442": {
@@ -3423,8 +3456,8 @@
 },
 "AT-0444": {
 "space black": "AT-0444-01",
-"silver": "AT-0444-02",
-"sil": "AT-0444-02"
+"sil": "AT-0444-02",
+"silver": "AT-0444-02"
 },
 "AT-0445": {
 "space black": "AT-0445-01"
@@ -3452,41 +3485,41 @@
 },
 "AT-0452": {
 "midnight": "AT-0452-01",
+"mid": "AT-0452-01",
 "star": "AT-0452-02",
-"starlight": "AT-0452-02",
-"mid": "AT-0452-03"
+"starlight": "AT-0452-02"
 },
 "AT-0453": {
 "jet black": "AT-0453-01",
-"silver": "AT-0453-02",
 "sil": "AT-0453-02",
+"silver": "AT-0453-02",
 "space gray": "AT-0453-03",
 "rose gold": "AT-0453-04"
 },
 "AT-0454": {
 "jet black": "AT-0454-01",
-"silver": "AT-0454-02",
 "sil": "AT-0454-02",
+"silver": "AT-0454-02",
 "space gray": "AT-0454-03",
 "rose gold": "AT-0454-04"
 },
 "AT-0455": {
-"black": "AT-0455-01",
-"black keys": "AT-0455-01",
 "teclas negras": "AT-0455-01",
 "bla": "AT-0455-01",
 "negro": "AT-0455-01",
+"black": "AT-0455-01",
+"black keys": "AT-0455-01",
 "black alpine loop m": "AT-0455-02",
 "blue trail loop m": "AT-0455-03",
 "anchor blue ocean band": "AT-0455-04",
 "blue": "AT-0455-05"
 },
 "AT-0456": {
-"black": "AT-0456-01",
-"black keys": "AT-0456-01",
 "teclas negras": "AT-0456-01",
 "bla": "AT-0456-01",
 "negro": "AT-0456-01",
+"black": "AT-0456-01",
+"black keys": "AT-0456-01",
 "black milanese loop l": "AT-0456-02",
 "natural": "AT-0456-03",
 "natural milanese loop l": "AT-0456-04"
@@ -3495,11 +3528,11 @@
 "black ceramic · black peach": "AT-0457-01"
 },
 "AT-0458": {
-"teclas blancas": "AT-0458-01",
-"whites": "AT-0458-01",
-"blanco": "AT-0458-01",
 "white": "AT-0458-01",
-"whi": "AT-0458-01"
+"teclas blancas": "AT-0458-01",
+"whi": "AT-0458-01",
+"whites": "AT-0458-01",
+"blanco": "AT-0458-01"
 },
 "AT-0459": {
 "titanio gris · blanco": "AT-0459-01"
@@ -3530,8 +3563,8 @@
 "AT-0466": {
 "blue": "AT-0466-01",
 "blu": "AT-0466-01",
-"silver": "AT-0466-02",
-"sil": "AT-0466-02"
+"sil": "AT-0466-02",
+"silver": "AT-0466-02"
 },
 "AT-0467": {
 "blue": "AT-0467-01",
@@ -3603,101 +3636,101 @@
 },
 "AT-0481": {
 "space black": "AT-0481-01",
-"space black - standard glass": "AT-0481-02"
+"space black - standard glass": "AT-0481-01"
 },
 "AT-0482": {
-"silver": "AT-0482-01",
-"sil": "AT-0482-01"
+"sil": "AT-0482-01",
+"silver": "AT-0482-01"
 },
 "AT-0483": {
 "space black": "AT-0483-01",
-"silver": "AT-0483-02",
-"sil": "AT-0483-02"
+"sil": "AT-0483-02",
+"silver": "AT-0483-02"
 },
 "AT-0484": {
 "space black": "AT-0484-01"
 },
 "AT-0485": {
-"grey": "AT-0485-01",
 "gris": "AT-0485-01",
-"cinza": "AT-0485-01",
-"gray": "AT-0485-01"
+"grey": "AT-0485-01",
+"gray": "AT-0485-01",
+"cinza": "AT-0485-01"
 },
 "AT-0486": {
-"grey": "AT-0486-01",
 "gris": "AT-0486-01",
-"cinza": "AT-0486-01",
-"gray": "AT-0486-01"
+"grey": "AT-0486-01",
+"gray": "AT-0486-01",
+"cinza": "AT-0486-01"
 },
 "AT-0487": {
-"grey": "AT-0487-01",
 "gris": "AT-0487-01",
-"cinza": "AT-0487-01",
-"gray": "AT-0487-01"
+"grey": "AT-0487-01",
+"gray": "AT-0487-01",
+"cinza": "AT-0487-01"
 },
 "AT-0488": {
 "": "AT-0488"
 },
 "AT-0489": {
-"grey": "AT-0489-01",
 "gris": "AT-0489-01",
-"cinza": "AT-0489-01",
-"gray": "AT-0489-01"
+"grey": "AT-0489-01",
+"gray": "AT-0489-01",
+"cinza": "AT-0489-01"
 },
 "AT-0490": {
-"silver": "AT-0490-01",
-"sil": "AT-0490-01"
+"sil": "AT-0490-01",
+"silver": "AT-0490-01"
 },
 "AT-0491": {
-"lightblue": "AT-0491-01",
-"light blue": "AT-0491-01"
+"light blue": "AT-0491-01",
+"lightblue": "AT-0491-01"
 },
 "AT-0492": {
-"grey": "AT-0492-01",
 "gris": "AT-0492-01",
-"cinza": "AT-0492-01",
-"gray": "AT-0492-01"
+"grey": "AT-0492-01",
+"gray": "AT-0492-01",
+"cinza": "AT-0492-01"
 },
 "AT-0493": {
-"lightblue": "AT-0493-01",
-"light blue": "AT-0493-01"
+"light blue": "AT-0493-01",
+"lightblue": "AT-0493-01"
 },
 "AT-0494": {
-"grey": "AT-0494-01",
 "gris": "AT-0494-01",
-"cinza": "AT-0494-01",
-"gray": "AT-0494-01"
+"grey": "AT-0494-01",
+"gray": "AT-0494-01",
+"cinza": "AT-0494-01"
 },
 "AT-0495": {
-"grey": "AT-0495-01",
 "gris": "AT-0495-01",
-"cinza": "AT-0495-01",
-"gray": "AT-0495-01"
+"grey": "AT-0495-01",
+"gray": "AT-0495-01",
+"cinza": "AT-0495-01"
 },
 "AT-0496": {
-"black": "AT-0496-01",
-"black keys": "AT-0496-01",
 "teclas negras": "AT-0496-01",
 "bla": "AT-0496-01",
-"negro": "AT-0496-01"
+"negro": "AT-0496-01",
+"black": "AT-0496-01",
+"black keys": "AT-0496-01"
 },
 "AT-0497": {
-"grey": "AT-0497-01",
 "gris": "AT-0497-01",
-"cinza": "AT-0497-01",
-"gray": "AT-0497-01"
+"grey": "AT-0497-01",
+"gray": "AT-0497-01",
+"cinza": "AT-0497-01"
 },
 "AT-0498": {
-"grey": "AT-0498-01",
 "gris": "AT-0498-01",
-"cinza": "AT-0498-01",
-"gray": "AT-0498-01"
+"grey": "AT-0498-01",
+"gray": "AT-0498-01",
+"cinza": "AT-0498-01"
 },
 "AT-0499": {
-"grey": "AT-0499-01",
 "gris": "AT-0499-01",
-"cinza": "AT-0499-01",
-"gray": "AT-0499-01"
+"grey": "AT-0499-01",
+"gray": "AT-0499-01",
+"cinza": "AT-0499-01"
 },
 "AT-0501": {
 "orange": "AT-0501-01"
@@ -3727,6 +3760,46 @@
 },
 "AT-0508": {
 "": "AT-0508"
+},
+"AT-0510": {
+"black": "AT-0510-01"
+},
+"AT-0511": {
+"black": "AT-0511-01",
+"lima": "AT-0511-02",
+"white": "AT-0511-03",
+"lavander": "AT-0511-04"
+},
+"AT-0512": {
+"white": "AT-0512-01",
+"violet": "AT-0512-02"
+},
+"AT-0513": {
+"blue": "AT-0513-01",
+"gray": "AT-0513-02"
+},
+"AT-0514": {
+"black": "AT-0514-01",
+"titanium": "AT-0514-02",
+"purple": "AT-0514-03"
+},
+"AT-0515": {
+"midnight": "AT-0515-01"
+},
+"AT-0516": {
+"mid": "AT-0516-01"
+},
+"AT-0517": {
+"": "AT-0517"
+},
+"AT-0518": {
+"": "AT-0518"
+},
+"AT-0519": {
+"": "AT-0519"
+},
+"AT-0520": {
+"": "AT-0520"
 }
 },
 "firmas": {
@@ -4367,7 +4440,8 @@
 ],
 "AT-0212": [
 "amazon|e-reader|11:1,16:1",
-"amazon|e-reader|16:1"
+"amazon|e-reader|16:1",
+"amazon|e-reader|16:1,6:1"
 ],
 "AT-0213": [
 "amazon|e-reader|12:1,16:1",
@@ -5007,6 +5081,7 @@
 "dell|monitor|24:1,p2425h:1"
 ],
 "AT-0421": [
+"dell|monitor|1920x1080:1,27:1,3:1,p2725h:1",
 "dell|monitor|1920x1080:1,27:1,3y:1,p2725h:1",
 "dell|monitor|27:1,3:1,p2725h:1"
 ],
@@ -5115,6 +5190,7 @@
 "apple|smartwatch|11:1,46mm:1"
 ],
 "AT-0455": [
+"apple|smartwatch|3:1,49mm:1,cellular:1,ultra:1",
 "apple|smartwatch|3:1,49mm:1,ultra:1"
 ],
 "AT-0456": [
@@ -5194,8 +5270,7 @@
 "apple|tablet|11:1,512:1,m5:1,pro:1"
 ],
 "AT-0481": [
-"apple|tablet|11:1,512:1,cellular:1,m5:1,pro:1",
-"apple|tablet|11:1,512:1,m5:1,pro:1"
+"apple|tablet|11:1,512:1,cellular:1,m5:1,pro:1"
 ],
 "AT-0482": [
 "apple|tablet|13:1,256:1,m4:1,pro:1"
@@ -5275,6 +5350,39 @@
 ],
 "AT-0508": [
 "sony|accesorio camara|100:1"
+],
+"AT-0510": [
+"apple|celular|128:1,16e:1"
+],
+"AT-0511": [
+"samsung|celular|128:1,6:1,a36:1"
+],
+"AT-0512": [
+"samsung|celular|512:1,s26:1,ultra:1"
+],
+"AT-0513": [
+"motorola|celular|60:1"
+],
+"AT-0514": [
+"xiaomi|celular|12:1,15:1,512:1,pro:1"
+],
+"AT-0515": [
+"apple|notebook|15:1,16:1,1tb:1,air:1,m5:1"
+],
+"AT-0516": [
+"apple|smartwatch|3:1,44mm:1,cellular:1,se:1"
+],
+"AT-0517": [
+"nikon|camara|140:1,18:1,d7500:1,kit:1"
+],
+"AT-0518": [
+"dji|camara de accion|3:1"
+],
+"AT-0519": [
+"dji|camara de accion|4p:1"
+],
+"AT-0520": [
+"dji|accesorio drone|2:1,neo:1"
 ]
 }
 }

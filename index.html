@@ -2121,7 +2121,10 @@ function firmaDura(nombre){
          /* El 11/09 el proveedor paso de "16GB/256GB" a "16/256GB": los gigas
             se cuentan por el numero y da igual como escriba la unidad. Los TB
             NO se tocan, que 1TB y 1GB son cosas muy distintas. */
-         .replace(/^(\d+)gb$/, '$1');
+         .replace(/^(\d+)gb$/, '$1')
+         /* "Cell" y "Cellular" son la misma cosa: el que agrega celular tiene
+            que separarse del que no, y el que lo escribe distinto juntarse. */
+         .replace(/^cell$/, 'cellular');
     if(!p || /^(19|20)\d\d$/.test(p)) continue;
     if(GAMA_FIRMA.has(p) || RE_MEDIDA_FIRMA.test(p)
        || (RE_MODELO_FIRMA.test(p) && !NO_ES_MODELO.has(p)))
@@ -2168,7 +2171,16 @@ function varianteDeLaColumna(f, codigo, color, colores){
   const lista = String(f.codigoVar).split('/').map(x => x.trim());
   if(lista.length !== colores.length) return '';
   const v = lista[colores.indexOf(color)] || '';
-  return v.startsWith(codigo + '-') && /^AT-\d{4}-\d{2}$/.test(v) ? v : '';
+  if(!v.startsWith(codigo + '-') || !/^AT-\d{4}-\d{2}$/.test(v)) return '';
+  /* Y que esa variante siga viva en el catalogo. La planilla se siembra cada
+     tanto, asi que puede venir apuntando a una variante que despues se dio de
+     baja: pasa cuando se descubre que un texto no era un color nuevo sino
+     otra forma de escribir uno que ya estaba. Si la usaramos igual, la ficha
+     pediria una foto que no se publica. Volviendo vacio decide
+     archivoDeVariante(), que busca por el texto del color y da con la buena. */
+  const tabla = (CATALOGO && CATALOGO.vars || {})[codigo] || {};
+  for(const k in tabla) if(tabla[k] === v) return v;
+  return '';
 }
 
 function archivoDeVariante(codigo, texto){

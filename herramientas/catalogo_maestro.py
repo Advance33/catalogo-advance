@@ -425,6 +425,16 @@ def firma_dura(nombre):
         # cuentan por el numero y da igual como escriba la unidad. Los TB NO
         # se tocan: 1TB y 1GB son cosas muy distintas.
         p = re.sub(r'^(\d+)gb$', r'\1', p)
+        # "Cell" y "Cellular" son la misma cosa. El equipo del sheet encontró
+        # el hueco el 14/09: "Watch SE 3 44MM +Cell" (405) y "Watch SE 3 44MM"
+        # (350) daban la misma firma, y los separaba el precio, no la firma.
+        # Proponían sumar "cell" a GAMA, pero eso arregla sólo la mitad: deja
+        # de reconocer al iPad Pro que ayer vino "Cell 5G LTE" y hoy "Cellular
+        # 5G" — justo el que hubo que confirmar a mano ese día. Unificando las
+        # dos palabras, el que agrega celular se separa y el que lo escribe
+        # distinto se junta.
+        if p == 'cell':
+            p = 'cellular'
         # un año no distingue un producto de otro
         if re.match(r'^(19|20)\d\d$', p):
             continue
@@ -637,7 +647,13 @@ def variante_de(codigo, texto, idx):
     if not k:
         sin_var = next((f for f in filas if not (f.get('NumVar') or '').strip()), None)
         return sin_var['CODIGO_VAR'] if sin_var else ''
-    for f in filas:
+    # Una variante dada de baja no compite por el nombre. Pasa cuando se
+    # descubre que un texto no era un color nuevo sino otra forma de escribir
+    # uno que ya estaba: la de mas se da de baja y su texto pasa a Escrituras
+    # de la buena. Si la muerta siguiera respondiendo, la foto iria a un
+    # numero que no se publica.
+    vivas = [f for f in filas if not (f.get('Baja') or '').strip()]
+    for f in vivas or filas:
         if k in escrituras_de(f):
             return f['CODIGO_VAR']
     return ''

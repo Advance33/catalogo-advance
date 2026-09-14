@@ -34,6 +34,7 @@ FOTOS = os.path.join(RAIZ, 'fotos')
 CARPETA = os.path.join(RAIZ, '_panel')
 SALIDA = os.path.join(CARPETA, 'faltan.js')
 MALAS = os.path.join(RAIZ, '_fotos-que-estan-mal')
+RECHAZADAS = os.path.join(RAIZ, '_panel', 'rechazadas.txt')
 
 
 def lo_que_ya_se_sabia():
@@ -57,6 +58,26 @@ def lo_que_ya_se_sabia():
             continue
         salida[nombre] = {'mini': mini_de(os.path.join(MALAS, nombre)),
                           'cuando': cuando.get(nombre, '')}
+    return salida
+
+
+def leer_rechazos():
+    """Las que se pegaron en el panel y mostraban otro producto, con el porque.
+
+    El panel las vuelve a pedir, y decir POR QUE evita que la proxima vez se
+    pegue la misma: "dice Blue Trail Loop y la foto es una Ocean Band negra"
+    se entiende; "falta esta foto" hace pegar lo mismo de nuevo.
+    """
+    if not os.path.exists(RECHAZADAS):
+        return {}
+    salida = {}
+    for linea in io.open(RECHAZADAS, encoding='utf-8'):
+        if linea.lstrip().startswith('#') or '#' not in linea:
+            continue
+        codigo, porque = linea.split('#', 1)
+        codigo = codigo.strip().replace(CM.EXT, '')
+        if codigo:
+            salida[codigo] = porque.strip()
     return salida
 
 
@@ -101,6 +122,7 @@ def main():
             dela_planilla[cod] = (ident, precio)
 
     sabido = lo_que_ya_se_sabia()
+    rechazos = leer_rechazos()
     faltan = []
     for v in maestro:
         if (v.get('Baja') or '').strip():
@@ -119,6 +141,8 @@ def main():
              'precio': precio, 'color': (v.get('Variante') or '').strip()}
         if archivo in sabido:
             p['mala'] = sabido[archivo]
+        if v['CODIGO_VAR'] in rechazos:
+            p['rechazo'] = rechazos[v['CODIGO_VAR']]
         faltan.append(p)
 
     # cual de cuantas le faltan a ese producto

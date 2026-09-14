@@ -183,13 +183,44 @@ def sincronizar_contador(filas):
 def escrituras_de(fila):
     """Todas las formas en que se puede escribir esa variante."""
     salida = {norm(fila.get('Variante'))} if (fila.get('Variante') or '').strip() else set()
-    salida.update(norm(x) for x in (fila.get('Escrituras') or '').split('|') if x.strip())
+    salida.update(norm(x) for x in lista(fila, 'Escrituras'))
     return {x for x in salida if x}
 
 
+ESCAPE = '\\'
+
+
 def lista(fila, campo):
-    """Un campo que guarda varios valores, separados por barra vertical."""
-    return [x.strip() for x in (fila.get(campo) or '').split('|') if x.strip()]
+    r"""Un campo que guarda varios valores, separados por barra vertical.
+
+    El texto del proveedor PUEDE traer una barra. El 14/09 empezó a mandar
+    los nombres como "P2425HE | Dell Pro 24 Plus", y guardados tal cual esa
+    barra partía el nombre en dos: el producto quedaba anotado como
+    "P2425HE" a secas, que no reconoce nada, y la confirmación hecha a mano
+    no servía. Por eso al guardar la barra del texto se escribe \| y acá se
+    vuelve a armar. Es el mismo error de siempre — un separador que aparece
+    adentro del dato — una capa más abajo.
+    """
+    texto, partes, actual, i = (fila.get(campo) or ''), [], '', 0
+    while i < len(texto):
+        if texto[i] == ESCAPE and i + 1 < len(texto):
+            actual += texto[i + 1]
+            i += 2
+        elif texto[i] == '|':
+            partes.append(actual)
+            actual = ''
+            i += 1
+        else:
+            actual += texto[i]
+            i += 1
+    partes.append(actual)
+    return [x.strip() for x in partes if x.strip()]
+
+
+def juntar(valores):
+    """Arma el campo escapando las barras que trae el texto."""
+    return '|'.join(v.replace(ESCAPE, ESCAPE + ESCAPE).replace('|', ESCAPE + '|')
+                    for v in valores)
 
 
 def todos(fila, campo):
@@ -208,7 +239,7 @@ def aprender(fila, campo, valor):
     valor = (valor or '').strip()
     if not valor or valor in todos(fila, campo):
         return False
-    fila[APRENDIDAS[campo]] = '|'.join(lista(fila, APRENDIDAS[campo]) + [valor])
+    fila[APRENDIDAS[campo]] = juntar(lista(fila, APRENDIDAS[campo]) + [valor])
     return True
 
 
@@ -226,7 +257,7 @@ def aprender_nombre(fila, nombre):
     nombre = (nombre or '').strip()
     if not nombre or nombre in nombres_de(fila):
         return False
-    fila['Nombres_vistos'] = '|'.join(lista(fila, 'Nombres_vistos') + [nombre])
+    fila['Nombres_vistos'] = juntar(lista(fila, 'Nombres_vistos') + [nombre])
     return True
 
 
@@ -244,7 +275,7 @@ def aprender_categoria(fila, categoria):
     categoria = (categoria or '').strip()
     if not categoria or norm(categoria) in {norm(x) for x in categorias_de(fila)}:
         return False
-    fila['Otras_Categorias'] = '|'.join(lista(fila, 'Otras_Categorias') + [categoria])
+    fila['Otras_Categorias'] = juntar(lista(fila, 'Otras_Categorias') + [categoria])
     return True
 
 

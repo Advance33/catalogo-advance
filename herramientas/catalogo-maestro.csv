@@ -65,11 +65,11 @@ AT-0056,AT-0056-01,Auriculares,Apple,AirPods Max 2ª Gen USB-C (Blue/Orange),Blu
 AT-0056,AT-0056-02,Auriculares,Apple,AirPods Max 2ª Gen USB-C (Blue/Orange),Orange,,02,AUD-APP-006,,auriculares~apple~airpods-max-usb-c~gen2,,,,620,2026-09-10,,,
 AT-0056,AT-0056-03,Auriculares,Apple,AirPods Max 2ª Gen USB-C (Blue/Orange),Midnight,,03,AUD-APP-009,,auriculares~apple~airpods-max-usb-c~gen2,,,,620,2026-09-10,,,
 AT-0056,AT-0056-04,Auriculares,Apple,AirPods Max 2ª Gen USB-C (Blue/Orange),Purple,pur,04,AUD-APP-009,,auriculares~apple~airpods-max-usb-c~gen2,,,,620,2026-09-10,,,
-AT-0056,AT-0056-05,Auriculares,Apple,AirPods Max 2ª Gen USB-C (Blue/Orange),Starlight,,05,AUD-APP-006,,auriculares~apple~airpods-max-usb-c~gen2,,,,620,2026-09-10,,,hay foto; la planilla no la vende hoy
+AT-0056,AT-0056-05,Auriculares,Apple,AirPods Max 2ª Gen USB-C (Blue/Orange),Starlight,Star,05,AUD-APP-006,,auriculares~apple~airpods-max-usb-c~gen2,,,,620,2026-09-10,,,hay foto; la planilla no la vende hoy
 AT-0057,AT-0057-01,Auriculares,Apple,AirPods Max USB-C (Blue),Blue,blu,01,AUD-APP-005,,auriculares~apple~airpods-max-usb-c,,,,550,2026-09-10,,,
 AT-0058,AT-0058,Auriculares,Apple,AirPods Pro 3ra Gen,,,,AUD-APP-004,,auriculares~apple~airpods-pro~gen3,,,,275,2026-09-10,,,
-AT-0059,AT-0059,Auriculares,Apple,EarPods Lightning,,,,AUD-APP-008,,auriculares~apple~earpods-lightning,,,,120,2026-09-10,,,
-AT-0060,AT-0060,Auriculares,Apple,EarPods USB-C,,,,AUD-APP-007,,auriculares~apple~earpods-usb-c,,,,130,2026-09-10,,,
+AT-0059,AT-0059,Auriculares,Apple,EarPods Lightning,,,,AUD-APP-008,AUD-APP-015,auriculares~apple~earpods-lightning,auriculares~apple~conector-earpods-lightning,EarPods|Conector Lightning|EarPods | Conector Lightning,,120,2026-09-10,,,
+AT-0060,AT-0060,Auriculares,Apple,EarPods USB-C,,,,AUD-APP-007,AUD-APP-016,auriculares~apple~earpods-usb-c,auriculares~apple~conector-earpods-usb-c,EarPods|Conector USB-C|EarPods | Conector USB-C,,130,2026-09-10,,,
 AT-0061,AT-0061-01,Auriculares,JBL,Earbuds Tune Flex Wireless Nc (White),White,blanco|teclas blancas|whi|whites,01,AUD-JBL-001,,auriculares~jbl~earbuds-flex-nc-tune-wireless,,,,105,2026-09-10,,,
 AT-0062,AT-0062-01,Auriculares,Kieslect,Adjustable Earbuds (Black),Black,bla|black keys|negro|teclas negras,01,AUD-KIE-001,,auriculares~kieslect~adjustable-earbuds,,,,69,2026-09-10,,,
 AT-0063,AT-0063-01,Auriculares,Samsung,Galaxy Buds 3 (White),White,blanco|teclas blancas|whi|whites,01,AUD-SAM-001,,auriculares~samsung~3-buds-galaxy,,,,190,2026-09-10,,,
@@ -77,6 +77,7 @@ AT-0064,AT-0064-01,Celular,Apple,iPhone 14 128GB (Blue/Purple/Red/Star/Yellow),B
 AT-0064,AT-0064-02,Celular,Apple,iPhone 14 128GB (Blue/Purple/Red/Star/Yellow),Purple,pur,02,CEL-APP-003,,celular~apple~14-iphone~128gb,,,,650,2026-09-10,,,
 AT-0064,AT-0064-03,Celular,Apple,iPhone 14 128GB (Blue/Purple/Red/Star/Yellow),Red,,03,CEL-APP-003,,celular~apple~14-iphone~128gb,,,,650,2026-09-10,,,
 AT-0064,AT-0064-04,Celular,Apple,iPhone 14 128GB (Blue/Purple/Red/Star/Yellow),Yellow,,04,CEL-APP-003,,celular~apple~14-iphone~128gb,,,,650,2026-09-10,,,
+AT-0064,AT-0064-05,Celular,Apple,iPhone 14 128GB (Blue/Purple/Red/Star/Yellow),Star,,05,CEL-APP-003,,celular~apple~14-iphone~128gb,,,,650,2026-09-14,,,variante agregada el 2026-09-14
 AT-0065,AT-0065-01,Celular,Apple,iPhone 15 128GB (Black),Black,bla|black keys|negro|teclas negras,01,CEL-APP-004,,celular~apple~15-iphone~128gb,,,,685,2026-09-10,,,
 AT-0065,AT-0065-02,Celular,Apple,iPhone 15 128GB (Black),Blue,,02,CEL-APP-004,,celular~apple~15-iphone~128gb,,,,685,2026-09-10,,,hay foto; la planilla no la vende hoy
 AT-0066,AT-0066-01,Celular,Apple,iPhone 15 Plus 128GB (Black),Black,bla|black keys|negro|teclas negras,01,CEL-APP-091,,celular~apple~15-iphone-plus~128gb,,,,780,2026-09-10,,,
@@ -96,6 +97,7 @@ AT-0070,AT-0070-02,Celular,Apple,iPhone 17 256GB (Blue/Sage/Lavender/White),Sage
 AT-0070,AT-0070-03,Celular,Apple,iPhone 17 256GB (Blue/Sage/Lavender/White),Lavender,lavander,03,CEL-APP-077,,celular~apple~17-iphone~256gb,,,,960,2026-09-10,,,
 AT-0070,AT-0070-04,Celular,Apple,iPhone 17 256GB (Blue/Sage/Lavender/White),White,blanco|teclas blancas|whi|whites,04,CEL-APP-077,,celular~apple~17-iphone~256gb,,,,960,2026-09-10,,,
 AT-0070,AT-0070-05,Celular,Apple,iPhone 17 256GB (Blue/Sage/Lavender/White),Black,,05,CEL-APP-077,,celular~apple~17-iphone~256gb,,,,960,2026-09-10,,,hay foto; la planilla no la vende hoy
+AT-0070,AT-0070-06,Celular,Apple,iPhone 17 256GB (Blue/Sage/Lavender/White),Green,,06,CEL-APP-077,,celular~apple~17-iphone~256gb,,,,1000,2026-09-14,,,variante agregada el 2026-09-14
 AT-0071,AT-0071-01,Celular,Apple,iPhone 17 Pro 1TB (Silver/Orange),Silver,sil,01,CEL-APP-013,,celular~apple~17-iphone-pro~1tb,,,,1600,2026-09-10,,,
 AT-0071,AT-0071-02,Celular,Apple,iPhone 17 Pro 1TB (Silver/Orange),Orange,,02,CEL-APP-013,,celular~apple~17-iphone-pro~1tb,,,,1600,2026-09-10,,,
 AT-0071,AT-0071-03,Celular,Apple,iPhone 17 Pro 1TB (Silver/Orange),Blue,,03,CEL-APP-013,,celular~apple~17-iphone-pro~1tb,,,,1600,2026-09-10,,,hay foto; la planilla no la vende hoy
@@ -126,7 +128,9 @@ AT-0082,AT-0082-03,Celular,Samsung,Galaxy A17 4/128GB (x5 U$235),Gray,,03,CEL-SA
 AT-0083,AT-0083-01,Celular,Samsung,Galaxy A17 8/256GB (Gray/Blue),Gray,cinza|grey|gris,01,CEL-SAM-003,,celular~samsung~a17-galaxy~8gb-256gb,,,,330,2026-09-10,,,
 AT-0083,AT-0083-02,Celular,Samsung,Galaxy A17 8/256GB (Gray/Blue),Blue,blu,02,CEL-SAM-003,,celular~samsung~a17-galaxy~8gb-256gb,,,,330,2026-09-10,,,
 AT-0083,AT-0083-03,Celular,Samsung,Galaxy A17 8/256GB (Gray/Blue),Black,,03,CEL-SAM-003,,celular~samsung~a17-galaxy~8gb-256gb,,,,330,2026-09-10,,,hay foto; la planilla no la vende hoy
-AT-0084,AT-0084-01,Celular,Samsung,Galaxy A27 6/128GB 5G (Black),Black,bla|black keys|negro|teclas negras,01,CEL-SAM-036,,celular~samsung~a27-galaxy~6gb-128gb-5g,,,,330,2026-09-10,,,
+AT-0084,AT-0084-01,Celular,Samsung,Galaxy A27 6/128GB 5G (Black),Black,bla|black keys|negro|teclas negras,01,CEL-SAM-036,CEL-SAM-097,celular~samsung~a27-galaxy~6gb-128gb-5g,celular~samsung~a27-galaxy~6gb-128gb,Galaxy A27 6/128GB (Black/Blue/Pink),,330,2026-09-10,,,
+AT-0084,AT-0084-02,Celular,Samsung,Galaxy A27 6/128GB 5G (Black),blue,,02,CEL-SAM-097,,celular~samsung~a27-galaxy~6gb-128gb,,,,350,2026-09-14,,,variante agregada el 2026-09-14
+AT-0084,AT-0084-03,Celular,Samsung,Galaxy A27 6/128GB 5G (Black),pink,,03,CEL-SAM-097,,celular~samsung~a27-galaxy~6gb-128gb,,,,350,2026-09-14,,,variante agregada el 2026-09-14
 AT-0085,AT-0085-01,Celular,Samsung,Galaxy A37 8/256GB (Gray/Green/Violet),Gray,cinza|grey|gris,01,CEL-SAM-085,,celular~samsung~a37-galaxy~8gb-256gb,,,,420,2026-09-10,,,
 AT-0085,AT-0085-02,Celular,Samsung,Galaxy A37 8/256GB (Gray/Green/Violet),Green,gre,02,CEL-SAM-085,,celular~samsung~a37-galaxy~8gb-256gb,,,,420,2026-09-10,,,
 AT-0085,AT-0085-03,Celular,Samsung,Galaxy A37 8/256GB (Gray/Green/Violet),Violet,violeta,03,CEL-SAM-085,,celular~samsung~a37-galaxy~8gb-256gb,,,,420,2026-09-10,,,
@@ -201,6 +205,7 @@ AT-0119,AT-0119-01,Celular,Xiaomi,Redmi Note 15 Pro 12/512GB (Black/Purple),Blac
 AT-0119,AT-0119-02,Celular,Xiaomi,Redmi Note 15 Pro 12/512GB (Black/Purple),Purple,pur,02,CEL-XIA-093,,celular~xiaomi~15-note-pro-redmi~12gb-512gb,,,,375,2026-09-10,,,
 AT-0120,AT-0120-01,Celular,Xiaomi,Redmi Note 15 Pro 8/256GB (Black),black,bla|black keys|negro|teclas negras,01,CEL-XIA-092,,celular~xiaomi~15-note-pro-redmi~8gb-256gb,,,,340,2026-09-10,,,
 AT-0121,AT-0121-01,Celular,Xiaomi,Redmi Note 15 Pro Plus 12/512GB 5G (Blue),Blue,blu,01,CEL-XIA-107,,celular~xiaomi~15-note-plus-pro-redmi~12gb-512gb-5g,,,,490,2026-09-10,,,
+AT-0121,AT-0121-02,Celular,Xiaomi,Redmi Note 15 Pro Plus 12/512GB 5G (Blue),black,,02,CEL-XIA-107,,celular~xiaomi~15-note-plus-pro-redmi~12gb-512gb-5g,,,,480,2026-09-14,,,variante agregada el 2026-09-14
 AT-0122,AT-0122-01,Celular,Xiaomi,Redmi Note 15 Pro Plus 8/256GB 5G (Black/Blue),Black,bla|black keys|negro|teclas negras,01,CEL-XIA-103,,celular~xiaomi~15-note-plus-pro-redmi~8gb-256gb-5g,,,,425,2026-09-10,,,
 AT-0122,AT-0122-02,Celular,Xiaomi,Redmi Note 15 Pro Plus 8/256GB 5G (Black/Blue),Blue,blu,02,CEL-XIA-103,,celular~xiaomi~15-note-plus-pro-redmi~8gb-256gb-5g,,,,425,2026-09-10,,,
 AT-0122,AT-0122-03,Celular,Xiaomi,Redmi Note 15 Pro Plus 8/256GB 5G (Black/Blue),Brown,,03,CEL-XIA-103,,celular~xiaomi~15-note-plus-pro-redmi~8gb-256gb-5g,,,,425,2026-09-10,,,hay foto; la planilla no la vende hoy
@@ -299,7 +304,7 @@ AT-0209,AT-0209,Drone,DJI,Drone DJI Mini 5 Pro (Rc 2) + Combo More Fly,,,,DRO-DJ
 AT-0210,AT-0210,Drone,DJI,Drone DJI Mini 5 Pro (Rc 2) + Combo More Fly Plus,,,,DRO-DJI-011,,drone~dji~2-5-combo-dji-drone-fly-mini-more-plus-pro-rc,,,,1430,2026-09-10,,,
 AT-0211,AT-0211,Drone,DJI,Drone DJI Mini 5 Pro (Rc-N3),,,,DRO-DJI-009,,drone~dji~5-dji-drone-mini-pro-rc-n3,,,,1135,2026-09-10,,,
 AT-0212,AT-0212-01,E-Reader,Amazon,Kindle Gen 11 16GB (Black),Black,bla|black keys|negro|teclas negras,01,ERD-AMZ-004,ERD-AMZ-007,e-reader~amazon~11-gen-kindle~16gb,e-reader~amazon~kindle-touch~16gb,Kindle Touch (2024) 16GB (Black),,215,2026-09-10,,,
-AT-0213,AT-0213-01,E-Reader,Amazon,Kindle Paperwhite Gen 12 16GB (Black),Black,bla|black keys|negro|teclas negras,01,ERD-AMZ-005,,e-reader~amazon~12-gen-kindle-paperwhite~16gb,,,,235,2026-09-10,,,
+AT-0213,AT-0213-01,E-Reader,Amazon,Kindle Paperwhite Gen 12 16GB (Black),Black,bla|black keys|negro|teclas negras,01,ERD-AMZ-005,,e-reader~amazon~12-gen-kindle-paperwhite~16gb,e-reader~amazon~300ppi-kindle-pantalla-paperwhite~gen12-7in-16gb,"Kindle Paperwhite (12ª Gen 2024) \| 16GB / Pantalla 7"" 300ppi — Black",,235,2026-09-10,,,
 AT-0214,AT-0214-01,E-Reader,Amazon,Kindle Paperwhite Gen 12 32GB Signature Edition (Metallic Black),Metallic Black,,01,ERD-AMZ-006,,e-reader~amazon~12-edition-gen-kindle-paperwhite-signature~32gb,,,,275,2026-09-10,,,
 AT-0215,AT-0215,Filmadora,Canon,HFG70 Vixia UHD 4K Camcoder,,,,FIL-CAN-001,,filmadora~canon~4k-camcoder-hfg70-uhd-vixia,,,,1419,2026-09-10,,,
 AT-0216,AT-0216,Filmadora,Panasonic,AG-CX20 4K,,,,FIL-PAN-004,,filmadora~panasonic~4k-ag-cx20,,,,2750,2026-09-10,,,
@@ -515,21 +520,21 @@ AT-0418,AT-0418-02,Lentes Inteligentes,Ray-Ban,Meta Wayfarer (601ST350) (Black/P
 AT-0419,AT-0419,Monitor,Apple,"Studio Display 27"" (Standard Glass/Tilt & Height)",,,,MON-APP-004,MON-APP-006,monitor~apple~display-glass-height-standard-studio-tilt~27in,monitor~apple~adjustable-display-glass-height-stand-standard-studio-tilt~27in,"27"" Studio Display Standard Glass · Tilt & Height Adjustable Stand",,2920,2026-09-10,,,
 AT-0420,AT-0420,Monitor,Dell,"24"" P2425H (FHD 1920x1080/Dp/HDMI/Vga/USB)",,,,MON-DEL-009,MON-DEL-011,monitor~dell~dp-p2425h~24in,monitor~dell~dp-fhd-hdmi-p2425h-usb-vesa-vga~24in,"P2425H 24"" FHD · Vesa / Dp / HDMI / Vga / USB",,380,2026-09-10,,,
 AT-0421,AT-0421,Monitor,Dell,"27"" P2725H (FHD 1920x1080/Dp/HDMI/Vga/USB/3Y Garantía)",,,,MON-DEL-010,MON-DEL-012,monitor~dell~3y-dp-p2725h~27in,monitor~dell~3-anos-dp-fhd-garantia-hdmi-p2725h-usb-vesa-vga~27in,"P2725H 27"" FHD · Vesa / Dp / HDMI / Vga / USB · Garantía 3 Años",,450,2026-09-10,,,
-AT-0422,AT-0422,Monitor,Dell,"Pro 24 Plus 23.8"" P2425HE (FHD 1920x1080/100Hz)",,,,MON-DEL-006,,monitor~dell~24-p2425he-plus-pro~23in,monitor~dell~100hz-24-fhd-p2425he-plus-pro~23in,"Pro 24 Plus P2425HE 23.8"" FHD · 100Hz",,540,2026-09-10,,,
+AT-0422,AT-0422,Monitor,Dell,"Pro 24 Plus 23.8"" P2425HE (FHD 1920x1080/100Hz)",,,,MON-DEL-006,,monitor~dell~24-p2425he-plus-pro~23in,monitor~dell~100hz-24-fhd-p2425he-plus-pro~23in|monitor~dell~100hz-24-dell-full-hd-p2425he-plus-pro~23in,"Pro 24 Plus P2425HE 23.8"" FHD · 100Hz|P2425HE \| Dell Pro 24 Plus 23.8"" Full HD (1920x1080) — 100Hz",,540,2026-09-10,,,
 AT-0423,AT-0423,Monitor,MSI,"Mag 272F 27"" Flat Rapid Ips (FHD/200Hz/0.5ms Gtg/Adaptive Sync/Hdr)",,,,MON-MSI-013,,monitor~msi~272f-flat-ips-mag-rapid~27in,,,,360,2026-09-10,,,
 AT-0424,AT-0424,Monitor,MSI,"Mag 274QF X24 27"" Flat Rapid Ips (Wqhd/240Hz/0.5ms Gtg/Adaptive Sync/Hdr)",,,,MON-MSI-015,,monitor~msi~274qf-flat-ips-mag-rapid-x24~27in,,,,440,2026-09-10,,,
 AT-0425,AT-0425,Monitor,MSI,"Mag 276CXF 27"" Curved 1500R Rapid Va (FHD/280Hz/0.5ms Gtg/Adaptive Sync/Hdr)",,,,MON-MSI-014,,monitor~msi~1500r-276cxf-curved-mag-rapid-va~27in,,,,380,2026-09-10,,,
-AT-0426,AT-0426,Monitor,Samsung,"Essential 24"" (FHD/100Hz)",,,,MON-SAM-006,,monitor~samsung~essential~24in,monitor~samsung~100hz-essential~24in,"24"" Essential 24"" · 100Hz",,310,2026-09-10,,,
+AT-0426,AT-0426,Monitor,Samsung,"Essential 24"" (FHD/100Hz)",,,,MON-SAM-006,,monitor~samsung~essential~24in,monitor~samsung~100hz-essential~24in|monitor~samsung~100hz-essential-ls24d300galxzb-panel-samsung~24in,"24"" Essential 24"" · 100Hz|LS24D300GALXZB \| Samsung 24"" Essential — Panel 100Hz",,310,2026-09-10,,,
 AT-0427,AT-0427,Monitor,Samsung,"Odyssey G5 27"" Curvo (165Hz)",,,,MON-SAM-005,,monitor~samsung~curvo-g5-odyssey~27in,,,,460,2026-09-10,,,
 AT-0428,AT-0428-01,Notebook,Apple,"MacBook Air M5 13.6"" 16GB/1TB (Midnight)",Midnight,,01,NB-APP-007,,notebook~apple~air-m5-macbook~13in-16gb-1tb-tecladoen,,,,1793,2026-09-10,,,
 AT-0428,AT-0428-02,Notebook,Apple,"MacBook Air M5 13.6"" 16GB/1TB (Midnight)",Silver,,02,NB-APP-007,,notebook~apple~air-m5-macbook~13in-16gb-1tb-tecladoen,,,,1793,2026-09-10,,,hay foto; la planilla no la vende hoy
 AT-0428,AT-0428-03,Notebook,Apple,"MacBook Air M5 13.6"" 16GB/1TB (Midnight)",Sky Blue,,03,NB-APP-007,,notebook~apple~air-m5-macbook~13in-16gb-1tb-tecladoen,,,,1793,2026-09-10,,,hay foto; la planilla no la vende hoy
-AT-0428,AT-0428-04,Notebook,Apple,"MacBook Air M5 13.6"" 16GB/1TB (Midnight)",Starlight,,04,NB-APP-007,,notebook~apple~air-m5-macbook~13in-16gb-1tb-tecladoen,,,,1793,2026-09-10,,,hay foto; la planilla no la vende hoy
+AT-0428,AT-0428-04,Notebook,Apple,"MacBook Air M5 13.6"" 16GB/1TB (Midnight)",Starlight,Star,04,NB-APP-007,,notebook~apple~air-m5-macbook~13in-16gb-1tb-tecladoen,,,,1793,2026-09-10,,,hay foto; la planilla no la vende hoy
 AT-0429,AT-0429-01,Notebook,Apple,"MacBook Air M5 13.6"" 24GB/1TB (Sky Blue)",Sky Blue,,01,NB-APP-082,,notebook~apple~air-m5-macbook~13in-24gb-1tb-tecladoen,,,,2167,2026-09-10,,,
 AT-0429,AT-0429-02,Notebook,Apple,"MacBook Air M5 13.6"" 24GB/1TB (Sky Blue)",Midnight,,02,NB-APP-082,,notebook~apple~air-m5-macbook~13in-24gb-1tb-tecladoen,,,,2167,2026-09-10,,,hay foto; la planilla no la vende hoy
 AT-0429,AT-0429-03,Notebook,Apple,"MacBook Air M5 13.6"" 24GB/1TB (Sky Blue)",Silver,,03,NB-APP-082,,notebook~apple~air-m5-macbook~13in-24gb-1tb-tecladoen,,,,2167,2026-09-10,,,hay foto; la planilla no la vende hoy
-AT-0429,AT-0429-04,Notebook,Apple,"MacBook Air M5 13.6"" 24GB/1TB (Sky Blue)",Starlight,,04,NB-APP-082,,notebook~apple~air-m5-macbook~13in-24gb-1tb-tecladoen,,,,2167,2026-09-10,,,hay foto; la planilla no la vende hoy
-AT-0430,AT-0430-01,Notebook,Apple,"MacBook Air M5 15"" 16GB/512GB (Starlight/Sky Blue/Silver)",Starlight,,01,NB-APP-035,,notebook~apple~air-m5-macbook~15in-16gb-512gb-tecladoen,,,,1870,2026-09-10,,,
+AT-0429,AT-0429-04,Notebook,Apple,"MacBook Air M5 13.6"" 24GB/1TB (Sky Blue)",Starlight,Star,04,NB-APP-082,,notebook~apple~air-m5-macbook~13in-24gb-1tb-tecladoen,,,,2167,2026-09-10,,,hay foto; la planilla no la vende hoy
+AT-0430,AT-0430-01,Notebook,Apple,"MacBook Air M5 15"" 16GB/512GB (Starlight/Sky Blue/Silver)",Starlight,Star,01,NB-APP-035,,notebook~apple~air-m5-macbook~15in-16gb-512gb-tecladoen,,,,1870,2026-09-10,,,
 AT-0430,AT-0430-02,Notebook,Apple,"MacBook Air M5 15"" 16GB/512GB (Starlight/Sky Blue/Silver)",Sky Blue,,02,NB-APP-035,,notebook~apple~air-m5-macbook~15in-16gb-512gb-tecladoen,,,,1870,2026-09-10,,,
 AT-0430,AT-0430-03,Notebook,Apple,"MacBook Air M5 15"" 16GB/512GB (Starlight/Sky Blue/Silver)",Silver,sil,03,NB-APP-035,,notebook~apple~air-m5-macbook~15in-16gb-512gb-tecladoen,,,,1870,2026-09-10,,,
 AT-0430,AT-0430-04,Notebook,Apple,"MacBook Air M5 15"" 16GB/512GB (Starlight/Sky Blue/Silver)",Midnight,,04,NB-APP-035,,notebook~apple~air-m5-macbook~15in-16gb-512gb-tecladoen,,,,1870,2026-09-10,,,hay foto; la planilla no la vende hoy
@@ -561,17 +566,19 @@ AT-0444,AT-0444-02,Notebook,Apple,"MacBook Pro M5 Pro 14"" 24GB/1TB (Space Black
 AT-0445,AT-0445-01,Notebook,Apple,"MacBook Pro M5 Pro 14"" 24GB/2TB (Space Black)",Space Black,,01,NB-APP-022,,notebook~apple~m5pro-macbook-pro~14in-24gb-2tb-tecladoen,,,,3300,2026-09-10,,,
 AT-0446,AT-0446-01,Notebook,Apple,"MacBook Pro M5 Pro 16"" 24GB/1TB (Space Black)",Space Black,,01,NB-APP-024,,notebook~apple~m5pro-macbook-pro~16in-24gb-1tb-tecladoen,,,,3245,2026-09-10,,,
 AT-0447,AT-0447-01,Notebook,Apple,"MacBook Pro M5 Pro 16"" 48GB/1TB (Space Black)",Space Black,,01,NB-APP-025,,notebook~apple~m5pro-macbook-pro~16in-48gb-1tb-tecladoen,,,,4180,2026-09-10,,,
+AT-0447,AT-0447-02,Notebook,Apple,"MacBook Pro M5 Pro 16"" 48GB/1TB (Space Black)",Silver,,02,NB-APP-025,,notebook~apple~m5pro-macbook-pro~16in-48gb-1tb-tecladoen,,,,4125,2026-09-14,,,variante agregada el 2026-09-14
 AT-0448,AT-0448-01,Parlante,JBL,Charge 6 (Camo),Camo,,01,AUD-JBL-002,,parlante~jbl~6-charge,,,,205,2026-09-10,,,
 AT-0449,AT-0449-01,Smartwatch,Apple,Watch SE 2ND Gen 40mm GPS M/L (Midnight),Midnight,,01,SW-APP-001,,smartwatch~apple~se-watch~gen2-40mm-ml-gps,,,,280,2026-09-10,,,
 AT-0450,AT-0450-01,Smartwatch,Apple,Watch SE 2ND Gen 44mm GPS S/L (Midnight),Midnight,,01,SW-APP-002,,smartwatch~apple~se-watch~gen2-44mm-sl-gps,,,,290,2026-09-10,,,
-AT-0451,AT-0451-01,Smartwatch,Apple,Watch SE 3 40mm GPS S/M (Midnight/Starlight),Midnight,,01,SW-APP-004,,smartwatch~apple~3-se-watch~40mm-sm-gps,,,,325,2026-09-10,,,
-AT-0451,AT-0451-02,Smartwatch,Apple,Watch SE 3 40mm GPS S/M (Midnight/Starlight),Starlight,,02,SW-APP-004,,smartwatch~apple~3-se-watch~40mm-sm-gps,,,,325,2026-09-10,,,
-AT-0452,AT-0452-01,Smartwatch,Apple,Watch SE 3 44mm GPS M/L (Midnight/Starlight),Midnight,,01,SW-APP-005,,smartwatch~apple~3-se-watch~44mm-ml-gps,,,,355,2026-09-10,,,
-AT-0452,AT-0452-02,Smartwatch,Apple,Watch SE 3 44mm GPS M/L (Midnight/Starlight),Starlight,,02,SW-APP-005,,smartwatch~apple~3-se-watch~44mm-ml-gps,,,,355,2026-09-10,,,
-AT-0453,AT-0453-01,Smartwatch,Apple,Watch Series 11 42mm GPS S/M (Jet Black/Silver/Space Gray),Jet Black,,01,SW-APP-039,,smartwatch~apple~11-series-watch~42mm-sm-gps,,,,410,2026-09-10,,,
-AT-0453,AT-0453-02,Smartwatch,Apple,Watch Series 11 42mm GPS S/M (Jet Black/Silver/Space Gray),Silver,sil,02,SW-APP-039,,smartwatch~apple~11-series-watch~42mm-sm-gps,,,,410,2026-09-10,,,
-AT-0453,AT-0453-03,Smartwatch,Apple,Watch Series 11 42mm GPS S/M (Jet Black/Silver/Space Gray),Space Gray,,03,SW-APP-039,,smartwatch~apple~11-series-watch~42mm-sm-gps,,,,410,2026-09-10,,,
-AT-0453,AT-0453-04,Smartwatch,Apple,Watch Series 11 42mm GPS S/M (Jet Black/Silver/Space Gray),Rose Gold,,04,SW-APP-021,,smartwatch~apple~11-series-watch~42mm-sm-gps,,,,410,2026-09-10,,,
+AT-0451,AT-0451-01,Smartwatch,Apple,Watch SE 3 40mm GPS S/M (Midnight/Starlight),Midnight,,01,SW-APP-004,,smartwatch~apple~3-se-watch~40mm-sm-gps,smartwatch~apple~se-watch~gen3-40mm,Watch SE 3GEN 40MM (Star),,325,2026-09-10,,,
+AT-0451,AT-0451-02,Smartwatch,Apple,Watch SE 3 40mm GPS S/M (Midnight/Starlight),Starlight,Star,02,SW-APP-004,,smartwatch~apple~3-se-watch~40mm-sm-gps,smartwatch~apple~se-watch~gen3-40mm,Watch SE 3GEN 40MM (Star),,325,2026-09-10,,,
+AT-0452,AT-0452-01,Smartwatch,Apple,Watch SE 3 44mm GPS M/L (Midnight/Starlight),Midnight,,01,SW-APP-005,,smartwatch~apple~3-se-watch~44mm-ml-gps,smartwatch~apple~se-watch~gen3-44mm,Watch SE 3 Gen 44MM (Mid),,355,2026-09-10,,,
+AT-0452,AT-0452-02,Smartwatch,Apple,Watch SE 3 44mm GPS M/L (Midnight/Starlight),Starlight,Star,02,SW-APP-005,,smartwatch~apple~3-se-watch~44mm-ml-gps,smartwatch~apple~se-watch~gen3-44mm,Watch SE 3 Gen 44MM (Mid),,355,2026-09-10,,,
+AT-0452,AT-0452-03,Smartwatch,Apple,Watch SE 3 44mm GPS M/L (Midnight/Starlight),Mid,,03,SW-APP-005,,smartwatch~apple~se-watch~gen3-44mm,,,,350,2026-09-14,,,variante agregada el 2026-09-14
+AT-0453,AT-0453-01,Smartwatch,Apple,Watch Series 11 42mm GPS S/M (Jet Black/Silver/Space Gray),Jet Black,,01,SW-APP-039,SW-APP-021,smartwatch~apple~11-series-watch~42mm-sm-gps,smartwatch~apple~s11-watch~42mm,Watch S11 42MM (Rose Gold)|Watch S11 42MM (Space Gray),,410,2026-09-10,,,
+AT-0453,AT-0453-02,Smartwatch,Apple,Watch Series 11 42mm GPS S/M (Jet Black/Silver/Space Gray),Silver,sil,02,SW-APP-039,SW-APP-021,smartwatch~apple~11-series-watch~42mm-sm-gps,smartwatch~apple~s11-watch~42mm,Watch S11 42MM (Rose Gold)|Watch S11 42MM (Space Gray),,410,2026-09-10,,,
+AT-0453,AT-0453-03,Smartwatch,Apple,Watch Series 11 42mm GPS S/M (Jet Black/Silver/Space Gray),Space Gray,,03,SW-APP-039,SW-APP-021,smartwatch~apple~11-series-watch~42mm-sm-gps,smartwatch~apple~s11-watch~42mm,Watch S11 42MM (Rose Gold)|Watch S11 42MM (Space Gray),,410,2026-09-10,,,
+AT-0453,AT-0453-04,Smartwatch,Apple,Watch Series 11 42mm GPS S/M (Jet Black/Silver/Space Gray),Rose Gold,,04,SW-APP-021,SW-APP-039,smartwatch~apple~11-series-watch~42mm-sm-gps,smartwatch~apple~s11-watch~42mm,Watch S11 42MM (Rose Gold)|Watch S11 42MM (Space Gray),,410,2026-09-10,,,
 AT-0454,AT-0454-01,Smartwatch,Apple,Watch Series 11 46mm GPS M/L (Jet Black/Silver/Space Gray/Rose Gold),Jet Black,,01,SW-APP-045,,smartwatch~apple~11-series-watch~46mm-ml-gps,,,,430,2026-09-10,,,
 AT-0454,AT-0454-02,Smartwatch,Apple,Watch Series 11 46mm GPS M/L (Jet Black/Silver/Space Gray/Rose Gold),Silver,sil,02,SW-APP-045,,smartwatch~apple~11-series-watch~46mm-ml-gps,,,,430,2026-09-10,,,
 AT-0454,AT-0454-03,Smartwatch,Apple,Watch Series 11 46mm GPS M/L (Jet Black/Silver/Space Gray/Rose Gold),Space Gray,,03,SW-APP-045,,smartwatch~apple~11-series-watch~46mm-ml-gps,,,,430,2026-09-10,,,
@@ -605,22 +612,22 @@ AT-0467,AT-0467-03,Tablet,Apple,"iPad 11"" A16 256GB (Blue)",Silver,,03,TAB-APP-
 AT-0468,AT-0468-01,Tablet,Apple,"iPad Air 11"" M4 128GB (Space Gray/Purple)",Space Gray,,01,TAB-APP-006,,tablet~apple~air-ipad-m4~11in-128gb,,,,790,2026-09-10,,,
 AT-0468,AT-0468-02,Tablet,Apple,"iPad Air 11"" M4 128GB (Space Gray/Purple)",Purple,pur,02,TAB-APP-006,,tablet~apple~air-ipad-m4~11in-128gb,,,,790,2026-09-10,,,
 AT-0468,AT-0468-03,Tablet,Apple,"iPad Air 11"" M4 128GB (Space Gray/Purple)",Blue,,03,TAB-APP-006,,tablet~apple~air-ipad-m4~11in-128gb,,,,790,2026-09-10,,,hay foto; la planilla no la vende hoy
-AT-0468,AT-0468-04,Tablet,Apple,"iPad Air 11"" M4 128GB (Space Gray/Purple)",Starlight,,04,TAB-APP-006,,tablet~apple~air-ipad-m4~11in-128gb,,,,790,2026-09-10,,,hay foto; la planilla no la vende hoy
+AT-0468,AT-0468-04,Tablet,Apple,"iPad Air 11"" M4 128GB (Space Gray/Purple)",Starlight,Star,04,TAB-APP-006,,tablet~apple~air-ipad-m4~11in-128gb,,,,790,2026-09-10,,,hay foto; la planilla no la vende hoy
 AT-0469,AT-0469-01,Tablet,Apple,"iPad Air 11"" M4 256GB (Space Gray)",Space Gray,,01,TAB-APP-062,,tablet~apple~air-ipad-m4~11in-256gb,,,,960,2026-09-10,,,
-AT-0469,AT-0469-02,Tablet,Apple,"iPad Air 11"" M4 256GB (Space Gray)",Starlight,,02,TAB-APP-007,,tablet~apple~air-ipad-m4~11in-256gb,,,,960,2026-09-10,,,
+AT-0469,AT-0469-02,Tablet,Apple,"iPad Air 11"" M4 256GB (Space Gray)",Starlight,Star,02,TAB-APP-007,,tablet~apple~air-ipad-m4~11in-256gb,,,,960,2026-09-10,,,
 AT-0469,AT-0469-03,Tablet,Apple,"iPad Air 11"" M4 256GB (Space Gray)",Blue,,03,TAB-APP-062,,tablet~apple~air-ipad-m4~11in-256gb,,,,960,2026-09-10,,,hay foto; la planilla no la vende hoy
 AT-0469,AT-0469-04,Tablet,Apple,"iPad Air 11"" M4 256GB (Space Gray)",Purple,,04,TAB-APP-062,,tablet~apple~air-ipad-m4~11in-256gb,,,,940,2026-09-11,,,variante agregada el 2026-09-11
 AT-0470,AT-0470-01,Tablet,Apple,"iPad Air 11"" M4 512GB (Space Gray)",Space Gray,,01,TAB-APP-011,,tablet~apple~air-ipad-m4~11in-512gb,,,,1150,2026-09-10,,,
-AT-0471,AT-0471-01,Tablet,Apple,"iPad Air 13"" M3 128GB (Blue/Purple)",Blue,blu,01,TAB-APP-058,,tablet~apple~air-ipad-m3~13in-128gb,,"iPad Air 13"" (7ª Gen M3) 128GB (Blue/Purple)",,930,2026-09-10,,,
-AT-0471,AT-0471-02,Tablet,Apple,"iPad Air 13"" M3 128GB (Blue/Purple)",Purple,pur,02,TAB-APP-058,,tablet~apple~air-ipad-m3~13in-128gb,,"iPad Air 13"" (7ª Gen M3) 128GB (Blue/Purple)",,930,2026-09-10,,,
+AT-0471,AT-0471-01,Tablet,Apple,"iPad Air 13"" M3 128GB (Blue/Purple)",Blue,blu,01,TAB-APP-058,,tablet~apple~air-ipad-m3~13in-128gb,tablet~apple~air-chip-ipad-m3~13in-128gb,"iPad Air 13"" (7ª Gen M3) 128GB (Blue/Purple)|iPad Air 13"" (7ª Gen) Chip M3 128GB (Blue/Purple)",,930,2026-09-10,,,
+AT-0471,AT-0471-02,Tablet,Apple,"iPad Air 13"" M3 128GB (Blue/Purple)",Purple,pur,02,TAB-APP-058,,tablet~apple~air-ipad-m3~13in-128gb,tablet~apple~air-chip-ipad-m3~13in-128gb,"iPad Air 13"" (7ª Gen M3) 128GB (Blue/Purple)|iPad Air 13"" (7ª Gen) Chip M3 128GB (Blue/Purple)",,930,2026-09-10,,,
 AT-0472,AT-0472-01,Tablet,Apple,"iPad Air 13"" M4 128GB (Blue)",Blue,blu,01,TAB-APP-063,,tablet~apple~air-ipad-m4~13in-128gb,,,,990,2026-09-10,,,
 AT-0472,AT-0472-02,Tablet,Apple,"iPad Air 13"" M4 128GB (Blue)",Space Gray,,02,TAB-APP-008,,tablet~apple~air-ipad-m4~13in-128gb,,,,990,2026-09-10,,,
-AT-0472,AT-0472-03,Tablet,Apple,"iPad Air 13"" M4 128GB (Blue)",Starlight,,03,TAB-APP-063,,tablet~apple~air-ipad-m4~13in-128gb,,,,990,2026-09-10,,,hay foto; la planilla no la vende hoy
+AT-0472,AT-0472-03,Tablet,Apple,"iPad Air 13"" M4 128GB (Blue)",Starlight,Star,03,TAB-APP-063,,tablet~apple~air-ipad-m4~13in-128gb,,,,990,2026-09-10,,,hay foto; la planilla no la vende hoy
 AT-0473,AT-0473-01,Tablet,Apple,"iPad Air 13"" M4 256GB (Space Gray/Starlight)",Space Gray,,01,TAB-APP-009,,tablet~apple~air-ipad-m4~13in-256gb,,,,1110,2026-09-10,,,
-AT-0473,AT-0473-02,Tablet,Apple,"iPad Air 13"" M4 256GB (Space Gray/Starlight)",Starlight,,02,TAB-APP-009,,tablet~apple~air-ipad-m4~13in-256gb,,,,1110,2026-09-10,,,
+AT-0473,AT-0473-02,Tablet,Apple,"iPad Air 13"" M4 256GB (Space Gray/Starlight)",Starlight,Star,02,TAB-APP-009,,tablet~apple~air-ipad-m4~13in-256gb,,,,1110,2026-09-10,,,
 AT-0473,AT-0473-03,Tablet,Apple,"iPad Air 13"" M4 256GB (Space Gray/Starlight)",Blue,,03,TAB-APP-009,,tablet~apple~air-ipad-m4~13in-256gb,,,,1110,2026-09-10,,,hay foto; la planilla no la vende hoy
 AT-0474,AT-0474-01,Tablet,Apple,iPad Mini 7MA Gen 128GB (Space Gray),Space Gray,,01,TAB-APP-003,,tablet~apple~ipad-mini~gen7-128gb,,,,700,2026-09-10,,,
-AT-0474,AT-0474-02,Tablet,Apple,iPad Mini 7MA Gen 128GB (Space Gray),Starlight,,02,TAB-APP-003,,tablet~apple~ipad-mini~gen7-128gb,,,,700,2026-09-11,,,variante agregada el 2026-09-11
+AT-0474,AT-0474-02,Tablet,Apple,iPad Mini 7MA Gen 128GB (Space Gray),Starlight,Star,02,TAB-APP-003,,tablet~apple~ipad-mini~gen7-128gb,,,,700,2026-09-11,,,variante agregada el 2026-09-11
 AT-0474,AT-0474-03,Tablet,Apple,iPad Mini 7MA Gen 128GB (Space Gray),Purple,,03,TAB-APP-003,,tablet~apple~ipad-mini~gen7-128gb,,,,700,2026-09-11,,,variante agregada el 2026-09-11
 AT-0475,AT-0475-01,Tablet,Apple,iPad Mini 7ma Gen 256gb (Space Gray),Space Gray,,01,TAB-APP-004,,tablet~apple~ipad-mini~gen7-256gb,,,,820,2026-09-10,,,
 AT-0476,AT-0476-01,Tablet,Apple,"iPad Pro 11"" M4 256GB (Space Black)",Space Black,,01,TAB-APP-010,,tablet~apple~ipad-m4-pro~11in-256gb,,,,1120,2026-09-10,,,
@@ -629,7 +636,8 @@ AT-0478,AT-0478,Tablet,Apple,"iPad Pro 11"" M4 512GB",,,,TAB-APP-046,,tablet~app
 AT-0479,AT-0479-01,Tablet,Apple,"iPad Pro 11"" M5 256GB (Space Black)",Space Black,,01,TAB-APP-015,,tablet~apple~ipad-m5-pro~11in-256gb,,,,1190,2026-09-10,,,
 AT-0479,AT-0479-02,Tablet,Apple,"iPad Pro 11"" M5 256GB (Space Black)",Silver,,02,TAB-APP-015,,tablet~apple~ipad-m5-pro~11in-256gb,,,,1190,2026-09-10,,,hay foto; la planilla no la vende hoy
 AT-0480,AT-0480-01,Tablet,Apple,"iPad Pro 11"" M5 512GB (Space Black)",Space Black,,01,TAB-APP-047,,tablet~apple~ipad-m5-pro~11in-512gb,,,,1440,2026-09-10,,,
-AT-0481,AT-0481-01,Tablet,Apple,"iPad Pro 11"" M5 512GB Cell 5G LTE + Wi-Fi (Standard Glass) (Space Black)",Space Black,,01,TAB-APP-059,,tablet~apple~cell-glass-ipad-m5-pro-standard~11in-512gb-5g-cellular,,,,1720,2026-09-10,,,
+AT-0481,AT-0481-01,Tablet,Apple,"iPad Pro 11"" M5 512GB Cell 5G LTE + Wi-Fi (Standard Glass) (Space Black)",Space Black,,01,TAB-APP-059,,tablet~apple~cell-glass-ipad-m5-pro-standard~11in-512gb-5g-cellular,tablet~apple~glass-ipad-m5-pro-standard~11in-512gb-5g-cellular,"iPad Pro M5 11"" 512GB Cellular 5G + Wi-Fi (Space Black - Standard Glass)",,1720,2026-09-10,,,
+AT-0481,AT-0481-02,Tablet,Apple,"iPad Pro 11"" M5 512GB Cell 5G LTE + Wi-Fi (Standard Glass) (Space Black)",Space Black - Standard Glass,,02,TAB-APP-059,,tablet~apple~glass-ipad-m5-pro-standard~11in-512gb-5g-cellular,,,,1720,2026-09-14,,,variante agregada el 2026-09-14
 AT-0482,AT-0482-01,Tablet,Apple,"iPad Pro 13"" M4 256GB (Silver)",Silver,sil,01,TAB-APP-013,,tablet~apple~ipad-m4-pro~13in-256gb,,,,1320,2026-09-10,,,
 AT-0483,AT-0483-01,Tablet,Apple,"iPad Pro 13"" M5 256GB (Space Black/Silver)",Space Black,,01,TAB-APP-018,,tablet~apple~ipad-m5-pro~13in-256gb,,,,1430,2026-09-10,,,
 AT-0483,AT-0483-02,Tablet,Apple,"iPad Pro 13"" M5 256GB (Space Black/Silver)",Silver,sil,02,TAB-APP-018,,tablet~apple~ipad-m5-pro~13in-256gb,,,,1430,2026-09-10,,,
@@ -653,7 +661,11 @@ AT-0501,AT-0501-01,Celular,Apple,iPhone 17 Pro Max 512GB E-Sim (Orange),Orange,,
 AT-0502,AT-0502-01,Celular,Samsung,Galaxy A16 4G 4/128GB (Black/Green),Black,,01,CEL-SAM-089,,celular~samsung~a16-galaxy~4gb-128gb-4g,,,,235,2026-09-11,,,alta confirmada a mano el 2026-09-11
 AT-0502,AT-0502-02,Celular,Samsung,Galaxy A16 4G 4/128GB (Black/Green),Green,,02,CEL-SAM-089,,celular~samsung~a16-galaxy~4gb-128gb-4g,,,,235,2026-09-11,,,alta confirmada a mano el 2026-09-11
 AT-0503,AT-0503-01,Celular,Samsung,Galaxy A27 8/256GB 5G (Black),Black,,01,CEL-SAM-091,,celular~samsung~a27-galaxy~8gb-256gb-5g,,,,380,2026-09-11,,,alta confirmada a mano el 2026-09-11
+AT-0503,AT-0503-02,Celular,Samsung,Galaxy A27 8/256GB 5G (Black),blue,,02,CEL-SAM-095,,celular~samsung~a27-galaxy~8gb-256gb,,,,380,2026-09-14,,,variante agregada el 2026-09-14
+AT-0503,AT-0503-03,Celular,Samsung,Galaxy A27 8/256GB 5G (Black),pink,,03,CEL-SAM-095,,celular~samsung~a27-galaxy~8gb-256gb,,,,380,2026-09-14,,,variante agregada el 2026-09-14
 AT-0504,AT-0504-01,Celular,Samsung,Galaxy A36 5G 8/256GB (Black),Black,,01,CEL-SAM-092,,celular~samsung~a36-galaxy~8gb-256gb-5g,,,,390,2026-09-11,,,alta confirmada a mano el 2026-09-11
+AT-0504,AT-0504-02,Celular,Samsung,Galaxy A36 5G 8/256GB (Black),lime,,02,CEL-SAM-096,,celular~samsung~a36-galaxy~8gb-256gb,,,,400,2026-09-14,,,variante agregada el 2026-09-14
+AT-0504,AT-0504-03,Celular,Samsung,Galaxy A36 5G 8/256GB (Black),blue,,03,CEL-SAM-096,,celular~samsung~a36-galaxy~8gb-256gb,,,,400,2026-09-14,,,variante agregada el 2026-09-14
 AT-0505,AT-0505-01,Notebook,Apple,"MacBook Air M5 13.6"" 24/512GB (Silver)",Silver,,01,NB-APP-101,,notebook~apple~air-m5-macbook~13in-24gb-512gb-tecladoen,,,,2123,2026-09-11,,,alta confirmada a mano el 2026-09-11
 AT-0506,AT-0506-01,Tablet,Apple,"iPad Pro M5 13"" 1TB (Space Black)",Space Black,,01,TAB-APP-020,,tablet~apple~ipad-m5-pro~13in-1tb,,,,2010,2026-09-11,,,alta confirmada a mano el 2026-09-11
 AT-0507,AT-0507-01,Lentes Inteligentes,Ray-Ban,Rayban Meta GEN2 Headliner (Shiny Black · Transitions Graph Green),Shiny Black · Transitions Graph Green,,01,GAF-RAY-032,,lentes-inteligentes~ray-ban~gen2-headliner-meta-rayban,,,,535,2026-09-11,,,alta confirmada a mano el 2026-09-11

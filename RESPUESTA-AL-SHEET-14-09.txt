@@ -1,0 +1,129 @@
+EL CSV VA COMO ARCHIVO, Y EL WATCH ULTRA 3 ES EL AT-0455
+================================================================
+Advance Tecno al equipo de la planilla · 14/09/2026
+Responde a sus tres puntos sobre el sin_codigo de hoy
+
+
+1) EL CSV: VA COMO ARCHIVO
+------------------------------------------------------------
+Adjunto catalogo-maestro.csv. Bien pedido: es lo mismo que les dijimos el
+11/09 cuando ustedes aplicaron diferencias en vez de retranscribir las 659
+filas. Un copy/paste puede cortar una linea sin que se note, y el maestro es
+la fuente de verdad de la identidad.
+
+    659 filas · 507 productos · AT-0001 a AT-0508 · proximo libre AT-0509
+    UTF-8 sin BOM, CRLF, 19 columnas
+
+Los tres que les faltaban estan adentro:
+
+    AUD-APP-015  ->  AT-0059
+    AUD-APP-016  ->  AT-0060
+    CEL-SAM-097  ->  AT-0084
+
+Siembrenlo tal cual, sin abrirlo con Excel: hay 110 filas con acentos y
+Excel las reescribe en la codificacion de Windows.
+
+
+2) EL WATCH ULTRA 3 (GPS + CELLULAR): ES EL AT-0455
+------------------------------------------------------------
+Confirmado, con el nombre ampliado. No va codigo nuevo.
+
+Lo que lo decide es el precio. El Ultra 3 se vende hoy en dos grupos:
+
+    AT-0455    800 / 805    Ocean Band, Alpine Loop, Trail Loop
+    AT-0456    930 / 960    Milanese Loop
+
+    SW-APP-062   800   <- cae exacto en el primero
+
+Si "(GPS + Cellular)" fuera una version aparte, costaria mas que la normal.
+Cuesta lo mismo que las otras tres filas de AT-0455. Y ademas el Apple Watch
+Ultra viene siempre con celular: no existe una version solo-GPS, asi que esa
+aclaracion del proveedor no separa nada.
+
+Lo contrario tambien esta hoy en la planilla, y sirve de contraste:
+
+    SW-APP-005   Watch SE 3 Gen 44MM (Mid)          350
+    SW-APP-048   Watch SE 3 Gen 44MM +Cell (Mid)    405
+
+Ahi el celular SI es otro producto, y se nota en los 55 dolares de
+diferencia. En el SE 3 el "+Cell" separa; en el Ultra 3 no. Por eso no hay
+una regla general del tipo "cellular es otro producto": hay que mirar el
+precio de cada uno.
+
+SW-APP-048, entonces, NO es el AT-0452: necesita codigo nuevo. Va en la
+lista de altas.
+
+UN PEDIDO SOBRE ESA FILA: SW-APP-062 viene con Color vacio, a diferencia de
+las otras siete filas de Ultra 3, que dicen su correa. Tal como esta no
+sabemos que se vende, y del lado de la web esa ficha sale sin foto igual,
+porque la portada se elige por el color del dia. Si el proveedor puede
+decir la correa, esa fila se completa sola.
+
+
+3) LOS TRES RELOJES: ANOTADOS, Y LOS TRES RECUPERAN LA FOTO
+------------------------------------------------------------
+Hecho. Los tres van en Nombres_vistos del CSV adjunto:
+
+    SW-APP-004   "Watch SE 3GEN 40MM (Star)"      ->  AT-0451
+    SW-APP-021   "Watch S11 42MM (Rose Gold)"     ->  AT-0453
+    SW-APP-039   "Watch S11 42MM (Space Gray)"    ->  AT-0453
+
+Y su diagnostico era exacto. Lo que rompe la firma:
+
+    3GEN     donde el catalogo dice   3        (se pego el "GEN" al numero)
+    S11      donde el catalogo dice   Series 11
+
+Verificamos que los tres recuperan imagen, que era el punto:
+
+    SW-APP-021  Rose Gold    ->  AT-0453-04   ya tenia foto
+    SW-APP-039  Space Gray   ->  AT-0453-03   ya tenia foto
+    SW-APP-004  Star         ->  AT-0451-02   ya tenia foto
+
+EL TERCERO NECESITO UNA COSA MAS, y conviene que la sepan. Con el vinculo
+puesto, SW-APP-004 resolvia su codigo pero seguia sin foto: el color viene
+como "Star" y la variante se llama "Starlight", asi que no enganchaba. No es
+un color nuevo, es una abreviatura, y va a la columna Escrituras de esa
+variante. Se lo anotamos a las once variantes Starlight del catalogo, asi que
+si el proveedor escribe "Star" en cualquier otro producto ya esta cubierto.
+
+Es la misma clase de problema que los nombres, una capa mas abajo: un codigo
+que resuelve no alcanza si el color no engancha, porque la portada se elige
+por el color del dia.
+
+UNA CORRECCION NUESTRA: en el mensaje anterior les dijimos que no habia
+ninguna fila de Series 11 42mm en la planilla. Estaba mal. Buscamos por
+"Series 11" y hoy se llaman "S11", que es justo el cambio de nombre del que
+estabamos hablando. Las dos filas estaban desde el principio.
+
+Del resto de sus unificaciones, confirmamos que ya se ven en la planilla:
+
+    AT-0229   LEN-CAN-009   RF 1.4X Extender            605
+    AT-0239   LEN-CAN-043   RF 2.0X Extender            715
+    AT-0299   LEN-NIK-009   Z Teleconverter TC-2X       660
+    AT-0366   LEN-SON-039   FE 2X Teleconverter         572
+    AT-0454   SW-APP-045    Watch Series 11 (GPS) 46MM  430
+    AT-0056   AUD-APP-006   AirPods Max USB-C 2         620
+
+Los cuatro teleconverters volvieron ademas a su ID y a su precio de siempre,
+asi que lo del 11/09 -- cuando el proveedor los movio a Accesorio Camara con
+otro ID -- quedo deshecho del todo. Mejor asi.
+
+
+4) DONDE QUEDA LA CUENTA
+------------------------------------------------------------
+Contra la planilla de ahora, 606 filas:
+
+     95  filas siguen sin codigo
+     11  las resolvimos entre los dos hoy (8 del pedido anterior + 3 relojes)
+     12  variantes nuevas de productos que ya estaban, agregadas de este lado
+
+Las 95 son las altas de verdad, para numerar.
+
+El proximo codigo libre sigue siendo AT-0509. Cuando nos pasen el manifiesto
+limpio corremos el cruce otra vez y les confirmamos el numero final antes de
+que asignen, como el 11/09.
+
+Y si alguna de esas 95 les hace ruido, mandenlas antes de numerar. Las dos
+veces que lo hicimos aparecio algo: la primera, dos Wayfarer que se llevaban
+el codigo del hermano; la segunda, ocho productos conocidos con el nombre
+reescrito.

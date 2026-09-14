@@ -186,7 +186,31 @@ que les dijimos que los habiamos confirmado y lo confirmado no servia.
 Arreglado, con los tres nombres reparados.
 
 
-8) DONDE QUEDA
+8) TRES FILAS QUE FRENAN NUESTRA PUBLICACION (de la planilla)
+------------------------------------------------------------
+Nuestro validador las marca como graves, y son las tres del mismo tipo: un
+color que aparece en DOS filas del mismo producto, con precio distinto.
+
+    iPad Air M4 11" 256GB   Starlight     TAB-APP-007 925  y  TAB-APP-062 940
+    iPad Air M4 13" 128GB   Space Gray    TAB-APP-008 970  y  TAB-APP-063 990
+    iPhone 17 Pro 256GB     Silver/Blue   CEL-APP-068 1250 y  CEL-APP-070 1245
+
+    TAB-APP-007  Color = Starlight
+    TAB-APP-062  Color = Space Gray/Blue/Purple/Starlight   <- Starlight en las dos
+
+El cliente ve el mismo color dos veces a dos precios y no hay forma de saber
+cual vale cuanto. No es el error caro -- no muestra otro producto ni otra
+foto -- pero es confuso justo en la tarjeta.
+
+El arreglo es el de siempre y es de ustedes: cuando un producto se parte en
+dos filas por precio, CADA FILA TIENE QUE TRAER SOLO SUS COLORES. Si el
+Starlight vale 925, va solo en la fila de 925 y sale de la otra.
+
+Es el mismo pedido que hicimos el 09/09 con los colores por fila. Volvio con
+los iPad Air, que el proveedor esta partiendo en dos filas seguido.
+
+
+9) DONDE QUEDA
 ------------------------------------------------------------
     530 filas · 530 con codigo · 0 sin codigo
     518 productos · AT-0001 a AT-0520 · proximo libre AT-0521

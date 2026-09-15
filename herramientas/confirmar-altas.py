@@ -44,6 +44,21 @@ APLICAR = '--aplicar' in sys.argv
 DECISIONES = os.path.join(AQUI, 'altas-decididas.csv')
 
 
+def filas_de_la_planilla():
+    """La planilla publicada, o un archivo con  --planilla <csv>.
+
+    El equipo del sheet trabaja en la hoja Cami antes de publicar Landing, y
+    lo que manda para resolver (el sin_codigo del manifiesto) sale de ahi. Sin
+    esto, las decisiones se buscaban en la planilla del dia anterior y las
+    filas nuevas no aparecian.
+    """
+    if '--planilla' in sys.argv:
+        ruta = sys.argv[sys.argv.index('--planilla') + 1]
+        with io.open(ruta, encoding='utf-8', newline='') as fh:
+            return list(csv.DictReader(fh))
+    return validar.bajar_csv()
+
+
 def main():
     sys.stdout.reconfigure(encoding='utf-8')
     if not os.path.exists(DECISIONES):
@@ -57,7 +72,7 @@ def main():
     maestro = CM.leer()
     idx = CM.indexar(maestro)
     filas = {(f.get('ID') or '').strip(): f
-             for f in validar.bajar_csv() if (f.get('ID') or '').strip()}
+             for f in filas_de_la_planilla() if (f.get('ID') or '').strip()}
 
     hechos, nuevos, quejas = [], [], []
     for d in decisiones:

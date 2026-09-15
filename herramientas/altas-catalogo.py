@@ -58,6 +58,12 @@ import fotos_sku as FS                        # noqa: E402
 import validar                                # noqa: E402
 
 APLICAR = '--aplicar' in sys.argv
+# Numera los productos marcados NUEVO y no toca las variantes de los que ya
+# estan. Hace falta cuando los colores de la planilla vienen en un formato
+# que el partidor no entiende: el 15/09 la hoja Cami trajo "(caja · malla)" en
+# los relojes, "color no informado" y "gray/1black", y sin esto las altas del
+# dia no se podian numerar sin crear dieciocho variantes que no existen.
+SOLO_PRODUCTOS = '--solo-productos' in sys.argv
 DECISIONES = os.path.join(AQUI, 'altas-decididas.csv')
 
 
@@ -76,6 +82,21 @@ def leer_decisiones():
     return salida
 
 
+def filas_de_la_planilla():
+    """La planilla publicada, o un archivo con  --planilla <csv>.
+
+    El equipo del sheet trabaja en la hoja Cami antes de publicar Landing, y
+    lo que manda para resolver (el sin_codigo del manifiesto) sale de ahi. Sin
+    esto, las decisiones se buscaban en la planilla del dia anterior y las
+    filas nuevas no aparecian.
+    """
+    if '--planilla' in sys.argv:
+        ruta = sys.argv[sys.argv.index('--planilla') + 1]
+        with io.open(ruta, encoding='utf-8', newline='') as fh:
+            return list(csv.DictReader(fh))
+    return validar.bajar_csv()
+
+
 def main():
     sys.stdout.reconfigure(encoding='utf-8')
     maestro = CM.leer()
@@ -84,7 +105,7 @@ def main():
         print('   python herramientas/sembrar-catalogo-maestro.py --escribir')
         return 2
 
-    filas = [f for f in validar.bajar_csv() if (f.get('ID') or '').strip()]
+    filas = [f for f in filas_de_la_planilla() if (f.get('ID') or '').strip()]
     conocidos = validar.leer_index()[0]
     pinta = validar.pinta
     cols = lambda f: FS.colores_de_la_fila(f, pinta, conocidos)
@@ -131,7 +152,12 @@ def main():
 
     nuevas_var, sin_resolver, escrituras, convertidas, esperando = [], [], [], [], []
     nuevos_prod = []
-    n = int(CM.proximo_codigo(maestro)[3:])
+    # El ULTIMO numero entregado. proximo_codigo() ya devuelve el siguiente
+    # libre, y abajo se suma uno antes de usarlo: tomarlo tal cual salteaba un
+    # numero en cada corrida. Asi quedo el hueco del AT-0509 el 14/09, que en
+    # su momento se explico como "un codigo entregado que no quedo". No fue
+    # eso: fue este +1 de mas.
+    n = int(CM.proximo_codigo(maestro)[3:]) - 1
 
     for f in filas:
         idf = (f.get('ID') or '').strip()
@@ -174,6 +200,8 @@ def main():
             maestro.extend(x for x in nuevos_prod if x['CODIGO'] == cod)
             idx = CM.indexar(maestro)
             continue
+        if SOLO_PRODUCTOS:
+            continue
         # producto conocido: ¿trae alguna variante que el catalogo no tenga?
         for v in cols(f):
             if CM.variante_de(cod, v, idx):
@@ -185,8 +213,9 @@ def main():
             ya = CM.variante_por_partes(cod, v, idx)
             if ya:
                 fila = idx['por_var'][ya]
-                fila['Escrituras'] = '|'.join(
-                    [x for x in (fila.get('Escrituras') or '').split('|') if x.strip()] + [v])
+                # Con CM.lista y CM.juntar, que escapan la barra: el 14/09 un
+                # nombre con "|" quedo partido en dos por juntarlo a mano.
+                fila['Escrituras'] = CM.juntar(CM.lista(fila, 'Escrituras') + [v])
                 escrituras.append((ya, v, fila))
                 continue
             # Un producto que se sembro sin colores y hoy trae el primero: la
@@ -225,7 +254,7 @@ def main():
     print('  %4d  variantes nuevas de productos que ya estaban' % len(nuevas_var))
     print('  %4d  variantes que ya estaban, escritas de otra forma' % len(escrituras))
     print('  %4d  productos que estrenan su primera variante' % len(convertidas))
-    print('  %4d  ESPERANDO CODIGO del sheet' % len(esperando))
+    print('  %4d  SIN DECIDIR (ni vinculo ni NUEVO)' % len(esperando))
     print()
     if nuevos_prod:
         print('--- productos nuevos ---')
@@ -258,9 +287,9 @@ def main():
         print()
     if esperando:
         print('--- SIN CODIGO ---')
-        print('    Los codigos los reparte el equipo de la planilla: un solo lado')
-        print('    numera, o dos altas del mismo dia se llevan el mismo AT-####.')
-        print('    Estas filas salen sin foto hasta que el sheet les ponga el suyo.')
+        print('    Los codigos los numera este lado, y solo lo que una persona')
+        print('    marco como NUEVO en altas-decididas.csv. Estas filas salen sin')
+        print('    foto hasta que alguien decida si son un alta o un vinculo.')
         print()
         print('    Si alguna es un producto que YA esta con otro nombre, se le anota')
         print('    el vinculo y deja de necesitar codigo nuevo. Va en')

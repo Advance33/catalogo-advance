@@ -1,0 +1,12 @@
+# Productos que validar.py marcó como posiblemente no nuevos y que Pedro miró
+# y dio por buenos. Una línea por producto: código AT, la señal, y un
+# comentario opcional después de #.
+#
+# Va por código AT y no por ID, porque los IDs de la planilla se renumeran.
+# Si un producto de acá cambia de señal (por ejemplo, de "caja blanca" a
+# "usado"), validar.py vuelve a preguntar.
+
+# 15/09/2026 — objetivos de kit en caja blanca. Pedro: nuevos y sellados, como todo.
+AT-0265  caja blanca   # Canon RF-S 55-210mm F/5-7
+AT-0364  caja blanca   # Sony FE 28-70mm F/3.5-5.6
+AT-0242  white box     # Canon RF 24-105mm F/4 IS USM

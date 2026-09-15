@@ -687,7 +687,83 @@ def regla_fotos(filas, ctx):
 # Cada regla dice dónde se arregla lo que encuentra. No es lo mismo un dato mal
 # cargado (se pide al equipo del sheet) que una lista del catálogo que quedó
 # corta (se toca index.html) o una foto que falta (se produce la imagen).
+CONDICION_ACEPTADA = os.path.join(AQUI, 'condicion-aceptada.txt')
+
+# Lo que delata un producto que no es nuevo y sellado. Va con \b a los dos
+# lados: "usado" no puede saltar dentro de otra palabra, y "cpo" solo, no
+# adentro de un código de modelo.
+SENALES_CONDICION = re.compile(
+    r'\b(usad[oa]s?|reacondicionad[oa]s?|refurbished|renewed|seminuev[oa]s?|'
+    r'open ?box|caja abierta|sin caja|caja blanca|white ?box|exhibici[oó]n|'
+    r'outlet|cpo|grad[oe] [abc]|like new|como nuev[oa]|segunda mano|'
+    r'reparad[oa]s?|swap|sin sellar)\b', re.I)
+
+# Una Condición que dice justamente lo que se promete no es una señal
+CONDICION_NUEVA = re.compile(r'^(nuev[oa]s?|sellad[oa]s?|nuev[oa] sellad[oa]|new|sealed)$', re.I)
+
+
+def leer_condicion_aceptada():
+    """Código -> señales que Pedro ya miró y dio por buenas.
+
+    Una línea por producto: el código AT y la señal, por ejemplo
+        AT-0265  caja blanca    # objetivo de kit, nuevo
+    Todo lo que va después de # es comentario.
+    """
+    aceptadas = collections.defaultdict(set)
+    if not os.path.exists(CONDICION_ACEPTADA):
+        return aceptadas
+    for linea in io.open(CONDICION_ACEPTADA, encoding='utf-8'):
+        linea = linea.split('#', 1)[0].strip()
+        if not linea:
+            continue
+        codigo, _, senal = linea.partition(' ')
+        if senal.strip():
+            aceptadas[codigo.strip().upper()].add(re.sub(r'\s+', ' ', norm(senal)))
+    return aceptadas
+
+
+def regla_condicion(filas, ctx):
+    """Productos que podrían no ser nuevos y sellados.
+
+    El catálogo le dice al cliente que todo lo que vende es nuevo y sellado.
+    Un usado, un reacondicionado o un open box que entre en la carga del día
+    haría mentir a la página, y no hay forma de que el código sepa si ese caso
+    está bien: lo decide Pedro. Por eso es GRAVE -la revisión diaria sólo avisa
+    por los graves- y se apaga producto por producto en condicion-aceptada.txt.
+
+    La aceptación es por código AT y por señal, no por ID: los IDs se
+    renumeran. Y si mañana el mismo producto pasa de "caja blanca" a "usado",
+    es otra señal y vuelve a preguntar.
+    """
+    aceptadas = leer_condicion_aceptada()
+    fallas = []
+    for f in filas:
+        senales = set()
+        cond = limpio(f.get('Condición'))
+        if cond and not CONDICION_NUEVA.match(norm(cond)):
+            senales.add(re.sub(r'\s+', ' ', norm(cond)))
+        for col in ('Modelo', 'Descripción completa', 'Incluye', 'Detalle'):
+            for m in SENALES_CONDICION.finditer(f.get(col) or ''):
+                senales.add(re.sub(r'\s+', ' ', norm(m.group(1))))
+        if not senales:
+            continue
+        codigo = (f.get('CODIGO') or '').strip().upper()
+        clave = codigo or (f.get('ID') or '').strip()
+        nuevas = sorted(s for s in senales if s not in aceptadas.get(clave, set()))
+        if not nuevas:
+            continue
+        nombre = limpio(f.get('Descripción completa')) or limpio(f.get('Modelo'))
+        fallas.append(('GRAVE', f.get('ID') or '?',
+                       'posible producto que no es nuevo y sellado (%s): %s %s. Si está '
+                       'bien, agregá "%s %s" a condicion-aceptada.txt'
+                       % (', '.join(nuevas), clave, nombre, clave, nuevas[0])))
+    return fallas
+
+
 PLANILLA, CODIGO, FOTOS_ = 'planilla', 'código', 'fotos'
+# Lo que no se arregla en ningún lado sino que se decide: sale de los pedidos
+# al equipo de la planilla, porque ahí no hay nada que corregir.
+DECISION = 'decisión'
 
 
 # Que decirle al equipo que carga la planilla cuando una regla encuentra algo.
@@ -732,6 +808,7 @@ REGLAS = [
     ('Colores',             regla_color,              PLANILLA),
     ('Color vs precio',     regla_color_por_precio,   PLANILLA),
     ('Nomenclatura lentes', regla_lentes,             PLANILLA),
+    ('Condición',           regla_condicion,          DECISION),
     ('Categorías',          regla_categorias,         CODIGO),
     ('Formato de memoria',  regla_specs_dual,         CODIGO),
     ('Tarjetas',            regla_tarjetas,           CODIGO),

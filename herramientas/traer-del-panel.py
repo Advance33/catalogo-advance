@@ -54,23 +54,35 @@ LISTAS = os.path.join(RAIZ, '_panel', 'listas')
 FOTOS = os.path.join(RAIZ, 'fotos')
 HOJA = os.path.join(RAIZ, '_panel', '_hoja-de-contacto.jpg')
 APLICAR = '--aplicar' in sys.argv
+POR_HOJA = 20
 
 
 def leer_rechazadas():
-    """Las que ya se miraron y mostraban otra cosa.
+    """Las IMAGENES que ya se miraron y mostraban otra cosa.
 
-    Se anotan en _panel/rechazadas.txt -- un codigo por linea, y despues de
-    una almohadilla por que -- para que no vuelvan a entrar en la proxima
-    corrida. Sin esto habria que acordarse cuales eran, y no hay forma.
+    _panel/rechazadas.txt, una por linea:
+
+        AT-0016   3f9a...c2   # es la foto del cargador, no del adaptador
+
+    Se rechaza la imagen, no el codigo. Si se rechazara el codigo, la foto
+    BUENA que se pegue despues para ese mismo producto tambien quedaria
+    afuera -- que es justo lo que paso el 15/09 con las nueve del 14.
+
+    Una linea sin huella no frena nada: solo le deja al panel el motivo para
+    mostrar mientras la foto siga faltando.
     """
+    salida = {}
     if not os.path.exists(RECHAZADAS):
-        return set()
-    salida = set()
+        return salida
     for linea in io.open(RECHAZADAS, encoding='utf-8'):
-        linea = linea.split('#', 1)[0].strip()
-        if linea:
-            salida.add(linea.replace(CM.EXT, ''))
+        partes = linea.split('#', 1)[0].split()
+        if len(partes) >= 2:
+            salida.setdefault(partes[0].replace(CM.EXT, ''), set()).add(partes[1])
     return salida
+
+
+def huella(crudo):
+    return hashlib.sha256(crudo).hexdigest()[:16]
 
 
 def documentos():
@@ -111,6 +123,7 @@ def main():
     vivas = {v['CODIGO_VAR']: v for v in CM.leer() if not (v.get('Baja') or '').strip()}
     rechazadas = leer_rechazadas()
     nuevas, ya, quejas, avisos, saltadas = [], 0, [], [], 0
+    huellas = {}
     porhuella = {}
 
     for doc in docs:
@@ -126,13 +139,14 @@ def main():
         if os.path.exists(os.path.join(FOTOS, archivo)):
             ya += 1
             continue
-        if base in rechazadas:
-            saltadas += 1
-            continue
         crudo = imagen_de(doc)
         if not crudo:
             quejas.append('%s: el documento no trae la imagen' % archivo)
             continue
+        if huella(crudo) in rechazadas.get(base, ()):
+            saltadas += 1               # la misma imagen que ya se rechazo
+            continue
+        huellas[archivo] = huella(crudo)
         try:
             from PIL import Image
             im = Image.open(io.BytesIO(crudo))
@@ -157,7 +171,7 @@ def main():
     # kits con el mismo cargador -- pero tambien es como se cuela la foto de otra
     # cosa, asi que se avisa para mirarla.
     repetidas = set()
-    for huella, archivos in porhuella.items():
+    for _, archivos in porhuella.items():
         if len(archivos) < 2:
             continue
         porproducto = {}
@@ -175,7 +189,7 @@ def main():
         if len(porproducto) > 1:
             avisos.append('%s: la misma imagen en %d productos distintos. Mirala: si uno '
                           'de ellos no es eso, ahi esta la foto de otra cosa'
-                          % (', '.join(sorted(archivos)), len(productos)))
+                          % (', '.join(sorted(archivos)), len(porproducto)))
     if repetidas:
         for archivo, ruta in [n for n in nuevas if n[0] in repetidas]:
             os.remove(ruta)
@@ -195,11 +209,17 @@ def main():
         print('   MIRAR: %s' % a)
 
     if nuevas:
-        BF.HOJA = HOJA
-        BF.hoja_de_contacto(nuevas, meta)
+        # En paginas de 20: lentes y camaras se parecen mucho entre si y el
+        # modelo va impreso chiquito en el cuerpo. En una hoja de 70 no se lee.
+        for n in range(0, len(nuevas), POR_HOJA):
+            BF.HOJA = HOJA.replace('.jpg', '-%d.jpg' % (n // POR_HOJA + 1))
+            BF.hoja_de_contacto(nuevas[n:n + POR_HOJA], meta)
+        io.open(os.path.join(LISTAS, '_huellas.json'), 'w', encoding='utf-8').write(
+            json.dumps(huellas, indent=1))
         print()
-        print('Hoja de contacto: %s' % HOJA)
-        print('MIRALA: el color lo dice el texto de la parada, la foto la eligio alguien.')
+        print('Hojas de contacto: %d, en %s' % ((len(nuevas) - 1) // POR_HOJA + 1,
+                                               os.path.dirname(HOJA)))
+        print('MIRALAS: el color lo dice el texto de la parada, la foto la eligio alguien.')
 
     if not APLICAR:
         print()

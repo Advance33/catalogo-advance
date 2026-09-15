@@ -13,8 +13,9 @@ cable.
 
 CONSERVA LO QUE YA SE SABIA. Si una foto se saco del sitio por mostrar otro
 producto, el panel lo muestra con la imagen vieja al lado, para poder decidir
-mirandola. Eso no se recalcula -- se copia del faltan.js anterior --, porque
-es una observacion de una persona y no se deduce de la planilla.
+mirandola; y si una se pego en el panel y mostraba otra cosa, muestra el
+motivo. Las dos cosas las vio una persona y no se deducen de la planilla:
+se leen de _fotos-que-estan-mal/ y de _panel/rechazadas.txt.
 """
 import io
 import os
@@ -74,10 +75,10 @@ def leer_rechazos():
     for linea in io.open(RECHAZADAS, encoding='utf-8'):
         if linea.lstrip().startswith('#') or '#' not in linea:
             continue
-        codigo, porque = linea.split('#', 1)
-        codigo = codigo.strip().replace(CM.EXT, '')
-        if codigo:
-            salida[codigo] = porque.strip()
+        datos, porque = linea.split('#', 1)
+        partes = datos.split()                  # CODIGO [HUELLA]
+        if partes:
+            salida[partes[0].replace(CM.EXT, '')] = porque.strip()
     return salida
 
 

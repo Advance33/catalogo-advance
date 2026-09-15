@@ -23,6 +23,7 @@ import re
 import sys
 import json
 import base64
+import hashlib
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.dirname(AQUI)
@@ -36,6 +37,7 @@ CARPETA = os.path.join(RAIZ, '_panel')
 SALIDA = os.path.join(CARPETA, 'faltan.js')
 MALAS = os.path.join(RAIZ, '_fotos-que-estan-mal')
 RECHAZADAS = os.path.join(RAIZ, '_panel', 'rechazadas.txt')
+BAJADAS = os.path.join(RAIZ, '_panel', 'bajadas', 'fotos')
 
 
 def lo_que_ya_se_sabia():
@@ -78,8 +80,31 @@ def leer_rechazos():
         datos, porque = linea.split('#', 1)
         partes = datos.split()                  # CODIGO [HUELLA]
         if partes:
-            salida[partes[0].replace(CM.EXT, '')] = porque.strip()
+            salida[partes[0].replace(CM.EXT, '')] = {
+                'porque': porque.strip(),
+                'huella': partes[1] if len(partes) > 1 else ''}
     return salida
+
+
+def bytes_de_la_rechazada(codigo, huella):
+    """Cuanto pesa, en la base del panel, la foto que se rechazo.
+
+    El panel guarda cada foto con su peso. Si la que sigue guardada pesa eso,
+    es la mala: el panel no la cuenta como hecha y la vuelve a pedir. Si Pedro
+    pega otra, el peso cambia y cuenta. Asi no hace falta borrar nada de la
+    base -- que ademas desde el 15/09 no deja borrar sin version.
+    """
+    ruta = os.path.join(BAJADAS, codigo + '.json')
+    if not huella or not os.path.exists(ruta):
+        return None
+    try:
+        doc = json.loads(io.open(ruta, encoding='utf-8').read())
+        crudo = base64.b64decode((doc.get('datos') or ',').split(',', 1)[1])
+    except Exception:
+        return None
+    if hashlib.sha256(crudo).hexdigest()[:16] != huella:
+        return None                          # ya pego otra: esa no es la mala
+    return doc.get('bytes')
 
 
 def mini_de(ruta, lado=150):
@@ -143,7 +168,11 @@ def main():
         if archivo in sabido:
             p['mala'] = sabido[archivo]
         if v['CODIGO_VAR'] in rechazos:
-            p['rechazo'] = rechazos[v['CODIGO_VAR']]
+            r = rechazos[v['CODIGO_VAR']]
+            p['rechazo'] = r['porque']
+            peso = bytes_de_la_rechazada(v['CODIGO_VAR'], r['huella'])
+            if peso:
+                p['rechazoBytes'] = peso
         faltan.append(p)
 
     # cual de cuantas le faltan a ese producto

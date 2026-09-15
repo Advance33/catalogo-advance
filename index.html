@@ -242,43 +242,96 @@
          color:var(--faint);font-size:20px;line-height:1;padding:7px 13px;border-radius:999px}
   .clear:hover{background:rgba(124,58,237,.10);color:var(--acento)}
 
-  /* ---------- El mosaico de rubros ----------
-     La foto llena la tarjeta y el nombre va encima, sobre un degradado: es lo
-     que se entiende de un vistazo cuando todavia no sabes que estas buscando. */
-  .mosaico{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-           gap:14px;padding:22px 0 10px}
+  /* ---------- Los mundos de la portada ----------
+     Eran 19 cuadrados iguales, uno por rubro, y de entrada se veía como una
+     planilla. Ahora los rubros van agrupados en mundos (MUNDOS, en la
+     configuración) y el tamaño de cada tarjeta dice qué pesa en el catálogo:
+     foto, video y drones es más de dos tercios de lo que hay, y ocupa media
+     vidriera. Los botones de adentro son los rubros de siempre. */
+  .mosaico{display:flex;flex-direction:column;gap:14px;padding:22px 0 10px}
   .mosaico[hidden]{display:none}
-  .mos{
-    position:relative;aspect-ratio:4/3;border-radius:16px;overflow:hidden;
-    display:block;width:100%;padding:0;text-align:left;cursor:pointer;
-    background:var(--surface);border:1px solid var(--line);
-    transition:border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+  .mundos{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));
+          grid-auto-rows:204px;grid-auto-flow:dense;gap:12px}
+  .mundo{
+    position:relative;overflow:hidden;grid-column:span 2;
+    display:flex;flex-direction:column;gap:12px;padding:18px 18px 16px;
+    background:var(--surface);border:1px solid var(--line);border-radius:22px;
   }
-  .mos img{position:relative;width:100%;height:100%;object-fit:contain;
-           padding:26px 26px 52px;display:block;background:var(--surface);
-           transition:transform .4s cubic-bezier(.2,.7,.3,1)}
-  .mos:hover{border-color:var(--acento);transform:translateY(-3px);box-shadow:var(--shadow)}
-  .mos:hover img{transform:scale(1.05)}
-  .mos:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
-  /* El degradado va sobre la foto y por debajo del texto: sin el, los nombres
-     desaparecen contra los productos claros (AirPods, Pencil, cajas blancas). */
-  .mos .sombra{position:absolute;inset:0;pointer-events:none;
-    background:linear-gradient(180deg,rgba(20,17,30,0) 42%,rgba(20,17,30,.86) 100%)}
-  .mos .txt{position:absolute;left:18px;right:18px;bottom:15px;color:#fff}
-  .mos .txt b{display:block;font:400 20px/1.1 var(--display);
-              text-transform:uppercase;letter-spacing:.01em}
-  .mos .txt i{display:block;margin-top:5px;font:500 11px/1 var(--mono);
-              font-style:normal;color:rgba(255,255,255,.82)}
-  .mos .sinfoto{position:absolute;inset:0;display:grid;place-items:center;
-                color:var(--faint);font:500 12px var(--mono)}
+  .mundo-foto{position:absolute;top:12px;right:12px;width:42%;height:50%;pointer-events:none}
+  /* multiply borra el fondo blanco de la foto contra el color de la tarjeta, y
+     el brillo apenas levantado se come los grises claros de algunas tomas. Sin
+     esto, en el mundo grande (que es lila) cada foto era un rectángulo blanco. */
+  .mundo-foto img{width:100%;height:100%;display:block;object-fit:contain;object-position:right top;
+                  mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04);
+                  transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+  .mundo:hover .mundo-foto img{transform:scale(1.04)}
+  .mundo-cab{position:relative;max-width:56%}
+  .mundo-cab h3{margin:0;font:400 21px/1.02 var(--display);text-transform:uppercase;
+                text-wrap:balance;color:var(--ink)}
+  .mundo-cab p{margin:6px 0 0;font:500 10.5px/1.45 var(--mono);letter-spacing:.03em;color:var(--faint)}
+  .mundo-rubros{position:relative;margin-top:auto;display:flex;flex-wrap:wrap;gap:6px}
+  .rubro{
+    display:inline-flex;align-items:baseline;gap:6px;padding:8px 12px;border:0;border-radius:999px;
+    background:var(--surface-2);color:var(--ink);font:600 12.5px/1 var(--sans);cursor:pointer;
+    transition:background .18s ease, color .18s ease;
+  }
+  .rubro i{font:500 10px/1 var(--mono);font-style:normal;color:var(--faint)}
+  .rubro:hover{background:var(--acento);color:#fff}
+  .rubro:hover i{color:#DCCEFB}
+  .rubro:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+
+  .mundo-alto{grid-row:span 2}
+  .mundo-alto .mundo-foto{top:96px;bottom:112px;left:10%;right:10%;width:auto;height:auto}
+  .mundo-alto .mundo-foto img{object-position:center}
+  .mundo-alto .mundo-cab{max-width:none}
+  .mundo-alto .mundo-cab h3{font-size:28px}
+  .mundo-grande{grid-column:span 4;grid-row:span 2;padding:26px;background:#E9E0FC;border-color:#DCCDF9}
+  .mundo-grande .mundo-foto{top:22px;right:3%;bottom:22px;width:50%;height:auto}
+  .mundo-grande .mundo-foto img{object-position:center}
+  .mundo-grande .mundo-cab,.mundo-grande .mundo-rubros{max-width:48%}
+  .mundo-grande .mundo-cab h3{font-size:42px}
+  .mundo-grande .mundo-cab p{font-size:12px}
+  .mundo-grande .rubro{background:var(--surface)}
+  .mundo-grande .rubro:hover{background:var(--acento)}
+  /* Lo que no está en ningún mundo va a lo ancho, al final: si quedara del
+     tamaño normal, dejaría cuatro columnas vacías al lado. */
+  .mundo-otros{grid-column:1 / -1}
+  .mundo-otros .mundo-cab{max-width:70%}
+
   /* La salida para el que quiere la lista entera igual */
-  .mos-todo{
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:8px;background:var(--surface-2);border-style:dashed;color:var(--muted);
+  .mundos-todo{
+    width:100%;display:flex;align-items:center;justify-content:center;gap:12px;padding:16px;
+    border:0;border-radius:999px;background:var(--ink);color:#fff;cursor:pointer;
+    font:400 17px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;
+    transition:background .2s ease;
   }
-  .mos-todo b{font:400 19px/1.1 var(--display);text-transform:uppercase;color:var(--ink)}
-  .mos-todo i{font:500 11px/1 var(--mono);font-style:normal}
-  .mos-todo:hover{color:var(--acento)}
+  .mundos-todo i{font:500 10.5px/1 var(--mono);font-style:normal;text-transform:none;
+                 letter-spacing:.03em;color:#B9A6EC}
+  .mundos-todo:hover{background:#2C2048}
+  .mundos-todo:focus-visible{outline:2px solid var(--acento);outline-offset:3px}
+  @media (prefers-reduced-motion: reduce){
+    .mundo-foto img{transition:none}
+    .mundo:hover .mundo-foto img{transform:none}
+  }
+
+  /* En el celular, una tarjeta debajo de la otra. Con menos de 760px las seis
+     columnas dejan los botones de rubro sin lugar. */
+  @media (max-width:760px){
+    .mundos{grid-template-columns:minmax(0,1fr);grid-auto-rows:auto;gap:10px}
+    .mundo,.mundo-alto,.mundo-grande,.mundo-otros{
+      grid-column:auto;grid-row:auto;min-height:176px;padding:15px 16px;border-radius:20px}
+    .mundo-cab h3,.mundo-alto .mundo-cab h3{font-size:19px}
+    .mundo-foto,.mundo-alto .mundo-foto{top:12px;right:10px;left:auto;bottom:auto;width:36%;height:84px}
+    .mundo-foto img,.mundo-alto .mundo-foto img{object-position:right top}
+    .mundo-cab,.mundo-alto .mundo-cab{max-width:60%}
+    .mundo-grande{min-height:300px}
+    .mundo-grande .mundo-cab h3{font-size:27px}
+    .mundo-grande .mundo-foto{top:14px;right:8px;bottom:auto;width:44%;height:130px}
+    .mundo-grande .mundo-cab{max-width:54%}
+    .mundo-grande .mundo-rubros{max-width:none}
+    .rubro{padding:7px 10px;font-size:12px}
+    .mundos-todo{font-size:15px}
+  }
 
   /* ---------- Sugerencias del buscador ----------
      Cuelga de .search, que es position:relative, y va por encima de todo lo
@@ -1478,6 +1531,12 @@
       display:grid;grid-template-columns:212px minmax(0,1fr);
       gap:34px;align-items:start;
     }
+    /* En la portada todavía no hay nada que filtrar: la columna le sacaba casi
+       250px de ancho a los mundos y repetía "Lo último que entró", que ya es
+       una fila debajo. Aparece recién cuando el cliente entra a un rubro,
+       busca algo o pide el catálogo entero. */
+    body.portada .columnas{grid-template-columns:minmax(0,1fr)}
+    body.portada .columnas > .toolbar{display:none}
     /* La barra deja de ser una banda de lado a lado y pasa a ser la columna */
     .columnas > .toolbar{
       position:sticky;top:64px;z-index:10;
@@ -1929,6 +1988,33 @@ const PREGUNTAS = [
   { p: '¿Cómo hago el pedido?',
     r: ['Desde cualquier producto tocá “Consultar por WhatsApp”.',
         'Si querés llevar varios, sumalos con el + y mandanos el pedido entero en un solo mensaje.'] },
+];
+
+// ---------- MUNDOS DE LA PORTADA ----------
+//
+// Al entrar, los rubros van agrupados en mundos: una tarjeta por mundo, con sus
+// rubros como botones. Se ven en el orden de esta lista.
+//   nombre → el título de la tarjeta
+//   foto   → el rubro cuya foto representa al mundo (se usa la del más caro)
+//   tamano → 'grande' (media vidriera), 'alto' (dos filas) o '' (normal)
+//   rubros → como vienen en la columna Categoría, en singular, en este orden
+//
+// Un rubro que no esté en ningún mundo NO se pierde: aparece en una tarjeta
+// "Otros rubros" al final. Hay rubros anotados que hoy no tienen stock
+// (Parlante, Notebook, Smartwatch, E-Reader): así, el día que entren, caen
+// directo en su mundo. Un mundo sin nada en stock no se muestra.
+const MUNDOS = [
+  { nombre: 'Celulares y tablets',  foto: 'Celular',     tamano: 'alto',
+    rubros: ['Celular', 'iPad', 'Tablet', 'E-Reader'] },
+  { nombre: 'Foto, video y drones', foto: 'Cámara',      tamano: 'grande',
+    rubros: ['Objetivo', 'Cámara', 'Accesorio Cámara', 'Filmadora', 'Cámara de Acción',
+             'Drone', 'Accesorio Drone'] },
+  { nombre: 'Computación',          foto: 'MacBook',     tamano: '',
+    rubros: ['MacBook', 'Notebook', 'Monitor', 'Desktop'] },
+  { nombre: 'Gaming y audio',       foto: 'Consola',     tamano: '',
+    rubros: ['Consola', 'Accesorio Gaming', 'Auriculares', 'Parlante'] },
+  { nombre: 'Relojes y accesorios', foto: 'Apple Watch', tamano: '',
+    rubros: ['Apple Watch', 'Smartwatch', 'Accesorio Apple', 'Gafas Inteligentes'] },
 ];
 
 /* ========================================================================== */
@@ -2433,10 +2519,30 @@ async function bajarMeta(){
   }catch(e){ return null; }
 }
 
+/* Meta la necesitan dos a la vez: la carga, para contar filas, y el sello de
+   actualización. Dentro de una misma vuelta de refresco se pide una sola vez. */
+let metaPromesa = null, metaHora = 0;
+function metaDelCiclo(){
+  if(!metaPromesa || Date.now() - metaHora > 20000){
+    metaHora = Date.now();
+    metaPromesa = bajarMeta();
+  }
+  return metaPromesa;
+}
+
 /* ---------- Carga de datos ---------- */
 
+/* Las dos fuentes no siempre traen lo mismo: gviz respeta los filtros de la
+   hoja y export no. El 15/09/2026 quedó un filtro puesto en la Landing -solo
+   los iPhone- y gviz devolvió 19 filas de 556: la página publicada mostró 19
+   productos y nada avisó, porque 19 filas también son una planilla válida.
+
+   Ahora se cuenta. Meta dice cuántas filas escribió la corrida; si una fuente
+   trae menos, se prueba la siguiente, y si ninguna llega al número se usa la
+   que más trajo. Sin Meta, se toma la primera que responda, como siempre. */
 async function bajarCSV(){
-  let ultimoError;
+  let ultimoError, mejor = null;
+  const metaP = metaDelCiclo();
   for(const url of FUENTES){
     try{
       // El &_= evita que el navegador devuelva una copia vieja en caché
@@ -2445,9 +2551,15 @@ async function bajarCSV(){
       const txt = await res.text();
       // Si Google devolvió HTML en vez de CSV, la planilla no es pública
       if(/^\s*</.test(txt)) throw new Error('la planilla no es pública');
-      return txt;
+      const esperadas = Number((await metaP)?.filas) || 0;
+      const filas = parseCSV(txt).filter(f => f.some(c => c.trim())).length - 1;
+      if(!esperadas || filas >= esperadas) return txt;
+      console.warn(`La planilla llegó con ${filas} filas de ${esperadas}. ` +
+                   '¿Quedó un filtro puesto en la hoja? Se prueba la otra fuente.');
+      if(!mejor || filas > mejor.filas) mejor = { txt, filas };
     }catch(e){ ultimoError = e; }
   }
+  if(mejor) return mejor.txt;
   throw ultimoError;
 }
 
@@ -4134,74 +4246,99 @@ function verTodoElCatalogo(){
   pintar();
 }
 
-function pintarMosaico(){
-  const mosaico = $('mosaico');
+/* Los rubros con stock, repartidos en los mundos de la configuración.
+
+   Ningún rubro se puede perder por el camino: el que no está anotado en ningún
+   mundo -porque entró uno nuevo, o porque la planilla lo escribe distinto- va a
+   "Otros rubros". Y ninguno puede aparecer dos veces: si alguien lo anota en
+   dos mundos, se queda en el primero. Se compara con norm() para que "Camara"
+   y "Cámara" sean el mismo rubro. */
+function mundosDeLaPortada(){
   const porCat = new Map();
   MODELOS.forEach(m => {
     if(!m.stock) return;                       // un rubro sin stock no se ofrece
     if(!porCat.has(m.cat)) porCat.set(m.cat, []);
     porCat.get(m.cat).push(m);
   });
+  const cats = [...porCat.keys()];
+  const usados = new Set();
 
-  const cats = [...porCat.keys()].sort(ordenCat);   // el mismo orden que la cinta
-  mosaico.replaceChildren();
+  const mundos = MUNDOS.map(cfg => {
+    const rubros = (cfg.rubros || [])
+      .map(r => cats.find(c => norm(c) === norm(r)))
+      .filter(c => c && !usados.has(c));
+    rubros.forEach(c => usados.add(c));
+    return { nombre: cfg.nombre, foto: cfg.foto || '', tamano: cfg.tamano || '', rubros };
+  });
+  const sueltos = cats.filter(c => !usados.has(c)).sort(ordenCat);
+  if(sueltos.length) mundos.push({ nombre: 'Otros rubros', foto: '', tamano: 'otros', rubros: sueltos });
 
-  cats.forEach(cat => {
-    const ms = porCat.get(cat);
-    // La foto es la del mas caro con imagen: es el que mejor representa al
-    // rubro. Se guardan varios candidatos porque bastantes URLs de la planilla
-    // estan rotas, y con uno solo el rubro entero se quedaba sin foto.
-    const fotos = ms.filter(m => m.imagen)
-                    .sort((a,b) => (b.precio ?? 0) - (a.precio ?? 0))
-                    .map(m => m.imagen).slice(0, 12);
-    const conFoto = fotos.length ? {imagen: fotos[0]} : null;
+  return mundos.filter(w => w.rubros.length).map(w => {
+    const ms = w.rubros.flatMap(c => porCat.get(c));
     const precios = ms.map(m => m.precio).filter(x => x !== null && x > 0);
-    const desde = precios.length ? Math.min(...precios) : null;
+    /* La foto es la del más caro del rubro elegido para el mundo, y detrás, por
+       si esa URL está rota, las de los demás rubros del mundo. Con un solo
+       candidato, una URL caída dejaba la tarjeta sin foto. */
+    const porPrecio = l => l.filter(m => m.imagen).sort((a, b) => (b.precio ?? 0) - (a.precio ?? 0));
+    const delRubro = ms.filter(m => norm(m.cat) === norm(w.foto));
+    const fotos = [...porPrecio(delRubro), ...porPrecio(ms.filter(m => !delRubro.includes(m)))]
+                    .map(m => m.imagen).slice(0, 12);
+    return { ...w, n: ms.length, desde: precios.length ? Math.min(...precios) : null, fotos,
+             porRubro: w.rubros.map(c => ({ cat: c, n: porCat.get(c).length })) };
+  });
+}
 
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'mos';
-    b.dataset.cat = cat;
-    b.innerHTML = `
-      <span class="sinfoto">${esc(plural(cat))}</span>
-      ${conFoto
-        ? `<img src="${esc(conFoto.imagen)}" alt="" loading="lazy" decoding="async">`
-        : ''}
-      <span class="sombra"></span>
-      <span class="txt">
-        <b>${esc(plural(cat))}</b>
-        <i>${ms.length} producto${ms.length !== 1 ? 's' : ''}${desde ? ' · desde USD ' + plata(desde) : ''}</i>
-      </span>`;
-    // Si la foto no carga, se prueba con la del siguiente producto del rubro.
-    // Recien cuando se acabaron los candidatos queda el nombre de atras.
-    const img = b.querySelector('img');
+function entrarAlRubro(cat){
+  filtros.cat = cat;
+  filtros.marca = '';
+  rendirCintaAuto();
+  // El chip de la cinta tiene que quedar marcado igual que si lo hubiera
+  // tocado ahí: si no, el cliente ve el rubro abierto y la cinta en "Todo".
+  [...$('cats').querySelectorAll('.chip')].forEach(x =>
+    x.setAttribute('aria-pressed', String(x.dataset.cat === cat)));
+  aplicarFiltro(true);
+}
+
+function pintarMosaico(){
+  const mosaico = $('mosaico');
+  const caja = document.createElement('div');
+  caja.className = 'mundos';
+
+  mundosDeLaPortada().forEach((w, i) => {
+    const t = document.createElement('article');
+    t.className = 'mundo' + (w.tamano ? ' mundo-' + w.tamano : '');
+    t.setAttribute('aria-labelledby', 'mundo-' + i);
+    t.innerHTML = `
+      ${w.fotos.length ? `<span class="mundo-foto"><img src="${esc(w.fotos[0])}" alt="" loading="lazy" decoding="async"></span>` : ''}
+      <div class="mundo-cab">
+        <h3 id="mundo-${i}">${esc(w.nombre)}</h3>
+        <p>${w.n} producto${w.n !== 1 ? 's' : ''}${w.desde ? ' · desde USD ' + plata(w.desde) : ''}</p>
+      </div>
+      <div class="mundo-rubros">${w.porRubro.map(r =>
+        `<button type="button" class="rubro" data-cat="${esc(r.cat)}">${esc(plural(r.cat))}<i>${r.n}</i></button>`
+      ).join('')}</div>`;
+
+    // Si la foto no carga, se prueba con la siguiente. Recién cuando se acaban
+    // los candidatos se saca la imagen: la tarjeta sigue sirviendo sin foto.
+    const img = t.querySelector('img');
     if(img){
       let k = 0;
       img.onerror = () => {
-        if(++k < fotos.length) img.src = fotos[k];
-        else img.remove();
+        if(++k < w.fotos.length) img.src = w.fotos[k];
+        else img.closest('.mundo-foto').remove();
       };
     }
-
-    b.onclick = () => {
-      filtros.cat = cat;
-      filtros.marca = '';
-      rendirCintaAuto();
-      // El chip de la cinta tiene que quedar marcado igual que si lo hubiera
-      // tocado ahi: si no, el cliente ve el rubro abierto y la cinta en "Todo".
-      [...$('cats').querySelectorAll('.chip')].forEach(x =>
-        x.setAttribute('aria-pressed', String(x.dataset.cat === cat)));
-      aplicarFiltro(true);
-    };
-    mosaico.appendChild(b);
+    t.querySelectorAll('.rubro').forEach(b => b.onclick = () => entrarAlRubro(b.dataset.cat));
+    caja.appendChild(t);
   });
 
   const todo = document.createElement('button');
   todo.type = 'button';
-  todo.className = 'mos mos-todo';
-  todo.innerHTML = `<b>Ver todo</b><i>${MODELOS.length} modelos</i>`;
+  todo.className = 'mundos-todo';
+  todo.innerHTML = `Ver todo el catálogo <i>${MODELOS.length} modelos</i> <span aria-hidden="true">→</span>`;
   todo.onclick = () => { verTodoElCatalogo(); volverArriba(); };
-  mosaico.appendChild(todo);
+
+  mosaico.replaceChildren(caja, todo);
 }
 
 /* ---------- Los bloques de la portada ----------
@@ -4769,7 +4906,7 @@ async function actualizar(primera){
   if(primera) grid.innerHTML = Array.from({length:10},()=>'<div class="skeleton"></div>').join('');
   try{
     // La cotización y el catálogo se piden a la vez, no uno después del otro
-    const [prods, tc, meta] = await Promise.all([cargar(), traerCotizacion(), bajarMeta()]);
+    const [prods, tc, meta] = await Promise.all([cargar(), traerCotizacion(), metaDelCiclo()]);
     PRODUCTOS = prods;
     MODELOS   = agrupar(prods);   // las variantes del mismo modelo van a una sola tarjeta
     TC = tc;

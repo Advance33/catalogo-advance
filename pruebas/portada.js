@@ -39,40 +39,65 @@ function correrPruebas(){
   ok(document.body.classList.contains('portada'),
      'el body queda marcado como portada, que es lo que lo muestra en el celular');
 
-  /* ---- 2. El mosaico esta completo y dice la verdad ---- */
-  const rubros = [...$$('#mosaico .mos:not(.mos-todo)')];
+  /* En pantalla ancha la columna de filtros no va en la portada: le quitaba
+     ancho a los mundos. Tiene que volver al entrar a un rubro (punto 3). */
+  const columna = document.querySelector('.columnas > .toolbar');
+  const ancha = innerWidth >= 1180;
+  if(ancha){
+    ok(getComputedStyle(columna).display === 'none', 'en la portada no aparece la columna de filtros');
+    const anchoMundos = $('mosaico').getBoundingClientRect().width;
+    const anchoCuerpo = document.querySelector('.columnas').getBoundingClientRect().width;
+    ok(anchoMundos > anchoCuerpo * 0.9, 'y los mundos usan todo el ancho',
+       Math.round(anchoMundos) + ' de ' + Math.round(anchoCuerpo) + 'px');
+  }else{
+    R.push('  --   ventana de menos de 1180px: ahi la columna de filtros no existe');
+  }
+
+  /* ---- 2. Los mundos estan completos y dicen la verdad ----
+     Desde el 15/09/2026 los rubros van agrupados en mundos (MUNDOS, en la
+     configuracion) en vez de una tarjeta por rubro. Lo que se exige es lo mismo
+     que antes: que todo rubro con stock tenga su boton y que los numeros sean
+     los de la planilla. */
+  const rubros = [...$$('#mosaico .mundo .rubro')];
+  const mundos = [...$$('#mosaico .mundo')];
   const catsConStock = new Set(MODELOS.filter(m => m.stock).map(m => m.cat));
-  ok(rubros.length === catsConStock.size,
-     'hay una tarjeta por cada rubro con stock',
-     rubros.length + ' tarjetas, ' + catsConStock.size + ' rubros');
-  ok(rubros.every(b => b.querySelector('.txt b').textContent.trim()),
-     'todas tienen nombre');
-  // El fondo con el nombre del rubro va SIEMPRE: si la URL de la planilla esta
-  // rota, sin esto la tarjeta quedaba en blanco con el icono de imagen rota.
-  ok(rubros.every(b => b.querySelector('.sinfoto')),
-     'todas tienen el nombre de respaldo detras de la foto');
-  ok(rubros.every(b => b.querySelector('.sombra')),
-     'todas tienen el degradado: sin el, los productos claros se comen el texto');
+  const enStock = cat => MODELOS.filter(m => m.stock && m.cat === cat);
 
-  // Las cuentas del subtitulo tienen que coincidir con la planilla
-  const mal = rubros.filter(b => {
-    const cat = b.dataset.cat;
-    const ms = MODELOS.filter(m => m.stock && m.cat === cat);
-    return !new RegExp('^' + ms.length + ' producto').test(
-      b.querySelector('.txt i').textContent.trim());
-  });
-  ok(mal.length === 0, 'la cantidad que dice cada rubro es la real',
-     mal.slice(0,3).map(b => b.dataset.cat).join(', ') || 'ninguna mal');
+  ok(mundos.length >= 2, 'la portada muestra los mundos', mundos.length);
+  ok(new Set(rubros.map(b => b.dataset.cat)).size === catsConStock.size &&
+     [...catsConStock].every(c => rubros.some(b => b.dataset.cat === c)),
+     'cada rubro con stock tiene su boton', rubros.length + ' botones, ' + catsConStock.size + ' rubros');
+  ok(rubros.length === new Set(rubros.map(b => b.dataset.cat)).size,
+     'y ninguno aparece en dos mundos');
+  ok(mundos.every(t => t.querySelector('h3').textContent.trim()), 'todos los mundos tienen nombre');
 
-  const sinDesde = rubros.filter(b => {
-    const cat = b.dataset.cat;
-    const ps = MODELOS.filter(m => m.stock && m.cat === cat)
-                      .map(m => m.precio).filter(x => x !== null && x > 0);
-    if(!ps.length) return false;                       // sin precios no dice "desde"
-    return !b.querySelector('.txt i').textContent.includes(plata(Math.min(...ps)));
+  // Lo que dice cada boton y cada mundo tiene que coincidir con la planilla
+  const malRubro = rubros.filter(b => Number(b.querySelector('i').textContent) !== enStock(b.dataset.cat).length);
+  ok(malRubro.length === 0, 'la cantidad de cada rubro es la real',
+     malRubro.slice(0, 3).map(b => b.dataset.cat).join(', ') || 'ninguna mal');
+  const malMundo = mundos.filter(t => {
+    const ms = [...t.querySelectorAll('.rubro')].flatMap(b => enStock(b.dataset.cat));
+    const ps = ms.map(m => m.precio).filter(x => x !== null && x > 0);
+    const txt = t.querySelector('.mundo-cab p').textContent;
+    return !new RegExp('^' + ms.length + ' producto').test(txt) ||
+           (ps.length && !txt.includes('desde USD ' + plata(Math.min(...ps))));
   });
-  ok(sinDesde.length === 0, 'el "desde" de cada rubro es su precio mas bajo',
-     sinDesde.slice(0,3).map(b => b.dataset.cat).join(', ') || 'ninguno mal');
+  ok(malMundo.length === 0, 'cada mundo suma bien sus productos y su "desde" es el mas bajo',
+     malMundo.map(t => t.querySelector('h3').textContent).join(', ') || 'ninguno mal');
+
+  /* Un rubro que no esta anotado en ningun mundo no puede desaparecer de la
+     portada: tiene que caer en "Otros rubros". Se prueba sacandole a proposito
+     sus rubros al primer mundo y mirando adonde van. */
+  const guardados = MUNDOS[0].rubros.slice();
+  MUNDOS[0].rubros.length = 0;
+  const sinAnotar = mundosDeLaPortada();
+  MUNDOS[0].rubros.push(...guardados);
+  const otros = sinAnotar.find(w => w.nombre === 'Otros rubros');
+  const huerfanos = guardados.filter(r => [...catsConStock].some(c => norm(c) === norm(r)));
+  ok(!huerfanos.length || (otros && huerfanos.every(r => otros.rubros.some(c => norm(c) === norm(r)))),
+     'un rubro sin mundo va a "Otros rubros" en vez de perderse', huerfanos.join(', ') || 'sin rubros para probar');
+  ok(sinAnotar.flatMap(w => w.rubros).length === catsConStock.size,
+     'y aun asi estan todos los rubros, una sola vez');
 
   /* ---- 3. Entrar a un rubro trae los productos ---- */
   const primero = rubros[0], cat = primero.dataset.cat;
@@ -81,6 +106,8 @@ function correrPruebas(){
   ok($('mosaico').hidden && !$('grid').hidden, 'ahora se ve la grilla y no el mosaico');
   ok($$('.card').length > 0, 'y hay productos dibujados', $$('.card').length);
   ok(LISTA.every(m => m.cat === cat), 'todos son del rubro elegido', cat);
+  if(ancha) ok(getComputedStyle(columna).display !== 'none',
+               'adentro del rubro vuelve la columna de filtros');
   // Sin esto el cliente veia el rubro abierto y la cinta de arriba en "Todo"
   const chipMarcado = [...$$('#cats .chip')].find(c => c.getAttribute('aria-pressed') === 'true');
   ok(chipMarcado && chipMarcado.dataset.cat === cat,
@@ -94,8 +121,8 @@ function correrPruebas(){
   ok(!$('mosaico').hidden && $('grid').hidden, 'y se vuelven a ver los rubros');
 
   /* ---- 5. La salida para el que quiere la lista entera ---- */
-  const todo = $('mosaico').querySelector('.mos-todo');
-  ok(!!todo, 'el mosaico termina con un "Ver todo"');
+  const todo = $('mosaico').querySelector('.mundos-todo');
+  ok(!!todo && todo === $('mosaico').lastElementChild, 'los mundos terminan con un "Ver todo el catálogo"');
   todo.click();
   ok(!enPortada() && !$('grid').hidden, '"Ver todo" abre la grilla completa');
   ok($$('.card').length > 0, 'con productos', $$('.card').length);

@@ -221,9 +221,6 @@
       animation:respirar 9s ease-in-out infinite;
     }
     header > *{position:relative;z-index:1}
-    /* La barra de filtros se despega cuando arrancás a bajar */
-    .toolbar{transition:box-shadow .25s, background .25s}
-    .toolbar.pegada{box-shadow:0 6px 22px rgba(24,18,38,.09)}
   }
   .bajada{color:var(--muted);font-size:14.5px;margin:0 0 20px;max-width:52ch}
 
@@ -532,7 +529,6 @@
   }
 
   /* ---------- Filtros ---------- */
-  .toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
   /* La cinta de categorías se desliza: con el dedo, con la rueda del mouse,
      arrastrándola, o con las flechas de los costados. */
   .chips-wrap{position:relative}
@@ -585,62 +581,12 @@
     box-shadow:0 4px 14px rgba(124,58,237,.40);
   }
 
-  /* ---------- Segunda cinta: las marcas de la sección ----------
-     Antes esto era un select con las 21 marcas del catálogo entero, así que
-     en Consolas te ofrecía Canon o Nikon, que no tienen ni una. Ahora muestra
-     solo las que hay adentro de lo que estás mirando, con cuántas son.
-     Van más chicos y sin relleno morado al elegirlos: el chip de categoría
-     tiene que seguir siendo el que manda en la barra. */
-  .chips-marcas{border-top:1px solid var(--line)}
-  .chips-marcas[hidden]{display:none}
-  .chips-marcas .chips{padding:8px 0 9px}
-  .chip-marca{
-    display:flex;align-items:center;gap:7px;
-    padding:6px 12px;font-size:9.5px;text-transform:none;letter-spacing:.08em;
-  }
-  .chip-marca i{
-    font-style:normal;font-size:9px;letter-spacing:.04em;
-    padding:2px 5px;border-radius:5px;background:var(--surface-2);color:var(--faint);
-  }
-  .chip-marca[aria-pressed="true"]{
-    background:rgba(124,58,237,.16);color:var(--glow);border-color:var(--acento);
-    box-shadow:none;
-  }
-  .chip-marca[aria-pressed="true"] i{background:var(--acento);color:#fff}
-
-  .row2{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:0 0 12px}
+  /* Los desplegables que quedan (el panel de configuración) */
   select{
     padding:9px 13px;font:13px var(--sans);border-radius:999px;cursor:pointer;
     background:var(--surface);color:var(--ink);border:1px solid var(--line);
   }
   select[hidden]{display:none}
-  .toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
-  .toggle input{width:16px;height:16px;accent-color:var(--acento);cursor:pointer}
-  .count{margin-left:auto;font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
-
-  /* En la compu los filtros entran en un renglón y quedan a la vista. En el
-     celular ocupaban tres, y como la barra es sticky se comían un quinto de la
-     pantalla todo el tiempo. Ahí se esconden detrás de este botón: la cinta de
-     categorías, que es lo que más se toca, sigue siempre arriba. */
-  /* Precio, orden y stock se tocan de vez en cuando; las categorias y las marcas,
-     todo el tiempo. Los tres primeros pasan a vivir detras de este boton: la barra
-     queda pegada arriba y no tiene sentido que se coma media pantalla. */
-  .filtros-btn{
-    display:flex;align-items:center;gap:7px;order:-1;
-    padding:9px 14px;border-radius:999px;cursor:pointer;
-    background:var(--surface-2);color:var(--ink);border:1px solid var(--line);
-    font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
-  }
-  .filtros-btn svg{width:13px;height:13px;display:block;transition:transform .2s}
-  .filtros-btn:hover{border-color:var(--acento)}
-  .filtros-btn[aria-expanded="true"]{border-color:var(--acento);color:var(--acento)}
-  .filtros-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
-  .row2 select,.row2 .toggle{display:none}
-  .row2.abierta select{display:block}
-  .row2.abierta .toggle{display:flex}
-  /* Montura y apertura siguen siendo cosa de lentes, abierta o no */
-  .row2.abierta select[hidden]{display:none}
-
   /* ---------- Grilla ---------- */
   .grid{display:grid;gap:16px;padding:22px 0 64px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
   .card{
@@ -1517,120 +1463,22 @@
     .mk-cir{width:56px;height:56px}
   }
 
-  /* ---------- Pantalla ancha: dos columnas ----------
-     En un monitor grande sobraban 300px de fondo vacío a cada lado. Las
-     categorías se quedan arriba (son navegación: decir en qué parte del
-     catálogo estás) y al costado va sólo lo que filtra lo que ya estás
-     mirando: la marca y los filtros. Así la columna es corta y no necesita
-     scroll propio. Debajo de 1180px no cambia nada: todo vuelve a la barra. */
+  /* ---------- Pantalla ancha ----------
+     En un monitor grande sobraban 300px de fondo vacío a cada lado, así que el
+     contenido se estira hasta 1680px. Los filtros vivían en una columna a la
+     izquierda; desde el 15/09/2026 van en el encabezado de cada rubro y la
+     grilla usa todo el ancho. */
   @media (min-width:1180px){
     .wrap{max-width:1680px}
-
-    .columnas{
-      max-width:1680px;margin:0 auto;padding:0 20px;
-      display:grid;grid-template-columns:212px minmax(0,1fr);
-      gap:34px;align-items:start;
-    }
-    /* En la portada todavía no hay nada que filtrar: la columna le sacaba casi
-       250px de ancho a los mundos y repetía "Lo último que entró", que ya es
-       una fila debajo. Aparece recién cuando el cliente entra a un rubro,
-       busca algo o pide el catálogo entero. */
-    body.portada .columnas{grid-template-columns:minmax(0,1fr)}
-    body.portada .columnas > .toolbar{display:none}
-    /* La barra deja de ser una banda de lado a lado y pasa a ser la columna */
-    .columnas > .toolbar{
-      position:sticky;top:64px;z-index:10;
-      background:transparent;border-bottom:0;padding:26px 0 24px;
-      /* Si la columna no entra en la pantalla, scrollea ella sola. Sin esto,
-         en una laptop de 768px las recomendaciones quedaban abajo del borde
-         y no había manera de verlas: la columna está fija. */
-      max-height:calc(100vh - 88px);overflow-y:auto;overscroll-behavior:contain;
-      scrollbar-width:thin;scrollbar-color:var(--line) transparent;
-    }
-    .columnas > .toolbar > .wrap{max-width:none;padding:0}
-    .columnas > main{padding:0;margin:0;max-width:none}
-
-    /* Las marcas se enderezan: de cinta que se desliza a lista de texto. La
-       píldora funcionaba en horizontal; apilada pesa demasiado para lo que es. */
-    .columnas .chips{
-      flex-direction:column;align-items:stretch;gap:0;
-      overflow:visible;padding:0;cursor:default;
-    }
-    .columnas .chip-nav{display:none}
-    .columnas .chips-wrap::before,.columnas .chips-wrap::after{display:none}
-    .columnas .chip{
-      width:100%;justify-content:flex-start;text-align:left;
-      background:transparent;border:0;box-shadow:none;border-radius:0;
-      padding:6px 0;font:400 13.5px/1.35 var(--sans);
-      letter-spacing:0;text-transform:none;color:var(--muted);
-    }
-    .columnas .chip:hover{color:var(--acento);background:transparent}
-    .columnas .chip[aria-pressed="true"]{
-      color:var(--acento);font-weight:600;background:transparent;
-    }
-    .columnas .chip b{margin-left:6px;font:400 11.5px var(--mono);color:var(--faint)}
-
-    /* Cada bloque de la columna se presenta */
-    .columnas .chips-wrap,.columnas .row2{
-      border-top:1px solid var(--line);padding-top:11px;margin-top:18px;
-    }
-    .columnas #marcas-wrap{border-top:0;margin-top:0;padding-top:0}
-    .columnas .rotulo{
-      display:block;font:600 9.5px/1 var(--mono);letter-spacing:.16em;
-      text-transform:uppercase;color:var(--faint);margin:0 0 9px;
-    }
-
-    /* Con lugar de sobra, los filtros no tienen por qué estar escondidos */
-    .columnas .filtros-btn{display:none}
-    .columnas .row2{flex-direction:column;align-items:stretch;gap:9px;padding-bottom:0}
-    .columnas .row2 select{display:block;width:100%}
-    .columnas .row2 select[hidden]{display:none}
-    .columnas .row2 .toggle{display:flex}
-    /* El conteo se mudó al título de la sección */
-    .columnas .count{display:none}
-
-    /* La cinta de categorías, ahora sola arriba */
     .barra-cats .wrap{max-width:1680px}
     .barra-cats .rotulo{display:none}
-
-    /* Lo que combina con la categoría abierta. Es el uso que le encontramos al
-       aire que quedaba abajo de los filtros: en vez de fondo vacío, tres cosas
-       que se suman a la compra. */
-    .columnas > main > .sugeridos{display:none}   /* en ancho vive en la columna */
-    .sugeridos{
-      display:flex;flex-direction:column;gap:2px;
-      border-top:1px solid var(--line);padding-top:11px;margin-top:18px;
-    }
-    .sug{
-      display:flex;align-items:center;gap:10px;width:100%;text-align:left;
-      background:transparent;border:0;border-radius:9px;padding:7px 6px;
-      cursor:pointer;color:var(--ink);transition:background .14s ease;
-    }
-    .sug:hover{background:var(--surface-2)}
-    /* El marco existe aunque la foto no: sin esto, los productos sin imagen
-       corren el texto a la izquierda y la lista queda dispareja. */
-    .sug-foto{
-      width:40px;height:40px;flex:none;border-radius:7px;
-      background:var(--foto-bg);display:block;overflow:hidden;
-    }
-    .sug-foto img{width:100%;height:100%;object-fit:contain;padding:3px;display:block}
-    .sug-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
-    /* Dos renglones como mucho: los nombres largos no pueden estirar la columna */
-    .sug-txt b{
-      font:500 11.5px/1.3 var(--sans);display:-webkit-box;-webkit-line-clamp:2;
-      -webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;
-    }
-    .sug-txt i{font:500 11px/1 var(--mono);color:var(--acento);font-style:normal}
-
-    /* Título de la sección: qué estás viendo y cuánto hay */
-    .seccion{
-      display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
-      padding:24px 0 12px;border-bottom:1px solid var(--line);
-    }
     .seccion h2{font:400 27px/1.1 var(--display);margin:0;letter-spacing:-.01em}
     .seccion span{font:500 13px/1 var(--mono);color:var(--faint)}
-    .columnas .grid{padding-top:18px}
   }
+  /* El título "Elegí un rubro" es de la portada. Adentro de un rubro, lo que
+     dice qué estás mirando es el encabezado. */
+  .seccion{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:24px 0 12px;border-bottom:1px solid var(--line)}
+  body:not(.portada) .seccion{display:none}
 
   /* La barra de categorías queda pegada arriba también en pantalla chica */
   .barra-cats{position:sticky;top:0;z-index:21;background:var(--paper);
@@ -1647,16 +1495,8 @@
     .cats-logo{padding-right:10px}
     .cats-logo img{height:17px}
   }
-  /* El título de sección sólo tiene sentido con la columna al costado: en
-     pantalla chica la categoría elegida ya se ve en la cinta, ahí arriba.
-     Va con su propio media query y no como regla suelta: escrita después del
-     bloque de arriba, con la misma especificidad, le ganaba siempre y el
-     título no aparecía nunca. */
   @media (max-width:1179px){
-    .seccion{display:none}
-    body.portada .seccion{
-      display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:20px 0 2px;
-    }
+    body.portada .seccion{padding:20px 0 2px;border-bottom:0}
   }
 
   /* En un monitor muy ancho la grilla sola se estira demasiado y las tarjetas
@@ -1665,32 +1505,176 @@
     .columnas .grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
   }
 
-  /* ---------- Las recomendaciones en el celular ----------
-     Acá no hay columna al costado: el bloque se mete al final de la grilla,
-     después de los productos, y ocupa todo el ancho. */
-  @media (max-width:1179px){
-    .sugeridos{
-      display:flex;flex-direction:column;gap:2px;
-      margin:6px 0 56px;padding:16px 4px 6px;border-top:1px solid var(--line);
-    }
-    .sugeridos .rotulo{
-      display:block;font:600 9.5px/1 var(--mono);letter-spacing:.16em;
-      text-transform:uppercase;color:var(--faint);margin:0 0 10px;
-    }
-    .sug{
-      display:flex;align-items:center;gap:12px;width:100%;text-align:left;
-      background:transparent;border:0;border-radius:10px;padding:9px 8px;
-      cursor:pointer;color:var(--ink);
-    }
-    .sug:active{background:var(--surface-2)}
-    .sug-foto{
-      width:46px;height:46px;flex:none;border-radius:8px;
-      background:var(--foto-bg);display:block;overflow:hidden;
-    }
-    .sug-foto img{width:100%;height:100%;object-fit:contain;padding:3px;display:block}
-    .sug-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
-    .sug-txt b{font:500 13px/1.3 var(--sans);overflow-wrap:anywhere}
-    .sug-txt i{font:500 12px/1 var(--mono);color:var(--acento);font-style:normal}
+  /* ---------- Te puede servir ----------
+     Vivía en la columna de filtros. Ahora va siempre debajo de los productos:
+     primero lo que el cliente vino a ver, después lo que combina. */
+  .sugeridos{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 56px;padding-top:18px;border-top:1px solid var(--line)}
+  .sugeridos[hidden]{display:none}
+  .sugeridos .rotulo{display:block;flex-basis:100%;margin:0 0 2px;font:600 9.5px/1 var(--mono);
+                     letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .sug{display:flex;align-items:center;gap:12px;flex:0 1 320px;min-width:0;text-align:left;cursor:pointer;
+       padding:8px 14px 8px 8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;
+       color:var(--ink);transition:border-color .16s ease}
+  .sug:hover{border-color:var(--acento)}
+  .sug:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  .sug-foto{width:46px;height:46px;flex:none;border-radius:8px;background:var(--foto-bg);display:block;overflow:hidden}
+  .sug-foto img{width:100%;height:100%;object-fit:contain;padding:3px;display:block}
+  .sug-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .sug-txt b{font:500 12.5px/1.3 var(--sans);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+             overflow:hidden;overflow-wrap:anywhere}
+  .sug-txt i{font:500 11px/1 var(--mono);color:var(--acento);font-style:normal}
+  @media (max-width:760px){ .sug{flex:1 1 100%} }
+
+  /* ==========================================================================
+     EL ENCABEZADO DEL RUBRO (15/09/2026)
+     Los filtros vivían en una columna a la izquierda: una lista de marcas,
+     cuatro desplegables y "Te puede servir", que le sacaban ancho a la grilla y
+     se veían como un formulario. Ahora cada rubro abre con una tarjeta como las
+     de los mundos de la portada: nombre, foto, marcas, "Ordenar" y "Filtrar".
+     Lo demás va al panel que abre "Filtrar".
+     ========================================================================== */
+  .rubro-cab{
+    margin-top:22px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,30%);
+    grid-template-areas:"tit foto" "fila fila" "act act";gap:10px 24px;padding:24px 26px 20px;
+    background:var(--surface);border:1px solid #E6DCF8;border-radius:22px;
+  }
+  .rubro-cab[hidden]{display:none}
+  .rubro-cab.sin-foto{grid-template-columns:minmax(0,1fr);grid-template-areas:"tit" "fila" "act"}
+  .rc-tit{grid-area:tit;align-self:center;min-width:0}
+  .rc-tit h2{margin:0;font:400 clamp(28px,3.2vw,46px)/1 var(--display);text-transform:uppercase;overflow-wrap:anywhere}
+  .rc-tit p{margin:9px 0 0;font:500 12px/1.4 var(--mono);letter-spacing:.03em;color:var(--faint)}
+  .rc-foto{grid-area:foto;display:block;height:150px}
+  /* multiply borra el fondo blanco de la foto contra la tarjeta */
+  .rc-foto img,.rf-mini img{width:100%;height:100%;object-fit:contain;display:block;mix-blend-mode:multiply}
+  .rc-fila{grid-area:fila;display:flex;align-items:center;gap:14px;padding-top:6px;min-width:0}
+  .rc-marcas,.rf-marcas{display:flex;flex-wrap:wrap;gap:7px;flex:1;min-width:0}
+  .rc-acc{display:flex;align-items:center;gap:6px;flex:none;margin-left:auto}
+  .rc-activos{grid-area:act;display:flex;flex-wrap:wrap;gap:6px;padding-top:12px;border-top:1px solid var(--line)}
+
+  .marca-chip{
+    display:inline-flex;align-items:baseline;gap:7px;flex:none;padding:11px 16px;border:0;border-radius:999px;
+    background:#F3EEFC;color:var(--ink);font:600 14px/1 var(--sans);cursor:pointer;
+    transition:background .16s ease, color .16s ease;
+  }
+  .marca-chip i{font:500 10.5px/1 var(--mono);font-style:normal;color:var(--faint)}
+  .marca-chip:hover{background:#E9DFFC}
+  .marca-chip[aria-pressed="true"]{background:var(--ink);color:#fff}
+  .marca-chip[aria-pressed="true"] i{color:#B9A6EC}
+
+  /* "Ordenar" va aparte y lo dice: antes era un desplegable más entre los
+     filtros, con "Marca y modelo" escrito, y se leía como si filtrara. */
+  .orden-caja{position:relative}
+  .orden-btn{
+    display:inline-flex;align-items:center;gap:7px;padding:10px 14px;border:1px solid transparent;border-radius:999px;
+    background:transparent;font:500 13px/1 var(--sans);color:var(--muted);cursor:pointer;white-space:nowrap;
+  }
+  .orden-btn b{font-weight:650;color:var(--ink)}
+  .orden-btn span{font-size:10px;color:var(--faint)}
+  .orden-btn:hover,.orden-btn[aria-expanded="true"]{border-color:var(--line);background:var(--surface)}
+  .orden-menu{
+    position:absolute;top:calc(100% + 6px);right:0;z-index:40;min-width:210px;padding:6px;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px -18px rgba(23,15,40,.35);
+  }
+  .orden-menu[hidden]{display:none}
+  .orden-menu button{
+    display:block;width:100%;text-align:left;padding:9px 11px;border:0;border-radius:9px;background:transparent;
+    font:500 13.5px/1.2 var(--sans);color:var(--ink);cursor:pointer;
+  }
+  .orden-menu button:hover{background:var(--surface-2)}
+  .orden-menu button[aria-checked="true"]{color:var(--acento);font-weight:650}
+
+  .filtrar-btn{
+    display:inline-flex;align-items:center;gap:9px;padding:11px 18px;border:0;border-radius:999px;cursor:pointer;
+    background:var(--ink);color:#fff;font:600 13.5px/1 var(--sans);white-space:nowrap;transition:background .16s ease;
+  }
+  .filtrar-btn:hover{background:#2C2048}
+  .filtrar-btn svg{width:16px;height:16px;flex:none}
+  .filtrar-btn b{display:grid;place-items:center;min-width:20px;height:20px;padding:0 5px;border-radius:999px;
+                 background:var(--acento);font:600 11px/1 var(--mono)}
+  .activo{
+    display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;cursor:pointer;
+    background:var(--surface);border:1px solid #CBB8F3;font:600 12.5px/1 var(--sans);color:var(--ink);
+  }
+  .activo::after{content:"×";color:var(--acento);font-size:15px;line-height:1}
+  .activo:hover{border-color:var(--acento)}
+  .marca-chip:focus-visible,.orden-btn:focus-visible,.orden-menu button:focus-visible,
+  .filtrar-btn:focus-visible,.activo:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+
+  /* ---------- Lo que queda fijo al bajar ----------
+     Algo que está adentro de una tarjeta no puede quedarse pegado arriba cuando
+     la tarjeta se va de la pantalla. Por eso hay una franja de alto cero pegada
+     debajo de la cinta de categorías: no empuja nada, y lo de adentro baja
+     cuando las marcas del banner salen de la vista. En la compu es el mismo
+     banner en chico; en el celular, solo la barra (ver más abajo). */
+  .rubro-fijo{position:sticky;top:var(--alto-cinta,58px);z-index:19;height:0}
+  .rubro-fijo[hidden]{display:none}
+  .rf-caja{position:absolute;left:0;right:0;top:0;padding-top:10px;transform:translateY(-130%);visibility:hidden;
+           transition:transform .3s cubic-bezier(.2,.7,.2,1), visibility 0s linear .3s}
+  .rubro-fijo.visible .rf-caja{transform:none;visibility:visible;transition:transform .3s cubic-bezier(.2,.7,.2,1), visibility 0s}
+  .rf-card{display:flex;align-items:center;gap:14px;padding:10px 14px;background:var(--surface);border:1px solid #E6DCF8;
+           border-radius:18px;box-shadow:0 18px 36px -22px rgba(23,15,40,.5)}
+  .rf-mini{display:block;width:46px;height:46px;flex:none;border-radius:12px;background:var(--foto-bg);overflow:hidden;padding:4px}
+  .rf-tit{flex:none;min-width:0}
+  .rf-tit h3{margin:0;font:400 20px/1 var(--display);text-transform:uppercase;white-space:nowrap}
+  .rf-tit p{margin:4px 0 0;font:500 10.5px/1 var(--mono);color:var(--faint);white-space:nowrap}
+  .rf-marcas{gap:6px}
+  .rf-marcas .marca-chip{padding:8px 12px;font-size:12.5px}
+  .rf-card .rc-acc{margin-left:auto}
+  .rf-activos{display:flex;flex-wrap:wrap;gap:6px;padding:8px 4px 0}
+  @media (prefers-reduced-motion: reduce){ .rf-caja,.rubro-fijo.visible .rf-caja{transition:none} }
+
+  /* ---------- El panel de "Filtrar" ----------
+     Una ventana más de la página (la maneja montarModal, como la ficha): se
+     cierra con Escape o tocando afuera. En la compu entra desde la derecha; en
+     el celular sube desde abajo. */
+  .modal-filtros{place-items:stretch end;padding:0}
+  .modal-filtros .caja{
+    width:min(420px,100%);height:100%;max-height:none;border-radius:22px 0 0 22px;padding:22px 22px 0;
+    display:flex;flex-direction:column;gap:18px;overflow-y:auto;
+  }
+  .mf-cab{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .modal .mf-cab h3{margin:0;font-size:24px}
+  .mf-cerrar{width:36px;height:36px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);
+             background:var(--surface);color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
+  .mf-cerrar:hover{border-color:var(--acento)}
+  .mf-grupo{display:flex;flex-direction:column;gap:9px}
+  .mf-rot{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .mf-chips{display:flex;flex-wrap:wrap;gap:6px}
+  .op-chip{
+    display:inline-flex;align-items:baseline;gap:6px;padding:9px 13px;border-radius:999px;cursor:pointer;
+    background:var(--surface);border:1px solid var(--line);font:600 13px/1 var(--sans);color:var(--ink);
+  }
+  .op-chip i{font:500 10px/1 var(--mono);font-style:normal;color:var(--faint)}
+  .op-chip:hover{border-color:var(--acento)}
+  .op-chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+  .op-chip[aria-pressed="true"] i{color:#B9A6EC}
+  .op-chip:focus-visible,.mf-cerrar:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  .modal .mf-pie{position:sticky;bottom:0;margin-top:auto;padding:14px 0 18px;background:var(--surface);border-top:1px solid var(--line)}
+
+  /* ---------- Celular ---------- */
+  @media (max-width:760px){
+    .rubro-cab{margin-top:14px;grid-template-columns:minmax(0,1fr) 34%;padding:16px;gap:10px 12px;border-radius:20px}
+    .rc-tit h2{font-size:26px}
+    .rc-foto{height:80px}
+    .rc-fila{flex-direction:column;align-items:stretch;gap:10px}
+    .rc-marcas{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:1px 16px 3px;scrollbar-width:none}
+    .rc-marcas::-webkit-scrollbar,.rf-marcas::-webkit-scrollbar{display:none}
+    .marca-chip{padding:9px 13px;font-size:13px}
+    .rc-acc{margin-left:0;justify-content:space-between}
+
+    /* Sin el banner: la pantalla es chica y cada centímetro que no ocupa lo
+       fijo es más producto a la vista. Quedan las marcas y los dos botones. */
+    .rf-caja{left:-20px;right:-20px;padding:0}
+    .rf-card{flex-wrap:wrap;gap:8px;padding:8px 20px;border-radius:0;border-width:0 0 1px;border-color:var(--line);
+             background:rgba(244,239,253,.96);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+             box-shadow:0 14px 26px -22px rgba(23,15,40,.55)}
+    .rf-mini,.rf-tit{display:none}
+    .rf-marcas{flex-basis:100%;flex-wrap:nowrap;overflow-x:auto;margin-inline:-20px;padding:1px 20px 3px;scrollbar-width:none}
+    .rf-card .rc-acc{flex:1;margin-left:0;justify-content:space-between}
+    .rf-activos{padding:0 20px 8px;background:rgba(244,239,253,.96)}
+
+    .modal-filtros{place-items:end stretch}
+    .modal-filtros .caja{width:100%;height:auto;max-height:86vh;border-radius:22px 22px 0 0}
   }
 </style>
 </head>
@@ -1790,65 +1774,25 @@
   </div>
 </div>
 <div class="columnas">
-<div class="toolbar">
-  <div class="wrap">
-    <!-- Segunda cinta: las marcas que hay dentro de la sección que estás
-         mirando. La arma el script y se esconde sola cuando no hay más de una. -->
-    <div class="chips-wrap chips-marcas" id="marcas-wrap" hidden>
-      <span class="rotulo">Marca</span>
-      <button class="chip-nav izq" id="marcas-izq" type="button" tabindex="-1" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
-      </button>
-      <div class="chips" id="marcas"></div>
-      <button class="chip-nav der" id="marcas-der" type="button" tabindex="-1" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-    <div class="row2" id="row2">
-      <span class="rotulo">Filtros</span>
-      <button class="filtros-btn" id="filtros-btn" type="button" aria-expanded="false" aria-controls="row2">
-        Filtros
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <select id="precio"><option value="">Cualquier precio</option></select>
-      <!-- Montura y apertura solo tienen sentido en lentes: el script los
-           muestra al elegir esa categoría y los esconde al salir. -->
-      <select id="capacidad" hidden><option value="">Cualquier capacidad</option></select>
-      <select id="ram" hidden><option value="">Cualquier memoria</option></select>
-      <select id="montura" hidden><option value="">Cualquier montura</option></select>
-      <select id="apertura" hidden>
-        <option value="">Cualquier apertura</option>
-        <option value="luminoso">Luminoso · f/2.8 o menor</option>
-        <option value="cerrado">Estándar · más de f/2.8</option>
-      </select>
-      <select id="orden">
-        <option value="modelo">Marca y modelo</option>
-        <option value="sheet">Orden de la planilla</option>
-        <option value="cat">Agrupado por categoría</option>
-        <option value="asc">Precio: menor a mayor</option>
-        <option value="desc">Precio: mayor a menor</option>
-        <option value="az">Nombre A-Z</option>
-      </select>
-      <label class="toggle"><input type="checkbox" id="soloStock"> Solo con stock</label>
-      <span class="count" id="count" aria-live="polite"></span>
-    </div>
-    <!-- Lo que combina con la categoría que estás mirando. Lo llena el script
-         y desaparece solo cuando no hay nada para sugerir. -->
-    <div class="sugeridos" id="sugeridos" hidden></div>
-  </div>
-</div>
-
 <main class="wrap">
-  <!-- Dice qué estás mirando y cuánto hay. El contador de la barra se queda
-       como respaldo para las pantallas chicas. -->
+  <!-- El título de la portada ("Elegí un rubro"). Adentro de un rubro, lo que
+       dice qué estás mirando es el encabezado de abajo. -->
   <div class="seccion">
     <h2 id="sec-titulo">Todo el catálogo</h2>
     <span id="sec-count"></span>
   </div>
+  <!-- Lo que queda fijo arriba al bajar: en la compu, el encabezado en chico;
+       en el celular, solo las marcas y los botones. Lo arma el script. -->
+  <div class="rubro-fijo" id="rubro-fijo" hidden></div>
+  <!-- El encabezado del rubro: nombre, foto, marcas, Ordenar y Filtrar -->
+  <div class="rubro-cab" id="rubro-cab" hidden></div>
   <!-- La portada: los rubros antes que los productos. Con 441 tarjetas de
        golpe el cliente entra a una pared y no sabe por donde empezar. -->
   <div class="mosaico" id="mosaico" hidden></div>
   <div class="grid" id="grid"></div>
+  <!-- Lo que combina con lo que estás mirando. Lo llena el script y desaparece
+       solo cuando no hay nada para sugerir. -->
+  <div class="sugeridos" id="sugeridos" hidden></div>
   <!-- Los bloques de la portada: se dibujan solos y solo cuando no hay filtros -->
   <div class="extras" id="extras" hidden></div>
 </main>
@@ -4188,7 +4132,8 @@ function pintarSugeridos(){
   if(!caja) return;
   // Con una categoría abierta se recomienda lo que la complementa; sin ninguna,
   // lo último que entró al catálogo.
-  const lista = filtros.cat ? elegirSugeridos(filtros.cat) : novedades();
+  // En la portada no va: "Lo último que entró" ya es una fila de los extras.
+  const lista = enPortada() ? [] : filtros.cat ? elegirSugeridos(filtros.cat) : novedades();
   const rotulo = filtros.cat ? 'Te puede servir' : 'Lo último que entró';
   caja.hidden = !lista.length;
   if(!lista.length){ caja.replaceChildren(); return; }
@@ -4204,23 +4149,231 @@ function pintarSugeridos(){
 
   caja.querySelectorAll('.sug').forEach(b =>
     b.onclick = () => abrirFicha(b.dataset.key));
-  ubicarSugeridos();
 }
 
-/* En pantalla ancha el bloque vive en la columna de filtros. En el celular esa
-   columna es la barra de arriba, y ahí las recomendaciones taparían los
-   productos antes de que se vean: se mudan al final de la grilla. Se mueve el
-   mismo nodo, así no hay dos copias que mantener. */
-const ANCHA = matchMedia('(min-width:1180px)');
+/* ---------- El encabezado del rubro ----------
+   Nombre, cantidad, foto, marcas, "Ordenar" y "Filtrar", arriba de la grilla.
+   Se arma dos veces con los mismos datos: el banner, y su versión fija, que
+   aparece arriba cuando el banner se va de la pantalla al bajar. */
 
-function ubicarSugeridos(){
-  const caja = $('sugeridos');
-  if(!caja) return;
-  const destino = ANCHA.matches ? $('row2').parentElement : document.querySelector('main');
-  if(destino && caja.parentElement !== destino) destino.appendChild(caja);
+const OPCIONES_ORDEN = [
+  ['modelo', 'Marca y modelo'], ['asc', 'Menor precio'], ['desc', 'Mayor precio'],
+  ['az', 'Nombre A-Z'], ['cat', 'Agrupado por rubro'], ['sheet', 'Orden de la planilla'],
+];
+const TEXTO_APERTURA = { luminoso: 'Luminoso · f/2.8 o menos', cerrado: 'Estándar · más de f/2.8' };
+const ICONO_FILTRAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>';
+
+const altoCinta = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--alto-cinta')) || 0;
+
+// La foto del rubro es la del más caro con stock y foto, como en los mundos
+function fotoDelRubro(cat){
+  const m = MODELOS.filter(x => x.cat === cat && x.stock && x.imagen)
+                   .sort((a, b) => (b.precio ?? 0) - (a.precio ?? 0))[0];
+  return m ? m.imagen : '';
 }
 
-ANCHA.addEventListener('change', ubicarSugeridos);
+/* Lo elegido que no se ve en otro lado, para mostrarlo con su cruz. La marca
+   sólo cuando no hay botones de marca: adentro de un rubro ya se ve marcada. */
+function filtrosActivos(conMarca){
+  const a = [];
+  if(conMarca && filtros.marca) a.push(['marca', filtros.marca]);
+  if(filtros.rango)     a.push(['rango', (RANGOS.find(r => r[0] === filtros.rango) || [0, filtros.rango])[1]]);
+  if(filtros.capacidad) a.push(['capacidad', filtros.capacidad]);
+  if(filtros.ram)       a.push(['ram', filtros.ram + ' de memoria']);
+  if(filtros.montura)   a.push(['montura', filtros.montura]);
+  if(filtros.apertura)  a.push(['apertura', TEXTO_APERTURA[filtros.apertura] || filtros.apertura]);
+  if(filtros.soloStock) a.push(['soloStock', 'Con stock']);
+  return a;
+}
+
+function htmlOrden(){
+  const actual = (OPCIONES_ORDEN.find(o => o[0] === filtros.orden) || OPCIONES_ORDEN[0])[1];
+  // "Agrupado por rubro" no tiene sentido adentro de un rubro, y el orden de la
+  // planilla sólo se ofrece si ya venía puesto por link.
+  const visibles = OPCIONES_ORDEN.filter(([v]) =>
+    (v !== 'cat' || !filtros.cat) && (v !== 'sheet' || filtros.orden === 'sheet'));
+  return `<div class="orden-caja">
+    <button type="button" class="orden-btn" aria-haspopup="menu" aria-expanded="false">Ordenar: <b>${esc(actual)}</b><span aria-hidden="true">▾</span></button>
+    <div class="orden-menu" role="menu" hidden>${visibles.map(([v, t]) =>
+      `<button type="button" role="menuitemradio" aria-checked="${v === filtros.orden}" data-orden="${v}">${esc(t)}</button>`).join('')}</div>
+  </div>`;
+}
+
+function pintarCabecera(texto){
+  const cab = $('rubro-cab'), fijo = $('rubro-fijo');
+  if(!cab || !fijo) return;
+  if(enPortada()){
+    cab.hidden = fijo.hidden = true;
+    cab.replaceChildren(); fijo.replaceChildren();
+    fijo.classList.remove('visible');
+    return;
+  }
+  cab.hidden = fijo.hidden = false;
+
+  const q = filtros.q.trim();
+  const titulo = filtros.cat ? plural(filtros.cat) : q ? `Resultados para “${q}”` : 'Todo el catálogo';
+  // Las marcas van sólo adentro de un rubro: en "Todo" son veinte y pico, y
+  // filtrar por marca sin decir de qué rubro no le sirve a nadie.
+  const marcas = filtros.cat ? marcasDisponibles() : [];
+  const conMarcas = marcas.length >= 2;
+  const foto = filtros.cat ? fotoDelRubro(filtros.cat) : '';
+  const precios = LISTA.map(m => m.precio).filter(x => x !== null && x > 0);
+  const desde = precios.length ? ' · desde USD ' + plata(Math.min(...precios)) : '';
+  const enPanel = filtrosActivos(false).length;
+  const activos = filtrosActivos(!conMarcas);
+
+  const total = marcas.reduce((s, [, n]) => s + n, 0);
+  const botonesMarca = conMarcas
+    ? [['', 'Todas', total], ...marcas.map(([m, n]) => [m, m, n])].map(([v, t, n]) =>
+        `<button type="button" class="marca-chip" data-marca="${esc(v)}" aria-pressed="${v === filtros.marca}">${esc(t)}<i>${n}</i></button>`).join('')
+    : '';
+  const acciones = `<div class="rc-acc">${htmlOrden()}<button type="button" class="filtrar-btn" aria-haspopup="dialog">${ICONO_FILTRAR}Filtrar${enPanel ? ` <b>${enPanel}</b>` : ''}</button></div>`;
+  const cruces = activos.map(([c, t]) =>
+    `<button type="button" class="activo" data-quitar="${c}" aria-label="Quitar ${esc(t)}">${esc(t)}</button>`).join('');
+
+  cab.classList.toggle('sin-foto', !foto);
+  cab.innerHTML = `
+    <div class="rc-tit"><h2>${esc(titulo)}</h2><p><span id="count">${esc(texto)}</span>${desde}</p></div>
+    ${foto ? `<span class="rc-foto"><img src="${esc(foto)}" alt="" decoding="async" onerror="this.parentElement.remove()"></span>` : ''}
+    <div class="rc-fila">${conMarcas ? `<div class="rc-marcas" role="group" aria-label="Marcas">${botonesMarca}</div>` : ''}${acciones}</div>
+    ${cruces ? `<div class="rc-activos">${cruces}</div>` : ''}`;
+
+  fijo.innerHTML = `<div class="rf-caja"><div class="rf-card">
+      ${foto ? `<span class="rf-mini"><img src="${esc(foto)}" alt="" decoding="async" onerror="this.parentElement.remove()"></span>` : ''}
+      <div class="rf-tit"><h3>${esc(titulo)}</h3><p>${esc(texto)}${desde}</p></div>
+      ${conMarcas ? `<div class="rf-marcas" role="group" aria-label="Marcas">${botonesMarca}</div>` : ''}${acciones}
+    </div>${cruces ? `<div class="rf-activos">${cruces}</div>` : ''}</div>`;
+  revisarFijo();
+}
+
+/* Lo fijo baja cuando la fila de marcas del banner quedó tapada por la cinta
+   de categorías. Mientras no se ve, no se puede tabular adentro (inert). */
+let fijoPendiente = 0;
+function revisarFijo(){
+  fijoPendiente = 0;
+  const cab = $('rubro-cab'), fijo = $('rubro-fijo');
+  if(!cab || !fijo) return;
+  const fila = cab.querySelector('.rc-fila');
+  const ver = !cab.hidden && !!fila && fila.getBoundingClientRect().bottom < altoCinta() + 4;
+  fijo.classList.toggle('visible', ver);
+  fijo.inert = !ver;
+}
+
+function cerrarMenusOrden(){
+  document.querySelectorAll('.orden-menu:not([hidden])').forEach(m => {
+    m.hidden = true;
+    m.previousElementSibling?.setAttribute('aria-expanded', 'false');
+  });
+}
+
+function clicCabecera(e){
+  const t = e.target.closest('.marca-chip,[data-quitar],.orden-btn,[data-orden],.filtrar-btn');
+  if(!t) return;
+  if(t.classList.contains('marca-chip')){
+    // Tocar la marca que ya estaba la saca: es el atajo para volver a ver el rubro entero
+    const v = t.dataset.marca;
+    filtros.marca = (!v || filtros.marca === v) ? '' : v;
+    aplicarFiltro(true);
+  }else if(t.dataset.quitar){
+    const c = t.dataset.quitar;
+    filtros[c] = c === 'soloStock' ? false : '';
+    aplicarFiltro(true);
+  }else if(t.classList.contains('orden-btn')){
+    const menu = t.nextElementSibling, abrir = menu.hidden;
+    cerrarMenusOrden();
+    menu.hidden = !abrir;
+    t.setAttribute('aria-expanded', String(abrir));
+    if(abrir) menu.querySelector('[aria-checked="true"]')?.focus();
+  }else if(t.dataset.orden){
+    filtros.orden = t.dataset.orden;
+    aplicarFiltro(true);
+  }else if(t.classList.contains('filtrar-btn')){
+    abrirFiltros();
+  }
+}
+
+/* ---------- El panel de "Filtrar" ---------- */
+
+// Cuántos productos quedarían con ese cambio, con todo lo demás como está
+function contarCon(cambios){
+  const antes = { ...filtros };
+  Object.assign(filtros, cambios);
+  const n = filtrar().length;
+  Object.assign(filtros, antes);
+  return n;
+}
+
+function gruposDeFiltros(){
+  const grupos = [{ campo: 'rango', titulo: 'Precio', opciones: RANGOS.map(([v, t]) => ({ v, t })) }];
+  const cap = valoresDe('capacidad'), ram = valoresDe('ram');
+  if(cap.length) grupos.push({ campo: 'capacidad', titulo: 'Capacidad', opciones: cap.map(v => ({ v, t: v })) });
+  if(ram.length) grupos.push({ campo: 'ram', titulo: 'Memoria', opciones: ram.map(v => ({ v, t: v })) });
+  if(norm(filtros.cat) === 'objetivo'){
+    const monturas = [...new Set(MODELOS.filter(m => m.cat === filtros.cat && m.montura).map(m => m.montura))]
+                       .sort((a, b) => a.localeCompare(b, 'es'));
+    if(monturas.length > 1) grupos.push({ campo: 'montura', titulo: 'Montura', opciones: monturas.map(v => ({ v, t: v })) });
+    grupos.push({ campo: 'apertura', titulo: 'Apertura',
+                  opciones: Object.entries(TEXTO_APERTURA).map(([v, t]) => ({ v, t })) });
+  }
+  return grupos;
+}
+
+function abrirFiltros(){
+  if($('filtros-panel')) return;
+  cerrarMenusOrden();
+  const d = document.createElement('div');
+  d.id = 'filtros-panel';
+  d.className = 'modal modal-filtros';
+
+  const dibujar = () => {
+    // Una opción que dejaría la grilla vacía no se ofrece, salvo que ya esté puesta
+    const grupos = gruposDeFiltros().map(g => ({ ...g, opciones: g.opciones
+      .map(o => ({ ...o, n: contarCon({ [g.campo]: o.v }), on: filtros[g.campo] === o.v }))
+      .filter(o => o.n || o.on) })).filter(g => g.opciones.length);
+    const n = LISTA.length;
+    d.innerHTML = `<div class="caja" role="dialog" aria-modal="true" aria-labelledby="mf-titulo">
+      <div class="mf-cab"><h3 id="mf-titulo">Filtrar</h3>
+        <button type="button" class="mf-cerrar" data-cerrar aria-label="Cerrar">&times;</button></div>
+      ${grupos.map(g => `<div class="mf-grupo" role="group" aria-labelledby="mf-${g.campo}">
+        <span class="mf-rot" id="mf-${g.campo}">${g.titulo}</span>
+        <div class="mf-chips">${g.opciones.map(o =>
+          `<button type="button" class="op-chip" data-campo="${g.campo}" data-v="${esc(o.v)}" aria-pressed="${o.on}">${esc(o.t)}<i>${o.n}</i></button>`).join('')}</div>
+      </div>`).join('')}
+      <div class="mf-grupo" role="group" aria-labelledby="mf-stock"><span class="mf-rot" id="mf-stock">Stock</span>
+        <div class="mf-chips"><button type="button" class="op-chip" data-stock aria-pressed="${filtros.soloStock}">Solo con stock<i>${contarCon({ soloStock: true })}</i></button></div></div>
+      <div class="botones mf-pie">
+        <button type="button" class="sec" data-limpiar>Limpiar</button>
+        <button type="button" class="pri" data-cerrar>Ver ${n} producto${n !== 1 ? 's' : ''}</button>
+      </div>
+    </div>`;
+  };
+
+  let cerrar = () => {};
+  d.addEventListener('click', e => {
+    const t = e.target.closest('[data-campo],[data-stock],[data-limpiar],[data-cerrar]');
+    if(!t) return;
+    if(t.hasAttribute('data-cerrar')){ cerrar(); return; }
+    let foco = '[data-limpiar]';
+    if(t.dataset.campo){
+      const c = t.dataset.campo, v = t.dataset.v;
+      filtros[c] = filtros[c] === v ? '' : v;
+      foco = `[data-campo="${c}"][data-v="${CSS.escape(v)}"]`;
+    }else if(t.hasAttribute('data-stock')){
+      filtros.soloStock = !filtros.soloStock;
+      foco = '[data-stock]';
+    }else{
+      Object.assign(filtros, { rango: '', capacidad: '', ram: '', montura: '', apertura: '', soloStock: false });
+    }
+    // Se aplica al toque: la grilla de atrás ya muestra el resultado, y el botón
+    // de abajo dice cuántos quedan. Reemplaza el link en vez de sumar historial.
+    aplicarFiltro(false);
+    dibujar();
+    d.querySelector(foco)?.focus({ preventScroll: true });
+  });
+
+  dibujar();
+  cerrar = montarModal(d);
+}
 
 /* El título de arriba de la grilla. Con un filtro puesto, el cliente tiene que
    poder saber qué está viendo sin releer los controles. */
@@ -4576,7 +4729,6 @@ function pintarSeccion(cuenta){
 }
 
 function pintar(){
-  pintarMarcas();
 
   // Portada: los rubros en vez de los productos. La grilla y sus adornos se
   // apagan enteros, no solo se esconden, para no dejar tarjetas cargando atras.
@@ -4589,8 +4741,8 @@ function pintar(){
     pintarExtras();
     LISTA = [];
     grid.replaceChildren();
-    $('count').textContent = '';
     pintarSeccion('');
+    pintarCabecera('');
     pintarSugeridos();
     return;
   }
@@ -4604,8 +4756,8 @@ function pintar(){
   const texto = !LISTA.length ? ''
     : CARPETA_FOTOS ? n
     : `${n} · ${LISTA.filter(p => p.imagen).length} con foto`;
-  $('count').textContent = texto;
   pintarSeccion(texto);
+  pintarCabecera(texto);
   pintarSugeridos();
 
   if(!LISTA.length){
@@ -4676,24 +4828,9 @@ function armarFiltros(){
   if(filtros.marca    && !marcas.includes(filtros.marca))      filtros.marca = '';
   if(filtros.montura  && !monturas.includes(filtros.montura))  filtros.montura = '';
 
-  // Los tramos de precio no dependen de la planilla: se arman una sola vez
-  if($('precio').options.length <= 1)
-    $('precio').innerHTML = '<option value="">Cualquier precio</option>'
-      + RANGOS.map(([val,txt]) => `<option value="${val}">${esc(txt)}</option>`).join('');
-
   const firma = cats.join('|') + '#' + marcas.join('|') + '#' + monturas.join('|');
   if(firma === FIRMA_FILTROS){ sincronizarControles(); return; }
   FIRMA_FILTROS = firma;
-
-  // Con el número al lado se ve de una si conviene filtrar por ahí
-  // El numero dice cuantas TARJETAS vas a ver, no cuantas filas de la planilla
-  // hay. Contando PRODUCTOS, un objetivo con tres filas de color contaba tres:
-  // la opcion prometia "Canon RF (23)" y la grilla devolvia 14.
-  $('montura').innerHTML = '<option value="">Cualquier montura</option>'
-    + monturas.map(m => {
-        const n = MODELOS.filter(p => p.montura === m).length;
-        return `<option value="${esc(m)}">${esc(m)} (${n})</option>`;
-      }).join('');
 
   $('cats').innerHTML = '';
   // El valor sigue siendo la categoría tal cual (el filtro y el link la usan);
@@ -4732,11 +4869,8 @@ function armarFiltros(){
 }
 
 /* ---------- Las marcas de la sección ----------
-   Los números dicen cuánto verías si tocaras ese chip: se cuentan con todos
-   los demás filtros puestos, pero sin el de marca. Se redibuja solo cuando la
-   lista cambió de verdad, para no perder el scroll de la cinta. */
-let FIRMA_MARCAS = '';
-
+   Los números dicen cuánto verías si tocaras esa marca: se cuentan con todos
+   los demás filtros puestos, pero sin el de marca. */
 function marcasDisponibles(){
   const guardado = filtros.marca;
   filtros.marca = '';
@@ -4752,44 +4886,6 @@ function marcasDisponibles(){
     esDest(a[0]) - esDest(b[0]) || b[1] - a[1] || a[0].localeCompare(b[0],'es'));
 }
 
-function pintarMarcas(){
-  const lista = marcasDisponibles();
-  /* La cinta aparece adentro de una seccion. En "Todo" son las 21 marcas del
-     catalogo en una sola fila que hay que scrollear entera, y filtrar por marca
-     sin decir de que rubro no le sirve a nadie: la barra queda mas limpia sin
-     ella. Con una sola marca tampoco aparece: no habria nada que elegir. */
-  const wrap = $('marcas-wrap');
-  wrap.hidden = !filtros.cat || lista.length < 2;
-
-  const firma = filtros.marca + '#' + lista.map(([m,n]) => m + n).join('|');
-  if(firma === FIRMA_MARCAS) return;
-  FIRMA_MARCAS = firma;
-  if(wrap.hidden){ $('marcas').replaceChildren(); return; }
-
-  const chip = (val, txt, n) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'chip chip-marca';
-    b.dataset.marca = val;
-    b.setAttribute('aria-pressed', String(val === filtros.marca));
-    b.append(txt);
-    const i = document.createElement('i');
-    i.textContent = n;
-    b.append(i);
-    // Tocar la marca que ya estaba puesta la saca: es el atajo para volver
-    // a ver la sección entera sin ir hasta el chip "Todas".
-    b.onclick = () => {
-      filtros.marca = filtros.marca === val ? '' : val;
-      aplicarFiltro(true);
-    };
-    return b;
-  };
-
-  const total = lista.reduce((s,[,n]) => s + n, 0);
-  $('marcas').replaceChildren(chip('', 'Todas', total), ...lista.map(([m,n]) => chip(m, m, n)));
-  sincronizarMarcas();
-}
-
 // Deja los controles mostrando lo que dice el objeto `filtros`. Se usa al
 // abrir con un link filtrado y al tocar el botón Atrás del navegador.
 function sincronizarControles(){
@@ -4798,14 +4894,9 @@ function sincronizarControles(){
   // ve resultados filtrados y ningun lugar donde diga por que.
   if(filtros.q) document.querySelector('.topbar').classList.add('buscando');
   $('clear').hidden = !filtros.q;
-  $('orden').value = filtros.orden;
-  $('precio').value = filtros.rango;
-  $('soloStock').checked = filtros.soloStock;
   sincronizarLentes();
   [...$('cats').querySelectorAll('.chip')].forEach(b =>
     b.setAttribute('aria-pressed', String((b.dataset.cat || '') === filtros.cat)));
-  [...$('marcas').children].forEach(b =>
-    b.setAttribute('aria-pressed', String((b.dataset.marca || '') === filtros.marca)));
 }
 
 /* Montura y apertura aparecen solo en la categoría Objetivo. Ofrecerlas en
@@ -4816,9 +4907,6 @@ function sincronizarControles(){
 function sincronizarLentes(){
   const hayLentes = norm(filtros.cat) === 'objetivo';
   if(!hayLentes){ filtros.montura = ''; filtros.apertura = ''; }
-  $('montura').hidden = $('apertura').hidden = !hayLentes;
-  $('montura').value  = filtros.montura;
-  $('apertura').value = filtros.apertura;
   sincronizarCapacidad();
 }
 
@@ -4826,33 +4914,26 @@ function sincronizarLentes(){
    que hay HOY en el rubro abierto: sin esto, en Celulares aparecerian las
    capacidades de las MacBook. Si queda una sola opcion el filtro no sirve para
    elegir nada y se esconde. */
+/* Los valores de capacidad o memoria que tiene sentido ofrecer: sólo adentro de
+   un rubro con capacidad, con lo que hay en ese rubro y esa marca, y sólo si
+   hay más de uno. En "Todo" se mezclarían la capacidad de un iPhone con la de
+   una MacBook y la de una consola, que no se comparan entre sí. */
+function valoresDe(id){
+  if(!filtros.cat || !CATS_CON_CAPACIDAD.includes(filtros.cat)) return [];
+  const saca = id === 'ram' ? ramDe : capacidadDe;
+  const enJuego = MODELOS.filter(m => m.cat === filtros.cat && (!filtros.marca || m.marca === filtros.marca));
+  const vals = [...new Set(enJuego.flatMap(m => m.variantes.map(saca)).filter(Boolean))]
+                 .sort((a, b) => enGB(a) - enGB(b));
+  return vals.length > 1 ? vals : [];
+}
+
+// Lo elegido puede no existir más al cambiar de rubro o de marca. Antes de que
+// llegue la planilla no se toca: no hay con qué comparar todavía.
 function sincronizarCapacidad(){
-  const enJuego = MODELOS.filter(m =>
-    (!filtros.cat || m.cat === filtros.cat) &&
-    (!filtros.marca || m.marca === filtros.marca));
-  /* Solo DENTRO de un rubro. En "Todo" se mezclarian la capacidad de un iPhone
-     con la de una MacBook y la de una consola, que no se comparan entre si; y
-     ademas estiraba la columna de filtros hasta necesitar scroll propio. */
-  const sirve = !!filtros.cat && CATS_CON_CAPACIDAD.includes(filtros.cat);
-
-  const armar = (id, saca, rotulo) => {
-    const vals = [...new Set(enJuego.flatMap(m => m.variantes.map(saca)).filter(Boolean))]
-                   .sort((a, b) => enGB(a) - enGB(b));
-    const hay = sirve && vals.length > 1;
-    if(!hay) filtros[id] = '';
-    $(id).hidden = !hay;
-    if(hay){
-      const cuenta = v => enJuego.filter(m => m.variantes.some(x => saca(x) === v)).length;
-      $(id).innerHTML = `<option value="">${rotulo}</option>`
-        + vals.map(v => `<option value="${esc(v)}">${esc(v)} (${cuenta(v)})</option>`).join('');
-    }
-    // Lo elegido puede no existir mas al cambiar de rubro
-    if(filtros[id] && !vals.includes(filtros[id])) filtros[id] = '';
-    $(id).value = filtros[id];
-  };
-
-  armar('capacidad', capacidadDe, 'Cualquier capacidad');
-  armar('ram', ramDe, 'Cualquier memoria');
+  if(!MODELOS.length) return;
+  ['capacidad', 'ram'].forEach(id => {
+    if(filtros[id] && !valoresDe(id).includes(filtros[id])) filtros[id] = '';
+  });
 }
 
 function error(e){
@@ -4992,7 +5073,12 @@ const claveDeHash = () => {
 // Si venís scrolleado y cambiás un filtro, los resultados nuevos empiezan
 // arriba: sin esto quedarías mirando el medio de una lista que ya no existe.
 function volverArriba(){
-  if(grid.getBoundingClientRect().top < -4) scrollTo({ top: Math.max(0, grid.offsetTop - 150) });
+  // Con el encabezado del rubro a la vista, se vuelve a él: si no, al tocar una
+  // marca en la barra fija quedabas en la grilla sin ver qué habías elegido.
+  const cab = $('rubro-cab');
+  const ancla = cab && !cab.hidden ? cab : grid;
+  const top = ancla.getBoundingClientRect().top;
+  if(top < altoCinta() - 4) scrollTo({ top: Math.max(0, top + scrollY - altoCinta() - 12) });
 }
 function aplicarFiltro(push){ sincronizarLentes(); escribirURL(push); volverArriba(); pintar(); }
 
@@ -5696,13 +5782,6 @@ document.addEventListener('pointerdown', e => {
 $('clear').onclick = () => {
   $('q').value=''; filtros.q=''; $('clear').hidden=true; cerrarSug(); aplicarFiltro(false); $('q').focus();
 };
-$('orden').onchange     = e => { filtros.orden = e.target.value;    aplicarFiltro(true); };
-$('precio').onchange    = e => { filtros.rango = e.target.value;    aplicarFiltro(true); };
-$('capacidad').onchange = e => { filtros.capacidad = e.target.value; aplicarFiltro(true); };
-$('ram').onchange       = e => { filtros.ram = e.target.value;       aplicarFiltro(true); };
-$('montura').onchange   = e => { filtros.montura = e.target.value;  aplicarFiltro(true); };
-$('apertura').onchange  = e => { filtros.apertura = e.target.value; aplicarFiltro(true); };
-$('soloStock').onchange = e => { filtros.soloStock = e.target.checked; aplicarFiltro(true); };
 $('bp-ver').onclick     = abrirPedido;
 
 // Un solo escuchador para toda la grilla: 483 tarjetas con tres escuchadores
@@ -6170,7 +6249,6 @@ const sincronizarCinta   = activarCinta('cats-wrap',   'cats',   'cats-izq',   '
   $('cats-izq').addEventListener('click', rendirCintaAuto);
   $('cats-der').addEventListener('click', rendirCintaAuto);
 }
-const sincronizarMarcas  = activarCinta('marcas-wrap', 'marcas', 'marcas-izq', 'marcas-der');
 
 /* ---------- Botón flotante de WhatsApp ----------
    Sale del mismo número que los botones de cada tarjeta. Si algún día borrás
@@ -6208,31 +6286,27 @@ document.addEventListener('visibilitychange', () =>
 
 $('cfg-btn').addEventListener('click', abrirPanel);
 
-// Abrir y cerrar los filtros en el celular. En la compu el botón no se muestra,
-// así que esto no llega a correr nunca.
-$('filtros-btn').addEventListener('click', e => {
-  const abierta = $('row2').classList.toggle('abierta');
-  e.currentTarget.setAttribute('aria-expanded', String(abierta));
-});
-
-// Sombra de la barra de filtros cuando queda pegada arriba. Un centinela de
-// 1px evita escuchar el scroll, que dispararía cientos de veces por segundo.
-if(!quieto && 'IntersectionObserver' in window){
-  const centinela = document.createElement('div');
-  centinela.style.cssText = 'position:absolute;top:0;height:1px;width:1px';
-  document.querySelector('header').appendChild(centinela);
-  new IntersectionObserver(
-    ([e]) => document.querySelector('.toolbar').classList.toggle('pegada', !e.isIntersecting),
-    { rootMargin: '0px' }
-  ).observe(centinela);
-}
-
 $('marca-btn').addEventListener('click', () => {
   const ahora = Date.now();
   eggN = (ahora - eggUltimo < EGG_VENTANA) ? eggN + 1 : 1;
   eggUltimo = ahora;
   if(eggN >= EGG_CLICS){ eggN = 0; abrirEgg(); }
 });
+
+/* ---------- Encabezado del rubro: eventos ---------- */
+$('rubro-cab').addEventListener('click', clicCabecera);
+$('rubro-fijo').addEventListener('click', clicCabecera);
+document.addEventListener('click', e => { if(!e.target.closest('.orden-caja')) cerrarMenusOrden(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') cerrarMenusOrden(); });
+addEventListener('scroll', () => { if(!fijoPendiente) fijoPendiente = requestAnimationFrame(revisarFijo); }, {passive: true});
+// Lo fijo se pega justo debajo de la cinta de categorías, que también es fija
+// y cambia de alto entre la compu y el celular.
+{
+  const cinta = document.querySelector('.barra-cats');
+  const medir = () => document.documentElement.style.setProperty('--alto-cinta', cinta.offsetHeight + 'px');
+  medir();
+  if('ResizeObserver' in window) new ResizeObserver(medir).observe(cinta);
+}
 
 /* ---------- Arranque ---------- */
 

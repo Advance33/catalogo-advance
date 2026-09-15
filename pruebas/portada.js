@@ -39,19 +39,16 @@ function correrPruebas(){
   ok(document.body.classList.contains('portada'),
      'el body queda marcado como portada, que es lo que lo muestra en el celular');
 
-  /* En pantalla ancha la columna de filtros no va en la portada: le quitaba
-     ancho a los mundos. Tiene que volver al entrar a un rubro (punto 3). */
-  const columna = document.querySelector('.columnas > .toolbar');
-  const ancha = innerWidth >= 1180;
-  if(ancha){
-    ok(getComputedStyle(columna).display === 'none', 'en la portada no aparece la columna de filtros');
-    const anchoMundos = $('mosaico').getBoundingClientRect().width;
-    const anchoCuerpo = document.querySelector('.columnas').getBoundingClientRect().width;
-    ok(anchoMundos > anchoCuerpo * 0.9, 'y los mundos usan todo el ancho',
-       Math.round(anchoMundos) + ' de ' + Math.round(anchoCuerpo) + 'px');
-  }else{
-    R.push('  --   ventana de menos de 1180px: ahi la columna de filtros no existe');
-  }
+  /* En la portada no hay nada que filtrar todavía: el encabezado del rubro, con
+     sus marcas y el botón Filtrar, aparece recién al entrar a uno (punto 3). La
+     columna de filtros de la izquierda ya no existe en ningún lado. */
+  ok($('rubro-cab').hidden && $('rubro-fijo').hidden, 'en la portada no aparece el encabezado de rubro');
+  ok(!document.querySelector('.toolbar'), 'y no queda la columna de filtros de antes');
+  const anchoMundos = $('mosaico').getBoundingClientRect().width;
+  const main = document.querySelector('main'), cm = getComputedStyle(main);
+  const anchoCuerpo = main.getBoundingClientRect().width - parseFloat(cm.paddingLeft) - parseFloat(cm.paddingRight);
+  ok(anchoMundos > anchoCuerpo * 0.9, 'los mundos usan todo el ancho',
+     Math.round(anchoMundos) + ' de ' + Math.round(anchoCuerpo) + 'px');
 
   /* ---- 2. Los mundos estan completos y dicen la verdad ----
      Desde el 15/09/2026 los rubros van agrupados en mundos (MUNDOS, en la
@@ -106,8 +103,8 @@ function correrPruebas(){
   ok($('mosaico').hidden && !$('grid').hidden, 'ahora se ve la grilla y no el mosaico');
   ok($$('.card').length > 0, 'y hay productos dibujados', $$('.card').length);
   ok(LISTA.every(m => m.cat === cat), 'todos son del rubro elegido', cat);
-  if(ancha) ok(getComputedStyle(columna).display !== 'none',
-               'adentro del rubro vuelve la columna de filtros');
+  ok(!$('rubro-cab').hidden && $('rubro-cab').querySelector('h2').textContent === plural(cat),
+     'adentro del rubro aparece su encabezado', $('rubro-cab').querySelector('h2')?.textContent);
   // Sin esto el cliente veia el rubro abierto y la cinta de arriba en "Todo"
   const chipMarcado = [...$$('#cats .chip')].find(c => c.getAttribute('aria-pressed') === 'true');
   ok(chipMarcado && chipMarcado.dataset.cat === cat,

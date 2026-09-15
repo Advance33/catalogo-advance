@@ -1,0 +1,88 @@
+CIERRE DEL 15/09 · lo que vemos de nuestro lado (chequeo 15:12)
+
+0) ESTADO
+   La Landing publicada es la de las 14:46 (Meta generado_en
+   2026-09-15T14:46:58), y Cami está igual. Tienen preparados
+   plan_merge.json (14:51) y fusiones_sugeridas.json (14:54), pero NO se
+   escribieron: TAB-APP-066 y CEL-SAM-099 siguen en las dos hojas.
+   Si corren el cierre, pásennos la salida completa. Para confirmar que
+   salió: generado_en en la pestaña Meta tiene que ser posterior a 14:54.
+
+   Sugerencia para que no vuelva a parecer publicado sin estarlo:
+   cerrar_dia.py corre replicar_landing.py sin mirar el código de salida
+   (-> subprocess.run(..., check=True)), y replicar_landing.py guarda el
+   manifiesto local antes de revisar los frenos.
+
+1) YA APLICADO EN EL MAESTRO
+   - Fusiones: AT-0469-02 Starlight -> TAB-APP-062
+               AT-0472-02 Space Gray -> TAB-APP-063
+               AT-0467-03 Silver     -> TAB-APP-002
+               AT-0093 ya tenía CEL-SAM-047
+   - AT-0524 (MacBook Pro 16" usado): de baja. No va a condicion-aceptada.
+   - AT-0522-02 Midnight nuevo (NB-APP-006 trae Silver/Midnight).
+   - AirTag -> AT-0001, Ray-Ban como acordamos, Metaverse sin numerar.
+
+   Archivo para sembrar:
+     C:\Users\pedro\Desktop\catalogo-maestro-2026-09-15.csv
+     701 filas · 527 productos · AT-0001 a AT-0529 · próximo AT-0530
+
+2) VERIFICADO, ESTA BIEN
+   - Landing publicada: 0 graves. Todos sus CODIGO coinciden con el
+     maestro, y ningún CODIGO_VAR apunta a una variante de baja.
+   - iPhone 17 Pro 256 (AT-0072), probado en el navegador: una tarjeta,
+     tocar Silver muestra USD 1.290 y Orange USD 1.260. La 070 no se
+     colapsa. Que figure en Otros_IDs es lo correcto.
+
+3) PARA CORREGIR
+
+   a) 11 productos salen en DOS o TRES tarjetas: mismo CODIGO con
+      distinto Grupo. Casi siempre una fila vieja sin stock y la
+      renombrada con stock, así que el cliente ve el mismo producto
+      agotado al lado del disponible.
+
+      AT-0001 AirTag x4       ACC-APP-070 (sin stock) / ACC-APP-002
+        Dijeron que sobra la 002, pero la que tiene stock es la 002.
+      AT-0197 GoPro Hero 13   CAM-GOP-002 (sin stock) / ACC-GOP-002
+      AT-0196 Hero 12 Bundle  CAM-GOP-003 (sin stock) / ACC-GOP-003
+      AT-0198 Mission 1 8K    CAM-GOP-005 (sin stock) / ACC-GOP-004
+        Y las nuevas quedaron en "Accesorio Cámara": son cámaras de acción.
+      AT-0416 Wayfarer        GAF-RAY-037 595 (sin stock) / GAF-RAY-044 570
+        Iba a un solo precio (570) y la 037 sigue a 595.
+      AT-0433 Neo 8/256 Esp   NB-APP-088 (sin stock) / NB-APP-104
+      AT-0434 Neo 8/512       NB-APP-002 (sin stock), NB-APP-098 / NB-APP-105
+      AT-0451 SE 3 40mm       SW-APP-004 (sin stock) / SW-APP-003
+      AT-0452 SE 3 44mm       SW-APP-005 / SW-APP-059 (sin stock)
+      AT-0453 Series 11 42mm  SW-APP-039, SW-APP-021 (sin stock) /
+                              SW-APP-008 / SW-APP-032
+      AT-0529 Blayzer Optics  046 / 047 / 048: tres tarjetas para un
+                              producto con tres monturas.
+
+      Propuesta de regla: filas con el mismo CODIGO van al mismo Grupo
+      (el de la fila con stock). No Grupo = CODIGO, que separaría las
+      capacidades que hoy comparten tarjeta a propósito.
+
+   b) SW-APP-032: nos dijeron que es el 42mm (vinculado a AT-0453), pero
+      está publicado en el Grupo del 46mm y a 430, que es el precio del
+      46mm. Uno de los dos está mal. Si es el 46mm, lo pasamos a AT-0454.
+
+   c) Colores que faltan para que haya foto. Hoy vienen con Color "—" y
+      sin CODIGO_VAR. Pedimos el formato "montura · lente", como la 041:
+        GAF-RAY-043  Shiny Black · G15 Green                  AT-0527-01
+        GAF-RAY-044  Shiny Black · Graphite Green Transitions AT-0416-01
+        GAF-RAY-045  Shiny Black · Transitions Sapphire       AT-0528-01
+        GAF-RAY-046  Trap Dark Love                           AT-0529-01
+        GAF-RAY-047  Transparent Black                        AT-0529-02
+        GAF-RAY-048  Matte Black                              AT-0529-03
+        SW-APP-008   Rose Gold (lo dice el nombre)
+        SW-APP-032   el color que corresponda
+
+   d) Datos mal escritos. Ya los anotamos de nuestro lado, pero corrijan
+      la hoja:
+        CEL-SAM-003 "gray/1black"      -> black (AT-0083-03)
+        CEL-SAM-085 "Charcoal/lavanda" -> lavanda lo tomamos como el
+          Violet (AT-0085-03), que es el Lavender de Samsung. Si es otro
+          color, avisen.
+        NB-APP-006 CODIGO_VAR "AT-0522-01/" -> "AT-0522-01/AT-0522-02"
+          al resembrar.
+
+4) CUANDO PUBLIQUEN, avisen: lo revisamos contra estos puntos.

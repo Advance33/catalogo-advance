@@ -3419,7 +3419,13 @@ function colapsarIguales(vs){
   const porFirma = new Map();
   vs.forEach(v => {
     const f = firmaVisible(v) + '|' + v.precio;
-    if(!porFirma.has(f)) porFirma.set(f, v);
+    const ya = porFirma.get(f);
+    /* Entre dos iguales se muestra la que tiene STOCK. El stock no entra en la
+       firma a proposito (dos filas iguales son la misma cosa para el cliente),
+       pero si se queda la primera que llega sin mirarlo, una fila vieja sin
+       stock tapa a la nueva que si tiene: el 15/09 las tres GoPro salian
+       agotadas habiendo stock, cuando el sheet junto sus filas en un Grupo. */
+    if(!ya || (!ya.stock && v.stock)) porFirma.set(f, v);
   });
   const quedan = [...porFirma.values()];
   /* Las descartadas NO se tiran: se devuelven aparte para que el modelo se las

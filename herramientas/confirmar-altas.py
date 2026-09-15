@@ -83,6 +83,10 @@ def main():
         if cual == 'NUEVO':
             nuevos.append(idf)
             continue
+        if cual == 'DESCARTADA':
+            # Una decision que se revirtio: la fila era basura y lo que se le
+            # habia anotado se quito a mano. Si vuelve, se decide de nuevo.
+            continue
         if not CM.RE_CODIGO.match(cual):
             quejas.append('%s: "%s" no es ni un codigo AT-#### ni NUEVO' % (idf, cual))
             continue

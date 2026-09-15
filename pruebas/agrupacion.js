@@ -127,6 +127,22 @@ function correrPruebas(){
      'no se oculta ningun producto que tenga algo que lo distinga',
      ocultoDeMas.slice(0, 2).join(' | ') || 'ninguno');
 
+  /* Entre dos filas iguales se muestra la que tiene STOCK. El 15/09 el sheet
+     empezo a juntar en el mismo Grupo las filas con el mismo CODIGO, y las tres
+     GoPro quedaron con su fila vieja sin stock y la nueva con stock, identicas
+     y al mismo precio. Se mostraba la primera que llegaba, que era la vieja: el
+     cliente veia agotada una camara que habia. */
+  const escondidaConStock = [];
+  MODELOS.filter(m => (m.gemelas || []).length).forEach(m => {
+    m.gemelas.forEach(g => {
+      const visible = m.variantes.find(v => firmaVisible(v) === firmaVisible(g) && v.precio === g.precio);
+      if(g.stock && visible && !visible.stock) escondidaConStock.push(g.id + ' detras de ' + visible.id);
+    });
+  });
+  ok(escondidaConStock.length === 0,
+     'una fila con stock nunca queda escondida detras de su gemela sin stock',
+     escondidaConStock.slice(0, 3).join(' | ') || 'ninguna');
+
   /* Un link viejo tiene que seguir abriendo. Si alguien guardo ?p=CEL-APP-069 y
      esa fila quedo colapsada detras de la 068, buscarModelo tiene que llevarlo
      igual a la tarjeta. */

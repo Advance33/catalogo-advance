@@ -1,0 +1,233 @@
+LAS 56 SIN CODIGO: RESUELTAS 46, Y TRES PREGUNTAS
+================================================================
+Advance Tecno al equipo de la planilla · 15/09/2026
+Responde a los cuatro puntos del mensaje de hoy
+
+
+1) EL CSV AL DIA: VA ADJUNTO
+------------------------------------------------------------
+    catalogo-maestro-2026-09-15.csv
+    695 variantes · 524 productos · AT-0001 a AT-0526
+    proximo libre: AT-0527
+
+Resiembren el archivo ENTERO. Trae los vinculos del 14 (verificados:
+AUD-APP-015 -> AT-0059, AUD-APP-016 -> AT-0060, CEL-SAM-097 -> AT-0084),
+las 11 altas del 14 y todo lo de hoy.
+
+Tenian razon en que su copia estaba atras, y su propio manifiesto lo
+muestra: de sus 56 sin_codigo, 18 ya las resolvia el archivo del 14. Son
+las 11 altas AT-0510 a AT-0520 y 7 vinculos de ese dia (AirPods 4 ANC,
+Kindle, los dos Dell, Watch SE 3 44mm Starlight y los dos Ultra 3).
+
+Medido con este archivo sobre su hoja Cami de hoy (562 filas): quedan 10
+sin codigo, y son exactamente las 10 de las preguntas de los puntos 4 y 5.
+Sobre la Landing publicada (530 filas): cero.
+
+
+2) EL PATRON: DE ACUERDO, Y ASI LO MANEJAMOS
+------------------------------------------------------------
+Coincidimos: cuando cambia una spec de verdad, el texto no alcanza para
+decidir, y equivocarse es mostrar la foto de otro producto.
+
+Por eso de este lado:
+  · La columna CODIGO manda. Por texto solo se resuelve si la firma dura
+    (capacidades, medidas, palabras de gama, contadas) coincide. Si no
+    coincide, la fila queda sin codigo: es el error barato.
+  · Lo que se decide a mano se decide UNA vez. Cada vinculo de hoy quedo
+    anotado con el ID y con el nombre con que vino hoy. Manana esas filas
+    se reconocen solas aunque sigan diciendo "A18 Pro" o "SE 3 GPS".
+
+No ensanchamos el comparador para tragarse el ruido. Si ustedes lo limpian
+antes de poner el CODIGO, mejor: la columna es lo que usamos.
+
+Para que lo tengan registrado, el ruido de hoy fue mas que el codigo de
+parte adelante:
+  · "(SM X520)", "(SM-X230)"... en las once tablets Samsung. Para nuestra
+    firma es un designador de modelo, igual que "MXK53AM/A".
+  · la marca repetida adelante: "Insta360 INSTA 360", "GoPro GO PRO"
+  · "E-Sim" sacado de toda la linea iPhone 17 Pro Max
+  · "WQHD (2K)" en el MSI, y el color "gray/1black" en un Galaxy A17
+
+Sobre A18 contra A18 Pro: en el MacBook Neo no lo decidio el texto sino
+la hoja. Las filas "A18 Pro" repiten precio, color e idioma de filas "A18"
+que siguen en la planilla. Detalle en el punto 3.
+
+
+3) LOS DUPLICADOS: VINCULADOS, NINGUNO CON CODIGO NUEVO
+------------------------------------------------------------
+    NB-APP-104  Neo 13" A18 Pro 8/256 Silver Espanol  891  ->  AT-0433
+                es la misma fila que NB-APP-088, mismo precio
+    NB-APP-105  Neo 13" A18 Pro 8/512 Citrus Ingles   957  ->  AT-0434
+                es la misma fila que NB-APP-002, mismo precio
+    SW-APP-003  Watch SE 3 GPS 40mm S/M               325  ->  AT-0451
+    SW-APP-008  Watch Series 11 GPS 42mm Rose Gold    410  ->  AT-0453
+
+Ojo con el Neo: son TRES productos, y lo que separa a los dos de 256GB es
+el idioma del teclado.
+    AT-0432  8/256GB ingles     AT-0433  8/256GB espanol     AT-0434  8/512GB
+
+Y ojo con el Watch: la fila que hoy queda sin codigo es SW-APP-032, que
+dice solamente "Apple Watch Series 11 GPS", sin medida ni color. Si es el
+42mm que mencionan, el precio no cierra: esta a 430, que es lo que vale el
+46mm; el 42mm esta a 410. Esa la dejamos sin codigo hasta que la fila
+traiga la medida.
+
+
+LAS 56, UNA POR UNA
+
+Ya las resolvia el archivo del 14 (18):
+    AUD-APP-013 AT-0055   ERD-AMZ-008 AT-0212   MON-DEL-013 AT-0420
+    MON-DEL-014 AT-0421   SW-APP-059  AT-0452   SW-APP-013  AT-0455
+    SW-APP-062  AT-0455   CEL-APP-093 AT-0510   CEL-SAM-098 AT-0511
+    CEL-SAM-100 AT-0512   CEL-MOT-077 AT-0513   CEL-XIA-100 AT-0514
+    NB-APP-103  AT-0515   SW-APP-048  AT-0516   CAM-NIK-011 AT-0517
+    CAM-DJI-007 AT-0518   CAM-DJI-008 AT-0519   ACC-DJI-013 AT-0520
+
+Vinculos de hoy (22), cada uno con su porque en nuestro registro:
+    TAB-SAM-014 AT-0494   TAB-SAM-027 AT-0492   TAB-SAM-035 AT-0488
+    TAB-SAM-037 AT-0495   TAB-SAM-038 AT-0498   TAB-SAM-039 AT-0486
+    TAB-SAM-040 AT-0485   TAB-SAM-041 AT-0493   TAB-SAM-042 AT-0489
+    TAB-SAM-043 AT-0491   TAB-SAM-044 AT-0497     (las 11: "(SM X...)")
+    ACC-GOP-002 AT-0197   ACC-GOP-003 AT-0196   ACC-GOP-004 AT-0198
+    ACC-APP-073 AT-0003   ACC-APP-074 AT-0009   ACC-APP-075 AT-0006
+    ACC-APP-076 AT-0010   CEL-SAM-003 AT-0083   MON-MSI-015 AT-0424
+    NB-APP-104  AT-0433   NB-APP-105  AT-0434
+
+Altas de hoy (6), numeradas de AT-0521 a AT-0526:
+    AT-0521  CEL-APP-089  iPhone Air 256GB (Skyblue)                1050
+             el catalogo solo tenia el de 1TB
+    AT-0522  NB-APP-006   MacBook Air M5 13.6" 16/512GB (Silver)    1672
+             hay 16/1TB, 24/512 y 24/1TB, no este
+    AT-0523  NB-APP-106   MacBook Pro M5 Pro 14" 48GB/1TB (Sp.Blk)  3762
+             de 14" hay 24/1TB y 24/2TB; el 48/1TB que hay es de 16"
+    AT-0524  NB-APP-107   MacBook Pro 16" M4 Pro 48/512 USADA       2695
+    AT-0525  TAB-XIA-008  Redmi Pad 2 11" 8/256GB (Grey)             345
+             el que hay es el Redmi Pad 2 PRO 12" 6/128
+    AT-0526  TAB-XIA-009  Poco Pad X1 11.2" 8/512GB (Grey)           475
+
+Preguntas (10): ACC-APP-002, SW-APP-032 y los 8 Ray-Ban de los puntos 4 y 5.
+
+Ademas de sus 56 vinculamos otras 22 filas que su lado resolvia y el
+nuestro no (Magic Mouse, Studio Display, Watch Series 11, iPad 11 A16,
+iPhone 17 Pro Max sin "E-Sim", el Headliner GAF-RAY-039 -> AT-0507...), para
+que las dos puntas den lo mismo.
+
+
+4) RAY-BAN: NO LOS NUMERAMOS TODAVIA, Y POR UNA RAZON NUESTRA
+------------------------------------------------------------
+Hicieron bien en no tocarlos. Respondemos sus dos preguntas y agregamos
+un problema que encontramos mirandolos.
+
+a) ¿Los Blayzer son AT nuevos?
+   Si: UN producto con tres monturas. Mismo modelo y mismo precio (585);
+   solo cambia la montura (Trap Dark Love, Transparent Black, Matte
+   Black). Un codigo, tres variantes.
+
+b) ¿Las dos secciones son el mismo producto?
+   No lo decide la seccion sino montura + lente:
+
+   GAF-RAY-037  GEN2 WAYFARER (Shiny Black/Graphite Green Trans.)   595
+   GAF-RAY-044  GEN 2 — WAYFARER F Shiny Black | L Transitions      570
+                Graphite Green
+       Mismo anteojo (AT-0416) a dos precios. ¿Hay una diferencia que no
+       esta escrita, como el tamano Standard o Large? Si no la hay, que
+       venga un solo precio.
+
+   GAF-RAY-043  WAYFARER F Shiny Black | L G15 Green                520
+       No esta en el catalogo: alta.
+
+   GAF-RAY-039  GEN2 HEADLINER (Shiny Black/Transitions Graph.Grn)  535
+       Es AT-0507, que ayer no se vendia. Vinculado hoy.
+   GAF-RAY-045  HEADLINER F Shiny Black | L Transitions Sapphire    570
+       Otro lente, otro anteojo: alta.
+
+   GAF-RAY-049  METAVERSE / SMART GLASSES — WAYFARER                520
+   GAF-RAY-050  METAVERSE / SMART GLASSES — SKYLER                  510
+       Sin montura ni lente no se pueden identificar. Hoy no traen la
+       referencia que mencionan. Si vuelven con ella: 601ST350 es AT-0418
+       (Wayfarer Black / Polarized Gradient Graphite), que hoy esta a 535.
+
+c) Lo que encontramos, y por que esperamos
+   De los 8 Ray-Ban que ya estan en el catalogo, 7 estan mal armados
+   (AT-0412 a AT-0418). Cada anteojo quedo partido en DOS variantes que en
+   realidad son la montura y el lente del MISMO anteojo:
+
+       AT-0412-01  Shiny Black
+       AT-0412-02  Transitions Green
+
+   Paso porque el proveedor escribia "(Shiny Black/Transitions Green)" y
+   la barra se leyo como separador de colores. En la ficha eso dibuja dos
+   puntitos de color, como si el cliente pudiera elegir entre una montura
+   y un lente. El formato nuevo "F montura | L lente" lo deja claro.
+
+   Si numeramos Headliner, G15 y Blayzer con el criterio viejo, repetimos
+   el error. Si los numeramos con el correcto, quedan distintos de los 7
+   que ya estan.
+
+   Y hay un precedente de como deberia ser: el Headliner AT-0507, que
+   entro el 14, ya esta armado bien, con una sola variante:
+       AT-0507-01  Shiny Black · Transitions Graph Green
+
+   PROPUESTA: montura + lente es UNA variante, como en el AT-0507. En los
+   7 viejos la -01 pasa a ser la combinacion y la -02
+   se da de baja con su texto en Escrituras, como hicimos el 14 con "Mid".
+   Antes de dar de baja miramos las fotos: si la -02 muestra otra cosa
+   que la -01, no se pierde nada sin avisar.
+
+   ¿Les cierra? Con su si numeramos las altas y corregimos los 7 el
+   mismo dia, para que su CODIGO_VAR cambie una sola vez.
+
+
+5) TRES COSAS QUE ENCONTRAMOS DE ESTE LADO
+------------------------------------------------------------
+a) UNA CORRECCION: EL HUECO DEL AT-0509
+   Ayer les escribimos que el AT-0509 "se habia entregado en una corrida
+   anterior y su producto no quedo". No es cierto. El 0509 nunca existio:
+   era un bug nuestro que salteaba un numero en cada corrida. La funcion
+   ya devolvia el siguiente libre y el script le volvia a sumar uno.
+
+   Esta arreglado: las altas de hoy salieron de AT-0521 a AT-0526, sin
+   salto. El 0509 queda vacio para siempre. Nadie lo tiene y reusarlo
+   confundiria mas que el hueco.
+
+b) LOS COLORES DE CAMI DE HOY NO SE PUEDEN PARTIR
+   Si leemos la columna Color como viene hoy, salen 18 variantes que no
+   existen. No las creamos. Son de tres tipos:
+     · "(Titanio Gris · Blanco)", "(Black Ceramic · Black Peach)": el
+       punto medio separa caja y malla del MISMO reloj (Garmin, Kieslect,
+       Elfin...). Es el mismo problema que los Ray-Ban.
+     · "color no informado" (TAB-SAM-035 y un iPad Pro): se leeria como
+       si fuera un color.
+     · "gray/1black" (CEL-SAM-003), y "lavanda" en el Galaxy A37: ¿es el
+       Lavender o el Violet que ya estan?
+   ¿Landing lo normaliza al publicar? Si no, pedimos que "color no
+   informado" venga vacio y que el punto medio no se use entre colores.
+
+c) FILAS REPETIDAS NUEVAS EN LA PLANILLA
+   Dos con el mismo color a DOS precios. Van a salir como graves cuando
+   se publique:
+       iPad 11 A16 256GB Silver       TAB-APP-002 625  y  TAB-APP-066 640
+       Magic Keyboard iPad Pro 13" W  ACC-APP-039 505  y  ACC-APP-076 495
+   Y repetidas al mismo precio (sobra una fila, no es grave):
+       ACC-APP-068 / 074    ACC-APP-066 / 075    NB-APP-088 / 104
+       NB-APP-002 / 105     CEL-SAM-003 / 094
+   Siguen tambien los tres graves del 14 (iPad Air 11" y 13" y el iPhone
+   17 Pro), que estan en el punto 8 de ese mensaje.
+
+
+6) DONDE QUEDA
+------------------------------------------------------------
+    695 variantes · 524 productos · AT-0001 a AT-0526 · proximo AT-0527
+    Cami de hoy (562):      552 con codigo · 10 sin codigo (las preguntas)
+    Landing publicada (530):  0 sin codigo
+    23 de 23 en el comparador · 13 tandas de prueba en verde
+    687 de 687 fotos en lo publicado ayer; las 6 altas de hoy, sin foto
+
+Lo que les pedimos:
+  1. Resembrar el adjunto.
+  2. AirTag: ¿ACC-APP-002 "AirTag 2nd Gen 4-Pack" es la 2a generacion, o
+     es la misma fila que ACC-APP-070 con otro nombre? Si es 2a gen, alta.
+     Si es la misma, vinculo a AT-0001 y sobra una fila.
+  3. SW-APP-032: la medida del reloj.
+  4. Ray-Ban: si les cierra la propuesta del punto 4c, el precio de
+     037 contra 044, y la referencia de 049 y 050.

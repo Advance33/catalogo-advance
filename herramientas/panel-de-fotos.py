@@ -107,6 +107,43 @@ def bytes_de_la_rechazada(codigo, huella):
     return doc.get('bytes')
 
 
+def para_buscar(marca, producto, variante):
+    """El texto para pegar en Google y encontrar la foto de ESA variante.
+
+    Del nombre se saca lo que no ayuda a buscar una imagen y la ensucia: el
+    parentesis de colores o de idioma, la memoria ("8/512GB", "16ram"), las
+    pulgadas (11.2"), los separadores sueltos (— | ·) y, en los Ray-Ban, la
+    cola "F <montura> | L <lente>", que ya viene en la variante. Despues va el
+    color, si el nombre no lo dice ya, y la marca una sola vez adelante.
+
+      RAY-BAN META GEN 2 — BLAYZER OPTICS + Trap Dark Love
+        -> Ray-Ban Meta Gen 2 Blayzer Optics Trap Dark Love
+    """
+    t = producto or ''
+    if CM.norm(marca).replace(' ', '-') in ('ray-ban', 'rayban'):
+        t = re.sub(r'\s+F\s+.*$', '', t)
+    t = re.sub(r'\([^)]*\)', ' ', t)
+    t = re.sub(r'\b\d+(?:[.,]\d+)?\s*(?:"|”|pulgadas)', ' ', t)
+    t = re.sub(r'\b\d+\s*/\s*\d+\s*(?:gb|tb)\b|\b\d+\s*(?:gb|tb|ram)\b', ' ', t, flags=re.I)
+    t = re.sub(r'(?<=\s)[—–|·•/]+(?=\s)', ' ', ' ' + t + ' ')
+    palabras = t.split()
+    # Solo se pasa a minuscula un nombre que viene TODO en mayusculas (como los
+    # Ray-Ban de la seccion nueva). Uno normal tiene siglas y numeros romanos
+    # que tienen que quedar como estan: "III", "USM", "M/L".
+    romano = re.compile(r'^[IVX]+$')
+    if palabras and all(not any(c.islower() for c in w) for w in palabras):
+        palabras = [w if (any(c.isdigit() for c in w) or romano.match(w) or len(w) < 3)
+                    else '-'.join(x[:1] + x[1:].lower() for x in w.split('-'))
+                    for w in palabras]
+    llano = lambda s: set(re.sub(r'[^a-z0-9]+', ' ', CM.norm(s)).split())
+    if marca and not ' '.join(palabras).lower().replace('-', ' ').startswith(marca.lower().replace('-', ' ')):
+        palabras = [marca] + palabras
+    color = re.sub(r'\s*[·|]\s*', ' ', variante or '').strip()
+    if color and not llano(color) <= llano(' '.join(palabras)):
+        palabras.append(color)
+    return re.sub(r'\s{2,}', ' ', ' '.join(palabras)).strip()
+
+
 def mini_de(ruta, lado=150):
     """La foto vieja, chiquita, metida en el documento. Chiquita porque viaja
     como texto adentro del archivo y son once."""
@@ -165,6 +202,7 @@ def main():
              'marca': (v.get('Marca') or '').strip(),
              'cat': (v.get('Categoria') or '').strip(),
              'precio': precio, 'color': (v.get('Variante') or '').strip()}
+        p['busqueda'] = para_buscar(p['marca'], p['prod'], p['color'])
         if archivo in sabido:
             p['mala'] = sabido[archivo]
         if v['CODIGO_VAR'] in rechazos:

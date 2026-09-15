@@ -430,11 +430,52 @@
   .pedilo button:hover{background:var(--glow)}
   .pedilo button:disabled{opacity:.45;cursor:default}
 
+  /* ---------- Preguntas frecuentes ----------
+     Una sola caja con las preguntas separadas por una línea: como lista se lee
+     de un vistazo, y como tarjetas sueltas parecían siete productos más. */
+  .faq{display:grid;gap:4px}
+  .faq-lista{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .faq-item + .faq-item{border-top:1px solid var(--line)}
+  .faq-item summary{
+    list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+    gap:14px;padding:16px 22px;font:600 15px/1.35 var(--sans);color:var(--ink);
+    transition:color .16s ease;
+  }
+  .faq-item summary::-webkit-details-marker{display:none}
+  /* El + gira y queda como ×: el mismo botón dice "abrir" y "cerrar" */
+  .faq-item summary::after{
+    content:"+";flex:none;width:26px;height:26px;border-radius:50%;
+    display:grid;place-items:center;background:var(--surface-2);color:var(--acento);
+    font:500 18px/1 var(--sans);transition:transform .2s ease, background .2s ease, color .2s ease;
+  }
+  .faq-item[open] summary::after{transform:rotate(45deg);background:var(--acento);color:#fff}
+  .faq-item summary:hover{color:var(--glow)}
+  .faq-item summary:focus-visible{outline:2px solid var(--acento);outline-offset:-2px}
+  .faq-r{padding:0 22px 18px;color:var(--muted);font-size:14.5px;line-height:1.55;
+         display:grid;gap:8px;max-width:72ch}
+  .faq-r p{margin:0}
+  .faq-r ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+  .faq-r li{color:var(--ink);display:flex;align-items:baseline;gap:10px}
+  .faq-r li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--acento);
+                    flex:none;transform:translateY(-2px)}
+  .faq-r a{justify-self:start;color:var(--acento);text-decoration:none;padding:6px 0;
+           font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+  .faq-r a::after{content:" →"}
+  .faq-r a:hover{color:var(--glow)}
+  .faq-mas{margin:10px 2px 0;font-size:14px;color:var(--muted)}
+  .faq-mas a{color:var(--acento);font-weight:600}
+  .faq-mas a:hover{color:var(--glow)}
+  @media (prefers-reduced-motion: reduce){
+    .faq-item summary::after{transition:none}
+  }
+
   @media (max-width:560px){
     .pc{width:142px}
     .pc-foto{height:104px}
     .fp-cab h3{font-size:19px}
     .pedilo{padding:20px}
+    .faq-item summary{padding:14px 16px;font-size:14.5px}
+    .faq-r{padding:0 16px 16px}
   }
 
   /* ---------- Filtros ---------- */
@@ -817,6 +858,28 @@
             font-size:12.5px;border-top:1px solid var(--line);padding-top:13px}
   .fi-tabla dt{font:600 9.5px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
   .fi-tabla dd{margin:0;color:var(--ink);word-break:break-word}
+
+  /* Envío, retiro y garantía debajo del botón. Chicos y en gris a propósito:
+     acompañan la decisión, no compiten con el botón de WhatsApp. */
+  .fi-servicio{list-style:none;margin:2px 0 0;padding:13px 0 0;border-top:1px solid var(--line);
+               display:grid;gap:10px}
+  .fi-servicio li{display:flex;gap:10px;align-items:flex-start}
+  .fi-servicio svg{width:18px;height:18px;flex:none;color:var(--acento);margin-top:1px}
+  .fi-servicio b{display:block;font:600 12.5px/1.3 var(--sans);color:var(--ink)}
+  .fi-servicio i{display:block;font-style:normal;font-size:12px;line-height:1.4;color:var(--muted)}
+
+  /* Relacionados al pie de la ficha: las mismas tarjetas chicas de la portada,
+     pero quietas. Adentro de una ventana, algo que se mueve solo distrae justo
+     cuando el cliente está leyendo un precio. */
+  .fi-rel{border-top:1px solid var(--line);background:var(--paper);padding:18px 22px 22px}
+  .fi-rel h4{margin:0 0 12px;font:600 10px/1 var(--mono);letter-spacing:.18em;
+             text-transform:uppercase;color:var(--faint)}
+  .fi-rel-tira{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  .fi-rel .pc{width:auto}
+  @media (max-width:640px){
+    .fi-rel{padding:16px}
+    .fi-rel-tira{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
 
   /* El precio subio al lado del titulo: es lo segundo que se busca despues de
      saber que producto es. Los pesos dejaron de ser una nota al pie -es el
@@ -1812,6 +1875,59 @@ const MARGEN_PCT = null;
 
 // Cada cuántos minutos se refresca solo el catálogo
 const REFRESCO_MIN = 5;
+
+// ---------- ENVÍO, RETIRO Y PREGUNTAS FRECUENTES ----------
+//
+// Estos textos son del negocio: salen de lo que definiste para la tienda y se
+// cambian SOLO acá. La página no calcula ni completa nada de esto por su
+// cuenta. Para sacar una línea o una pregunta, borrala; para agregar, copiá una.
+//
+// OJO con la garantía: no poner un plazo fijo ("1 año"). Cada producto tiene
+// la suya, y prometer un plazo que no se cumple es un problema con el cliente.
+
+const DIRECCION = 'Av. De los Incas 5150, 1A, CABA';
+const MAPA      = 'https://maps.app.goo.gl/kzwGpTwUNLkTEwWRA';
+
+// Las tres líneas debajo del botón de WhatsApp, en cada ficha: [título, detalle].
+// Si el producto trae su garantía en la planilla, se muestra esa en el detalle.
+const SERVICIO = {
+  envio:    ['Envíos a todo el país', 'Por la paquetería que elijas. Recomendamos Andreani.'],
+  retiro:   ['Retiro en CABA',        'Con cita previa: la coordinamos por WhatsApp.'],
+  garantia: ['Con garantía',          'Cada producto tiene la suya.'],
+};
+
+// Las preguntas del final de la portada, en este orden.
+//   p     → la pregunta
+//   r     → la respuesta, un párrafo por renglón
+//   lista → (opcional) viñetas debajo de la respuesta
+//   link  → (opcional) [texto del botón, dirección]
+const PREGUNTAS = [
+  { p: '¿Cómo puedo pagar?',
+    // Sin emojis a propósito: Windows no dibuja banderas y la 🇦🇷 salía como
+    // las letras "AR", y el ₿ quedaba corrido respecto del resto.
+    r: ['Tenés estas opciones:'],
+    lista: ['Efectivo en dólares',
+            'Efectivo en pesos',
+            'Transferencia bancaria (+2%)',
+            'Criptomonedas (+2%)',
+            'PayPal, Payoneer o Prex (+10%)'] },
+  { p: '¿El precio incluye IVA?',
+    r: ['No. Si necesitás factura, la emitimos agregando el 10,5% de IVA.'] },
+  { p: '¿Por qué cambia el precio en pesos?',
+    r: ['Los precios están en dólares, así que el valor en pesos cambia con el dólar.'] },
+  { p: '¿Hacen envíos?',
+    r: ['Sí, a todo el país. Lo mandamos por la paquetería que elijas: el costo y la demora dependen de cada una.',
+        'Te recomendamos Andreani.'] },
+  { p: '¿Puedo ir a verlos o retirar en persona?',
+    r: [`Sí. Estamos en ${DIRECCION}.`,
+        'Atendemos solo con cita previa: escribinos y coordinamos la visita sin problema.'],
+    link: ['Ver en Google Maps', MAPA] },
+  { p: '¿Los productos tienen garantía?',
+    r: ['Sí, todos. Cada producto tiene su propia garantía, así que consultanos por la del que te interesa.'] },
+  { p: '¿Cómo hago el pedido?',
+    r: ['Desde cualquier producto tocá “Consultar por WhatsApp”.',
+        'Si querés llevar varios, sumalos con el + y mandanos el pedido entero en un solo mensaje.'] },
+];
 
 /* ========================================================================== */
 
@@ -4199,6 +4315,12 @@ function pintarExtras(){
       </div>
     </section>`);
 
+  /* 7. Preguntas frecuentes. Lo que el cliente se pregunta antes de escribir:
+     cómo pagar, si hay envío, dónde estamos. Si lo encuentra acá, llega al
+     WhatsApp con la decisión más tomada. */
+  const faq = htmlPreguntas();
+  if(faq) partes.push(faq);
+
   caja.innerHTML = partes.join('');
 
   /* --- Que hace cada cosa --- */
@@ -4237,6 +4359,28 @@ function pintarExtras(){
     inp.addEventListener('keydown', e => { if(e.key === 'Enter') mandar(); });
     listo();
   }
+}
+
+/* Los textos salen de PREGUNTAS, en la configuración. Son desplegables nativos
+   (details/summary): se abren con el teclado y con lector de pantalla sin una
+   línea de JavaScript, y siguen andando aunque el script falle. */
+function htmlPreguntas(){
+  if(!PREGUNTAS.length) return '';
+  const items = PREGUNTAS.map(q => `
+    <details class="faq-item">
+      <summary>${esc(q.p)}</summary>
+      <div class="faq-r">
+        ${(q.r || []).map(t => `<p>${esc(t)}</p>`).join('')}
+        ${q.lista ? `<ul>${q.lista.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
+        ${q.link ? `<a href="${esc(q.link[1])}" target="_blank" rel="noopener">${esc(q.link[0])}</a>` : ''}
+      </div>
+    </details>`).join('');
+  return `<section class="faq" id="faq">
+    <div class="fp-cab"><h3>Preguntas frecuentes</h3></div>
+    <div class="faq-lista">${items}</div>
+    ${WHATSAPP ? `<p class="faq-mas">¿Te quedó otra duda?
+      <a href="${linkWA('Hola! Tengo una consulta')}" target="_blank" rel="noopener">Escribinos por WhatsApp</a></p>` : ''}
+  </section>`;
 }
 
 function pintarSeccion(cuenta){
@@ -4736,10 +4880,11 @@ function htmlDatosFicha(m, v){
   // dicen nada que el título no diga ya, y se llevaban las dos primeras filas.
   // La cotización tampoco es una característica del producto: se fue al pie,
   // con la nota del precio.
+  // La garantía salió de la tabla: ahora va con el envío y el retiro, debajo
+  // del botón, que es donde el cliente la busca antes de decidir.
   const filas = [
     ['Condición',   v.condicion],
-    ['Teclado',     idiomaTeclado(v.teclado)],
-    ['Garantía',    v.garantia]
+    ['Teclado',     idiomaTeclado(v.teclado)]
   ].filter(([,x]) => x);
 
   const lista = specs(v);
@@ -4767,7 +4912,30 @@ function htmlDatosFicha(m, v){
         : `<a class="pri cta cta-aviso" href="${linkWA(mensajeAviso(v, COLOR_FICHA))}" target="_blank" rel="noopener">${ICONO_WA}Avisame cuando entre</a>`) : ''}
       <div id="fi-pedido-caja">${htmlPedidoFicha(clave(v))}</div>
     </div>
+    ${htmlServicio(v)}
     <p class="fi-nota">Precio sujeto a cambio sin previo aviso. Consultá disponibilidad antes de comprar.${coti ? ' ' + esc(coti) : ''}</p>`;
+}
+
+/* Envío, retiro y garantía, justo debajo del botón. Es lo que el cliente se
+   pregunta en el momento de decidir: si no lo ve ahí, lo pregunta por WhatsApp
+   o se va sin preguntar. Los textos salen de SERVICIO, en la configuración. */
+const ICONOS_SERVICIO = {
+  envio:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.5h11v10h-11z"/><path d="M13.5 10h4.2l3.3 3.4v3.1h-7.5"/><circle cx="6.5" cy="17.6" r="1.9"/><circle cx="17" cy="17.6" r="1.9"/></svg>',
+  retiro:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>',
+  garantia: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"/><path d="M8.8 12.2l2.2 2.2 4.3-4.4"/></svg>',
+};
+
+function htmlServicio(v){
+  const lineas = Object.keys(ICONOS_SERVICIO).map(k => {
+    const t = SERVICIO[k];
+    if(!t || !t[0]) return '';
+    // Si la planilla trae la garantía de ESTE producto, manda sobre el texto
+    // general: es el dato real, el otro es solo la regla de la casa.
+    const detalle = (k === 'garantia' && v.garantia) ? v.garantia : t[1];
+    return `<li data-servicio="${k}">${ICONOS_SERVICIO[k]}
+      <span><b>${esc(t[0])}</b>${detalle ? `<i>${esc(detalle)}</i>` : ''}</span></li>`;
+  }).join('');
+  return lineas ? `<ul class="fi-servicio">${lineas}</ul>` : '';
 }
 
 /* El selector de versiones. Cada botón lleva SU precio: es lo que el cliente
@@ -4787,6 +4955,49 @@ function htmlOpcionesFicha(m, v){
     <span class="fi-ops-lbl">Opciones</span>
     <div class="fi-ops">${btns}</div>
   </div>`;
+}
+
+/* ---------- También te puede interesar ----------
+   Al pie de la ficha, productos del mismo rubro con el precio más parecido.
+   Sale de la planilla y de nada más: no hay ranking de ventas ni productos
+   puestos a mano, así que la lista es la misma para todos y se puede probar.
+
+   El precio se compara en proporción y no en dólares: 150 está tan lejos de
+   100 como 4.500 de 3.000. Restando, un cable de 20 quedaba "al lado" de uno
+   de 70, y una cámara de 3.000 "lejísimos" de una de 3.200. */
+const RELACIONADOS = 4;
+
+function relacionados(m, cuantos = RELACIONADOS){
+  const base = MODELOS.filter(x => x !== m && x.cat === m.cat &&
+                                   x.stock && x.imagen && x.precio > 0);
+  if(!base.length) return [];
+
+  const lejos = x => (m.precio > 0) ? Math.abs(Math.log(x.precio / m.precio)) : 0;
+  const orden = [...base].sort((a, b) => lejos(a) - lejos(b) || a.precio - b.precio);
+
+  /* Como mucho la mitad de una misma marca en la primera pasada. Sin esto, al
+     que mira un iPhone le salían cuatro iPhone, y compararlo con un Galaxy de
+     precio parecido es justamente lo que no hace solo. Si el rubro no tiene
+     otras marcas, se completa igual con las que haya. */
+  const tope = Math.ceil(cuantos / 2), out = [];
+  for(const x of orden){
+    if(out.length >= cuantos) break;
+    if(out.filter(y => y.marca === x.marca).length < tope) out.push(x);
+  }
+  for(const x of orden){
+    if(out.length >= cuantos) break;
+    if(!out.includes(x)) out.push(x);
+  }
+  return out;
+}
+
+function htmlRelacionados(m){
+  const lista = relacionados(m);
+  if(!lista.length) return '';
+  return `<section class="fi-rel" aria-label="También te puede interesar">
+    <h4>También te puede interesar</h4>
+    <div class="fi-rel-tira">${lista.map(htmlProdChico).join('')}</div>
+  </section>`;
 }
 
 // historia: true = suma al historial · false = reemplaza · null = no lo toca
@@ -4813,10 +5024,15 @@ function abrirFicha(k, historia = true){
         <div class="fi-foto">${htmlBadge(v, true)}${htmlFoto(v)}</div>
         <div class="fi-datos">${htmlDatosFicha(m, v)}</div>
       </div>
+      ${htmlRelacionados(m)}
     </div>`;
 
   cerrarFichaDOM = montarModal(d, () => { if(FICHA) cerrarFicha(); });
   d.querySelector('.fi-cerrar').onclick = () => cerrarFicha();
+  // Los relacionados van fuera de .fi-datos a propósito: dependen del modelo y
+  // no de la versión, así que cambiar de color o capacidad no los redibuja.
+  d.querySelectorAll('.fi-rel .pc').forEach(b =>
+    b.onclick = () => abrirFicha(b.dataset.key));
   engancharFicha(d, m, v);
   // Si el cliente ya había elegido un color, la ficha abre mostrando ese
   if(COLOR_FICHA) mostrarFotoColor(v, COLOR_FICHA, d);

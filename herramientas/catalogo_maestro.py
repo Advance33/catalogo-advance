@@ -763,14 +763,53 @@ def mapa_para_la_web(filas, idx=None):
             'firmas': {k: sorted(v) for k, v in firmas.items()}}
 
 
-def candidatos_foto(codigo, textos_de_hoy, idx):
+def variante_sin_color(codigo, nombre, idx, colores_conocidos=()):
+    """La variante de una fila que no trae color, deducida del nombre.
+
+    La misma regla que varianteSinColor() en index.html: si se cambia aca, se
+    cambia alla. Devuelve una variante SOLO si es inequivoca:
+      1. el nombre nombra una sola variante del producto ("Space Black" gana
+         sobre "Black" cuando estan las dos), o
+      2. no nombra ninguna, el producto tiene una sola variante viva, y el
+         nombre no menciona otro color.
+    El 15/09 eran 18 fichas con la foto cargada por color y la fila sin color,
+    que buscaban la foto sin variante y mostraban el logo.
+    """
+    if not codigo:
+        return ''
+    palabras = lambda s: ' ' + re.sub(r'[^a-z0-9]+', ' ', norm(s or '')).strip() + ' '
+    t = palabras(nombre)
+    tabla = {}
+    for f in idx['por_codigo'].get(codigo) or []:
+        if (f.get('Baja') or '').strip() or not (f.get('NumVar') or '').strip():
+            continue
+        for e in escrituras_de(f):
+            if len(palabras(e).strip()) >= 3:
+                tabla[e] = f['CODIGO_VAR']
+    hallados = [k for k in tabla if palabras(k) in t]
+    hallados = [k for k in hallados if not any(o != k and palabras(k) in palabras(o) for o in hallados)]
+    cods = {tabla[k] for k in hallados}
+    if cods:
+        return next(iter(cods)) if len(cods) == 1 else ''
+    vivas = set(tabla.values())
+    if len(vivas) != 1:
+        return ''
+    if any(len(palabras(c).strip()) >= 3 and palabras(c) in t for c in colores_conocidos):
+        return ''
+    return next(iter(vivas))
+
+
+def candidatos_foto(codigo, textos_de_hoy, idx, nombre='', colores_conocidos=()):
     """Los archivos que la web prueba para la portada de una fila, en orden:
-    la primera variante que vende hoy, después cualquier otra que venda, y al
-    final el producto sin variante."""
+    la primera variante que vende hoy, después cualquier otra que venda, el
+    producto sin variante, y si la fila no trae color, la variante que el
+    nombre deja clara (variante_sin_color)."""
     if not codigo:
         return []
     salida = [variante_de(codigo, t, idx) for t in (textos_de_hoy or [])]
     salida.append(variante_de(codigo, '', idx) or codigo)
+    if not textos_de_hoy:
+        salida.append(variante_sin_color(codigo, nombre, idx, colores_conocidos))
     vistos, out = set(), []
     for n in salida:
         if n and n not in vistos:

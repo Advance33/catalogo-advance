@@ -2328,6 +2328,38 @@ async function cargarIndiceFotos(){
   }catch(e){ return null; }
 }
 
+/* La variante de una fila que NO trae color. Pasa seguido: "Alfa 7 III Body
+   Black", "Magic Mouse 2 — White", "Kindle Touch 2024 ... — Black". El color
+   viene en el nombre, suelto, y la columna Color llega vacia. Las fotos de esos
+   productos estan guardadas POR COLOR (AT-0174-01.jpg), asi que sin esto la
+   portada buscaba AT-0174.jpg, no existia, y salia el logo: el 15/09 eran 18
+   fichas con la foto cargada y sin mostrarla.
+
+   Dos casos, y en los dos tiene que ser inequivoco:
+     1. El nombre nombra UNA sola variante del producto (con su escritura o
+        cualquiera de las anotadas). "Space Black" gana sobre "Black" si estan
+        las dos, porque la corta esta adentro de la larga.
+     2. El nombre no nombra ninguna, el producto tiene UNA sola variante, y el
+        nombre tampoco menciona OTRO color: si dijera "Space Gray" y la unica
+        foto fuera la Silver, seria la foto de otro color.
+   Si hay duda, vacio: sin foto es barato, con la de otro color no.
+   La misma regla esta en catalogo_maestro.variante_sin_color(). */
+function varianteSinColor(codigo, texto){
+  const tabla = (CATALOGO && CATALOGO.vars || {})[codigo];
+  if(!tabla) return '';
+  const palabras = s => ' ' + norm(s || '').replace(/[^a-z0-9]+/g, ' ').trim() + ' ';
+  const t = palabras(texto);
+  const claves = Object.keys(tabla).filter(k => palabras(k).trim().length >= 3);
+  let hallados = claves.filter(k => t.includes(palabras(k)));
+  hallados = hallados.filter(k => !hallados.some(o => o !== k && palabras(o).includes(palabras(k))));
+  const cods = [...new Set(hallados.map(k => tabla[k]))];
+  if(cods.length) return cods.length === 1 ? cods[0] : '';
+  const vivas = [...new Set(claves.map(k => tabla[k]))];
+  if(vivas.length !== 1) return '';
+  const otroColor = Object.keys(COLORES).some(c => palabras(c).trim().length >= 3 && t.includes(palabras(c)));
+  return otroColor ? '' : vivas[0];
+}
+
 /* Los nombres de archivo que le corresponden a una fila, en orden de
    preferencia. Primero por codigo del catalogo, que es la identidad de
    verdad; despues por SKU y por ID, que son los nombres de las dos etapas
@@ -2347,6 +2379,11 @@ function nombresDeFoto(f, colores, soloDeColor){
     const sinVar = archivoDeVariante(codigo, '');
     if(sinVar) pelados.push(sinVar);
     pelados.push(codigo);
+    // la fila no trae color: la variante que el nombre deja clara, si la hay
+    if(!colores.length){
+      const deducida = varianteSinColor(codigo, f.desc || f.modelo);
+      if(deducida) pelados.push(deducida);
+    }
   }
   for(const base of [f.sku, f.id].filter(Boolean)){
     for(const c of colores){
@@ -4879,6 +4916,19 @@ function nombreFicha(m, v){
   // Las palabras que ya son un chip ("128GB", "5G") no se repiten
   const chips = new Set(specs(v).map(norm));
   t = t.split(/\s+/).filter(p => p && !chips.has(norm(p))).join(' ');
+  /* Sacar un chip deja sueltos los separadores que lo rodeaban: "Kindle Touch
+     2024 | 16GB / Pantalla 6\" — Black" quedaba "Kindle Touch 2024 | / Pantalla —
+     Black", y "Poco Pad X1 — 11.2\" | 8/512GB" quedaba "Poco Pad X1 — | 8/512GB".
+     De dos separadores seguidos queda el primero, y ninguno abre ni cierra. */
+  const SEPARADOR = /^[—–\-|\/·•:,]+$/;
+  t = t.split(/\s+/).reduce((out, p) => {
+    if(!p) return out;
+    if(SEPARADOR.test(p) && (!out.length || SEPARADOR.test(out[out.length - 1]))) return out;
+    out.push(p);
+    return out;
+  }, []);
+  while(t.length && SEPARADOR.test(t[t.length - 1])) t.pop();
+  t = t.join(' ');
 
   return t.split(/\s+/).filter(Boolean).length >= 2 ? t.trim() : entero;
 }

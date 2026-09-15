@@ -229,7 +229,7 @@ def main():
 
     def candidatos(r):
         c = codigo_de.get(r['ID'].strip())
-        return CM.candidatos_foto(c, colores(r), cidx) if c else []
+        return CM.candidatos_foto(c, colores(r), cidx, r.get('Descripción completa') or '', conocidos) if c else []
 
     # ---- 1 y 2: lo que le falta a cada fila ----
     sin_base, sin_color = [], []

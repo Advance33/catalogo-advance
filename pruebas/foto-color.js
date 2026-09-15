@@ -143,4 +143,29 @@ async function correrPruebas(){
          conFoto.v.id + ' / ' + conFoto.color + (dice ? ' dice: ' + dice : ''));
     }
   }
+
+  /* ---- Filas SIN color cuyo nombre deja clara la variante ----
+     "Alfa 7 III Body Black", "Magic Mouse 2 — White": la columna Color llega
+     vacia y la foto esta guardada por color. El 15/09 eran 18 fichas con la foto
+     cargada mostrando el logo. Si varianteSinColor() encuentra la variante y su
+     foto existe, la portada tiene que tenerla. */
+  const sinColor = PRODUCTOS.filter(p => !p.color && p.codigo);
+  const perdidas = sinColor.filter(p => {
+    const v = varianteSinColor(p.codigo, p.modelo ? p.modelo + ' ' + p.desc : p.desc);
+    return v && INDICE_FOTOS && INDICE_FOTOS.has(v + EXT_FOTOS) && !p.imagen;
+  });
+  ok(!perdidas.length, 'una fila sin color cuyo nombre dice la variante muestra su foto',
+     perdidas.length ? perdidas.slice(0, 3).map(p => p.id + ' ' + p.desc).join(' | ')
+                     : sinColor.length + ' filas sin color');
+
+  /* Y no inventa: con dos variantes nombradas no elige ninguna. */
+  const cod = Object.keys((CATALOGO && CATALOGO.vars) || {}).find(c =>
+    new Set(Object.values(CATALOGO.vars[c])).size >= 2);
+  if(cod){
+    const nombres = Object.keys(CATALOGO.vars[cod]).filter(k => k.length >= 3);
+    const dos = nombres.filter((k, i) => nombres.findIndex(o => CATALOGO.vars[cod][o] !== CATALOGO.vars[cod][k]) >= 0);
+    const a = nombres[0], b = nombres.find(k => CATALOGO.vars[cod][k] !== CATALOGO.vars[cod][a]);
+    if(a && b && !a.includes(b) && !b.includes(a))
+      ok(varianteSinColor(cod, 'Producto ' + a + ' ' + b) === '', 'con dos variantes en el nombre no elige ninguna', cod + ': ' + a + ' / ' + b);
+  }
 }

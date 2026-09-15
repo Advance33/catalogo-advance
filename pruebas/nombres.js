@@ -88,4 +88,18 @@ function correrPruebas(){
   ok(!sucios.length, 'ningún producto muestra una nota de carga en el nombre',
      sucios.length ? sucios.slice(0, 3).map(v => v.id + ': ' + v.desc).join(' | ')
                    : todos.length + ' productos');
+
+  /* ---- 4. Titulos de la ficha sin separadores sueltos ----
+     Sacar los chips del titulo dejaba "Kindle Touch 2024 | / Pantalla — Black"
+     y "Poco Pad X1 — | 8/512GB". */
+  const SEP = /^[—–\-|\/·•:,]+$/;
+  const rotos = [];
+  MODELOS.forEach(m => (m.variantes || [m]).forEach(v => {
+    const w = nombreFicha(m, v).split(/\s+/).filter(Boolean);
+    if(SEP.test(w[0] || '') || SEP.test(w[w.length - 1] || '') ||
+       w.some((x, i) => i && SEP.test(x) && SEP.test(w[i - 1])))
+      rotos.push(v.id + ': ' + nombreFicha(m, v));
+  }));
+  ok(!rotos.length, 'ningún título de ficha queda con separadores sueltos',
+     rotos.slice(0, 3).join(' | ') || 'ninguno');
 }

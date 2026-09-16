@@ -20,3 +20,4 @@ d7de8ade0ae668ebbbaa8133623ae60e  2   # MACBOOK NEO 256GB | MACBOOK NEO 512GB Si
 73c1f94f3c249eaa02af603955fbd205  2   # MACBOOK PRO M5 PRO 16" | MACBOOK PRO M4 PRO 16" Space Black (mismo diseno)
 25962c152ae217db62974dd2a1c40485  2   # IPHONE 17 E | IPHONE 17E Black (el 17e de 256 y de 512: la memoria no se ve)
 71237030b1c9d21762ff21c855a709cc  2   # IPHONE 17 E | IPHONE 17E White (el 17e de 256 y de 512: la memoria no se ve)
+97a3aff5163edf20642b58e9212a3b1a  2   # APPLE WATCH ULTRA 3 | APPLE WATCH ULTRA 3 49MM: caja Natural con Anchor Blue Ocean Band, la -04 y la -05 ("Blue") son el mismo reloj

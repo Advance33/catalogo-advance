@@ -1597,8 +1597,20 @@
   }
   .activo::after{content:"×";color:var(--acento);font-size:15px;line-height:1}
   .activo:hover{border-color:var(--acento)}
+
+  /* Volver al menu de rubros. Sin esto, el que entraba a "Todo" con una marca
+     puesta no tenia como volver: "Todo" dejaba la marca y la portada no
+     aparecia nunca. Va arriba del nombre del rubro y en la barra fija. */
+  .volver-menu{
+    display:inline-flex;align-items:center;gap:8px;margin:0 0 12px;padding:8px 14px 8px 11px;border:0;border-radius:999px;
+    background:#F3EEFC;color:var(--ink);font:600 12.5px/1 var(--sans);cursor:pointer;white-space:nowrap;
+    transition:background .16s ease;
+  }
+  .volver-menu svg{width:15px;height:15px;flex:none;color:var(--acento)}
+  .volver-menu:hover{background:#E9DFFC}
+  .rf-card .volver-menu{margin:0;flex:none;padding:10px 13px 10px 11px}
   .marca-chip:focus-visible,.orden-btn:focus-visible,.orden-menu button:focus-visible,
-  .filtrar-btn:focus-visible,.activo:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  .filtrar-btn:focus-visible,.activo:focus-visible,.volver-menu:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
 
   /* ---------- Lo que queda fijo al bajar ----------
      Algo que está adentro de una tarjeta no puede quedarse pegado arriba cuando
@@ -1671,6 +1683,18 @@
     .rf-mini,.rf-tit{display:none}
     .rf-marcas{flex-basis:100%;flex-wrap:nowrap;overflow-x:auto;margin-inline:-20px;padding:1px 20px 3px;scrollbar-width:none}
     .rf-card .rc-acc{flex:1;margin-left:0;justify-content:space-between}
+    /* Las marcas ocupan su propia fila; el boton del menu va abajo, con los
+       otros dos, y sin texto. Aun asi "Ordenar: Marca y modelo" y "Filtrar"
+       ya llenaban los 320 px utiles: en esta barra, y solo aca, el nombre del
+       orden se corta con puntos antes que mandar los botones a otra fila. En
+       el encabezado de arriba se sigue leyendo entero. */
+    .rf-card .volver-menu{order:1;width:40px;height:40px;padding:0;justify-content:center}
+    .rf-card .volver-menu span{display:none}
+    .rf-card .rc-acc{order:2;flex:1 1 0;min-width:0}
+    .rf-card .orden-caja{min-width:0}
+    .rf-card .orden-btn{max-width:100%;min-width:0}
+    .rf-card .orden-btn b{min-width:0;overflow:hidden;text-overflow:ellipsis}
+    .rf-card .filtrar-btn{flex:none}
     .rf-activos{padding:0 20px 8px;background:rgba(244,239,253,.96)}
 
     .modal-filtros{place-items:end stretch}
@@ -4161,6 +4185,8 @@ const OPCIONES_ORDEN = [
   ['az', 'Nombre A-Z'], ['cat', 'Agrupado por rubro'], ['sheet', 'Orden de la planilla'],
 ];
 const TEXTO_APERTURA = { luminoso: 'Luminoso · f/2.8 o menos', cerrado: 'Estándar · más de f/2.8' };
+// Cuatro cuadrados: el mosaico de rubros de la portada, que es adonde lleva
+const ICONO_MENU = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/></svg>';
 const ICONO_FILTRAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>';
 
 const altoCinta = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--alto-cinta')) || 0;
@@ -4233,12 +4259,13 @@ function pintarCabecera(texto){
 
   cab.classList.toggle('sin-foto', !foto);
   cab.innerHTML = `
-    <div class="rc-tit"><h2>${esc(titulo)}</h2><p><span id="count">${esc(texto)}</span>${desde}</p></div>
+    <div class="rc-tit"><button type="button" class="volver-menu" data-menu>${ICONO_MENU}<span>Todos los rubros</span></button><h2>${esc(titulo)}</h2><p><span id="count">${esc(texto)}</span>${desde}</p></div>
     ${foto ? `<span class="rc-foto"><img src="${esc(foto)}" alt="" decoding="async" onerror="this.parentElement.remove()"></span>` : ''}
     <div class="rc-fila">${conMarcas ? `<div class="rc-marcas" role="group" aria-label="Marcas">${botonesMarca}</div>` : ''}${acciones}</div>
     ${cruces ? `<div class="rc-activos">${cruces}</div>` : ''}`;
 
   fijo.innerHTML = `<div class="rf-caja"><div class="rf-card">
+      <button type="button" class="volver-menu" data-menu aria-label="Volver a los rubros">${ICONO_MENU}<span>Rubros</span></button>
       ${foto ? `<span class="rf-mini"><img src="${esc(foto)}" alt="" decoding="async" onerror="this.parentElement.remove()"></span>` : ''}
       <div class="rf-tit"><h3>${esc(titulo)}</h3><p>${esc(texto)}${desde}</p></div>
       ${conMarcas ? `<div class="rf-marcas" role="group" aria-label="Marcas">${botonesMarca}</div>` : ''}${acciones}
@@ -4267,8 +4294,9 @@ function cerrarMenusOrden(){
 }
 
 function clicCabecera(e){
-  const t = e.target.closest('.marca-chip,[data-quitar],.orden-btn,[data-orden],.filtrar-btn');
+  const t = e.target.closest('.marca-chip,[data-quitar],.orden-btn,[data-orden],.filtrar-btn,[data-menu]');
   if(!t) return;
+  if(t.hasAttribute('data-menu')){ irAlMenu(); return; }
   if(t.classList.contains('marca-chip')){
     // Tocar la marca que ya estaba la saca: es el atajo para volver a ver el rubro entero
     const v = t.dataset.marca;
@@ -4397,6 +4425,25 @@ function verTodoElCatalogo(){
   if(verTodo) return;
   verTodo = true;
   pintar();
+}
+
+/* Volver al menu de rubros desde cualquier lado. Saca TODO lo elegido -rubro,
+   marca, busqueda y lo del panel-, porque la portada es "todavia no pedi nada":
+   con uno solo puesto, enPortada() da false y el boton no llevaria a ningun
+   lado. El orden elegido se respeta, que no es un filtro. Y baja hasta el
+   titulo "Elegi un rubro", para que se vea el menu y no el encabezado. */
+function irAlMenu(){
+  Object.assign(filtros, { q:'', cat:'', marca:'', rango:'', soloStock:false,
+                           montura:'', apertura:'', capacidad:'', ram:'' });
+  verTodo = false;
+  cerrarMenusOrden();
+  sincronizarControles();
+  cerrarBuscador();
+  escribirURL(true);
+  pintar();
+  const titulo = $('sec-titulo');
+  if(titulo) scrollTo({ top: Math.max(0, titulo.getBoundingClientRect().top + scrollY - altoCinta() - 16),
+                        behavior: quieto ? 'auto' : 'smooth' });
 }
 
 /* Los rubros con stock, repartidos en los mundos de la configuración.
@@ -4846,6 +4893,9 @@ function armarFiltros(){
     b.dataset.cat = val;
     b.setAttribute('aria-pressed', String(filtros.cat === val));
     b.onclick = () => {
+      // "Todo" es el menu. Antes solo sacaba el rubro: con una marca puesta
+      // quedabas en la grilla entera de esa marca y la portada no volvia.
+      if(!val){ rendirCintaAuto(); irAlMenu(); return; }
       filtros.cat = val;
       // Volver a "Todo" es volver a la portada: si no, el que se arrepiente de
       // un rubro cae en las 441 tarjetas, que es justo lo que evitamos.

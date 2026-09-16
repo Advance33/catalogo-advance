@@ -1,0 +1,113 @@
+CIERRE DEL 16/09 · maestro al día para sembrar y publicar la Landing
+
+0) ESTADO
+   La Landing publicada sigue siendo la del 15/09 (556 filas). Trabajamos
+   sobre la hoja Cami de hoy (585 filas): de las 44 filas sin código
+   quedan 4, y son dudas que tienen que decidir ustedes (punto 3).
+   Cuando publiquen, pásennos Meta generado_en y lo verificamos.
+
+1) ARCHIVO PARA SEMBRAR
+     C:\Users\pedro\Desktop\catalogo-maestro-2026-09-16.csv
+     715 filas · 532 productos · AT-0001 a AT-0534 · próximo AT-0535
+
+   Altas nuevas (5):
+     AT-0530  CEL-APP-087  iPhone 17e 512GB (Black/White)
+     AT-0531  CEL-APP-033  iPhone 17 Pro Max 2TB (Orange/Silver/Blue)
+     AT-0532  NB-APP-110   MacBook Pro M4 Pro 16" 24/512 Space Black
+     AT-0533  MON-MSI-016  Monitor MSI Pro MP22v 22" (sin variante)
+     AT-0534  LEN-NIK-025  Nikon Z 14-24mm F/2.8 S
+
+   Vínculos (35): IDs nuevos o renombrados de productos que ya estaban.
+     ACC-APP-070 AT-0001 · ACC-APP-077 AT-0008 · ACC-SON-023 AT-0051
+     CAM-CAN-038 AT-0154 · CAM-FUJ-009 AT-0159 · CEL-APP-007 AT-0076
+     CEL-APP-021 AT-0070 · CEL-APP-094 AT-0072 · CEL-APP-095 AT-0073
+     CEL-APP-096 AT-0075 · CEL-APP-097 AT-0501 · CON-NIN-002 AT-0133
+     ERD-AMZ-005 AT-0213 · GAF-RAY-051 AT-0418 · GAF-RAY-052 AT-0416
+     GAF-RAY-053 AT-0417 · GAF-RAY-054 AT-0414 · GAF-RAY-055 AT-0415
+     MON-SAM-006 AT-0426 · NB-APP-107  AT-0433 · NB-APP-108  AT-0434
+     NB-APP-109  AT-0434 · SW-APP-056  AT-0455 · SW-APP-063  AT-0449
+     SW-APP-064  AT-0450 · SW-APP-065  AT-0451 · SW-APP-066  AT-0452
+     SW-APP-067  AT-0456 · SW-GAR-005  AT-0458 · SW-GAR-006  AT-0459
+     TAB-APP-068 AT-0467 · TAB-APP-069 AT-0473 · TAB-SAM-035 AT-0488
+     TAB-SAM-037 AT-0495 · TAB-SAM-046 AT-0496
+
+   Variantes nuevas (6): AT-0432-03 Blush, AT-0434-04 Silver,
+     AT-0467-04 Pink, AT-0501-02 Silver, AT-0501-03 Blue, AT-0512-03 Black.
+
+   Todas las altas y variantes nuevas ya tienen foto, salvo AT-0533 (MSI).
+
+2) IDs REUSADOS: OJO
+   Hoy detectamos dos IDs que pasaron a ser OTRO producto:
+     NB-APP-107  el 15/09 era el MacBook Pro 16" usado (AT-0524, de baja);
+                 hoy es el MacBook Neo 8/256 Español -> AT-0433.
+     SW-APP-056  era el Ultra 3 con Milanese Loop (AT-0456); hoy es el
+                 Ultra 3 Black / Black Alpine Loop M -> AT-0455.
+                 Lo sacamos de AT-0456 (el Milanese Natural hoy es SW-APP-067).
+   Nuestro confirmar-altas ahora frena una decisión vieja si la fila de
+   hoy ya es otro producto. Pero lo sano es no reusar IDs: un ID que se
+   libera no debería volver a usarse. Si pasa, avísennos.
+
+   Hasta que publiquen, nuestra prueba "codigos" marca SW-APP-056 (la
+   Landing vieja dice AT-0456). Es esperable y se va con la Landing nueva.
+
+3) DUDAS: SIGUEN SIN CÓDIGO HASTA QUE DECIDAN
+   a) TAB-SAM-047  Galaxy Tab S10 FE 12/256GB (X620) (Silver) · USD 630
+      X620 es el código de Samsung de la Tab S10 FE+ (13,1"), pero el
+      nombre dice FE y el precio está cerca de la FE.
+        AT-0493  S10 FE Wifi 12/256 +Pencil      590
+        AT-0491  S10 FE Plus Wifi 12/256         780
+      ¿Cuál es? Si es otra, la damos de alta.
+   b) GAF-RAY-056  "Skyler 601/1M52 · 601/CH52": son DOS anteojos en una
+      fila (AT-0412 Transitions Green y AT-0413 Transitions Amethyst).
+      Una fila por anteojo, y cada una se reconoce sola.
+   c) GAF-RAY-049 y GAF-RAY-050 (Metaverse): siguen sin numerar, como
+      acordamos. No hace falta hacer nada.
+
+4) COLUMNA COLOR: CAMBIÓ DE FORMATO HOY (84 filas contra el 15/09)
+   La web usa esa columna para mostrar las opciones de color y para
+   elegir la foto. Tres casos:
+
+   a) YA RESUELTO DE NUESTRO LADO, no hace falta tocar nada:
+      "Black · English", "Midnight · S/M", "Natural – Blue Trail Loop M/L",
+      "White Keys · Inglés", etc. Quedaron anotados como otra forma de
+      escribir el mismo color.
+
+   b) HAY QUE CORREGIRLO: specs en Color. La web lo muestra como si fuera
+      un color. Poner "—" en Color y dejar el dato en el nombre o en Detalle:
+        MON-SAM-005 "165Hz · Curvo"       MON-SAM-006 "100Hz"
+        MON-MSI-016 "100Hz"               MON-DEL-006 "1920x1080 · 100Hz"
+        MON-DEL-013 y MON-DEL-014 "1920x1080 · VESA · DP · HDMI ..."
+        MON-MSI-013, MON-MSI-014, MON-MSI-015 "200Hz · Flat Rapid IPS ..."
+        MON-APP-004 "Standard Glass · Tilt & Height Adjustable Stand"
+        ACC-SON-023 "Consultar colores"
+
+   c) HAY QUE CORREGIRLO: "|" para separar opciones. La web separa
+      opciones sólo con "/", así que estas filas quedan sin foto:
+        SW-KIE-003  "Graphite Black · ... | Rose Gold · ... | Moonlit Silver · ..."
+                    -> separar con " / "
+        SW-APP-062  "Black – Black Ocean Band | Natural – Anchor Blue Ocean Band"
+                    -> son dos relojes distintos: una fila por reloj
+        GAF-RAY-056 (ver 3b)
+
+   Recordatorio de la convención: "/" separa opciones; "·" une las partes
+   de UN objeto (montura · lente, caja · malla). Hoy vinieron con "/" los
+   que son un solo objeto: GAF-RAY-039 "Shiny Black/Transitions Graph Green",
+   SW-GAR-004 "Black Ceramic/Black Peach", SW-GAR-003 y SW-GAR-006
+   "Titanio Gris/Blanco" / "Gris/Blanco". Los tomamos igual, pero en la
+   web salen como dos opciones.
+
+5) PARA CONFIRMAR
+   a) ACC-APP-070 ahora dice "AirTag 2ª Gen (Pack x4)". Lo vinculamos a
+      AT-0001 porque el 15/09 confirmaron que es el mismo x4. Si de verdad
+      es la segunda generación, es otro producto: avísennos y lo separamos.
+   b) MON-MSI-016 "MSI Pro MP22v": ese modelo no existe tal cual en MSI.
+      Lo más parecido es el PRO MP225V (21,45", 100 Hz). ¿Cuál es? Sin
+      eso no cargamos la foto, para no mostrar otro monitor.
+   c) SW-APP-039 "APPLE WATCH S11 42MM (Space Gray)" sin stock desde el
+      14/09: sigue dando un título de tarjeta raro. Si no vuelve, conviene
+      sacarla.
+
+6) FOTOS DE HOY (ya subidas al sitio)
+   - Las Blue y Orange del iPhone 17 Pro y del 17 Pro Max 1TB se rehicieron
+     desde Apple, con el modelo exacto y sin la franja gris.
+   - Falta sólo la del Canon RF 15-35mm (LEN-CAN-058), además del MSI.

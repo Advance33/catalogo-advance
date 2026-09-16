@@ -51,7 +51,10 @@ async function correrPruebas(){
   let revisados = 0, repetidos = [];
   for(const m of conColor.slice(0, 40)){
     for(const v of (m.variantes || [m])){
-      const cols = (v.color || '').split('/').map(s => s.trim()).filter(Boolean);
+      // Con partirColores, como la ficha: "Starlight · S/M" es UN color con su
+      // talle. Partido a mano en la barra, la prueba buscaba un puntito
+      // "Starlight · S" que la ficha no dibuja, y fallaba sin que nada anduviera mal.
+      const cols = partirColores(v.color || '');
       if(cols.length < 2 || !v.id) continue;
       const vistos = new Map();
       for(const c of cols){
@@ -79,7 +82,7 @@ async function correrPruebas(){
   let caso = null;
   for(const m of conColor){
     for(const v of (m.variantes || [m])){
-      const cols = (v.color || '').split('/').map(s => s.trim()).filter(Boolean);
+      const cols = partirColores(v.color || '');
       if(cols.length < 2 || !v.id || !v.imagen) continue;
       for(const c of cols){
         const urls = fotosDeColor(v, c);
@@ -117,7 +120,7 @@ async function correrPruebas(){
   let conFoto = null;
   for(const m of conColor){
     for(const v of (m.variantes || [m])){
-      const cols = (v.color || '').split('/').map(s => s.trim()).filter(Boolean);
+      const cols = partirColores(v.color || '');
       if(cols.length < 2 || !v.id) continue;
       for(const c of cols){
         for(const u of fotosDeColor(v, c)) if(await existe(u)) { conFoto = { v, color: c }; break; }

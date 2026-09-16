@@ -81,16 +81,40 @@ def leer_revisadas():
 
 
 def bajar():
-    url = (f'https://docs.google.com/spreadsheets/d/{SHEET_ID}'
-           f'/gviz/tq?tqx=out:csv&headers=1&gid={SHEET_GID}')
-    with urllib.request.urlopen(url, timeout=60) as r:
-        txt = r.read().decode('utf-8')
-    if txt.lstrip().lower().startswith(('<!doctype', '<html')):
-        raise SystemExit('ERROR: la planilla no es publica (Google devolvio HTML)')
-    filas = [x for x in csv.DictReader(io.StringIO(txt)) if x.get('ID', '').strip()]
-    if not filas:
+    """La Landing entera. Se bajan las dos fuentes y se usa la que trae mas.
+
+    gviz respeta los filtros que alguien deja puestos en la hoja y export no.
+    El 16/09 quedo un filtro en la Landing y gviz trajo 55 filas de 583: este
+    chequeo informo 615 fotos "huerfanas" y reescribio fotos/indice.json con
+    esa planilla recortada. La web ya se cuidaba de eso (bajarCSV en
+    index.html); este script no.
+    """
+    base = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}'
+    fuentes = [f'{base}/export?format=csv&gid={SHEET_GID}',
+               f'{base}/gviz/tq?tqx=out:csv&headers=1&gid={SHEET_GID}']
+    mejor, cuantas, error = None, [], None
+    for url in fuentes:
+        try:
+            with urllib.request.urlopen(url, timeout=60) as r:
+                txt = r.read().decode('utf-8')
+        except Exception as e:
+            error = e
+            continue
+        if txt.lstrip().lower().startswith(('<!doctype', '<html')):
+            raise SystemExit('ERROR: la planilla no es publica (Google devolvio HTML)')
+        filas = [x for x in csv.DictReader(io.StringIO(txt)) if x.get('ID', '').strip()]
+        cuantas.append(len(filas))
+        if mejor is None or len(filas) > len(mejor):
+            mejor = filas
+    if mejor is None:
+        raise SystemExit('ERROR: no se pudo bajar la planilla (%s)' % error)
+    if not mejor:
         raise SystemExit('ERROR: la planilla vino vacia')
-    return filas
+    if len(set(cuantas)) > 1:
+        print('AVISO: las dos fuentes no traen lo mismo (%s filas). Casi siempre es un'
+              ' filtro puesto en la hoja Landing: se usa la que trae mas.'
+              % ' y '.join(map(str, cuantas)))
+    return mejor
 
 
 def main():

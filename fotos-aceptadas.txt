@@ -15,3 +15,6 @@ a1946c42773c1b22e9e9c9d03392a37e  2   # 56 F/1.4 DC DN CONT SONY E | 56MM F/1.4 
 57f81f74c5dfb5e636a3e709aab2710e  2   # IPAD 11 A16 | IPAD 11" A16
 56acf9f2a14130b4d7457ae94e948c46  2   # IPAD PRO M4 11" | IPAD PRO M5 11"
 846029a8ce6ac4e256e4e1888f5c7c0f  3   # IPAD AIR 13" M3 | IPAD AIR M4 13" (misma foto oficial de Apple: el diseno es identico)
+cbd80e88dc71aa95ef931965f2e9bcbf  2   # MACBOOK NEO 256GB | MACBOOK NEO 512GB Blush (la misma maquina: la memoria no se ve)
+d7de8ade0ae668ebbbaa8133623ae60e  2   # MACBOOK NEO 256GB | MACBOOK NEO 512GB Silver (la misma maquina: la memoria no se ve)
+73c1f94f3c249eaa02af603955fbd205  2   # MACBOOK PRO M5 PRO 16" | MACBOOK PRO M4 PRO 16" Space Black (mismo diseno)

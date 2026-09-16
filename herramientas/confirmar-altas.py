@@ -41,6 +41,7 @@ import fotos_sku as FS                        # noqa: E402
 import validar                                # noqa: E402
 
 APLICAR = '--aplicar' in sys.argv
+HOY = __import__('datetime').date.today().isoformat()
 DECISIONES = os.path.join(AQUI, 'altas-decididas.csv')
 
 
@@ -68,6 +69,15 @@ def main():
 
     with io.open(DECISIONES, encoding='utf-8', newline='') as fh:
         decisiones = list(csv.DictReader(fh))
+    # Si un ID se decidio dos veces, vale la ULTIMA, igual que en
+    # altas-catalogo.py. El 16/09 NB-APP-107 tenia un NUEVO del 15/09 (era otro
+    # producto) y un vinculo de hoy: sin esto se listaban las dos.
+    ultima = {}
+    for d in decisiones:
+        idf = (d.get('ID') or '').strip()
+        if idf and (d.get('Decision') or '').strip():
+            ultima[idf] = d
+    leidas, decisiones = len(decisiones), list(ultima.values())
 
     maestro = CM.leer()
     idx = CM.indexar(maestro)
@@ -100,6 +110,24 @@ def main():
             # saco la fila. En los dos casos no hay nada que anotar.
             continue
         nombre = (fila.get('Descripción completa') or '').strip()
+        # Una decision de OTRO dia solo se vuelve a aplicar si la fila de hoy
+        # sigue siendo ese producto. El proveedor reusa IDs: el 16/09 NB-APP-107
+        # paso de ser un MacBook Pro 16" usado a un MacBook Neo, y SW-APP-056 de
+        # un Ultra 3 con Milanese Loop a uno con Alpine Loop. Sin esto, la
+        # decision vieja le anotaba al producto viejo el nombre y el ID de otro,
+        # y desde ese dia las dos filas se confundian. La prueba es la firma
+        # dura: si ninguno de los nombres conocidos del producto la comparte, no
+        # se anota nada y se avisa. Las decisiones de HOY no pasan por aca: son
+        # justamente las que alguien miro con el nombre de hoy delante.
+        fecha = (d.get('Fecha') or '').strip()
+        if fecha and fecha != HOY:
+            firma_hoy = CM.firma_dura(nombre)
+            conocidas = {CM.firma_dura(n) for m in destino for n in CM.nombres_de(m)}
+            if firma_hoy not in conocidas:
+                quejas.append('%s: la decision del %s dice %s, pero hoy la fila es "%s": '
+                              'parece un ID reusado. No se anota; decidir de nuevo'
+                              % (idf, fecha, cual, nombre[:48]))
+                continue
         sku = FS.sku_de(fila)
         cambios = []
         for m in destino:
@@ -117,7 +145,7 @@ def main():
     print('CONFIRMAR ALTAS')
     print('=' * 74)
     print('%d decisiones leidas   ·   %d vinculos para anotar   ·   %d marcadas NUEVO'
-          % (len(decisiones), len(hechos), len(nuevos)))
+          % (leidas, len(hechos), len(nuevos)))
     print()
     if hechos:
         print('--- vinculos ---')

@@ -137,6 +137,10 @@ def para_buscar(marca, producto, variante):
                     for w in palabras]
     llano = lambda s: set(re.sub(r'[^a-z0-9]+', ' ', CM.norm(s)).split())
     if marca and not ' '.join(palabras).lower().replace('-', ' ').startswith(marca.lower().replace('-', ' ')):
+        # "Monitor 22 MSI Pro MP22v" -> "MSI Monitor 22 Pro MP22v": la marca
+        # que venia en el medio se saca, para no buscar "MSI ... MSI".
+        if ' ' not in marca.strip():
+            palabras = [w for w in palabras if w.lower() != marca.strip().lower()]
         palabras = [marca] + palabras
     color = re.sub(r'\s*[·|]\s*', ' ', variante or '').strip()
     if color and not llano(color) <= llano(' '.join(palabras)):
@@ -164,7 +168,16 @@ def main():
     maestro = CM.leer()
     idx = CM.indexar(maestro)
     try:
-        filas = validar.bajar_csv()
+        # Con  --planilla <csv>  se arma sobre la hoja Cami del dia, antes de
+        # que el sheet publique: asi las fotos de las altas se piden el mismo
+        # dia y no al siguiente, igual que en altas-catalogo.py.
+        if '--planilla' in sys.argv:
+            import csv
+            ruta = sys.argv[sys.argv.index('--planilla') + 1]
+            with io.open(ruta, encoding='utf-8', newline='') as fh:
+                filas = list(csv.DictReader(fh))
+        else:
+            filas = validar.bajar_csv()
     except Exception as e:
         print('No se pudo bajar la planilla: %s' % e)
         return 2

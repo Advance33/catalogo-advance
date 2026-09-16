@@ -1,0 +1,74 @@
+VERIFICACIÓN DE LA LANDING DEL 16/09 (Meta 15:42) · qué quedó bien y qué falta
+
+0) QUEDÓ BIEN
+   - 583 filas, 0 graves. Las 5 altas salen con código y con foto.
+   - Monitores, Studio Display y Joystick con Color "—". Kieslect con " / ".
+     SW-APP-039 afuera. GAF-RAY-039, SW-GAR-003 y SW-GAR-004 ya con "·".
+   - Sus respuestas, aplicadas:
+       TAB-SAM-047 -> AT-0493 (S10 FE 12/256), con la variante nueva
+                      AT-0493-02 Silver y su foto.
+       AirTag      -> sigue en AT-0001.
+       MSI         -> PRO MP225V, ya tiene foto.
+
+1) ARCHIVO PARA SEMBRAR (cambió después del de la mañana)
+     C:\Users\pedro\Desktop\catalogo-maestro-2026-09-16-b.csv
+     717 filas · 532 productos · AT-0001 a AT-0534 · próximo AT-0535
+   Nuevo: AT-0493-02 Silver (TAB-SAM-047) y AT-0455-06 Black Ocean Band.
+
+2) QUEDÓ UN FILTRO PUESTO EN LA HOJA LANDING
+   gviz devuelve 55 filas de 583 (empieza en NB-APP-001: parece un filtro
+   por Notebook). Es lo mismo que pasó el 15/09 con los iPhone. La web se
+   defiende (compara con Meta y baja la otra fuente), pero tarda el doble en
+   cargar. Sáquenlo.
+
+3) SW-APP-056 SIGUE CON AT-0456: HOY SALE SIN FOTO
+   Ya vieron la causa (el vínculo local). Hasta la próxima corrida esa ficha
+   no tiene foto. Si pueden, corrijan a mano CODIGO = AT-0455.
+
+4) CODIGO_VAR SE CORTA EN EL TALLE
+   Las filas con "color · talle" salen con CODIGO_VAR "/" (dos vacíos). La
+   barra antes de S/M, M/L o S/L no separa colores: es la misma regla que
+   usan partirColores() de la web y validar.py. Tiene que salir un código
+   por color:
+     SW-APP-004  Starlight · S/M                     AT-0451-02
+     SW-APP-005  Midnight · M/L                      AT-0452-01
+     SW-APP-008  Rose Gold · S/M                     AT-0453-04
+     SW-APP-014  Natural – Blue Trail Loop M/L       AT-0455-03
+     SW-APP-045  Jet Black/Space Gray/Silver/Rose Gold · M/L
+                 AT-0454-01/AT-0454-03/AT-0454-02/AT-0454-04
+     SW-APP-063  Midnight · Sport Band M/L           AT-0449-01
+     SW-APP-064  Midnight · Sport Band S/L           AT-0450-01
+     SW-APP-065  Midnight · S/M                      AT-0451-01
+     SW-APP-066  Starlight · M/L                     AT-0452-02
+   Hoy la web las muestra bien porque resuelve por el catálogo, pero la
+   columna tiene que venir completa.
+
+5) ULTRA 3 (SW-APP-056 y SW-APP-062): PARTIR LAS FILAS ES DE SU LADO
+   Nosotros no escribimos en la planilla. De nuestro lado ya están las tres
+   variantes, así que cada fila nueva se va a reconocer sola:
+     Black · Black Alpine Loop M         AT-0455-02
+     Black · Black Ocean Band            AT-0455-06  (nueva; falta la foto)
+     Natural · Anchor Blue Ocean Band    AT-0455-04
+   Hoy "Black Ocean Band" está en las dos filas a dos precios (805 y 795).
+   Al partirlas, un precio por reloj.
+
+6) SW-GAR-006 "Gris/Blanco" ES UN SOLO RELOJ
+   Caja titanio gris con malla blanca, la foto de AT-0459-01. Con "/" la web
+   ofrece dos colores. Escríbanlo "Gris · Blanco", como en SW-GAR-003.
+
+7) RAY-BAN: FILAS VIEJAS SIN STOCK AL LADO DE LAS NUEVAS
+   Es el mismo anteojo con el mismo código en dos filas con nombres
+   distintos. La tarjeta no encuentra un título común y muestra el nombre
+   entero de una sola fila.
+     AT-0417  GAF-RAY-036 (sin stock)      /  GAF-RAY-053
+     AT-0418  GAF-RAY-038 (sin stock)      /  GAF-RAY-051
+     AT-0415  GAF-RAY-010 (sin stock)      /  GAF-RAY-055
+     AT-0414  GAF-RAY-040 (sin stock)      /  GAF-RAY-054
+     AT-0416  GAF-RAY-044 570 (sin stock)  /  GAF-RAY-052 595
+   Si no vuelven, saquen las filas sin stock.
+
+   GAF-RAY-056 sigue siendo DOS anteojos en una fila (601/1M52 = AT-0412 y
+   601/CH52 = AT-0413), con sus filas viejas GAF-RAY-041 y 042 sin stock.
+   Una fila por anteojo.
+
+   GAF-RAY-046 (Blayzer Trap Dark Love) salió sin CODIGO: es AT-0529-01.

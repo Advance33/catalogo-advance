@@ -1908,6 +1908,26 @@ const RECARGO_FIJO = 20;
 //    El nombre exacto lo arma herramientas/fotos_sku.py; los nombres
 //    viejos por ID (CEL-APP-004.jpg) se siguen entendiendo.
 const CARPETA_FOTOS = 'fotos/';
+/* La copia de 400 px, para todo lo que se ve chico: la grilla, los rubros de
+   la portada, la vidriera, las novedades y lo mirado. Vive al lado de la
+   grande, con el mismo nombre (fotos/mini/AT-0065-02.jpg), así la dirección
+   sale de la otra sin consultar ninguna lista; la arma herramientas/
+   miniaturas.py y se rehace sola al publicar.
+
+   Medido el 17/09/2026 en un celular de 390 px: la portada bajaba 73 fotos
+   de 900x900, 2,1 MB, para mostrarlas del tamaño de una estampilla. Las
+   chicas pesan 12 KB contra 64 KB. La grande queda para la ficha, que es
+   donde el cliente mira el producto de cerca. */
+const CARPETA_MINIS = CARPETA_FOTOS + 'mini/';
+function fotoChica(u){
+  if(!u) return u;
+  // Las de Google (las de respaldo que manda ADVAPP) se piden chicas por
+  // dirección: lh3 devuelve el ancho que se le pida.
+  if(/googleusercontent\.com/.test(u)) return u.replace(/=[-\w]+$/, '') + '=w400';
+  const i = u.lastIndexOf(CARPETA_FOTOS);
+  if(i === -1 || u.includes(CARPETA_MINIS)) return u;
+  return u.slice(0, i) + CARPETA_MINIS + u.slice(i + CARPETA_FOTOS.length);
+}
 const EXT_FOTOS = '.jpg';
 
 // ⚠️ Solo aplica si la planilla trae "Costo USD" en vez de "Precio USD".
@@ -2572,10 +2592,15 @@ async function bajarAdvapp(){
   const reloj = setTimeout(() => corte.abort(), ADVAPP_ESPERA_MS);
   let d;
   try{
-    // Sin el &_= que lleva la planilla: Vercel lo cachea 60 s, y un parametro
-    // distinto en cada visita se saltearia ese cache. 'no-store' evita la copia
-    // del navegador, que es la que podria quedar vieja.
-    const r = await fetch(ADVAPP_URL, { cache: 'no-store', signal: corte.signal });
+    /* Sin el &_= que lleva la planilla: Vercel lo cachea 60 s, y un parametro
+       distinto en cada visita se saltearia ese cache.
+
+       'no-cache' y no 'no-store': el navegador guarda la copia pero pregunta
+       siempre si cambio. Cuando no cambio -que es lo normal entre los
+       refrescos de cada 5 minutos- el servidor contesta 304 sin cuerpo y no
+       se bajan los 65 KB de nuevo. Los datos nunca quedan viejos: cuando
+       cambian, viene el JSON entero. */
+    const r = await fetch(ADVAPP_URL, { cache: 'no-cache', signal: corte.signal });
     if(!r.ok) throw new Error('HTTP ' + r.status);
     d = await r.json();
   }catch(e){
@@ -2613,8 +2638,17 @@ let FUENTE = null;
    escrito, y contra la planilla solo con margen: comparado exacto contra
    Meta, la web creeria que vino cortado (trae menos a proposito) y volveria
    siempre a la planilla. */
+/* Cuantas filas trajo la ultima carga buena. Es la vara para darse cuenta de
+   que ADVAPP vino cortado sin tener que preguntarle a la planilla en cada
+   visita: la hoja Meta es un pedido a Google que tarda y casi siempre
+   confirma lo que ya sabemos. Solo se la consulta cuando algo no cierra. */
+const ULTIMAS_FILAS = 'advtecno.filas';
+const filasDeAyer = () => { try{ return Number(localStorage.getItem(ULTIMAS_FILAS)) || 0; }catch(e){ return 0; } };
+const guardarFilas = n => { try{ localStorage.setItem(ULTIMAS_FILAS, String(n)); }catch(e){} };
+
 async function bajarDatos(){
-  const metaP = metaDelCiclo();       // se pide ya: la usan las dos fuentes
+  let metaP = null;                   // se pide recien cuando hace falta
+  const meta = () => (metaP = metaP || metaDelCiclo());
   let motivo = '';
   if(ADVAPP_URL){
     try{
@@ -2622,10 +2656,16 @@ async function bajarDatos(){
       const n = a.filas.length - 1;
       if(a.manifiesto.filas && n < a.manifiesto.filas)
         throw new Error(`trajo ${n} de las ${a.manifiesto.filas} filas que declara`);
-      const planilla = Number((await metaP)?.filas) || 0;
-      if(planilla && n < planilla * ADVAPP_MINIMO)
-        throw new Error(`trajo ${n} filas y la planilla tiene ${planilla} ` +
-                        `(menos del ${Math.round(ADVAPP_MINIMO * 100)} %)`);
+      /* Contra la planilla, y solo si trae menos que la ultima vez: ahi si
+         vale la pena preguntarle a Meta cuantas filas hay de verdad. */
+      const antes = filasDeAyer();
+      if(antes && n < antes * ADVAPP_MINIMO){
+        const planilla = Number((await meta())?.filas) || 0;
+        if(planilla && n < planilla * ADVAPP_MINIMO)
+          throw new Error(`trajo ${n} filas y la planilla tiene ${planilla} ` +
+                          `(menos del ${Math.round(ADVAPP_MINIMO * 100)} %)`);
+      }
+      guardarFilas(n);
       return a;
     }catch(e){
       motivo = (e && e.message) || String(e);
@@ -2633,7 +2673,7 @@ async function bajarDatos(){
     }
   }
   const txt = await bajarCSV();
-  return { fuente: 'planilla', manifiesto: await metaP, motivo, filas: parseCSV(txt) };
+  return { fuente: 'planilla', manifiesto: await meta(), motivo, filas: parseCSV(txt) };
 }
 
 /* Notas de carga que se cuelan en el nombre del producto. El cliente las lee
@@ -2825,6 +2865,11 @@ async function cargar(){
       p.imagen = urlFoto(p.imagen) ||
                  fotoDeCarpeta(p, colorDeLaFila(p.color, p.desc || p.modelo)) ||
                  fotoDeAdvapp(p, colorDeLaFila(p.color, p.desc || p.modelo));
+      /* `imagen` es la chica, que es la que usa TODO lo que se ve chico sin
+         tener que acordarse de pedirla; la grande se guarda al lado y la pide
+         la ficha. Así un bloque nuevo de la portada nace liviano. */
+      p.imagenGrande = p.imagen;
+      p.imagen = fotoChica(p.imagen);
       return p;
     })
     // Se deducen una vez al cargar, no en cada tecla del buscador: son dos
@@ -3183,10 +3228,12 @@ function specs(p){
 // La <img> con su reemplazo por si el archivo no existe. Si el link está roto
 // se cambia SOLO la <img>: usar parentNode.innerHTML borraría también el badge
 // de stock, que es su hermano.
-function htmlFoto(p, clase){
+function htmlFoto(p, clase, grande){
   const sinFoto = `<div class="sinfoto"><b>${esc(p.marca || 'Sin foto')}</b><i>sin imagen</i></div>`;
   if(!p.imagen) return sinFoto;
-  return `<img src="${esc(p.imagen)}" alt="${esc(nombreConMarca(p))}" ${clase || ''} decoding="async"
+  // La chica alcanza en todos lados menos en la ficha, que la muestra grande.
+  const src = (grande && p.imagenGrande) || p.imagen;
+  return `<img src="${esc(src)}" alt="${esc(nombreConMarca(p))}" ${clase || ''} decoding="async"
                onload="this.classList.add('ok')"
                onerror="this.parentElement.classList.add('vacia'); this.outerHTML=this.dataset.alt"
                data-alt="${esc(sinFoto)}">`;
@@ -3528,7 +3575,9 @@ function mostrarFotoColor(p, color, d){
   };
 
   const volver = () => {
-    if(p.imagen && img.getAttribute('src') !== p.imagen) img.src = p.imagen;
+    // A la principal del producto, en grande: esto es la ficha.
+    const suya = p.imagenGrande || p.imagen;
+    if(suya && img.getAttribute('src') !== suya) img.src = suya;
     avisar(true);
   };
   const urls = fotosDeColor(p, color);
@@ -5578,7 +5627,7 @@ function abrirFicha(k, historia = true){
     <div class="caja" role="dialog" aria-modal="true" aria-label="${esc(m.desc)}">
       <button class="fi-cerrar" type="button" aria-label="Cerrar">&times;</button>
       <div class="fi-cols">
-        <div class="fi-foto">${htmlBadge(v, true)}${htmlFoto(v)}</div>
+        <div class="fi-foto">${htmlBadge(v, true)}${htmlFoto(v, '', true)}</div>
         <div class="fi-datos">${htmlDatosFicha(m, v)}</div>
       </div>
       ${htmlRelacionados(m)}
@@ -5645,8 +5694,9 @@ function pintarFotoFicha(d, v){
   const cont = d.querySelector('.fi-foto');
   if(!cont) return;
   const img = cont.querySelector('img');
-  if(!img || !v.imagen){ cont.innerHTML = htmlBadge(v, true) + htmlFoto(v); return; }
-  if(img.getAttribute('src') !== v.imagen){ img.classList.remove('ok'); img.src = v.imagen; }
+  const grande = v.imagenGrande || v.imagen;
+  if(!img || !v.imagen){ cont.innerHTML = htmlBadge(v, true) + htmlFoto(v, '', true); return; }
+  if(img.getAttribute('src') !== grande){ img.classList.remove('ok'); img.src = grande; }
   const badge = cont.querySelector('.badge');
   if(badge) badge.outerHTML = htmlBadge(v, true);
   else cont.insertAdjacentHTML('afterbegin', htmlBadge(v, true));

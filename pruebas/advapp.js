@@ -69,7 +69,21 @@ async function correrPruebas(){
   else
     ok(sello !== 'Actualizado hoy', 'sin verificado_hoy de ADVAPP el sello no dice "hoy"', sello);
 
-  /* ---- 5. Menos filas que la planilla NO es estar cortado ---- */
+  /* ---- 5. Con ADVAPP bien, no se le pide nada a la planilla ----
+     La hoja Meta es un pedido a Google que tarda y casi siempre confirma lo que
+     ya sabemos. Se consulta sólo si algo no cierra (ver bajarDatos). */
+  {
+    const real2 = window.fetch;
+    let aGoogle = 0;
+    window.fetch = (url, opts) => { if(/docs\.google/.test(String(url))) aGoogle++; return real2(url, opts); };
+    try{
+      const d = await bajarDatos();
+      ok(d.fuente === 'advapp' && aGoogle === 0,
+         'con ADVAPP andando no se pide ni la planilla ni su hoja Meta', d.fuente + ' · ' + aGoogle + ' pedidos a Google');
+    }finally{ window.fetch = real2; }
+  }
+
+  /* ---- 6. Menos filas que la planilla NO es estar cortado ---- */
   if(filasMeta){
     const n = Math.ceil(filasMeta * 0.85);
     const d = await conAdvapp(() => respuesta({ ...real, filas: n, productos: real.productos.slice(0, n) }), bajarDatos);

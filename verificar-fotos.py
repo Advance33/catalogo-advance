@@ -130,6 +130,17 @@ def main():
     pinta = validar.pinta
     colores = lambda r: FS.colores_de_la_fila(r, pinta, conocidos)
 
+    # Las copias chicas de fotos/mini/, que son las que usa la grilla y la
+    # portada. Se rehacen aca y no a mano: una foto nueva o corregida tiene que
+    # llevarse su chica en la misma publicacion, o la web muestra la vieja.
+    try:
+        import miniaturas
+        hechas, borradas, _ = miniaturas.actualizar()
+        if hechas or borradas:
+            print('Fotos chicas: %d nuevas, %d borradas' % (hechas, borradas))
+    except Exception as e:
+        print('AVISO: no se pudieron rehacer las fotos chicas (%s)' % e)
+
     files = [f for f in os.listdir(FOTOS) if f.lower().endswith(FS.EXT)]
     bases = {os.path.splitext(f)[0] for f in files}
 

@@ -1918,6 +1918,17 @@ const MARGEN_PCT = null;
 // Cada cuántos minutos se refresca solo el catálogo
 const REFRESCO_MIN = 5;
 
+// ---------- MEDICIÓN ----------
+//
+// A dónde se mandan los eventos: qué se busca, qué ficha se abre, desde
+// dónde tocan WhatsApp. Es un endpoint propio, de ADVAPP: los datos quedan
+// nuestros y se pueden cruzar con el catálogo. El formato está escrito en
+// MEDICION-ADVAPP.txt, al lado de este archivo.
+//
+// VACÍO = no se mide nada y no sale ningún pedido. Así queda hasta que el
+// endpoint exista; encenderlo es cambiar esta línea y publicar.
+let ANALITICA_URL = '';
+
 // ---------- ENVÍO, RETIRO Y PREGUNTAS FRECUENTES ----------
 //
 // Estos textos son del negocio: salen de lo que definiste para la tienda y se
@@ -6580,6 +6591,183 @@ addEventListener('scroll', () => { if(!fijoPendiente) fijoPendiente = requestAni
   medir();
   if('ResizeObserver' in window) new ResizeObserver(medir).observe(cinta);
 }
+
+/* ==========================================================================
+   MEDICIÓN — qué busca, qué mira y qué toca el cliente
+
+   Sirve para saber qué productos empujar y dónde se van los clientes. No hay
+   nada de terceros: los eventos van a un endpoint de ADVAPP y quedan en su
+   base, así se pueden cruzar con el catálogo (qué se mira contra qué se
+   vende). Tampoco hay cookies: la visita se identifica con un número al azar
+   que vive en sessionStorage y se pierde al cerrar la pestaña.
+
+   Nunca puede romper la página: si algo falla acá, se descarta en silencio.
+   Con ANALITICA_URL vacío no se junta ni se manda nada, y si el navegador
+   pide no ser seguido (Do Not Track) tampoco.
+   ========================================================================== */
+const ANALITICA = (() => {
+  const cola = [];
+  let visita = '', reloj = 0;
+  const apagada = () => !ANALITICA_URL ||
+    navigator.doNotTrack === '1' || window.doNotTrack === '1';
+
+  const alAzar = () => {
+    try{ return crypto.randomUUID(); }catch(e){ return String(Math.random()).slice(2) + Date.now().toString(36); }
+  };
+  const idVisita = () => {
+    if(visita) return visita;
+    try{
+      visita = sessionStorage.getItem('advtecno.visita') || alAzar();
+      sessionStorage.setItem('advtecno.visita', visita);
+    }catch(e){ visita = alAzar(); }   // en incógnito puede fallar; no importa
+    return visita;
+  };
+
+  /* El cuerpo va como text/plain a PROPÓSITO. Cualquier otro tipo obliga al
+     navegador a preguntar antes (preflight), y sendBeacon no puede hacerlo:
+     los eventos del final de la visita -justo los del clic a WhatsApp- se
+     perderían. Adentro es JSON igual. */
+  function mandar(){
+    clearTimeout(reloj); reloj = 0;
+    if(!cola.length || apagada()) return;
+    const cuerpo = JSON.stringify({ v: 1, sitio: 'tecno-web', visita: idVisita(),
+                                    eventos: cola.splice(0, cola.length) });
+    try{
+      const bolsa = new Blob([cuerpo], { type: 'text/plain;charset=UTF-8' });
+      if(navigator.sendBeacon && navigator.sendBeacon(ANALITICA_URL, bolsa)) return;
+      fetch(ANALITICA_URL, { method: 'POST', body: cuerpo, keepalive: true,
+                             headers: { 'Content-Type': 'text/plain;charset=UTF-8' } });
+    }catch(e){}
+  }
+
+  function medir(tipo, datos){
+    if(apagada()) return;
+    try{
+      cola.push({ t: tipo, ...(datos || {}), ms: Math.round(performance.now()) });
+      // De a tandas: veinte eventos o cinco segundos, lo que pase primero.
+      if(cola.length >= 20) mandar();
+      else if(!reloj) reloj = setTimeout(mandar, 5000);
+    }catch(e){}
+  }
+
+  // Lo juntado se manda al irse: cambiar de pestaña, cerrarla o tocar un link
+  // que abre WhatsApp.
+  addEventListener('visibilitychange', () => { if(document.hidden) mandar(); });
+  addEventListener('pagehide', mandar);
+  return { medir, mandar, pendientes: () => cola.length, apagada };
+})();
+// Se llama `anotar` y no `medir` porque las tandas layout.js y menu.js ya
+// tienen su propia funcion medir(): dos declaraciones con el mismo nombre en
+// la misma pagina son un error de sintaxis y esas pruebas no corrian.
+const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
+
+/* Los enganches. Se envuelven las funciones que ya existen en vez de meter
+   una llamada adentro de cada una: así lo que hace la página y lo que se mide
+   quedan separados, y el día que alguien toque una de esas funciones no tiene
+   que acordarse de mantener viva la medición. */
+(function engancharMedicion(){
+  const datos = p => p ? { id: p.id, codigo: p.codigo || '', cat: p.cat, marca: p.marca,
+                           precio: p.precio, nombre: (p.desc || '').slice(0, 80) } : {};
+
+  const laFicha = abrirFicha;
+  abrirFicha = function(k, historia){
+    const r = laFicha.apply(this, arguments);
+    try{ if(FICHA) anotar('ficha', datos(buscarProducto(FICHA))); }catch(e){}
+    return r;
+  };
+  const elColor = elegirColorFicha;
+  elegirColorFicha = function(d, p, color){
+    try{ anotar('color', { ...datos(p), color }); }catch(e){}
+    return elColor.apply(this, arguments);
+  };
+  const laVersion = elegirVariante;
+  elegirVariante = function(d, m, v, color){
+    try{ anotar('version', { ...datos(v), opcion: v && v.opcion }); }catch(e){}
+    return laVersion.apply(this, arguments);
+  };
+  const elPedido = togglePedido;
+  togglePedido = function(k, color){
+    const estaba = enPedido(k);
+    const r = elPedido.apply(this, arguments);
+    try{ anotar(estaba ? 'pedido_quitar' : 'pedido_agregar',
+               { ...datos(buscarProducto(k)), color: color || '' }); }catch(e){}
+    return r;
+  };
+  const laCantidad = cambiarCant;
+  cambiarCant = function(k, delta){
+    const r = laCantidad.apply(this, arguments);
+    try{ anotar('pedido_cantidad', { id: k, cant: cantDe(k) }); }catch(e){}
+    return r;
+  };
+  const elRubro = entrarAlRubro;
+  entrarAlRubro = function(cat){
+    try{ anotar('rubro', { rubro: cat }); }catch(e){}
+    return elRubro.apply(this, arguments);
+  };
+  const elMenu = irAlMenu;
+  irAlMenu = function(){
+    try{ anotar('menu'); }catch(e){}
+    return elMenu.apply(this, arguments);
+  };
+  const todoElCatalogo = verTodoElCatalogo;
+  verTodoElCatalogo = function(){
+    try{ if(!verTodo) anotar('ver_todo'); }catch(e){}
+    return todoElCatalogo.apply(this, arguments);
+  };
+
+  /* El clic a WhatsApp es la conversión: lo único que de verdad dice si el
+     catálogo sirvió. Se escucha uno solo para todos los botones -tarjeta,
+     ficha, pedido y el flotante- y se anota de cuál vino. */
+  document.addEventListener('click', e => {
+    try{
+      const a = e.target.closest && e.target.closest('a[href*="wa.me/"]');
+      if(!a) return;
+      const donde = a.id === 'wa-flotante' ? 'flotante'
+        : (a.id === 'bp-enviar' || a.closest('#barra-pedido, #pedido')) ? 'pedido'
+        : a.closest('#ficha') ? 'ficha'
+        : a.closest('.card') ? 'tarjeta'
+        : a.closest('.faq') ? 'preguntas' : 'otro';
+      const card = a.closest('.card');
+      const p = donde === 'ficha' ? buscarProducto(FICHA)
+              : card ? buscarModelo(card.dataset.key) : null;
+      anotar('whatsapp', { desde: donde, ...datos(p),
+        ...(donde === 'pedido' ? { unidades: unidadesPedido(), total: totalPedido() } : {}) });
+      ANALITICA.mandar();     // se está yendo a WhatsApp: no esperar los 5 s
+    }catch(err){}
+  }, true);
+
+  /* La búsqueda, cuando deja de escribir. Se manda el texto y CUÁNTOS
+     resultados dio: las búsquedas con cero son la lista de lo que el cliente
+     vino a buscar y no encontró. */
+  let tecla = 0;
+  $('q').addEventListener('input', () => {
+    clearTimeout(tecla);
+    tecla = setTimeout(() => {
+      const q = filtros.q.trim();
+      if(q.length >= 2) anotar('busqueda', { q: q.slice(0, 60), resultados: LISTA.length });
+    }, 1400);
+  });
+
+  /* Una por visita, colgada de la primera carga buena. Sin temporizador a
+     proposito: un setInterval vivo deja al navegador sin cerrar nunca cuando
+     las pruebas corren con el reloj acelerado, y las tandas que abren la
+     pagina adentro de un iframe (layout, menu) quedaban colgadas. */
+  const laCarga = actualizar;
+  let contada = false;
+  actualizar = async function(primera){
+    const r = await laCarga.apply(this, arguments);
+    try{
+      if(!contada && MODELOS.length){
+        contada = true;
+        let ref = '';
+        try{ ref = document.referrer ? new URL(document.referrer).hostname : ''; }catch(e){}
+        anotar('visita', { ancho: innerWidth, productos: PRODUCTOS.length,
+                          fuente: (FUENTE && FUENTE.fuente) || '', ref });
+      }
+    }catch(e){}
+    return r;
+  };
+})();
 
 /* ---------- Arranque ---------- */
 

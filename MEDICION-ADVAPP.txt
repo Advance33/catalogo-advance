@@ -1,0 +1,128 @@
+MEDICIÓN DE LA WEB · lo que ADVAPP tiene que recibir (17/09/2026)
+
+La web ya manda los eventos; hoy está APAGADA porque falta el endpoint. Del
+lado del catálogo, encenderla es poner la dirección en ANALITICA_URL
+(index.html, bloque MEDICIÓN) y publicar. Nada más.
+
+Se eligió que los datos queden en ADVAPP y no en un servicio de terceros:
+así se pueden cruzar con el catálogo (qué SKU se mira contra cuál se vende) y
+no hay cookies ni cartel de consentimiento.
+
+
+1) EL ENDPOINT
+------------------------------------------------------------
+   POST https://advapp-blond.vercel.app/api/eventos      (nombre a confirmar)
+
+   Cabeceras de respuesta:
+     Access-Control-Allow-Origin: https://advance33.github.io
+     (para probar en local, también http://localhost:8765)
+
+   Respuesta: 204 sin cuerpo. La web no la lee ni reintenta: si falla, se
+   pierden esos eventos y ya. Nunca puede frenar ni romper la página.
+
+   OJO CON EL CONTENT-TYPE. El cuerpo llega como text/plain y adentro es
+   JSON. No es un descuido: cualquier otro tipo obliga al navegador a pedir
+   permiso antes (preflight), y sendBeacon no puede hacerlo. Con preflight se
+   perderían justo los eventos del final de la visita, que son los del clic a
+   WhatsApp. Hay que parsear el texto como JSON.
+
+   No hace falta OPTIONS: con text/plain no hay preflight.
+
+
+2) EL CUERPO
+------------------------------------------------------------
+   {
+     "v": 1,
+     "sitio": "tecno-web",
+     "visita": "a5d218f5-993b-4b3f-a93a-3c5885413312",
+     "eventos": [ { "t": "ficha", "id": "CEL-APP-005", ... , "ms": 4210 } ]
+   }
+
+   visita   número al azar, uno por pestaña. Vive en sessionStorage y se
+            pierde al cerrarla. No identifica a una persona ni se cruza con
+            nada: sirve para saber que esos eventos son del mismo recorrido.
+   ms       milisegundos desde que abrió la página, para reconstruir el orden.
+   eventos  hasta 20 por envío. Se manda cada 5 segundos, al cambiar de
+            pestaña, al cerrarla y al tocar WhatsApp (ese va en el momento).
+
+   Tamaño normal: menos de 8 KB. El navegador no deja pasar de 64 KB.
+
+
+3) LOS EVENTOS
+------------------------------------------------------------
+   Todos los de producto llevan, además: id (el ID de la planilla), codigo
+   (AT-####), cat, marca, precio y nombre (hasta 80 caracteres).
+
+   visita           una por pestaña. ancho (px), productos (cuántos se
+                    cargaron), fuente ("advapp" o "planilla"), ref (el dominio
+                    de donde vino, vacío si entró directo).
+   rubro            entró a un rubro. rubro: "Celular".
+   menu             volvió al menú de rubros.
+   ver_todo         pidió el catálogo entero.
+   busqueda         q (lo que buscó, hasta 60 caracteres) y resultados
+                    (cuántos le quedaron). Se manda cuando deja de escribir,
+                    y sólo desde 2 letras. Las de resultados 0 son la lista de
+                    lo que vinieron a buscar y no encontramos.
+   ficha            abrió la ficha de un producto.
+   color            eligió un color. color: "Silver".
+   version          cambió de versión (capacidad, teclado). opcion: "512GB".
+   pedido_agregar   sumó al pedido. color, si eligió uno.
+   pedido_quitar    lo sacó.
+   pedido_cantidad  cambió unidades. cant.
+   whatsapp         TOCÓ WHATSAPP. desde: "tarjeta", "ficha", "pedido",
+                    "flotante" o "preguntas". Con desde="pedido" van también
+                    unidades y total. Es la conversión: lo único que dice si
+                    el catálogo sirvió.
+
+   Lo que NO se manda nunca: nada escrito por el cliente salvo la búsqueda,
+   ningún dato personal, ningún teléfono, ningún texto del mensaje.
+
+   Si el navegador pide no ser seguido (Do Not Track), la web no junta ni
+   manda nada.
+
+
+4) DÓNDE GUARDARLO (sugerencia)
+------------------------------------------------------------
+   Una tabla sola alcanza, con las columnas que más se consultan afuera del
+   JSON y el resto adentro:
+
+     create table eventos_web (
+       id          bigserial primary key,
+       recibido_en timestamptz not null default now(),
+       sitio       text,
+       visita      text,
+       tipo        text,        -- t
+       ms          int,
+       producto    text,        -- el ID de la planilla
+       codigo      text,        -- AT-####
+       cat         text,
+       marca       text,
+       precio      numeric,
+       color       text,
+       q           text,
+       resultados  int,
+       desde       text,
+       datos       jsonb        -- el evento entero, por si mañana suma campos
+     );
+     create index on eventos_web (tipo, recibido_en desc);
+     create index on eventos_web (producto);
+
+   Conviene guardar el evento entero en `datos`: el día que agreguemos un
+   campo nuevo, no hay que tocar la tabla para no perderlo.
+
+
+5) LO QUE VAMOS A PREGUNTARLE
+------------------------------------------------------------
+   - Qué productos se miran y no se venden: fichas por producto contra ventas.
+   - Qué se busca y no aparece: busqueda con resultados = 0.
+   - Desde dónde tocan WhatsApp: tarjeta, ficha o pedido.
+   - El embudo: visitas -> fichas -> clics a WhatsApp.
+   - Qué rubros entran primero y cuáles no entra nadie.
+
+   Con eso se decide qué empujar y qué fotos o textos arreglar primero.
+
+
+6) PARA ARRANCAR
+------------------------------------------------------------
+   Avisen cuando el endpoint esté y con qué dirección exacta. Lo encendemos,
+   miramos una hora que lleguen bien y recién ahí lo dejamos andando.

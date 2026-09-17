@@ -107,6 +107,18 @@ def bytes_de_la_rechazada(codigo, huella):
     return doc.get('bytes')
 
 
+ADVAPP = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web'
+
+
+def bajar_advapp():
+    """Los productos como los publica ADVAPP, con las mismas columnas."""
+    import urllib.request
+    with urllib.request.urlopen(ADVAPP, timeout=60) as r:
+        d = json.loads(r.read().decode('utf-8'))
+    cols = d.get('columnas') or []
+    return [{c: str(p.get(c, '') or '') for c in cols} for p in d['productos']]
+
+
 def para_buscar(marca, producto, variante):
     """El texto para pegar en Google y encontrar la foto de ESA variante.
 
@@ -176,6 +188,11 @@ def main():
             ruta = sys.argv[sys.argv.index('--planilla') + 1]
             with io.open(ruta, encoding='utf-8', newline='') as fh:
                 filas = list(csv.DictReader(fh))
+        elif '--advapp' in sys.argv:
+            # Desde el 17/09 la web lee ADVAPP y la planilla quedo de respaldo:
+            # las fotos que faltan son las de lo que ADVAPP publica, que no es
+            # exactamente lo mismo (saca repetidos y lo destildado).
+            filas = bajar_advapp()
         else:
             filas = validar.bajar_csv()
     except Exception as e:

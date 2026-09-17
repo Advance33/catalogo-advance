@@ -1,0 +1,42 @@
+FOTOS QUE FALTAN EN LA WEB (17/09) · tres son datos, una es foto
+
+Hoy hay 4 fichas que salen sin imagen. Sólo una necesita que alguien
+consiga la foto; las otras tres tienen la foto hecha y no se puede usar
+porque el dato no cierra.
+
+1) SW-APP-056 · Watch Ultra 3 49mm · con stock · USD 805
+   Viene con CODIGO = AT-0456, y sus SKUS son todos de AT-0455 (cinco: -01
+   a -05). Con el código apuntando a otro producto, la web no tiene de dónde
+   sacar la foto y la ficha sale vacía.
+   Como debería venir:
+     CODIGO      AT-0455
+     Color       Black Alpine Loop M / Black Ocean Band
+     CODIGO_VAR  AT-0455-02/AT-0455-06
+     SKUS        los dos de esos colores, no los cinco
+   La foto de AT-0455-02 ya está publicada; la de AT-0455-06 la estamos
+   consiguiendo de este lado.
+
+2) GAF-RAY-056 · Meta Skyler · con stock · USD 580
+   Son DOS anteojos en una fila: la 601/1M52 y la 601/CH52. Por eso no se le
+   puede poner un código, y sin código no hay foto. Partida en dos, las dos
+   tienen foto desde hace días:
+     601/1M52 (Shiny Black · Transitions Green)     AT-0412 · AT-0412-01
+     601/CH52 (Shiny Black · Transitions Amethyst)  AT-0413 · AT-0413-01
+
+3) GAF-RAY-049 y GAF-RAY-050 · Metaverse / Smart Glasses · sin stock
+   Siguen sin numerar, como acordamos: sin la referencia de fábrica no se
+   sabe qué anteojo es. Como no tienen stock, no urge. Si vuelven con la
+   referencia entre paréntesis, les asignamos código y foto el mismo día.
+
+4) La única foto que falta de verdad
+   AT-0455-06 · Apple Watch Ultra 3 49mm, caja BLACK con malla Black Ocean
+   Band. La busqué en el CDN de Apple y en sus fotos de prensa: la única
+   oficial es la malla sola, sin el reloj. La carga Pedro desde el panel.
+
+DE PASO, UN DATO DE ADVAPP
+   9 filas traen en SKUS un `at` que no está en su CODIGO_VAR, porque el
+   CODIGO_VAR viene cortado en el talle ("Starlight · S/M" sale "/"):
+   SW-APP-004, 005, 008, 014, 045, 056, 063, 064 y 066.
+   La web no las adivina: si el CODIGO_VAR no trae un código por color y la
+   fila tiene más de un SKU, no pone ninguna foto de respaldo. Hoy esas filas
+   se ven bien porque tienen su archivo propio, pero conviene arreglarlo.

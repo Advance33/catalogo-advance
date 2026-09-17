@@ -1849,6 +1849,21 @@
    CONFIGURACIÓN — lo único que tenés que tocar
    ========================================================================== */
 
+// ---------- DE DÓNDE SALEN LOS PRODUCTOS ----------
+//
+// Primero ADVAPP, el sistema interno: devuelve las mismas columnas que la
+// planilla, con los mismos nombres, en JSON. La planilla de abajo queda de
+// RESPALDO y se lee sola si ADVAPP da error, tarda más de ADVAPP_ESPERA_MS,
+// viene sin productos, trae menos de los que declara o trae menos de
+// ADVAPP_MINIMO de las filas que dice la hoja Meta de la planilla.
+// Con ADVAPP_URL vacío la web vuelve a leer solo la planilla, como antes.
+const ADVAPP_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web';
+const ADVAPP_ESPERA_MS = 8000;
+// ADVAPP trae menos filas que la planilla a propósito: saca los repetidos y lo
+// destildado. Por eso no se le exige el total de Meta, solo que no quede muy
+// por debajo, que es lo que se ve cuando una respuesta llega cortada.
+const ADVAPP_MINIMO = 0.8;
+
 // ID de tu planilla (lo que va entre /d/ y /edit en la URL)
 // OJO: esta es la planilla "Landing", NO la de Cami. La de Cami es la fuente
 // comercial, pero la carga diaria de precios le pisa la columna Color. La
@@ -2531,6 +2546,85 @@ async function bajarCSV(){
   throw ultimoError;
 }
 
+/* ---------- ADVAPP, la fuente principal ----------
+   Devuelve { contrato, fuente, generado_en, filas, verificado_hoy, columnas,
+   productos }. Cada producto trae las mismas columnas que la planilla, con los
+   mismos nombres y en texto. Se traduce a la misma tabla que sale del CSV
+   (encabezado + filas): asi cargar() la lee igual, y el agrupado, los colores,
+   las fotos y el pedido no se enteran de donde vino.
+
+   Va una columna mas, SKUS: [{ sku, at, fotos }], un SKU por color, con `at`
+   igual al codigo de CODIGO_VAR. De ahi sale la foto de respaldo cuando no
+   hay archivo propio en fotos/. */
+async function bajarAdvapp(){
+  const corte = new AbortController();
+  const reloj = setTimeout(() => corte.abort(), ADVAPP_ESPERA_MS);
+  let d;
+  try{
+    // Sin el &_= que lleva la planilla: Vercel lo cachea 60 s, y un parametro
+    // distinto en cada visita se saltearia ese cache. 'no-store' evita la copia
+    // del navegador, que es la que podria quedar vieja.
+    const r = await fetch(ADVAPP_URL, { cache: 'no-store', signal: corte.signal });
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    d = await r.json();
+  }catch(e){
+    throw new Error(e && e.name === 'AbortError'
+      ? `tardo mas de ${ADVAPP_ESPERA_MS / 1000} s` : (e && e.message) || String(e));
+  }finally{
+    clearTimeout(reloj);
+  }
+  const productos = Array.isArray(d && d.productos) ? d.productos : [];
+  if(!productos.length) throw new Error('vino sin productos');
+  if(!/^landing\/1\./.test(d.contrato || ''))
+    console.warn('ADVAPP viene con un contrato que esta web no conoce:', d.contrato);
+  const columnas = (Array.isArray(d.columnas) && d.columnas.length)
+    ? d.columnas.map(String)
+    : Object.keys(productos[0]).filter(k => k !== 'SKUS');
+  const texto = v => (v === null || v === undefined) ? '' : String(v);
+  return {
+    fuente: 'advapp',
+    manifiesto: { contrato: d.contrato, fuente: d.fuente, generado_en: d.generado_en,
+                  filas: Number(d.filas) || 0, verificado_hoy: d.verificado_hoy === true },
+    filas: [[...columnas, 'SKUS'],
+            ...productos.map(p => [...columnas.map(c => texto(p[c])),
+                                   JSON.stringify(Array.isArray(p.SKUS) ? p.SKUS : [])])]
+  };
+}
+
+/* De donde sale la ultima carga buena: { fuente: 'advapp' | 'planilla',
+   manifiesto, motivo }. El manifiesto es el de esa fuente: el de ADVAPP viene
+   en su mismo JSON; el de la planilla es la hoja Meta. `motivo` dice por que
+   no se uso ADVAPP, si no se uso. */
+let FUENTE = null;
+
+/* Primero ADVAPP; si no sirve, la planilla con sus dos caminos (bajarCSV).
+   El control de filas de ADVAPP es contra lo que el mismo JSON dice haber
+   escrito, y contra la planilla solo con margen: comparado exacto contra
+   Meta, la web creeria que vino cortado (trae menos a proposito) y volveria
+   siempre a la planilla. */
+async function bajarDatos(){
+  const metaP = metaDelCiclo();       // se pide ya: la usan las dos fuentes
+  let motivo = '';
+  if(ADVAPP_URL){
+    try{
+      const a = await bajarAdvapp();
+      const n = a.filas.length - 1;
+      if(a.manifiesto.filas && n < a.manifiesto.filas)
+        throw new Error(`trajo ${n} de las ${a.manifiesto.filas} filas que declara`);
+      const planilla = Number((await metaP)?.filas) || 0;
+      if(planilla && n < planilla * ADVAPP_MINIMO)
+        throw new Error(`trajo ${n} filas y la planilla tiene ${planilla} ` +
+                        `(menos del ${Math.round(ADVAPP_MINIMO * 100)} %)`);
+      return a;
+    }catch(e){
+      motivo = (e && e.message) || String(e);
+      console.warn('ADVAPP no sirvio (' + motivo + '): se usa la planilla.');
+    }
+  }
+  const txt = await bajarCSV();
+  return { fuente: 'planilla', manifiesto: await metaP, motivo, filas: parseCSV(txt) };
+}
+
 /* Notas de carga que se cuelan en el nombre del producto. El cliente las lee
    tal cual: "+ Capa" es funda en portugués y "C/C" quiere decir con cargador.
    Se limpian acá y no sólo en la planilla porque la carga diaria la reescribe
@@ -2574,10 +2668,10 @@ function sacarNotasDelNombre(p){
 async function cargar(){
   // La planilla y el indice de fotos se piden a la vez; el indice hace falta
   // antes de armar cada producto, porque decide su foto de portada.
-  const [crudo, indice] = await Promise.all([bajarCSV(), cargarIndiceFotos()]);
+  const [datos, indice] = await Promise.all([bajarDatos(), cargarIndiceFotos()]);
   INDICE_FOTOS = indice && indice.archivos;
   CATALOGO = indice && indice.catalogo;
-  const filas = parseCSV(crudo).filter(f => f.some(c => c.trim()));
+  const filas = datos.filas.filter(f => f.some(c => c.trim()));
   if(filas.length < 2) throw new Error('la planilla vino vacía');
 
   // Ubico cada columna por su nombre, así no se rompe si reordenás la planilla
@@ -2630,7 +2724,9 @@ async function cargar(){
     codigoVar:col('codigo_var','codigo var','codigovar'),
     // El precio de antes, para los que están en promoción. Si la columna no
     // existe, el catálogo anda igual y el carrusel usa los que tienen regalo.
-    antes:col('oferta','precio anterior','antes','precio lista')
+    antes:col('oferta','precio anterior','antes','precio lista'),
+    // Solo en ADVAPP: un SKU por color con sus fotos. La planilla no la trae.
+    skus:col('skus')
   };
 
   const esCosto = C.precio === -1 && C.costo !== -1;
@@ -2656,7 +2752,7 @@ async function cargar(){
       : t.slice(0, corte).replace(/[.,]/g, '') + '.' + t.slice(corte + 1)) || 0;
   };
 
-  return filas.slice(1)
+  const productos = filas.slice(1)
     // Fuera las filas separadoras decorativas ("━━━ CELULAR · IPHONE 📱 ━━━"):
     // se reconocen porque solo tienen contenido en la primera celda
     .filter(f => f.slice(1).some(c => c.trim()))
@@ -2695,6 +2791,9 @@ async function cargar(){
         teclado:  val(f,C.teclado),
         codigo: val(f,C.codigo),
         codigoVar: val(f,C.codigoVar),
+        // Las fotos de ADVAPP por codigo de variante. Son el respaldo: solo se
+        // usan cuando no hay archivo propio en fotos/ para ese color.
+        fotosAdvapp: C.skus === -1 ? {} : fotosDeLosSkus(f[C.skus]),
         imagen: val(f,C.imagen),          // la columna Imagen; si viene vacia manda la carpeta
         activo: C.activo === -1 || val(f,C.activo) === '' || esSi(val(f,C.activo))
       };
@@ -2713,7 +2812,8 @@ async function cargar(){
          del catalogo se quedaba sin foto por eso. */
       p.codigo = p.codigo || codigoDeLaFila(p);
       p.imagen = urlFoto(p.imagen) ||
-                 fotoDeCarpeta(p, colorDeLaFila(p.color, p.desc || p.modelo));
+                 fotoDeCarpeta(p, colorDeLaFila(p.color, p.desc || p.modelo)) ||
+                 fotoDeAdvapp(p, colorDeLaFila(p.color, p.desc || p.modelo));
       return p;
     })
     // Se deducen una vez al cargar, no en cada tecla del buscador: son dos
@@ -2722,6 +2822,8 @@ async function cargar(){
     // nombre, y conviene que lean el que de verdad ve el cliente.
     .map(sacarNotasDelNombre)
     .map(p => { p.montura = monturaDe(p); p.apertura = aperturaDe(p); return p; });
+  FUENTE = { fuente: datos.fuente, manifiesto: datos.manifiesto, motivo: datos.motivo };
+  return productos;
   // Si la planilla tuviera "Proveedor" o "Costo USD", esos campos nunca se copian
   // acá. Lo que no existe en este objeto no puede filtrarse a la web.
 }
@@ -3326,7 +3428,57 @@ function fotosDeColor(p, color){
   // Con indice no se pide lo que no existe: cada URL que falla es un pedido
   // de mas y un onerror que esperar.
   if(INDICE_FOTOS) nombres = nombres.filter(n => INDICE_FOTOS.has(n + EXT_FOTOS));
-  return nombres.map(n => urlFoto(CARPETA_FOTOS + encodeURIComponent(n) + EXT_FOTOS));
+  if(nombres.length || !INDICE_FOTOS)
+    return nombres.map(n => urlFoto(CARPETA_FOTOS + encodeURIComponent(n) + EXT_FOTOS));
+  /* Sin archivo propio de ese color, la foto de ADVAPP: primero la de esta
+     fila y despues la de sus hermanas, en el mismo orden que las locales. */
+  for(const fila of [p, ...hermanas]){
+    const u = fotoDeAdvapp(fila, color);
+    if(u) return [u];
+  }
+  return [];
+}
+
+/* Las fotos de ADVAPP de una fila, por codigo de variante:
+   { 'AT-0065-02': 'https://lh3.googleusercontent.com/…' }. Solo la primera de
+   cada SKU: galeria todavia no hay. */
+function fotosDeLosSkus(txt){
+  const salida = {};
+  let lista;
+  try{ lista = JSON.parse(txt || '[]'); }catch{ return salida; }
+  if(!Array.isArray(lista)) return salida;
+  for(const s of lista){
+    const at  = String((s && s.at) || '').trim().toUpperCase();
+    const url = urlFoto(Array.isArray(s && s.fotos) ? String(s.fotos[0] || '') : '');
+    if(at && url && !salida[at]) salida[at] = url;
+  }
+  return salida;
+}
+
+/* La foto de ADVAPP para un color de la fila (o, sin color, la del primero
+   que la tenga). El color se ubica por su posicion en CODIGO_VAR -el color 2
+   es la variante 2- y esa variante por el `at` del SKU. Sin colores, la del
+   producto. No adivina: si CODIGO_VAR no trae un codigo por color y la fila
+   tiene mas de un SKU, no hay forma de saber cual es cual y no pone ninguna. */
+function fotoDeAdvapp(p, color){
+  const fotos = p && p.fotosAdvapp;
+  const ats = fotos ? Object.keys(fotos) : [];
+  if(!ats.length) return '';
+  const todos = partirColores(p.color || '');
+  if(!todos.length)
+    return fotos[String(p.codigo || '').trim().toUpperCase()] || (ats.length === 1 ? fotos[ats[0]] : '');
+  const pedidos = color ? partirColores(color) : todos;
+  const cvs = String(p.codigoVar || '').split('/').map(x => x.trim().toUpperCase());
+  for(const c of pedidos){
+    const i = todos.findIndex(x => norm(x) === norm(c));
+    const cv = (i !== -1 && cvs.length === todos.length) ? cvs[i] : '';
+    if(cv && fotos[cv]) return fotos[cv];
+  }
+  /* Una fila de un solo color y un solo SKU no deja dudas aunque CODIGO_VAR
+     venga cortado, que pasa con los talles ("Starlight · S/M" sale "/"). */
+  if(todos.length === 1 && ats.length === 1 && pedidos.some(c => norm(c) === norm(todos[0])))
+    return fotos[ats[0]];
+  return '';
 }
 
 function mostrarFotoColor(p, color, d){
@@ -5058,7 +5210,10 @@ async function actualizar(primera){
     // Con manifiesto se sabe si la carga del dia corrio: "hoy" solo cuando la
     // planilla lo confirma; si no, la fecha real de la fila mas nueva, que es
     // lo que el cliente puede creer sin que le mientan.
-    sello(META && META.verificado_hoy ? 'Actualizado hoy'
+    // El manifiesto de la fuente que se uso: con ADVAPP, el de su JSON; con la
+    // planilla, la hoja Meta.
+    const manifiesto = (FUENTE && FUENTE.fuente === 'advapp') ? FUENTE.manifiesto : META;
+    sello(manifiesto && manifiesto.verificado_hoy ? 'Actualizado hoy'
           : fecha ? `Actualizado ${fecha}` : 'En vivo', true);
   }catch(e){
     console.warn('No se pudo actualizar:', e);

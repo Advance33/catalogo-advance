@@ -3774,7 +3774,13 @@ function armarModelo(vs){
   let grupos = porEtiqueta();
   vs.forEach(v => {
     if(!repetida(v) || !v.color) return;
-    if(new Set(grupos[v.etiqueta].map(juegoColor)).size > 1) v.etiqueta += ' · ' + v.color;
+    // Si ademas cambia el teclado, lo que el cliente elige es el teclado, y el
+    // paso de abajo lo nombra. Con el color, los dos MacBook Neo 8/256GB salian
+    // "· Indigo/Blush" y "· Silver/Citrus", y la diferencia real -ingles o
+    // español, a otro precio- no se leia en ningun lado.
+    const g = grupos[v.etiqueta];
+    if(new Set(g.map(x => norm(x.teclado))).size > 1) return;
+    if(new Set(g.map(juegoColor)).size > 1) v.etiqueta += ' · ' + v.color;
   });
   /* Y si con el color TAMPOCO alcanza, va el ID. Pasa cuando dos filas tienen
      la misma capacidad y el mismo color: el MacBook Neo A18 tenía dos "512GB ·
@@ -3802,6 +3808,32 @@ function armarModelo(vs){
       ? ' · USD ' + plata(v.precio)
       : ' · ' + v.id;
   });
+
+  /* Un boton por VERSION, no por fila. Cuando el proveedor carga cada color
+     en su propia fila (el iPhone 17 Pro Max 256GB vino en tres: Orange, Blue y
+     Silver), las etiquetas de arriba quedan "256GB E-Sim · Orange", "· Blue",
+     "· Silver" y la ficha mostraba tres botones de la misma version. El color
+     ya se elige con los puntitos, que saltan a la fila de ese color con su
+     precio (hermanasColor), asi que esas filas comparten un solo boton.
+
+     Solo se juntan si cada color vive en UNA fila y no hay otra diferencia
+     que el cliente tenga que elegir: si dos filas declaran el mismo color, o
+     cambian de teclado, el puntito no sabria a cual llevar y siguen separadas. */
+  vs.forEach(v => { v.opcion = v.etiqueta; });
+  const porVersion = new Map();
+  vs.forEach(v => {
+    const k = norm(v.etiquetaBase);
+    if(!porVersion.has(k)) porVersion.set(k, []);
+    porVersion.get(k).push(v);
+  });
+  for(const grupo of porVersion.values()){
+    if(grupo.length < 2) continue;
+    const colores = grupo.map(v => partirColores(v.color).map(norm).filter(Boolean));
+    const todos = colores.flat();
+    const cadaColorEnUnaFila = colores.every(c => c.length) && new Set(todos).size === todos.length;
+    const mismoTeclado = new Set(grupo.map(v => norm(v.teclado))).size === 1;
+    if(cadaColorEnUnaFila && mismoTeclado) grupo.forEach(v => { v.opcion = v.etiquetaBase; });
+  }
 
   const colores = [...new Set(
     vs.flatMap(v => partirColores(v.color)))];
@@ -3856,7 +3888,10 @@ const precioTarjeta = m => {
 // cuántas hay informa más que cortarlas por la mitad.
 function htmlOpciones(m){
   if(!m.multi) return '';
-  const et = m.variantes.map(v => v.etiqueta);
+  // Por version, igual que los botones de la ficha. Si todas las filas son
+  // colores de la misma version no hay opciones: los colores ya se ven.
+  const et = [...new Set(m.variantes.map(v => v.opcion || v.etiqueta))];
+  if(et.length < 2) return '';
   return (et.length <= 4 && et.every(e => e.length <= 12))
     ? et.map(esc).join(' · ')
     : `${et.length} opciones`;
@@ -5429,7 +5464,32 @@ function htmlServicio(v){
 function htmlOpcionesFicha(m, v){
   if(!m.multi) return '';
   const elegida = clave(v);
-  const btns = m.variantes.map(x => {
+  /* Una opcion por version (ver `opcion` en armarModelo). El boton de una
+     version con varias filas marca la que se esta mirando, o si no la mas
+     barata con stock, y dice "desde" cuando sus colores no valen lo mismo. */
+  const versiones = new Map();
+  m.variantes.forEach(x => {
+    const op = x.opcion || x.etiqueta;
+    if(!versiones.has(op)) versiones.set(op, []);
+    versiones.get(op).push(x);
+  });
+  if(versiones.size < 2) return '';
+  const porPrecio = (a, b) => (a.precio ?? Infinity) - (b.precio ?? Infinity);
+  const btns = [...versiones.entries()].map(([op, grupo]) => {
+    if(grupo.length > 1){
+      const aca = grupo.find(x => clave(x) === elegida);
+      const conStock = grupo.filter(x => x.stock);
+      const rep = aca || [...(conStock.length ? conStock : grupo)].sort(porPrecio)[0];
+      const precios = grupo.map(x => x.precio).filter(x => x !== null);
+      const precio = !precios.length ? 'Consultar'
+        : (new Set(precios).size > 1 ? 'desde USD ' : 'USD ') + plata(Math.min(...precios));
+      return `<button type="button" class="fi-op${conStock.length ? '' : ' agotada'}" data-k="${esc(clave(rep))}"
+               data-op="${esc(op)}" aria-pressed="${!!aca}"${conStock.length ? '' : ' title="Sin stock"'}>
+               <b>${esc(op)}</b>
+               <i>${precio}</i>
+             </button>`;
+    }
+    const x = grupo[0];
     const k = clave(x);
     return `<button type="button" class="fi-op${x.stock ? '' : ' agotada'}" data-k="${esc(k)}"
              aria-pressed="${k === elegida}"${x.stock ? '' : ' title="Sin stock"'}>
@@ -5539,8 +5599,16 @@ function engancharFicha(d, m, v){
     else elegirColorFicha(d, v, b.dataset.color);
   });
   d.querySelectorAll('.fi-op').forEach(b => b.onclick = () => {
-    const otra = m.variantes.find(x => clave(x) === b.dataset.k);
-    if(otra && clave(otra) !== FICHA) elegirVariante(d, m, otra);
+    // Las filas de esa version: una, o varias si son colores de la misma. Si
+    // ya estas en ella no hay nada que cambiar; si venis de otra, se mantiene
+    // el color que elegiste, siempre que esta version lo tenga.
+    const grupo = b.dataset.op ? m.variantes.filter(x => x.opcion === b.dataset.op)
+                               : m.variantes.filter(x => clave(x) === b.dataset.k);
+    if(grupo.some(x => clave(x) === FICHA)) return;
+    const c = norm(COLOR_FICHA);
+    const conColor = c && grupo.find(x => partirColores(x.color).some(y => norm(y) === c));
+    const otra = conColor || m.variantes.find(x => clave(x) === b.dataset.k);
+    if(otra && clave(otra) !== FICHA) elegirVariante(d, m, otra, conColor ? COLOR_FICHA : undefined);
   });
 }
 

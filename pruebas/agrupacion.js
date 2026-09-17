@@ -288,8 +288,11 @@ function correrPruebas(){
   /* ---- 5. La tarjeta ---- */
   const conRango = MODELOS.filter(m => m.multi && m.precio !== m.precioMax);
   ok(conRango.length > 0, 'hay modelos cuyas versiones no valen lo mismo', conRango.length);
+  // Con dos versiones o mas: un modelo que solo cambia de color no muestra
+  // opciones en la tarjeta, sus colores ya se ven (17/09/2026)
+  const versiones = m => new Set(m.variantes.map(v => v.opcion)).size;
   const card = [...document.querySelectorAll('.card')].find(c => {
-    const m = buscarModelo(c.dataset.key); return m && m.multi && m.precio !== m.precioMax;
+    const m = buscarModelo(c.dataset.key); return m && m.multi && m.precio !== m.precioMax && versiones(m) > 1;
   });
   ok(card && card.querySelector('.usd .desde'), 'esas tarjetas dicen "desde"',
      card && card.querySelector('.usd').textContent.replace(/\s+/g,' ').trim());
@@ -303,7 +306,13 @@ function correrPruebas(){
 
   /* ---- 6. La ficha: elegir version cambia el precio ---- */
   PEDIDO = []; guardarPedido();
-  const m0 = conRango[0];
+  // La version mas cara, sola en su boton: una que junta varias filas de color
+  // abre la mas barata con stock, y esta prueba necesita llegar a la mas cara.
+  const solaEnSuBoton = m => {
+    const c = m.variantes.find(v => v.precio === m.precioMax);
+    return c && m.variantes.filter(v => v.opcion === c.opcion).length === 1 && versiones(m) > 1;
+  };
+  const m0 = conRango.find(solaEnSuBoton) || conRango[0];
   const barata = m0.variantes.find(v => v.precio === m0.precio);
   const cara   = m0.variantes.find(v => v.precio === m0.precioMax);
   abrirFicha(clave(barata), null);
@@ -312,7 +321,7 @@ function correrPruebas(){
   ok(d.querySelector('.fi-nombre').textContent === m0.desc, 'el titulo es el del modelo',
      d.querySelector('.fi-nombre').textContent);
   const ops = [...d.querySelectorAll('.fi-op')];
-  ok(ops.length === m0.variantes.length, 'un boton por version', ops.length);
+  ok(ops.length === versiones(m0), 'un boton por version, no por fila de color', ops.length + ' de ' + m0.variantes.length + ' filas');
   ok(ops.every(b => /USD|Consultar/.test(b.textContent)), 'cada boton muestra su propio precio',
      ops.map(b=>b.textContent.replace(/\s+/g,' ').trim()).join(' / '));
   ok(d.querySelector('.fi-precio .usd').textContent.includes(plata(m0.precio)),
@@ -337,7 +346,9 @@ function correrPruebas(){
     abrirFicha(clave(porColor.rep), null);
     const dd = document.getElementById('ficha');
     const antes = dd.querySelector('.fi-precio .usd').textContent;
-    [...dd.querySelectorAll('.fi-op')].find(b => b.dataset.k !== clave(porColor.rep)).click();
+    const otraOp = [...dd.querySelectorAll('.fi-op')].find(b => b.dataset.k !== clave(porColor.rep));
+    const otroColor = [...dd.querySelectorAll('.fi-pintas button')].find(b => b.dataset.k && b.dataset.k !== clave(porColor.rep));
+    (otraOp || otroColor).click();
     ok(document.getElementById('ficha').querySelector('.fi-precio .usd').textContent !== antes,
        'elegir la version de otro color cambia el precio',
        porColor.desc + ': ' + porColor.variantes.map(v=>v.etiqueta+' USD '+v.precio).join(' | '));

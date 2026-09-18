@@ -149,14 +149,24 @@ function correrPruebas(){
     R.push('  --  hoy no hay versiones que cambien solo de teclado');
   }
 
-  /* ---- 7. La tarjeta cuenta versiones ---- */
-  const soloColor = MODELOS.find(m => m.multi && versionesDe(m).size === 1);
-  if(soloColor) ok(htmlOpciones(soloColor) === '', 'un modelo que solo cambia de color no muestra opciones en la tarjeta', soloColor.desc);
+  /* ---- 7. Las versiones se cuentan en la ficha ----
+     Desde el 17/09 la tarjeta no las lista: era texto chico que nadie leia y
+     la ficha ya tiene un boton por version. Lo que se prueba es que ese boton
+     salga por VERSION y no por fila de la planilla. */
   const conVarias = juntas.find(x => versionesDe(x.m).size > 1);
   if(conVarias){
-    const t = htmlOpciones(conVarias.m);
-    const n = versionesDe(conVarias.m).size;
-    ok(t.includes(n + ' opciones') || t.split(' · ').length === n, 'y uno con varias versiones las cuenta por version, no por fila',
-       conVarias.m.desc + ': ' + t);
+    const m = conVarias.m;
+    abrirFicha(clave(m.rep));
+    const botones = [...document.querySelectorAll('#ficha .fi-ops .fi-op')];
+    ok(botones.length === versionesDe(m).size, 'la ficha tiene un boton por version, no por fila',
+       m.desc + ': ' + botones.length + ' de ' + m.variantes.length + ' filas');
+    quitarFicha();
+  }
+  const soloColor = MODELOS.find(m => m.multi && versionesDe(m).size === 1);
+  if(soloColor){
+    abrirFicha(clave(soloColor.rep));
+    ok(!document.querySelector('#ficha .fi-ops'),
+       'y un modelo que solo cambia de color no muestra versiones', soloColor.desc);
+    quitarFicha();
   }
 }

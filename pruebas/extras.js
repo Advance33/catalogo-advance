@@ -8,7 +8,7 @@ const $$ = s => document.querySelectorAll(s);
 const esperar = setInterval(() => {
   // Como portada.js, esta tanda NO pide la grilla: prueba la pagina tal como
   // la ve el cliente al entrar.
-  if(!MODELOS.length || !$$('#cats .chip').length || !$$('#extras .fp').length) return;
+  if(!MODELOS.length || !$$('#cats .chip').length || !$('presupuesto')) return;
   clearInterval(esperar);
   for(let i=1;i<5000;i++) clearInterval(i);
   try{ correrPruebas(); }catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; }
@@ -26,66 +26,55 @@ const esperar = setInterval(() => {
 }, 150);
 
 function correrPruebas(){
-  /* ---- 1. Atajos por presupuesto ---- */
-  const atajos = [...$$('#extras .at')];
-  ok(atajos.length >= 3, 'hay atajos por presupuesto', atajos.length);
-  /* Si el numero que promete el atajo no es el que despues muestra la grilla,
+  /* ---- 1. Por presupuesto ----
+     Desde el 17/09 son pestañas con vitrinas (lo fino, en presupuesto.js).
+     Si el numero que promete un tramo no es el que despues muestra la grilla,
      el cliente siente que le mentimos. Se compara contra filtrar() DE VERDAD:
      antes esta prueba re-implementaba la formula del catalogo, asi que validaba
      el error en vez de encontrarlo, y por eso el desfasaje vivio meses dando
      OK. Una prueba que copia la cuenta que quiere verificar no verifica nada. */
-  const malCuenta = atajos.filter(b => {
+  const tramos = [...$$('#presupuesto .pv-tab')];
+  ok(tramos.length >= 3, 'hay tramos por presupuesto', tramos.length);
+  const malCuenta = tramos.filter(b => {
+    elegirTramo(b.dataset.pv);
     const guardado = JSON.stringify(filtros);
     Object.assign(filtros, { q:'', cat:'', marca:'', soloStock:false,
-                             rango:b.dataset.rango, montura:'', apertura:'' });
+                             rango:b.dataset.pv, montura:'', apertura:'' });
     const n = filtrar().length;
     Object.assign(filtros, JSON.parse(guardado));
-    return !b.querySelector('i').textContent.startsWith(String(n));
+    return !$('presupuesto').querySelector('[data-ver]').textContent.startsWith('Ver los ' + n + ' ');
   });
-  ok(malCuenta.length === 0, 'cada atajo dice cuantos productos tiene de verdad',
-     malCuenta.map(b => b.dataset.rango).join(', ') || 'todos bien');
-  ok(atajos.every(b => RANGOS.some(r => r[0] === b.dataset.rango)),
+  ok(malCuenta.length === 0, 'cada tramo dice cuantos productos tiene de verdad',
+     malCuenta.map(b => b.dataset.pv).join(', ') || 'todos bien');
+  ok(tramos.every(b => RANGOS.some(r => r[0] === b.dataset.pv)),
      'todos apuntan a un tramo de precio que existe');
 
-  /* ---- 2. Las filas de productos ---- */
-  const filas = [...$$('#extras .fp')];
-  ok(filas.length >= 3, 'hay varias filas de productos', filas.length);
-  const rotulos = filas.map(f => f.querySelector('h3') && f.querySelector('h3').textContent);
-  ok(rotulos.includes('Lo último que entró'), 'esta la fila de lo ultimo que entro',
-     rotulos.join(' | '));
-  const tarjetas = [...$$('#extras .pc')];
-  ok(tarjetas.length > 0, 'las filas tienen tarjetas', tarjetas.length);
-  ok(tarjetas.every(b => b.dataset.key), 'todas saben que producto abren');
-  ok(tarjetas.every(b => b.querySelector('.pc-txt b').textContent.trim()),
-     'todas tienen nombre');
-  // Ofrecer algo agotado en la portada es mandar al cliente a un callejon
-  const agotados = tarjetas.filter(b => {
-    const m = buscarModelo(b.dataset.key);
-    return m && !m.stock;
-  });
-  ok(agotados.length === 0, 'ninguna fila ofrece algo sin stock', agotados.length);
+  /* ---- 2. Recién llegados ----
+     Desde el 16/09 ocupa el lugar de "Lo que miraste", "Lo último que entró" y
+     las cinco filas por rubro. Lo fino se prueba en nuevos.js; aca, que este. */
+  ok(!!$('nuevos') && $('nuevos').querySelectorAll('.nv-ancho').length >= 2,
+     'esta la vidriera de recien llegados', $$('#nuevos .nv-ancho').length);
+  ok(!$$('#extras .pc').length, 'y ya no estan las filas de tarjetas chicas', $$('#extras .pc').length);
 
-  /* ---- 3. "Ver todos" de cada rubro ---- */
-  const ver = [...$$('#extras .fp-ver')];
-  ok(ver.length >= 1, 'las filas por rubro tienen "Ver todos"', ver.length);
-  const cat = ver[0].dataset.vercat;
-  ver[0].click();
-  ok(filtros.cat === cat, '"Ver todos" abre ese rubro', filtros.cat);
+  /* ---- 3. Elegir un rubro apaga la portada ---- */
+  const chip = [...$$('#cats .chip')].find(c => c.dataset.cat);
+  chip.click();
+  ok(filtros.cat === chip.dataset.cat, 'elegir un rubro lo abre', filtros.cat);
   ok($('extras').hidden, 'y los bloques de la portada se apagan');
   ok(!$('grid').hidden, 'ahora se ve la grilla');
 
   /* ---- 4. Volver a la portada los trae de nuevo ---- */
   [...$$('#cats .chip')].find(c => c.dataset.cat === '').click();
   ok(!$('extras').hidden, 'al volver a "Todo" los bloques vuelven');
-  ok($$('#extras .fp').length >= 3, 'y se redibujan enteros', $$('#extras .fp').length);
+  ok(!!$('nuevos') && !!$('presupuesto'), 'y se redibujan enteros', $('extras').children.length);
 
-  /* ---- 5. La fila de marcas, que antes quedaba escondida ----
-     Vivia adentro de la grilla y solo en "Todo" sin filtros. Como la portada ya
-     no dibuja la grilla, no la veia nadie: por eso se mudo a los extras. */
-  ok(!!$('extras').querySelector('.fila-marcas'),
-     'la fila de marcas esta en la portada');
-  ok($('extras').querySelectorAll('.mk').length >= 3, 'con varias marcas',
-     $('extras').querySelectorAll('.mk').length);
+  /* ---- 5. Las marcas ----
+     Desde el 16/09 no son una fila de circulos casi al final: son la vitrina
+     que se turna sola, pegada debajo de los rubros. Lo fino, en marcas.js. */
+  const vitrina = $('marcas-vitrina');
+  ok(!!vitrina && $('extras').firstElementChild === vitrina,
+     'la vitrina de marcas es lo primero debajo de los rubros');
+  ok(!$('extras').querySelector('.fila-marcas'), 'y la fila de circulos ya no esta en la portada');
 
   /* ---- 6. Pedí lo que no está ---- */
   const inp = $('pedilo-q'), bot = $('pedilo-btn');

@@ -261,7 +261,7 @@
   .mundo-foto img{width:100%;height:100%;display:block;object-fit:contain;object-position:right top;
                   mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04);
                   transition:transform .45s cubic-bezier(.2,.7,.2,1)}
-  .mundo:hover .mundo-foto img{transform:scale(1.04)}
+  .mundo:hover .mundo-foto img.ve{transform:scale(1.04)}
   .mundo-cab{position:relative;max-width:56%}
   .mundo-cab h3{margin:0;font:400 21px/1.02 var(--display);text-transform:uppercase;
                 text-wrap:balance;color:var(--ink)}
@@ -308,7 +308,70 @@
   .mundos-todo:focus-visible{outline:2px solid var(--acento);outline-offset:3px}
   @media (prefers-reduced-motion: reduce){
     .mundo-foto img{transition:none}
-    .mundo:hover .mundo-foto img{transform:none}
+    .mundo:hover .mundo-foto img.ve{transform:none}
+  }
+
+  /* ---------- Los rubros en movimiento (16/09) ----------
+     Cuatro cosas juntas, elegidas entre seis propuestas:
+     1. La foto de cada mundo se turna por el producto estrella de cada rubro,
+        de a una tarjeta por vez, y el rubro de la foto queda marcado.
+     2. Al pasar el mouse por un rubro, la foto salta a ese producto y aparece
+        su nombre.
+     3. Una luz violeta recorre despacio los bordes; la tarjeta que acaba de
+        cambiar de foto se lleva una vuelta rápida.
+     4. Con el mouse, la tarjeta se inclina apenas hacia él (la versión suave:
+        con más grados y brillo competía con todo lo demás). */
+  @property --mundo-luz{syntax:'<angle>';inherits:false;initial-value:0deg}
+  @property --mundo-vuelta{syntax:'<angle>';inherits:false;initial-value:0deg}
+  /* Las fotos van apiladas y se ve la que tiene .ve. El corrimiento de la
+     inclinación va en la foto con translate, que se suma a su transform: puesto
+     en la caja, la aislaba del fondo y volvía el recuadro blanco de la toma. */
+  .mundo-foto img{position:absolute;inset:0;opacity:0;transform:scale(.92) translateY(12px);
+                  translate:var(--px,0px) var(--py,0px);
+                  transition:opacity .6s ease, transform .8s cubic-bezier(.2,.7,.2,1), translate .5s cubic-bezier(.2,.7,.2,1)}
+  .mundo-foto img.ve{opacity:1;transform:none}
+  .rubro.en-foto{box-shadow:inset 0 0 0 1.5px var(--acento)}
+  .mundo-cap{position:absolute;z-index:2;right:14px;top:calc(12px + 50%);max-width:46%;padding:6px 10px;border-radius:999px;
+             background:var(--ink);color:#fff;font:600 10.5px/1.2 var(--sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+             opacity:0;transform:translateY(6px);transition:opacity .25s ease, transform .3s ease;pointer-events:none}
+  .mundo-cap.ve{opacity:1;transform:none}
+  .mundo-alto .mundo-cap{top:auto;bottom:96px;right:auto;left:50%;max-width:80%;transform:translate(-50%,6px)}
+  .mundo-alto .mundo-cap.ve{transform:translate(-50%,0)}
+  .mundo-grande .mundo-cap{top:auto;bottom:26px;right:26px}
+
+  .mundo::before,.mundo-vuelta{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+    mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+  .mundo::before{padding:2px;opacity:.75;transition:opacity .3s ease;
+    background:conic-gradient(from var(--mundo-luz),transparent 0 62%,var(--acento) 80%,#C4A6FF 86%,transparent 92%)}
+  .mundo:hover::before{opacity:1}
+  .mundo-vuelta{padding:2.5px;z-index:4;opacity:0;
+    background:conic-gradient(from var(--mundo-vuelta),transparent 0 52%,var(--acento) 76%,#EDE4FF 83%,transparent 90%)}
+
+  .mundos{perspective:1100px}
+  .mundo{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease}
+  .mundo.sigue{transition:transform .08s linear, box-shadow .4s ease;box-shadow:0 30px 60px -36px rgba(76,29,149,.6)}
+  .mundo.sigue .mundo-foto img{transition:opacity .6s ease, transform .8s cubic-bezier(.2,.7,.2,1), translate .08s linear}
+
+  .mundos-todo{position:relative;overflow:hidden}
+  .mundos-todo::after{content:"";position:absolute;inset:0;pointer-events:none;transform:translateX(-120%);
+    background:linear-gradient(100deg,transparent 30%,rgba(196,166,255,.35) 50%,transparent 70%)}
+
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes mundoLuz{to{--mundo-luz:360deg}}
+    @keyframes mundoVuelta{0%{--mundo-vuelta:0deg;opacity:0}12%{opacity:1}82%{opacity:1}100%{--mundo-vuelta:360deg;opacity:0}}
+    @keyframes mundoBarre{0%,60%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+    .mundo::before{animation:mundoLuz 7s linear infinite;animation-delay:calc(var(--i,0) * -1.4s)}
+    .mundo:hover::before{animation-duration:2.4s}
+    .mundo.cambia .mundo-vuelta{animation:mundoVuelta 1.4s cubic-bezier(.45,0,.2,1) forwards}
+    .mundos-todo::after{animation:mundoBarre 4.5s ease-in-out infinite}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .mundo::before{display:none}
+    .mundo,.mundo.sigue,.mundo-foto img,.mundo.sigue .mundo-foto img{transition:none}
+  }
+  @media (max-width:760px){
+    .mundo-cap{display:none}
   }
 
   /* En el celular, una tarjeta debajo de la otra. Con menos de 760px las seis
@@ -372,13 +435,6 @@
   .fp-cab h3{margin:0;font:400 22px/1.1 var(--display);text-transform:uppercase;
              letter-spacing:.01em}
   .fp-cab .fp-sub{font:500 11px/1 var(--mono);color:var(--faint);letter-spacing:.06em}
-  .fp-cab .fp-ver{
-    margin-left:auto;background:transparent;border:0;cursor:pointer;padding:4px 2px;
-    font:600 10.5px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;
-    color:var(--acento);display:inline-flex;align-items:center;gap:6px;
-  }
-  .fp-cab .fp-ver:hover{color:var(--glow)}
-  .fp-cab .fp-ver::after{content:"→";font-size:13px}
 
   /* La pista se desliza sola con el dedo; en la compu la barra va oculta y se
      arrastra, igual que las cintas de chips. */
@@ -440,92 +496,398 @@
   .pc-txt i .desde{font:500 10px/1 var(--mono);color:var(--faint);
                    font-style:normal;margin-right:3px}
 
-  /* ---------- Atajos por precio ----------
-     Muchos clientes no vienen por rubro sino por cuanto quieren gastar. */
-  .precios-at{display:flex;gap:9px;flex-wrap:wrap}
-  .at{
-    background:var(--surface);border:1px solid var(--line);border-radius:12px;
-    padding:13px 17px;cursor:pointer;text-align:left;color:var(--ink);
-    display:flex;flex-direction:column;gap:5px;
-    transition:border-color .16s ease, transform .16s ease;
-  }
-  .at:hover{border-color:var(--acento);transform:translateY(-2px)}
-  .at:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
-  .at b{font:500 13.5px/1 var(--sans)}
-  .at i{font:500 10.5px/1 var(--mono);font-style:normal;color:var(--faint)}
+  /* ---------- Recién llegados ----------
+     Un banner grande que pasa solo por las novedades y, abajo, las dos que
+     vienen. Blanco y con el color solo en lo que se toca: la cinta, «Nuevo» y
+     los botones. */
+  .nv-escena{display:flex;flex-direction:column;gap:14px}
+  .nv-marco{position:relative}
+  /* Todas las novedades van apiladas en la misma celda y se ve una sola. Así la
+     caja toma sola el alto de la más larga y lo de abajo no salta al rotar, sin
+     medir nada con JavaScript (y sigue valiendo si cambia el ancho). */
+  .nv-pila{display:grid}
+  .nv-pila > .nv-tarj{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .35s ease, visibility 0s linear .35s}
+  .nv-pila > .nv-tarj.activa{visibility:visible;opacity:1;transition:opacity .35s ease}
 
-  /* ---------- Pedí lo que no está ----------
-     El catalogo no tiene todo, pero el vendedor si lo consigue: en vez de que
-     el cliente se vaya sin decir nada, que lo escriba y llegue por WhatsApp. */
-  .pedilo{
-    background:var(--surface);border:1px solid var(--line);border-radius:16px;
-    padding:24px 26px;display:grid;gap:16px;
-  }
-  .pedilo h3{margin:0;font:400 22px/1.1 var(--display);text-transform:uppercase}
-  .pedilo p{margin:0;color:var(--muted);font-size:14.5px;max-width:56ch}
-  .pedilo-form{display:flex;gap:10px;flex-wrap:wrap}
-  .pedilo input{
-    flex:1;min-width:230px;padding:13px 16px;font:15px var(--sans);
-    background:var(--paper);color:var(--ink);
-    border:1px solid var(--line);border-radius:999px;outline:none;
-    transition:border-color .18s, box-shadow .18s;
-  }
-  .pedilo input::placeholder{color:var(--faint)}
-  .pedilo input:focus{border-color:var(--acento);box-shadow:0 0 0 4px rgba(124,58,237,.14)}
-  .pedilo button{
-    background:var(--acento);color:#fff;border:0;border-radius:999px;cursor:pointer;
-    padding:13px 24px;font:600 11px/1 var(--mono);letter-spacing:.13em;
-    text-transform:uppercase;transition:background .16s ease;
-  }
-  .pedilo button:hover{background:var(--glow)}
-  .pedilo button:disabled{opacity:.45;cursor:default}
+  .nv-tarj{position:relative;overflow:hidden;cursor:pointer;color:var(--ink);
+           background:var(--surface);border:1px solid var(--line);border-radius:24px;
+           transition:opacity .35s ease, border-color .2s ease, box-shadow .25s ease}
+  .nv-tarj:hover{border-color:#CBB8F3;box-shadow:0 26px 50px -34px rgba(76,29,149,.55)}
+  .nv-tarj:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
 
-  /* ---------- Preguntas frecuentes ----------
-     Una sola caja con las preguntas separadas por una línea: como lista se lee
-     de un vistazo, y como tarjetas sueltas parecían siete productos más. */
-  .faq{display:grid;gap:4px}
-  .faq-lista{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-  .faq-item + .faq-item{border-top:1px solid var(--line)}
-  .faq-item summary{
-    list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
-    gap:14px;padding:16px 22px;font:600 15px/1.35 var(--sans);color:var(--ink);
-    transition:color .16s ease;
+  .nv-foto{position:relative;min-width:0}
+  /* Igual que en los mundos: multiply y un poco de brillo se comen el fondo
+     blanco o gris claro de la toma, que sobre la tarjeta blanca era un recuadro */
+  .nv-foto img{position:absolute;left:4%;top:0;width:92%;height:88%;object-fit:contain;
+               mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04)}
+  .nv-foto .sinfoto{position:absolute;inset:0;display:grid;place-content:center;text-align:center;color:var(--faint)}
+  /* Una sombra de piso: el producto se apoya en algo sin cambiarle el fondo */
+  .nv-piso{position:absolute;left:12%;right:12%;bottom:4%;height:9%;border-radius:50%;
+           background:radial-gradient(closest-side,rgba(23,15,40,.16),transparent);filter:blur(2px)}
+
+  .nv-datos{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px;min-width:0}
+  .nv-rubro{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .nv-nom{margin:0;font:400 26px/1 var(--display);text-transform:uppercase;letter-spacing:.005em;
+          text-wrap:balance;overflow-wrap:anywhere}
+  .nv-chips{display:flex;flex-wrap:wrap;gap:5px}
+  .nv-chips span{padding:5px 9px;border-radius:7px;background:var(--surface-2);border:1px solid var(--line);
+                 font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .nv-opciones{font:600 11px/1 var(--mono);color:var(--glow)}
+  .nv-precio{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 14px}
+  .nv-precio small{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .nv-precio b{font:400 38px/1 var(--display);letter-spacing:.005em}
+  .nv-precio i{font:500 13px/1 var(--mono);font-style:normal;color:var(--muted)}
+  .nv-botones{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  /* El mismo botón de la tarjeta (con su «Agregado» en verde), pero lleno */
+  .nv .mas{flex:none;padding:0 20px;background:var(--acento);color:#fff;border-color:var(--acento);
+           box-shadow:0 12px 24px -12px rgba(124,58,237,.9)}
+  .nv .mas:hover{background:var(--glow);border-color:var(--glow)}
+  .nv .mas[aria-pressed="true"]{background:var(--ok-soft);color:var(--ok);border-color:rgba(15,138,95,.45);box-shadow:none}
+  .nv-consultar{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;
+                background:var(--surface);border:1px solid rgba(124,58,237,.45);color:var(--acento);text-decoration:none;
+                font:700 11.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+  .nv-consultar:hover{border-color:var(--acento)}
+  .nv-consultar svg{width:17px;height:17px;flex:none}
+  .nv-servicio{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;padding:0;list-style:none;
+               font:500 12px/1.2 var(--sans);color:var(--muted)}
+  .nv-servicio li{display:inline-flex;align-items:center;gap:7px}
+  .nv-servicio svg{width:17px;height:17px;flex:none;color:var(--acento)}
+
+  /* El banner */
+  .nv-ancho{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;
+            padding:34px 40px 50px 30px;min-height:430px}
+  .nv-ancho .nv-foto{min-height:340px}
+  .nv-ancho .nv-nom{font-size:clamp(34px,4.2vw,58px)}
+  .nv-ancho .nv-precio b{font-size:clamp(38px,3.8vw,54px)}
+  .nv-cinta{position:absolute;top:24px;left:-44px;z-index:3;width:190px;padding:8px 0;overflow:hidden;
+            transform:rotate(-38deg);pointer-events:none;background:var(--acento);color:#fff;text-align:center;
+            font:700 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+            box-shadow:0 8px 18px -8px rgba(124,58,237,.9)}
+  .nv-puntos{position:absolute;top:14px;right:16px;z-index:4;display:flex}
+  .nv-puntos button{width:30px;height:28px;padding:0;border:0;background:transparent;cursor:pointer;display:grid;place-items:center}
+  .nv-puntos button::before{content:"";width:9px;height:9px;border-radius:9px;background:var(--line);
+                            transition:width .25s ease, background .25s ease}
+  .nv-puntos button[aria-current="true"]::before{width:26px;background:var(--acento)}
+  .nv-puntos button:focus-visible{outline:2px solid var(--acento);outline-offset:-2px;border-radius:8px}
+  .nv-barra{position:absolute;left:30px;right:30px;bottom:20px;height:4px;border-radius:4px;
+            background:var(--surface-2);overflow:hidden;pointer-events:none}
+  .nv-barra span{display:block;height:100%;background:var(--acento);transform-origin:left;transform:scaleX(0)}
+  @keyframes nvAvanza{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+  /* Las dos que vienen */
+  .nv-siguen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .nv-chico{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:8px;
+            padding:22px 20px 20px 24px;min-height:250px}
+  .nv-chico .nv-datos{justify-content:flex-start;gap:9px}
+  .nv-chico .nv-precio{margin-top:auto;flex-direction:column;align-items:flex-start;gap:5px}
+  .nv-chico .nv-precio b{font-size:30px}
+  .nv-chico .nv-foto img{top:6%;left:0;width:100%;height:80%}
+  .nv-nuevo{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;
+            background:var(--acento);color:#fff;font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+            box-shadow:0 8px 18px -8px rgba(124,58,237,.8)}
+  .nv-nuevo::before{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
+
+  /* El movimiento: entra, flota sobre su sombra y la cinta brilla. Con
+     "reducir movimiento" rota igual (como la vidriera de arriba), pero de golpe
+     y sin nada de esto. */
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes nvEntraFoto{from{opacity:0;transform:translateY(26px) scale(.95)}to{opacity:1;transform:none}}
+    @keyframes nvEntraDato{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+    @keyframes nvEntraCard{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @keyframes nvFlota{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+    @keyframes nvSombra{0%,100%{transform:scaleX(1);opacity:1}50%{transform:scaleX(.8);opacity:.55}}
+    @keyframes nvBrillo{0%,55%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+    @keyframes nvLate{50%{opacity:.25}}
+    .nv-ancho.activa .nv-foto img{animation:nvEntraFoto .65s cubic-bezier(.2,.7,.2,1) backwards,
+                                            nvFlota 4.6s ease-in-out .65s infinite}
+    .nv-ancho.activa .nv-piso{animation:nvSombra 4.6s ease-in-out .65s infinite}
+    .nv-ancho.activa .nv-datos > *{animation:nvEntraDato .5s cubic-bezier(.2,.7,.2,1) backwards}
+    .nv-ancho.activa .nv-datos > :nth-child(2){animation-delay:.05s}
+    .nv-ancho.activa .nv-datos > :nth-child(3){animation-delay:.1s}
+    .nv-ancho.activa .nv-datos > :nth-child(4){animation-delay:.15s}
+    .nv-ancho.activa .nv-datos > :nth-child(5){animation-delay:.2s}
+    .nv-ancho.activa .nv-datos > :nth-child(6){animation-delay:.25s}
+    .nv-ancho.activa .nv-datos > :nth-child(n+7){animation-delay:.3s}
+    .nv-chico.activa{animation:nvEntraCard .5s cubic-bezier(.2,.7,.2,1) backwards}
+    .nv-pila[data-paso="2"] > .nv-chico.activa{animation-delay:.08s}
+    .nv-cinta::after{content:"";position:absolute;inset:0;transform:translateX(-130%);
+                     background:linear-gradient(100deg,transparent 25%,rgba(255,255,255,.75) 50%,transparent 75%);
+                     animation:nvBrillo 3.8s ease-in-out infinite}
+    .nv-nuevo::before{animation:nvLate 1.6s ease-in-out infinite}
   }
-  .faq-item summary::-webkit-details-marker{display:none}
-  /* El + gira y queda como ×: el mismo botón dice "abrir" y "cerrar" */
-  .faq-item summary::after{
-    content:"+";flex:none;width:26px;height:26px;border-radius:50%;
-    display:grid;place-items:center;background:var(--surface-2);color:var(--acento);
-    font:500 18px/1 var(--sans);transition:transform .2s ease, background .2s ease, color .2s ease;
-  }
-  .faq-item[open] summary::after{transform:rotate(45deg);background:var(--acento);color:#fff}
-  .faq-item summary:hover{color:var(--glow)}
-  .faq-item summary:focus-visible{outline:2px solid var(--acento);outline-offset:-2px}
-  .faq-r{padding:0 22px 18px;color:var(--muted);font-size:14.5px;line-height:1.55;
-         display:grid;gap:8px;max-width:72ch}
-  .faq-r p{margin:0}
-  .faq-r ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
-  .faq-r li{color:var(--ink);display:flex;align-items:baseline;gap:10px}
-  .faq-r li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--acento);
-                    flex:none;transform:translateY(-2px)}
-  .faq-r a{justify-self:start;color:var(--acento);text-decoration:none;padding:6px 0;
-           font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
-  .faq-r a::after{content:" →"}
-  .faq-r a:hover{color:var(--glow)}
-  .faq-mas{margin:10px 2px 0;font-size:14px;color:var(--muted)}
-  .faq-mas a{color:var(--acento);font-weight:600}
-  .faq-mas a:hover{color:var(--glow)}
   @media (prefers-reduced-motion: reduce){
-    .faq-item summary::after{transition:none}
+    .nv-barra{display:none}
+    .nv-pila > .nv-tarj,.nv-pila > .nv-tarj.activa{transition:none}
+  }
+
+  @media (max-width:900px){
+    .nv-chico{grid-template-columns:minmax(0,1fr) 120px}
+    .nv-chico .nv-nom{font-size:22px}
+  }
+  @media (max-width:640px){
+    /* La pila toma el alto de la novedad más larga: lo que sobra va abajo y no
+       entre la foto y el nombre */
+    .nv-ancho{grid-template-columns:minmax(0,1fr);align-content:start;gap:10px;padding:22px 20px 42px;min-height:0}
+    .nv-ancho .nv-foto{min-height:0;height:230px}
+    .nv-ancho .nv-nom{font-size:34px}
+    .nv-ancho .nv-precio b{font-size:38px}
+    .nv-puntos{top:8px;right:8px}
+    .nv-barra{left:20px;right:20px;bottom:18px}
+    .nv-siguen{grid-template-columns:minmax(0,1fr)}
+    .nv-chico{grid-template-columns:minmax(0,1fr) 110px;min-height:0;padding:18px}
+    .nv-chico .nv-foto{min-height:120px}
+  }
+
+  /* ---------- Marcas: se turnan solas ----------
+     Una cinta de logos que avanza sola de a una marca y, abajo, la vitrina de
+     la que quedó en el centro: sus rubros, lo último que entró y el botón para
+     ver todo. Va debajo de los rubros: son las dos formas de elegir por dónde
+     entrar. */
+  .mv{display:flex;flex-direction:column;gap:2px}
+  .mv-caja{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:24px;overflow:hidden}
+  .mv-banda{position:relative;overflow:hidden;border-bottom:1px solid #EFE8FB;
+            -webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);
+            mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
+  .mv-tira{display:flex;width:max-content;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+  .mv-tira.sin{transition:none}
+  .mv-it{position:relative;flex:none;display:flex;flex-direction:column;align-items:center;gap:8px;
+         width:132px;padding:22px 0 18px;background:transparent;border:0;cursor:pointer;color:var(--ink)}
+  .mv-it:focus-visible{outline:2px solid var(--acento);outline-offset:-4px;border-radius:12px}
+  /* Flex y no grid: en una grilla el 100% de alto de la imagen no toma los 30px
+     de la caja, y los logos cuadrados (Apple, Nikon) salían a tamaño real */
+  .mv-logo{display:flex;align-items:center;justify-content:center;width:84px;height:30px;
+           filter:grayscale(1);opacity:.4;transition:filter .4s ease, opacity .4s ease, transform .4s ease}
+  .mv-logo img{width:100%;height:100%;object-fit:contain;display:block}
+  /* El nombre es el respaldo: si hay logo, la imagen lo tapa */
+  .mv-logo b{font:800 13px/1 var(--sans);letter-spacing:-.01em;white-space:nowrap}
+  .mv-logo img + b{display:none}
+  .mv-it i{font:500 10px/1 var(--mono);font-style:normal;color:var(--faint);transition:color .4s ease}
+  /* Al pasar el mouse toma su color: en gris todas se parecen y no se distinguen */
+  .mv-it:hover .mv-logo{filter:none;opacity:1}
+  .mv-it.activa .mv-logo{filter:none;opacity:1;transform:scale(1.18)}
+  .mv-it.activa i{color:var(--acento)}
+  .mv-barra{position:absolute;left:26px;right:26px;bottom:0;height:3px;border-radius:3px 3px 0 0;
+            background:#EFE8FB;overflow:hidden;opacity:0;transition:opacity .3s ease}
+  .mv-it.activa .mv-barra{opacity:1}
+  .mv-barra span{display:block;height:100%;background:var(--acento);transform-origin:left;transform:scaleX(0)}
+  .mv-it.activa .mv-barra span{animation:mvLlena var(--mv-ms,4000ms) linear forwards}
+  .mv.pausa .mv-barra span{animation-play-state:paused}
+  @keyframes mvLlena{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+  .mv-panel{display:grid;grid-template-columns:280px minmax(0,1fr);gap:26px;padding:26px 26px 26px 30px}
+  .mv-info{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+  .mv-info .mv-logo{width:150px;height:48px;justify-content:flex-start;filter:none;opacity:1}
+  .mv-info .mv-logo img{object-position:left center}
+  .mv-info .mv-logo b{font-size:26px}
+  .mv-info p{margin:0;font:500 12px/1.4 var(--mono);color:var(--faint)}
+  .mv-chips{display:flex;flex-wrap:wrap;gap:6px}
+  .mv-chip{padding:7px 11px;border-radius:999px;cursor:pointer;background:var(--surface-2);border:1px solid transparent;
+           color:var(--ink);font:500 12.5px/1 var(--sans);transition:border-color .16s ease}
+  .mv-chip:hover{border-color:var(--acento)}
+  .mv-chip i{font:500 9.5px/1 var(--mono);font-style:normal;color:var(--faint);margin-left:4px}
+  .mv-ver{margin-top:auto;display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border:0;border-radius:999px;cursor:pointer;
+          background:var(--acento);color:#fff;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+          box-shadow:0 12px 24px -12px rgba(124,58,237,.9);transition:background .16s ease}
+  .mv-ver:hover{background:var(--glow)}
+  .mv-chip:focus-visible,.mv-ver:focus-visible,.mv-p:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  .mv-prods{display:flex;flex-direction:column;gap:10px;min-width:0}
+  .mv-rot{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .mv-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  .mv-p{display:flex;flex-direction:column;gap:6px;padding:10px 12px 14px;border-radius:16px;cursor:pointer;text-align:left;
+        background:var(--surface);border:1px solid #EFE8FB;color:var(--ink);transition:border-color .16s ease}
+  .mv-p:hover{border-color:#CBB8F3}
+  /* Alto fijo: el panel se mide antes de que bajen las fotos (ver reservarAltoMarcas) */
+  .mv-p-foto{display:block;height:130px}
+  .mv-p-foto img{width:100%;height:100%;object-fit:contain;display:block;mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04)}
+  .mv-p b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;
+          font:500 13px/1.3 var(--sans)}
+  .mv-p i{font:600 12px/1 var(--mono);font-style:normal;color:var(--acento)}
+  .mv-p i small{font:500 9.5px/1 var(--mono);color:var(--faint);margin-right:3px}
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes mvAparece{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .mv-panel{animation:mvAparece .35s ease both}
+  }
+  /* Con "reducir movimiento" gira igual, como las otras vidrieras, pero de golpe */
+  @media (prefers-reduced-motion: reduce){
+    .mv-tira,.mv-logo{transition:none}
+    .mv-barra{display:none}
+  }
+  @media (max-width:900px){
+    .mv-panel{grid-template-columns:220px minmax(0,1fr)}
+    .mv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (max-width:640px){
+    .mv-it{width:104px;padding:16px 0 14px}
+    .mv-logo{width:64px;height:24px}
+    .mv-panel{grid-template-columns:minmax(0,1fr);gap:16px;padding:18px 16px}
+    .mv-info{gap:9px}
+    .mv-info .mv-logo{width:110px;height:34px}
+    .mv-ver{margin-top:4px}
+    .mv-p-foto{height:100px}
+  }
+
+  /* ---------- ¿Cuánto querés gastar? (17/09) ----------
+     Los tramos de precio en pestañas y, abajo, cuatro productos de ese precio
+     en vitrinas de vidrio claras sobre fondo oscuro. Al pie, lo que este
+     visitante miró. Reemplaza a los botones de "Por presupuesto" y a la tira
+     de "Seguí mirando": eran dos piezas chicas y sin fotos. El oscuro es el de
+     Destacados, con el brillo violeta abajo en vez de arriba. */
+  .pv{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:16px;padding:20px 24px 16px;border-radius:28px;color:#F4EFFD;
+      background:radial-gradient(90% 130% at 80% 120%,rgba(124,58,237,.34),transparent 62%),linear-gradient(155deg,#232030 0%,#14111E 100%)}
+  .pv-lab{margin:0;font:600 10.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:#A597C4}
+  .pv-cab{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .pv-tabs{display:flex;gap:4px;min-width:0;overflow-x:auto;scrollbar-width:none;padding:2px}
+  .pv-tabs::-webkit-scrollbar{display:none}
+  .pv-tab{flex:none;padding:9px 14px;border:0;border-radius:999px;background:transparent;color:#A597C4;cursor:pointer;
+          font:500 13.5px/1 var(--sans);font-variant-numeric:tabular-nums;white-space:nowrap;transition:background .2s ease, color .2s ease}
+  .pv-tab:hover{color:#F4EFFD}
+  .pv-tab[aria-pressed="true"]{color:#fff;background:rgba(124,58,237,.32);box-shadow:inset 0 0 0 1px rgba(196,181,253,.38)}
+  .pv-ver{margin-left:auto;display:inline-flex;align-items:center;gap:10px;padding:0;border:0;background:transparent;color:#F4EFFD;cursor:pointer;
+          font:600 13px/1 var(--sans);white-space:nowrap}
+  .pv-ver span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(244,239,253,.1);transition:background .2s ease, transform .2s ease}
+  .pv-ver:hover span{background:var(--acento);transform:translateX(3px)}
+  .pv-fila{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  .pv-vit{display:flex;flex-direction:column;gap:9px;min-width:0;padding:0;border:0;background:transparent;color:#F4EFFD;cursor:pointer;text-align:left}
+  /* La vitrina: caja de vidrio clara con reflejo arriba y sombra abajo. La foto
+     se mezcla con el vidrio, así no se ve su fondo blanco. */
+  .pv-caja{position:relative;display:block;height:150px;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#FFFFFF 0%,#F1EBFC 100%);
+           box-shadow:inset 0 -22px 30px -22px rgba(76,29,149,.28),0 22px 40px -26px rgba(0,0,0,.7);transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+  .pv-caja::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.7) 0 18%,rgba(255,255,255,0) 34%)}
+  .pv-caja img{position:absolute;left:14%;top:12%;width:72%;height:76%;object-fit:contain;mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04);
+               transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  .pv-vit:hover .pv-caja{transform:translateY(-4px)}
+  .pv-vit:hover .pv-caja img{transform:scale(1.06)}
+  .pv-vit b{font:500 12.5px/1.25 var(--sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pv-precio{font:600 12px/1 var(--mono);font-variant-numeric:tabular-nums;color:#C4B5FD;white-space:nowrap}
+  .pv-precio small{font-weight:500;color:#A597C4;margin-right:4px}
+  .pv-movil{display:none}
+  .pv-pie{display:flex;align-items:center;gap:14px;min-width:0;padding-top:12px;border-top:1px solid rgba(244,239,253,.09)}
+  .pv-pie .pv-lab{flex:none}
+  .pv-visto{display:flex;gap:4px;min-width:0;overflow-x:auto;scrollbar-width:none}
+  .pv-visto::-webkit-scrollbar{display:none}
+  .pv-vi{flex:none;display:flex;align-items:center;gap:10px;padding:4px 12px 4px 4px;border:0;border-radius:12px;background:transparent;color:#F4EFFD;
+         cursor:pointer;text-align:left;transition:background .2s ease}
+  .pv-vi:hover{background:rgba(244,239,253,.07)}
+  .pv-placa{position:relative;flex:none;width:38px;height:38px;border-radius:10px;background:#F4EFFD}
+  .pv-placa img{position:absolute;left:4px;top:4px;width:30px;height:30px;object-fit:contain;mix-blend-mode:multiply}
+  .pv-vi .pv-t{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .pv-vi b{font:500 12px/1.2 var(--sans);max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pv-tab:focus-visible,.pv-ver:focus-visible,.pv-vit:focus-visible,.pv-vi:focus-visible{outline:2px solid #C4B5FD;outline-offset:2px;border-radius:12px}
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes pvEntra{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    .pv-fila.entra > *{animation:pvEntra .45s cubic-bezier(.2,.7,.2,1) backwards}
+    .pv-fila.entra > :nth-child(2){animation-delay:.06s}
+    .pv-fila.entra > :nth-child(3){animation-delay:.12s}
+    .pv-fila.entra > :nth-child(4){animation-delay:.18s}
+  }
+  /* En el celular: pestañas arriba a lo ancho, vitrinas que se deslizan y el
+     botón de ver todo debajo, con el tramo escrito */
+  @media (max-width:640px){
+    .pv{padding:16px 0 12px;gap:12px;border-radius:24px}
+    .pv-cab{padding:0 16px;gap:10px}
+    .pv-cab .pv-lab{flex-basis:100%}
+    .pv-tabs{flex-basis:calc(100% + 32px);margin:0 -16px;padding:2px 16px}
+    .pv-cab .pv-ver{display:none}
+    .pv-fila{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:16px;scrollbar-width:none;gap:10px;padding:0 16px}
+    .pv-fila::-webkit-scrollbar{display:none}
+    .pv-fila .pv-vit{flex:none;width:42%;scroll-snap-align:start}
+    .pv-caja{height:120px}
+    .pv-movil{display:flex;padding:0 16px}
+    .pv-pie{flex-direction:column;align-items:stretch;gap:8px;padding:10px 16px 0}
+    .pv-visto{margin:0 -16px;padding:0 12px}
+  }
+
+  /* ---------- Ayuda: las preguntas y lo que no está (17/09) ----------
+     Antes eran dos cajas claras, una encima de la otra: "¿No lo encontrás?" y
+     una lista de desplegables. Ahora es un solo bloque oscuro, de la misma
+     familia que las vitrinas de arriba: a la izquierda las ocho preguntas
+     numeradas, a la derecha la respuesta y, al pie, el pedido de lo que no
+     está (que es la misma conversación: alguien con una duda).
+     Las respuestas van apiladas en la misma celda, como las novedades: así el
+     alto no salta al pasar de una a otra. En el celular NO se apilan: ahí la
+     respuesta queda debajo de la lista, no se mueve nada por encima del dedo,
+     y reservar el alto de la más larga dejaba un hueco negro. */
+  .ayuda{
+    position:relative;overflow:hidden;display:flex;flex-direction:column;gap:14px;
+    padding:22px 24px 16px;border-radius:28px;color:#F4EFFD;
+    background:radial-gradient(90% 130% at 12% -25%,rgba(124,58,237,.34),transparent 62%),
+               linear-gradient(155deg,#232030 0%,#14111E 100%);
+  }
+  .ayuda h3{margin:0;font:400 22px/1.1 var(--display);text-transform:uppercase}
+  .ay-caja{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:0 22px;
+           border-top:1px solid rgba(244,239,253,.1)}
+  .ay-lista{display:flex;flex-direction:column;padding:6px 0}
+  .ay-p{
+    position:relative;display:flex;align-items:center;gap:12px;width:100%;
+    padding:10px 12px;border:0;border-radius:12px;background:transparent;
+    color:#D9D0EC;cursor:pointer;text-align:left;font:500 14.5px/1.35 var(--sans);
+    transition:background .18s ease, color .18s ease;
+  }
+  .ay-n{flex:none;font:600 10.5px/1 var(--mono);letter-spacing:.08em;color:#7A6D99}
+  .ay-p:hover{background:rgba(244,239,253,.05);color:#fff}
+  .ay-p[aria-pressed="true"]{background:rgba(244,239,253,.08);color:#fff}
+  .ay-p[aria-pressed="true"] .ay-n{color:#C4B5FD}
+  .ay-p[aria-pressed="true"]::before{content:"";position:absolute;left:0;top:8px;bottom:8px;
+                                     width:3px;border-radius:0 3px 3px 0;background:var(--acento)}
+  .ay-panel{display:flex;flex-direction:column;gap:12px;padding:18px 0 14px 22px;
+            border-left:1px solid rgba(244,239,253,.1)}
+  .ay-pila{display:grid}
+  .ay-r{grid-area:1/1;visibility:hidden;display:grid;gap:8px;align-content:start;
+        color:#C9BFE0;font-size:14.5px;line-height:1.55}
+  .ay-r.ve{visibility:visible}
+  .ay-r h4{margin:0;font:600 17px/1.3 var(--sans);color:#fff}
+  .ay-r p{margin:0}
+  .ay-r ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+  .ay-r li{display:flex;align-items:baseline;gap:10px;color:#F4EFFD}
+  .ay-r li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;
+                   background:#C4B5FD;transform:translateY(-2px)}
+  .ay-r a{justify-self:start;color:#C4B5FD;text-decoration:none;padding:4px 0;
+          font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+  .ay-r a::after{content:" →"}
+  .ay-otra{margin:auto 0 0;padding-top:12px;border-top:1px solid rgba(244,239,253,.1);
+           font-size:13.5px;color:#A597C4}
+  .ay-otra a{color:#fff;font-weight:600;text-decoration:none}
+  .ay-otra a:hover{color:#C4B5FD}
+  .ay-pedilo{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,1.05fr);
+             align-items:center;gap:10px 20px;
+             padding-top:12px;border-top:1px solid rgba(244,239,253,.1)}
+  .ay-pedilo b{display:block;font:600 14.5px/1.2 var(--sans)}
+  .ay-pedilo p{margin:4px 0 0;font-size:13.5px;line-height:1.45;color:#A597C4;max-width:52ch}
+  .ay-form{display:flex;gap:8px;min-width:0;padding:5px;border-radius:999px;
+           background:rgba(244,239,253,.08)}
+  .ay-form input{flex:1;min-width:0;height:40px;padding:0 14px;border:0;background:transparent;
+                 color:#fff;font:15px var(--sans);outline:none}
+  .ay-form input::placeholder{color:#8F83AE}
+  .ay-form button{
+    flex:none;height:40px;padding:0 18px;border:0;border-radius:999px;
+    background:var(--acento);color:#fff;cursor:pointer;
+    font:600 11px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+    transition:background .16s ease;
+  }
+  .ay-form button:hover{background:var(--glow)}
+  .ay-form button:disabled{opacity:.45;cursor:default}
+  .ay-p:focus-visible,.ay-form input:focus-visible,.ay-form button:focus-visible{
+    outline:2px solid #C4B5FD;outline-offset:2px}
+
+  @media (max-width:760px){
+    .ay-caja{grid-template-columns:minmax(0,1fr)}
+    .ay-panel{padding:14px 0 12px;border-left:0;border-top:1px solid rgba(244,239,253,.1)}
+    .ay-r{display:none}
+    .ay-r.ve{display:grid}
+    /* La respuesta abierta, debajo de su pregunta: el título lo dice el botón
+       de arriba, así que acá sobra. */
+    .ay-lista .ay-r{padding:2px 12px 14px}
+    .ay-lista .ay-r h4{display:none}
+    .ay-pedilo{grid-template-columns:minmax(0,1fr)}
   }
 
   @media (max-width:560px){
     .pc{width:142px}
     .pc-foto{height:104px}
     .fp-cab h3{font-size:19px}
-    .pedilo{padding:20px}
-    .faq-item summary{padding:14px 16px;font-size:14.5px}
-    .faq-r{padding:0 16px 16px}
+    .ayuda{padding:18px 16px 14px;border-radius:22px}
+    .ay-p{padding:9px 10px;font-size:14px}
+    .ay-pedilo b{flex:1 1 100%}
   }
 
   /* ---------- Filtros ---------- */
@@ -587,32 +949,90 @@
     background:var(--surface);color:var(--ink);border:1px solid var(--line);
   }
   select[hidden]{display:none}
-  /* ---------- Grilla ---------- */
-  .grid{display:grid;gap:16px;padding:22px 0 64px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
-  .card{
-    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
-    display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow);
-    transition:transform .16s, box-shadow .16s;
-  }
-  .card:hover{transform:translateY(-3px);box-shadow:0 2px 6px rgba(24,18,38,.06),0 16px 40px rgba(124,58,237,.22);border-color:rgba(124,58,237,.45)}
+  /* ---------- Grilla (17/09) ----------
+     Cinco por fila y bajando de a una. Antes era un ancho mínimo por tarjeta
+     (auto-fill): en un monitor ancho entraban siete y quedaban diminutas. */
+  .grid{display:grid;gap:18px 16px;padding:22px 0 64px;grid-template-columns:repeat(2,minmax(0,1fr))}
+  @media (min-width:640px){ .grid{grid-template-columns:repeat(3,minmax(0,1fr))} }
+  @media (min-width:980px){ .grid{grid-template-columns:repeat(4,minmax(0,1fr))} }
+  @media (min-width:1300px){ .grid{grid-template-columns:repeat(5,minmax(0,1fr))} }
 
-  /* Aparición al entrar en pantalla. Solo se anima lo que estás mirando:
-     con 483 tarjetas, animarlas todas de una vez trabaría el scroll. */
+  /* La tarjeta dejó de ser una caja: la foto va suelta sobre el papel y lo
+     único con forma es la etiqueta oscura del precio. Elegido con Pedro el
+     17/09, después de dos tandas de diseños que no le cerraron.
+     OJO: nada de transform, opacity ni filter sobre .card. La foto se apoya en
+     el fondo con mix-blend-mode y cualquiera de esas tres la aísla: volvía a
+     aparecer el rectángulo blanco de la foto del proveedor. Por eso la
+     aparición se anima en .cuerpo y el zoom se hace sobre la propia imagen. */
+  .card{display:flex;flex-direction:column;gap:10px;background:none;border:0;border-radius:0;box-shadow:none;overflow:visible}
+
+  /* Aparición al entrar en pantalla: "salen de la caja" (Pedro, 18/09).
+     Primero aparecen el nombre y la etiqueta y, detrás, el producto sube
+     desde abajo como si saliera de la caja. Solo se anima lo que estás
+     mirando: con 483 tarjetas, animarlas todas de una vez trabaría el scroll.
+     El escalonado sale de --i, que pone revelar() en las primeras diez.
+     La subida va por `translate` y el flotar del mouse por `transform`: son
+     propiedades distintas, así la demora de la entrada no le llega al mouse. */
   @media (prefers-reduced-motion: no-preference){
-    .card{opacity:0;transform:translateY(14px) scale(.98)}
-    .card.vis{opacity:1;transform:none}
-    .card{transition:opacity .42s cubic-bezier(.22,.7,.3,1),
-                     transform .42s cubic-bezier(.22,.7,.3,1),
-                     box-shadow .18s, border-color .18s}
-    .card.vis:hover{transform:translateY(-3px)}
-    /* La foto entra con un fundido cuando termina de bajar */
-    .foto img{opacity:0;transition:opacity .45s ease}
-    .foto img.ok{opacity:1}
+    .card .cuerpo{opacity:0;transform:translateY(10px);
+                  transition:opacity .35s ease calc(var(--i, 0) * 70ms),
+                             transform .35s ease calc(var(--i, 0) * 70ms)}
+    .card.vis .cuerpo{opacity:1;transform:none}
+    .foto img{opacity:0;translate:0 70%;
+              transition:translate .7s cubic-bezier(.16,1,.3,1) calc(var(--i, 0) * 70ms + 180ms),
+                         opacity .3s ease calc(var(--i, 0) * 70ms + 180ms),
+                         transform .35s cubic-bezier(.2,.9,.3,1.2)}
+    /* Espera a estar a la vista y a que la foto haya bajado */
+    .card.vis .foto img.ok{opacity:1;translate:0 0}
+    /* Ya adentro, sin demoras: si no, al cambiar de color la principal tardaba
+       en apagarse (hasta medio segundo en las de la derecha) y se veían las dos
+       fotos superpuestas. La pone mostrarColorEnTarjeta(). */
+    .card.entro .foto img{transition:opacity .25s ease, transform .35s cubic-bezier(.2,.9,.3,1.2)}
   }
 
-  .foto{position:relative;aspect-ratio:1/1;background:var(--foto-bg);
+  /* overflow:hidden es lo que hace de "caja": la foto sube desde abajo sin
+     pasar por encima del nombre. No crea contexto de apilado, así que no le
+     corta el mix-blend-mode a la foto (clip-path sí lo haría). */
+  .foto{position:relative;aspect-ratio:1/1;background:none;
         display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .foto img{width:100%;height:100%;object-fit:contain;padding:24px;display:block}
+  /* multiply + el retoque de brillo: así el fondo blanco de la foto del
+     proveedor se funde con el papel de la página y la foto queda sin caja */
+  .foto img{width:100%;height:100%;object-fit:contain;padding:10px;display:block;
+            mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04)}
+
+  /* La sombra del piso para cuando la foto flota. Es un óvalo aparte y va
+     en ::before, que se pinta antes que la foto: una sombra sobre la foto
+     misma dibujaría el rectángulo de la foto del proveedor, que es blanco. */
+  .foto::before{content:"";position:absolute;left:20%;right:20%;bottom:2%;height:8%;border-radius:50%;pointer-events:none;
+                background:radial-gradient(closest-side,rgba(24,18,38,.3),transparent);opacity:0;transform:scale(.7);
+                transition:opacity .35s ease, transform .35s ease}
+
+  /* Al pasar el mouse la foto flota con su sombra, y la etiqueta del precio
+     la acompaña: sube y se prende en violeta. Solo donde hay mouse: en el
+     celular el :hover se queda pegado después de tocar. */
+  @media (hover:hover) and (prefers-reduced-motion: no-preference){
+    .card:hover .foto img{transform:translateY(-8px) scale(1.02)}
+    .card:hover .foto::before{opacity:1;transform:none}
+    .card:hover .pie{transform:translateY(-4px);
+                     box-shadow:0 14px 26px -12px rgba(124,58,237,.85), inset 0 1px 0 rgba(196,181,253,.45)}
+  }
+
+  /* Los puntitos de la tarjeta cambian la foto (18/09): la del color va en
+     una segunda imagen encima. Las dos se funden con multiply, así que la
+     principal se apaga mientras la otra se prende: si no, se verían los dos
+     productos superpuestos, porque el blanco de una deja ver la otra. */
+  .foto img.alt{position:absolute;inset:0;opacity:0;translate:0 0;transition:opacity .25s ease, transform .35s cubic-bezier(.2,.9,.3,1.2)}
+  .foto.otro img.alt{opacity:1}
+  .foto.otro img:not(.alt){opacity:0 !important}
+  /* Seguro: sin .otro, la del color no se ve nunca, lleve la clase que lleve.
+     Si le quedaba la "ok" de las fotos principales, pesaba más que la regla de
+     arriba y al salir de la tarjeta se veían las dos superpuestas. */
+  .foto:not(.otro) img.alt{opacity:0 !important}
+  .card .pintas i{position:relative;cursor:pointer;transition:transform .15s ease, box-shadow .15s ease}
+  /* El puntito mide 12px: para el dedo, el lugar donde se toca es más grande */
+  .card .pintas i::after{content:"";position:absolute;inset:-6px -3px}
+  .card .pintas i.elegido{box-shadow:0 0 0 2px var(--paper), 0 0 0 3.5px var(--ink)}
+  @media (hover:hover){ .card .pintas i:hover{transform:scale(1.25)} }
   .sinfoto{
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
     /* Oscuro a propósito: el fondo claro de .foto es para las fotos reales
@@ -647,23 +1067,31 @@
   /* Si el producto ademas esta agotado, el ahorro baja un renglon para no
      taparse con el otro cartel. */
   .foto .badge.no + .badge.ahorro{top:38px}
+  /* Lo que viene de regalo, como cinta al pie de la foto. Arriba no: ahí están
+     los carteles de agotado y de ahorro, y se pisaban. */
+  .cinta{
+    position:absolute;z-index:2;left:0;bottom:8px;max-width:94%;
+    padding:5px 9px;border-radius:0 7px 7px 0;background:var(--ok);color:#fff;
+    font:600 10.5px/1.25 var(--sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
   /* El precio de antes, al lado del de hoy */
-  .pie s.antes{font:500 11.5px/1 var(--mono);color:var(--faint);margin-left:7px}
+  .pie s.antes{font:500 11.5px/1 var(--mono);color:#A597C4;margin-left:7px}
 
-  .cuerpo{padding:15px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .cuerpo{padding:0;display:flex;flex-direction:column;gap:7px;flex:1}
   .marca{
     font:600 9.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--faint);
-    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    display:flex;align-items:center;gap:8px;
   }
+  .marca .badge{margin-left:auto}
+  /* En la tarjeta el nombre dejó de ir en mayúsculas de display: con dos
+     renglones y nombres largos (iPhone 17 Pro Max 512GB) se leía peor. */
   .nombre{
-    font:400 15px/1.28 var(--display);text-transform:uppercase;letter-spacing:.005em;margin:0;
-    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.56em;
+    font:600 14.5px/1.3 var(--sans);letter-spacing:-.01em;margin:0;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;
     /* "(BLACK/WHITE/PINK/ULTRAMARINE/TEAL)" es un solo token: sin esto se
        desborda de la tarjeta y el line-clamp corta a mitad de palabra. */
     overflow-wrap:anywhere;
   }
-  .meta{font:11.5px/1.4 var(--sans);color:var(--faint);margin:0;
-        display:flex;align-items:center;gap:7px;flex-wrap:wrap;overflow-wrap:anywhere}
   /* Los colores en los que viene el producto. La foto muestra uno solo,
      así que estos puntitos son lo único que cuenta la historia completa. */
   .pintas{display:inline-flex;gap:4px;flex:none}
@@ -674,17 +1102,20 @@
   .fi-tabla .pintas i{width:14px;height:14px}
   .fi-tabla dd .pintas{vertical-align:-3px;margin-right:7px}
   .incluye{font:600 11px/1.35 var(--sans);color:var(--ok);background:var(--ok-soft);padding:6px 9px;border-radius:8px}
-  /* Las capacidades en las que viene el modelo. Una línea sola: si no entra se
-     corta, porque el detalle completo está en la ficha. */
-  .opciones{font:500 10.5px/1.4 var(--mono);color:var(--glow);margin:0;
-            white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-  .pie{margin-top:auto;padding-top:11px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
-  .usd{font:400 23px/1 var(--display);letter-spacing:.01em}
+  /* La etiqueta del precio: el pie de la tarjeta es un bloque oscuro, como el
+     cartelito de una góndola. Es lo único de la tarjeta que tiene forma. */
+  /* El alto fijo es el de una etiqueta con "desde": sin él, las que lo llevan
+     quedaban un renglón más altas que sus vecinas de fila. */
+  .pie{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;
+       min-height:68px;padding:9px 12px;border-radius:12px;background:var(--ink);color:#fff;
+       transition:transform .3s cubic-bezier(.2,.9,.3,1.2), box-shadow .3s ease}
+  .plata{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .usd{font:400 23px/.92 var(--display);letter-spacing:.01em}
   /* El "desde" no compite con el número: es una aclaración, no el precio */
   .usd .desde{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
-              color:var(--faint);font-style:normal;display:block;margin-bottom:5px}
-  .ars{font:500 12px/1 var(--mono);letter-spacing:.03em;color:var(--muted);margin-top:5px}
+              color:#A597C4;font-style:normal;display:block;margin-bottom:5px}
+  .ars{font:500 11.5px/1 var(--mono);letter-spacing:.03em;color:#A597C4;margin:0}
   /* WhatsApp en la tarjeta queda como ícono: el logo se reconoce sin leer, y
      el texto lo necesita más el otro botón, que es el que arma el pedido.
      Ninguno de los dos va lleno de morado. Con quince tarjetas en pantalla,
@@ -717,7 +1148,9 @@
   .fi-botones .sec:hover{opacity:1}
   /* El contador de unidades y el "quitar" son una sola pieza dentro de la columna */
   #fi-pedido-caja{display:flex;flex-direction:column;gap:9px}
-  .card.agotado .foto img{filter:grayscale(1);opacity:.5}
+  /* .vis e img.ok van en el selector para pesar más que la regla de la
+     entrada, que la pone en opacidad 1 */
+  .card.agotado .foto img,.card.agotado.vis .foto img.ok{filter:grayscale(1);opacity:.5}
   .card.agotado .usd,.card.agotado .ars{color:var(--faint)}
 
   /* Modo compacto: mientras no haya NINGUNA foto cargada en el catálogo.
@@ -821,8 +1254,13 @@
   .modal .sec:hover{color:var(--ink);border-color:var(--faint)}
 
   /* ---------- Ficha de producto ---------- */
+  /* 100vh en el Safari del iPhone es el alto con las barras ESCONDIDAS: con
+     las barras a la vista la caja era ~70px más alta que la pantalla y, como la
+     ventana la centra, se cortaba arriba (la X de cerrar quedaba casi afuera) y
+     abajo. dvh es el alto que se ve de verdad; los navegadores viejos que no lo
+     conocen ignoran esa línea y se quedan con la de vh. */
   #ficha .caja{
-    width:min(760px,100%);max-height:calc(100vh - 40px);overflow:auto;padding:0;
+    width:min(760px,100%);max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow:auto;padding:0;
     display:flex;flex-direction:column;
   }
   .fi-cerrar{
@@ -925,7 +1363,8 @@
     background:repeating-linear-gradient(45deg,var(--line),var(--line) 3px,transparent 3px,transparent 6px);
     box-shadow:inset 0 0 0 1px var(--faint);
   }
-  .fi-color-elegido{color:var(--ink)}
+  /* "Pink/White/Purple/Green" no tiene espacios: sin partirlo, en 320 px empujaba la ficha de costado */
+  .fi-color-elegido{color:var(--ink);overflow-wrap:anywhere}
   .fi-color-elegido b{font-weight:600;color:var(--glow)}
   .fi-tabla dd .fi-hint{display:block;font-size:10.5px;color:var(--faint);margin-top:3px}
   /* El display:block de arriba le gana al hidden si no se dice esto */
@@ -1001,6 +1440,27 @@
 
   /* ---------- Botones de la tarjeta ---------- */
   .acciones{display:flex;gap:8px}
+
+  /* En la tarjeta los dos botones viven sobre la foto y aparecen al pasar el
+     mouse: abajo se comían media tarjeta. Con el dedo no hay "pasar por
+     encima", así que en pantallas táctiles están siempre. */
+  .foto .acciones{
+    position:absolute;z-index:3;top:6px;right:6px;gap:6px;
+    opacity:0;transform:translateY(-4px);
+    transition:opacity .18s ease, transform .18s ease;
+  }
+  .card:hover .foto .acciones,.card:focus-within .foto .acciones{opacity:1;transform:none}
+  @media (hover:none){ .foto .acciones{opacity:1;transform:none} }
+  .acciones .mas,.acciones .wa{
+    flex:none;width:36px;min-width:0;height:36px;min-height:0;padding:0;border-radius:50%;
+    display:grid;place-items:center;background:var(--ink);color:#fff;border:0;
+    box-shadow:0 6px 16px -9px rgba(24,18,38,.85);
+  }
+  .acciones .mas b{display:none}
+  .acciones .mas:hover,.acciones .wa:hover{background:var(--acento);color:#fff}
+  .acciones .mas[aria-pressed="true"]{background:var(--ok);color:#fff}
+  /* Sin fotos cargadas no hay dónde apoyarlos: vuelven a la etiqueta */
+  .pie .acciones{position:static;opacity:1;transform:none}
   /* El que arma el pedido es el ancho y el único con texto: es la acción que
      deja vender varios productos en un solo mensaje, y como ícono suelto nadie
      entendía qué hacía. Los 44px son el mínimo para el dedo. */
@@ -1078,9 +1538,15 @@
     .bp-enviar{padding:12px 16px}
     .bp-total b{font-size:17px}
   }
+  /* En 320 px los dos botones dejaban 25 px para el total, y "USD 650" salía
+     partido en dos renglones. El total pasa a su propio renglón, en una línea. */
+  @media (max-width:360px){
+    .barra-pedido{flex-wrap:wrap;row-gap:8px}
+    .bp-total{order:-1;flex:1 1 100%;flex-direction:row;align-items:baseline;gap:10px}
+  }
 
   /* Lista del pedido */
-  #pedido .caja{width:min(520px,100%);max-height:calc(100vh - 40px);overflow:auto}
+  #pedido .caja{width:min(520px,100%);max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow:auto}   /* dvh: ver #ficha .caja */
   .pd-item{display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
   .pd-item:first-of-type{border-top:0}
   .pd-foto{width:46px;height:46px;flex:none;border-radius:9px;background:var(--foto-bg);
@@ -1499,11 +1965,9 @@
     body.portada .seccion{padding:20px 0 2px;border-bottom:0}
   }
 
-  /* En un monitor muy ancho la grilla sola se estira demasiado y las tarjetas
-     quedan enormes: mejor sumar columnas que agrandar cada una. */
-  @media (min-width:1600px){
-    .columnas .grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
-  }
+  /* Antes, en un monitor muy ancho, la grilla sumaba columnas sola (llegaba a
+     siete tarjetas por fila). Desde el 17/09 son cinco y no más: Pedro las
+     quiere de ese tamaño, y sumar columnas las volvía diminutas. */
 
   /* ---------- Te puede servir ----------
      Vivía en la columna de filtros. Ahora va siempre debajo de los productos:
@@ -1672,7 +2136,10 @@
     .rc-marcas{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:1px 16px 3px;scrollbar-width:none}
     .rc-marcas::-webkit-scrollbar,.rf-marcas::-webkit-scrollbar{display:none}
     .marca-chip{padding:9px 13px;font-size:13px}
-    .rc-acc{margin-left:0;justify-content:space-between}
+    /* Con "Agrupado por rubro" u "Orden de la planilla", Ordenar y Filtrar no
+       entran en 320 px (iPhone con zoom de pantalla): Filtrar se salía de la
+       pantalla. Si no entran, Filtrar baja de renglón. */
+    .rc-acc{margin-left:0;justify-content:space-between;flex-wrap:wrap;row-gap:8px}
 
     /* Sin el banner: la pantalla es chica y cada centímetro que no ocupa lo
        fijo es más producto a la vista. Quedan las marcas y los dos botones. */
@@ -1690,7 +2157,7 @@
        el encabezado de arriba se sigue leyendo entero. */
     .rf-card .volver-menu{order:1;width:40px;height:40px;padding:0;justify-content:center}
     .rf-card .volver-menu span{display:none}
-    .rf-card .rc-acc{order:2;flex:1 1 0;min-width:0}
+    .rf-card .rc-acc{order:2;flex:1 1 0;min-width:0;flex-wrap:nowrap}   /* acá el orden se corta con … en vez de bajar Filtrar */
     .rf-card .orden-caja{min-width:0}
     .rf-card .orden-btn{max-width:100%;min-width:0}
     .rf-card .orden-btn b{min-width:0;overflow:hidden;text-overflow:ellipsis}
@@ -1698,7 +2165,7 @@
     .rf-activos{padding:0 20px 8px;background:rgba(244,239,253,.96)}
 
     .modal-filtros{place-items:end stretch}
-    .modal-filtros .caja{width:100%;height:auto;max-height:86vh;border-radius:22px 22px 0 0}
+    .modal-filtros .caja{width:100%;height:auto;max-height:86vh;max-height:86dvh;border-radius:22px 22px 0 0}
   }
 </style>
 </head>
@@ -1974,34 +2441,38 @@ const SERVICIO = {
 //   r     → la respuesta, un párrafo por renglón
 //   lista → (opcional) viñetas debajo de la respuesta
 //   link  → (opcional) [texto del botón, dirección]
+// Reescritas el 17/09: primero la respuesta, después el detalle. El precio en
+// pesos subió al segundo lugar porque es lo primero que se mira al entrar.
+// Ningún dato cambió: los recargos, el 10,5% y la dirección son los de siempre.
 const PREGUNTAS = [
   { p: '¿Cómo puedo pagar?',
     // Sin emojis a propósito: Windows no dibuja banderas y la 🇦🇷 salía como
     // las letras "AR", y el ₿ quedaba corrido respecto del resto.
-    r: ['Tenés estas opciones:'],
+    r: ['Elegís la que te quede más cómoda. Las que tienen porcentaje llevan ese recargo sobre el precio:'],
     lista: ['Efectivo en dólares',
             'Efectivo en pesos',
             'Transferencia bancaria en pesos (sin recargo)',
             'Criptomonedas (+2%)',
             'PayPal, Payoneer o Prex (+10%)'] },
-  { p: '¿El precio incluye IVA?',
-    r: ['No. Si necesitás factura, la emitimos agregando el 10,5% de IVA.'] },
   { p: '¿Por qué cambia el precio en pesos?',
-    r: ['Los precios están en dólares, así que el valor en pesos cambia con el dólar.'] },
+    r: ['Todos los precios están en dólares. El valor en pesos que ves al lado es una referencia: se calcula con la cotización del día, así que se mueve con el dólar.'] },
+  { p: '¿El precio incluye IVA?',
+    r: ['No. El precio que ves es sin factura.',
+        'Si la necesitás, la emitimos sumando el 10,5% de IVA.'] },
   { p: '¿Hacen envíos?',
-    r: ['Sí, a todo el país. Lo mandamos por la paquetería que elijas: el costo y la demora dependen de cada una.',
-        'Te recomendamos Andreani.'] },
+    r: ['Sí, a todo el país. Lo despachamos por la paquetería que elijas: el costo y la demora los pone cada empresa.',
+        'Si no tenés preferencia, te recomendamos Andreani.'] },
   { p: '¿Puedo ir a verlos o retirar en persona?',
     r: [`Sí. Estamos en ${DIRECCION}.`,
-        'Atendemos solo con cita previa: escribinos y coordinamos la visita sin problema.'],
+        'Atendemos solo con cita previa: escribinos por WhatsApp y coordinamos día y hora.'],
     link: ['Ver en Google Maps', MAPA] },
   { p: '¿Los productos son nuevos?',
-    r: ['Sí, todos nuestros productos son nuevos y sellados.'] },
+    r: ['Sí, sin excepciones: todo lo que publicamos es nuevo y sellado.'] },
   { p: '¿Los productos tienen garantía?',
-    r: ['Sí, todos. Cada producto tiene su propia garantía, así que consultanos por la del que te interesa.'] },
+    r: ['Sí, todos. La garantía cambia según el producto, así que preguntanos por la del que te interesa y te la confirmamos antes de que compres.'] },
   { p: '¿Cómo hago el pedido?',
-    r: ['Desde cualquier producto tocá “Consultar por WhatsApp”.',
-        'Si querés llevar varios, sumalos con el + y mandanos el pedido entero en un solo mensaje.'] },
+    r: ['En cualquier producto tocá “Consultar por WhatsApp”: el mensaje te sale ya escrito con el modelo.',
+        'Si querés llevar varios, sumalos con el + y mandanos todo en un solo mensaje.'] },
 ];
 
 // ---------- MUNDOS DE LA PORTADA ----------
@@ -3400,8 +3871,9 @@ function colorDeLaFila(col, desc){
 function htmlColores(txt){
   const lista = pintas(txt).filter(c => c.hex);
   if(!lista.length) return '';
+  // data-color: en la grilla, pasar por el puntito muestra la foto de ese color
   return `<span class="pintas">${lista.map(c =>
-    `<i style="background:${c.hex}" title="${esc(c.nombre)}"></i>`).join('')}</span>`;
+    `<i style="background:${c.hex}" title="${esc(c.nombre)}" data-color="${esc(c.nombre)}"></i>`).join('')}</span>`;
 }
 
 /* En la ficha los puntitos dejan de ser decoración y pasan a ser botones: el
@@ -3943,19 +4415,9 @@ const precioTarjeta = m => {
   return `<i class="desde">desde</i> ${precioUSD(m)}`;
 };
 
-// Las opciones, resumidas en un renglón: "128gb · 256gb · 512gb". Si las
-// etiquetas son largas (los relojes son "42mm Silver S/M") no entran, y decir
-// cuántas hay informa más que cortarlas por la mitad.
-function htmlOpciones(m){
-  if(!m.multi) return '';
-  // Por version, igual que los botones de la ficha. Si todas las filas son
-  // colores de la misma version no hay opciones: los colores ya se ven.
-  const et = [...new Set(m.variantes.map(v => v.opcion || v.etiqueta))];
-  if(et.length < 2) return '';
-  return (et.length <= 4 && et.every(e => e.length <= 12))
-    ? et.map(esc).join(' · ')
-    : `${et.length} opciones`;
-}
+/* Las opciones ("128gb · 256gb · 512gb") salieron de la tarjeta el 17/09: eran
+   un renglón de texto chico que competía con el nombre, y la ficha ya tiene un
+   botón por versión, con su precio. */
 
 /* ---------- Render ---------- */
 
@@ -3971,34 +4433,40 @@ function tarjeta(p){
   const link  = linkWA(mensajeWA(p));
   const badge = htmlBadge(p);
   const ars   = precioARS(p);
-  // En la tarjeta van pocas: las que entran en un renglón sin apretar el diseño
-  const chips = specs(p).slice(0,4);
-  const opts  = htmlOpciones(p);
 
+  /* Los dos botones. Van sobre la foto y aparecen al pasar el mouse; si no hay
+     fotos cargadas, el CSS los deja fijos dentro de la etiqueta del precio. */
+  const acciones = `
+    <div class="acciones">
+      <button class="mas" type="button" aria-pressed="${enPedidoModelo(p)}"
+              aria-label="Agregar al pedido" title="Agregar al pedido">
+        <span class="ico">${ICONO_MAS}</span>
+        <b class="txt-add">Agregar</b><b class="txt-ok">Agregado</b>
+      </button>
+      ${link ? `<a class="wa" href="${link}" target="_blank" rel="noopener"
+                   title="Consultar por WhatsApp" aria-label="Consultar por WhatsApp">${ICONO_WA}</a>` : ''}
+    </div>`;
+
+  /* Qué se ve y qué no (elegido con Pedro el 17/09): los colores como puntitos
+     al lado de la marca, el regalo como cinta sobre la foto y el precio en la
+     etiqueta. Los colores escritos, las capacidades y la línea de opciones
+     salieron de la tarjeta: era todo texto chico y está entero en la ficha. */
   el.innerHTML = `
-    ${CON_FOTOS ? `<div class="foto${p.imagen ? '' : ' vacia'}">${badge}${htmlAhorro(p)}${htmlFoto(p,'loading="lazy"')}</div>` : ''}
+    ${CON_FOTOS ? `<div class="foto${p.imagen ? '' : ' vacia'}">
+      ${badge}${htmlAhorro(p)}${htmlFoto(p,'loading="lazy"')}
+      ${p.incluye ? `<span class="cinta" title="${esc(p.incluye)}">${esc(p.incluye)}</span>` : ''}
+      ${acciones}
+    </div>` : ''}
     <div class="cuerpo">
-      <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}</span>
+      <span class="marca">${esc(p.marca)}${sub ? htmlColores(sub) : ''}${CON_FOTOS ? '' : badge}</span>
       <h2 class="nombre">${esc(p.desc)}</h2>
-      ${sub ? `<p class="meta">${htmlColores(sub)}<span>${esc(sub)}</span></p>` : ''}
-      ${chips.length ? `<div class="specs">${chips.map(s=>`<span>${esc(s)}</span>`).join('')}</div>` : ''}
-      ${opts ? `<p class="opciones">${opts}</p>` : ''}
-      ${p.incluye ? `<div class="incluye">${esc(p.incluye)}</div>` : ''}
       <div class="pie">
-        <div>
+        <div class="plata">
           <span class="usd">${precioTarjeta(p)}</span>
           ${ahorro(p) ? `<s class="antes">USD ${plata(p.antes)}</s>` : ''}
           ${ars ? `<div class="ars">${ars}</div>` : ''}
         </div>
-        <div class="acciones">
-          <button class="mas" type="button" aria-pressed="${enPedidoModelo(p)}"
-                  aria-label="Agregar al pedido">
-            <span class="ico">${ICONO_MAS}</span>
-            <b class="txt-add">Agregar</b><b class="txt-ok">Agregado</b>
-          </button>
-          ${link ? `<a class="wa" href="${link}" target="_blank" rel="noopener"
-                       title="Consultar por WhatsApp" aria-label="Consultar por WhatsApp">${ICONO_WA}</a>` : ''}
-        </div>
+        ${CON_FOTOS ? '' : acciones}
       </div>
     </div>`;
   return el;
@@ -4265,6 +4733,9 @@ const CUANTAS_MARCAS = 12;
 // visible, como para no empujar los productos abajo del todo.
 const MARCAS_DESPUES_DE = 6;
 
+// "Ray-Ban" -> "ray-ban": el nombre del archivo del logo
+const slugMarca = marca => encodeURIComponent(norm(marca).replace(/[^a-z0-9]+/g, '-'));
+
 function marcasParaLaFila(){
   const cuenta = new Map();
   MODELOS.forEach(m => { if(m.marca) cuenta.set(m.marca, (cuenta.get(m.marca) || 0) + 1); });
@@ -4277,7 +4748,7 @@ function htmlFilaMarcas(){
   const lista = marcasParaLaFila();
   if(lista.length < 3) return '';
   const items = lista.map(([marca, n]) => {
-    const logo = urlFoto(CARPETA_MARCAS + encodeURIComponent(norm(marca).replace(/[^a-z0-9]+/g,'-')) + '.png');
+    const logo = urlFoto(CARPETA_MARCAS + slugMarca(marca) + '.png');
     return `<button class="mk" type="button" data-marca="${esc(marca)}" title="${esc(marca)} · ${n} productos">
       <span class="mk-cir">
         ${logo ? `<img src="${esc(logo)}" alt="" loading="lazy" onerror="this.remove()">` : ''}
@@ -4375,9 +4846,17 @@ function elegirSugeridos(cat, techo = techoSugeridos()){
   return out;
 }
 
+/* El número del código propio (AT-0529 → 529). Se asignan en orden y nunca se
+   reusan, así que el más alto de un modelo dice cuándo entró al catálogo. */
+const numeroAT = c => { const r = /^AT-(\d{4})\b/.exec(String(c || '')); return r ? +r[1] : 0; };
+const codigoMasAlto = m => Math.max(0, ...(m.variantes || [m]).map(v => numeroAT(v.codigo)));
+
 /* En "Todo el catálogo" no hay con qué relacionar, pero sí algo que mostrar:
    lo último que entró. Van de categorías distintas a propósito, para que de un
-   vistazo se vea la variedad de rubros y no tres lentes seguidos. */
+   vistazo se vea la variedad de rubros y no tres lentes seguidos.
+   Lo último que entró se sabe por el código AT, no por la fecha: la planilla
+   pone la misma fecha de actualización en todas las filas (el 15/09 eran las
+   483), y con eso el orden quedaba librado a la posición en la hoja. */
 function novedades(cuantas = CUANTOS_SUGERIDOS, unaPorRubro = true){
   const fecha = p => {
     const m = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/.exec((p.fecha || '').trim());
@@ -4387,7 +4866,7 @@ function novedades(cuantas = CUANTOS_SUGERIDOS, unaPorRubro = true){
   };
   const orden = MODELOS
     .filter(m => m.stock && m.precio !== null && m.imagen)
-    .sort((a,b) => fecha(b.rep) - fecha(a.rep) || a.idx - b.idx);
+    .sort((a,b) => codigoMasAlto(b) - codigoMasAlto(a) || fecha(b.rep) - fecha(a.rep) || a.idx - b.idx);
 
   const out = [], vistas = new Set();
   for(const m of orden){
@@ -4403,7 +4882,7 @@ function pintarSugeridos(){
   if(!caja) return;
   // Con una categoría abierta se recomienda lo que la complementa; sin ninguna,
   // lo último que entró al catálogo.
-  // En la portada no va: "Lo último que entró" ya es una fila de los extras.
+  // En la portada no va: ahí ya están los "Recién llegados".
   const lista = enPortada() ? [] : filtros.cat ? elegirSugeridos(filtros.cat) : novedades();
   const rotulo = filtros.cat ? 'Te puede servir' : 'Lo último que entró';
   caja.hidden = !lista.length;
@@ -4730,14 +5209,19 @@ function mundosDeLaPortada(){
     const delRubro = ms.filter(m => norm(m.cat) === norm(w.foto));
     const fotos = [...porPrecio(delRubro), ...porPrecio(ms.filter(m => !delRubro.includes(m)))]
                     .map(m => m.imagen).slice(0, 12);
+    /* Cada rubro trae su producto estrella (el más caro con foto): la foto
+       del mundo se turna por ellos y es la que aparece al pasar por el rubro. */
     return { ...w, n: ms.length, desde: precios.length ? Math.min(...precios) : null, fotos,
-             porRubro: w.rubros.map(c => ({ cat: c, n: porCat.get(c).length })) };
+             porRubro: w.rubros.map(c => {
+               const estrella = porPrecio(porCat.get(c))[0];
+               return { cat: c, n: porCat.get(c).length, foto: estrella ? estrella.imagen : '', prod: estrella ? nombreCorto(estrella) : '' };
+             }) };
   });
 }
 
-function entrarAlRubro(cat){
+function entrarAlRubro(cat, marca = ''){
   filtros.cat = cat;
-  filtros.marca = '';
+  filtros.marca = marca;
   rendirCintaAuto();
   // El chip de la cinta tiene que quedar marcado igual que si lo hubiera
   // tocado ahí: si no, el cliente ve el rubro abierto y la cinta en "Todo".
@@ -4755,8 +5239,15 @@ function pintarMosaico(){
     const t = document.createElement('article');
     t.className = 'mundo' + (w.tamano ? ' mundo-' + w.tamano : '');
     t.setAttribute('aria-labelledby', 'mundo-' + i);
+    t.style.setProperty('--i', i);
+    // Solo la primera foto baja de entrada; las demás, justo antes de que les toque
+    const capas = capasDelMundo(w);
     t.innerHTML = `
-      ${w.fotos.length ? `<span class="mundo-foto"><img src="${esc(w.fotos[0])}" alt="" loading="lazy" decoding="async"></span>` : ''}
+      <span class="mundo-vuelta" aria-hidden="true"></span>
+      ${capas.length ? `<span class="mundo-foto">${capas.map((c, k) =>
+        `<img ${k === 0 ? `src="${esc(c.src)}" class="ve"` : `data-src="${esc(c.src)}"`} alt="" loading="lazy" decoding="async"
+              data-j="${c.j}" data-prod="${esc(c.prod)}">`).join('')}</span>
+        <span class="mundo-cap" aria-hidden="true"></span>` : ''}
       <div class="mundo-cab">
         <h3 id="mundo-${i}">${esc(w.nombre)}</h3>
         <p>${w.n} producto${w.n !== 1 ? 's' : ''}${w.desde ? ' · desde USD ' + plata(w.desde) : ''}</p>
@@ -4765,18 +5256,38 @@ function pintarMosaico(){
         `<button type="button" class="rubro" data-cat="${esc(r.cat)}">${esc(plural(r.cat))}<i>${r.n}</i></button>`
       ).join('')}</div>`;
 
-    // Si la foto no carga, se prueba con la siguiente. Recién cuando se acaban
-    // los candidatos se saca la imagen: la tarjeta sigue sirviendo sin foto.
-    const img = t.querySelector('img');
-    if(img){
-      let k = 0;
+    // Si la primera foto no carga, se prueba con la siguiente candidata. Las de
+    // los rubros no tienen repuesto: si fallan, salen de la ronda. Sin ninguna,
+    // la tarjeta sigue sirviendo sin foto.
+    t.querySelectorAll('.mundo-foto img').forEach((img, capa) => {
+      let intento = 0;
       img.onerror = () => {
-        if(++k < w.fotos.length) img.src = w.fotos[k];
-        else img.closest('.mundo-foto').remove();
+        if(capa === 0 && ++intento < w.fotos.length){ img.src = w.fotos[intento]; return; }
+        const estaba = img.classList.contains('ve');
+        img.remove();
+        if(!t.querySelector('.mundo-foto img')){ t.querySelector('.mundo-foto')?.remove(); t.querySelector('.mundo-cap')?.remove(); }
+        else if(estaba) mostrarCapa(t, 0, false);
       };
-    }
-    t.querySelectorAll('.rubro').forEach(b => b.onclick = () => entrarAlRubro(b.dataset.cat));
+    });
+    t.querySelectorAll('.rubro').forEach((b, j) => {
+      b.onclick = () => entrarAlRubro(b.dataset.cat);
+      // Pasar por un rubro muestra su producto. Con el dedo no: tocar ya entra.
+      const ver = () => {
+        const k = [...t.querySelectorAll('.mundo-foto img')].findIndex(img => img.dataset.j === String(j));
+        if(k >= 0) mostrarCapa(t, k, true);
+      };
+      b.addEventListener('pointerenter', e => { if(e.pointerType === 'mouse') ver(); });
+      b.addEventListener('focus', ver);
+    });
+    t._k = 0;
+    // La tarjeta que alguien mira con el mouse no cambia sola
+    t.addEventListener('pointerenter', e => { if(e.pointerType === 'mouse') t._frenada = true; });
+    t.addEventListener('pointermove', e => { if(e.pointerType === 'mouse') inclinarMundo(t, e); });
+    t.addEventListener('pointerleave', () => { t._frenada = false; mostrarCapa(t, t._k, false); inclinarMundo(t, null); });
+    t.querySelector('.mundo-rubros').addEventListener('pointerleave', () => mostrarCapa(t, t._k, false));
+    t.addEventListener('focusout', e => { if(!t.contains(e.relatedTarget)) mostrarCapa(t, t._k, false); });
     caja.appendChild(t);
+    mostrarCapa(t, 0, false);
   });
 
   const todo = document.createElement('button');
@@ -4786,6 +5297,83 @@ function pintarMosaico(){
   todo.onclick = () => { verTodoElCatalogo(); volverArriba(); };
 
   mosaico.replaceChildren(caja, todo);
+  arrancarMundos();
+}
+
+/* Las fotos de un mundo: la de siempre primero y después la estrella de cada
+   rubro que no esté ya. Cada una sabe de qué rubro es (j) para marcarlo. */
+function capasDelMundo(w){
+  const capas = w.fotos[0] ? [{ src: w.fotos[0], j: -1, prod: '' }] : [];
+  w.porRubro.forEach((r, j) => {
+    if(!r.foto) return;
+    const ya = capas.find(c => c.src === r.foto);
+    if(ya){ if(ya.j < 0){ ya.j = j; ya.prod = r.prod; } return; }
+    capas.push({ src: r.foto, j, prod: r.prod });
+  });
+  return capas;
+}
+
+function mostrarCapa(t, k, conNombre){
+  const imgs = [...t.querySelectorAll('.mundo-foto img')];
+  if(!imgs.length) return;
+  k = Math.min(k, imgs.length - 1);
+  // Se baja la que se va a ver y la que sigue, así ya está cuando le toque
+  [imgs[k], imgs[(k + 1) % imgs.length]].forEach(img => { if(!img.getAttribute('src') && img.dataset.src) img.src = img.dataset.src; });
+  imgs.forEach((img, i) => img.classList.toggle('ve', i === k));
+  t.querySelectorAll('.rubro').forEach((b, i) => b.classList.toggle('en-foto', String(i) === imgs[k].dataset.j));
+  const cap = t.querySelector('.mundo-cap');
+  if(cap){
+    const prod = conNombre ? imgs[k].dataset.prod : '';
+    if(prod) cap.textContent = prod;
+    cap.classList.toggle('ve', !!prod);
+  }
+}
+
+const MUNDOS_MS = 2600;          // cada cuánto cambia una tarjeta (de a una por vez)
+const INCLINA_MUNDO = [4, 3];    // grados, a lo ancho y a lo alto, de punta a punta
+const DESPEGA_FOTO = [10, 7];    // px que se corre la foto con el mouse
+let mundosTimer = null, mundosTurno = 0;
+
+function inclinarMundo(t, e){
+  if(!e || quieto){
+    t.classList.remove('sigue');
+    ['--rx', '--ry', '--px', '--py'].forEach(v => t.style.removeProperty(v));
+    return;
+  }
+  const r = t.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+  t.classList.add('sigue');
+  t.style.setProperty('--ry', (x * INCLINA_MUNDO[0]).toFixed(2) + 'deg');
+  t.style.setProperty('--rx', (-y * INCLINA_MUNDO[1]).toFixed(2) + 'deg');
+  t.style.setProperty('--px', (x * DESPEGA_FOTO[0]).toFixed(1) + 'px');
+  t.style.setProperty('--py', (y * DESPEGA_FOTO[1]).toFixed(1) + 'px');
+}
+
+// Le toca a la siguiente tarjeta que nadie esté mirando
+function girarMundos(){
+  const tarjetas = [...document.querySelectorAll('#mosaico .mundo')];
+  for(let intento = 0; intento < tarjetas.length; intento++){
+    const t = tarjetas[mundosTurno++ % tarjetas.length];
+    const n = t.querySelectorAll('.mundo-foto img').length;
+    if(t._frenada || n < 2) continue;
+    t._k = (t._k + 1) % n;
+    mostrarCapa(t, t._k, false);
+    t.classList.remove('cambia'); void t.offsetWidth; t.classList.add('cambia');
+    return;
+  }
+}
+
+/* Con "reducir movimiento" las fotos no se turnan: a diferencia de las
+   vidrieras, acá no se esconde nada (los rubros están todos escritos) y un
+   cambio de golpe cada 2,6 segundos sería un parpadeo. Pasar por un rubro sí
+   sigue mostrando su producto. */
+function arrancarMundos(){
+  pararMundos();
+  if(quieto || !enPortada() || document.hidden || !document.querySelector('#mosaico .mundo')) return;
+  mundosTimer = setInterval(girarMundos, MUNDOS_MS);
+}
+function pararMundos(){
+  if(mundosTimer){ clearInterval(mundosTimer); mundosTimer = null; }
 }
 
 /* ---------- Los bloques de la portada ----------
@@ -4793,11 +5381,11 @@ function pintarMosaico(){
    Se dibujan solos debajo del mosaico y solo existen en la portada: apenas el
    cliente elige un rubro o busca algo, molestan y desaparecen. */
 
-const FILAS_RUBRO   = 5;    // cuantos rubros muestran su propia fila
-const POR_FILA      = 12;   // productos por fila: mas es scroll infinito al costado
 const MIRADOS_MAX   = 10;
+const NUEVOS_MAX    = 6;      // novedades en la vidriera, una por rubro
+const NUEVOS_MS     = 5000;   // cada cuanto pasa a la siguiente
 
-/* --- Lo que miraste: es de este visitante y de este navegador --- */
+/* --- Seguí mirando: es de este visitante y de este navegador --- */
 const MIRADOS_KEY = 'advance-mirados-v1';
 
 function leerMirados(){
@@ -4815,10 +5403,12 @@ function anotarMirado(k){
   }catch{}
 }
 
+/* Se guarda la variante que se abrió, así que dos colores o capacidades del
+   mismo modelo son dos claves: sin quitar los repetidos, el mismo iPhone salía
+   dos veces seguidas. */
 function modelosMirados(){
-  const claves = leerMirados();
-  return claves.map(k => MODELOS.find(m => m.variantes.some(v => clave(v) === k)))
-               .filter(m => m && m.stock && m.imagen);
+  return leerMirados().map(buscarModelo)
+    .filter((m, i, lista) => m && m.stock && m.imagen && lista.indexOf(m) === i);
 }
 
 /* --- Una tarjeta chica, la misma para todas las filas --- */
@@ -4837,33 +5427,418 @@ function htmlProdChico(m){
   </button>`;
 }
 
-/* --- Una fila: rotulo, subtitulo opcional y la pista --- */
-function htmlFilaProd(titulo, lista, sub, verCat){
-  if(!lista.length) return '';
-  return `<section class="fp">
-    <div class="fp-cab">
-      <h3>${esc(titulo)}</h3>
-      ${sub ? `<span class="fp-sub">${esc(sub)}</span>` : ''}
-      ${verCat ? `<button class="fp-ver" type="button" data-vercat="${esc(verCat)}">Ver todos</button>` : ''}
-    </div>
-    <div class="fp-pista"><div class="fp-tira">${lista.map(htmlProdChico).join('')}</div></div>
+// En letra grande va el nombre hasta el primer " — ", " | " o " (": lo que
+// sigue son detalles que ya están en los chips o en la ficha.
+const nombreCorto = m => String(m.desc || '').split(/\s(?:—|\||\()/)[0].trim() || m.desc;
+
+/* --- ¿Cuánto querés gastar? ---
+   Los tramos de RANGOS en pestañas y cuatro productos de ese precio en
+   vitrinas. Pasar el mouse por un tramo ya muestra los suyos; "Ver los N" abre
+   la grilla con ese tramo, igual que los botones de antes. Al pie, lo mirado. */
+const PV_VITRINAS = 4;
+let PV = [], pvVal = '';
+
+function datosPresupuesto(){
+  return RANGOS.map(([val, txt, min, max]) => {
+    /* Se cuenta con el MISMO criterio que filtrar(): por variantes y con el
+       tope excluido. Antes se contaba con m.precio, que es el precio MINIMO
+       del modelo, y con <= max: un modelo de 180 a 320 no aparecia en "USD 200
+       a 500" aunque el filtro si lo devolvia, y uno de 200 justos se contaba en
+       dos tramos a la vez. Tampoco se mira el stock, porque el clic solo pone
+       filtros.rango: el numero tiene que ser el que la grilla va a mostrar. */
+    const n = MODELOS.filter(m => m.variantes.some(v =>
+      v.precio !== null && v.precio >= min && v.precio < max)).length;
+    // En las vitrinas, los más caros de ese precio con foto y stock, uno por
+    // rubro mientras alcance: cuatro celulares seguidos no muestran el tramo
+    const cand = MODELOS.filter(m => m.stock && m.imagen && m.precio !== null && m.precio >= min && m.precio < max)
+                        .sort((a, b) => b.precio - a.precio);
+    const prods = [], rubros = new Set();
+    cand.forEach(m => { if(prods.length < PV_VITRINAS && !rubros.has(m.cat)){ rubros.add(m.cat); prods.push(m); } });
+    cand.forEach(m => { if(prods.length < PV_VITRINAS && !prods.includes(m)) prods.push(m); });
+    return { val, txt, min, max, n, prods };
+  }).filter(t => t.n);
+}
+
+const tramoCorto = t => t.min === 0 ? 'Hasta ' + plata(t.max)
+  : t.max === Infinity ? 'Más de ' + plata(t.min)
+  : `USD ${plata(t.min)} – ${plata(t.max)}`;
+const precioChico = m => `${m.multi && m.precio !== m.precioMax ? '<small>desde</small>' : ''}USD ${plata(m.precio)}`;
+
+function htmlVitrinas(t){
+  return t.prods.map(m => `<button type="button" class="pv-vit" data-key="${esc(clave(m))}" title="${esc(nombreConMarca(m))}">
+      <span class="pv-caja"><img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span>
+      <b>${esc(nombreCorto(m))}</b><span class="pv-precio">${precioChico(m)}</span></button>`).join('');
+}
+
+function htmlPresupuesto(lista, mirados){
+  const t = lista.find(x => x.val === pvVal);
+  return `<section class="pv" id="presupuesto" aria-labelledby="pv-titulo">
+    <div class="pv-cab"><h3 class="pv-lab" id="pv-titulo">¿Cuánto querés gastar?</h3>
+      <div class="pv-tabs" role="group" aria-label="Precio">${lista.map(x =>
+        `<button type="button" class="pv-tab" data-pv="${esc(x.val)}" aria-pressed="${x === t}">${esc(tramoCorto(x))}</button>`).join('')}</div>
+      <button type="button" class="pv-ver" data-ver>Ver los ${t.n} <span aria-hidden="true">→</span></button></div>
+    <div class="pv-fila entra" id="pv-fila">${htmlVitrinas(t)}</div>
+    <div class="pv-movil"><button type="button" class="pv-ver" data-ver>Ver los ${t.n} · ${esc(t.txt)} <span aria-hidden="true">→</span></button></div>
+    ${mirados.length ? `<div class="pv-pie"><span class="pv-lab">Visto hace poco</span><div class="pv-visto">${mirados.map(m =>
+      `<button type="button" class="pv-vi" data-key="${esc(clave(m))}" title="${esc(nombreConMarca(m))}">
+         <span class="pv-placa"><img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span>
+         <span class="pv-t"><b>${esc(nombreCorto(m))}</b><span class="pv-precio">${precioChico(m)}</span></span></button>`).join('')}</div></div>` : ''}
   </section>`;
 }
 
-/* --- Los rubros que se llevan una fila propia ---
-   Los primeros del orden de la barra (que ya esta puesto por lo que mas se
-   vende) con suficientes productos como para que la fila no quede coja. */
-function rubrosDestacados(){
-  const porCat = new Map();
-  MODELOS.forEach(m => {
-    if(!m.stock || !m.imagen || m.precio === null) return;
-    if(!porCat.has(m.cat)) porCat.set(m.cat, []);
-    porCat.get(m.cat).push(m);
+// Cambia de tramo sin redibujar la pieza: la fila de pestañas no pierde su scroll
+function elegirTramo(val){
+  const sec = $('presupuesto'), t = PV.find(x => x.val === val);
+  if(!sec || !t || val === pvVal) return;
+  pvVal = val;
+  sec.querySelectorAll('.pv-tab').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pv === val)));
+  const fila = $('pv-fila');
+  fila.innerHTML = htmlVitrinas(t);
+  fila.classList.remove('entra'); void fila.offsetWidth; fila.classList.add('entra');
+  sec.querySelectorAll('[data-ver]').forEach((b, i) => {
+    b.firstChild.textContent = i === 0 ? `Ver los ${t.n} ` : `Ver los ${t.n} · ${t.txt} `;
   });
-  return [...porCat.entries()]
-    .filter(([, ms]) => ms.length >= 4)
-    .sort(([a], [b]) => ordenCat(a, b))
-    .slice(0, FILAS_RUBRO);
+}
+
+function montarPresupuesto(sec){
+  sec.addEventListener('click', e => {
+    const tab = e.target.closest('[data-pv]');
+    if(tab){ elegirTramo(tab.dataset.pv); return; }
+    if(e.target.closest('[data-ver]')){ filtros.rango = pvVal; sincronizarControles(); aplicarFiltro(true); return; }
+    const prod = e.target.closest('[data-key]');
+    if(prod) abrirFicha(prod.dataset.key);
+  });
+  // Con el mouse alcanza con pasar por el tramo; con el dedo, se toca
+  sec.addEventListener('pointerover', e => {
+    const tab = e.target.closest('[data-pv]');
+    if(tab && e.pointerType === 'mouse') elegirTramo(tab.dataset.pv);
+  });
+}
+
+/* --- Recién llegados ---
+   Lo último que entró al catálogo, uno por rubro. El banner pasa solo de uno
+   al otro y las dos tarjetas de abajo muestran los que vienen. Todo lo que
+   dice es de la planilla: precio, pesos con la cotización, el regalo de
+   "Incluye" y la línea de servicio de la ficha. Nada de "últimas unidades". */
+let NV = [], nvIndice = 0, nvTimer = null, nvDesde = 0, nvCorrido = 0;
+const nvFrenos = new Set();   // por qué está frenada: el mouse encima, el foco adentro
+
+function htmlPrecioNuevo(m){
+  const desde = m.multi && m.precio !== m.precioMax;
+  const ars = precioARS(m);
+  return `<div class="nv-precio">${desde ? '<small>desde</small>' : ''}<b>USD ${plata(m.precio)}</b>${ars ? `<i>${ars}</i>` : ''}</div>`;
+}
+
+function htmlAgregarNuevo(m, texto){
+  return `<button class="mas" type="button" aria-pressed="${enPedidoModelo(m)}"
+            aria-label="Agregar ${esc(nombreCorto(m))} al pedido">
+      <span class="ico">${ICONO_MAS}</span><b class="txt-add">${texto}</b><b class="txt-ok">Agregado</b>
+    </button>`;
+}
+
+function htmlNuevoGrande(m){
+  const chips = specs(m).slice(0, 3);
+  const link = linkWA(mensajeWA(m));
+  const servicio = ['envio', 'garantia'].filter(k => SERVICIO[k] && SERVICIO[k][0])
+    .map(k => `<li>${ICONOS_SERVICIO[k]}${esc(SERVICIO[k][0])}</li>`).join('');
+  return `<article class="nv-tarj nv-ancho" data-key="${esc(clave(m))}" tabindex="0">
+    <span class="nv-cinta" aria-hidden="true">Recién llegado</span>
+    <div class="nv-foto"><span class="nv-piso" aria-hidden="true"></span>${htmlFoto(m, 'loading="lazy"')}</div>
+    <div class="nv-datos">
+      <span class="nv-rubro">${esc(plural(m.cat))}</span>
+      <h3 class="nv-nom">${esc(nombreCorto(m))}</h3>
+      ${chips.length ? `<div class="nv-chips">${chips.map(s => `<span>${esc(s)}</span>`).join('')}</div>` : ''}
+      ${conRegalo(m) ? `<div class="incluye">${esc(m.incluye)}</div>` : ''}
+      ${m.multi ? `<span class="nv-opciones">${m.variantes.length} opciones</span>` : ''}
+      ${htmlPrecioNuevo(m)}
+      <div class="nv-botones">${htmlAgregarNuevo(m, 'Agregar al pedido')}${link
+        ? `<a class="nv-consultar" href="${link}" target="_blank" rel="noopener">${ICONO_WA}Consultar</a>` : ''}</div>
+      ${servicio ? `<ul class="nv-servicio">${servicio}</ul>` : ''}
+    </div>
+  </article>`;
+}
+
+function htmlNuevoChico(m){
+  return `<article class="nv-tarj nv-chico" data-key="${esc(clave(m))}" tabindex="0">
+    <div class="nv-datos">
+      <span class="nv-nuevo">Nuevo</span>
+      <span class="nv-rubro">${esc(plural(m.cat))}</span>
+      <h3 class="nv-nom">${esc(nombreCorto(m))}</h3>
+      ${conRegalo(m) ? `<div class="incluye">${esc(m.incluye)}</div>` : ''}
+      ${htmlPrecioNuevo(m)}
+      <div class="nv-botones">${htmlAgregarNuevo(m, 'Agregar')}</div>
+    </div>
+    <div class="nv-foto"><span class="nv-piso" aria-hidden="true"></span>${htmlFoto(m, 'loading="lazy"')}</div>
+  </article>`;
+}
+
+/* Cada pila tiene TODAS las novedades y muestra la que le toca: la del banner
+   es la actual (paso 0) y las de abajo, la siguiente y la otra (pasos 1 y 2). */
+function htmlNuevos(lista){
+  const n = lista.length;
+  const pila = (paso, html) => `<div class="nv-pila" data-paso="${paso}">${lista.map(html).join('')}</div>`;
+  const puntos = n > 1 ? `<div class="nv-puntos">${lista.map((m, i) =>
+      `<button type="button" data-ir="${i}" aria-current="false"
+               aria-label="Ver ${esc(nombreCorto(m))} (${i + 1} de ${n})"></button>`).join('')}</div>` : '';
+  return `<section class="nv" id="nuevos" aria-labelledby="nv-titulo">
+    <div class="fp-cab"><h3 id="nv-titulo">Recién llegados</h3>
+      <span class="fp-sub">lo último que se sumó al catálogo</span></div>
+    <div class="nv-escena">
+      <div class="nv-marco">${pila(0, htmlNuevoGrande)}${puntos}${n > 1 ? '<div class="nv-barra" aria-hidden="true"><span></span></div>' : ''}</div>
+      ${n > 1 ? `<div class="nv-siguen">${pila(1, htmlNuevoChico)}${n > 2 ? pila(2, htmlNuevoChico) : ''}</div>` : ''}
+    </div>
+  </section>`;
+}
+
+function marcarNuevos(){
+  const sec = document.getElementById('nuevos');
+  if(!sec || !NV.length) return;
+  sec.querySelectorAll('.nv-pila').forEach(p => {
+    const toca = (nvIndice + Number(p.dataset.paso)) % NV.length;
+    [...p.children].forEach((t, i) => t.classList.toggle('activa', i === toca));
+  });
+  sec.querySelectorAll('.nv-puntos button').forEach((b, i) =>
+    b.setAttribute('aria-current', String(i === nvIndice)));
+  reiniciarBarraNuevos();
+}
+
+function irNuevo(i){
+  if(!NV.length) return;
+  nvIndice = (i + NV.length) % NV.length;
+  nvDesde = Date.now(); nvCorrido = 0;
+  marcarNuevos();
+}
+
+// Como la barra de la vidriera de arriba: sacar y volver a poner la animación
+function reiniciarBarraNuevos(){
+  const b = document.querySelector('#nuevos .nv-barra span');
+  if(!b) return;
+  b.style.animation = 'none';
+  void b.offsetWidth;
+  b.style.animation = (nvTimer && !quieto) ? `nvAvanza ${NUEVOS_MS}ms linear forwards` : 'none';
+  b.style.animationPlayState = nvFrenos.size ? 'paused' : 'running';
+}
+
+/* Un solo temporizador que mira cuánto corrió: al frenar se guarda lo que
+   llevaba, así la barrita y el cambio siguen sincronizados al soltar. */
+function arrancarNuevos(){
+  pararNuevos();
+  if(NV.length < 2 || !document.getElementById('nuevos') || !enPortada() || document.hidden) return;
+  nvDesde = Date.now(); nvCorrido = 0;
+  nvTimer = setInterval(() => {
+    if(nvFrenos.size) return;
+    if(nvCorrido + Date.now() - nvDesde >= NUEVOS_MS) irNuevo(nvIndice + 1);
+  }, 200);
+  reiniciarBarraNuevos();
+}
+function pararNuevos(){
+  if(nvTimer){ clearInterval(nvTimer); nvTimer = null; }
+}
+function frenarNuevos(motivo){
+  if(!nvFrenos.size) nvCorrido += Date.now() - nvDesde;
+  nvFrenos.add(motivo);
+  const b = document.querySelector('#nuevos .nv-barra span');
+  if(b) b.style.animationPlayState = 'paused';
+}
+function soltarNuevos(motivo){
+  if(!nvFrenos.delete(motivo) || nvFrenos.size) return;
+  nvDesde = Date.now();
+  const b = document.querySelector('#nuevos .nv-barra span');
+  if(b) b.style.animationPlayState = 'running';
+}
+
+function montarNuevos(sec){
+  nvFrenos.clear();
+  sec.addEventListener('click', e => {
+    const punto = e.target.closest('[data-ir]');
+    if(punto){ irNuevo(Number(punto.dataset.ir)); return; }
+    const t = e.target.closest('.nv-tarj');
+    if(!t) return;
+    if(e.target.closest('.mas')){ togglePedidoModelo(t.dataset.key); return; }
+    if(e.target.closest('a')) return;          // Consultar abre WhatsApp solo
+    abrirFicha(t.dataset.key);
+  });
+  sec.addEventListener('keydown', e => {
+    if((e.key !== 'Enter' && e.key !== ' ') || !e.target.classList.contains('nv-tarj')) return;
+    e.preventDefault();
+    abrirFicha(e.target.dataset.key);
+  });
+  // Se frena mientras la miran con el mouse o la recorren con el teclado. Con
+  // el dedo no: en el celular el "mouse encima" no se suelta nunca.
+  sec.addEventListener('pointerenter', e => { if(e.pointerType === 'mouse') frenarNuevos('mouse'); });
+  sec.addEventListener('pointerleave', e => { if(e.pointerType === 'mouse') soltarNuevos('mouse'); });
+  sec.addEventListener('focusin', () => frenarNuevos('foco'));
+  sec.addEventListener('focusout', e => { if(!sec.contains(e.relatedTarget)) soltarNuevos('foco'); });
+  marcarNuevos();
+  arrancarNuevos();
+}
+
+/* --- Marcas: se turnan solas ---
+   Las marcas con más productos (las mismas que la fila de marcas), en una
+   cinta que avanza sola de a una y deja la del momento en el centro. Abajo, la
+   vitrina de esa marca. Tocar un logo lo trae al centro. */
+const MARCAS_MS = 4000;   // eran 6 segundos y se hacía largo: Pedro lo pidió más corto (16/09)
+let MV = [], mvPos = 0, mvK = 0, mvTimer = null, mvDesde = 0, mvCorrido = 0, mvSalto = null, mvObs = null;
+const mvFrenos = new Set();
+
+function datosMarcas(){
+  return marcasParaLaFila().map(([marca, n]) => {
+    const ms = MODELOS.filter(m => m.marca === marca);
+    const porCat = new Map();
+    ms.forEach(m => porCat.set(m.cat, (porCat.get(m.cat) || 0) + 1));
+    return {
+      marca, n, rubros: porCat.size,
+      cats: [...porCat].sort((a, b) => b[1] - a[1] || ordenCat(a[0], b[0])).slice(0, 3),
+      nuevos: ms.filter(m => m.stock && m.precio !== null && m.imagen)
+                .sort((a, b) => codigoMasAlto(b) - codigoMasAlto(a) || a.idx - b.idx).slice(0, 4),
+    };
+  });
+}
+
+/* Los logos de marcas/ son cuadrados con la marca finita al medio: en la cinta
+   quedaban diminutos. Se usa la copia sin margen de marcas/recortados/ (la
+   genera herramientas/recortar-logos.py); si no está, el original; si tampoco,
+   el nombre escrito. */
+function htmlLogoMarca(marca){
+  const orig = urlFoto(CARPETA_MARCAS + slugMarca(marca) + '.png');
+  const recortado = urlFoto(CARPETA_MARCAS + 'recortados/' + slugMarca(marca) + '.png');
+  return `<span class="mv-logo">${recortado ? `<img src="${esc(recortado)}" alt="${esc(marca)}" data-orig="${esc(orig)}" decoding="async"
+      onerror="if(this.dataset.orig){this.src=this.dataset.orig;this.dataset.orig=''}else{this.remove()}">` : ''}<b>${esc(marca)}</b></span>`;
+}
+
+// conFotos=false es para medir: mismo alto (la foto tiene alto fijo) sin bajar ninguna imagen
+function htmlPanelMarca(x, conFotos = true){
+  const prods = x.nuevos.map(m => {
+    const desde = m.multi && m.precio !== m.precioMax;
+    return `<button class="mv-p" type="button" data-key="${esc(clave(m))}">
+      <span class="mv-p-foto">${conFotos ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">` : ''}</span>
+      <b>${esc(nombreCorto(m))}</b><i>${desde ? '<small>desde</small>' : ''}USD ${plata(m.precio)}</i>
+    </button>`;
+  }).join('');
+  return `<div class="mv-panel">
+    <div class="mv-info">${htmlLogoMarca(x.marca)}
+      <p>${x.n} producto${x.n !== 1 ? 's' : ''} en ${x.rubros} rubro${x.rubros !== 1 ? 's' : ''}</p>
+      <div class="mv-chips">${x.cats.map(([cat, k]) =>
+        `<button class="mv-chip" type="button" data-cat="${esc(cat)}">${esc(plural(cat))}<i>${k}</i></button>`).join('')}</div>
+      <button class="mv-ver" type="button">Ver ${x.n === 1 ? 'el' : 'los ' + x.n} de ${esc(x.marca)} →</button>
+    </div>
+    ${prods ? `<div class="mv-prods"><span class="mv-rot">Lo último de ${esc(x.marca)}</span><div class="mv-grid">${prods}</div></div>` : ''}
+  </div>`;
+}
+
+/* La cinta lleva la lista tres veces: se mueve por la copia del medio y, al
+   pasarse de una punta, salta sin animación a la misma marca en el medio. Así
+   siempre avanza para el mismo lado y nunca se ve el final. Las copias de los
+   costados son decorado: no las leen los lectores ni se llega con el tabulador. */
+function htmlMarcas(lista){
+  const copia = c => lista.map((x, k) => `<button class="mv-it" type="button" data-k="${k}" data-copia="${c}"
+      ${c === 1 ? `aria-pressed="false" aria-label="${esc(x.marca)}, ${x.n} productos"` : 'aria-hidden="true" tabindex="-1"'}>
+      ${htmlLogoMarca(x.marca)}<i>${x.n}</i><span class="mv-barra" aria-hidden="true"><span></span></span>
+    </button>`).join('');
+  return `<section class="mv" id="marcas-vitrina" aria-labelledby="mv-titulo" style="--mv-ms:${MARCAS_MS}ms">
+    <div class="fp-cab"><h3 id="mv-titulo">Buscá por marca</h3>
+      <span class="fp-sub">se turnan solas · tocá una para elegirla</span></div>
+    <div class="mv-caja">
+      <div class="mv-banda"><div class="mv-tira">${copia(0)}${copia(1)}${copia(2)}</div></div>
+      <div class="mv-lugar" id="mv-lugar">${htmlPanelMarca(lista[mvK])}</div>
+    </div>
+  </section>`;
+}
+
+function irMarca(pos, animar = true, reiniciar = true){
+  const sec = $('marcas-vitrina');
+  if(!sec || !MV.length) return;
+  const tira = sec.querySelector('.mv-tira'), banda = sec.querySelector('.mv-banda');
+  const n = MV.length, k = ((pos % n) + n) % n;
+  // La misma marca otra vez: la barrita tiene que volver a empezar
+  if(reiniciar && k === mvK) tira.querySelectorAll('.activa').forEach(el => { el.classList.remove('activa'); void el.offsetWidth; });
+  [...tira.children].forEach(el => {
+    const es = Number(el.dataset.k) === k;
+    el.classList.toggle('activa', es);
+    if(el.dataset.copia === '1') el.setAttribute('aria-pressed', String(es));
+  });
+  tira.classList.toggle('sin', !animar || quieto);
+  const el = tira.children[pos];
+  tira.style.transform = `translateX(${Math.round(banda.clientWidth / 2 - (el.offsetLeft + el.offsetWidth / 2))}px)`;
+  mvPos = pos;
+  if(k !== mvK){ mvK = k; $('mv-lugar').innerHTML = htmlPanelMarca(MV[k]); }
+  if(reiniciar){ mvDesde = Date.now(); mvCorrido = 0; }
+  clearTimeout(mvSalto);
+  if(pos < n || pos >= 2 * n) mvSalto = setTimeout(() => irMarca(n + k, false, false), animar && !quieto ? 760 : 0);
+}
+
+/* Todas las marcas no ocupan lo mismo (más o menos rubros, nombres de uno o
+   dos renglones): sin esto, todo lo de abajo subía y bajaba cada 4 segundos.
+   Se dibuja cada panel sin fotos en una copia invisible del mismo ancho, se
+   toma el más alto y se reserva ese alto. En la copia, y no en el lugar de
+   verdad: redibujar el visible volvía a bajar sus fotos y repetía la entrada. */
+function reservarAltoMarcas(){
+  const lugar = $('mv-lugar');
+  if(!lugar || !MV.length || !lugar.offsetWidth) return;
+  const medidor = document.createElement('div');
+  medidor.setAttribute('aria-hidden', 'true');
+  medidor.style.cssText = `position:absolute;left:0;top:0;width:${lugar.offsetWidth}px;visibility:hidden;pointer-events:none`;
+  lugar.parentElement.appendChild(medidor);
+  let alto = 0;
+  MV.forEach(x => { medidor.innerHTML = htmlPanelMarca(x, false); alto = Math.max(alto, medidor.offsetHeight); });
+  medidor.remove();
+  lugar.style.minHeight = alto + 'px';
+}
+
+function arrancarMarcas(){
+  pararMarcas();
+  if(MV.length < 2 || !$('marcas-vitrina') || !enPortada() || document.hidden) return;
+  mvDesde = Date.now(); mvCorrido = 0;
+  mvTimer = setInterval(() => {
+    if(mvFrenos.size) return;
+    if(mvCorrido + Date.now() - mvDesde >= MARCAS_MS) irMarca(mvPos + 1);
+  }, 150);
+}
+function pararMarcas(){
+  if(mvTimer){ clearInterval(mvTimer); mvTimer = null; }
+}
+function frenarMarcas(motivo){
+  if(!mvFrenos.size) mvCorrido += Date.now() - mvDesde;
+  mvFrenos.add(motivo);
+  $('marcas-vitrina')?.classList.add('pausa');
+}
+function soltarMarcas(motivo){
+  if(!mvFrenos.delete(motivo) || mvFrenos.size) return;
+  mvDesde = Date.now();
+  $('marcas-vitrina')?.classList.remove('pausa');
+}
+
+function montarMarcas(sec){
+  mvFrenos.clear();
+  sec.addEventListener('click', e => {
+    const it = e.target.closest('.mv-it');
+    if(it){ irMarca([...it.parentElement.children].indexOf(it)); return; }
+    const x = MV[mvK];
+    const chip = e.target.closest('.mv-chip');
+    if(chip){ entrarAlRubro(chip.dataset.cat, x.marca); return; }
+    if(e.target.closest('.mv-ver')){ filtros.marca = x.marca; aplicarFiltro(true); return; }
+    const p = e.target.closest('.mv-p');
+    if(p) abrirFicha(p.dataset.key);
+  });
+  sec.addEventListener('pointerenter', e => { if(e.pointerType === 'mouse') frenarMarcas('mouse'); });
+  sec.addEventListener('pointerleave', e => { if(e.pointerType === 'mouse') soltarMarcas('mouse'); });
+  sec.addEventListener('focusin', () => frenarMarcas('foco'));
+  sec.addEventListener('focusout', e => { if(!sec.contains(e.relatedTarget)) soltarMarcas('foco'); });
+  // Si cambia el ancho, cambia dónde queda el centro y cuánto ocupa cada panel
+  mvObs?.disconnect();
+  if('ResizeObserver' in window){
+    let pendiente = 0, ancho = 0;
+    mvObs = new ResizeObserver(es => {
+      const w = Math.round(es[0].contentRect.width);
+      if(pendiente || w === ancho) return;
+      ancho = w;
+      pendiente = requestAnimationFrame(() => { pendiente = 0; reservarAltoMarcas(); irMarca(mvPos, false, false); });
+    });
+    mvObs.observe(sec.querySelector('.mv-banda'));
+  }
+  reservarAltoMarcas();
+  irMarca(MV.length + mvK, false, false);
+  arrancarMarcas();
 }
 
 /* Los bloques se rehacian enteros en cada pintado, y cada uno son seis filas
@@ -4876,104 +5851,76 @@ function pintarExtras(){
   const caja = $('extras');
   if(!caja) return;
   // Fuera de la portada se esconden pero NO se borran: volver es instantaneo.
-  if(!enPortada()){ caja.hidden = true; return; }
+  if(!enPortada()){ caja.hidden = true; pararNuevos(); pararMarcas(); return; }
   caja.hidden = false;
 
-  // Lo unico que cambia entre pintados es la planilla y lo que el cliente miro
-  const firma = MODELOS.length + '|' + leerMirados().join(',');
+  /* Lo que cambia entre pintados es la planilla, la cotizacion y lo que el
+     cliente miro. La vidriera muestra precios en dolares y en pesos: con solo
+     contar los modelos, un cambio de precio de la planilla no la redibujaba. */
+  const nuevos = novedades(NUEVOS_MAX);
+  const marcas = datosMarcas();
+  const tramos = datosPresupuesto();
+  const mirados = modelosMirados();
+  const firma = MODELOS.length + '|' + TC + '|' + leerMirados().join(',') + '|'
+    + mirados.map(m => clave(m) + ':' + m.precio + ':' + m.precioMax).join(',') + '|'
+    + tramos.map(t => [t.val, t.n, ...t.prods.map(m => clave(m) + ':' + m.precio + ':' + m.precioMax)].join(':')).join(',') + '|'
+    + nuevos.map(m => [clave(m), m.precio, m.precioMax, m.incluye, m.imagen, m.variantes.length].join(':')).join(',') + '|'
+    + marcas.map(x => [x.marca, x.n, x.cats.join(';'), ...x.nuevos.map(m => clave(m) + ':' + m.precio + ':' + m.precioMax)].join(':')).join(',');
   if(firma === FIRMA_EXTRAS && caja.children.length){
-    // Se despiertan los paseos, que se frenaron al esconderse
-    caja.querySelectorAll('.fp-pista').forEach(desfilar);
+    // Las vidrieras se frenaron al esconderse: vuelven a girar
+    arrancarNuevos();
+    arrancarMarcas();
     return;
   }
   FIRMA_EXTRAS = firma;
 
   const partes = [];
 
-  /* 1. Por cuanto queres gastar. Muchos no vienen por rubro sino por plata. */
-  const atajos = RANGOS.map(([val, txt, min, max]) => {
-    /* Se cuenta con el MISMO criterio que filtrar(): por variantes y con el
-       tope excluido. Antes se contaba con m.precio, que es el precio MINIMO
-       del modelo, y con <= max: un modelo de 180 a 320 no aparecia en "USD 200
-       a 500" aunque el filtro si lo devolvia, y uno de 200 justos se contaba en
-       dos tramos a la vez. Tampoco se mira el stock, porque el clic solo pone
-       filtros.rango: el numero tiene que ser el que la grilla va a mostrar. */
-    const n = MODELOS.filter(m => m.variantes.some(v =>
-      v.precio !== null && v.precio >= min && v.precio < max)).length;
-    return n ? `<button class="at" type="button" data-rango="${esc(val)}">
-        <b>${esc(txt)}</b><i>${n} producto${n !== 1 ? 's' : ''}</i>
-      </button>` : '';
-  }).filter(Boolean).join('');
-  if(atajos) partes.push(`<section class="fp">
-      <div class="fp-cab"><h3>Por presupuesto</h3>
-        <span class="fp-sub">elegí por lo que querés gastar</span></div>
-      <div class="precios-at">${atajos}</div>
-    </section>`);
+  /* 0. Las marcas, que se turnan solas. Pegadas a los rubros: son las dos
+     formas de elegir por donde entrar. Antes eran una fila de circulos casi al
+     final de la portada, debajo de todo lo demas (16/09). */
+  MV = marcas;
+  if(mvK >= MV.length) mvK = 0;
+  if(MV.length >= 3) partes.push(htmlMarcas(MV));
 
-  /* 2. Lo que miraste. Va arriba porque es lo unico personal de la pagina.
-     Sale del navegador del cliente: no es un ranking de la tienda. */
-  const mirados = modelosMirados();
-  if(mirados.length >= 2)
-    partes.push(htmlFilaProd('Lo que miraste', mirados, 'guardado en este navegador'));
+  /* 1. Cuanto queres gastar, con lo mirado al pie. Muchos no vienen por rubro
+     sino por plata. Desde el 17/09 son vitrinas con productos de cada precio:
+     antes eran seis botones de texto y, aparte, una tira de "Seguí mirando".
+     Lo mirado sale del navegador del cliente: no es un ranking. */
+  PV = tramos;
+  if(!PV.some(t => t.val === pvVal) && PV.length)
+    pvVal = PV.reduce((a, b) => b.n > a.n ? b : a).val;   // abre en el tramo con más productos
+  if(PV.length) partes.push(htmlPresupuesto(PV, mirados));
 
-  /* 3. Lo ultimo que entro, con mas lugar que en la columna del costado */
-  partes.push(htmlFilaProd('Lo último que entró', novedades(POR_FILA, false),
-                           'recién cargado en la planilla'));
+  /* 3. Recién llegados. Reemplaza a "Lo que miraste", "Lo último que entró" y
+     las cinco filas por rubro (16/09): eran muchos productos chiquitos y muy
+     largo; esto es menos y más visual. */
+  NV = nuevos;
+  if(nvIndice >= NV.length) nvIndice = 0;
+  if(NV.length) partes.push(htmlNuevos(NV));
 
-  /* 4. Una fila por rubro, como las de las plataformas de series */
-  rubrosDestacados().forEach(([cat, ms]) => {
-    const lista = [...ms].sort((a, b) => (b.precio ?? 0) - (a.precio ?? 0)).slice(0, POR_FILA);
-    partes.push(htmlFilaProd(plural(cat), lista, ms.length + ' en stock', cat));
-  });
-
-  /* 5. Las marcas. Vivian metidas adentro de la grilla, que en la portada ya
-     no se dibuja: sin mudarlas aca no las veia nadie. */
-  const marcas = htmlFilaMarcas();
-  if(marcas) partes.push(`<section class="fp">${marcas}</section>`);
-
-  /* 6. Lo que no esta. El catalogo no tiene todo, pero se consigue: mejor que
-     lo escriba a que se vaya sin decir nada. */
-  partes.push(`<section class="pedilo">
-      <h3>¿No lo encontrás?</h3>
-      <p>Decinos qué estás buscando y te lo cotizamos. Trabajamos con más marcas
-         y modelos de los que están cargados acá.</p>
-      <div class="pedilo-form">
-        <input id="pedilo-q" type="text" autocomplete="off"
-               placeholder="Ej: iPhone 17 Pro Max 1TB, Sony A7 IV, DJI Mini 5…">
-        <button id="pedilo-btn" type="button" disabled>Consultar por WhatsApp</button>
-      </div>
-    </section>`);
-
-  /* 7. Preguntas frecuentes. Lo que el cliente se pregunta antes de escribir:
-     cómo pagar, si hay envío, dónde estamos. Si lo encuentra acá, llega al
-     WhatsApp con la decisión más tomada. */
-  const faq = htmlPreguntas();
-  if(faq) partes.push(faq);
+  /* 6. La ayuda. Lo que el cliente se pregunta antes de escribir -cómo pagar,
+     si hay envío, dónde estamos- y, si aun así no encuentra lo que busca, el
+     casillero para decirlo: el catálogo no tiene todo, pero se consigue, y es
+     mejor que lo escriba a que se vaya sin decir nada. Si lo resuelve acá,
+     llega al WhatsApp con la decisión más tomada. */
+  const ayuda = htmlAyuda();
+  if(ayuda) partes.push(ayuda);
 
   caja.innerHTML = partes.join('');
 
   /* --- Que hace cada cosa --- */
-  // Cada fila se pasea sola: son doce productos y en pantalla entran tres
-  caja.querySelectorAll('.fp-pista').forEach(desfilar);
+  const presupuesto = $('presupuesto');
+  if(presupuesto) montarPresupuesto(presupuesto);
 
-  caja.querySelectorAll('.pc').forEach(b =>
-    b.onclick = () => abrirFicha(b.dataset.key));
+  const secAyuda = $('ayuda');
+  if(secAyuda) montarAyuda(secAyuda);
 
-  caja.querySelectorAll('.at').forEach(b =>
-    b.onclick = () => { filtros.rango = b.dataset.rango; sincronizarControles(); aplicarFiltro(true); });
+  const vidriera = $('nuevos');
+  if(vidriera) montarNuevos(vidriera); else pararNuevos();
 
-  caja.querySelectorAll('.fp-ver').forEach(b =>
-    b.onclick = () => {
-      filtros.cat = b.dataset.vercat;
-      filtros.marca = '';
-      rendirCintaAuto();
-      [...$('cats').querySelectorAll('.chip')].forEach(x =>
-        x.setAttribute('aria-pressed', String(x.dataset.cat === filtros.cat)));
-      aplicarFiltro(true);
-    });
-
-  caja.querySelectorAll('.mk').forEach(b =>
-    b.onclick = () => { filtros.marca = b.dataset.marca; aplicarFiltro(true); });
+  const vitrinaMarcas = $('marcas-vitrina');
+  if(vitrinaMarcas) montarMarcas(vitrinaMarcas); else pararMarcas();
 
   const inp = $('pedilo-q'), bot = $('pedilo-btn');
   if(inp && bot){
@@ -4990,26 +5937,96 @@ function pintarExtras(){
   }
 }
 
-/* Los textos salen de PREGUNTAS, en la configuración. Son desplegables nativos
-   (details/summary): se abren con el teclado y con lector de pantalla sin una
-   línea de JavaScript, y siguen andando aunque el script falle. */
-function htmlPreguntas(){
+// Cuál de las ocho se está mostrando. Vive fuera del pintado para que volver a
+// la portada no lo devuelva siempre a la primera.
+let ayIndice = 0;
+
+/* Los textos salen de PREGUNTAS, en la configuración. Las ocho respuestas se
+   dibujan de una sola vez y quedan apiladas: cambiar de pregunta mueve una
+   clase, no vuelve a pintar la pieza ni recarga nada. */
+function htmlAyuda(){
   if(!PREGUNTAS.length) return '';
-  const items = PREGUNTAS.map(q => `
-    <details class="faq-item">
-      <summary>${esc(q.p)}</summary>
-      <div class="faq-r">
-        ${(q.r || []).map(t => `<p>${esc(t)}</p>`).join('')}
-        ${q.lista ? `<ul>${q.lista.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
-        ${q.link ? `<a href="${esc(q.link[1])}" target="_blank" rel="noopener">${esc(q.link[0])}</a>` : ''}
+  if(ayIndice >= PREGUNTAS.length) ayIndice = 0;
+  const lista = PREGUNTAS.map((q, i) => `
+    <button type="button" class="ay-p" data-ay="${i}" aria-pressed="${i === ayIndice}">
+      <span class="ay-n">${String(i + 1).padStart(2, '0')}</span>${esc(q.p)}</button>`).join('');
+  const respuestas = PREGUNTAS.map((q, i) => `
+    <div class="ay-r${i === ayIndice ? ' ve' : ''}" data-ay="${i}">
+      <h4>${esc(q.p)}</h4>
+      ${(q.r || []).map(t => `<p>${esc(t)}</p>`).join('')}
+      ${q.lista ? `<ul>${q.lista.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
+      ${q.link ? `<a href="${esc(q.link[1])}" target="_blank" rel="noopener">${esc(q.link[0])}</a>` : ''}
+    </div>`).join('');
+  return `<section class="ayuda" id="ayuda" aria-labelledby="ay-titulo">
+    <h3 id="ay-titulo">Preguntas frecuentes</h3>
+    <div class="ay-caja">
+      <div class="ay-lista" role="group" aria-label="Preguntas frecuentes">${lista}</div>
+      <div class="ay-panel">
+        <div class="ay-pila">${respuestas}</div>
+        ${WHATSAPP ? `<p class="ay-otra">¿Te quedó otra duda?
+          <a href="${linkWA('Hola! Tengo una consulta')}" target="_blank" rel="noopener">Escribinos por WhatsApp</a></p>` : ''}
       </div>
-    </details>`).join('');
-  return `<section class="faq" id="faq">
-    <div class="fp-cab"><h3>Preguntas frecuentes</h3></div>
-    <div class="faq-lista">${items}</div>
-    ${WHATSAPP ? `<p class="faq-mas">¿Te quedó otra duda?
-      <a href="${linkWA('Hola! Tengo una consulta')}" target="_blank" rel="noopener">Escribinos por WhatsApp</a></p>` : ''}
+    </div>
+    <div class="ay-pedilo">
+      <div><b>¿Buscás algo que no está?</b>
+        <p>Conseguimos más marcas y modelos de los que están cargados acá.
+           Decinos cuál y te lo cotizamos.</p></div>
+      <div class="ay-form">
+        <input id="pedilo-q" type="text" autocomplete="off" aria-label="Qué estás buscando"
+               placeholder="Ej: iPhone 17 Pro Max 1TB, Sony A7 IV, DJI Mini 5…">
+        <button id="pedilo-btn" type="button" disabled>Consultar por WhatsApp</button>
+      </div>
+    </div>
   </section>`;
+}
+
+/* En el celular la respuesta se abre debajo de la pregunta que se toca: con la
+   lista de ocho, tenerla siempre al pie obligaba a bajar hasta el final para
+   leerla. En pantalla ancha vuelven todas a la pila, donde van apiladas en la
+   misma celda y el alto no salta. Se pregunta a través de una función para que
+   la prueba pueda simular el celular sin achicar la ventana. */
+const AY_CEL = matchMedia('(max-width:760px)');
+let ayEnCelular = () => AY_CEL.matches;
+
+function acomodarAyuda(){
+  const sec = $('ayuda');
+  if(!sec) return;
+  const pila = sec.querySelector('.ay-pila');
+  // Vuelven todas a la pila y en orden: appendChild mueve, no copia
+  for(let i = 0; i < PREGUNTAS.length; i++){
+    const r = sec.querySelector(`.ay-r[data-ay="${i}"]`);
+    if(r) pila.append(r);
+  }
+  if(!ayEnCelular()) return;
+  const b = sec.querySelector(`.ay-p[data-ay="${ayIndice}"]`);
+  const r = sec.querySelector(`.ay-r[data-ay="${ayIndice}"]`);
+  if(b && r) b.after(r);
+}
+AY_CEL.addEventListener('change', acomodarAyuda);
+
+// Cambia de pregunta sin redibujar: la lista no pierde el foco ni el scroll
+function elegirPregunta(i){
+  const sec = $('ayuda');
+  if(!sec || !(i >= 0) || i >= PREGUNTAS.length || i === ayIndice) return;
+  ayIndice = i;
+  sec.querySelectorAll('.ay-p').forEach((b, k) => b.setAttribute('aria-pressed', String(k === i)));
+  sec.querySelectorAll('.ay-r').forEach(r => r.classList.toggle('ve', Number(r.dataset.ay) === i));
+  acomodarAyuda();
+}
+
+function montarAyuda(sec){
+  acomodarAyuda();
+  sec.addEventListener('click', e => {
+    const b = e.target.closest('.ay-p');
+    if(b) elegirPregunta(Number(b.dataset.ay));
+  });
+  /* Con el mouse alcanza con pasar por encima. Con el dedo no: en el celular el
+     pointerover llega junto con el toque y abriría la pregunta de al lado. */
+  sec.addEventListener('pointerover', e => {
+    if(e.pointerType !== 'mouse') return;
+    const b = e.target.closest('.ay-p');
+    if(b) elegirPregunta(Number(b.dataset.ay));
+  });
 }
 
 function pintarSeccion(cuenta){
@@ -5042,6 +6059,7 @@ function pintar(){
   }
 
   pintarExtras();          // fuera de la portada se vacia solo
+  pararMundos();
   LISTA = filtrar();
   dibujadas = 0;
   // Con CARPETA_FOTOS todos tienen una URL "supuesta", exista o no el archivo,
@@ -5085,13 +6103,15 @@ const observador = (!quieto && 'IntersectionObserver' in window)
 function revelar(tarjetas){
   if(!observador){ tarjetas.forEach(el => el.classList.add('vis')); return; }
   tarjetas.forEach((el, i) => {
-    // Escalonado solo en las primeras: más allá no se ve y solo suma demora
-    if(i < 10) el.style.transitionDelay = (i * 45) + 'ms';
+    /* Escalonado solo en las primeras: más allá no se ve y solo suma demora.
+       Va como --i y no como transition-delay de la tarjeta: la tarjeta ya no
+       anima nada (ver .card en el CSS), lo que entra es su foto y su cuerpo. */
+    if(i < 10) el.style.setProperty('--i', i);
     observador.observe(el);
   });
   // Una imagen que ya estaba en caché puede no disparar onload
   requestAnimationFrame(() => {
-    grid.querySelectorAll('.foto img').forEach(im => { if(im.complete) im.classList.add('ok'); });
+    grid.querySelectorAll('.foto img:not(.alt)').forEach(im => { if(im.complete) im.classList.add('ok'); });
   });
 
   // Seguro: las tarjetas arrancan invisibles, así que si el observador fallara
@@ -5616,7 +6636,7 @@ function abrirFicha(k, historia = true){
 
   FICHA_MODELO = m;
   FICHA = clave(v);
-  anotarMirado(FICHA);   // para la fila "Lo que miraste" de la portada
+  anotarMirado(FICHA);   // para el "Seguí mirando" de la portada
   // El color arranca en el que ya haya elegido para este producto en el pedido
   COLOR_FICHA = colorDe(FICHA);
   if(historia !== null){ fichaEmpujada = historia === true; escribirURL(historia === true); }
@@ -5867,6 +6887,11 @@ function refrescarBotonesPedido(){
     const m = buscarModelo(c.dataset.key);
     c.querySelector('.mas')?.setAttribute('aria-pressed',
       String(m ? enPedidoModelo(m) : enPedido(c.dataset.key)));
+  });
+  // Los de la vidriera de Recién llegados: el mismo producto está en varias pilas
+  document.querySelectorAll('#nuevos .nv-tarj').forEach(t => {
+    const m = buscarModelo(t.dataset.key);
+    t.querySelector('.mas')?.setAttribute('aria-pressed', String(!!m && enPedidoModelo(m)));
   });
   refrescarFicha();
 }
@@ -6126,14 +7151,73 @@ $('bp-ver').onclick     = abrirPedido;
 // para siempre. Este escucha único las agarra a todas, sin importar cómo se
 // hayan insertado. Va en fase de captura porque "load" no burbujea.
 grid.addEventListener('load', e => {
-  if(e.target.tagName === 'IMG') e.target.classList.add('ok');
+  // La foto de otro color (img.alt) no: su visibilidad la maneja .otro
+  if(e.target.tagName === 'IMG' && !e.target.classList.contains('alt')) e.target.classList.add('ok');
 }, true);
+
+/* ---------- Los puntitos de la tarjeta cambian la foto (18/09) ----------
+   Con el mouse, pasar por un color muestra su foto y salir de la tarjeta
+   vuelve a la principal. Con el dedo, tocar el puntito la cambia (y no abre
+   la ficha). La foto se le pide a la fila que VENDE ese color: donde el
+   precio cambia con el color, cada uno es una fila con su código, y
+   preguntándole a la principal salía la misma foto en todos (iPhone 17 Pro,
+   17 Pro Max, Air). Se prueba la chica y después la grande; si no hay
+   ninguna, la tarjeta queda como estaba: nada roto a la vista. */
+function mostrarColorEnTarjeta(card, dot){
+  const m = buscarModelo(card.dataset.key);
+  const foto = card.querySelector('.foto');
+  const nombre = dot.dataset.color;
+  if(!m || !foto || !nombre || !foto.querySelector('img')) return;
+  card.classList.add('entro');           // de acá en más, sin la demora de la entrada
+  card.querySelectorAll('.pintas i').forEach(i => i.classList.toggle('elegido', i === dot));
+  card.dataset.colorVisto = nombre;
+  const fila = m.variantes.find(v => partirColores(v.color || '').some(x => norm(x) === norm(nombre))) || m.rep || m;
+  const urls = [...new Set(fotosDeColor(fila, nombre).flatMap(u => [fotoChica(u), u]))];
+  (function probar(i){
+    if(i >= urls.length || card.dataset.colorVisto !== nombre) return;
+    const prueba = new Image();
+    prueba.onload = () => {
+      if(card.dataset.colorVisto !== nombre) return;      // ya pasó a otro color
+      // Sin la clase "ok": esa la llevan solo las fotos principales
+      let alt = foto.querySelector('img.alt');
+      if(!alt){
+        alt = document.createElement('img');
+        alt.className = 'alt'; alt.alt = ''; alt.decoding = 'async';
+        foto.querySelector('img').after(alt);
+      }
+      alt.src = urls[i];
+      foto.classList.add('otro');
+    };
+    prueba.onerror = () => probar(i + 1);
+    prueba.src = urls[i];
+  })(0);
+}
+
+function volverFotoPrincipal(card){
+  delete card.dataset.colorVisto;
+  card.querySelector('.foto')?.classList.remove('otro');
+  card.querySelectorAll('.pintas i.elegido').forEach(i => i.classList.remove('elegido'));
+}
+
+grid.addEventListener('pointerover', e => {
+  if(e.pointerType !== 'mouse') return;
+  const dot = e.target.closest('.card .pintas i');
+  if(dot) mostrarColorEnTarjeta(dot.closest('.card'), dot);
+});
+grid.addEventListener('pointerout', e => {
+  if(e.pointerType !== 'mouse') return;
+  const card = e.target.closest('.card');
+  if(card && card.dataset.colorVisto && !card.contains(e.relatedTarget)) volverFotoPrincipal(card);
+});
 
 grid.addEventListener('click', e => {
   const card = e.target.closest('.card');
   if(!card) return;
   if(e.target.closest('.mas')){ togglePedidoModelo(card.dataset.key); return; }
   if(e.target.closest('a')) return;          // el botón Consultar hace lo suyo
+  // Tocar un puntito cambia la foto; la ficha se abre tocando el resto
+  const dot = e.target.closest('.pintas i');
+  if(dot){ mostrarColorEnTarjeta(card, dot); return; }
   abrirFicha(card.dataset.key);
 });
 grid.addEventListener('keydown', e => {
@@ -6615,8 +7699,10 @@ $('of-pista').addEventListener('scroll', () => {
   }, 120);
 }, {passive:true});
 // En una pestaña de fondo no tiene sentido que siga girando
-document.addEventListener('visibilitychange', () =>
-  document.hidden ? pararOfertas() : arrancarOfertas());
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden){ pararOfertas(); pararNuevos(); pararMarcas(); pararMundos(); }
+  else { arrancarOfertas(); arrancarNuevos(); arrancarMarcas(); arrancarMundos(); }
+});
 
 $('cfg-btn').addEventListener('click', abrirPanel);
 

@@ -296,13 +296,14 @@ function correrPruebas(){
   });
   ok(card && card.querySelector('.usd .desde'), 'esas tarjetas dicen "desde"',
      card && card.querySelector('.usd').textContent.replace(/\s+/g,' ').trim());
-  ok(card && card.querySelector('.opciones'), 'y muestran las opciones',
-     card && card.querySelector('.opciones').textContent);
+  // Desde el 17/09 la tarjeta no lista las opciones: estan en la ficha
+  ok(card && !card.querySelector('.opciones') && !card.querySelector('.specs'),
+     'y ya no listan opciones ni capacidades: eso quedo en la ficha');
   const simple = [...document.querySelectorAll('.card')].find(c => {
     const m = buscarModelo(c.dataset.key); return m && !m.multi;
   });
-  ok(simple && !simple.querySelector('.usd .desde') && !simple.querySelector('.opciones'),
-     'un producto sin variantes no dice "desde" ni muestra opciones');
+  ok(simple && !simple.querySelector('.usd .desde'),
+     'un producto sin variantes no dice "desde"');
 
   /* ---- 6. La ficha: elegir version cambia el precio ---- */
   PEDIDO = []; guardarPedido();

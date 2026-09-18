@@ -9,7 +9,7 @@ const $$ = s => document.querySelectorAll(s);
 
 const esperar = setInterval(() => {
   // Como extras.js, prueba la pagina tal como la ve el cliente al entrar
-  if(!MODELOS.length || !$$('#cats .chip').length || !$$('#extras .fp').length) return;
+  if(!MODELOS.length || !$$('#cats .chip').length || !$('presupuesto')) return;
   clearInterval(esperar);
   for(let i=1;i<5000;i++) clearInterval(i);
   try{ correrPruebas(); }catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; }
@@ -30,29 +30,31 @@ const PLAZO_FIJO = /\b(1|un|uno)\s+a[ñn]o\b/i;
 const elegible = x => x.stock && x.imagen && x.precio > 0;
 
 function correrPruebas(){
-  /* ---- 1. Preguntas frecuentes ---- */
-  const faq = $('faq');
-  ok(!!faq, 'la portada tiene preguntas frecuentes');
-  if(!faq) return;
-  const items = [...faq.querySelectorAll('.faq-item')];
-  ok(items.length === PREGUNTAS.length, 'una por cada pregunta de la configuracion',
-     items.length + ' de ' + PREGUNTAS.length);
-  ok(items.every(d => d.querySelector('summary').textContent.trim() &&
-                      d.querySelector('.faq-r').textContent.trim()),
-     'todas tienen pregunta y respuesta');
-  // Abiertas de entrada serian un muro de texto al final de la portada
-  ok(items.every(d => !d.open), 'arrancan cerradas');
-  items[0].open = true;
-  ok(items[0].querySelector('.faq-r').getBoundingClientRect().height > 0, 'y se abren');
-  items[0].open = false;
+  /* ---- 1. Preguntas frecuentes ----
+     Desde el 17/09 no son desplegables sueltos: son el bloque oscuro del final,
+     con la lista a un lado y la respuesta al otro. Lo fino, en ayuda.js. */
+  const ayuda = $('ayuda');
+  ok(!!ayuda, 'la portada tiene preguntas frecuentes');
+  if(!ayuda) return;
+  const preg = [...ayuda.querySelectorAll('.ay-p')];
+  const resp = [...ayuda.querySelectorAll('.ay-r')];
+  ok(preg.length === PREGUNTAS.length && resp.length === PREGUNTAS.length,
+     'una por cada pregunta de la configuracion', preg.length + ' de ' + PREGUNTAS.length);
+  ok(preg.every((b, i) => b.textContent.includes(PREGUNTAS[i].p)),
+     'las preguntas son las de la configuracion, en ese orden');
+  ok(resp.every((r, i) => (PREGUNTAS[i].r || []).every(t => r.textContent.includes(t)) &&
+                          (PREGUNTAS[i].lista || []).every(t => r.textContent.includes(t))),
+     'y cada respuesta dice lo que dice la configuracion');
+  // Una sola a la vista: las ocho abiertas serian un muro de texto
+  ok(ayuda.querySelectorAll('.ay-r.ve').length === 1, 'se ve una sola respuesta por vez');
 
-  ok(!PLAZO_FIJO.test(faq.textContent), 'ninguna respuesta promete un plazo fijo de garantia');
-  ok(faq.textContent.includes(DIRECCION), 'la direccion es la de la configuracion');
-  const mapa = [...faq.querySelectorAll('a')].find(a => a.getAttribute('href') === MAPA);
+  ok(!PLAZO_FIJO.test(ayuda.textContent), 'ninguna respuesta promete un plazo fijo de garantia');
+  ok(ayuda.textContent.includes(DIRECCION), 'la direccion es la de la configuracion');
+  const mapa = [...ayuda.querySelectorAll('a')].find(a => a.getAttribute('href') === MAPA);
   ok(!!mapa, 'hay un link al mapa', MAPA);
   ok(mapa && mapa.target === '_blank' && /noopener/.test(mapa.rel),
      'y abre en otra pestaña sin darle acceso a la pagina');
-  const otra = faq.querySelector('.faq-mas a');
+  const otra = ayuda.querySelector('.ay-otra a');
   ok(!WHATSAPP || (otra && otra.href.startsWith('https://wa.me/' + WHATSAPP)),
      '"¿Te quedo otra duda?" va al WhatsApp de la tienda');
 
@@ -60,7 +62,7 @@ function correrPruebas(){
   filtros.q = 'iphone'; pintar();
   ok($('extras').hidden, 'al buscar, las preguntas se esconden con la portada');
   filtros.q = ''; pintar();
-  ok(!$('extras').hidden && !!$('faq'), 'y vuelven al volver');
+  ok(!$('extras').hidden && !!$('ayuda'), 'y vuelven al volver');
 
   /* ---- 2. Envio, retiro y garantia en la ficha ---- */
   const sinGar = MODELOS.find(m => elegible(m) && !m.rep.garantia);

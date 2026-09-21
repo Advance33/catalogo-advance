@@ -699,17 +699,38 @@
   .mv-chip:focus-visible,.mv-ver:focus-visible,.mv-p:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
   .mv-prods{display:flex;flex-direction:column;gap:10px;min-width:0}
   .mv-rot{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
-  .mv-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-  .mv-p{display:flex;flex-direction:column;gap:6px;padding:10px 12px 14px;border-radius:16px;cursor:pointer;text-align:left;
-        background:var(--surface);border:1px solid #EFE8FB;color:var(--ink);transition:border-color .16s ease}
-  .mv-p:hover{border-color:#CBB8F3}
+  /* Lo último de la marca, en cinta (21/09). Eran cuatro tarjetas fijas: con 65
+     productos de Apple mostrar cuatro era quedarse corto, y la grilla pareja se
+     veía simple. Ahora desfilan hasta catorce y la cinta frena cuando el mouse
+     se apoya (el pointerenter de la sección ya frena también la rueda de
+     marcas, así que se puede mirar con calma). Elegido del muestrario. */
+  .mv-pista{overflow:hidden;
+            -webkit-mask-image:linear-gradient(90deg,transparent,#000 3%,#000 94%,transparent);
+            mask-image:linear-gradient(90deg,transparent,#000 3%,#000 94%,transparent)}
+  .mv-desfile{display:flex;gap:12px;width:max-content}
+  .mv-p{flex:none;width:168px;display:flex;flex-direction:column;padding:0;overflow:hidden;
+        border-radius:16px;cursor:pointer;text-align:left;
+        background:var(--surface);border:1px solid #EFE8FB;color:var(--ink);
+        transition:transform .2s ease, border-color .2s ease}
+  .mv-p:hover{border-color:#CBB8F3;transform:translateY(-3px)}
   /* Alto fijo: el panel se mide antes de que bajen las fotos (ver reservarAltoMarcas) */
-  .mv-p-foto{display:block;height:130px}
-  .mv-p-foto img{width:100%;height:100%;object-fit:contain;display:block;mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04)}
+  .mv-p-foto{display:block;height:118px;background:var(--foto-bg)}
+  .mv-p-foto img{width:100%;height:100%;object-fit:contain;padding:10px;display:block;mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04)}
   .mv-p b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;
-          font:500 13px/1.3 var(--sans)}
-  .mv-p i{font:600 12px/1 var(--mono);font-style:normal;color:var(--acento)}
+          padding:10px 12px 0;font:500 12px/1.3 var(--sans)}
+  .mv-p i{margin:8px 12px 12px;font:600 12px/1 var(--mono);font-style:normal;color:var(--acento)}
   .mv-p i small{font:500 9.5px/1 var(--mono);color:var(--faint);margin-right:3px}
+  /* La cinta corre sola. Con "reducir movimiento" se queda quieta y se recorre
+     con el dedo, como las otras cintas del catálogo. */
+  @media (prefers-reduced-motion: no-preference){
+    .mv-desfile.anda{animation:mvDesfila var(--mv-dur,40s) linear infinite}
+    .mv-pista:hover .mv-desfile.anda{animation-play-state:paused}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .mv-pista{overflow-x:auto;scrollbar-width:none}
+    .mv-pista::-webkit-scrollbar{display:none}
+  }
+  @keyframes mvDesfila{from{transform:translateX(0)}to{transform:translateX(calc(var(--mv-corrida,0px) * -1))}}
   @media (prefers-reduced-motion: no-preference){
     @keyframes mvAparece{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
     .mv-panel{animation:mvAparece .35s ease both}
@@ -721,7 +742,6 @@
   }
   @media (max-width:900px){
     .mv-panel{grid-template-columns:220px minmax(0,1fr)}
-    .mv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   }
   @media (max-width:640px){
     .mv-it{width:104px;padding:16px 0 14px}
@@ -6137,6 +6157,7 @@ function montarNuevos(sec){
    cinta que avanza sola de a una y deja la del momento en el centro. Abajo, la
    vitrina de esa marca. Tocar un logo lo trae al centro. */
 const MARCAS_MS = 4000;   // eran 6 segundos y se hacía largo: Pedro lo pidió más corto (16/09)
+const MV_CINTA = 14;      // cuántos productos entran en la cinta de la marca
 let MV = [], mvPos = 0, mvK = 0, mvTimer = null, mvDesde = 0, mvCorrido = 0, mvSalto = null, mvObs = null;
 const mvFrenos = new Set();
 
@@ -6159,8 +6180,10 @@ function datosMarcas(){
     return {
       marca, n, rubros: porCat.size,
       cats: catsDeLaMarca(marca, porCat),
+      /* Hasta catorce para la cinta. Mas que eso y la vuelta se hace eterna:
+         el cliente espera medio minuto para volver a ver la primera. */
       nuevos: ms.filter(m => m.stock && m.precio !== null && m.imagen)
-                .sort((a, b) => codigoMasAlto(b) - codigoMasAlto(a) || a.idx - b.idx).slice(0, 4),
+                .sort((a, b) => codigoMasAlto(b) - codigoMasAlto(a) || a.idx - b.idx).slice(0, MV_CINTA),
     };
   });
 }
@@ -6177,14 +6200,28 @@ function htmlLogoMarca(marca){
 }
 
 // conFotos=false es para medir: mismo alto (la foto tiene alto fijo) sin bajar ninguna imagen
+const MV_ANCHO = 180;     // 168 de tarjeta + 12 de separacion, como en el CSS
+
 function htmlPanelMarca(x, conFotos = true){
-  const prods = x.nuevos.map(m => {
+  // La copia de atras es decorado: ni la leen los lectores ni se llega con el tabulador
+  const tarjetas = (copia) => x.nuevos.map(m => {
     const desde = m.multi && m.precio !== m.precioMax;
-    return `<button class="mv-p" type="button" data-key="${esc(clave(m))}">
+    return `<button class="mv-p" type="button" data-key="${esc(clave(m))}"${copia ? ' aria-hidden="true" tabindex="-1"' : ''}>
       <span class="mv-p-foto">${conFotos ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">` : ''}</span>
       <b>${esc(nombreCorto(m))}</b><i>${desde ? '<small>desde</small>' : ''}USD ${plata(m.precio)}</i>
     </button>`;
   }).join('');
+  /* La tira va DUPLICADA y la animacion corre exactamente el ancho de la
+     primera copia: al terminar vuelve a cero y, como lo que se ve es identico,
+     no se nota el corte. Es el mismo truco de las cintas de la portada.
+     Con pocas tarjetas no desfila: entran todas en pantalla y moverlas seria
+     marear al cliente por nada. */
+  const desfila = x.nuevos.length >= 6;
+  const prods = x.nuevos.length
+    ? `<div class="mv-pista" style="--mv-corrida:${x.nuevos.length * MV_ANCHO}px;--mv-dur:${Math.max(20, x.nuevos.length * 3)}s">
+         <div class="mv-desfile${desfila ? ' anda' : ''}">${tarjetas(false)}${desfila ? tarjetas(true) : ''}</div>
+       </div>`
+    : '';
   return `<div class="mv-panel">
     <div class="mv-info">${htmlLogoMarca(x.marca)}
       <p>${x.n} producto${x.n !== 1 ? 's' : ''} en ${x.rubros} rubro${x.rubros !== 1 ? 's' : ''}</p>
@@ -6192,7 +6229,7 @@ function htmlPanelMarca(x, conFotos = true){
         `<button class="mv-chip" type="button" data-cat="${esc(cat)}">${esc(plural(cat))}<i>${k}</i></button>`).join('')}</div>
       <button class="mv-ver" type="button">Ver ${x.n === 1 ? 'el' : 'los ' + x.n} de ${esc(x.marca)} →</button>
     </div>
-    ${prods ? `<div class="mv-prods"><span class="mv-rot">Lo último de ${esc(x.marca)}</span><div class="mv-grid">${prods}</div></div>` : ''}
+    ${prods ? `<div class="mv-prods"><span class="mv-rot">Lo último de ${esc(x.marca)}</span>${prods}</div>` : ''}
   </div>`;
 }
 

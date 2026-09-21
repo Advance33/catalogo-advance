@@ -1,0 +1,60 @@
+PARA SUMAR AL DOCUMENTO DE LOS BOTONES REPETIDOS — 21/09/2026
+Tres puntos mas, verificados contra la carga de hoy (766 filas, 20:08)
+
+
+10) EL MISMO AT-####-NN EN DOS PRODUCTOS DISTINTOS — 2 casos
+------------------------------------------------------------
+REGLA (parser): un AT-####-NN nombra UN producto y UN color. Dos filas que
+son productos distintos no pueden compartirlo: es lo que decide que foto se
+muestra, asi que quedan pegadas la una a la otra.
+
+Esto NO es lo mismo que el punto 9. Alla el CODIGO_VAR era de otro producto;
+aca dos productos distintos traen el mismo, y los dos creen que es suyo.
+
+   AT-0073-01 lo traen dos filas:
+     CEL-APL-17P-512-ORG-ESIM   iPhone 17 Pro 512GB E-Sim (Orange)
+     CEL-APL-17P-512-ORG-SIM    iPhone 17 Pro 512GB Sim (Orange)
+
+   Son dos productos, no dos escrituras del mismo: uno es eSIM y el otro
+   SIM fisica, y se venden a precios distintos. En nuestro maestro el
+   AT-0073 quedo asociado al de SIM fisica.
+
+   AT-0455-05 lo traen tres filas, las tres del Watch Ultra 3 49mm Natural:
+     SWT-APL-WULTRA3-000-NAT-49-CELL-TRAILML   Blue Trail Loop M/L
+     SWT-APL-WULTRA3-000-NAT-49-CELL-OCEAN     Anchor Blue Ocean Band
+     SWT-APL-WULTRA3-000-NAT-49-CELL-000       Natural, sin malla
+
+Los codigos AT los damos nosotros. Diganos cual se queda con el codigo que
+ya tiene y les pasamos los nuevos para los otros; no hace falta que inventen
+ninguno.
+
+
+11) EL 17 PRO: 11 FILAS SIN CODIGO_VAR, 7 CON CODIGO DE OTRA CAPACIDAD
+------------------------------------------------------------
+Complementa el punto 8. Son las filas que entraron el 19/09 a las 17:05.
+
+Las once traen CODIGO = AT-0071, que es el del 1TB, y CODIGO_VAR vacio:
+
+     4 son de 1TB          el CODIGO esta bien, falta el CODIGO_VAR
+     7 son de 256 y 512GB  el CODIGO es el de otra capacidad
+
+Por que no aparecen en la lista de las 48: para estas no hay un "deberia"
+que calcular. Sim y eSIM son productos distintos y nuestro maestro hoy tiene
+uno solo de los dos por capacidad, asi que el codigo que les corresponde
+todavia no existe. Lo damos nosotros: avisen y lo mandamos junto con lo del
+punto 10.
+
+Mientras tanto, esas siete filas se muestran con la foto que les toque por
+el AT-0071, que es el del 1TB.
+
+
+12) LO QUE YA SE ARREGLO — no hace falta pedirlo de nuevo
+------------------------------------------------------------
+El 19/09 habia 18 filas cuya descripcion no decia Sim ni E-Sim aunque su SKU
+si lo declaraba (iPhone 17, 17e, Air y 17 Pro). Hoy no queda ninguna: las 46
+filas con SKU que lo declara lo dicen tambien en la descripcion. Gracias.
+
+De nuestro lado quedo un respaldo: cuando la descripcion calla y una hermana
+declara lo contrario, la web completa el rotulo leyendo el final del SKU
+(-SIM / -ESIM). Hoy no hace nada, que es como tiene que estar. No hay que
+coordinar nada: si vuelve a pasar, lo tapa solo; si no pasa, no se nota.

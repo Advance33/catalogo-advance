@@ -742,6 +742,11 @@
   .pv{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:16px;padding:20px 24px 16px;border-radius:28px;color:#F4EFFD;
       background:radial-gradient(90% 130% at 80% 120%,rgba(124,58,237,.34),transparent 62%),linear-gradient(155deg,#232030 0%,#14111E 100%)}
   .pv-lab{margin:0;font:600 10.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:#A597C4}
+  /* La pregunta es la invitación a elegir un tramo: se lee como el título de
+     las otras piezas oscuras (Preguntas frecuentes) y no como la etiqueta
+     chica del pie. Y va en su propia línea, que antes competía con las
+     pestañas en el mismo renglón. (Pedro, 21/09/2026) */
+  #pv-titulo{flex-basis:100%;font:400 22px/1.1 var(--display);letter-spacing:0;color:#F4EFFD}
   .pv-cab{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
   .pv-tabs{display:flex;gap:4px;min-width:0;overflow-x:auto;scrollbar-width:none;padding:2px}
   .pv-tabs::-webkit-scrollbar{display:none}

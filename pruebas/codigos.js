@@ -187,8 +187,16 @@ function correrPruebas(){
   ok(corridas.length === 0, 'CODIGO_VAR trae un codigo por color, en el mismo orden',
      corridas.slice(0, 3).map(p => p.id).join(' | '));
 
-  /* Y que la variante que manda la planilla sea la misma que resuelve el mapa
-     por el texto del color. */
+  /* Y que la variante que manda la planilla no choque con la del mapa.
+     Que difieran no siempre es un error: la fila del Watch Ultra 3 Alpine
+     Loop dice "Black" en Color y CODIGO_VAR apunta a "Black Alpine Loop M",
+     que es la correcta para ESA fila aunque el mapa, leyendo solo el texto
+     "Black", conteste la Black a secas. La planilla sabe de que fila habla y
+     el texto no.
+
+     Lo que si es siempre un error es que un color se lleve la variante de
+     OTRO color de la misma fila: eso es una celda dada vuelta, y es la unica
+     forma en que la columna pondria la foto equivocada. */
   let cruzadas = 0;
   const distintas = [];
   for(const p of PRODUCTOS){
@@ -204,21 +212,24 @@ function correrPruebas(){
       if(porTexto && partes[i]) cruzadas++;
     });
   }
-  /* Que la planilla mande una variante que despues se dio de baja es normal:
-     se siembra cada tanto, y entre medio se corrige. Lo que no puede pasar es
-     que la web la use, porque esa foto no se publica. Asi que lo que se exige
-     no es que coincidan siempre, sino que cuando difieran gane el mapa. */
-  const usadas = distintas.filter(d => {
-    const p = PRODUCTOS.find(x => d.startsWith(x.id + ' '));
-    if(!p) return true;
+  R.push('  --  ' + cruzadas + ' colores cruzados, ' + distintas.length +
+         ' donde la planilla y el mapa no dicen lo mismo');
+  distintas.slice(0, 3).forEach(d => R.push('        ' + d));
+
+  const dadasVuelta = [];
+  for(const p of PRODUCTOS){
     const cols = partirColores(p.color);
-    return cols.some(c => varianteDeLaColumna(p, p.codigo, c, cols) &&
-                          varianteDeLaColumna(p, p.codigo, c, cols) !== archivoDeVariante(p.codigo, c));
-  });
-  ok(usadas.length === 0,
-     'cuando la planilla y el mapa difieren en la variante, la web usa la del mapa',
-     usadas.slice(0, 3).join(' | ') || cruzadas + ' colores cruzados, ' +
-     distintas.length + ' con la planilla atrasada');
+    if(!cols.length || !p.codigo) continue;
+    for(const c of cols){
+      const usa = varianteDeLaColumna(p, p.codigo, c);
+      if(!usa) continue;
+      const otro = cols.find(x => norm(x) !== norm(c) && archivoDeVariante(p.codigo, x) === usa);
+      if(otro) dadasVuelta.push(p.id + ': ' + c + ' se lleva la variante de ' + otro + ' (' + usa + ')');
+    }
+  }
+  ok(dadasVuelta.length === 0,
+     'la celda nunca le da a un color la variante de OTRO color de la fila',
+     dadasVuelta.slice(0, 3).join(' | ') || cruzadas + ' colores revisados');
 
   /* Las dos guardas de varianteDeLaColumna(), probadas a mano: una celda
      corrida y un codigo que es de otro producto NO se usan. Son las dos
@@ -227,16 +238,61 @@ function correrPruebas(){
                                 && partirColores(p.color).length > 1);
   if(conVar){
     const cols = partirColores(conVar.color);
-    const bueno = varianteDeLaColumna(conVar, conVar.codigo, cols[0], cols);
+    const bueno = varianteDeLaColumna(conVar, conVar.codigo, cols[0]);
     ok(bueno === conVar.codigoVar.split('/')[0].trim(),
        'varianteDeLaColumna toma la posicion del color', bueno);
     const corrida = {...conVar, codigoVar: conVar.codigoVar.split('/').slice(0, -1).join('/')};
-    ok(varianteDeLaColumna(corrida, conVar.codigo, cols[0], cols) === '',
+    ok(varianteDeLaColumna(corrida, conVar.codigo, cols[0]) === '',
        'y no usa una celda a la que le falta una posicion');
     const ajena = {...conVar, codigoVar: cols.map(() => 'AT-9999-01').join('/')};
-    ok(varianteDeLaColumna(ajena, conVar.codigo, cols[0], cols) === '',
+    ok(varianteDeLaColumna(ajena, conVar.codigo, cols[0]) === '',
        'ni una variante que es de otro producto');
+    const alReves = {...conVar, codigoVar: conVar.codigoVar.split('/').reverse().join('/')};
+    const cruzado = varianteDeLaColumna(alReves, conVar.codigo, cols[0]);
+    ok(!cruzado || cruzado !== archivoDeVariante(conVar.codigo, cols[1]),
+       'ni una celda dada vuelta, que le daria a un color la foto del de al lado', cruzado);
   } else {
     R.push('  --  ninguna fila con varios colores trae CODIGO_VAR: las guardas no se probaron');
   }
+
+  /* ---- 9. Preguntarle a una hermana por un color que ella no vende ----
+     fotosDeColor() busca la foto del color en la fila y despues en sus
+     hermanas: es lo que hace que el MacBook Neo 8/256 muestre la Indigo que
+     esta cargada en la fila de 8/512. Pero la hermana tiene que contestar por
+     ESE color, no por el suyo.
+
+     El 21/09 contestaba por el suyo: leia su celda CODIGO_VAR con la lista de
+     colores que le pasaban de afuera, y la fila Icyblue del Galaxy S25 FE
+     devolvia su propia foto cuando le preguntaban por White. Eran cinco
+     productos mostrando la foto de otro color, en la ficha y en la grilla. */
+  /* Como se decide que es "otro color", sin ponerse a comparar textos: la
+     escritura no sirve de juez -- el catalogo anota "natural titanium" y la
+     planilla manda "Natural", o anota "lavander" y la planilla "Lavender", y
+     eso es el MISMO color escrito distinto. Lo que se mira es el catalogo:
+     el archivo esta mal si es el que el catalogo le dio a OTRO color que este
+     mismo modelo vende. Ahi no hay duda posible. */
+  const deOtroColor = [];
+  for(const m of MODELOS){
+    const suyos = [...new Set(m.variantes.flatMap(v => partirColores(v.color)))];
+    for(const v of m.variantes){
+      for(const c of suyos){
+        for(const u of fotosDeColor(v, c)){
+          const arch = decodeURIComponent((u.split('/').pop() || '')).replace(/\.[a-z]+$/i, '');
+          if(!/^AT-\d{4}-\d{2}$/.test(arch)) continue;
+          const cod = arch.slice(0, 7);
+          // Si ese archivo TAMBIEN es el del color pedido, es el mismo color
+          // escrito de dos formas ("Black" y "negro" apuntan al mismo): no hay
+          // nada que reprochar.
+          if(archivoDeVariante(cod, c) === arch) continue;
+          const duenio = suyos.find(x => norm(x) !== norm(c) &&
+                                         archivoDeVariante(cod, x) === arch);
+          if(duenio) deOtroColor.push(v.id + ' pide ' + c + ' y le dan ' + arch +
+                                      ', que el catalogo le dio a ' + duenio);
+        }
+      }
+    }
+  }
+  ok(deOtroColor.length === 0,
+     'nadie devuelve, para un color, el archivo que el catalogo le dio a otro',
+     [...new Set(deOtroColor)].slice(0, 4).join(' | ') || 'ninguno');
 }

@@ -18,8 +18,10 @@ const esperar = setInterval(() => {
   for(let i=1;i<5000;i++) clearInterval(i);
   try{ correrPruebas(); }catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; }
   // La foto del color se pide recién al tocarlo: esa parte va aparte y cierra
-  try{ probarFotoDeColor(terminar); }
-  catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; terminar(); }
+  const seguir = () => { try{ probarEntradaCinta(terminar); }
+                         catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; terminar(); } };
+  try{ probarFotoDeColor(seguir); }
+  catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; seguir(); }
 }, 150);
 
 function terminar(){
@@ -53,6 +55,11 @@ const transparente = t => /^(transparent|rgba\(0,\s*0,\s*0,\s*0\))$/.test(String
 const cerca = (a, b, tol = 6) => a.length === 3 && b.length === 3 &&
                                  a.every((x, i) => Math.abs(x - b[i]) <= tol);
 const variable = n => rgb(getComputedStyle(document.documentElement).getPropertyValue(n));
+/* Espera a que se cumpla algo, sin colgarse: a los 4 segundos sigue igual. El
+   observador que revela la cinta avisa en su propio tiempo, y en el navegador
+   sin ventana ese tiempo no es el mismo en cada corrida. */
+const cuando = (cond, sigue, t0 = Date.now()) =>
+  (cond() || Date.now() - t0 > 4000) ? sigue() : setTimeout(() => cuando(cond, sigue, t0), 120);
 
 // Versiones del modelo, por el mismo criterio que usa la ficha
 const versionesDe = m => {
@@ -371,23 +378,100 @@ function correrPruebas(){
     cerrarFicha();
   }
 
-  /* ---- 7. Los sugeridos, con las tarjetas nuevas ---- */
+  /* ---- 7. Los sugeridos: la cinta (21/09) ----
+     Pedro la eligio del muestrario. Lo que la define y hay que sostener: la
+     foto en un cuadrado FIJO (ninguna puede quedar mas grande que otra) y el
+     precio en texto, no en etiqueta oscura. */
   const conRel = MODELOS.find(m => relacionados(m).length);
   abrirFicha(clave(conRel.rep), null);
   d = document.getElementById('ficha');
   const pc = d.querySelector('.fi-rel .pc');
   ok(!!pc, 'la ficha sugiere otros productos', conRel.desc);
-  ok(pc && estilo(pc, 'border-top-width') === '0px' &&
-     transparente(estilo(pc, 'background-color')),
-     'sin caja, como las tarjetas de la grilla',
-     pc && estilo(pc, 'border-top-width') + ' / ' + estilo(pc, 'background-color'));
+  ok(pc && estilo(pc, 'flex-direction') === 'row',
+     'los sugeridos son pastillas, con la foto al costado del nombre',
+     pc && estilo(pc, 'flex-direction'));
+  ok(pc && !transparente(estilo(pc, 'background-color')),
+     'cada una con su fondo', pc && estilo(pc, 'background-color'));
+
+  const pf = pc && pc.querySelector('.pc-foto');
+  const rp = pf && pf.getBoundingClientRect();
+  ok(rp && rp.width > 0 && Math.abs(rp.width - rp.height) <= 1,
+     'la foto va en un cuadrado fijo: ninguna puede entrar mas grande que otra',
+     rp && Math.round(rp.width) + 'x' + Math.round(rp.height));
+  /* Esta es la que se rompe sola en cuanto alguien toque la animacion: al
+     animar opacity y translate la pastilla arma un grupo de composicion, y
+     adentro de el la foto deja de fundirse si el cuadrado no tiene fondo. */
+  ok(pf && !transparente(estilo(pf, 'background-color')),
+     'y el cuadrado tiene fondo propio, para que la foto siga fundiendose al animarse',
+     pf && estilo(pf, 'background-color'));
+
   const pcPrecio = pc && pc.querySelector('.pc-txt i');
-  ok(pcPrecio && cerca(rgb(estilo(pcPrecio, 'background-color')), variable('--ink')),
-     'con el precio en etiqueta oscura', pcPrecio && estilo(pcPrecio, 'background-color'));
+  ok(pcPrecio && transparente(estilo(pcPrecio, 'background-color')),
+     'el precio va en texto, no en etiqueta oscura',
+     pcPrecio && estilo(pcPrecio, 'background-color'));
+  ok(pcPrecio && cerca(rgb(estilo(pcPrecio, 'color')), variable('--glow'), 12),
+     'y con el color de los links', pcPrecio && estilo(pcPrecio, 'color'));
   const pcImg = pc && pc.querySelector('.pc-foto img');
   ok(!pcImg || estilo(pcImg, 'mix-blend-mode') === 'multiply',
      'y la foto fundida con el fondo');
+  ok(todos('#ficha .fi-rel .pc').every((b, i) => b.style.getPropertyValue('--i') === String(i)),
+     'cada una sabe su lugar en la fila, que es lo que escalona la entrada');
   cerrarFicha();
+}
+
+/* ---- 8. La cinta entra de costado ----
+   La entrada NO se dispara al abrir la ficha: los sugeridos estan abajo de
+   todo y se la perderia justo el que despues baja a mirarlos. La revela un
+   IntersectionObserver cuando el bloque aparece adentro de la ventana.
+
+   Ese disparo no se puede probar aca: el navegador sin ventana corre con reloj
+   virtual y nunca entrega los avisos del observador, que dependen de que se
+   dibuje un cuadro. Lo que si se prueba es el contrato de las dos puntas --
+   arranca escondida y corrida, y con .vis termina quieta en su lugar -- que es
+   donde se rompe si alguien toca el CSS. El disparo se verifica con captura. */
+function probarEntradaCinta(listo){
+  const conRel = MODELOS.find(m => relacionados(m).length);
+  if(!conRel){ R.push('  --  hoy ningun producto tiene sugeridos'); return listo(); }
+  /* Quien mira si el bloque aparece es un IntersectionObserver, y el navegador
+     sin ventana no le entrega nada. Pero si se puede ver que lo PONGA a mirar:
+     se le cambia la clase por una que anota a quien observa. Sin esto, sacar
+     la llamada a revelarSugeridos() no lo notaba nadie y la cinta se quedaba
+     escondida para siempre. */
+  const observados = [];
+  const IOreal = window.IntersectionObserver;
+  if(IOreal) window.IntersectionObserver = class extends IOreal {
+    observe(el){ observados.push(el); return super.observe(el); }
+  };
+  abrirFicha(clave(conRel.rep), null);
+  if(IOreal) window.IntersectionObserver = IOreal;
+
+  const d = document.getElementById('ficha');
+  const rel = d.querySelector('.fi-rel');
+  const pc = rel && rel.querySelector('.pc');
+  ok(rel && !rel.classList.contains('vis'),
+     'la cinta arranca escondida y no se revela sola al abrir la ficha');
+  // De costado y no de abajo: un translate de 0 en X pasaria el "no es none"
+  const corridaX = t => Math.abs(parseFloat(String(t).trim().split(/\s+/)[0]) || 0);
+  ok(pc && parseFloat(estilo(pc, 'opacity')) === 0 && corridaX(estilo(pc, 'translate')) >= 10,
+     'las pastillas arrancan corridas de costado',
+     pc && estilo(pc, 'opacity') + ' / ' + estilo(pc, 'translate'));
+  ok(!IOreal || observados.includes(rel),
+     'y alguien la pone a mirar, para revelarla cuando el bloque aparezca',
+     observados.length + ' observado(s)');
+
+  rel.classList.add('vis');
+  terminarTransiciones();
+  /* "0px" y no "none": el reposo se escribe translate:0 0 a proposito, porque
+     interpolar hasta none no es igual de seguro en todos los navegadores. Eso
+     deja un grupo de composicion vivo, y por eso el cuadrado de la foto lleva
+     su propio fondo (se prueba arriba). */
+  const quieto = t => t === 'none' || /^0(px)?( 0(px)?)?$/.test(String(t).trim());
+  ok(pc && parseFloat(estilo(pc, 'opacity')) === 1 && quieto(estilo(pc, 'translate')),
+     'revelada, la cinta queda quieta en su lugar',
+     pc && estilo(pc, 'opacity') + ' / ' + estilo(pc, 'translate'));
+  R.push('  --  el disparo por scroll no corre en el navegador sin ventana: se mira con captura');
+  cerrarFicha();
+  listo();
 }
 
 /* ---- 8. Tocar un color cambia la foto grande ----

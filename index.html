@@ -1325,31 +1325,67 @@
   .fi-servicio b{display:block;font:600 12.5px/1.3 var(--sans);color:var(--ink)}
   .fi-servicio i{display:block;font-style:normal;font-size:12px;line-height:1.4;color:var(--muted)}
 
-  /* Relacionados al pie de la ficha: las mismas tarjetas chicas de la portada,
-     pero quietas. Adentro de una ventana, algo que se mueve solo distrae justo
-     cuando el cliente está leyendo un precio. */
-  .fi-rel{border-top:1px solid var(--line);background:var(--paper);padding:18px 22px 22px}
-  .fi-rel h4{margin:0 0 12px;font:600 10px/1 var(--mono);letter-spacing:.18em;
+  /* ---------- También te puede interesar: la cinta (21/09) ----------
+     Cuatro pastillas parejas al pie, con la foto chica al costado del nombre.
+
+     Antes eran cuatro tarjetas grandes y tenían dos problemas: la foto de cada
+     producto entraba con su propia escala -el Galaxy S25 Ultra al doble de alto
+     que un iPhone 17e- y el precio iba en etiqueta oscura, que era la tercera
+     cosa negra de la ficha después del precio y de la franja del envío.
+     Con el cuadrado fijo ninguna foto puede quedar despareja, y el precio en
+     texto le devuelve el negro a lo que se está decidiendo arriba. */
+  .fi-rel{border-top:1px solid var(--line);background:var(--paper);padding:15px 22px 18px}
+  .fi-rel-cab{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:11px}
+  .fi-rel h4{margin:0;font:600 10px/1 var(--mono);letter-spacing:.18em;
              text-transform:uppercase;color:var(--faint)}
-  .fi-rel-tira{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-  /* Las mismas tarjetas de la grilla nueva: sin caja, con el precio en etiqueta
-     oscura. El multiply funde el fondo blanco de la foto con el lila del pie. */
-  .fi-rel .pc{width:auto;background:none;border:0;border-radius:0;overflow:visible;
-              display:flex;flex-direction:column;gap:8px}
-  .fi-rel .pc:hover{border-color:transparent;transform:none;box-shadow:none}
-  .fi-rel .pc-foto{height:104px;background:none}
-  .fi-rel .pc-foto img{padding:0;mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04);
-                       transition:transform .25s cubic-bezier(.2,.9,.3,1.2)}
-  .fi-rel .pc-txt{padding:0}
-  .fi-rel .pc-txt i{display:inline-flex;margin-top:7px;padding:5px 10px;border-radius:9px;
-                    background:var(--ink);color:#fff;font:600 11.5px/1 var(--mono)}
-  .fi-rel .pc-txt i .desde{color:#A597C4}
+  /* De dónde sale la lista, dicho con las mismas palabras que la arman */
+  .fi-rel-porque{font:500 12px/1.3 var(--sans);color:var(--faint)}
+  .fi-rel-tira{display:flex;gap:10px}
+  .fi-rel .pc{
+    flex:1;min-width:0;width:auto;display:flex;flex-direction:row;align-items:center;gap:10px;
+    padding:7px 9px;border-radius:12px;background:var(--surface);border:0;overflow:visible;
+  }
+  /* El recuadro de la foto lleva SU PROPIO fondo, y no es de adorno: la entrada
+     anima translate y opacity, y eso arma un grupo de composición donde el
+     multiply deja de ver el fondo de la pastilla. Sin esto, apenas se anima,
+     cada producto vuelve a mostrar el recuadro blanco de su foto. */
+  .fi-rel .pc-foto{width:44px;height:44px;flex:none;display:block;background:var(--surface)}
+  .fi-rel .pc-foto img{width:100%;height:100%;object-fit:contain;padding:0;display:block;
+                       mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04)}
+  .fi-rel .pc-txt{min-width:0;display:flex;flex-direction:column;gap:2px;padding:0}
+  .fi-rel .pc-txt b{font:600 11.5px/1.25 var(--sans);-webkit-line-clamp:1}
+  .fi-rel .pc-txt i{margin-top:0;font:600 10.5px/1 var(--mono);color:var(--glow)}
+  .fi-rel .pc-txt i .desde{font-size:9px;margin-right:3px}
+
+  /* Llegan de costado, una atrás de la otra: el movimiento viene de afuera y
+     dice "acá hay más" sin escribirlo. translate para la entrada y transform
+     para el mouse, como propiedades separadas: si las dos usaran transform,
+     pasar el mouse cortaría la entrada a la mitad. */
+  .fi-rel .pc{
+    opacity:0;translate:30px 0;
+    transition:opacity .3s ease calc(var(--i,0) * 85ms),
+               translate .6s cubic-bezier(.16,1,.3,1) calc(var(--i,0) * 85ms),
+               transform .28s cubic-bezier(.2,.9,.3,1.2), box-shadow .28s ease;
+  }
+  .fi-rel.vis .pc{opacity:1;translate:0 0}
   @media (hover:hover) and (prefers-reduced-motion: no-preference){
-    .fi-rel .pc:hover .pc-foto img{transform:translateY(-5px)}
+    .fi-rel .pc-foto img{transition:transform .3s cubic-bezier(.2,.9,.3,1.2)}
+    .fi-rel .pc:hover{transform:translateY(-2px);box-shadow:0 10px 22px -14px rgba(24,18,38,.7)}
+    .fi-rel .pc:hover .pc-foto img{transform:scale(1.06)}
+  }
+  /* Con "menos movimiento" no entran: ya están */
+  @media (prefers-reduced-motion: reduce){
+    .fi-rel .pc{opacity:1;translate:none;transition:none}
   }
   @media (max-width:640px){
-    .fi-rel{padding:16px}
-    .fi-rel-tira{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .fi-rel{padding:14px 16px 16px}
+    .fi-rel-cab{flex-direction:column;align-items:flex-start;gap:3px}
+    .fi-rel-tira{flex-wrap:wrap}
+    .fi-rel .pc{flex:1 1 44%}
+    /* En el celular la pastilla es la mitad de ancha y "Galaxy S25 Ultra" no
+       entra en un renglon: con uno solo quedaba "Galaxy S25..." y no se sabe
+       si es la Ultra o la FE. */
+    .fi-rel .pc-txt b{-webkit-line-clamp:2}
   }
 
   /* El precio subio al lado del titulo: es lo segundo que se busca despues de
@@ -1496,7 +1532,7 @@
     .fi-pintas button{width:44px;height:44px}
     .fi-eje{grid-template-columns:1fr;gap:6px}
     .fi-envio{padding:12px 16px;align-items:flex-start}
-    .fi-rel-tira{gap:12px}
+    .fi-rel-tira{gap:8px}
   }
 
   /* ---------- Especificaciones deducidas ---------- */
@@ -2934,11 +2970,22 @@ function codigoDeLaFila(f){
    corrida le daria a un color la foto del color de al lado, que es
    exactamente el error que el codigo propio vino a terminar. Si algo no
    cierra devuelve vacio y decide archivoDeVariante(), como antes. */
-function varianteDeLaColumna(f, codigo, color, colores){
+function varianteDeLaColumna(f, codigo, color){
   if(!f || !f.codigoVar || !codigo) return '';
+  /* Los colores con los que se lee la celda son SIEMPRE los de ESTA fila, no
+     los que pidio quien llama. fotosDeColor() le pregunta a las filas
+     hermanas por un color que ellas no venden, y leyendo la celda con la
+     lista de afuera la posicion daba cualquier cosa: la fila Icyblue del
+     Galaxy S25 FE devolvia SU variante cuando le preguntaban por White, y la
+     ficha terminaba mostrando la foto celeste con el nombre "White" abajo.
+     Pasaba en cinco productos el 21/09 -- tambien en la grilla, al pasar el
+     mouse por un puntito. */
+  const propios = partirColores(f.color);
   const lista = String(f.codigoVar).split('/').map(x => x.trim());
-  if(lista.length !== colores.length) return '';
-  const v = lista[colores.indexOf(color)] || '';
+  if(!propios.length || lista.length !== propios.length) return '';
+  const i = propios.findIndex(c => norm(c) === norm(color));
+  if(i === -1) return '';
+  const v = lista[i] || '';
   if(!v.startsWith(codigo + '-') || !/^AT-\d{4}-\d{2}$/.test(v)) return '';
   /* Y que esa variante siga viva en el catalogo. La planilla se siembra cada
      tanto, asi que puede venir apuntando a una variante que despues se dio de
@@ -2947,8 +2994,15 @@ function varianteDeLaColumna(f, codigo, color, colores){
      pediria una foto que no se publica. Volviendo vacio decide
      archivoDeVariante(), que busca por el texto del color y da con la buena. */
   const tabla = (CATALOGO && CATALOGO.vars || {})[codigo] || {};
-  for(const k in tabla) if(tabla[k] === v) return v;
-  return '';
+  let viva = false;
+  for(const k in tabla) if(tabla[k] === v) viva = true;
+  if(!viva) return '';
+  /* Y que no sea la variante que el catalogo le da a OTRO color de esta misma
+     fila: una celda dada vuelta pasa el control del largo igual y le daria a
+     cada color la foto del de al lado, que es exactamente el error que el
+     codigo propio vino a terminar. */
+  if(propios.some((c, j) => j !== i && archivoDeVariante(codigo, c) === v)) return '';
+  return v;
 }
 
 function archivoDeVariante(codigo, texto){
@@ -3022,7 +3076,7 @@ function nombresDeFoto(f, colores, soloDeColor){
   const codigo = f.codigo || codigoDeLaFila(f);
   if(codigo){
     for(const c of colores){
-      const v = varianteDeLaColumna(f, codigo, c, colores) || archivoDeVariante(codigo, c);
+      const v = varianteDeLaColumna(f, codigo, c) || archivoDeVariante(codigo, c);
       if(v) salida.push(v);
     }
     // el archivo del producto que no tiene variantes, y el codigo a secas
@@ -4020,12 +4074,22 @@ function miniColorFicha(fila, nombre){
   return fotoChica(u);
 }
 
+/* El color con el que abre la ficha (21/09). Las miniaturas están apagadas
+   -en gris y a media opacidad- hasta que una se elige, así que una ficha recién
+   abierta se veía entera gris y parecía que el producto no tenía color puesto.
+   El que corresponde es el PRIMERO de la fila: por convención de la planilla es
+   el de la foto principal, el mismo que ya se está viendo. */
+function colorPorDefecto(p){
+  const c = pintas((p && p.color) || '')[0];
+  return c ? c.nombre : '';
+}
+
 function htmlColorFicha(p, m){
   const { lista, precioVaria } = coloresFicha(p, m);
   const aqui = clave(p);
   // El color elegido sale del pedido si el producto ya está cargado; si no,
-  // del que se acaba de tocar en esta ficha.
-  const eleg = colorDe(aqui) || COLOR_FICHA;
+  // del que se acaba de tocar en esta ficha; y si tampoco, el de la foto.
+  const eleg = colorDe(aqui) || COLOR_FICHA || colorPorDefecto(p);
 
   // Con un solo color no hay nada que elegir: queda el nombre bajo la foto
   if(lista.length < 2)
@@ -4046,7 +4110,7 @@ function htmlColorFicha(p, m){
   const hint = precioVaria ? 'El precio cambia según el color' : 'Tocá un color para elegirlo';
   return `<div class="fi-pintas">${puntos}</div>
     <span class="fi-color-nom" id="fi-color-txt">${eleg ? `<b>${esc(eleg)}</b>` : esc(p.color)}</span>
-    <span class="fi-hint" id="fi-color-hint"${precioVaria ? ' data-precio="1"' : ''}${eleg && !precioVaria ? ' hidden' : ''}>${hint}</span>`;
+    <span class="fi-hint" id="fi-color-hint"${precioVaria ? ' data-precio="1"' : ''}${COLOR_ELEGIDO && !precioVaria ? ' hidden' : ''}>${hint}</span>`;
 }
 
 /* Foto por color. La planilla trae una sola foto por producto, así que la del
@@ -6588,6 +6652,10 @@ addEventListener('popstate', () => {
 let FICHA = null;           // clave de la VARIANTE que se está mirando
 let FICHA_MODELO = null;    // el modelo al que pertenece, con todas sus variantes
 let COLOR_FICHA = '';       // color elegido en la ficha abierta
+/* ¿Ese color lo puso el cliente (o venía del pedido), o es el de por defecto?
+   Importa en dos lados: el aviso "tocá un color para elegirlo" sigue a la vista
+   mientras no haya elegido, y la foto del color sólo se busca si la pidió. */
+let COLOR_ELEGIDO = false;
 let fichaEmpujada = false;  // ¿agregamos una entrada al historial al abrirla?
 let cerrarFichaDOM = null;  // saca la ventana de la pantalla, sin tocar el historial
 
@@ -6891,13 +6959,50 @@ function relacionados(m, cuantos = RELACIONADOS){
   return out;
 }
 
+/* Una pastilla de la cinta. No usa htmlProdChico() a propósito: esa es la
+   tarjeta chica de la portada, que va en columna y con la foto grande, y acá
+   la foto va al costado y chica. El --i es el lugar en la fila, que es lo que
+   escalona la entrada. */
+function htmlSugerido(m, i){
+  const desde = m.multi && m.precio !== null && m.precio !== m.precioMax;
+  return `<button class="pc" type="button" data-key="${esc(clave(m.rep))}" style="--i:${i}"
+                  title="${esc(nombreConMarca(m.rep))}">
+    <span class="pc-foto">${m.imagen
+      ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`
+      : ''}</span>
+    <span class="pc-txt">
+      <b>${esc(nombreCorto(m))}</b>
+      <i>${desde ? '<span class="desde">desde</span>' : ''}${m.precio === null
+        ? 'Consultar' : 'USD ' + plata(m.precio)}</i>
+    </span>
+  </button>`;
+}
+
 function htmlRelacionados(m){
   const lista = relacionados(m);
   if(!lista.length) return '';
   return `<section class="fi-rel" aria-label="También te puede interesar">
-    <h4>También te puede interesar</h4>
-    <div class="fi-rel-tira">${lista.map(htmlProdChico).join('')}</div>
+    <div class="fi-rel-cab">
+      <h4>También te puede interesar</h4>
+      <span class="fi-rel-porque">Otros ${esc(plural(m.cat))} de precio parecido</span>
+    </div>
+    <div class="fi-rel-tira">${lista.map(htmlSugerido).join('')}</div>
   </section>`;
+}
+
+/* La cinta entra cuando aparece, no cuando se abre la ficha: está abajo de
+   todo, así que disparándola al abrir se la perdería justo el que después baja
+   a mirarla. El cliente scrollea ADENTRO de la ventana, por eso el observador
+   mira contra la caja y no contra la página. */
+function revelarSugeridos(rel, caja){
+  if(!rel) return;
+  if(typeof IntersectionObserver !== 'function'){ rel.classList.add('vis'); return; }
+  const ob = new IntersectionObserver(es => {
+    if(!es.some(e => e.isIntersecting)) return;
+    rel.classList.add('vis');
+    ob.disconnect();
+  }, { root: caja || null, threshold: .15 });
+  ob.observe(rel);
 }
 
 // historia: true = suma al historial · false = reemplaza · null = no lo toca
@@ -6911,8 +7016,10 @@ function abrirFicha(k, historia = true){
   FICHA_MODELO = m;
   FICHA = clave(v);
   anotarMirado(FICHA);   // para el "Seguí mirando" de la portada
-  // El color arranca en el que ya haya elegido para este producto en el pedido
-  COLOR_FICHA = colorDe(FICHA);
+  /* El color arranca en el que ya haya elegido para este producto en el pedido;
+     si no hay, queda marcado el de la foto, así la tira no abre toda en gris. */
+  COLOR_ELEGIDO = !!colorDe(FICHA);
+  COLOR_FICHA = colorDe(FICHA) || colorPorDefecto(v);
   if(historia !== null){ fichaEmpujada = historia === true; escribirURL(historia === true); }
 
   const d = document.createElement('div');
@@ -6938,9 +7045,13 @@ function abrirFicha(k, historia = true){
   // no de la versión, así que cambiar de color o capacidad no los redibuja.
   d.querySelectorAll('.fi-rel .pc').forEach(b =>
     b.onclick = () => abrirFicha(b.dataset.key));
+  revelarSugeridos(d.querySelector('.fi-rel'), d.querySelector('.caja'));
   engancharFicha(d, m, v);
-  // Si el cliente ya había elegido un color, la ficha abre mostrando ese
-  if(COLOR_FICHA) mostrarFotoColor(v, COLOR_FICHA, d);
+  /* Si el cliente ya había elegido un color, la ficha abre mostrando ese. Con
+     el de por defecto no: esa foto ya es la que está puesta, y buscar su
+     archivo por color haría aparecer el aviso "sin foto de este color" en todos
+     los productos que no tienen una foto por color. */
+  if(COLOR_ELEGIDO) mostrarFotoColor(v, COLOR_FICHA, d);
   // Una foto ya cacheada puede no disparar el onload
   const im = d.querySelector('.fi-foto img');
   if(im?.complete) im.classList.add('ok');
@@ -6979,7 +7090,9 @@ function elegirVariante(d, m, v, color){
   FICHA = clave(v);
   // `color` llega cuando se cambió de versión tocando un puntito: ese color
   // es el que el cliente eligió y tiene que quedar marcado en la nueva.
-  COLOR_FICHA = color || colorDe(FICHA);
+  const elegido = color || colorDe(FICHA);
+  COLOR_ELEGIDO = !!elegido;
+  COLOR_FICHA = elegido || colorPorDefecto(v);
   d.querySelector('.fi-datos').innerHTML = htmlDatosFicha(m, v);
   pintarFotoFicha(d, v);
   // La tira vive al lado de la foto, fuera de .fi-datos: se redibuja aparte o
@@ -6987,7 +7100,8 @@ function elegirVariante(d, m, v, color){
   pintarColoresFicha(d, v, m);
   engancharFicha(d, m, v);
   escribirURL(false);
-  if(COLOR_FICHA) mostrarFotoColor(v, COLOR_FICHA, d);
+  // Igual que al abrir: la foto por color se busca sólo si el color lo pidió él
+  if(elegido) mostrarFotoColor(v, elegido, d);
 }
 
 // La foto se toca lo mínimo: si es la misma imagen, solo se actualiza el badge
@@ -7057,6 +7171,7 @@ function refrescarFicha(){
 function elegirColorFicha(d, p, color){
   const k = clave(p);
   COLOR_FICHA = color;
+  COLOR_ELEGIDO = true;
   if(enPedido(k)) elegirColor(k, color);          // ya está en el pedido: se le actualiza el color
 
   d.querySelectorAll('.fi-pintas button').forEach(b =>

@@ -1416,6 +1416,13 @@
   .fi-colores .fi-hint{display:block;text-align:center;font-size:11px;color:var(--faint)}
   .fi-colores .fi-hint[hidden]{display:none}
   .fi-nota{font-size:11px;color:var(--faint);margin:0}
+  /* Lo que el cliente esta eligiendo, escrito de corrido, justo arriba del
+     boton. La ficha ya lo dice, pero en pedazos: el modelo en el titulo, la
+     memoria en un boton y el color en un puntito. Juntarlos es trabajo del
+     que mira, y es lo primero que hay que confirmar antes de escribir. */
+  .fi-elegido{margin:16px 0 0;padding:11px 13px;border-radius:12px;background:var(--surface-2);
+              font:500 13px/1.45 var(--sans);color:var(--muted)}
+  .fi-elegido b{color:var(--ink);font-weight:600}
 
   /* ---------- Elegir color: la tira al costado de la foto (21/09) ----------
      En la grilla los puntitos son decorativos. Acá el cliente está decidiendo,
@@ -6952,6 +6959,29 @@ function cerrarFicha(){
    también acá hacía que "Apple iPhone 15 128GB SIM (Black/Blue)" dijera tres
    veces lo mismo. Si sacar todo eso deja menos de dos palabras, se muestra el
    nombre completo: mejor repetir que no nombrar el producto. */
+/* Lo que esta eligiendo el cliente, para leerlo de un vistazo.
+
+   El nombre y la version no cambian con el color, asi que se escriben una
+   vez; el color vive en su propio span porque se actualiza al tocar un
+   puntito (ver elegirColorFicha). La version se agrega solo si el modelo
+   tiene mas de una y el nombre no la dice ya: si no, quedaba "iPhone 16e
+   128GB 128GB". (Pedro, 22/09/2026) */
+function partesElegido(m, v){
+  const nombre = nombreFicha(m, v).trim();
+  const version = ((m.multi && (v.opcion || v.etiqueta)) || '').trim();
+  return [nombre, version && !norm(nombre).includes(norm(version)) ? ' ' + version : ''];
+}
+
+function htmlElegidoColor(color){
+  return color ? `, color <b>${esc(color)}</b>` : '';
+}
+
+function htmlElegido(m, v, color){
+  const [nombre, version] = partesElegido(m, v);
+  return `<p class="fi-elegido" id="fi-elegido">Estás eligiendo: <b>${esc(nombre + version)}</b>` +
+         `<span id="fi-elegido-color">${htmlElegidoColor(color)}</span>.</p>`;
+}
+
 function nombreFicha(m, v){
   const entero = m.desc || '';
   let t = entero;
@@ -7024,6 +7054,7 @@ function htmlDatosFicha(m, v){
     ${v.detalle ? `<p class="fi-detalle">${esc(v.detalle)}</p>` : ''}
     ${filas.length ? `<dl class="fi-tabla">${filas.map(([t,x]) =>
       `<dt>${esc(t)}</dt><dd>${esc(x)}</dd>`).join('')}</dl>` : ''}
+    ${htmlElegido(m, v, COLOR_FICHA)}
     <div class="botones fi-botones">
       ${WHATSAPP ? (v.stock
         ? `<a class="pri cta" href="${linkWA(mensajeWA(v, COLOR_FICHA))}" target="_blank" rel="noopener">${ICONO_WA}Consultar por WhatsApp</a>`
@@ -7457,6 +7488,9 @@ function elegirColorFicha(d, p, color){
     b.setAttribute('aria-pressed', String(b.dataset.color === color)));
   const t = d.querySelector('#fi-color-txt');
   if(t) t.innerHTML = `<b>${esc(color)}</b>`;
+  // La frase de arriba del boton: cambia el color, no el modelo
+  const eleg = d.querySelector('#fi-elegido-color');
+  if(eleg) eleg.innerHTML = htmlElegidoColor(color);
   // el aviso lo termina de acomodar mostrarFotoColor: con precio por color
   // ese mensaje tiene que quedarse, y si falta la foto hay que decirlo
   const nota = d.querySelector('#fi-color-hint');

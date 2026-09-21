@@ -991,9 +991,9 @@
                          transform .35s cubic-bezier(.2,.9,.3,1.2)}
     /* Espera a estar a la vista y a que la foto haya bajado */
     .card.vis .foto img.ok{opacity:1;translate:0 0}
-    /* Ya adentro, sin demoras: si no, al cambiar de color la principal tardaba
-       en apagarse (hasta medio segundo en las de la derecha) y se veían las dos
-       fotos superpuestas. La pone mostrarColorEnTarjeta(). */
+    /* Una vez que entró, sin demoras: la demora es solo para la entrada
+       escalonada, y arrastrarla después hacía que la foto tardara en responder
+       al mouse. */
     .card.entro .foto img{transition:opacity .25s ease, transform .35s cubic-bezier(.2,.9,.3,1.2)}
   }
 
@@ -1024,22 +1024,6 @@
                      box-shadow:0 14px 26px -12px rgba(124,58,237,.85), inset 0 1px 0 rgba(196,181,253,.45)}
   }
 
-  /* Los puntitos de la tarjeta cambian la foto (18/09): la del color va en
-     una segunda imagen encima. Las dos se funden con multiply, así que la
-     principal se apaga mientras la otra se prende: si no, se verían los dos
-     productos superpuestos, porque el blanco de una deja ver la otra. */
-  .foto img.alt{position:absolute;inset:0;opacity:0;translate:0 0;transition:opacity .25s ease, transform .35s cubic-bezier(.2,.9,.3,1.2)}
-  .foto.otro img.alt{opacity:1}
-  .foto.otro img:not(.alt){opacity:0 !important}
-  /* Seguro: sin .otro, la del color no se ve nunca, lleve la clase que lleve.
-     Si le quedaba la "ok" de las fotos principales, pesaba más que la regla de
-     arriba y al salir de la tarjeta se veían las dos superpuestas. */
-  .foto:not(.otro) img.alt{opacity:0 !important}
-  .card .pintas i{position:relative;cursor:pointer;transition:transform .15s ease, box-shadow .15s ease}
-  /* El puntito mide 12px: para el dedo, el lugar donde se toca es más grande */
-  .card .pintas i::after{content:"";position:absolute;inset:-6px -3px}
-  .card .pintas i.elegido{box-shadow:0 0 0 2px var(--paper), 0 0 0 3.5px var(--ink)}
-  @media (hover:hover){ .card .pintas i:hover{transform:scale(1.25)} }
   .sinfoto{
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
     /* Oscuro a propósito: el fondo claro de .foto es para las fotos reales
@@ -1090,24 +1074,21 @@
     display:flex;align-items:center;gap:8px;
   }
   .marca .badge{margin-left:auto}
-  /* En la tarjeta el nombre dejó de ir en mayúsculas de display: con dos
-     renglones y nombres largos (iPhone 17 Pro Max 512GB) se leía peor. */
+  /* El nombre vuelve a las mayúsculas de display el 21/09, y esta vez sí.
+     Había salido de ahí porque con nombres como "iPhone 17 Pro Max 512GB" dos
+     renglones en mayúsculas se leían peor que en la letra de texto. Lo que
+     cambió es el nombre, no la letra: ahora dice sólo el modelo —la memoria se
+     elige en la ficha y el color se ve ahí también—, así que entra holgado.
+     A cambio, la grilla habla el mismo idioma que los títulos de rubro y los
+     precios, que son de esta misma familia. */
   .nombre{
-    font:600 14.5px/1.3 var(--sans);letter-spacing:-.01em;margin:0;
-    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;
+    font:400 19px/1.05 var(--display);letter-spacing:.005em;text-transform:uppercase;margin:0;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.1em;
     /* "(BLACK/WHITE/PINK/ULTRAMARINE/TEAL)" es un solo token: sin esto se
        desborda de la tarjeta y el line-clamp corta a mitad de palabra. */
     overflow-wrap:anywhere;
   }
-  /* Los colores en los que viene el producto. La foto muestra uno solo,
-     así que estos puntitos son lo único que cuenta la historia completa. */
-  .pintas{display:inline-flex;gap:4px;flex:none}
-  .pintas i{
-    width:12px;height:12px;border-radius:50%;display:block;
-    box-shadow:inset 0 0 0 1px rgba(24,18,38,.18), 0 1px 2px rgba(24,18,38,.12);
-  }
-  .fi-tabla .pintas i{width:14px;height:14px}
-  .fi-tabla dd .pintas{vertical-align:-3px;margin-right:7px}
+
   .incluye{font:600 11px/1.35 var(--sans);color:var(--ok);background:var(--ok-soft);padding:6px 9px;border-radius:8px}
 
   /* La etiqueta del precio: el pie de la tarjeta es un bloque oscuro, como el
@@ -4007,14 +3988,6 @@ function colorDeLaFila(col, desc){
   return (a.size < b.size && [...a].every(c => b.has(c))) ? par : col;
 }
 
-function htmlColores(txt){
-  const lista = pintas(txt).filter(c => c.hex);
-  if(!lista.length) return '';
-  // data-color: en la grilla, pasar por el puntito muestra la foto de ese color
-  return `<span class="pintas">${lista.map(c =>
-    `<i style="background:${c.hex}" title="${esc(c.nombre)}" data-color="${esc(c.nombre)}"></i>`).join('')}</span>`;
-}
-
 /* ---------- Los colores, al costado de la foto (21/09) ----------
    En la grilla los puntitos son decoración. Acá el cliente está decidiendo,
    así que son botones: tocás uno y ese color queda elegido para el pedido y
@@ -4315,6 +4288,13 @@ const RE_RAM   = /\b\d+\s*ram\b/gi;                     // 16ram
    quedaba suelto en el nombre. Eso partia en dos tarjetas cosas que son un
    solo modelo: los MacBook Air M5 y el S26 Ultra de 16/1TB. */
 const RE_DUAL  = /\b\d{1,2}\s*\/\s*\d{1,4}\s*(?:gb|tb)\b/gi;  // 12/256GB, 16/1TB
+/* Igual, pero aceptando la unidad tambien en el primer numero. NO se usa
+   para agrupar: RE_DUAL decide que filas son el mismo modelo, y ampliarlo
+   junto dos MacBook Neo que cambian de TECLADO, que es algo que el cliente
+   tiene que poder elegir. Aca solo sirve para escribir el nombre: sin esto,
+   "MacBook Pro M5 14\" 16GB/1TB Esp" quedaba como "MacBook Pro M5 14\" / Esp",
+   con la barra colgada donde estaba la memoria. */
+const RE_DUAL_NOMBRE = /\b\d{1,2}\s*(?:gb)?\s*\/\s*\d{1,4}\s*(?:gb|tb)\b/gi;
 const RE_PAREN = /\([^)]*\)/g;                          // (Space Gray/Silver)
 const RE_CORCH = /\[[^\]]*\]/g;                         // [5G]
 // Solo relojes:
@@ -4334,6 +4314,32 @@ function familia(p){
   if(esReloj(p))
     t = t.replace(RE_MM,' ').replace(RE_CORREA,' ').replace(RE_TALLE,' ').replace(RE_COLOR,' ');
   return [norm(p.cat), norm(p.marca), norm(t).replace(/[\s\-–/]+/g,' ').trim()].join('|');
+}
+
+/* ---------- El nombre sin la memoria (21/09) ----------
+   En la grilla la memoria dejo de ser parte del texto del nombre y pasa a ser
+   un dato propio, al lado. Antes la fila quedaba despareja sin que hubiera un
+   motivo visible: el iPhone 15 Plus mostraba "128GB (Yellow)" -- una sola fila,
+   su nombre viene asi de la planilla -- y el iPhone 16 Pro Max no mostraba nada
+   -- agrupa 256 y 512, asi que del nombre solo queda lo comun --.
+
+   Se limpia con la MISMA secuencia que familia(), que es la que decide que dos
+   filas son el mismo modelo: si sacara de mas, productos distintos se
+   agruparian, y eso lo cuida la tanda de agrupacion. El parentesis se va con
+   ella, y esta bien: adentro casi siempre esta el color, que ya se ve en los
+   puntitos de al lado de la marca.
+
+   Ojo que esto es SOLO para mostrar. El nombre entero sigue siendo p.desc, que
+   es lo que viaja al mensaje de WhatsApp, al pedido y al buscador. */
+function nombreSinMemoria(desc){
+  const t = String(desc || '')
+    .replace(RE_PAREN, ' ').replace(RE_CORCH, ' ')
+    .replace(RE_DUAL_NOMBRE, ' ').replace(RE_CAP, ' ').replace(RE_RAM, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/^[\s\-–/·]+/, '').replace(/[\s\-–/·]+$/, '')
+    .trim();
+  // Si la limpieza se lleva todo, vale mas el nombre de la planilla que nada
+  return t || String(desc || '');
 }
 
 // El nombre de la tarjeta es lo que todas las variantes tienen en común:
@@ -4390,7 +4396,62 @@ function completarSim(vs){
   }
 }
 
-function etiquetaVariante(p, nombre){
+/* ---------- La misma versión, escrita de seis maneras (21/09) ----------
+   El MacBook Neo llegaba con DIEZ versiones: "8/256GB" y "8GB/256GB" y
+   "8ram 512GB"; "Teclado ES", "· Teclado español" y "· Teclado inglés"; dos con
+   el PRECIO metido adentro del nombre ("· USD 847") y otras con el color, que
+   ya se elige al lado de la foto. Como cada texto distinto arma su propio
+   botón, la ficha mostraba diez pestañas -la mitad diciendo lo mismo- y de dos
+   renglones cada una.
+
+   Acá se empareja la ESCRITURA, sin cambiar lo que dice: las que eran la misma
+   quedan iguales y se juntan solas más abajo. Es maquillaje del lado de la web:
+   la corrección que sobrevive va al parser de la planilla, pedida como regla
+   (ver PEDIDO-AL-SHEET y la nota de los IDs). */
+/* Lo que la planilla escribe MAL y no hay forma de deducir mirando el texto.
+   Va por CÓDIGO propio, que es lo único que no rota, y cada línea dice de dónde
+   salió: esto no se generaliza nunca. En los MacBook Pro el "Pro" SÍ es otro
+   chip (M5 contra M5 Pro), así que sacar la palabra en todos lados sería
+   borrar productos distintos. El arreglo que sobrevive va al parser de la
+   planilla; esto es el parche mientras tanto. */
+const VERSION_MAL_ESCRITA = {
+  // Pedro, 21/09: el "A18 Pro" del MacBook Neo es el mismo A18 que la fila
+  // normal. Las dos filas ya comparten el código AT-0433, o sea el mismo
+  // producto, y sólo cambia el color. AT-0434 es la misma historia en el de
+  // 512GB, que también viene escrito "A18 Pro".
+  'AT-0433': [/\bpro\b/ig],
+  'AT-0434': [/\bpro\b/ig],
+};
+
+function emparejarVersion(e, p, coloresDelModelo){
+  let s = String(e || '');
+  for(const re of VERSION_MAL_ESCRITA[String(p && p.codigo || '').toUpperCase()] || [])
+    s = s.replace(re, ' ');
+  // El precio adentro del nombre: ya se muestra al lado y encima queda viejo
+  s = s.replace(/\s*[·|,-]?\s*(?:USD|U\$S)\s*[\d][\d.,]*/gi, ' ');
+  // "8ram 512GB" y "8/256GB" son la RAM y la capacidad: se escriben igual
+  s = s.replace(/\b(\d{1,3})\s*ram\s*\/?\s*(\d{1,4})\s*(GB|TB)\b/gi,
+                (_, r, c, u) => r + 'GB/' + c + u.toUpperCase());
+  s = s.replace(/\b(\d{1,3})\s*\/\s*(\d{1,4})\s*(GB|TB)\b/gi,
+                (_, r, c, u) => r + 'GB/' + c + u.toUpperCase());
+  // El teclado, con el mismo nombre que usa la ficha (idiomaTeclado)
+  s = s.replace(/\bteclado\s+(esp(?:añol)?|es|ingl[ée]s|ing|en)\b/gi,
+                (_, x) => 'Teclado ' + (/^es/i.test(x) ? 'español' : 'inglés'));
+  // Siempre con el mismo separador, tenga o no punto medio en la planilla
+  s = s.replace(/\s*·\s*/g, ' · ').replace(/(?:\s*·\s*|\s+)(Teclado\b)/gi, ' · $1');
+  /* El color se saca sólo si es el de ESTA fila: el cliente lo elige con los
+     puntitos, y adentro de la versión hacía que "8/256GB Silver" y "8/256GB"
+     parecieran dos productos. */
+  for(const c of [...partirColores(p.color || ''), ...(coloresDelModelo || [])]){
+    const t = (c || '').trim();
+    if(!t) continue;
+    const esc = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    s = s.replace(new RegExp('[\\s·]*' + esc + '\\s*$', 'i'), '');
+  }
+  return s.replace(/\s{2,}/g, ' ').replace(/^[\s·]+|[\s·]+$/g, '').trim();
+}
+
+function etiquetaVariante(p, nombre, coloresDelModelo){
   let e = p.desc || '';
   if(norm(e).startsWith(norm(nombre))) e = e.slice(nombre.length);
   /* Del paréntesis se saca el color, porque eso ya se elige con los puntitos.
@@ -4412,6 +4473,7 @@ function etiquetaVariante(p, nombre){
   // La planilla escribe la capacidad como se le ocurre ("128gb", "512GB") y en
   // los botones quedaban mezcladas. Acá se emparejan.
   e = e.replace(/(\d+\s*)(gb|tb)\b/gi, (_,n,u) => n.trim() + u.toUpperCase());
+  e = emparejarVersion(e, p, coloresDelModelo);
   if(e) return e;
   // Sin nada que la distinga, la variante se queda con el color. Cuando la
   // columna Color está vacía suele estar al final del nombre, entre paréntesis
@@ -4498,7 +4560,13 @@ function armarModelo(vs){
   const rep = vs.find(v => v.stock && v.precio === precioMin)
            || vs.find(v => v.precio === precioMin) || vs[0];
   const nombre = nombreGrupo(vs);
-  vs.forEach(v => { v.etiqueta = etiquetaVariante(v, nombre); v.etiquetaBase = v.etiqueta; });
+  /* Los colores de TODO el modelo, no sólo los de la fila: hay filas que
+     nombran un color que su propia columna Color no declara (el MacBook Neo
+     tiene una que se llama "8/512GB Citrus" con la columna en Blush). Si no se
+     saca, ese color queda pegado al nombre de la versión y arma un botón
+     aparte. */
+  const coloresDelModelo = [...new Set(vs.flatMap(v => partirColores(v.color)))];
+  vs.forEach(v => { v.etiqueta = etiquetaVariante(v, nombre, coloresDelModelo); v.etiquetaBase = v.etiqueta; });
   /* Va antes de las hermanas de color y del agrupado por version, para que
      todo lo de abajo vea la etiqueta ya completa: las tres filas del 512GB
      eSIM (Orange, Blue, Silver) terminan en un solo boton con sus puntitos. */
@@ -4592,19 +4660,72 @@ function armarModelo(vs){
      que el cliente tenga que elegir: si dos filas declaran el mismo color, o
      cambian de teclado, el puntito no sabria a cual llevar y siguen separadas. */
   vs.forEach(v => { v.opcion = v.etiqueta; });
+  /* La clave lleva el teclado adentro (21/09). Antes era sólo el nombre y se
+     pedía que TODO el grupo tuviera el mismo teclado: bastaba una fila en
+     español para que no se juntara nada. En el MacBook Neo eso dejaba los
+     cuatro colores del teclado inglés como cuatro botones que sólo se
+     diferenciaban por el precio. Ahora los colores se juntan DENTRO de cada
+     teclado, y si el mismo nombre existe con los dos, el botón lo dice. */
+  /* Y las palabras, en cualquier orden (21/09). La planilla escribe la misma
+     versión dada vuelta -"5G 16GB/1TB" y "16GB/1TB 5G" en el Galaxy S26 Ultra,
+     "SM X620 +Pencil 8GB/128GB" y "8GB/128GB SM X620 +Pencil" en las Tab- y
+     salían dos botones que decían lo mismo. La clave ordena las palabras.
+     Ordenar alcanza y no hace falta pedir el mismo código: "256GB" y "256GB
+     Cellular", o "16GB/1TB" y "24GB/1TB", tienen palabras distintas y no se
+     juntan. Pedir además el código fue peor: la planilla le da códigos
+     distintos a filas del mismo botón y se desarmaban agrupaciones que ya
+     estaban bien (salían "32GB/1TB · Space Black" y "512GB E-Sim · Orange"). */
+  const palabrasClave = t => norm(t).split(/\s+/).filter(Boolean).sort().join(' ');
   const porVersion = new Map();
+  const tecladosDe = new Map();
   vs.forEach(v => {
-    const k = norm(v.etiquetaBase);
+    const base = norm(v.etiquetaBase);
+    const k = [palabrasClave(v.etiquetaBase), norm(v.teclado), norm(v.condicion)].join('|');
     if(!porVersion.has(k)) porVersion.set(k, []);
     porVersion.get(k).push(v);
+    if(!tecladosDe.has(base)) tecladosDe.set(base, new Set());
+    tecladosDe.get(base).add(norm(v.teclado));
   });
   for(const grupo of porVersion.values()){
     if(grupo.length < 2) continue;
     const colores = grupo.map(v => partirColores(v.color).map(norm).filter(Boolean));
     const todos = colores.flat();
     const cadaColorEnUnaFila = colores.every(c => c.length) && new Set(todos).size === todos.length;
-    const mismoTeclado = new Set(grupo.map(v => norm(v.teclado))).size === 1;
-    if(cadaColorEnUnaFila && mismoTeclado) grupo.forEach(v => { v.opcion = v.etiquetaBase; });
+    if(!cadaColorEnUnaFila) continue;
+    /* De las formas de escribirlo gana la que más usa ESTE modelo, y si empatan
+       la más corta. Mirando sólo el grupo empataban de a dos y salía la del
+       proveedor: el MacBook Neo quedaba con un botón "13" A18 8GB/256GB" al
+       lado de otro "A18 13" 8GB/256GB", dados vuelta. */
+    const cuenta = new Map();
+    vs.forEach(v => cuenta.set(v.etiquetaBase, (cuenta.get(v.etiquetaBase) || 0) + 1));
+    const base = [...new Set(grupo.map(v => v.etiquetaBase))]
+      .sort((a, b) => (cuenta.get(b) || 0) - (cuenta.get(a) || 0) || a.length - b.length)[0];
+    const mezclaTeclado = (tecladosDe.get(norm(base)) || new Set()).size > 1;
+    // Si el nombre ya nombra el teclado, no se repite
+    const et = mezclaTeclado && grupo[0].teclado && !/teclado/i.test(base)
+             ? base + ' · ' + nombreTeclado(grupo[0].teclado)
+             : base;
+    grupo.forEach(v => { v.opcion = et; });
+  }
+
+  /* Y la tira de colores tiene que ofrecer TODOS los colores del botón. Se
+     calculó más arriba con el nombre de la planilla, cuando estas filas
+     todavía eran versiones distintas: sin esto el botón promete "desde USD
+     891", la tira muestra un solo color y las filas del otro grupo no se
+     pueden elegir en ningún lado. Sólo se juntan si ningún color se repite:
+     con dos filas del mismo color el puntito no sabría a cuál llevar. */
+  const porOpcion = new Map();
+  vs.forEach(v => {
+    const k = norm(v.opcion);
+    if(!porOpcion.has(k)) porOpcion.set(k, []);
+    porOpcion.get(k).push(v);
+  });
+  for(const grupo of porOpcion.values()){
+    if(grupo.length < 2) continue;
+    const cols = grupo.map(v => partirColores(v.color).map(norm).filter(Boolean));
+    const todos = cols.flat();
+    if(!(cols.every(c => c.length) && new Set(todos).size === todos.length)) continue;
+    grupo.forEach(v => { v.hermanasColor = grupo; });
   }
 
   const colores = [...new Set(
@@ -4635,7 +4756,40 @@ function agrupar(prods){
     if(!mapa.has(f)) mapa.set(f, []);
     mapa.get(f).push(p);
   });
-  return [...mapa.values()].map(armarModelo).sort((a,b) => a.idx - b.idx);
+  const ms = [...mapa.values()].map(armarModelo).sort((a,b) => a.idx - b.idx);
+  ponerTitulos(ms);
+  return ms;
+}
+
+/* El titulo de la tarjeta: el nombre del modelo y nada mas. La memoria y el
+   color salen del texto -- la memoria se elige adentro de la ficha y el color
+   ya esta en los puntitos de al lado de la marca -- y asi la fila queda pareja,
+   que era lo que no cerraba: el iPhone 15 Plus mostraba "128GB (Yellow)" porque
+   es una fila sola, y el iPhone 16 Pro Max no mostraba nada porque agrupa dos
+   capacidades.
+
+   Con una excepcion, y por eso se decide aca y no tarjeta por tarjeta: si al
+   recortarlo dos modelos DISTINTOS quedan llamandose igual, los dos se quedan
+   con el nombre entero. Pasa con los Ray-Ban Meta, donde el parentesis con el
+   color del armazon y del cristal es lo unico que los separa, y con el Mini 5
+   Pro, donde el parentesis dice que control remoto trae. Dos tarjetas con el
+   mismo nombre y distinto precio es peor que un nombre largo. */
+function ponerTitulos(ms){
+  const porCorto = new Map();
+  ms.forEach(m => {
+    const t = nombreSinMemoria(m.desc);
+    if(!porCorto.has(t)) porCorto.set(t, []);
+    porCorto.get(t).push(m);
+  });
+  ms.forEach(m => {
+    const t = nombreSinMemoria(m.desc);
+    const juntos = porCorto.get(t) || [];
+    /* Solo es choque si el recorte los junto. Dos filas que YA se llamaban
+       igual en la planilla -- el Quest 3S de 128 y el de 256 -- se siguen
+       llamando igual con el nombre entero: alargarlo no arregla nada. */
+    const choca = juntos.some(x => x !== m && x.desc !== m.desc);
+    m.titulo = choca ? m.desc : t;
+  });
 }
 
 // El modelo que contiene esta variante. Sirve para abrir la ficha desde un link
@@ -4698,8 +4852,8 @@ function tarjeta(p){
       ${acciones}
     </div>` : ''}
     <div class="cuerpo">
-      <span class="marca">${esc(p.marca)}${sub ? htmlColores(sub) : ''}${CON_FOTOS ? '' : badge}</span>
-      <h2 class="nombre">${esc(p.desc)}</h2>
+      <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}</span>
+      <h2 class="nombre">${esc(p.titulo || p.desc)}</h2>
       <div class="pie">
         <div class="plata">
           <span class="usd">${precioTarjeta(p)}</span>
@@ -4968,7 +5122,21 @@ function pararOfertas(){
    marcas/<marca-en-minuscula>.png y el nombre queda de respaldo si el archivo
    no está, igual que con las fotos por color. */
 const CARPETA_MARCAS = 'marcas/';
-const CUANTAS_MARCAS = 12;
+const CUANTAS_MARCAS = 13;
+
+/* El orden lo decide Pedro, no la cantidad de productos (21/09). Antes salían
+   ordenadas por cuántos modelos tenía cada una, y eso ponía adelante a las de
+   fotografía -la fila arrancaba con Canon y Sony- mientras los celulares, que
+   es lo que más se busca, quedaban en el medio. Ahora manda esta lista:
+   primero los celulares, después las computadoras, después la fotografía y al
+   final lo demás.
+
+   Las que no están acá no se pierden: entran atrás, por cantidad, hasta
+   completar el cupo. Y ninguna se muestra vacía: si la marca no tiene ningún
+   producto en la planilla del día, no aparece, esté o no en la lista. */
+const ORDEN_MARCAS = ['Apple', 'Samsung', 'Xiaomi', 'Motorola', 'Microsoft',
+                      'Canon', 'Sony', 'Nikon', 'Sigma', 'Tamron',
+                      'DJI', 'Ray-Ban', 'Kieslect'];
 // Después de cuántas tarjetas se mete la fila: entra pasada la primera tanda
 // visible, como para no empujar los productos abajo del todo.
 const MARCAS_DESPUES_DE = 6;
@@ -4979,8 +5147,13 @@ const slugMarca = marca => encodeURIComponent(norm(marca).replace(/[^a-z0-9]+/g,
 function marcasParaLaFila(){
   const cuenta = new Map();
   MODELOS.forEach(m => { if(m.marca) cuenta.set(m.marca, (cuenta.get(m.marca) || 0) + 1); });
+  /* Se compara con norm(): la planilla escribe "Ray-Ban" y la lista podría
+     decir "Rayban". Si la escritura decidiera, la marca se caería del orden
+     sin que nadie se entere y aparecería al final, entre las de relleno. */
+  const puesto = new Map(ORDEN_MARCAS.map((m, i) => [norm(m), i]));
+  const lugar = m => puesto.has(norm(m)) ? puesto.get(norm(m)) : Infinity;
   return [...cuenta]
-    .sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0],'es'))
+    .sort((a,b) => lugar(a[0]) - lugar(b[0]) || b[1] - a[1] || a[0].localeCompare(b[0],'es'))
     .slice(0, CUANTAS_MARCAS);
 }
 
@@ -6867,6 +7040,14 @@ function htmlOpcionesFicha(m, v){
   const reales = [...versiones.entries()].filter(([op, g]) => !opcionEsColor(g, op));
   if(reales.length < 2) return '';
 
+  /* Orden: primero lo que se puede comprar, después por precio. Venían en el
+     orden en que la planilla las cargó, que no le dice nada al cliente: en el
+     MacBook Neo la primera pestaña estaba agotada y la única con stock quedaba
+     perdida en el medio de la lista. */
+  const barato = g => Math.min(...g.map(x => x.precio ?? Infinity));
+  reales.sort((a, b) => (a[1].some(x => x.stock) ? 0 : 1) - (b[1].some(x => x.stock) ? 0 : 1)
+                     || barato(a[1]) - barato(b[1]));
+
   const porPrecio = (a, b) => (a.precio ?? Infinity) - (b.precio ?? Infinity);
   const precioDe = grupo => {
     const ps = grupo.map(x => x.precio).filter(x => x !== null);
@@ -7558,73 +7739,14 @@ $('bp-ver').onclick     = abrirPedido;
 // para siempre. Este escucha único las agarra a todas, sin importar cómo se
 // hayan insertado. Va en fase de captura porque "load" no burbujea.
 grid.addEventListener('load', e => {
-  // La foto de otro color (img.alt) no: su visibilidad la maneja .otro
-  if(e.target.tagName === 'IMG' && !e.target.classList.contains('alt')) e.target.classList.add('ok');
+  if(e.target.tagName === 'IMG') e.target.classList.add('ok');
 }, true);
-
-/* ---------- Los puntitos de la tarjeta cambian la foto (18/09) ----------
-   Con el mouse, pasar por un color muestra su foto y salir de la tarjeta
-   vuelve a la principal. Con el dedo, tocar el puntito la cambia (y no abre
-   la ficha). La foto se le pide a la fila que VENDE ese color: donde el
-   precio cambia con el color, cada uno es una fila con su código, y
-   preguntándole a la principal salía la misma foto en todos (iPhone 17 Pro,
-   17 Pro Max, Air). Se prueba la chica y después la grande; si no hay
-   ninguna, la tarjeta queda como estaba: nada roto a la vista. */
-function mostrarColorEnTarjeta(card, dot){
-  const m = buscarModelo(card.dataset.key);
-  const foto = card.querySelector('.foto');
-  const nombre = dot.dataset.color;
-  if(!m || !foto || !nombre || !foto.querySelector('img')) return;
-  card.classList.add('entro');           // de acá en más, sin la demora de la entrada
-  card.querySelectorAll('.pintas i').forEach(i => i.classList.toggle('elegido', i === dot));
-  card.dataset.colorVisto = nombre;
-  const fila = m.variantes.find(v => partirColores(v.color || '').some(x => norm(x) === norm(nombre))) || m.rep || m;
-  const urls = [...new Set(fotosDeColor(fila, nombre).flatMap(u => [fotoChica(u), u]))];
-  (function probar(i){
-    if(i >= urls.length || card.dataset.colorVisto !== nombre) return;
-    const prueba = new Image();
-    prueba.onload = () => {
-      if(card.dataset.colorVisto !== nombre) return;      // ya pasó a otro color
-      // Sin la clase "ok": esa la llevan solo las fotos principales
-      let alt = foto.querySelector('img.alt');
-      if(!alt){
-        alt = document.createElement('img');
-        alt.className = 'alt'; alt.alt = ''; alt.decoding = 'async';
-        foto.querySelector('img').after(alt);
-      }
-      alt.src = urls[i];
-      foto.classList.add('otro');
-    };
-    prueba.onerror = () => probar(i + 1);
-    prueba.src = urls[i];
-  })(0);
-}
-
-function volverFotoPrincipal(card){
-  delete card.dataset.colorVisto;
-  card.querySelector('.foto')?.classList.remove('otro');
-  card.querySelectorAll('.pintas i.elegido').forEach(i => i.classList.remove('elegido'));
-}
-
-grid.addEventListener('pointerover', e => {
-  if(e.pointerType !== 'mouse') return;
-  const dot = e.target.closest('.card .pintas i');
-  if(dot) mostrarColorEnTarjeta(dot.closest('.card'), dot);
-});
-grid.addEventListener('pointerout', e => {
-  if(e.pointerType !== 'mouse') return;
-  const card = e.target.closest('.card');
-  if(card && card.dataset.colorVisto && !card.contains(e.relatedTarget)) volverFotoPrincipal(card);
-});
 
 grid.addEventListener('click', e => {
   const card = e.target.closest('.card');
   if(!card) return;
   if(e.target.closest('.mas')){ togglePedidoModelo(card.dataset.key); return; }
   if(e.target.closest('a')) return;          // el botón Consultar hace lo suyo
-  // Tocar un puntito cambia la foto; la ficha se abre tocando el resto
-  const dot = e.target.closest('.pintas i');
-  if(dot){ mostrarColorEnTarjeta(card, dot); return; }
   abrirFicha(card.dataset.key);
 });
 grid.addEventListener('keydown', e => {

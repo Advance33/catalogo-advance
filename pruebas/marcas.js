@@ -40,7 +40,42 @@ function correrPruebas(){
   /* ---- 1. Que marcas y con que numeros ---- */
   ok(n >= 3 && n <= CUANTAS_MARCAS, 'muestra las marcas principales', n);
   ok(JSON.stringify(MV.map(x => x.marca)) === JSON.stringify(marcasParaLaFila().map(x => x[0])),
-     'las mismas y en el mismo orden que la fila de marcas (por cantidad)');
+     'las mismas y en el mismo orden que la fila de marcas');
+
+  /* ---- 1b. El orden lo elige Pedro, no la cantidad (21/09) ----
+     Antes salian de mayor a menor cantidad de productos y la fila arrancaba
+     con Canon y Sony, que son las de fotografia; los celulares, que es lo que
+     mas se busca, quedaban en el medio. Ahora manda ORDEN_MARCAS.
+
+     Ojo con como se compara: contra la lista, no contra marcasParaLaFila(),
+     que es justo la funcion que se quiere verificar. */
+  /* La lista va escrita ACA, a mano, y no se lee de ORDEN_MARCAS: si la
+     prueba mirara la misma constante que verifica, darla vuelta pasaria en
+     verde. Escrita aparte, cambiar el orden obliga a tocar los dos lados, que
+     es lo que se quiere: es el orden que eligio Pedro, no un detalle. */
+  const ELEGIDO = ['Apple', 'Samsung', 'Xiaomi', 'Motorola', 'Microsoft',
+                   'Canon', 'Sony', 'Nikon', 'Sigma', 'Tamron',
+                   'DJI', 'Ray-Ban', 'Kieslect'];
+  const hay = m => MODELOS.some(x => norm(x.marca) === norm(m));
+  const esperado = ELEGIDO.filter(hay);
+  ok(CUANTAS_MARCAS >= esperado.length,
+     'el cupo alcanza para todas las marcas elegidas que hay hoy',
+     CUANTAS_MARCAS + ' lugares para ' + esperado.length);
+  const enLista = MV.map(x => x.marca).filter(m => esperado.some(e => norm(e) === norm(m)));
+  ok(JSON.stringify(enLista.map(norm)) === JSON.stringify(esperado.slice(0, enLista.length).map(norm)),
+     'las marcas de la lista van en el orden que eligio Pedro',
+     enLista.join(', '));
+
+  /* Las que no estan en la lista no se pierden, pero van atras de todas las
+     que si estan: si una se colara adelante, el orden elegido deja de valer. */
+  const posicion = MV.map((x, i) => [i, esperado.some(e => norm(e) === norm(x.marca))]);
+  const ultimaDeLista = Math.max(-1, ...posicion.filter(p => p[1]).map(p => p[0]));
+  const coladas = posicion.filter(p => !p[1] && p[0] < ultimaDeLista);
+  ok(!coladas.length, 'y ninguna de afuera se cuela adelante',
+     coladas.map(p => MV[p[0]].marca).join(', ') || 'ninguna');
+
+  ok(MV.every(x => x.n > 0), 'ninguna marca se muestra vacia',
+     MV.filter(x => !x.n).map(x => x.marca).join(', ') || MV.length + ' marcas');
   /* Como en los atajos de presupuesto: el numero que promete tiene que ser el
      que despues muestra la grilla. Se compara contra filtrar(), no contra una
      cuenta copiada, que validaria el error en vez de encontrarlo. */

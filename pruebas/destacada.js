@@ -107,8 +107,13 @@ function correrPruebas(){
   if(fila){
     const mks = [...fila.querySelectorAll('.mk')];
     ok(mks.length >= 3 && mks.length <= CUANTAS_MARCAS, 'con las marcas principales', mks.length);
-    const nums = mks.map(b => +b.querySelector('i').textContent);
-    ok(nums.every((n,i) => i === 0 || nums[i-1] >= n), 'ordenadas por cantidad',
+    /* El orden ya no es por cantidad: desde el 21/09 lo elige Pedro (ver
+       ORDEN_MARCAS y la tanda de marcas, que lo fija contra una lista escrita
+       a mano). Aca lo que importa es que la fila muestre lo MISMO que la
+       vitrina: son dos dibujos de la misma lista y no pueden discrepar. */
+    ok(JSON.stringify(mks.map(b => b.dataset.marca)) ===
+       JSON.stringify(marcasParaLaFila().map(x => x[0])),
+       'en el mismo orden que la vitrina de marcas',
        mks.map(b => b.dataset.marca + ' ' + b.querySelector('i').textContent).join(', '));
     ok(mks.every(b => MODELOS.some(m => m.marca === b.dataset.marca)),
        'todas las marcas de la fila existen en el catalogo');

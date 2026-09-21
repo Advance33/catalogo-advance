@@ -1,8 +1,10 @@
 // La tarjeta de producto de la grilla (17/09). Pedro la armó en un muestrario,
 // eligiendo de a una cosa: foto sin caja, precio en etiqueta oscura, cinco por
-// fila, botones al pasar el mouse, y a la vista los colores, el regalo y el
-// precio en pesos. Esta tanda fija esas elecciones, para que un cambio de otro
-// lado no las desarme sin que nadie se dé cuenta.
+// fila, botones al pasar el mouse, y a la vista el regalo y el precio en pesos.
+// El 21/09 se sumó: en la tarjeta va SOLO el nombre del modelo, más grande, y
+// ni la memoria ni los colores, que se ven adentro de la ficha.
+// Esta tanda fija esas elecciones, para que un cambio de otro lado no las
+// desarme sin que nadie se dé cuenta.
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const $$ = s => document.querySelectorAll(s);
@@ -12,8 +14,7 @@ const esperar = setInterval(() => {
   clearInterval(esperar);
   for(let i=1;i<5000;i++) clearInterval(i);
   try{ correrPruebas(); }catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; }
-  // Las fotos de los colores se cargan de a una: esa parte va aparte y cierra la tanda
-  try{ probarColores(terminar); }catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; terminar(); }
+  terminar();
 }, 150);
 
 function terminar(){
@@ -56,12 +57,121 @@ function correrPruebas(){
   });
   ok(conRegalo.length > 0 && !malRegalo.length, 'el regalo va como cinta sobre la foto, con el texto de la planilla',
      malRegalo.map(c => c.dataset.key).slice(0, 3).join(', ') || conRegalo.length + ' con regalo');
+  /* Los colores salieron de la tarjeta el 21/09 y se ven adentro de la ficha,
+     en la tira al costado de la foto. Con ellos se fue tambien lo que colgaba:
+     pasar el mouse por un color y ver esa foto en la grilla. */
   const conColor = cs.filter(c => { const p = buscarModelo(c.dataset.key); return p && pintas(p.color || '').some(x => x.hex); });
-  ok(conColor.length > 0 && conColor.every(c => c.querySelector('.marca .pintas')), 'los colores van como puntitos al lado de la marca',
-     conColor.length);
+  ok(conColor.length > 0 && !cs.some(c => c.querySelector('.pintas')),
+     'los colores no estan en la tarjeta', conColor.length + ' modelos con color');
+  if(conColor.length){
+    abrirFicha(conColor[0].dataset.key, null);
+    const tira = document.querySelectorAll('#ficha .fi-pintas button, #ficha #fi-color-txt');
+    ok(tira.length > 0, 'y si adentro de la ficha',
+       buscarModelo(conColor[0].dataset.key).desc + ': ' + tira.length + ' elemento(s)');
+    cerrarFicha();
+  }
   ok(!cs.some(c => c.querySelector('.meta, .specs, .opciones, .incluye')),
      'no quedaron los colores escritos, las capacidades, las opciones ni la caja verde');
   ok(!TC || cs.every(c => c.querySelector('.pie .ars')), 'el precio en pesos va en la etiqueta');
+
+  /* ---- 2b. En la tarjeta, solo el nombre del modelo (21/09) ----
+     Pedro: "aca figura la memoria de los celulares y en otros no". Pasaba
+     porque el nombre lo escribe el proveedor: una fila sola llegaba con la
+     capacidad adentro ("iPhone 15 Plus 128GB (Yellow)") y un modelo que agrupa
+     dos capacidades se quedaba sin ella. Ahora en la grilla va el modelo y la
+     capacidad se elige adentro de la ficha. El color tampoco esta en el texto:
+     ya se ve en los puntitos de al lado de la marca. */
+  const CAP = /\d+(?:[.,]\d+)?\s*(?:GB|TB)\b/i;
+  const conMemoria = cs.filter(c => CAP.test(c.querySelector('.nombre').textContent || ''));
+  ok(!conMemoria.length, 'en la tarjeta el nombre no trae la memoria',
+     conMemoria.slice(0, 3).map(c => '"' + c.querySelector('.nombre').textContent.trim() + '"').join(' | ')
+     || cs.length + ' tarjetas');
+  ok(cs.every(c => (c.querySelector('.nombre').textContent || '').trim().length > 1),
+     'y ningun nombre se quedo vacio al recortarlo');
+  /* Y se nota: es lo que el cliente busca en la grilla. Desde el 21/09 va en
+     la letra de display y en mayusculas, la misma de los titulos de rubro y de
+     los precios: Pedro la eligio de un muestrario de seis. */
+  const h2 = cs[0].querySelector('.nombre');
+  const tam = parseFloat(estilo(h2, 'font-size'));
+  ok(tam >= 16, 'el nombre se lee grande', tam + 'px');
+  ok(tam > parseFloat(estilo(cs[0].querySelector('.marca'), 'font-size')),
+     'y manda sobre la marca');
+  ok(estilo(h2, 'text-transform') === 'uppercase', 'va en mayusculas',
+     estilo(h2, 'text-transform'));
+  /* La misma familia que los titulos de rubro: si alguien le cambia la letra a
+     uno de los dos, la grilla deja de hablar el idioma de la pagina. */
+  const tituloRubro = document.getElementById('sec-titulo');
+  ok(!tituloRubro || estilo(h2, 'font-family') === estilo(tituloRubro, 'font-family'),
+     'con la misma letra que los titulos de rubro',
+     estilo(h2, 'font-family').split(',')[0]);
+
+  /* Que la capacidad siga estando donde se decide: en la ficha. Con una sola
+     va en los chips de arriba; con varias, en las pestañas de memoria. */
+  const conCaps = MODELOS.find(m => (m.variantes || [m]).some(v => CAP.test(v.desc || '')));
+  if(conCaps){
+    abrirFicha(clave(conCaps.rep), null);
+    const d = document.getElementById('ficha');
+    const texto = [...d.querySelectorAll('.fi-datos .specs span, .fi-ops .fi-op b')]
+                    .map(x => x.textContent).join(' ');
+    ok(CAP.test(texto), 'y adentro de la ficha si figura, en los chips o en las pestañas',
+       conCaps.desc + ': ' + texto.replace(/\s+/g, ' ').trim().slice(0, 60));
+    cerrarFicha();
+  }
+
+  /* Dos tarjetas con el mismo nombre y distinto precio serian peor que un
+     nombre largo. Por eso el recorte se decide mirando a TODOS los modelos:
+     los Ray-Ban Meta, donde el parentesis del armazon es lo unico que los
+     separa, se quedan con el nombre entero. */
+  const porTitulo = new Map();
+  MODELOS.forEach(m => {
+    const t = m.titulo || m.desc;
+    if(!porTitulo.has(t)) porTitulo.set(t, []);
+    porTitulo.get(t).push(m);
+  });
+  const chocan = [...porTitulo.entries()].filter(([, l]) =>
+    l.length > 1 && l.some(x => x.desc !== l[0].desc));
+  ok(!chocan.length, 'y el recorte nunca deja dos modelos distintos llamandose igual',
+     chocan.slice(0, 3).map(([t, l]) => '"' + t + '" x' + l.length).join(' | ')
+     || MODELOS.length + ' modelos');
+
+  /* Se compara contra el original: "EOS R100 Kit 18-45 / 55-210" ya viene con
+     esa barra de la planilla y esta bien. Lo que no puede pasar es que la
+     limpieza AGREGUE una que antes no estaba. */
+  const barras = t => (String(t).match(/\s[\/·–-]\s/g) || []).length;
+  const rotos = MODELOS.filter(m => {
+    const n = nombreSinMemoria(m.desc);
+    return !n.trim() || /\s{2,}/.test(n) || barras(n) > barras(m.desc) ||
+           /^[\/·–-]|[\/·–-]$/.test(n.trim());
+  });
+  ok(!rotos.length, 'en ningun rubro el nombre queda partido al sacarle la memoria',
+     rotos.slice(0, 3).map(m => '"' + m.desc + '" -> "' + nombreSinMemoria(m.desc) + '"').join(' | ')
+     || MODELOS.length + ' modelos');
+
+  /* El color tampoco: ya esta en los puntitos de al lado de la marca, y
+     repetirlo entre parentesis era la otra mitad de lo que emparejaba mal la
+     fila. Solo cuenta cuando el parentesis ES exactamente sus colores; los que
+     dicen otra cosa ("Pack x4", "Mini 3 Pro") se quedan. */
+  const repiteColor = MODELOS.filter(m => {
+    const par = (/\(([^)]*)\)\s*$/.exec(nombreSinMemoria(m.desc)) || [])[1];
+    if(!par) return false;
+    const suyos = partirColores(m.color || '').map(norm);
+    const partes = partirColores(par).map(norm);
+    return partes.length && partes.every(p => suyos.includes(p));
+  });
+  ok(!repiteColor.length, 'ni deja entre parentesis el color, que ahora se ve en la ficha',
+     repiteColor.slice(0, 3).map(m => '"' + nombreSinMemoria(m.desc) + '"').join(' | ')
+     || MODELOS.length + ' modelos');
+
+  /* El recorte es SOLO para mostrar: el nombre entero sigue siendo el de la
+     planilla, que es lo que viaja al mensaje de WhatsApp, al pedido y al
+     buscador. Acortarlo ahi seria perder el dato. */
+  if(conCaps){
+    ok(CAP.test(conCaps.desc) || (conCaps.variantes || []).some(v => CAP.test(v.desc)),
+       'el nombre completo no se toca: sigue yendo al WhatsApp y al pedido',
+       conCaps.desc);
+    ok(decodeURIComponent(mensajeWA(conCaps.rep)).includes(conCaps.rep.desc),
+       'y el mensaje lo nombra entero', conCaps.rep.desc);
+  }
 
   /* ---- 3. La etiqueta oscura, pareja en toda la fila ---- */
   const pies = cs.filter(c => Math.abs(c.getBoundingClientRect().top - top0) < 4).map(c => c.querySelector('.pie').getBoundingClientRect());
@@ -136,63 +246,3 @@ function correrPruebas(){
 /* ---- 8. Los puntitos cambian la foto (18/09) ----
    Se busca un modelo donde cada color es una fila con su código: ahí
    preguntarle a la fila principal devolvía la misma foto para todos. */
-function probarColores(fin){
-  const filaDe = (m, n) => m.variantes.find(v => partirColores(v.color || '').some(x => norm(x) === norm(n))) || m.rep;
-  const archivo = u => decodeURIComponent(String(u || '').split('/').pop().split('?')[0]);
-  const candidata = cards().map(c => {
-    const m = buscarModelo(c.dataset.key);
-    const dots = [...c.querySelectorAll('.pintas i')];
-    if(!m || dots.length < 2) return null;
-    const fotos = dots.map(d => archivo(fotosDeColor(filaDe(m, d.dataset.color), d.dataset.color)[0]));
-    return fotos[0] && fotos[1] && fotos[0] !== fotos[1] ? { c, m, dots, fotos } : null;
-  }).filter(Boolean).sort((a, b) => new Set(b.m.variantes.map(v => v.codigo)).size - new Set(a.m.variantes.map(v => v.codigo)).size)[0];
-  if(!candidata){ R.push('  --  hoy no hay en Celulares un modelo con fotos distintas por color'); entrarAlRubro(''); return fin(); }
-  const { c, m, dots, fotos } = candidata;
-  const foto = c.querySelector('.foto');
-  const alt = () => foto.querySelector('img.alt');
-  const muestra = k => foto.classList.contains('otro') && alt() && archivo(alt().src) === fotos[k];
-
-  /* Las fotos se bajan antes de probar. Acá el reloj corre más rápido que la
-     red: sin esto, una foto que no estaba en caché "tardaba" más de los 4
-     segundos de espera aunque llegara enseguida. */
-  const bajar = u => new Promise(r => { const i = new Image(); i.onload = i.onerror = r; i.src = u; });
-  const urls = dots.slice(0, 2).flatMap(d => fotosDeColor(filaDe(m, d.dataset.color), d.dataset.color)).flatMap(u => [fotoChica(u), u]);
-  Promise.all(urls.map(bajar)).then(() => {
-  dots[1].dispatchEvent(new PointerEvent('pointerover', { bubbles: true, pointerType: 'mouse' }));
-  cuando(() => muestra(1), () => {
-    ok(muestra(1), 'con el mouse, pasar por un color muestra su foto', m.desc + ' → ' + dots[1].dataset.color + ' ' + (alt() && archivo(alt().src)));
-    ok(dots[1].classList.contains('elegido'), 'y el puntito queda marcado');
-    // Sin demora: con la de la entrada, la principal tardaba en apagarse y se veían las dos
-    const principal = foto.querySelector('img:not(.alt)');
-    ok(getComputedStyle(principal).transitionDelay.split(',').every(d => parseFloat(d) === 0),
-       'al cambiar de color la principal se apaga sin demora', getComputedStyle(principal).transitionDelay);
-    terminarTransiciones();
-    ok(alt() && !alt().classList.contains('ok') && getComputedStyle(principal).opacity === '0',
-       'y queda apagada mientras se ve la otra (si no, se superponen)',
-       'principal ' + getComputedStyle(principal).opacity + ' / otra ' + (alt() && getComputedStyle(alt()).opacity) + ' / ' + (alt() && alt().className) + ' / ' + foto.className);
-    dots[0].dispatchEvent(new PointerEvent('pointerover', { bubbles: true, pointerType: 'mouse' }));
-    cuando(() => muestra(0), () => {
-      ok(muestra(0), 'otro color, otra foto: cada uno se le pide a la fila que lo vende', dots[0].dataset.color + ' ' + (alt() && archivo(alt().src)));
-      c.dispatchEvent(new PointerEvent('pointerout', { bubbles: true, pointerType: 'mouse', relatedTarget: document.body }));
-      terminarTransiciones();
-      ok(!foto.classList.contains('otro') && !c.querySelector('.pintas i.elegido'), 'al salir de la tarjeta vuelve la foto principal');
-      // Lo que se VE, no solo las clases: la del color apagada y la principal prendida
-      ok(getComputedStyle(alt()).opacity === '0' && getComputedStyle(foto.querySelector('img:not(.alt)')).opacity === '1',
-         'y la del color queda apagada: no se superponen',
-         'principal ' + getComputedStyle(foto.querySelector('img:not(.alt)')).opacity + ' / otra ' + getComputedStyle(alt()).opacity);
-
-      // Con el dedo: tocar el puntito cambia la foto y NO abre la ficha
-      quitarFicha();
-      dots[1].click();
-      cuando(() => muestra(1), () => {
-        ok(muestra(1) && !FICHA_MODELO, 'con el dedo, tocar el puntito cambia la foto y no abre la ficha', FICHA_MODELO && FICHA_MODELO.desc);
-        c.querySelector('.nombre').click();
-        ok(FICHA_MODELO === m, 'tocar el resto de la tarjeta sí abre la ficha');
-        quitarFicha();
-        entrarAlRubro('');
-        fin();
-      });
-    });
-  });
-  });
-}

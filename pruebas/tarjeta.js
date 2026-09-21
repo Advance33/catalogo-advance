@@ -88,6 +88,32 @@ function correrPruebas(){
      || cs.length + ' tarjetas');
   ok(cs.every(c => (c.querySelector('.nombre').textContent || '').trim().length > 1),
      'y ningun nombre se quedo vacio al recortarlo');
+
+  /* Lo mismo con Sim / E-Sim (22/09). La tarjeta nombra al modelo; cual de
+     las dos versiones se lleva se elige adentro. Ojo que en los BOTONES de la
+     ficha la palabra tiene que quedarse -- son dos productos con precios
+     distintos -- y eso lo cuida la tanda de sim.
+
+     El 4G y el 5G NO entran en el recorte: Pedro los dejo como estaban,
+     porque ahi son parte de como se llama el producto, no una version. */
+  const RE_SIM = /\bsim\b|\be-?\s?sim\b/i;
+  const dicenSim = cs.filter(c => RE_SIM.test(c.querySelector('.nombre').textContent || ''));
+  ok(!dicenSim.length, 'en la tarjeta el nombre no dice Sim ni E-Sim',
+     dicenSim.slice(0, 3).map(c => '"' + c.querySelector('.nombre').textContent.trim() + '"').join(' | ')
+     || cs.length + ' tarjetas');
+  /* Que no sea vacuo: tiene que haber a quien recortarle. Si manana la
+     planilla deja de escribirlo, esta comprobacion avisa en vez de callarse. */
+  const traianSim = MODELOS.filter(m => RE_SIM.test(m.desc || ''));
+  ok(traianSim.length > 0 && traianSim.every(m => !RE_SIM.test(m.titulo || '')),
+     'y los que lo traian en la descripcion quedaron con el modelo solo',
+     traianSim.slice(0, 3).map(m => '"' + m.desc + '" -> "' + m.titulo + '"').join(' | ')
+     || 'hoy ninguna fila lo trae');
+  const RE_G = /\b[45]\s?G\b/i;
+  const conG = MODELOS.filter(m => RE_G.test(m.desc || ''));
+  const perdieronG = conG.filter(m => !RE_G.test(m.titulo || ''));
+  ok(conG.length > 0 && !perdieronG.length, 'el 4G y el 5G se quedan donde estaban',
+     perdieronG.slice(0, 3).map(m => '"' + m.desc + '" -> "' + m.titulo + '"').join(' | ')
+     || conG.length + ' modelos lo conservan');
   /* Y se nota: es lo que el cliente busca en la grilla. Desde el 21/09 va en
      la letra de display y en mayusculas, la misma de los titulos de rubro y de
      los precios: Pedro la eligio de un muestrario de seis. */

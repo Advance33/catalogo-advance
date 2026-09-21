@@ -3316,6 +3316,8 @@ async function cargar(){
         // Las fotos de ADVAPP por codigo de variante. Son el respaldo: solo se
         // usan cuando no hay archivo propio en fotos/ para ese color.
         fotosAdvapp: C.skus === -1 ? {} : fotosDeLosSkus(f[C.skus]),
+        // Sim o eSIM segun ADVAPP: primero el SKU de la web, si no los de color.
+        sim: simDelSku(val(f,C.sku)) || (C.skus === -1 ? '' : simDeLosSkus(f[C.skus])),
         imagen: val(f,C.imagen),          // la columna Imagen; si viene vacia manda la carpeta
         activo: C.activo === -1 || val(f,C.activo) === '' || esSi(val(f,C.activo))
       };
@@ -3969,6 +3971,32 @@ function fotosDeColor(p, color){
   return [];
 }
 
+/* Sim o eSIM, leido del final del SKU de ADVAPP (-SIM / -ESIM).
+
+   El dato es de ellos, no nuestro: en la familia del iPhone 17 lo que no
+   aclara "Sim" lo dan por eSIM (regla de ADVAPP del 17/09/2026) y eso queda
+   escrito en el SKU de cada color. La descripcion, en cambio, a veces no lo
+   dice, y es de donde sale el texto del boton. */
+const simDelSku = s => {
+  const x = String(s || '').toLowerCase();
+  return /[-~]e-?sim$/.test(x) ? 'E-Sim' : /[-~]sim$/.test(x) ? 'Sim' : '';
+};
+/* La "e" es opcional a proposito: hay que reconocer "512GB Sim" igual que
+   "512GB E-Sim", porque el que calla puede estar al lado de cualquiera. */
+const diceSim = t => /\b(e-?\s?)?sim\b/i.test(t || '');
+
+/* Lo mismo mirando los SKU por color que manda ADVAPP, para las filas cuyo
+   SKU de la web no lo aclara. Solo vale si TODOS dicen lo mismo: una fila de
+   tres colores trae tres SKU y, si no coinciden, no hay un dato para la fila
+   entera. Sin SKU que lo diga, no devuelve nada: no se adivina. */
+function simDeLosSkus(txt){
+  let lista;
+  try{ lista = JSON.parse(txt || '[]'); }catch{ return ''; }
+  if(!Array.isArray(lista) || !lista.length) return '';
+  const dichos = lista.map(s => simDelSku(s && s.sku));
+  return dichos.every(d => d && d === dichos[0]) ? dichos[0] : '';
+}
+
 /* Las fotos de ADVAPP de una fila, por codigo de variante:
    { 'AT-0065-02': 'https://lh3.googleusercontent.com/…' }. Solo la primera de
    cada SKU: galeria todavia no hay. */
@@ -4154,6 +4182,26 @@ const nombreTeclado = t => {
   return i ? 'Teclado ' + i.toLowerCase() : '';
 };
 
+/* Sim y eSIM son dos productos distintos, con precios distintos. Cuando la
+   descripcion de uno de los dos no lo aclara, quedan dos botones que el
+   cliente no puede diferenciar: el iPhone 17 Pro mostraba "512GB" a USD 1.440
+   al lado de "512GB Sim" desde USD 1.440, y el primero era el eSIM.
+
+   Se completa SOLO cuando hace falta, o sea cuando una hermana declara lo
+   contrario y, sacandole la palabra, se llama igual. Los modelos que son
+   todos eSIM -el 17e, el Air- no repiten la palabra en cada boton, que no
+   aclararia nada. Y sin SKU que lo diga no se toca: no se adivina. */
+function completarSim(vs){
+  const sinDecir = vs.filter(v => !diceSim(v.etiqueta) && v.sim);
+  if(!sinDecir.length) return;
+  const pelada = e => norm(e.replace(/\b(e-?\s?)?sim\b/ig, ' ').replace(/\s+/g, ' '));
+  for(const v of sinDecir){
+    if(!vs.some(x => diceSim(x.etiqueta) && pelada(x.etiqueta) === norm(v.etiqueta))) continue;
+    v.etiqueta = (v.etiqueta + ' ' + v.sim).trim();
+    v.etiquetaBase = v.etiqueta;
+  }
+}
+
 function etiquetaVariante(p, nombre){
   let e = p.desc || '';
   if(norm(e).startsWith(norm(nombre))) e = e.slice(nombre.length);
@@ -4263,6 +4311,10 @@ function armarModelo(vs){
            || vs.find(v => v.precio === precioMin) || vs[0];
   const nombre = nombreGrupo(vs);
   vs.forEach(v => { v.etiqueta = etiquetaVariante(v, nombre); v.etiquetaBase = v.etiqueta; });
+  /* Va antes de las hermanas de color y del agrupado por version, para que
+     todo lo de abajo vea la etiqueta ya completa: las tres filas del 512GB
+     eSIM (Orange, Blue, Silver) terminan en un solo boton con sus puntitos. */
+  completarSim(vs);
 
   /* El precio puede depender del color, y el proveedor confirmó que es así de
      verdad: el iPhone 17 Pro Max 512GB sale USD 1.490 en Orange y 1.520 en

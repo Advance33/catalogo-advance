@@ -1,0 +1,278 @@
+[REGISTRO] Enviado por Pedro el 21/09/2026. Son los puntos 0 a 9.
+Los puntos 10, 11 y 12 estan en SUMAR-AL-PEDIDO-21-09.txt y NO se enviaron
+con este documento: quedaron para el proximo.
+
+
+LA MISMA VERSION, ESCRITA DE DOS FORMAS: SALEN DOS BOTONES
+==========================================================
+Advance Tecno al equipo de la planilla - 21/09/2026
+Sobre el nombre del producto y las columnas CODIGO, Teclado y Color
+
+
+0) EN UNA FRASE
+------------------------------------------------------------
+Dos cosas. La ficha arma los botones de "Version" leyendo el NOMBRE, y
+cuando la misma version viene escrita de dos maneras salen dos botones que
+dicen lo mismo (el caso mas grave es el MacBook Neo: 16 filas que son 4
+versiones reales). Y aparte, 48 filas traen en la columna CODIGO el codigo
+de OTRA capacidad del mismo producto, que es lo que decide que foto se
+muestra. Lo primero es molesto; lo segundo muestra el producto equivocado.
+
+Ninguno de estos pedidos es "corrijan esta celda": la carga de manana
+reescribe la hoja. Son reglas para el parser, que es donde sobreviven.
+
+
+1) LA MISMA MEMORIA, ESCRITA DE DOS FORMAS - 16 modelos
+------------------------------------------------------------
+REGLA (parser): dentro de un mismo producto, la RAM y la capacidad se
+escriben SIEMPRE de la misma manera. Cual de las dos formas elijan nos da
+igual ("8/256GB" o "8GB/256GB"); lo que rompe es que convivan.
+
+   Galaxy A36 - codigo AT-0511, el mismo producto:
+     CEL-SAM-A36-6G128-BLK-000    Galaxy A36 6/128GB (Black)
+     CEL-SAM-A36-6G128-BLU-000    Galaxy A36 6GB/128GB (Blue)
+
+   MacBook Neo - codigo AT-0432, el mismo producto:
+     NB-APP-001                   MacBook Neo A18 13" 8/256GB (Citrus)
+     NBK-APL-NEO13-8G256-BLS-EN   MacBook Neo A18 13" 8GB/256GB (Blush)
+
+   Y una tercera forma, en el mismo modelo (codigo AT-0434):
+     NB-APP-098                   MacBook Neo A18 13" 8ram 512gb (Indigo)
+     NB-APP-108                   MacBook Neo A18 13" 8GB/512GB (Citrus)
+
+Los otros modelos con las dos formas conviviendo: G06 Power, Galaxy A17,
+A27, A56, A57, S25 Ultra, S26 FE, S26 Ultra, Poco X8 Pro Max, Redmi Note 15
+Pro Plus, Galaxy Tab S10 FE Wifi, Tab S10 FE Plus Wifi, Tab A11 y Tab S11
+Ultra Wifi.
+
+Aclaracion para que no hagan trabajo de mas: que TODO el catalogo escriba
+"8/256GB" esta bien y no hay que tocarlo. El pedido es solo que no convivan
+las dos formas adentro del mismo producto.
+
+
+2) EL TECLADO EN EL NOMBRE, Y CONTRA SU COLUMNA - 10 filas
+------------------------------------------------------------
+REGLA (parser): el teclado va en la columna Teclado y no en el nombre. Y si
+el ID termina en -ES, la columna tiene que decir ES.
+
+Hoy hay diez filas que dicen "Teclado ES" en el nombre y EN en la columna.
+Las dos cosas no pueden ser ciertas, y la ficha muestra las dos: el boton
+sale de una y la linea "Teclado" de la otra.
+
+     NBK-APL-NEO13-8G256-BLS-ES   ...8GB/256GB Teclado ES (Blush)    columna EN
+     NBK-APL-NEO13-8G256-IND-ES   ...8GB/256GB Teclado ES (Indigo)   columna EN
+     NBK-APL-NEO13-8G512-BLS-ES   ...8GB/512GB Teclado ES (Blush)    columna EN
+     NBK-APL-NEO13-8G512-CIT-ES   ...8GB/512GB Teclado ES (Citrus)   columna EN
+     NBK-APL-NEO13-8G512-IND-ES   ...8GB/512GB Teclado ES (Indigo)   columna EN
+     NBK-APL-NEO13-8G512-SLV-ES   ...8GB/512GB Teclado ES (Silver)   columna EN
+     NBK-APL-MBP14M5-24G1TB-SBK-ES  MacBook Pro M5 14" 24GB/1TB Teclado ES   columna EN
+     NBK-APL-MBP14M5-24G1TB-SLV-ES  MacBook Pro M5 14" 24GB/1TB Teclado ES   columna EN
+     NBK-APL-MBP14M5-32G1TB-SBK-ES  MacBook Pro M5 14" 32GB/1TB Teclado ES   columna EN
+     NBK-APL-MBP14M5-32G1TB-SLV-ES  MacBook Pro M5 14" 32GB/1TB Teclado ES   columna EN
+
+Cual de las dos esta bien lo saben ustedes; por el ID pareciera que el
+teclado es espanol y la columna quedo en EN.
+
+Este es el que mas rinde de los cinco: hoy el MacBook Neo ya quedo en cuatro
+botones, pero mal repartidos. El de 512 sale como "8GB/512GB" a secas y como
+"8GB/512GB - Teclado espanol", porque las filas -ES tienen la columna en EN.
+Con este punto arreglado quedan "ingles" y "espanol", que es lo correcto.
+
+
+3) LAS MISMAS PALABRAS, EN DISTINTO ORDEN - 4 casos
+------------------------------------------------------------
+REGLA (parser): el orden de las palabras del nombre es el mismo para todas
+las filas de un producto. Da igual si el 5G va antes o despues de la
+memoria, mientras sea siempre igual.
+
+     CEL-SAM-S26ULT-256-BLK-000   Galaxy S26 Ultra 5G 256GB (Black)
+     CEL-SAM-S26ULT-256-VIO-000   Galaxy S26 Ultra 256GB 5G (Violet)
+
+     CEL-SAM-S26ULT-512-SKY-000   Galaxy S26 Ultra 5G 512GB (Sky Blue)
+     CEL-SAM-S26ULT-512-BLK-000   Galaxy S26 Ultra 512GB 5G (Black)
+
+     CEL-SAM-S26PLUS-256-BLK-000  Galaxy S26 Plus 5G 256GB (Black)
+     CEL-SAM-050                  Galaxy S26 Plus 256GB 5G (White)
+
+     CEL-SAM-S26PLUS-512-WHT-000  Galaxy S26 Plus 5G 512GB (White)
+     CEL-SAM-S26PLUS-512-BLK-000  Galaxy S26 Plus 512GB 5G (Black)
+
+Este ya lo tapamos del lado nuestro (si son las mismas palabras en otro
+orden, la web los junta), asi que no corre apuro. Lo dejamos anotado porque
+el dia que una de esas filas cambie de precio, se va a notar.
+
+
+4) EL CHIP ESCRITO DISTINTO ADENTRO DEL MISMO PRODUCTO - 2 filas
+------------------------------------------------------------
+REGLA (parser): el chip se escribe igual en todas las filas del producto.
+
+Dos filas del MacBook Neo dicen "A18 Pro" y el resto del mismo producto
+dice "A18":
+
+     NB-APP-088                   MacBook Neo 13" - A18 Pro 8/256GB - Silver
+     NBK-APL-NEO13-8G512-BLS-EN   MacBook Neo 13" - A18 Pro 8/512GB - Citrus (Blush)
+
+Pedro confirma que es el mismo chip que la fila normal, no otro modelo. En
+la web quedaba un boton "Pro" al lado del comun, como si fueran dos
+productos distintos.
+
+Ojo con esto: el codigo propio NO alcanza para detectarlo. NB-APP-088 es
+AT-0433 y la fila de 512 es AT-0434, y ese mismo AT-0434 tiene tambien
+filas que dicen "A18" a secas.
+
+Si el proveedor lo escribe asi y no hay regla que lo arregle, sirve un
+override fijo por ID para esas dos filas, como hicieron con el SW-KIE-003.
+
+
+5) UN COLOR EN EL NOMBRE QUE NO ES EL DE LA FILA - 1 fila
+------------------------------------------------------------
+REGLA (parser): el color va en la columna Color. En el nombre no hace
+falta, porque en la web se elige con los puntitos.
+
+     NBK-APL-NEO13-8G512-BLS-EN   el nombre dice "- Citrus", la columna
+                                  Color dice "Blush"
+
+Aca no es solo redundancia: los dos se contradicen y uno de los dos esta
+mal.
+
+
+6) LO QUE NO ES UN PEDIDO
+------------------------------------------------------------
+Los botones de la ficha se ven con el precio adentro del nombre
+("...Teclado ingles - USD 847"). Lo revisamos: ninguna fila de la planilla
+trae el precio en el nombre. Eso lo agrega nuestra web como desempate
+cuando dos botones quedan con el mismo texto, y lo estamos corrigiendo de
+este lado. Si entran a la web y lo ven, es nuestro: no tienen nada que
+hacer con eso.
+
+
+7) COMO LO MIRAMOS
+------------------------------------------------------------
+Sobre las 763 filas con codigo de la carga de hoy (de 766 en total):
+
+     memoria escrita de dos formas en el mismo producto ... 16 modelos
+     teclado en el nombre .............................. 22 filas
+       de esas, contra la columna Teclado ............... 10 filas
+     mismas palabras en distinto orden ................. 4 casos
+     color en el nombre que no esta en la columna ...... 1 fila (mas los
+       Ray-Ban, que son armazon y cristal y estan bien asi)
+     columna CODIGO apuntando a otro producto .......... 48 filas
+     CODIGO_VAR apuntando a variantes de otro producto . 3 celdas
+
+Con los puntos 1, 2 y 4 arreglados, el MacBook Neo queda en 4 botones
+-256 y 512, ingles y espanol- con sus cuatro colores cada uno, que es lo
+que de verdad hay para elegir.
+
+
+8) LA COLUMNA CODIGO APUNTA A OTRO PRODUCTO - 48 filas
+------------------------------------------------------------
+REGLA (parser): el AT-#### de una fila es el del producto de esa fila. Una
+capacidad distinta es otro producto y tiene otro codigo.
+
+Este es el mas serio de todos, y no es cosmetico: el AT-#### es lo que
+decide QUE FOTO se muestra. Hoy 48 filas traen el codigo de otra capacidad
+de la misma familia, asi que esos productos aparecen con la foto y la
+identidad del hermano.
+
+El patron es siempre el mismo. Tres ejemplos:
+
+     CEL-SAM-A17-8G256-BLU-000
+         es              Galaxy A17 8GB/256GB (Blue)
+         dice CODIGO     AT-0082   que es Galaxy A17 4/128GB
+         le corresponde  AT-0083   que es Galaxy A17 8/256GB
+
+     CEL-APL-16PM-512-NAT-000
+         es              iPhone 16 Pro Max 512GB (Natural)
+         dice CODIGO     AT-0068   que es iPhone 16 Pro Max 256GB
+         le corresponde  AT-0069   que es iPhone 16 Pro Max 512GB
+
+     NBK-APL-MBA15M5-16G1TB-SKY-EN
+         es              MacBook Air M5 15" 16GB/1TB (Sky Blue)
+         dice CODIGO     AT-0430   que es MacBook Air M5 15" 16GB/512GB
+         le corresponde  AT-0515   que es MacBook Air M5 15" 16GB/1TB
+
+Las 48, con el codigo que traen y el que les corresponde:
+
+  ID                                         dice      deberia    producto
+  ------------------------------------------ --------- ---------- --------------------------------
+  CEL-APL-16PM-512-NAT-000                   AT-0068 -> AT-0069    iPhone 16 Pro Max 512GB (Natural)
+  CEL-SAM-A17-8G256-BLU-000                  AT-0082 -> AT-0083    Galaxy A17 8GB/256GB (Blue)
+  CEL-SAM-A27-8G256-BLU-000                  AT-0084 -> AT-0503    Galaxy A27 8GB/256GB (Blue)
+  CEL-SAM-A27-8G256-PNK-000                  AT-0084 -> AT-0503    Galaxy A27 8GB/256GB (Pink)
+  CEL-SAM-A36-8G256-LAV-000                  AT-0511 -> AT-0504    Galaxy A36 8GB/256GB (Lavender)
+  CEL-SAM-A36-8G256-WHT-000                  AT-0511 -> AT-0504    Galaxy A36 8GB/256GB (White)
+  CEL-SAM-A56-8G256-BLK-000                  AT-0086 -> AT-0087    Galaxy A56 8GB/256GB (Black)
+  CEL-SAM-A56-8G256-PNK-000                  AT-0086 -> AT-0087    Galaxy A56 8GB/256GB (Pink)
+  CEL-SAM-S25FE-512-JBK-000                  AT-0090 -> AT-0091    Galaxy S25 FE 512GB (Jet Black)
+  CEL-SAM-S25ULT-12G512-GRY-000              AT-0092 -> AT-0093    Galaxy S25 Ultra 5G 12GB/512GB (Gray)
+  CEL-SAM-S25ULT-12G512-SBL-000              AT-0092 -> AT-0093    Galaxy S25 Ultra 5G 12GB/512GB (Silverblue)
+  CEL-SAM-S26-256-SKY-000                    AT-0095 -> AT-0096    Galaxy S26 256GB (Sky Blue)
+  CEL-SAM-S26-256-WHT-000                    AT-0095 -> AT-0096    Galaxy S26 256GB (White)
+  CEL-SAM-S26FE-8G512-PIS-000                AT-0097 -> AT-0099    Galaxy S26 FE 8GB/512GB (Pistachio)
+  CEL-SAM-S26PLUS-256-BLK-000                AT-0101 -> AT-0100    Galaxy S26 Plus 5G 256GB (Black)
+  CEL-SAM-S26PLUS-256-SKY-000                AT-0101 -> AT-0100    Galaxy S26 Plus 5G 256GB (Sky Blue)
+  CEL-SAM-S26PLUS-256-VIO-000                AT-0101 -> AT-0100    Galaxy S26 Plus 5G 256GB (Violet)
+  CEL-SAM-S26ULT-256-BLK-000                 AT-0102 -> AT-0103    Galaxy S26 Ultra 5G 256GB (Black)
+  CEL-SAM-S26ULT-256-SKY-000                 AT-0102 -> AT-0103    Galaxy S26 Ultra 5G 256GB (Sky Blue)
+  CEL-SAM-S26ULT-512-SKY-000                 AT-0102 -> AT-0512    Galaxy S26 Ultra 5G 512GB (Sky Blue)
+  CEL-SAM-S26ULT-512-WHT-000                 AT-0102 -> AT-0512    Galaxy S26 Ultra 5G 512GB (White)
+  CEL-XIA-POCOX8PROMAX-12G512-WHT-000        AT-0114 -> AT-0115    Poco X8 Pro Max 5G 12GB/512GB (White)
+  CEL-XIA-REDMINOTE15PROPLUS-8G256-BLU-000   AT-0121 -> AT-0122    Redmi Note 15 Pro Plus 5G 8GB/256GB (Blue)
+  NBK-APL-MBA13M5-24G1TB-SLV-EN              AT-0522 -> AT-0429    MacBook Air M5 13.6" 24GB/1TB (Silver)
+  NBK-APL-MBA13M5-24G512-MID-EN              AT-0522 -> AT-0505    MacBook Air M5 13.6" 24GB/512GB (Midnight)
+  NBK-APL-MBA13M5-24G512-SKY-EN              AT-0522 -> AT-0505    MacBook Air M5 13.6" 24GB/512GB (Sky Blue)
+  NBK-APL-MBA15M5-16G1TB-SKY-EN              AT-0430 -> AT-0515    MacBook Air M5 15" 16GB/1TB (Sky Blue)
+  NBK-APL-MBA15M5-16G1TB-SLV-EN              AT-0430 -> AT-0515    MacBook Air M5 15" 16GB/1TB (Silver)
+  NBK-APL-MBA15M5-16G1TB-STL-EN              AT-0430 -> AT-0515    MacBook Air M5 15" 16GB/1TB (Starlight)
+  NBK-APL-MBA15M5-24G1TB-MID-EN              AT-0430 -> AT-0431    MacBook Air M5 15" 24GB/1TB (Midnight)
+  NBK-APL-MBA15M5-24G1TB-SLV-EN              AT-0430 -> AT-0431    MacBook Air M5 15" 24GB/1TB (Silver)
+  NBK-APL-MBA15M5-24G1TB-STL-EN              AT-0430 -> AT-0431    MacBook Air M5 15" 24GB/1TB (Starlight)
+  NBK-APL-MBP14M5-16G1TB-SBK-EN              AT-0438 -> AT-0437    MacBook Pro M5 14" 16GB/1TB (Space Black)
+  NBK-APL-MBP14M5-16G1TB-SLV-EN              AT-0438 -> AT-0437    MacBook Pro M5 14" 16GB/1TB (Silver)
+  NBK-APL-MBP14M5-32G1TB-SLV-EN              AT-0438 -> AT-0439    MacBook Pro M5 14" 32GB/1TB (Silver)
+  NBK-APL-MBP14M5P-24G2TB-SLV-EN             AT-0444 -> AT-0445    MacBook Pro M5 Pro 14" 24GB/2TB (Silver)
+  NBK-APL-MBP16M5MAX-48G2TB-SLV-EN           AT-0441 -> AT-0442    MacBook Pro M5 Max 16" 48GB/2TB (Silver)
+  NBK-APL-MBP16M5P-48G1TB-SBK-EN             AT-0446 -> AT-0447    MacBook Pro M5 Pro 16" 48GB/1TB (Space Black)
+  NBK-APL-NEO13-8G256-BLS-ES                 AT-0434 -> AT-0433    MacBook Neo A18 13" 8GB/256GB Teclado ES (Blush)
+  NBK-APL-NEO13-8G256-IND-ES                 AT-0434 -> AT-0433    MacBook Neo A18 13" 8GB/256GB Teclado ES (Indigo)
+  NBK-APL-NEO13-8G256-SLV-EN                 AT-0434 -> AT-0432    MacBook Neo A18 13" 8GB/256GB (Silver)
+  TAB-APL-IPAD11A16-512-PNK-WIFI             AT-0467 -> AT-0465    iPad 11 A16 512GB (Pink)
+  TAB-APL-IPADAIR11M4-128-BLU-WIFI           AT-0470 -> AT-0468    iPad Air M4 11" 128GB (Blue)
+  TAB-APL-IPADAIR11M4-128-STL-WIFI           AT-0470 -> AT-0468    iPad Air M4 11" 128GB (Starlight)
+  TAB-APL-IPADPRO11M4-512-SBK-WIFI           AT-0476 -> AT-0478    iPad Pro M4 11" 512GB (Space Black)
+  TAB-APL-IPADPRO13M5-1TB-SLV-WIFI           AT-0484 -> AT-0506    iPad Pro M5 13" 1TB (Silver)
+  TAB-SAM-TABS10FEPLUS-12G256-GRY-WIFIPEN    AT-0492 -> AT-0491    Galaxy Tab S10 FE Plus Wifi (SM X620) +Pencil
+  TAB-SAM-TABS10FEPLUS-12G256-SLV-WIFIPEN    AT-0492 -> AT-0491    Galaxy Tab S10 FE Plus Wifi (SM X620) +Pencil
+
+Como lo verificamos: la columna "deberia" no la inventamos. Sale del catalogo
+maestro, el mismo archivo con el que ustedes siembran la columna CODIGO, y
+coincide con la capacidad que dice el nombre de la fila. En los 48 casos el
+codigo que traen es el de otra capacidad de la misma familia.
+
+Una sospecha, por si ayuda a encontrarlo: casi todas las filas afectadas
+tienen el ID nuevo, largo (CEL-SAM-A17-8G256-BLU-000), y el codigo que traen
+es el que el maestro tiene anotado para el ID viejo del mismo producto
+(CEL-SAM-003). Pareceria que el vinculo se resuelve por familia y no por
+capacidad.
+
+
+9) CODIGO_VAR APUNTANDO A VARIANTES DE OTRO PRODUCTO - 3 celdas
+------------------------------------------------------------
+REGLA (parser): el AT-####-NN de CODIGO_VAR empieza con el AT-#### de la
+misma fila. Si no, es de otro producto.
+
+     SWT-APL-WULTRA3-000-BLK-49-CELL-OCEAN   CODIGO_VAR dice AT-0455-01
+     SWT-APL-WULTRA3-000-NAT-49-CELL-000     CODIGO_VAR dice AT-0455-05
+                                             las dos filas son AT-0456
+
+La tercera es la del Alpine Loop, y esa esta bien: la fila dice "Black" en
+Color y CODIGO_VAR apunta a la variante "Black Alpine Loop M", que es la
+correcta para esa fila. La dejamos anotada solo para que no la "corrijan"
+por error.
+
+Las dos de arriba la web ya las ignora y resuelve por el nombre del color,
+asi que no se ve nada roto; pero la celda quedo de una siembra vieja y el
+dia que el nombre del color cambie, se va a notar.
+
+
+Falta algo?

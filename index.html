@@ -3627,6 +3627,35 @@ function marcaDestacada(){
   return m && MODELOS.some(p => p.cat === filtros.cat && norm(p.marca) === norm(m)) ? m : '';
 }
 
+/* Con qué rubros se presenta cada marca en "Buscá por marca", en orden.
+
+   No sale de la cantidad, que es como estaba: sale de con qué vende cada
+   marca. Canon abre con Cámaras aunque tenga el doble de objetivos, y Sigma
+   abre con Objetivos, que es lo suyo. Justamente porque las dos reglas se
+   contradicen, esto va marca por marca y no con una lista sola. Lo eligió
+   Pedro el 21/09/2026.
+
+   Los nombres son los que usa la web, ya renombrados: el "Lente" de la
+   planilla acá es 'Objetivo', y la tablet de Apple es 'iPad'.
+
+   Se muestran hasta tres. Un rubro anotado que hoy no tiene productos no
+   aparece (Tamron todavía no trae accesorios) y la marca que no esté en la
+   lista -Motorola, o una que entre mañana- sigue saliendo por cantidad. */
+const RUBROS_POR_MARCA = {
+  'Apple':     ['Celular', 'MacBook', 'Accesorio Apple'],
+  'Samsung':   ['Celular', 'Tablet', 'Monitor'],
+  'Xiaomi':    ['Celular', 'Tablet'],
+  'Microsoft': ['Consola', 'Accesorio Gaming'],
+  'Canon':     ['Cámara', 'Accesorio Cámara', 'Objetivo'],
+  'Sony':      ['Cámara', 'Accesorio Cámara', 'Objetivo'],
+  'Nikon':     ['Cámara', 'Accesorio Cámara', 'Objetivo'],
+  'Sigma':     ['Objetivo', 'Accesorio Cámara'],
+  'Tamron':    ['Objetivo', 'Accesorio Cámara'],
+  'DJI':       ['Cámara de Acción', 'Drone', 'Accesorio Drone'],
+  'Ray-Ban':   ['Gafas Inteligentes'],
+  'Kieslect':  ['Smartwatch', 'Auriculares'],
+};
+
 function ordenCat(a, b){
   const ia = ORDEN_CATS.indexOf(a), ib = ORDEN_CATS.indexOf(b);
   if(ia !== -1 && ib !== -1) return ia - ib;
@@ -4300,6 +4329,13 @@ const RE_DUAL  = /\b\d{1,2}\s*\/\s*\d{1,4}\s*(?:gb|tb)\b/gi;  // 12/256GB, 16/1T
    "MacBook Pro M5 14\" 16GB/1TB Esp" quedaba como "MacBook Pro M5 14\" / Esp",
    con la barra colgada donde estaba la memoria. */
 const RE_DUAL_NOMBRE = /\b\d{1,2}\s*(?:gb)?\s*\/\s*\d{1,4}\s*(?:gb|tb)\b/gi;
+/* Sim y eSIM NO se muestran en el nombre de la tarjeta (22/09). La tarjeta
+   nombra al modelo; cual de las dos versiones se lleva es una eleccion que
+   se hace adentro, igual que la memoria. Ojo: en los BOTONES de la ficha la
+   palabra se queda, y ahi no es adorno -- son dos productos con precios
+   distintos y sin la palabra el cliente no puede diferenciarlos (ver
+   completarSim). El 4G y el 5G no entran aca: quedan como estan. */
+const RE_SIM_NOMBRE = /\b(?:e[\s-]?sim|sim)\b/gi;   // Sim, E-Sim, eSIM
 const RE_PAREN = /\([^)]*\)/g;                          // (Space Gray/Silver)
 const RE_CORCH = /\[[^\]]*\]/g;                         // [5G]
 // Solo relojes:
@@ -4334,12 +4370,17 @@ function familia(p){
    ella, y esta bien: adentro casi siempre esta el color, que ya se ve en los
    puntitos de al lado de la marca.
 
+   Desde el 22/09 tambien se va la palabra Sim / E-Sim, por lo mismo: la
+   tarjeta nombra al modelo y la version se elige adentro. El 4G y el 5G se
+   quedan, que son parte de como se llama el producto.
+
    Ojo que esto es SOLO para mostrar. El nombre entero sigue siendo p.desc, que
    es lo que viaja al mensaje de WhatsApp, al pedido y al buscador. */
 function nombreSinMemoria(desc){
   const t = String(desc || '')
     .replace(RE_PAREN, ' ').replace(RE_CORCH, ' ')
     .replace(RE_DUAL_NOMBRE, ' ').replace(RE_CAP, ' ').replace(RE_RAM, ' ')
+    .replace(RE_SIM_NOMBRE, ' ')
     .replace(/\s{2,}/g, ' ')
     .replace(/^[\s\-–/·]+/, '').replace(/[\s\-–/·]+$/, '')
     .trim();
@@ -6099,6 +6140,17 @@ const MARCAS_MS = 4000;   // eran 6 segundos y se hacía largo: Pedro lo pidió 
 let MV = [], mvPos = 0, mvK = 0, mvTimer = null, mvDesde = 0, mvCorrido = 0, mvSalto = null, mvObs = null;
 const mvFrenos = new Set();
 
+/* Los rubros del panel de una marca: los suyos, en el orden de
+   RUBROS_POR_MARCA y sólo los que hoy tengan productos. Si la marca no está
+   anotada, o ninguno de los suyos tiene nada, los tres con más productos,
+   como era antes. */
+function catsDeLaMarca(marca, porCat){
+  const suyos = RUBROS_POR_MARCA[marca] || [];
+  const elegidos = suyos.map(c => [...porCat].find(([k]) => norm(k) === norm(c))).filter(Boolean);
+  if(elegidos.length) return elegidos.slice(0, 3);
+  return [...porCat].sort((a, b) => b[1] - a[1] || ordenCat(a[0], b[0])).slice(0, 3);
+}
+
 function datosMarcas(){
   return marcasParaLaFila().map(([marca, n]) => {
     const ms = MODELOS.filter(m => m.marca === marca);
@@ -6106,7 +6158,7 @@ function datosMarcas(){
     ms.forEach(m => porCat.set(m.cat, (porCat.get(m.cat) || 0) + 1));
     return {
       marca, n, rubros: porCat.size,
-      cats: [...porCat].sort((a, b) => b[1] - a[1] || ordenCat(a[0], b[0])).slice(0, 3),
+      cats: catsDeLaMarca(marca, porCat),
       nuevos: ms.filter(m => m.stock && m.precio !== null && m.imagen)
                 .sort((a, b) => codigoMasAlto(b) - codigoMasAlto(a) || a.idx - b.idx).slice(0, 4),
     };

@@ -1,0 +1,70 @@
+PARA LA SESION DE ADVAPP — iPhone 17 Pro, tres cosas de tecno_productos
+21/09/2026 · de la web del catalogo (advance33.github.io/catalogo-advance)
+
+Lo vimos porque en la ficha del 17 Pro aparecian dos botones que el cliente no
+podia diferenciar: "512GB" a USD 1.440 al lado de "512GB Sim" desde USD 1.440.
+No son el mismo producto —el primero es el eSIM—, pero no habia como saberlo.
+
+Nada de esto es urgente ni rompe nada. Del lado de la web ya lo tapamos (punto
+3). Lo mandamos porque los tres son datos de ADVAPP, no de la web.
+
+
+1) AT-0073-01 esta puesto en DOS productos distintos
+
+   CEL-APP-071  iPhone 17 Pro 512GB (Orange)      SKU ...-512-ORG-ESIM
+   CEL-APP-095  iPhone 17 Pro 512GB Sim (Orange)  SKU ...-512-ORG-SIM
+
+   Los dos con codigo_var = AT-0073-01. Son el eSIM y el de SIM fisica: dos
+   productos, un solo codigo nuestro. En nuestro maestro AT-0073 quedo asociado
+   al de SIM fisica ("Nombres_vistos: iPhone 17 Pro 512GB Sim (Orange)"), asi
+   que al eSIM le falta codigo propio.
+
+   Los codigos AT los damos nosotros. Diganos si lo dejan asi y les mandamos el
+   AT nuevo para el eSIM, o si prefieren que el AT-0073 pase al eSIM y el nuevo
+   sea para el de SIM. Lo que no puede quedar es el mismo codigo en los dos:
+   las fotos y la identidad de la web cuelgan de ahi.
+
+
+2) Once filas del 19/09 quedaron sin CODIGO_VAR, y siete con un CODIGO que no
+   es el suyo
+
+   Con codigo = AT-0071, que es el del 1TB, siendo de otra capacidad:
+     iPhone 17 Pro 256GB Sim (Blue / Orange / Silver)
+     iPhone 17 Pro 512GB Sim (Blue / Silver)
+     iPhone 17 Pro 512GB E-Sim (Blue / Silver)
+
+   Con codigo = AT-0071 bien puesto, pero sin codigo_var:
+     iPhone 17 Pro 1TB Sim (Blue / Orange / Silver)
+     iPhone 17 Pro 1TB E-Sim (Orange)
+
+   La web busca la foto por ese codigo. Con el codigo del 1TB en una fila de
+   256GB le puede tocar la foto equivocada, y sin codigo_var no hay foto por
+   color. Son las filas que entraron el 19/09 a las 17:05.
+
+
+3) La descripcion no dice Sim / E-Sim aunque el SKU si lo dice
+
+   Son 18 productos publicados hoy: 17 Pro, 17e, 17 y Air. Ejemplos:
+
+     iPhone 17 Pro 512GB (Orange)   ->  CEL-APL-17P-512-ORG-ESIM
+     iPhone 17 Pro 1TB (Silver)     ->  CEL-APL-17P-1TB-SLV-ESIM
+     iPhone 17e 512GB (Black)       ->  CEL-APL-17E-512-BLK-ESIM
+
+   El SKU lo sabe por la regla de ustedes del 17/09 (en la familia del 17, lo
+   que no aclara "Sim" es eSIM; esta escrita en sql/172). La descripcion no lo
+   dice, y la descripcion es de donde la web saca el texto del boton.
+
+   Pedido: que `descripcion` lleve el rotulo como ya lo lleva el SKU.
+
+   Mientras tanto, hoy publicamos un parche de nuestro lado: cuando la
+   descripcion calla y una hermana declara lo contrario, la web completa el
+   rotulo leyendo el final del SKU (-SIM / -ESIM). No adivina: sin SKU que lo
+   diga, no toca nada, y donde no hay con que confundirse tampoco agrega la
+   palabra. Cuando ustedes lo arreglen en la descripcion, nuestro parche deja
+   de hacer nada solo — no hay que avisarnos ni coordinar el orden.
+
+
+Por que no lo tocamos nosotros: tenemos el repo clonado y acceso de lectura a
+la base, pero esto es el motor de listas de Tecno, el push va derecho a
+produccion, hay otra sesion trabajando ahi y en esta maquina todavia no hay
+Node para correr los tests de ustedes. No vamos a tocarlo a ciegas.

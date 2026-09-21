@@ -82,6 +82,13 @@
     --ok-soft:rgba(15,138,95,.10);
     --shadow:0 1px 2px rgba(24,18,38,.05), 0 10px 30px rgba(24,18,38,.07);
     --foto-bg:#F3EFFA;    /* lila claro: los productos blancos (Pencil, AirTag, AirPods) desaparecen sobre la tarjeta blanca */
+    /* El fondo de la ficha. Casi blanco, pero no blanco: sobre blanco puro la
+       Xbox Series S y el AirTag pierden el contorno. Va en la caja Y en el
+       lado de la foto, y eso ultimo no es de adorno: mix-blend-mode mezcla
+       contra lo que haya pintado DEBAJO dentro de su grupo, y la ventana entra
+       con una animacion de opacity+transform que arma un grupo propio. Con el
+       fondo puesto en .fi-foto la mezcla tiene siempre contra que hacerse. */
+    --ficha-bg:#FBF9FF;
     --radius:14px;
   }
 
@@ -1271,21 +1278,34 @@
   }
   .fi-cerrar:hover{background:var(--acento);border-color:var(--acento);color:#fff}
   #ficha .caja{position:relative}
-  .fi-cols{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr)}
-  /* Sin aspect-ratio fijo: es un item del grid, asi que se estira solo hasta
-     la altura de la columna de datos. Con 1/1 quedaba clavado en 320px y
-     dejaba un hueco muerto abajo, que es lo que pasa casi siempre porque los
-     datos son mas altos. El min-height cubre el caso inverso: ficha corta. */
-  /* El lila se queda. Probé fondo blanco para que no se viera el escalón que
-     hace cada foto (casi todas vienen sobre blanco), pero la Xbox Series S
-     blanca y el AirTag se difuminan contra el borde: se pierde el contorno del
-     producto, que es peor que el escalón. Lo que sí bajó es el padding: el
-     producto ocupa la columna en vez de flotar en el medio. */
-  .fi-foto{position:relative;background:var(--foto-bg);min-height:320px;
-           display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .fi-foto img{width:100%;height:100%;object-fit:contain;padding:14px;display:block}
-  .fi-foto .badge{position:absolute;top:12px;left:12px}
-  .fi-datos{padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
+  .fi-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+
+  /* ---------- La foto, sin caja (21/09) ----------
+     Hasta ayer la foto vivía en un recuadro lila y el producto flotaba adentro.
+     Ahora la caja entera es lila casi blanco, la columna de datos es blanca y
+     el producto se apoya en la página, igual que en la grilla.
+
+     El fondo no es blanco puro a propósito: sobre blanco la Xbox Series S y el
+     AirTag pierden el contorno. Y no es el lila fuerte de antes porque ahí se
+     veía el escalón del recuadro.
+
+     OJO con multiply: se come el fondo blanco de la foto del proveedor, pero
+     deja de mezclar si algún padre tiene transform, opacity o filter propios. */
+  #ficha .caja{background:var(--ficha-bg)}
+  .fi-foto{position:relative;display:flex;flex-direction:column;justify-content:center;
+           gap:10px;padding:24px;min-height:320px;background:var(--ficha-bg)}
+  .fi-marco{position:relative;flex:1;min-height:170px;display:grid;place-items:center}
+  /* La foto va pegada a los cuatro lados del marco y no con width/height al
+     100%: adentro de una caja con aspect-ratio el 100% de alto no siempre se
+     resuelve, y en el celular la foto se salia del marco y le caia encima a la
+     tira de colores. Con inset:0 el marco manda siempre. */
+  .fi-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;
+               mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04)}
+  .fi-arriba{position:absolute;z-index:3;top:16px;left:18px;right:18px;
+             display:flex;gap:7px;flex-wrap:wrap;align-items:flex-start}
+  .fi-foto .badge{position:static}
+  .fi-datos{padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0;
+            background:var(--surface)}
   .fi-marca{font:600 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--glow)}
   .modal .fi-nombre{font:400 clamp(1.15rem,2.6vw,1.6rem)/1.15 var(--display);
                     text-transform:uppercase;margin:0;letter-spacing:.005em;padding-right:38px}
@@ -1311,8 +1331,22 @@
   .fi-rel{border-top:1px solid var(--line);background:var(--paper);padding:18px 22px 22px}
   .fi-rel h4{margin:0 0 12px;font:600 10px/1 var(--mono);letter-spacing:.18em;
              text-transform:uppercase;color:var(--faint)}
-  .fi-rel-tira{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-  .fi-rel .pc{width:auto}
+  .fi-rel-tira{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  /* Las mismas tarjetas de la grilla nueva: sin caja, con el precio en etiqueta
+     oscura. El multiply funde el fondo blanco de la foto con el lila del pie. */
+  .fi-rel .pc{width:auto;background:none;border:0;border-radius:0;overflow:visible;
+              display:flex;flex-direction:column;gap:8px}
+  .fi-rel .pc:hover{border-color:transparent;transform:none;box-shadow:none}
+  .fi-rel .pc-foto{height:104px;background:none}
+  .fi-rel .pc-foto img{padding:0;mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04);
+                       transition:transform .25s cubic-bezier(.2,.9,.3,1.2)}
+  .fi-rel .pc-txt{padding:0}
+  .fi-rel .pc-txt i{display:inline-flex;margin-top:7px;padding:5px 10px;border-radius:9px;
+                    background:var(--ink);color:#fff;font:600 11.5px/1 var(--mono)}
+  .fi-rel .pc-txt i .desde{color:#A597C4}
+  @media (hover:hover) and (prefers-reduced-motion: no-preference){
+    .fi-rel .pc:hover .pc-foto img{transform:translateY(-5px)}
+  }
   @media (max-width:640px){
     .fi-rel{padding:16px}
     .fi-rel-tira{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1321,81 +1355,112 @@
   /* El precio subio al lado del titulo: es lo segundo que se busca despues de
      saber que producto es. Los pesos dejaron de ser una nota al pie -es el
      numero con el que la mayoria decide- y ahora acompanian al dolar. */
-  .fi-precio{margin-top:4px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-  .fi-precio .usd{font:400 32px/1 var(--display)}
-  .fi-precio .ars{font:500 17px/1 var(--mono);color:var(--muted)}
+  /* Desde el 21/09 va en etiqueta oscura: es el único bloque negro de la
+     columna, así que el ojo cae ahí sin tener que buscarlo. */
+  .fi-precio{margin-top:2px;display:flex;align-items:flex-end;justify-content:space-between;
+             gap:12px;flex-wrap:wrap;padding:13px 17px;border-radius:15px;
+             background:var(--ink);color:#fff}
+  .fi-precio .usd{font:400 32px/.95 var(--display)}
+  .fi-precio .ars{font:500 13px/1 var(--mono);color:#A597C4;padding-bottom:4px}
   .fi-precio .sub{flex-basis:100%}
 
-  /* El color no es un dato mas de la tabla: es una decision. Sale de la lista y
-     se muestra como lo que es. En grilla y no apilado porque en columna se
-     llevaba cuatro renglones -rotulo, puntitos, nombre y la instruccion- para
-     decir "Black/Blue": el nombre va al lado de los puntitos, no debajo. */
-  /* minmax(0,auto) y no auto a secas: con `auto` la columna de los puntitos
-     toma su ancho sin cortar, asi que un producto de seis colores los pone
-     todos en una linea y empuja la ficha a lo ancho. Con el minimo en 0 la
-     columna cede y los puntitos, que ya son flex-wrap, bajan de renglon. */
-  .fi-color{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);
-            gap:3px 10px;align-items:center}
-  .fi-rotulo{grid-column:1/-1;font:600 9.5px/1.5 var(--mono);letter-spacing:.14em;
-             text-transform:uppercase;color:var(--faint)}
-  .fi-color .fi-pintas{margin-bottom:0}
-  .fi-color .fi-hint{grid-column:1/-1;font-size:11px;color:var(--faint)}
+  /* El color salió de la columna de datos (21/09): vive al costado de la foto,
+     que es donde se ve el cambio. Debajo de la foto queda su nombre, y el
+     aviso -"sin foto de este color", "el precio cambia"- debajo del nombre. */
+  .fi-colores{display:flex;flex-direction:column;gap:4px;align-items:center}
+  .fi-color-nom{display:block;text-align:center;font:600 12.5px/1.3 var(--sans);
+                color:var(--muted);overflow-wrap:anywhere}
+  .fi-color-nom b{font-weight:600;color:var(--glow)}
+  .fi-colores .fi-hint{display:block;text-align:center;font-size:11px;color:var(--faint)}
+  .fi-colores .fi-hint[hidden]{display:none}
   .fi-nota{font-size:11px;color:var(--faint);margin:0}
 
-  /* ---------- Elegir color en la ficha ----------
+  /* ---------- Elegir color: la tira al costado de la foto (21/09) ----------
      En la grilla los puntitos son decorativos. Acá el cliente está decidiendo,
      así que son botones: tocás uno y ese color queda elegido para el pedido y
-     para el mensaje de WhatsApp. Si existe la foto de ese color, la foto cambia. */
-  .fi-pintas{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:5px}
+     para el mensaje de WhatsApp. Si existe la foto de ese color, la foto cambia.
+
+     Cada botón muestra la foto chica de su color cuando la hay; si no, el tono.
+     Los que no están elegidos van apagados: el elegido se reconoce por ser el
+     único a color, sin necesidad de marcos ni anillos. */
+  /* Sin transform para centrarla: un transform acá arma un grupo aparte y las
+     fotitos de adentro dejarían de fundirse con el fondo de la ficha. Se
+     centra estirándola de arriba a abajo y repartiendo con flex. */
+  .fi-pintas{position:absolute;z-index:3;right:12px;top:0;bottom:0;margin:0;
+             display:flex;flex-direction:column;justify-content:center;gap:10px;align-items:center}
   .fi-pintas button{
-    width:20px;height:20px;padding:0;border-radius:50%;cursor:pointer;display:block;
-    border:0;box-shadow:inset 0 0 0 1px rgba(24,18,38,.18), 0 1px 2px rgba(24,18,38,.12);
-    transition:transform .12s ease, box-shadow .12s ease;
+    width:52px;height:52px;padding:0;border-radius:12px;cursor:pointer;display:block;
+    border:0;background-color:var(--surface-2);
+    background-size:contain;background-repeat:no-repeat;background-position:center;
+    box-shadow:inset 0 0 0 1px rgba(24,18,38,.10);
+    filter:grayscale(1);opacity:.5;
+    transition:filter .16s ease, opacity .16s ease, box-shadow .16s ease, transform .16s ease;
   }
-  .fi-pintas button:hover{transform:scale(1.12)}
-  /* El anillo va por fuera del puntito para no taparle el color */
-  .fi-pintas button[aria-pressed="true"]{
-    transform:scale(1.06);
-    box-shadow:inset 0 0 0 1px rgba(24,18,38,.22), 0 0 0 2px var(--surface), 0 0 0 4px var(--acento);
+  /* Con foto propia se funde con el fondo, igual que la foto grande, y el
+     elegido se reconoce por ser el único a color: sin marcos ni anillos, que
+     es justo lo que Pedro eligió del muestrario. */
+  .fi-pintas button.confoto{
+    background-color:transparent;box-shadow:none;border-radius:0;
+    mix-blend-mode:multiply;
   }
-  /* Color que no está en la lista de hex: no inventamos el tono, se marca con rayas */
+  .fi-pintas button:hover{filter:none;opacity:1;transform:scale(1.06)}
+  .fi-pintas button[aria-pressed="true"]{filter:none;opacity:1}
+  /* Sin foto es un puntito de color: ahí sí hace falta marcar cuál es */
+  .fi-pintas button:not(.confoto)[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--ink)}
+  /* Color que no está en la lista de hex y sin foto propia: no inventamos el
+     tono, se marca con rayas */
   .fi-pintas button.sinhex{
-    background:repeating-linear-gradient(45deg,var(--line),var(--line) 3px,transparent 3px,transparent 6px);
+    background-image:repeating-linear-gradient(45deg,var(--line),var(--line) 3px,transparent 3px,transparent 6px);
     box-shadow:inset 0 0 0 1px var(--faint);
   }
-  /* "Pink/White/Purple/Green" no tiene espacios: sin partirlo, en 320 px empujaba la ficha de costado */
-  .fi-color-elegido{color:var(--ink);overflow-wrap:anywhere}
-  .fi-color-elegido b{font-weight:600;color:var(--glow)}
-  .fi-tabla dd .fi-hint{display:block;font-size:10.5px;color:var(--faint);margin-top:3px}
-  /* El display:block de arriba le gana al hidden si no se dice esto */
-  .fi-tabla dd .fi-hint[hidden]{display:none}
 
-  /* ---------- Elegir versión (capacidad, medida, color) ----------
-     Cada botón lleva su propio precio: el cliente compara sin tener que ir
-     tocando uno por uno. */
-  .fi-ops-caja{border-top:1px solid var(--line);padding-top:13px;display:flex;
-               flex-direction:column;gap:8px}
-  .fi-ops-lbl{font:600 9.5px/1.5 var(--mono);letter-spacing:.14em;
+  /* ---------- Elegir versión: pestañas, con el rótulo a la izquierda ----------
+     Antes cada versión era un botón con su caja y su precio. Un iPhone con
+     cuatro capacidades por dos versiones de SIM llenaba media ficha de botones
+     -"muchos botones", dijo Pedro, y tenía razón-. Ahora son dos ejes: primero
+     la memoria y, adentro de esa memoria, la versión. */
+  .fi-ejes{display:grid;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+  /* El rotulo arranca arriba, no centrado: con tres o cuatro memorias las
+     pestañas bajan de renglon y "MEMORIA" quedaba flotando en el medio. */
+  .fi-eje{display:grid;grid-template-columns:74px minmax(0,1fr);align-items:start;gap:14px}
+  .fi-eje-rot{padding-top:4px}
+  .fi-eje + .fi-eje{padding-top:12px;border-top:1px solid var(--line)}
+  .fi-eje-rot{font:600 9.5px/1.4 var(--mono);letter-spacing:.14em;
               text-transform:uppercase;color:var(--faint)}
-  .fi-ops{display:flex;flex-wrap:wrap;gap:7px}
+  .fi-ops{display:flex;flex-wrap:wrap;gap:18px}
   .fi-op{
-    display:flex;flex-direction:column;gap:3px;align-items:flex-start;
-    padding:8px 12px;border-radius:11px;cursor:pointer;text-align:left;
-    background:var(--surface-2);border:1px solid var(--line);color:var(--ink);
-    transition:border-color .12s ease, background .12s ease;
+    position:relative;display:flex;flex-direction:column;gap:2px;align-items:flex-start;
+    padding:0 0 8px;border:0;background:none;cursor:pointer;text-align:left;color:var(--ink);
   }
-  .fi-op b{font:500 12px/1.2 var(--sans);letter-spacing:.01em}
-  .fi-op i{font:500 10.5px/1 var(--mono);color:var(--muted);font-style:normal}
-  .fi-op:hover{border-color:var(--faint)}
-  .fi-op[aria-pressed="true"]{
-    border-color:var(--acento);background:rgba(124,58,237,.10);
-    box-shadow:0 0 0 1px var(--acento);
+  .fi-op b{font:600 14.5px/1.2 var(--sans);letter-spacing:.01em}
+  .fi-op i{font:500 10.5px/1 var(--mono);color:var(--faint);font-style:normal}
+  /* El subrayado se dibuja solo, de izquierda a derecha: sin bordes que prendan
+     y apaguen, la fila de pestañas no se mueve al elegir otra. */
+  .fi-op::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:2px;
+    background:var(--acento);transform:scaleX(0);transform-origin:left;
+    transition:transform .18s ease;
   }
+  .fi-op:hover::after{transform:scaleX(.4)}
+  .fi-op[aria-pressed="true"]::after{transform:scaleX(1)}
   .fi-op[aria-pressed="true"] i{color:var(--glow)}
+  /* El segundo eje va más chico: la memoria es la decisión grande */
+  .fi-ops.chicas .fi-op b{font:500 13px/1.2 var(--sans);color:var(--muted)}
+  .fi-ops.chicas .fi-op[aria-pressed="true"] b{color:var(--ink)}
   /* Sin stock se puede elegir igual (el cliente quiere ver el precio), pero se
      nota de una que no está disponible */
   .fi-op.agotada{opacity:.5}
   .fi-op.agotada b{text-decoration:line-through}
+
+  /* ---------- La franja de envío (21/09) ----------
+     Cruza la ficha entre los datos y los sugeridos, del mismo oscuro que la
+     etiqueta del precio. El texto sale de SERVICIO: antes encabezaba la lista
+     de abajo, se mudó acá y no se repite en los dos lados. */
+  .fi-envio{display:flex;align-items:center;gap:12px;padding:13px 20px;
+            background:var(--ink);color:#fff}
+  .fi-envio svg{width:20px;height:20px;flex:none;color:#C4B5FD}
+  .fi-envio b{font:600 13px/1.3 var(--sans)}
+  .fi-envio span{font:500 12.5px/1.35 var(--sans);color:#BCAFDB}
 
   /* ---------- Cuántas unidades ---------- */
   .fi-cant{display:flex;align-items:center;gap:10px;justify-content:space-between;
@@ -1412,12 +1477,26 @@
   .stepper button:disabled{opacity:.35;cursor:default}
   .stepper .n{min-width:30px;text-align:center;font:500 14px/1 var(--mono);color:var(--ink)}
   /* El x2 al lado del precio: sin esto el total del pedido no se explica solo */
-  .fi-precio .sub{font:500 12px/1 var(--mono);color:var(--glow);margin-top:7px}
+  .fi-precio .sub{font:500 12px/1 var(--mono);color:#C4B5FD;margin-top:7px}
 
   @media (max-width:640px){
     .fi-cols{grid-template-columns:1fr}
-    .fi-foto{aspect-ratio:4/3;min-height:0}
+    /* display:block y no flex: con flex la foto es un item con flex-basis 0 y,
+       segun el ancho, se queda sin altura propia y la tira le cae encima.
+       Como bloque, el aspect-ratio manda y lo de abajo va abajo. */
+    .fi-foto{display:block;min-height:0;padding:18px 16px 12px}
+    .fi-marco{display:grid;place-items:center;width:100%;aspect-ratio:4/3;min-height:0}
+    .fi-foto img{max-height:none}
+    .fi-colores{margin-top:12px}
     .fi-datos{padding:18px}
+    /* Al costado no entra: en el celular la tira vuelve abajo de la foto, en
+       horizontal, arriba del nombre del color. */
+    .fi-pintas{position:static;top:auto;bottom:auto;flex-direction:row;flex-wrap:wrap;
+               justify-content:center}
+    .fi-pintas button{width:44px;height:44px}
+    .fi-eje{grid-template-columns:1fr;gap:6px}
+    .fi-envio{padding:12px 16px;align-items:flex-start}
+    .fi-rel-tira{gap:12px}
   }
 
   /* ---------- Especificaciones deducidas ---------- */
@@ -3878,21 +3957,36 @@ function htmlColores(txt){
     `<i style="background:${c.hex}" title="${esc(c.nombre)}" data-color="${esc(c.nombre)}"></i>`).join('')}</span>`;
 }
 
-/* En la ficha los puntitos dejan de ser decoración y pasan a ser botones: el
-   cliente elige el color, queda marcado, viaja al pedido y al mensaje de
-   WhatsApp. Acá se muestran TODOS los colores de la fila, también los que no
-   están en la lista de hex (esos van rayados): que no sepamos pintarlos no es
-   motivo para que no se puedan elegir. */
-function htmlColorFicha(p, m){
-  /* En los modelos donde el precio depende del color, los puntitos dejan de
-     ser una muestra y pasan a ser EL selector: se juntan los colores de todas
-     las versiones y cada uno lleva el suyo, así tocar un color cambia también
-     el precio. En el resto de los modelos funciona como siempre, mostrando
-     sólo los colores de la fila que se está mirando. */
-  const hermanas = (p.hermanasColor || []).filter(x => x.color);
-  const porColor = hermanas.length > 1;
-  const crudos = (porColor ? hermanas : [p]).flatMap(x =>
-    pintas(x.color).map(c => ({ ...c, k: clave(x), precio: x.precio })));
+/* ---------- Los colores, al costado de la foto (21/09) ----------
+   En la grilla los puntitos son decoración. Acá el cliente está decidiendo,
+   así que son botones: tocás uno y ese color queda elegido para el pedido y
+   para el mensaje de WhatsApp. Se muestran TODOS los colores de la fila,
+   también los que no están en la lista de hex (esos van rayados): que no
+   sepamos pintarlos no es motivo para que no se puedan elegir. */
+
+/* Una "versión" que en realidad es un color. La planilla a veces carga cada
+   color como si fuera otra versión -el iPhone 16 viene como "Ultramarine" y
+   "White"- y entonces el color se elegía dos veces: con el botón de versión y
+   con el puntito. Cuando pasa, la tira se queda con los colores de TODO el
+   modelo y los botones de versión no los repiten. */
+const opcionEsColor = (grupo, op) =>
+  grupo.every(x => partirColores(x.color).some(c => norm(c) === norm(op)));
+
+function coloresFicha(p, m){
+  const vs = (m && m.variantes) || [p];
+  const porOpcion = new Map();
+  vs.forEach(x => {
+    const op = x.opcion || x.etiqueta;
+    if(!porOpcion.has(op)) porOpcion.set(op, []);
+    porOpcion.get(op).push(x);
+  });
+  const hayOpColor = [...porOpcion.entries()].some(([op, g]) => opcionEsColor(g, op));
+  /* Si no, en los modelos donde el precio depende del color la tira junta las
+     filas hermanas (la misma versión en otro color) y cada color lleva el
+     suyo, así tocar un color cambia también el precio. */
+  const filas = (hayOpColor ? vs : (p.hermanasColor || [])).filter(x => x.color);
+  const crudos = (filas.length > 1 ? filas : [p]).flatMap(x =>
+    pintas(x.color).map(c => ({ ...c, k: clave(x), precio: x.precio, fila: x })));
 
   /* Un mismo color puede venir en dos hermanas y entonces se dibujaba dos
      veces. Pasa con el iPhone 17 PRO 256GB, que son dos filas declarando los
@@ -3909,26 +4003,50 @@ function htmlColorFicha(p, m){
     if(mejora) unicos.set(k, c);
   });
   const lista = [...unicos.values()];
+  // El aviso del precio sólo si de verdad cambia: dos hermanas al mismo precio
+  // existen igual (las separa el color) y ahí no hay nada que avisar.
+  return { lista, precioVaria: new Set(lista.map(c => c.precio)).size > 1 };
+}
 
-  // Con un solo color no hay nada que elegir: queda como estaba
-  if(lista.length < 2) return htmlColores(p.color) + esc(p.color);
+/* La foto chica de ese color, para la tira. Con el índice de fotos sabemos
+   cuáles existen, así que no se pide ninguna de más. Sin índice las
+   direcciones locales son una corazonada: antes que disparar una foto rota por
+   cada color de cada ficha que se abre, se muestra el tono y listo. */
+function miniColorFicha(fila, nombre){
+  if(!fila || !nombre) return '';
+  const u = fotosDeColor(fila, nombre)[0] || '';
+  if(!u) return '';
+  if(!INDICE_FOTOS && u.includes(CARPETA_FOTOS)) return '';
+  return fotoChica(u);
+}
 
+function htmlColorFicha(p, m){
+  const { lista, precioVaria } = coloresFicha(p, m);
   const aqui = clave(p);
   // El color elegido sale del pedido si el producto ya está cargado; si no,
   // del que se acaba de tocar en esta ficha.
   const eleg = colorDe(aqui) || COLOR_FICHA;
+
+  // Con un solo color no hay nada que elegir: queda el nombre bajo la foto
+  if(lista.length < 2)
+    return p.color ? `<span class="fi-color-nom" id="fi-color-txt">${esc(p.color)}</span>` : '';
+
   const puntos = lista.map(c => {
-    const precio = porColor && c.precio !== null ? ' · USD ' + plata(c.precio) : '';
+    const precio = precioVaria && c.precio !== null ? ' · USD ' + plata(c.precio) : '';
+    const mini = miniColorFicha(c.fila, c.nombre);
+    const fondo = [mini ? `background-image:url(${esc(mini)})` : '',
+                   c.hex ? `background-color:${c.hex}` : ''].filter(Boolean).join(';');
+    const clase = mini ? 'confoto' : (c.hex ? '' : 'sinhex');
     return `<button type="button" data-color="${esc(c.nombre)}" data-k="${esc(c.k)}"
-             ${c.hex ? `style="background:${c.hex}"` : 'class="sinhex"'}
+             ${fondo ? `style="${fondo}"` : ''}${clase ? ` class="${clase}"` : ''}
              aria-pressed="${eleg === c.nombre}" title="${esc(c.nombre + precio)}"
              aria-label="Elegir ${esc(c.nombre + precio)}"></button>`;
   }).join('');
 
-  const hint = porColor ? 'El precio cambia según el color' : 'Tocá un color para elegirlo';
+  const hint = precioVaria ? 'El precio cambia según el color' : 'Tocá un color para elegirlo';
   return `<div class="fi-pintas">${puntos}</div>
-    <span class="fi-color-elegido" id="fi-color-txt">${eleg ? `<b>${esc(eleg)}</b>` : esc(p.color)}</span>
-    <span class="fi-hint" id="fi-color-hint"${porColor ? ' data-precio="1"' : ''}${eleg && !porColor ? ' hidden' : ''}>${hint}</span>`;
+    <span class="fi-color-nom" id="fi-color-txt">${eleg ? `<b>${esc(eleg)}</b>` : esc(p.color)}</span>
+    <span class="fi-hint" id="fi-color-hint"${precioVaria ? ' data-precio="1"' : ''}${eleg && !precioVaria ? ' hidden' : ''}>${hint}</span>`;
 }
 
 /* Foto por color. La planilla trae una sola foto por producto, así que la del
@@ -4040,7 +4158,9 @@ function fotoDeAdvapp(p, color){
 }
 
 function mostrarFotoColor(p, color, d){
-  const caja = d.querySelector('.fi-foto');
+  // .fi-marco y no .fi-foto: al costado de la foto ahora vive la tira de
+  // colores, y el <img> tiene que salir adentro del marco, no encima de ella.
+  const caja = d.querySelector('.fi-marco');
   let img = caja && caja.querySelector('img');
   /* Puede no haber <img>: la fila no tiene foto de su primer color y la
      ficha abrio con el placeholder. Pero si tiene la foto de OTRO color
@@ -6540,7 +6660,14 @@ function htmlDatosFicha(m, v){
     ['Teclado',     idiomaTeclado(v.teclado)]
   ].filter(([,x]) => x);
 
-  const lista = specs(v);
+  /* Los chips de specs repetían lo que ya dicen las pestañas: el iPhone 17 Pro
+     mostraba "256GB" y "ESIM" arriba del precio, y otra vez abajo como pestaña
+     de memoria y de versión. Se sacan los que están en la versión elegida; si
+     no hay pestañas, quedan todos, que ahí son el único lugar que lo dice. */
+  const ejes  = htmlOpcionesFicha(m, v);
+  const plano = t => norm(t).replace(/[^a-z0-9]/g, '');
+  const dice  = ejes ? plano(v.opcion || v.etiqueta || '') : '';
+  const lista = specs(v).filter(s => !dice || !dice.includes(plano(s)));
   const ars   = precioARS(v);
   const coti  = TC ? `Cotización: $ ${plata(Math.round(TC))} por dólar.` : '';
 
@@ -6553,8 +6680,7 @@ function htmlDatosFicha(m, v){
       ${ars ? `<div class="ars">${ars}</div>` : ''}
       <div class="sub" id="fi-sub" hidden></div>
     </div>
-    ${htmlOpcionesFicha(m, v)}
-    ${v.color ? `<div class="fi-color"><span class="fi-rotulo">Color</span>${htmlColorFicha(v, m)}</div>` : ''}
+    ${ejes}
     ${v.incluye ? `<div class="incluye">${esc(v.incluye)}</div>` : ''}
     ${v.detalle ? `<p class="fi-detalle">${esc(v.detalle)}</p>` : ''}
     ${filas.length ? `<dl class="fi-tabla">${filas.map(([t,x]) =>
@@ -6569,17 +6695,28 @@ function htmlDatosFicha(m, v){
     <p class="fi-nota">Precio sujeto a cambio sin previo aviso. Consultá disponibilidad antes de comprar.${coti ? ' ' + esc(coti) : ''}</p>`;
 }
 
-/* Envío, retiro y garantía, justo debajo del botón. Es lo que el cliente se
-   pregunta en el momento de decidir: si no lo ve ahí, lo pregunta por WhatsApp
-   o se va sin preguntar. Los textos salen de SERVICIO, en la configuración. */
+/* Retiro y garantía, justo debajo del botón. Es lo que el cliente se pregunta
+   en el momento de decidir: si no lo ve ahí, lo pregunta por WhatsApp o se va
+   sin preguntar. El envío salió de esta lista el 21/09 y pasó a la franja
+   oscura, que se ve sin bajar. Los textos salen de SERVICIO, igual que antes. */
 const ICONOS_SERVICIO = {
   envio:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.5h11v10h-11z"/><path d="M13.5 10h4.2l3.3 3.4v3.1h-7.5"/><circle cx="6.5" cy="17.6" r="1.9"/><circle cx="17" cy="17.6" r="1.9"/></svg>',
   retiro:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>',
   garantia: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"/><path d="M8.8 12.2l2.2 2.2 4.3-4.4"/></svg>',
 };
 
+/* La franja de envío, cruzando la ficha entre los datos y los sugeridos. El
+   texto es el mismo de SERVICIO que antes encabezaba la lista de abajo: se
+   mudó acá, no se duplicó, así que abajo quedan el retiro y la garantía. */
+function htmlEnvioFicha(){
+  const t = SERVICIO.envio;
+  if(!t || !t[0]) return '';
+  return `<div class="fi-envio">${ICONOS_SERVICIO.envio}
+    <span><b>${esc(t[0])}</b>${t[1] ? ' — ' + esc(t[1]) : ''}</span></div>`;
+}
+
 function htmlServicio(v){
-  const lineas = Object.keys(ICONOS_SERVICIO).map(k => {
+  const lineas = Object.keys(ICONOS_SERVICIO).filter(k => k !== 'envio').map(k => {
     const t = SERVICIO[k];
     if(!t || !t[0]) return '';
     // Si la planilla trae la garantía de ESTE producto, manda sobre el texto
@@ -6591,12 +6728,59 @@ function htmlServicio(v){
   return lineas ? `<ul class="fi-servicio">${lineas}</ul>` : '';
 }
 
-/* El selector de versiones. Cada botón lleva SU precio: es lo que el cliente
-   está comparando, y verlo junto evita tener que tocar una por una. */
+/* ---------- Elegir la versión, en dos pasos (21/09) ----------
+   La planilla escribe la versión entera en un solo texto: "512GB E-Sim",
+   'A18 13" 8GB/256GB Teclado ES'. Como un botón por versión, el iPhone 17 Pro
+   llenaba la ficha con seis cajas y encima repetía la capacidad en todas.
+
+   Acá ese texto se parte en dos ejes: la memoria por un lado y lo que queda
+   por el otro. No se inventa nada, es el mismo texto cortado. Primero se elige
+   la memoria y después, adentro de esa memoria, la versión: así ningún eje
+   tiene más de tres o cuatro pestañas y todas las versiones siguen a un toque
+   o dos de distancia. */
+const RE_MEMORIA = /\d+(?:[.,]\d+)?\s*(?:GB|TB)\b/gi;
+
+/* La ÚLTIMA capacidad del texto: en "8GB/512GB" el 8 es la RAM y lo que el
+   cliente elige es el disco. */
+function memoriaDeOpcion(t){
+  const m = String(t || '').match(RE_MEMORIA);
+  return m ? m[m.length - 1].toUpperCase().replace(/\s+/g, '') : '';
+}
+
+/* Lo que queda de la versión sin la memoria. Se lleva puesto el separador que
+   tenía pegado ("8GB/256GB" sin "256GB" quedaba "8GB/") y los restos que no
+   son una opción: el precio de desempate que agrega armarModelo y los puntos
+   medios que sobran. */
+function restoDeOpcion(t){
+  const s = String(t || '');
+  const m = s.match(RE_MEMORIA);
+  let sin = s;
+  if(m){
+    const tok = m[m.length - 1];
+    const i = s.lastIndexOf(tok);
+    let ini = i;
+    while(ini > 0 && /[\s·\/-]/.test(s[ini - 1])) ini--;
+    sin = s.slice(0, ini) + ' ' + s.slice(i + tok.length);
+  }
+  return sin.replace(/USD\s*[\d.,]+/gi, '').replace(/·/g, ' ')
+            .replace(/\s{2,}/g, ' ').replace(/^[\s·\/-]+|[\s·\/-]+$/g, '').trim();
+}
+
+
+/* Lo que todas las pestañas de un eje dicen igual no aporta nada y las hace
+   más largas: entre 'A18 13" 8GB Teclado inglés' y 'A18 13" 8GB Teclado ES'
+   lo que se elige es "inglés" o "ES". */
+function sinLoComun(et){
+  if(et.length < 2) return et;
+  const ws = et.map(t => t.split(/\s+/).filter(Boolean));
+  const com = ws[0].filter(w => ws.every(x => x.includes(w)));
+  return et.map((t, i) => ws[i].filter(w => !com.includes(w)).join(' ').trim() || t);
+}
+
 function htmlOpcionesFicha(m, v){
   if(!m.multi) return '';
   const elegida = clave(v);
-  /* Una opcion por version (ver `opcion` en armarModelo). El boton de una
+  /* Una opcion por version (ver `opcion` en armarModelo). La pestaña de una
      version con varias filas marca la que se esta mirando, o si no la mas
      barata con stock, y dice "desde" cuando sus colores no valen lo mismo. */
   const versiones = new Map();
@@ -6605,34 +6789,72 @@ function htmlOpcionesFicha(m, v){
     if(!versiones.has(op)) versiones.set(op, []);
     versiones.get(op).push(x);
   });
-  if(versiones.size < 2) return '';
+  /* Las versiones que en realidad son un color se eligen en la tira de al lado
+     de la foto. Sin esto el iPhone 16 traía un botón "Ultramarine" y otro
+     "White" además de la tira, diciendo dos veces lo mismo. */
+  const reales = [...versiones.entries()].filter(([op, g]) => !opcionEsColor(g, op));
+  if(reales.length < 2) return '';
+
   const porPrecio = (a, b) => (a.precio ?? Infinity) - (b.precio ?? Infinity);
-  const btns = [...versiones.entries()].map(([op, grupo]) => {
-    if(grupo.length > 1){
-      const aca = grupo.find(x => clave(x) === elegida);
-      const conStock = grupo.filter(x => x.stock);
-      const rep = aca || [...(conStock.length ? conStock : grupo)].sort(porPrecio)[0];
-      const precios = grupo.map(x => x.precio).filter(x => x !== null);
-      const precio = !precios.length ? 'Consultar'
-        : (new Set(precios).size > 1 ? 'desde USD ' : 'USD ') + plata(Math.min(...precios));
-      return `<button type="button" class="fi-op${conStock.length ? '' : ' agotada'}" data-k="${esc(clave(rep))}"
-               data-op="${esc(op)}" aria-pressed="${!!aca}"${conStock.length ? '' : ' title="Sin stock"'}>
-               <b>${esc(op)}</b>
-               <i>${precio}</i>
-             </button>`;
-    }
-    const x = grupo[0];
-    const k = clave(x);
-    return `<button type="button" class="fi-op${x.stock ? '' : ' agotada'}" data-k="${esc(k)}"
-             aria-pressed="${k === elegida}"${x.stock ? '' : ' title="Sin stock"'}>
-             <b>${esc(x.etiqueta)}</b>
-             <i>${x.precio === null ? 'Consultar' : 'USD ' + plata(x.precio)}</i>
-           </button>`;
+  const precioDe = grupo => {
+    const ps = grupo.map(x => x.precio).filter(x => x !== null);
+    if(!ps.length) return 'Consultar';
+    return (new Set(ps).size > 1 ? 'desde USD ' : 'USD ') + plata(Math.min(...ps));
+  };
+  // A qué fila lleva una pestaña: la que se está mirando si cae adentro, y si
+  // no la más barata con stock. Igual criterio que el "desde" que muestra.
+  const filaDe = grupo => {
+    const aca = grupo.find(x => clave(x) === elegida);
+    const conStock = grupo.filter(x => x.stock);
+    return aca || [...(conStock.length ? conStock : grupo)].sort(porPrecio)[0];
+  };
+  const pestana = (et, verPrecio, irA, extra) => {
+    const hay = verPrecio.some(x => x.stock);
+    const destino = filaDe(irA);
+    return `<button type="button" class="fi-op${hay ? '' : ' agotada'}"
+             data-k="${esc(clave(destino))}" data-op="${esc(destino.opcion || destino.etiqueta)}"${extra || ''}
+             aria-pressed="${verPrecio.some(x => clave(x) === elegida)}"${hay ? '' : ' title="Sin stock"'}>
+             <b>${esc(et)}</b><i>${precioDe(verPrecio)}</i></button>`;
+  };
+  const eje = (rot, clase, btns) => `<div class="fi-eje"><span class="fi-eje-rot">${rot}</span>
+      <div class="fi-ops${clase}" data-eje="${rot.toLowerCase()}">${btns}</div></div>`;
+
+  const opActual = v.opcion || v.etiqueta;
+  const mems = [...new Set(reales.map(([op]) => memoriaDeOpcion(op)))];
+  /* Dos ejes sólo si TODAS las versiones dicen su memoria y hay más de una.
+     Si alguna no la dice, partirlas dejaría una pestaña sin rótulo y otra sin
+     eje: en ese caso van todas juntas, como estaban hasta ayer. */
+  if(mems.length < 2 || !mems.every(Boolean))
+    return `<div class="fi-ejes">${eje('Versión', '',
+      reales.map(([op, g]) => pestana(op, g, g)).join(''))}</div>`;
+
+  const memAct = memoriaDeOpcion(opActual);
+  const restoAct = restoDeOpcion(opActual);
+  const memTabs = [...mems].sort((a, b) => enGB(a) - enGB(b)).map(mm => {
+    const suyas = reales.filter(([op]) => memoriaDeOpcion(op) === mm);
+    const todas = suyas.flatMap(([, g]) => g);
+    // Cambiar de memoria no tiene por qué cambiar de versión: si esa memoria
+    // tiene la misma (Sim, teclado español), se va a ésa.
+    const igual = suyas.find(([op]) => restoDeOpcion(op) === restoAct);
+    return pestana(mm, todas, igual ? igual[1] : todas, ` data-mem="${esc(mm)}"`);
   }).join('');
-  return `<div class="fi-ops-caja">
-    <span class="fi-ops-lbl">Opciones</span>
-    <div class="fi-ops">${btns}</div>
-  </div>`;
+
+  const hermanas = reales.filter(([op]) => memoriaDeOpcion(op) === memAct);
+  let verTabs = '';
+  if(hermanas.length > 1){
+    let et = sinLoComun(hermanas.map(([op]) => restoDeOpcion(op) || 'Base'));
+    /* Si el recorte deja dos pestañas diciendo lo mismo, o una diciendo sólo
+       un número -"8", que es lo que queda de "8/256GB"-, se pasó de vivo: lo
+       que las distingue es justo lo que sacó. En ese caso vuelve el texto
+       entero de la planilla: más largo, pero no engaña.
+       Ojo que el "8" contra "8GB" sale de que la planilla escribe la misma RAM
+       de dos maneras; eso se arregla en la planilla, no acá. */
+    if(new Set(et).size !== et.length || et.some(t => /^\d+$/.test(t)))
+      et = hermanas.map(([op]) => op);
+    verTabs = hermanas.map(([, g], i) => pestana(et[i], g, g)).join('');
+  }
+  return `<div class="fi-ejes">${eje('Memoria', '', memTabs)}${
+    verTabs ? eje('Versión', ' chicas', verTabs) : ''}</div>`;
 }
 
 /* ---------- También te puede interesar ----------
@@ -6699,9 +6921,14 @@ function abrirFicha(k, historia = true){
     <div class="caja" role="dialog" aria-modal="true" aria-label="${esc(m.desc)}">
       <button class="fi-cerrar" type="button" aria-label="Cerrar">&times;</button>
       <div class="fi-cols">
-        <div class="fi-foto">${htmlBadge(v, true)}${htmlFoto(v, '', true)}</div>
+        <div class="fi-foto">
+          <div class="fi-arriba">${htmlBadge(v, true)}</div>
+          <div class="fi-marco">${htmlFoto(v, '', true)}</div>
+          <div class="fi-colores">${htmlColorFicha(v, m)}</div>
+        </div>
         <div class="fi-datos">${htmlDatosFicha(m, v)}</div>
       </div>
+      ${htmlEnvioFicha()}
       ${htmlRelacionados(m)}
     </div>`;
 
@@ -6755,6 +6982,9 @@ function elegirVariante(d, m, v, color){
   COLOR_FICHA = color || colorDe(FICHA);
   d.querySelector('.fi-datos').innerHTML = htmlDatosFicha(m, v);
   pintarFotoFicha(d, v);
+  // La tira vive al lado de la foto, fuera de .fi-datos: se redibuja aparte o
+  // se queda con los colores y los precios de la versión anterior.
+  pintarColoresFicha(d, v, m);
   engancharFicha(d, m, v);
   escribirURL(false);
   if(COLOR_FICHA) mostrarFotoColor(v, COLOR_FICHA, d);
@@ -6763,15 +6993,21 @@ function elegirVariante(d, m, v, color){
 // La foto se toca lo mínimo: si es la misma imagen, solo se actualiza el badge
 // de stock. Recargarla siempre haría un parpadeo blanco en cada clic.
 function pintarFotoFicha(d, v){
-  const cont = d.querySelector('.fi-foto');
+  const arriba = d.querySelector('.fi-arriba');
+  if(arriba) arriba.innerHTML = htmlBadge(v, true);
+  const cont = d.querySelector('.fi-marco');
   if(!cont) return;
   const img = cont.querySelector('img');
   const grande = v.imagenGrande || v.imagen;
-  if(!img || !v.imagen){ cont.innerHTML = htmlBadge(v, true) + htmlFoto(v, '', true); return; }
+  if(!img || !v.imagen){ cont.innerHTML = htmlFoto(v, '', true); return; }
   if(img.getAttribute('src') !== grande){ img.classList.remove('ok'); img.src = grande; }
-  const badge = cont.querySelector('.badge');
-  if(badge) badge.outerHTML = htmlBadge(v, true);
-  else cont.insertAdjacentHTML('afterbegin', htmlBadge(v, true));
+}
+
+// La tira de colores, el nombre del elegido y su aviso: todo lo que cuelga de
+// la foto y depende de la versión que se esté mirando.
+function pintarColoresFicha(d, v, m){
+  const caja = d.querySelector('.fi-colores');
+  if(caja) caja.innerHTML = htmlColorFicha(v, m);
 }
 
 /* ---------- La parte viva de la ficha ----------

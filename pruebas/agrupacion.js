@@ -305,6 +305,28 @@ function correrPruebas(){
   ok(simple && !simple.querySelector('.usd .desde'),
      'un producto sin variantes no dice "desde"');
 
+  /* Desde el 21/09 la version se elige en dos pasos: primero la memoria y
+     despues, adentro, la version. Para llegar a una version cualquiera hay que
+     recorrer los dos ejes; si vive en la memoria que ya esta abierta, alcanza
+     con su pestaña. */
+  const irAVariante = v => {
+    let d = document.getElementById('ficha');
+    const op = v.opcion || v.etiqueta;
+    let b = [...d.querySelectorAll('.fi-op')].find(x => x.dataset.k === clave(v)) ||
+            [...d.querySelectorAll('.fi-op')].find(x => x.dataset.op === op);
+    if(!b){
+      const t = [...d.querySelectorAll('.fi-ops[data-eje="memoria"] .fi-op')]
+                  .find(x => x.dataset.mem === memoriaDeOpcion(op));
+      if(t){ t.click(); d = document.getElementById('ficha');
+             b = [...d.querySelectorAll('.fi-op')].find(x => x.dataset.k === clave(v)) ||
+                 [...d.querySelectorAll('.fi-op')].find(x => x.dataset.op === op); }
+    }
+    // Y si esa version es un color, el que lleva a su fila es el de la tira
+    if(!b) b = [...d.querySelectorAll('.fi-pintas button')].find(x => x.dataset.k === clave(v));
+    if(b) b.click();
+    return !!b;
+  };
+
   /* ---- 6. La ficha: elegir version cambia el precio ---- */
   PEDIDO = []; guardarPedido();
   // La version mas cara, sola en su boton: una que junta varias filas de color
@@ -313,7 +335,16 @@ function correrPruebas(){
     const c = m.variantes.find(v => v.precio === m.precioMax);
     return c && m.variantes.filter(v => v.opcion === c.opcion).length === 1 && versiones(m) > 1;
   };
-  const m0 = conRango.find(solaEnSuBoton) || conRango[0];
+  /* Y con pestañas de verdad: un modelo cuyas "versiones" son todas colores
+     se elige en la tira, no en pestañas, y ahi no hay nada que contar. */
+  const conPestanas = m => {
+    const ops = new Map();
+    m.variantes.forEach(v => { const o = v.opcion || v.etiqueta;
+      if(!ops.has(o)) ops.set(o, []); ops.get(o).push(v); });
+    return [...ops.entries()].filter(([o, g]) => !opcionEsColor(g, o)).length > 1;
+  };
+  const m0 = conRango.find(m => solaEnSuBoton(m) && conPestanas(m)) ||
+             conRango.find(conPestanas) || conRango[0];
   const barata = m0.variantes.find(v => v.precio === m0.precio);
   const cara   = m0.variantes.find(v => v.precio === m0.precioMax);
   abrirFicha(clave(barata), null);
@@ -322,20 +353,30 @@ function correrPruebas(){
   ok(d.querySelector('.fi-nombre').textContent === m0.desc, 'el titulo es el del modelo',
      d.querySelector('.fi-nombre').textContent);
   const ops = [...d.querySelectorAll('.fi-op')];
-  ok(ops.length === versiones(m0), 'un boton por version, no por fila de color', ops.length + ' de ' + m0.variantes.length + ' filas');
-  ok(ops.every(b => /USD|Consultar/.test(b.textContent)), 'cada boton muestra su propio precio',
+  /* Las pestañas salen por VERSION y nunca son mas que las versiones: una fila
+     de color no puede colarse como pestaña propia. La cuenta exacta dejo de
+     tener sentido el 21/09, cuando la version se partio en dos ejes y a la
+     vista quedan solo las memorias mas las versiones de la memoria abierta. */
+  const opsReales = new Set(m0.variantes.map(v => v.opcion || v.etiqueta));
+  ok(conPestanas(m0) ? (ops.length > 0 && ops.length <= versiones(m0)) : ops.length === 0,
+     'las pestañas salen por version, no por fila de color',
+     ops.length + ' pestañas, ' + versiones(m0) + ' versiones, ' + m0.variantes.length + ' filas');
+  ok(ops.every(b => opsReales.has(b.dataset.op)),
+     'y cada una apunta a una version de la planilla',
+     ops.map(b => b.dataset.op).join(' / '));
+  ok(ops.every(b => /USD|Consultar/.test(b.textContent)), 'cada pestaña muestra su propio precio',
      ops.map(b=>b.textContent.replace(/\s+/g,' ').trim()).join(' / '));
   ok(d.querySelector('.fi-precio .usd').textContent.includes(plata(m0.precio)),
      'arranca mostrando el precio de la variante abierta');
 
-  [...d.querySelectorAll('.fi-op')].find(b => b.dataset.k === clave(cara)).click();
+  ok(irAVariante(cara), 'se llega a la version mas cara', (cara.opcion || cara.etiqueta));
   d = document.getElementById('ficha');
   ok(d.querySelector('.fi-precio .usd').textContent.includes(plata(m0.precioMax)),
      'al elegir otra version cambia el precio',
      d.querySelector('.fi-precio .usd').textContent.trim());
   ok(FICHA === clave(cara), 'la ficha pasa a apuntar a esa variante', FICHA);
-  ok([...d.querySelectorAll('.fi-op')].find(b => b.dataset.k === clave(cara))
-        .getAttribute('aria-pressed') === 'true', 'y queda marcada');
+  ok([...d.querySelectorAll('.fi-op')].some(b => b.dataset.k === clave(cara) &&
+        b.getAttribute('aria-pressed') === 'true'), 'y queda marcada');
   const ars = d.querySelector('.fi-precio .ars');
   ok(!TC || !ars || ars.textContent.includes(plata(Math.round(m0.precioMax*TC))),
      'el precio en pesos acompana', ars && ars.textContent.trim());
@@ -347,9 +388,12 @@ function correrPruebas(){
     abrirFicha(clave(porColor.rep), null);
     const dd = document.getElementById('ficha');
     const antes = dd.querySelector('.fi-precio .usd').textContent;
-    const otraOp = [...dd.querySelectorAll('.fi-op')].find(b => b.dataset.k !== clave(porColor.rep));
+    /* Cuando la version ES el color no hay pestañas: se elige en la tira, que
+       es justamente el cambio del 21/09. Vale cualquiera de los dos caminos. */
     const otroColor = [...dd.querySelectorAll('.fi-pintas button')].find(b => b.dataset.k && b.dataset.k !== clave(porColor.rep));
-    (otraOp || otroColor).click();
+    const otraOp = [...dd.querySelectorAll('.fi-op')].find(b => b.dataset.k !== clave(porColor.rep));
+    ok(!!(otroColor || otraOp), 'hay como pasar al otro color', porColor.desc);
+    (otroColor || otraOp).click();
     ok(document.getElementById('ficha').querySelector('.fi-precio .usd').textContent !== antes,
        'elegir la version de otro color cambia el precio',
        porColor.desc + ': ' + porColor.variantes.map(v=>v.etiqueta+' USD '+v.precio).join(' | '));
@@ -381,8 +425,10 @@ function correrPruebas(){
   abrirFicha(clave(cara), null);
   d = document.getElementById('ficha');
   ok(d.querySelector('.fi-nombre').textContent === m0.desc, 'un link a una variante abre el modelo');
-  ok([...d.querySelectorAll('.fi-op')].find(b => b.dataset.k === clave(cara))
-        .getAttribute('aria-pressed') === 'true', 'con esa variante ya elegida');
+  ok([...d.querySelectorAll('.fi-op')].some(b => b.dataset.k === clave(cara) &&
+        b.getAttribute('aria-pressed') === 'true') ||
+     [...d.querySelectorAll('.fi-pintas button')].some(b => b.dataset.k === clave(cara) &&
+        b.getAttribute('aria-pressed') === 'true'), 'con esa variante ya elegida');
   cerrarFicha();
 
   /* ---- 10. Buscar y filtrar ---- */

@@ -73,9 +73,18 @@ function correrPruebas(){
   ok(!!document.querySelector('#fi-color-hint'),
      'la ficha avisa que el precio cambia segun el color');
 
-  if(deOtra.length){
+  /* Ojo con cual se toca: dos hermanas pueden valer lo mismo y entonces tocar
+     ese color NO tiene por que cambiar el precio. Se busca a proposito uno
+     cuya fila valga distinto, que es lo que esta prueba mira. */
+  const otroPrecio = deOtra.find(b => {
+    const x = buscarProducto(b.dataset.k);
+    return x && x.precio !== null && x.precio !== v.precio;
+  });
+  if(!otroPrecio){
+    R.push('  --  ningun color de otra fila vale distinto en ' + nombre + ': nada que comparar');
+  }else{
     const antes = document.querySelector('.fi-precio .usd')?.textContent || '';
-    deOtra[0].click();
+    otroPrecio.click();
     const despues = document.querySelector('.fi-precio .usd')?.textContent || '';
     ok(antes && despues && antes !== despues,
        'tocar un color de otra version cambia el precio', antes + ' -> ' + despues);

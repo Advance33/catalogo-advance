@@ -1,8 +1,13 @@
-// Los botones de "Opciones" de la ficha, uno por VERSION (17/09/2026). El
-// proveedor carga cada color en su propia fila, y la ficha del iPhone 17 Pro
-// Max mostraba "256GB E-Sim · Orange", "· Blue" y "· Silver": tres botones de
-// la misma version, al mismo precio. Ahora van en uno solo y el color se elige
-// con los puntitos, que llevan a la fila de ese color con su precio.
+// Elegir la version en la ficha. El proveedor carga cada color en su propia
+// fila, y la ficha del iPhone 17 Pro Max mostraba "256GB E-Sim · Orange",
+// "· Blue" y "· Silver": tres botones de la misma version, al mismo precio.
+// Van en uno solo y el color se elige en la tira de al lado de la foto, que
+// lleva a la fila de ese color con su precio (17/09/2026).
+//
+// Desde el 21/09 la version se elige en DOS pasos: primero la memoria y
+// despues, adentro de esa memoria, la version. Asi que ya no hay "un boton por
+// version" a la vista: lo que se prueba es que a TODAS las versiones se pueda
+// llegar, y que dos pestañas del mismo eje nunca digan lo mismo.
 //
 // Sin nombres fijos: los casos se buscan en los productos del dia.
 const R = []; let fallas = 0;
@@ -29,25 +34,62 @@ const versionesDe = m => {
 };
 const colores = v => partirColores(v.color).map(norm).filter(Boolean);
 const botones = () => [...document.querySelectorAll('#ficha .fi-op')];
+// Las pestañas de memoria llevan data-mem; las de version, no. Importa para
+// mirar precios: la de memoria muestra el de TODA la memoria, no el de una.
+const deVersion = () => botones().filter(b => !b.dataset.mem);
 const texto = b => b.textContent.replace(/\s+/g, ' ').trim();
+
+/* Llegar a una version desde la ficha recien abierta: si su pestaña esta a la
+   vista, un toque; si esta en otra memoria, primero la pestaña de esa memoria
+   y despues la suya. Devuelve el boton, o null si no se llega. */
+function irAVersion(op){
+  let d = document.getElementById('ficha');
+  let b = [...d.querySelectorAll('.fi-op')].find(x => x.dataset.op === op);
+  if(b) return b;
+  const mm = memoriaDeOpcion(op);
+  const tab = [...d.querySelectorAll('.fi-ops[data-eje="memoria"] .fi-op')]
+                .find(x => x.dataset.mem === mm);
+  if(!tab) return null;
+  tab.click();
+  d = document.getElementById('ficha');
+  return [...d.querySelectorAll('.fi-op')].find(x => x.dataset.op === op) || null;
+}
 
 function correrPruebas(){
   PEDIDO = []; guardarPedido();
   const multi = MODELOS.filter(m => m.multi);
 
-  /* ---- 1. En todas las fichas: un boton por version y ninguno repetido ---- */
-  const malContados = [], repetidos = [];
+  /* ---- 1. A todas las versiones se llega, y ninguna pestaña se repite ----
+     El recorte de la etiqueta ("256GB Sim" -> "Sim") es lo que puede fallar:
+     si dos versiones quedan diciendo lo mismo, el cliente ve dos pestañas
+     iguales con precios distintos y no tiene como saber cual es cual. */
+  const sueltas = [], repetidos = [];
   multi.forEach(m => {
+    const vs = versionesDe(m);
+    for(const [op, grupo] of vs){
+      abrirFicha(clave(m.rep), null);
+      const d = document.getElementById('ficha');
+      let llega = !!irAVersion(op);
+      if(!llega){
+        // Las versiones que son un color se eligen en la tira, no en pestañas
+        const ks = new Set([...d.querySelectorAll('.fi-pintas button')].map(x => x.dataset.k));
+        llega = grupo.some(v => ks.has(clave(v)));
+      }
+      if(!llega) sueltas.push(m.desc + ' / ' + op);
+      cerrarFicha();
+    }
     abrirFicha(clave(m.rep), null);
-    const n = versionesDe(m).size;
-    const bs = botones();
-    if(bs.length !== (n > 1 ? n : 0)) malContados.push(m.desc + ': ' + bs.length + ' botones para ' + n + ' versiones');
-    const textos = bs.map(b => b.querySelector('b').textContent.trim());
-    if(new Set(textos).size !== textos.length) repetidos.push(m.desc + ': ' + textos.join(' / '));
+    document.querySelectorAll('#ficha .fi-ops').forEach(caja => {
+      const t = [...caja.querySelectorAll('.fi-op b')].map(b => b.textContent.trim());
+      if(new Set(t).size !== t.length)
+        repetidos.push(m.desc + ' [' + caja.dataset.eje + ']: ' + t.join(' / '));
+    });
     cerrarFicha();
   });
-  ok(!malContados.length, 'cada ficha tiene un boton por version', malContados.slice(0, 3).join(' | ') || multi.length + ' fichas');
-  ok(!repetidos.length, 'ningun boton dice lo mismo que otro', repetidos.slice(0, 3).join(' | ') || 'ninguno');
+  ok(!sueltas.length, 'a todas las versiones se llega: por pestaña o por la tira de colores',
+     sueltas.slice(0, 3).join(' | ') || multi.length + ' fichas');
+  ok(!repetidos.length, 'ninguna pestaña dice lo mismo que otra del mismo eje',
+     repetidos.slice(0, 3).join(' | ') || 'ninguna');
 
   /* ---- 2. Lo que se junta es seguro ---- */
   const inseguros = [];
@@ -75,7 +117,15 @@ function correrPruebas(){
   for(const [caso, esperado] of [[conPrecios, 'desde USD '], [mismoPrecio, 'USD ']]){
     if(!caso) continue;
     abrirFicha(clave(caso.m.rep), null);
-    const b = botones().find(x => x.dataset.op === caso.op);
+    irAVersion(caso.op);   // puede vivir en otra memoria
+    // Solo del eje de version: la pestaña de memoria muestra el precio de toda
+    // la memoria, que puede ser mas barato que el de esta version.
+    let b = deVersion().find(x => x.dataset.op === caso.op);
+    /* Si es la unica version de su memoria no tiene pestaña propia: la de la
+       memoria es la suya, y entonces ese precio SI es el de esta version. */
+    if(!b) b = botones().find(x => x.dataset.mem === memoriaDeOpcion(caso.op) &&
+                                   x.dataset.op === caso.op);
+    if(!b) R.push('  --  ' + caso.m.desc + ': ' + caso.op + ' no llega a tener pestaña');
     const minimo = Math.min(...caso.grupo.map(v => v.precio).filter(x => x !== null));
     if(b) ok(texto(b).endsWith(esperado + plata(minimo)) && (esperado === 'USD ' ? !/desde/.test(texto(b)) : true),
              esperado === 'USD ' ? 'con todos los colores al mismo precio, el boton dice ese precio'
@@ -116,7 +166,7 @@ function correrPruebas(){
       abrirFicha(clave(desde), null);
       const p = [...document.querySelectorAll('#ficha .fi-pintas button')].find(x => norm(x.dataset.color) === comun);
       if(p) p.click();
-      const boton = botones().find(x => (x.dataset.op || x.querySelector('b').textContent.trim()) === otraOp);
+      const boton = irAVersion(otraOp);
       if(!boton){ cerrarFicha(); continue; }
       boton.click();
       const ahora = buscarProducto(FICHA);
@@ -149,17 +199,24 @@ function correrPruebas(){
     R.push('  --  hoy no hay versiones que cambien solo de teclado');
   }
 
-  /* ---- 7. Las versiones se cuentan en la ficha ----
-     Desde el 17/09 la tarjeta no las lista: era texto chico que nadie leia y
-     la ficha ya tiene un boton por version. Lo que se prueba es que ese boton
-     salga por VERSION y no por fila de la planilla. */
+  /* ---- 7. Las pestañas salen por VERSION, no por fila ----
+     Desde el 17/09 la tarjeta no las lista: era texto chico que nadie leia.
+     Y desde el 21/09 la ficha las reparte en dos ejes, asi que la cuenta ya no
+     es "una por version": lo que no puede pasar es que una fila de color se
+     cuele como pestaña propia. La cuenta que si vale: nunca mas pestañas que
+     versiones. */
   const conVarias = juntas.find(x => versionesDe(x.m).size > 1);
   if(conVarias){
     const m = conVarias.m;
     abrirFicha(clave(m.rep));
-    const botones = [...document.querySelectorAll('#ficha .fi-ops .fi-op')];
-    ok(botones.length === versionesDe(m).size, 'la ficha tiene un boton por version, no por fila',
-       m.desc + ': ' + botones.length + ' de ' + m.variantes.length + ' filas');
+    const bs = [...document.querySelectorAll('#ficha .fi-ops .fi-op')];
+    ok(bs.length > 0 && bs.length <= versionesDe(m).size,
+       'las pestañas salen por version y nunca son mas que las versiones',
+       m.desc + ': ' + bs.length + ' pestañas, ' + versionesDe(m).size + ' versiones, ' +
+       m.variantes.length + ' filas');
+    const dup = juntas.find(j => j.m === m) || conVarias;
+    ok(!bs.some(b => dup.grupo.slice(1).some(v => b.dataset.k === clave(v) && b.dataset.op !== dup.op)),
+       'y ninguna pestaña es una fila de color de otra version');
     quitarFicha();
   }
   const soloColor = MODELOS.find(m => m.multi && versionesDe(m).size === 1);

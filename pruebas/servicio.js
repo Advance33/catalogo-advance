@@ -64,14 +64,24 @@ function correrPruebas(){
   filtros.q = ''; pintar();
   ok(!$('extras').hidden && !!$('ayuda'), 'y vuelven al volver');
 
-  /* ---- 2. Envio, retiro y garantia en la ficha ---- */
+  /* ---- 2. Envio, retiro y garantia en la ficha ----
+     El 21/09 el envio se mudo de la lista a la franja oscura que cruza la
+     ficha: se ve sin bajar y no se dice dos veces. Retiro y garantia siguen
+     debajo del boton, que es donde el cliente los busca al decidir. */
   const sinGar = MODELOS.find(m => elegible(m) && !m.rep.garantia);
   abrirFicha(clave(sinGar.rep));
+  const franja = $('ficha').querySelector('.fi-envio');
+  ok(!!franja && franja.textContent.includes(SERVICIO.envio[0]),
+     'la ficha cruza una franja con el envio', franja && franja.textContent.replace(/\s+/g, ' ').trim());
+  ok(!!franja && franja.textContent.includes(SERVICIO.envio[1]),
+     'y aclara quien lo cobra, con el texto de SERVICIO');
   let serv = $('ficha').querySelector('.fi-servicio');
-  ok(!!serv, 'la ficha muestra envio, retiro y garantia');
+  ok(!!serv, 'y debajo del boton, el retiro y la garantia');
   const lineas = serv ? [...serv.querySelectorAll('li')] : [];
-  ok(lineas.length === Object.keys(SERVICIO).length, 'una linea por cada una',
+  ok(lineas.length === Object.keys(SERVICIO).length - 1, 'una linea por cada una, sin repetir el envio',
      lineas.map(l => l.dataset.servicio).join(', '));
+  ok(!lineas.some(l => l.dataset.servicio === 'envio'),
+     'el envio no esta en los dos lados');
   const botones = $('ficha').querySelector('.fi-botones');
   ok(botones && botones.nextElementSibling === serv,
      'justo debajo del boton, que es donde el cliente decide');
@@ -185,7 +195,8 @@ function correrPruebas(){
   ok($('ficha').querySelectorAll('.fi-rel').length === 1 &&
      $('ficha').querySelector('.fi-rel') === relAntes,
      'cambiar de version no redibuja ni duplica los sugeridos', multi.desc);
-  ok($('ficha').querySelectorAll('.fi-servicio').length === 1,
+  ok($('ficha').querySelectorAll('.fi-servicio').length === 1 &&
+     $('ficha').querySelectorAll('.fi-envio').length === 1,
      'y el envio y el retiro siguen estando, una sola vez');
   quitarFicha();
 }

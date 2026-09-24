@@ -41,6 +41,13 @@ PRESUPUESTO = {'layout': 200, 'extras': 150, 'foto-color': 150}   # segundos; el
 # de doce productos con foto), asi que con los 90 de base no llegaba.
 
 CHROMES = [
+    # Mac (la mudanza del 23/09/2026). Van primero porque en Windows no
+    # existen y se saltean solas; al reves pasa lo mismo.
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    os.path.expanduser('~/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),
+    '/Applications/Chromium.app/Contents/MacOS/Chromium',
+    '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+    # Windows
     r'C:\Program Files\Google\Chrome\Application\chrome.exe',
     r'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',
     os.path.expandvars(r'%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe'),

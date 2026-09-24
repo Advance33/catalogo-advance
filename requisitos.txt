@@ -1,0 +1,21 @@
+# Librerias de Python que usan el catalogo y el proyecto productor.
+# Las versiones son las que estaban andando en la PC de Pedro al 24/09/2026.
+#
+#     pip3 install -r requisitos.txt
+
+# Planillas de Google (el proyecto productor lee y escribe los sheets)
+gspread==6.2.1
+google-auth==2.53.0
+google-auth-oauthlib==1.4.0
+requests==2.34.2
+
+# Excel
+openpyxl==3.1.5
+
+# Fotos: miniaturas y recortes
+pillow==12.3.0
+
+# PDF: los manuales e informes
+reportlab==5.0.0
+pypdf==6.14.2
+pypdfium2==5.13.0

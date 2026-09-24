@@ -163,7 +163,10 @@ def main():
         print('OJO: el catalogo maestro esta roto, el indice va sin el.')
         print('   %s' % e)
     with open(INDICE, 'w', encoding='utf-8') as fh:
-        json.dump(indice, fh, ensure_ascii=False, indent=0)
+        # sort_keys: el indice sale siempre en el mismo orden. Sin esto cada
+        # corrida reordenaba las claves y dejaba 400 lineas de diff que decian
+        # lo mismo, tapando los cambios de verdad.
+        json.dump(indice, fh, ensure_ascii=False, indent=0, sort_keys=True)
 
     # Las columnas CODIGO y CODIGO_VAR del contrato landing/1.3. Las escribe
     # el otro proyecto con el mismo catalogo maestro que tenemos aca, asi que

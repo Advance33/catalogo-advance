@@ -337,7 +337,7 @@ def proximo_codigo(filas, ruta=CONTADOR):
 
 
 def guardar_contador(n, ruta=CONTADOR):
-    io.open(ruta, 'w', encoding='utf-8').write(
+    io.open(ruta, 'w', encoding='utf-8', newline='\r\n').write(
         '# El ultimo numero de codigo que se entrego. NO BAJA NUNCA.\n'
         '# Si este archivo se pierde, se reconstruye con el maximo del\n'
         '# catalogo, pero entonces se pierden los codigos de los productos\n'

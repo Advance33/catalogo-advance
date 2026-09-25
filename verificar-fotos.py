@@ -162,7 +162,10 @@ def main():
     except CM.CatalogoRoto as e:
         print('OJO: el catalogo maestro esta roto, el indice va sin el.')
         print('   %s' % e)
-    with open(INDICE, 'w', encoding='utf-8') as fh:
+    # newline='\r\n': el indice se escribe igual en Windows y en Mac. Sin esto,
+    # desde la Mac salia con otros finales de linea y el commit mostraba el
+    # archivo entero cambiado aunque no hubiera ninguna foto nueva.
+    with open(INDICE, 'w', encoding='utf-8', newline='\r\n') as fh:
         # sort_keys: el indice sale siempre en el mismo orden. Sin esto cada
         # corrida reordenaba las claves y dejaba 400 lineas de diff que decian
         # lo mismo, tapando los cambios de verdad.
@@ -364,7 +367,7 @@ def main():
                     aceptadas_ids.add(linea)
     clave = lambda ids_: ','.join(sorted(ids_))
     if '--aceptar' in sys.argv:
-        with open(ACEPTADAS, 'w', encoding='utf-8') as fh:
+        with open(ACEPTADAS, 'w', encoding='utf-8', newline='\r\n') as fh:
             fh.write('# Duplicados de foto ya revisados y dados por buenos:' + chr(10))
             fh.write('# huella de la imagen, en cuantos modelos aparece, y cuales.' + chr(10))
             fh.write('# Se regenera con: python verificar-fotos.py --aceptar' + chr(10))
@@ -481,7 +484,7 @@ def main():
             print('El nombre va tal cual esta en fotos/ (ahora son nombres largos por SKU).')
             return 2
         hechas, congeladas = 0, 0
-        with open(REVISADAS, 'w', encoding='utf-8') as fh:
+        with open(REVISADAS, 'w', encoding='utf-8', newline='\r\n') as fh:
             fh.write('# Fotos miradas contra el producto que dice la planilla.' + chr(10))
             fh.write('# Si una cambia, deja de coincidir y no se publica hasta mirarla.' + chr(10))
             fh.write('# Anotar las miradas:  python verificar-fotos.py --revisadas' + chr(10))

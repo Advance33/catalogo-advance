@@ -196,12 +196,12 @@ def correr_gs(matriz):
     perfil = tempfile.mkdtemp(prefix='ctrl-')
     try:
         correr.levantar_servidor()
-        dom = subprocess.run(
+        dom = (correr.dump_dom(
             [correr.buscar_chrome(), '--headless', '--disable-gpu', '--no-first-run',
              '--user-data-dir=' + perfil, '--incognito', '--disk-cache-size=1',
              '--virtual-time-budget=60000', '--dump-dom',
              'http://localhost:8765/_control.html'],
-            capture_output=True, timeout=300).stdout.decode('utf-8', 'replace')
+            300) or b'').decode('utf-8', 'replace')
     finally:
         shutil.rmtree(perfil, ignore_errors=True)
         if os.path.exists(destino):

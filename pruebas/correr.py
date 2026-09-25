@@ -93,6 +93,36 @@ def armar_probe(js):
     io.open(PROBE, 'wb').write(salida.encode('utf-8'))
 
 
+def dump_dom(cmd, limite):
+    """Corre Chrome con --dump-dom y devuelve lo que imprimio, o None si no
+    llego a imprimir la pagina entera antes de `limite` segundos.
+
+    En Mac, Chrome sin ventana imprime el DOM pero despues NO se cierra solo
+    (en Windows si). Esperar a que termine dejaba cada tanda colgada hasta el
+    timeout y se perdia el resultado. Por eso se lee la salida a medida que
+    llega y, apenas aparece el </html> del final, se cierra Chrome a mano.
+    """
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    partes = []
+    lector = threading.Thread(target=lambda: [partes.append(b) for b in iter(lambda: p.stdout.read1(65536), b'')],
+                              daemon=True)
+    lector.start()
+    fin = time.time() + limite
+    try:
+        while time.time() < fin:
+            if b''.join(partes[-3:]).rstrip().endswith(b'</html>') or p.poll() is not None:
+                break
+            time.sleep(0.3)
+        else:
+            return None
+    finally:
+        if p.poll() is None:
+            p.kill()
+        p.wait()
+        lector.join(5)
+    return b''.join(partes)
+
+
 def correr(chrome, segundos=90):
     """Abre _probe.html sin ventana y devuelve el texto del <pre id="RESULTADO">.
 
@@ -107,11 +137,11 @@ def correr(chrome, segundos=90):
            '--virtual-time-budget=%d' % (segundos * 1000), '--dump-dom',
            BASE + '/_probe.html']
     try:
-        dom = subprocess.run(cmd, capture_output=True, timeout=segundos + 90).stdout
-    except subprocess.TimeoutExpired:
-        return None
+        dom = dump_dom(cmd, segundos + 90)
     finally:
         shutil.rmtree(perfil, ignore_errors=True)
+    if dom is None:
+        return None
     m = re.search(r'<pre id="RESULTADO">(.*?)</pre>', dom.decode('utf-8', 'replace'), re.S)
     return html.unescape(m.group(1)) if m else None
 

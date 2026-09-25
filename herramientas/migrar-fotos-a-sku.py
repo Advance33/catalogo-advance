@@ -72,7 +72,7 @@ def leer_registro():
 
 
 def escribir_registro(reg):
-    with open(REVISADAS, 'w', encoding='utf-8') as fh:
+    with open(REVISADAS, 'w', encoding='utf-8', newline='\r\n') as fh:
         fh.write('# Fotos miradas contra el producto que dice la planilla.' + chr(10))
         fh.write('# Si una cambia, deja de coincidir y no se publica hasta mirarla.' + chr(10))
         fh.write('# Anotar las miradas:  python verificar-fotos.py --revisadas' + chr(10))

@@ -13,18 +13,23 @@ Cómo avisa:
     bien visible en el Escritorio y muestra una notificación.
   - Cuando los errores se resuelven, el archivo del Escritorio se borra solo.
 
-Se instala con instalar-revision-diaria.bat (una sola vez).
+Se instala una sola vez:  python revision-diaria.py --instalar  (python3 en Mac).
+En Windows queda como tarea programada; en Mac, como agente de launchd.
 Para probarlo a mano:  python revision-diaria.py
 """
 import os, sys, subprocess, datetime, glob
 
 AQUI      = os.path.dirname(os.path.abspath(__file__))
 LOGS      = os.path.join(AQUI, 'logs')
-ESCRITORIO = os.path.join(os.environ.get('USERPROFILE', AQUI), 'Desktop')
+ESCRITORIO = os.path.join(os.path.expanduser('~'), 'Desktop')
 AVISO     = os.path.join(ESCRITORIO, 'AVISO - catalogo con errores.txt')
 DIAS_LOG  = 30
 TAREA     = 'Catalogo Advance Tecno - revision diaria'
 HORA_DEF  = '09:30'
+
+MAC       = sys.platform == 'darwin'
+AGENTE    = 'com.advancetecno.revision-diaria'
+PLIST     = os.path.join(os.path.expanduser('~'), 'Library', 'LaunchAgents', AGENTE + '.plist')
 
 
 def correr_ps(comando):
@@ -32,9 +37,71 @@ def correr_ps(comando):
                           capture_output=True, text=True, encoding='utf-8', errors='replace')
 
 
+def launchctl(*args):
+    return subprocess.run(['launchctl'] + list(args), capture_output=True, text=True)
+
+
+def instalar_mac(hora):
+    """El equivalente Mac de la tarea programada: un agente de launchd del
+    usuario. Si la Mac estaba dormida a esa hora, corre al despertarse."""
+    import plistlib
+    h, m = [int(x) for x in hora.split(':')]
+    os.makedirs(LOGS, exist_ok=True)
+    os.makedirs(os.path.dirname(PLIST), exist_ok=True)
+    with open(PLIST, 'wb') as fh:
+        plistlib.dump({
+            'Label': AGENTE,
+            'ProgramArguments': [sys.executable, os.path.join(AQUI, 'revision-diaria.py')],
+            'WorkingDirectory': AQUI,
+            'StartCalendarInterval': {'Hour': h, 'Minute': m},
+            'StandardOutPath': os.path.join(LOGS, 'launchd.txt'),
+            'StandardErrorPath': os.path.join(LOGS, 'launchd.txt'),
+        }, fh)
+    dominio = 'gui/%d' % os.getuid()
+    launchctl('bootout', dominio, PLIST)            # por si ya estaba cargado
+    r = launchctl('bootstrap', dominio, PLIST)
+    if r.returncode == 0:
+        print('Listo. La revisión va a correr todos los días a las %s.' % hora)
+        print('Si la Mac estaba dormida a esa hora, corre cuando se despierta.')
+        print('\nPara cambiar la hora:   python3 revision-diaria.py --instalar 14:00')
+        print('Para sacarla:           python3 revision-diaria.py --desinstalar')
+        return 0
+    print('No se pudo registrar el agente:\n%s' % ((r.stderr or r.stdout or '').strip()[:600]))
+    return 1
+
+
+def desinstalar_mac():
+    launchctl('bootout', 'gui/%d' % os.getuid(), PLIST)
+    if os.path.exists(PLIST):
+        os.remove(PLIST)
+        print('Agente eliminado. Ya no se revisa sola.')
+        return 0
+    print('No estaba instalada.')
+    return 1
+
+
+def estado_mac():
+    if not os.path.exists(PLIST):
+        print('No esta instalada.')
+        return 0
+    import plistlib
+    with open(PLIST, 'rb') as fh:
+        cal = plistlib.load(fh).get('StartCalendarInterval', {})
+    cargado = launchctl('print', 'gui/%d/%s' % (os.getuid(), AGENTE)).returncode == 0
+    print('Instalada%s. Corre todos los días a las %02d:%02d.'
+          % ('' if cargado else ' (pero no cargada: volvé a correr --instalar)',
+             cal.get('Hour', 0), cal.get('Minute', 0)))
+    logs = sorted(glob.glob(os.path.join(LOGS, 'revision-*.txt')))
+    if logs:
+        print('Ultima vez:  %s' % os.path.basename(logs[-1])[9:19])
+    return 0
+
+
 def instalar(hora):
     """Registra la tarea programada de Windows. No hace falta ser admin:
     es una tarea del usuario."""
+    if MAC:
+        return instalar_mac(hora)
     pythonw = os.path.join(os.path.dirname(sys.executable), 'pythonw.exe')
     if not os.path.exists(pythonw):
         pythonw = sys.executable          # peor es nada: se verá una ventana
@@ -64,6 +131,8 @@ def instalar(hora):
 
 
 def desinstalar():
+    if MAC:
+        return desinstalar_mac()
     r = correr_ps('Unregister-ScheduledTask -TaskName "%s" -Confirm:$false; "ok"' % TAREA)
     if 'ok' in (r.stdout or ''):
         print('Tarea eliminada. Ya no se revisa sola.')
@@ -73,6 +142,8 @@ def desinstalar():
 
 
 def estado():
+    if MAC:
+        return estado_mac()
     r = correr_ps(
         '$t = Get-ScheduledTask -TaskName "%s" -ErrorAction SilentlyContinue;'
         'if($t){ $i = Get-ScheduledTaskInfo $t;'
@@ -83,9 +154,22 @@ def estado():
     return 0
 
 
+def _comillas_as(s):
+    """Texto entre comillas para AppleScript."""
+    return '"%s"' % s.replace('\\', '\\\\').replace('"', "'")
+
+
 def notificar(titulo, texto):
     """Globo de notificación de Windows. Si falla, no pasa nada: el aviso
     de verdad es el archivo del Escritorio."""
+    if MAC:
+        script = 'display notification %s with title %s sound name "Basso"' % (
+            _comillas_as(texto), _comillas_as(titulo))
+        try:
+            subprocess.run(['osascript', '-e', script], timeout=20, capture_output=True)
+        except Exception:
+            pass
+        return
     ps = (
         "Add-Type -AssemblyName System.Windows.Forms;"
         "$n = New-Object System.Windows.Forms.NotifyIcon;"
@@ -236,7 +320,15 @@ def main():
         f.write('\nFotos (verificar-fotos.py, salida %s):\n%s\n' % (rf.returncode, rf.stdout or rf.stderr or ''))
 
     if (r.returncode == 1 and graves) or vieja or fotos_mal:
-        with open(AVISO, 'w', encoding='utf-8') as f:
+        # En Mac, corriendo desde launchd, el sistema puede no dejar escribir
+        # en el Escritorio (permisos de privacidad). Entonces el aviso queda
+        # en logs/ (que no se publica) y la notificacion igual sale.
+        aviso = AVISO
+        try:
+            open(aviso, 'a').close()
+        except OSError:
+            aviso = os.path.join(LOGS, os.path.basename(AVISO))
+        with open(aviso, 'w', encoding='utf-8') as f:
             f.write(
                 'EL CATALOGO TIENE ERRORES\n'
                 'Revisado el %s\n%s\n\n'
@@ -258,18 +350,22 @@ def main():
                   ('%d error(es) grave(s) en la planilla. ' % len(graves) if graves else '')
                   + ('La planilla no se actualiza. ' if vieja else '')
                   + ('Hay fotos que mirar. ' if fotos_mal else '')
-                  + 'Mira el aviso en el Escritorio.')
-        print('%d graves%s%s. Aviso dejado en el Escritorio.'
-              % (len(graves), ' + carga vieja' if vieja else '', ' + fotos' if fotos_mal else ''))
+                  + ('Mira el aviso en el Escritorio.' if aviso == AVISO
+                     else 'Mira el aviso en la carpeta logs del catalogo.'))
+        print('%d graves%s%s. Aviso dejado en %s'
+              % (len(graves), ' + carga vieja' if vieja else '', ' + fotos' if fotos_mal else '', aviso))
         return 1
 
     if r.returncode == 2:
         print('No se pudo revisar (sin internet). Queda anotado en el log.')
         return 0     # no alarmamos por un problema de conexión
 
-    if os.path.exists(AVISO):
-        os.remove(AVISO)
-        print('Sin errores graves. Se borró el aviso del Escritorio.')
+    viejos = [a for a in (AVISO, os.path.join(LOGS, os.path.basename(AVISO)))
+              if os.path.exists(a)]
+    if viejos:
+        for a in viejos:
+            os.remove(a)
+        print('Sin errores graves. Se borró el aviso.')
     else:
         print('Sin errores graves.')
     return 0

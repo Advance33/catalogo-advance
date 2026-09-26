@@ -1,0 +1,142 @@
+[BORRADOR] Sin enviar. Verificado contra la carga de ADVAPP del 26/09/2026
+(758 filas). Cuando Pedro lo mande, cambiar esta línea por
+"[REGISTRO] Enviado por Pedro el ..." como en PEDIDO-BOTONES-21-09.txt.
+
+
+LO QUE SIGUE IGUAL DESDE EL 21/09, UNA CORRECCIÓN Y DOS COSAS NUEVAS
+====================================================================
+Advance Tecno al equipo de ADVAPP - 26/09/2026
+Sobre las columnas Teclado, CODIGO y CODIGO_VAR, y el nombre de los AirPods Max
+
+
+0) EN UNA FRASE
+------------------------------------------------------------
+Revisamos el catálogo entero contra la carga de hoy. De nuestro lado
+arreglamos lo que era nuestro. Lo que queda depende de la carga: el
+teclado del MacBook Neo sigue contradiciendo su columna (lo pedimos el
+21/09), el Watch Ultra 3 Black Ocean no muestra su foto, y los AirPods Max
+traen un nombre que no coincide con su SKU.
+
+Como siempre: no son "corrijan esta celda". La carga de mañana reescribe la
+hoja; son reglas para el parser, que es donde sobreviven.
+
+
+1) RECORDATORIO - EL TECLADO CONTRA SU COLUMNA (punto 2 del 21/09) - 12 filas
+------------------------------------------------------------
+REGLA (parser): la columna Teclado dice lo mismo que el nombre y el SKU. Si
+el SKU termina en -ES, la columna es ES.
+
+Las diez filas del 21/09 siguen igual, y se sumaron dos (las primeras, que
+lo dicen como "Esp"):
+
+     NBK-APL-MBP14M5-16G1TB-SBK-ES   MacBook Pro M5 14" 16GB/1TB Esp          columna EN
+     NBK-APL-MBP14M5-16G1TB-SLV-ES   MacBook Pro M5 14" 16GB/1TB Esp          columna EN
+     NBK-APL-MBP14M5-24G1TB-SBK-ES   MacBook Pro M5 14" 24GB/1TB Teclado ES   columna EN
+     NBK-APL-MBP14M5-24G1TB-SLV-ES   MacBook Pro M5 14" 24GB/1TB Teclado ES   columna EN
+     NBK-APL-MBP14M5-32G1TB-SBK-ES   MacBook Pro M5 14" 32GB/1TB Teclado ES   columna EN
+     NBK-APL-MBP14M5-32G1TB-SLV-ES   MacBook Pro M5 14" 32GB/1TB Teclado ES   columna EN
+     NBK-APL-NEO13-8G256-BLS-ES      MacBook Neo 8GB/256GB Teclado ES (Blush)    columna EN
+     NBK-APL-NEO13-8G256-IND-ES      MacBook Neo 8GB/256GB Teclado ES (Indigo)   columna EN
+     NBK-APL-NEO13-8G512-BLS-ES      MacBook Neo 8GB/512GB Teclado ES (Blush)    columna EN
+     NBK-APL-NEO13-8G512-CIT-ES      MacBook Neo 8GB/512GB Teclado ES (Citrus)   columna EN
+     NBK-APL-NEO13-8G512-IND-ES      MacBook Neo 8GB/512GB Teclado ES (Indigo)   columna EN
+     NBK-APL-NEO13-8G512-SLV-ES      MacBook Neo 8GB/512GB Teclado ES (Silver)   columna EN
+
+Qué ve el cliente: en el MacBook Neo, el Blush y el Indigo de teclado
+español quedan con la columna en EN, o sea que para la web hay DOS Blush y
+DOS Indigo con teclado inglés, a precios distintos. No hay forma de saber
+cuál es cuál, así que no los podemos juntar en un botón con sus colores y
+salen cinco botones "8GB/256GB · Teclado inglés" que sólo se distinguen por
+el precio ("· USD 847", "· USD 902"...).
+
+El 21/09 les dijimos que ese precio adentro del botón lo estábamos
+corrigiendo nosotros. Lo revisamos: se va solo apenas la columna Teclado
+coincida con el nombre. No hace falta otro cambio de su lado.
+
+Y sigue pendiente del punto 8 que tres filas de 256GB del Neo traen el
+CODIGO del 512GB:
+     NBK-APL-NEO13-8G256-BLS-ES      AT-0434 -> AT-0433
+     NBK-APL-NEO13-8G256-IND-ES      AT-0434 -> AT-0433
+     NBK-APL-NEO13-8G256-SLV-EN      AT-0434 -> AT-0432
+
+
+2) CORRECCIÓN AL PUNTO 9 DEL 21/09 - Watch Ultra 3 Black Ocean - 1 fila
+------------------------------------------------------------
+El 21/09 escribimos que esta fila es AT-0456 y que lo que estaba mal era el
+CODIGO_VAR. Nos equivocamos: en nuestro maestro el Black Ocean Band es una
+variante del AT-0455 (Watch Ultra 3 49mm con Alpine Loop / Ocean Band), no
+del AT-0456, que son los Milanese Loop.
+
+     SWT-APL-WULTRA3-000-BLK-49-CELL-OCEAN
+       hoy:        CODIGO AT-0456   CODIGO_VAR AT-0455-01
+       debería:    CODIGO AT-0455   CODIGO_VAR AT-0455-06
+
+Qué ve el cliente: es la única fila del catálogo que muestra la foto de
+ADVAPP en vez de la nuestra. La nuestra existe (AT-0455-06) y aparece sola
+cuando la fila traiga esos dos códigos.
+
+
+3) NUEVO - AIRPODS MAX: EL NOMBRE NO DICE LA GENERACIÓN QUE DICE EL SKU - 5 filas
+------------------------------------------------------------
+Esto es una pregunta, no un pedido: no sabemos cuál de los dos datos está
+bien.
+
+     AUR-APL-AIRPODSMAX2-000-BLU-USBC   AirPods Max USB-C (Blue)
+     AUR-APL-AIRPODSMAX2-000-MID-USBC   AirPods Max USB-C (Midnight)
+     AUR-APL-AIRPODSMAX2-000-ORG-USBC   AirPods Max USB-C (Orange)
+     AUR-APL-AIRPODSMAX2-000-PUR-USBC   AirPods Max USB-C (Purple)
+     AUR-APL-AIRPODSMAX2-000-STL-USBC   AirPods Max USB-C (Starlight)
+
+El SKU (AIRPODSMAX2) y el CODIGO (AT-0056) dicen 2ª generación: chip H2,
+audio adaptativo. El nombre, "AirPods Max USB-C", es el de la 1ª generación
+con puerto USB-C (AT-0057), que es otro producto y vale distinto.
+
+  - Si son 2ª Gen: el nombre tiene que decirlo ("AirPods Max 2ª Gen USB-C").
+  - Si son 1ª Gen: están mal el SKU y el CODIGO.
+
+
+4) NUEVO - EL MISMO AT-####-NN EN DOS PRODUCTOS DISTINTOS - 2 casos
+------------------------------------------------------------
+(Lo teníamos anotado el 21/09 y no llegó a salir en ese envío.)
+
+REGLA (parser): un AT-####-NN nombra UN producto y UN color. Es lo que
+decide qué foto se muestra, así que dos productos distintos no pueden
+compartirlo.
+
+   AT-0073-01 lo traen dos filas:
+     CEL-APP-071   iPhone 17 Pro 512GB E-Sim (Orange)
+     CEL-APP-095   iPhone 17 Pro 512GB Sim (Orange)
+   Son dos productos: eSIM y SIM física, a precios distintos.
+
+   AT-0455-05 lo traen dos filas del Watch Ultra 3 49mm Natural:
+     SW-APP-016    Natural – Blue Trail Loop M/L
+     SW-APP-017    Natural – Anchor Blue Ocean Band
+
+Los códigos AT los damos nosotros. Díganos cuál fila se queda con el código
+que ya tiene y les pasamos los nuevos para las otras; no hace falta que
+inventen ninguno.
+
+
+5) NUEVO - EL 17 PRO: 11 FILAS SIN CODIGO_VAR - 7 CON CÓDIGO DE OTRA CAPACIDAD
+------------------------------------------------------------
+(También quedó sin enviar el 21/09.)
+
+Las once traen CODIGO = AT-0071, que es el del 1TB, y CODIGO_VAR vacío:
+
+     4 son de 1TB           el CODIGO está bien, falta el CODIGO_VAR
+       CEL-APL-17P-1TB-BLU-SIM, -1TB-ORG-ESIM, -1TB-ORG-SIM, -1TB-SLV-SIM
+     7 son de 256 y 512GB   el CODIGO es el de otra capacidad
+       CEL-APL-17P-256-BLU-SIM, -256-ORG-SIM, -256-SLV-SIM,
+       CEL-APL-17P-512-BLU-ESIM, -512-BLU-SIM, -512-SLV-ESIM, -512-SLV-SIM
+
+Para estas no hay un "debería" que les podamos dar todavía: Sim y eSIM son
+productos distintos y nuestro maestro hoy tiene uno solo de los dos por
+capacidad. El código que les corresponde lo damos nosotros, junto con los
+del punto 4. Mientras tanto, las siete de 256 y 512GB se muestran con la
+foto del 1TB.
+
+
+6) LO QUE YA SE ARREGLÓ - gracias
+------------------------------------------------------------
+Las descripciones del iPhone 17, 17e, Air y 17 Pro ya dicen Sim o E-Sim en
+todas las filas cuyo SKU lo declara. El 19/09 faltaba en 18.

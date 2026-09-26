@@ -1,0 +1,66 @@
+[PARA CARGAR] Todavía no está cargado en ADVAPP. Verificado contra la carga
+del 26/09/2026. Cuando se cargue, cambiar esta línea por
+"[REGISTRO] Cargado el ... por ...".
+
+
+CÓDIGOS PARA CARGAR EN LAS FICHAS DE ADVAPP - 26/09/2026
+============================================================
+En cada ficha de producto de ADVAPP (se busca por el ID), poner CODIGO y
+CODIGO_VAR como dice la columna "poner". Son 18 fichas. No se toca nada más.
+
+Los códigos AT los damos nosotros. Ya están dados de alta en nuestro maestro
+(herramientas/catalogo-maestro.csv), con su foto.
+
+
+1) iPHONE 17 PRO SIM - códigos nuevos (9 fichas)
+------------------------------------------------------------
+Sim y eSIM son productos distintos. AT-0071/72/73 quedan para eSIM.
+Sim estrena AT-0535 (256GB), AT-0536 (512GB) y AT-0537 (1TB).
+
+  ID (ficha)                   hoy                  poner
+  CEL-APL-17P-256-SLV-SIM      AT-0071  (vacío)     AT-0535  AT-0535-01
+  CEL-APL-17P-256-BLU-SIM      AT-0071  (vacío)     AT-0535  AT-0535-02
+  CEL-APL-17P-256-ORG-SIM      AT-0071  (vacío)     AT-0535  AT-0535-03
+  CEL-APP-095                  AT-0073  AT-0073-01  AT-0536  AT-0536-01
+  CEL-APL-17P-512-BLU-SIM      AT-0071  (vacío)     AT-0536  AT-0536-02
+  CEL-APL-17P-512-SLV-SIM      AT-0071  (vacío)     AT-0536  AT-0536-03
+  CEL-APL-17P-1TB-SLV-SIM      AT-0071  (vacío)     AT-0537  AT-0537-01
+  CEL-APL-17P-1TB-ORG-SIM      AT-0071  (vacío)     AT-0537  AT-0537-02
+  CEL-APL-17P-1TB-BLU-SIM      AT-0071  (vacío)     AT-0537  AT-0537-03
+
+
+2) iPHONE 17 PRO eSIM - falta el código de color (3 fichas)
+------------------------------------------------------------
+  ID (ficha)                   hoy                  poner
+  CEL-APL-17P-1TB-ORG-ESIM     AT-0071  (vacío)     AT-0071  AT-0071-02
+  CEL-APL-17P-512-BLU-ESIM     AT-0071  (vacío)     AT-0073  AT-0073-02
+  CEL-APL-17P-512-SLV-ESIM     AT-0071  (vacío)     AT-0073  AT-0073-03
+
+
+3) WATCH ULTRA 3 49mm - cada malla con el suyo (3 fichas)
+------------------------------------------------------------
+  ID (ficha)                              hoy                  poner
+  SW-APP-016   (Natural Blue Trail Loop)  AT-0455  AT-0455-05  AT-0455  AT-0455-03
+  SW-APP-017   (Natural Anchor Blue Ocean) AT-0455 AT-0455-05  AT-0455  AT-0455-04
+  SWT-APL-WULTRA3-000-BLK-49-CELL-OCEAN   AT-0456  AT-0455-01  AT-0455  AT-0455-06
+               (Black Ocean Band)
+
+
+4) MacBook NEO 8GB/256GB - traían el código del 512GB (3 fichas)
+------------------------------------------------------------
+  ID (ficha)                   hoy                  poner
+  NBK-APL-NEO13-8G256-BLS-ES   AT-0434  (vacío)     AT-0433  AT-0433-03
+  NBK-APL-NEO13-8G256-IND-ES   AT-0434  (vacío)     AT-0433  AT-0433-04
+  NBK-APL-NEO13-8G256-SLV-EN   AT-0434  (vacío)     AT-0432  AT-0432-04
+
+
+LO QUE QUEDA COMO PREGUNTA (no se carga)
+------------------------------------------------------------
+AirPods Max USB-C (Blue, Midnight, Orange, Purple, Starlight): el SKU
+(AIRPODSMAX2) y el CODIGO (AT-0056) dicen 2ª generación, y el nombre dice
+"AirPods Max USB-C", que es la 1ª generación con USB-C (AT-0057). ¿Cuál de
+los dos está bien?
+
+La columna Teclado de 12 Mac dice EN cuando el nombre y el SKU dicen ES.
+La web ya no depende de esa columna (lee el teclado del SKU), así que no
+es urgente, pero el dato sigue mal en ADVAPP y conviene corregirlo.

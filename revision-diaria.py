@@ -25,7 +25,7 @@ ESCRITORIO = os.path.join(os.path.expanduser('~'), 'Desktop')
 AVISO     = os.path.join(ESCRITORIO, 'AVISO - catalogo con errores.txt')
 DIAS_LOG  = 30
 TAREA     = 'Catalogo Advance Tecno - revision diaria'
-HORA_DEF  = '09:30'
+HORA_DEF  = '14:00'   # despues de la carga de precios del mediodia de ADVAPP
 
 MAC       = sys.platform == 'darwin'
 AGENTE    = 'com.advancetecno.revision-diaria'
@@ -213,37 +213,32 @@ def preparar_salida():
         pass
 
 
-SHEET_ID = '18xxslIKTBnVMrLixCGlQBJGje3vKBYQHXy0qvVp8tpQ'
-META_URL = ('https://docs.google.com/spreadsheets/d/%s/gviz/tq?sheet=Meta&tqx=out:csv'
-            % SHEET_ID)
+ADVAPP_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web'
 
 
 def carga_vieja():
-    """Lee la hoja Meta y dice si la planilla dejo de actualizarse.
+    """Dice si ADVAPP no cargo precios hoy.
 
     Devuelve un texto con el motivo, o None si esta al dia (o si no se pudo
     leer: por falta de internet no se alarma a nadie).
 
-    La carga diaria corre cerca de las 13:00 y esta revision a las 09:30: a
-    esa hora lo normal es que la fila mas nueva sea de AYER. Se avisa recien
-    cuando tiene dos dias o mas, que es cuando de verdad falto una corrida.
+    Hasta el 26/09/2026 esto miraba la hoja Meta de la planilla, que dejo de
+    actualizarse el 22/09 cuando la web paso a leer ADVAPP: habria avisado
+    "la carga no corre" todos los dias. ADVAPP publica `verificado_hoy`, que
+    es true cuando hay algun costo cargado en el dia. Sabado y domingo no se
+    carga, asi que esos dias no se avisa.
     """
-    import csv, io, json, urllib.request
-    try:
-        with urllib.request.urlopen(META_URL, timeout=30) as r:
-            txt = r.read().decode('utf-8')
-        fila = next((f for f in csv.reader(io.StringIO(txt)) if f and f[0] == 'json'), None)
-        if not fila:
-            return None
-        meta = json.loads(fila[1])
-        fecha = meta.get('fecha_verificacion_max') or ''
-        d, m, a = [int(x) for x in fecha.split('/')]
-        dias = (datetime.date.today() - datetime.date(a, m, d)).days
-        if dias >= 2:
-            return ('la fila mas nueva de la planilla es del %s (hace %d dias); '
-                    'la carga diaria no esta corriendo' % (fecha, dias))
+    import json, urllib.request
+    if datetime.date.today().weekday() >= 5:
         return None
-    except Exception as e:
+    try:
+        with urllib.request.urlopen(ADVAPP_URL, timeout=60) as r:
+            d = json.loads(r.read().decode('utf-8'))
+        if d.get('verificado_hoy') is False:
+            return ('ADVAPP dice que hoy no se verifico ningun precio '
+                    '(verificado_hoy = false): la web muestra los de la ultima carga')
+        return None
+    except Exception:
         return None
 
 
@@ -294,13 +289,11 @@ def main():
             elif linea.strip().startswith('Se arreglan en'):
                 break
 
-    # La planilla trae su propio manifiesto (hoja Meta, contrato landing/1.1)
-    # que dice hasta que fecha se verifico. Si la carga del dia no corrio, el
-    # sitio sigue mostrando precios viejos con toda naturalidad: esta es la
-    # unica forma de enterarse sin abrir la planilla.
+    # Si ADVAPP no cargo precios hoy, el sitio sigue mostrando los viejos con
+    # toda naturalidad: esta es la unica forma de enterarse sin abrir ADVAPP.
     vieja = carga_vieja()
     with open(log, 'a', encoding='utf-8') as f:
-        f.write('\n\nCarga de la planilla: %s\n' % (vieja or 'al dia'))
+        f.write('\n\nCarga de precios en ADVAPP: %s\n' % (vieja or 'al dia'))
 
     # Las fotos. verificar-fotos.py frena por las cuatro formas que tiene una
     # ficha de mostrar otro producto y por las fotos que perdieron su producto
@@ -319,7 +312,24 @@ def main():
     with open(log, 'a', encoding='utf-8') as f:
         f.write('\nFotos (verificar-fotos.py, salida %s):\n%s\n' % (rf.returncode, rf.stdout or rf.stderr or ''))
 
-    if (r.returncode == 1 and graves) or vieja or fotos_mal:
+    # Las pruebas de la pagina (pruebas/correr.py): abren el catalogo con los
+    # datos de hoy en Chrome sin ventana y miran lo que ve el cliente. El
+    # 26/09 fueron lo unico que encontro los errores de verdad; el validador
+    # decia "sin errores graves". Tardan un par de minutos.
+    try:
+        rp = subprocess.run([exe, os.path.join('pruebas', 'correr.py')],
+                            cwd=AQUI, capture_output=True, text=True,
+                            encoding='utf-8', errors='replace', timeout=900,
+                            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+        salida_p = (rp.stdout or '') + (rp.stderr or '')
+    except subprocess.TimeoutExpired:
+        salida_p = 'las pruebas tardaron mas de 15 minutos y se cortaron'
+    pagina_mal = ['[pagina] ' + l.strip()[len('FALLA'):].strip()[:160]
+                  for l in salida_p.split('\n') if l.strip().startswith('FALLA')]
+    with open(log, 'a', encoding='utf-8') as f:
+        f.write('\nPruebas de la pagina (pruebas/correr.py):\n%s\n' % salida_p)
+
+    if (r.returncode == 1 and graves) or vieja or fotos_mal or pagina_mal:
         # En Mac, corriendo desde launchd, el sistema puede no dejar escribir
         # en el Escritorio (permisos de privacidad). Entonces el aviso queda
         # en logs/ (que no se publica) y la notificacion igual sale.
@@ -333,10 +343,11 @@ def main():
                 'EL CATALOGO TIENE ERRORES\n'
                 'Revisado el %s\n%s\n\n'
                 'Son cosas que el cliente esta viendo mal en la web AHORA,\n'
-                'porque el sitio lee la planilla en vivo.\n\n'
+                'porque el sitio lee ADVAPP en vivo.\n\n'
                 '%s\n\n%s\n\n'
                 'Cada linea dice donde se arregla:\n'
-                '  planilla = se le pide al equipo del sheet\n'
+                '  planilla = se le pide a ADVAPP (el dato viene de ahi)\n'
+                '  pagina   = lo que ve el cliente, segun las pruebas\n'
                 '  codigo   = hay que tocar index.html\n'
                 '  fotos    = falta producir la imagen, o correr el comando\n'
                 '             que dice REVISAR-FOTOS.txt\n\n'
@@ -344,16 +355,19 @@ def main():
                 'Cuando se resuelvan, este archivo desaparece solo\n'
                 'en la revision del dia siguiente.\n'
                 % (ahora, '=' * 60,
-                   '\n'.join(graves + (['[planilla] LA PLANILLA NO SE ACTUALIZA: ' + vieja] if vieja else []) + fotos_mal),
+                   '\n'.join(graves + (['[ADVAPP] LOS PRECIOS NO SE ACTUALIZARON: ' + vieja] if vieja else [])
+                             + fotos_mal + pagina_mal),
                    '=' * 60, log))
         notificar('Catalogo Advance Tecno',
-                  ('%d error(es) grave(s) en la planilla. ' % len(graves) if graves else '')
-                  + ('La planilla no se actualiza. ' if vieja else '')
+                  ('%d error(es) grave(s) en los datos. ' % len(graves) if graves else '')
+                  + ('ADVAPP no cargo precios hoy. ' if vieja else '')
+                  + ('%d prueba(s) de la pagina fallan. ' % len(pagina_mal) if pagina_mal else '')
                   + ('Hay fotos que mirar. ' if fotos_mal else '')
                   + ('Mira el aviso en el Escritorio.' if aviso == AVISO
                      else 'Mira el aviso en la carpeta logs del catalogo.'))
-        print('%d graves%s%s. Aviso dejado en %s'
-              % (len(graves), ' + carga vieja' if vieja else '', ' + fotos' if fotos_mal else '', aviso))
+        print('%d graves%s%s%s. Aviso dejado en %s'
+              % (len(graves), ' + carga vieja' if vieja else '', ' + fotos' if fotos_mal else '',
+                 ' + %d pruebas' % len(pagina_mal) if pagina_mal else '', aviso))
         return 1
 
     if r.returncode == 2:

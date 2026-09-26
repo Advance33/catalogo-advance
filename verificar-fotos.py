@@ -81,6 +81,21 @@ def leer_revisadas():
 
 
 def bajar():
+    """Lo que muestra la web: ADVAPP (validar.bajar_advapp), y si no contesta,
+    la planilla, que esta congelada desde el 22/09. Hasta el 26/09 este
+    chequeo miraba solo la planilla y no veia los productos nuevos de ADVAPP."""
+    try:
+        filas = [x for x in validar.bajar_advapp() if x.get('ID', '').strip()]
+        if filas:
+            print('Fuente: ADVAPP')
+            return filas
+    except Exception as e:
+        print('AVISO: ADVAPP no contesto (%s); se usa la planilla, congelada '
+              'desde el 22/09.' % e)
+    return bajar_planilla()
+
+
+def bajar_planilla():
     """La Landing entera. Se bajan las dos fuentes y se usa la que trae mas.
 
     gviz respeta los filtros que alguien deja puestos en la hoja y export no.

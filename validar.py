@@ -99,13 +99,66 @@ def leer_index():
     return colores, plurales, orden, renombre, notas
 
 
-def bajar_csv(destino=None):
+# Desde el 17/09/2026 la web lee ADVAPP, y desde el 22/09 la planilla no se
+# actualiza mas. Los controles leian la planilla: el 26/09 el validador decia
+# "sin errores graves" sobre 583 filas congeladas mientras la web mostraba 758
+# de ADVAPP. Ahora leen lo mismo que la web, con las mismas columnas (contrato
+# landing/1.x), y la planilla queda de respaldo, igual que en index.html.
+ADVAPP_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web'
+FUENTE = {'nombre': '', 'manifiesto': None}   # de donde salio la ultima bajada
+
+
+def bajar_advapp():
+    """Los productos de ADVAPP como filas de la planilla, mas la columna SKUS
+    (el JSON de los SKU por color, como lo arma bajarAdvapp() en la web)."""
+    req = urllib.request.Request(ADVAPP_URL, headers={'User-Agent': 'validar.py'})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        d = json.loads(r.read().decode('utf-8'))
+    productos = d.get('productos') or []
+    if not productos:
+        raise ValueError('ADVAPP vino sin productos')
+    cols = [str(c) for c in (d.get('columnas') or [])] or \
+        [k for k in productos[0] if k != 'SKUS']
+    texto = lambda v: '' if v is None else str(v)
+    filas = []
+    for p in productos:
+        f = {c: texto(p.get(c)) for c in cols}
+        f['SKUS'] = json.dumps(p.get('SKUS') if isinstance(p.get('SKUS'), list) else [],
+                               ensure_ascii=False)
+        filas.append(f)
+    FUENTE['manifiesto'] = {k: d.get(k) for k in
+                            ('contrato', 'fuente', 'generado_en', 'filas', 'verificado_hoy')}
+    return filas
+
+
+def bajar_planilla(destino=None):
     req = urllib.request.Request(CSV_URL, headers={'User-Agent': 'validar.py'})
     with urllib.request.urlopen(req, timeout=60) as r:
         datos = r.read().decode('utf-8')
     if destino:
         io.open(destino, 'w', encoding='utf-8', newline='').write(datos)
     return list(csv.DictReader(io.StringIO(datos)))
+
+
+def bajar_csv(destino=None):
+    """Lo que muestra la web: ADVAPP, y si no contesta, la planilla (que esta
+    congelada desde el 22/09: sirve para no quedarse sin nada, no para creerle)."""
+    try:
+        filas = bajar_advapp()
+        FUENTE['nombre'] = 'ADVAPP'
+    except Exception as e:
+        sys.stderr.write('AVISO: ADVAPP no contesto (%s); se usa la planilla, '
+                         'que esta congelada desde el 22/09.\n' % e)
+        FUENTE['nombre'] = 'planilla (respaldo: ADVAPP no contesto)'
+        FUENTE['manifiesto'] = None
+        return bajar_planilla(destino)
+    if destino:
+        cols = list(filas[0].keys())
+        with io.open(destino, 'w', encoding='utf-8', newline='') as fh:
+            w = csv.DictWriter(fh, fieldnames=cols)
+            w.writeheader()
+            w.writerows(filas)
+    return filas
 
 
 META_URL = ('https://docs.google.com/spreadsheets/d/%s/gviz/tq?sheet=Meta&tqx=out:csv'
@@ -873,7 +926,7 @@ def main():
             print('Planilla: %s (local)' % local[0])
         else:
             filas = bajar_csv()
-            print('Planilla: hoja Landing, bajada recién')
+            print('Fuente: %s, bajada recién' % FUENTE['nombre'])
     except Exception as e:
         # No poder validar no es lo mismo que encontrar errores: sale con 2
         # para que PUBLICAR.bat lo distinga y no diga que el catálogo está mal.

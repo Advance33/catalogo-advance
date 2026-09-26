@@ -4417,9 +4417,26 @@ function nombreSinMemoria(desc){
 
 // El nombre de la tarjeta es lo que todas las variantes tienen en común:
 // "Apple iPad 11 A16 128gb" + "… 256gb" + "… 512gb" → "Apple iPad 11 A16".
+/* El nombre sin la marca adelante, si la trae: ADVAPP escribe el mismo
+   producto a veces con la marca y a veces sin ("Samsung Galaxy S26 12/256GB"
+   y "Galaxy S26 12/512GB"). La marca ya sale aparte en la tarjeta. */
+function sinMarca(desc, marca){
+  const d = desc || '', m = (marca || '').trim();
+  return m && norm(d).startsWith(norm(m) + ' ') ? d.slice(m.length).trim() : d;
+}
+
 function nombreGrupo(vs){
   if(vs.length === 1) return vs[0].desc;
-  const pal = vs.map(v => (v.desc || '').split(/\s+/));
+  const n = prefijoComun(vs.map(v => v.desc || ''));
+  if(n) return n;
+  /* Sin comienzo comun, se prueba sin la marca. Antes se rendia y ponia el
+     nombre ENTERO de la primera fila: el Galaxy S26 salia titulado "Samsung
+     Galaxy S26 12/256GB (Black)" con los 512GB y los otros colores adentro. */
+  return prefijoComun(vs.map(v => sinMarca(v.desc, v.marca))) || vs[0].desc;
+}
+
+function prefijoComun(descs){
+  const pal = descs.map(d => d.split(/\s+/));
   const out = [];
   for(let i = 0, min = Math.min(...pal.map(w => w.length)); i < min; i++){
     if(!pal.every(w => norm(w[i]) === norm(pal[0][i]))) break;
@@ -4430,8 +4447,8 @@ function nombreGrupo(vs){
   // tal cual en la tarjeta. Si quedó un "(" sin cerrar, se va con lo que sigue.
   const n = out.join(' ').replace(/\s*\([^)]*$/,'').replace(/[\s\-–(]+$/,'');
   // Un prefijo de una sola palabra no nombra nada ("Apple"): antes de mostrar
-  // eso, preferimos el nombre completo de la primera variante.
-  return n.split(/\s+/).filter(Boolean).length >= 2 ? n : vs[0].desc;
+  // eso, preferimos el nombre completo de la primera variante (nombreGrupo).
+  return n.split(/\s+/).filter(Boolean).length >= 2 ? n : '';
 }
 
 // Lo que distingue a esta variante de sus hermanas: "512gb", "16ram 1tb",
@@ -4526,6 +4543,8 @@ function emparejarVersion(e, p, coloresDelModelo){
 
 function etiquetaVariante(p, nombre, coloresDelModelo){
   let e = p.desc || '';
+  // El nombre del grupo puede haber salido sin la marca (nombreGrupo)
+  if(!norm(e).startsWith(norm(nombre))) e = sinMarca(e, p.marca);
   if(norm(e).startsWith(norm(nombre))) e = e.slice(nombre.length);
   /* Del paréntesis se saca el color, porque eso ya se elige con los puntitos.
      Pero sólo si TODO lo de adentro son colores: entre paréntesis también
@@ -8468,14 +8487,22 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
     try{ if(FICHA) anotar('ficha', datos(buscarProducto(FICHA))); }catch(e){}
     return r;
   };
-  const elColor = elegirColorFicha;
-  elegirColorFicha = function(d, p, color){
-    try{ anotar('color', { ...datos(p), color }); }catch(e){}
-    return elColor.apply(this, arguments);
-  };
+  /* Elegir un color se mide en el clic del puntito, no en elegirColorFicha:
+     cuando cada color es una fila con su precio, el puntito cambia de version
+     (elegirVariante) y el color quedaba anotado como "version", sin decir cual.
+     Mientras dura ese clic, elegirVariante no anota nada: ya se anoto el color. */
+  let porPuntito = false;
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('#ficha .fi-pintas button');
+    porPuntito = !!b;
+    if(!b) return;
+    try{ anotar('color', { ...datos(buscarProducto(b.dataset.k) || buscarProducto(FICHA)),
+                           color: b.dataset.color || '' }); }catch(e){}
+  }, true);
+  document.addEventListener('click', () => { porPuntito = false; });
   const laVersion = elegirVariante;
   elegirVariante = function(d, m, v, color){
-    try{ anotar('version', { ...datos(v), opcion: v && v.opcion }); }catch(e){}
+    try{ if(!porPuntito) anotar('version', { ...datos(v), opcion: v && v.opcion }); }catch(e){}
     return laVersion.apply(this, arguments);
   };
   const elPedido = togglePedido;

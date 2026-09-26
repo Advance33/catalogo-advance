@@ -3460,7 +3460,10 @@ async function cargar(){
         detalle:  val(f,C.detalle),
         garantia: val(f,C.garantia),
         condicion:val(f,C.condicion),
-        teclado:  val(f,C.teclado),
+        // El teclado, primero del SKU ("...-tecladoes") y recien si no lo dice,
+        // de la columna. Las dos vienen de ADVAPP, pero la columna quedo
+        // copiada del sheet y en 12 Mac contradice al nombre y al SKU (26/09).
+        teclado:  tecladoDelSku(val(f,C.sku)) || val(f,C.teclado),
         codigo: val(f,C.codigo),
         codigoVar: val(f,C.codigoVar),
         // Las fotos de ADVAPP por codigo de variante. Son el respaldo: solo se
@@ -4204,6 +4207,17 @@ const simDelSku = s => {
 /* La "e" es opcional a proposito: hay que reconocer "512GB Sim" igual que
    "512GB E-Sim", porque el que calla puede estar al lado de cualquiera. */
 const diceSim = t => /\b(e-?\s?)?sim\b/i.test(t || '');
+
+/* El teclado de una Mac, leido del final del SKU de la web ("~13in-8gb-256gb-
+   tecladoes"). Mismo criterio que la Sim: el SKU es de ADVAPP y es el que
+   coincide con el nombre. La columna Teclado, en cambio, quedo copiada del
+   sheet y dice EN en 12 filas que son de teclado espanol: el Neo mostraba
+   cinco botones "Teclado ingles" que solo se distinguian por el precio.
+   Si el SKU no lo dice, no devuelve nada y manda la columna. */
+const tecladoDelSku = s => {
+  const m = /[-~]teclado(es|en)$/.exec(String(s || '').toLowerCase());
+  return m ? m[1].toUpperCase() : '';
+};
 
 /* Lo mismo mirando los SKU por color que manda ADVAPP, para las filas cuyo
    SKU de la web no lo aclara. Solo vale si TODOS dicen lo mismo: una fila de

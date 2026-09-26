@@ -37,22 +37,35 @@ const botones = () => [...document.querySelectorAll('#ficha .fi-op')];
 // Las pestañas de memoria llevan data-mem; las de version, no. Importa para
 // mirar precios: la de memoria muestra el de TODA la memoria, no el de una.
 const deVersion = () => botones().filter(b => !b.dataset.mem);
+// La misma version escrita con las palabras en otro orden ("8GB/128GB 5G" y
+// "5G 8GB/128GB") es UNA version: la pagina la junta asi desde el 21/09
+// (palabrasClave en armarModelo). Se compara igual que ella.
+const palabras = t => norm(t).split(/\s+/).filter(Boolean).sort().join(' ');
 const texto = b => b.textContent.replace(/\s+/g, ' ').trim();
 
 /* Llegar a una version desde la ficha recien abierta: si su pestaña esta a la
    vista, un toque; si esta en otra memoria, primero la pestaña de esa memoria
    y despues la suya. Devuelve el boton, o null si no se llega. */
+/* Ojo: la pestaña de MEMORIA tambien lleva data-op (la version a la que salta),
+   y puede ser justo la buscada. Contarla como "ya llegue" dejaba la ficha en
+   otra memoria sin haber tocado nada: el iPhone 17 Pro se quedaba en 256GB y
+   la prueba leia el precio de la pestaña "1TB" (el de toda la memoria, con el
+   Sim mas barato) en vez del de la version E-Sim. Primero las de version; la de
+   memoria vale sola cuando la version es la unica de su memoria. */
 function irAVersion(op){
-  let d = document.getElementById('ficha');
-  let b = [...d.querySelectorAll('.fi-op')].find(x => x.dataset.op === op);
+  const deVer = () => [...document.querySelectorAll('#ficha .fi-op')]
+    .find(x => !x.dataset.mem && x.dataset.op === op);
+  let b = deVer();
   if(b) return b;
   const mm = memoriaDeOpcion(op);
-  const tab = [...d.querySelectorAll('.fi-ops[data-eje="memoria"] .fi-op')]
+  const tab = [...document.querySelectorAll('#ficha .fi-ops[data-eje="memoria"] .fi-op')]
                 .find(x => x.dataset.mem === mm);
-  if(!tab) return null;
-  tab.click();
-  d = document.getElementById('ficha');
-  return [...d.querySelectorAll('.fi-op')].find(x => x.dataset.op === op) || null;
+  if(!tab) return [...document.querySelectorAll('#ficha .fi-op')].find(x => x.dataset.op === op) || null;
+  if(tab.getAttribute('aria-pressed') !== 'true') tab.click();
+  b = deVer();
+  if(b) return b;
+  return [...document.querySelectorAll('#ficha .fi-op')]
+    .find(x => x.dataset.mem === mm && x.dataset.op === op) || null;
 }
 
 function correrPruebas(){
@@ -100,7 +113,7 @@ function correrPruebas(){
       inseguros.push(m.desc + ' / ' + op + ': un color en dos filas');
     if(new Set(grupo.map(v => norm(v.teclado))).size > 1)
       inseguros.push(m.desc + ' / ' + op + ': distinto teclado');
-    if(new Set(grupo.map(v => norm(v.etiquetaBase))).size > 1)
+    if(new Set(grupo.map(v => palabras(v.etiquetaBase))).size > 1)
       inseguros.push(m.desc + ' / ' + op + ': distinta version');
   }));
   ok(!inseguros.length, 'solo se juntan filas de la misma version, con cada color en una sola fila y el mismo teclado',

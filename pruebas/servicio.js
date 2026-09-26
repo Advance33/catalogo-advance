@@ -186,11 +186,30 @@ function correrPruebas(){
   /* Cambiar de version redibuja los datos de la ficha. Los sugeridos dependen
      del modelo, no de la version: tienen que quedar quietos, y el bloque de
      envio tiene que volver a aparecer una sola vez. */
+  /* Hace falta un modelo cuya ficha tenga de verdad una pestaña de version
+     para tocar. Tener dos variantes con stock no alcanza: si las variantes
+     son colores, se eligen en la tira de la foto y la ficha no dibuja
+     ninguna pestaña (htmlOpcionesFicha). Elegir por las variantes hacia que,
+     el dia que el primero de la lista era de colores, la prueba reventara
+     con "Cannot read properties of undefined (reading 'click')".
+     Se elige con el mismo criterio que la ficha: dos o mas versiones que no
+     sean un color. */
+  const versionesReales = m => {
+    const g = new Map();
+    m.variantes.forEach(x => { const k = x.opcion || x.etiqueta; g.set(k, [...(g.get(k) || []), x]); });
+    return [...g.entries()].filter(([k, xs]) => !opcionEsColor(xs, k)).length;
+  };
   const multi = MODELOS.find(m => m.multi && elegible(m) && relacionados(m).length &&
-    m.variantes.filter(v => v.stock).length >= 2);
+    m.variantes.filter(v => v.stock).length >= 2 && versionesReales(m) >= 2);
+  if(!multi){
+    R.push('  --   hoy ningun modelo con sugeridos tiene pestañas de version para probarlo');
+    return;
+  }
   abrirFicha(clave(multi.rep));
   const relAntes = $('ficha').querySelector('.fi-rel');
   const op = [...$('ficha').querySelectorAll('.fi-op')].find(b => b.getAttribute('aria-pressed') !== 'true');
+  ok(!!op, 'la ficha tiene una pestaña de version para cambiar', multi.desc);
+  if(!op){ quitarFicha(); return; }
   op.click();
   ok($('ficha').querySelectorAll('.fi-rel').length === 1 &&
      $('ficha').querySelector('.fi-rel') === relAntes,

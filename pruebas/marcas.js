@@ -105,9 +105,13 @@ function correrPruebas(){
   const x = MV[2], panel = $('mv-lugar');
   ok(panel.querySelector('.mv-ver').textContent.includes(x.marca), 'la vitrina de abajo es de esa marca',
      panel.querySelector('.mv-ver').textContent.trim());
-  const prods = [...panel.querySelectorAll('.mv-p')].map(b => buscarModelo(b.dataset.key));
-  ok(prods.length >= 1 && prods.length <= 4 && prods.every(m => m && m.marca === x.marca && m.stock && m.precio !== null && m.imagen),
-     'muestra hasta cuatro productos de esa marca, con stock, precio y foto', prods.length);
+  /* Desde el 21/09 (09a260f) los productos van en una cinta de hasta MV_CINTA
+     que, cuando desfila, lleva la tira DUPLICADA para dar la vuelta sin corte.
+     La segunda copia es decorado (aria-hidden): se cuenta solo la primera. */
+  const prods = [...panel.querySelectorAll('.mv-p:not([aria-hidden="true"])')].map(b => buscarModelo(b.dataset.key));
+  ok(prods.length >= 1 && prods.length <= MV_CINTA && prods.every(m => m && m.marca === x.marca && m.stock && m.precio !== null && m.imagen),
+     'muestra hasta ' + MV_CINTA + ' productos de esa marca, con stock, precio y foto', prods.length);
+  ok(new Set(prods.map(m => clave(m))).size === prods.length, 'sin repetir ninguno en la cinta', prods.length);
   const codigos = prods.map(codigoMasAlto);
   ok(codigos.every((c, i) => i === 0 || codigos[i - 1] >= c), 'lo ultimo que entro va primero', codigos.join(' > '));
   // Tocar un logo de la cinta lo trae al centro

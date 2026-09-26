@@ -266,9 +266,18 @@ function correrPruebas(){
   const multi = MODELOS.filter(m => m.multi);
   ok(multi.length > 0, 'hay modelos agrupados',
      multi.length + ' modelos agrupan ' + multi.reduce((s,m)=>s+m.variantes.length,0) + ' filas');
-  const malNombre = multi.filter(m => !m.variantes.every(v => baja(v.desc).startsWith(baja(m.desc))));
+  /* Con o sin la marca adelante: ADVAPP escribe el mismo producto de las dos
+     maneras ("Samsung Galaxy S26 ..." y "Galaxy S26 ...") y el grupo se llama
+     entonces sin ella (sinMarca en nombreGrupo). */
+  const empiezaCon = (v, n) => baja(v.desc).startsWith(baja(n)) || baja(sinMarca(v.desc, v.marca)).startsWith(baja(n));
+  const malNombre = multi.filter(m => !m.variantes.every(v => empiezaCon(v, m.desc)));
   ok(malNombre.length === 0, 'el nombre del grupo es el comienzo comun de todas sus variantes',
      malNombre.map(m=>m.desc)[0] || 'todos bien');
+  // Y nunca es el nombre entero de una fila con capacidad o color: eso es rendirse
+  const enteros = multi.filter(m => m.variantes.length > 1 && m.variantes.some(v => v.desc === m.desc) &&
+                                    !m.variantes.every(v => v.desc === m.desc));
+  ok(!enteros.length, 'ningun grupo se titula con el nombre entero de una de sus filas',
+     enteros.map(m => m.desc).slice(0, 3).join(' | ') || 'ninguno');
   ok(multi.every(m => m.desc.split(/\s+/).length >= 2), 'ningun grupo quedo con nombre de una palabra');
 
   const mini = MODELOS.find(m => /Mac Mini M4(?! Pro)/.test(m.desc));

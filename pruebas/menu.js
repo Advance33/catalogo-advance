@@ -20,11 +20,23 @@ const esperar = setInterval(() => {
   try{ pararPaseos(); }catch(e){}
   try{ pararOfertas(); }catch(e){}
   try{ enLaCompu(); }catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; }
-  // El viaje hasta el menu es suave: se mide cuando termino
+  /* El viaje hasta el menu es suave, y Chrome sin ventana con el reloj
+     acelerado (--virtual-time-budget) no anima el scroll suave: en la Mac
+     quedaba quieto donde estaba y la prueba fallaba siempre, aunque el
+     destino pedido era el correcto. Aca se prueba el destino, asi que el
+     viaje se hace de un salto, como para quien pide menos movimiento. */
   try{
     filtros.marca = 'Apple'; aplicarFiltro(true);
     scrollTo(0, document.body.scrollHeight);
-    $('rubro-cab').querySelector('[data-menu]').click();
+    const scrollOrig = window.scrollTo;
+    window.scrollTo = function(...args){
+      const a = args[0];
+      if(args.length === 1 && a && typeof a === 'object' && a.behavior === 'smooth')
+        args[0] = Object.assign({}, a, { behavior: 'auto' });
+      return scrollOrig.apply(this, args);
+    };
+    try{ $('rubro-cab').querySelector('[data-menu]').click(); }
+    finally{ window.scrollTo = scrollOrig; }
   }catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; }
   setTimeout(() => {
     const tit = $('sec-titulo').getBoundingClientRect().top;

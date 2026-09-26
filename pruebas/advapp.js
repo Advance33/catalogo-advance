@@ -120,9 +120,18 @@ async function correrPruebas(){
      `si ADVAPP tarda mas de ${ADVAPP_ESPERA_MS / 1000} s, usa la planilla`, lento.motivo + ' · ' + (Date.now() - t0) + ' ms');
 
   /* ---- 7. Fotos: la propia primero, la de ADVAPP solo si no hay ---- */
-  const conLas2 = PRODUCTOS.filter(p => p.imagen && Object.keys(p.fotosAdvapp || {}).length);
+  /* "Con archivo propio" se pregunta de verdad, con fotoDeCarpeta, igual que
+     al cargar. Antes se contaba toda fila con fotos de ADVAPP, y la que no
+     tiene archivo propio -y por eso usa, bien, la de ADVAPP- hacia fallar la
+     prueba: el Watch Ultra 3 Black Ocean trae en CODIGO_VAR la variante de
+     otro producto (AT-0455-01 en una fila AT-0456) y no le toca ningun archivo. */
+  const propia = p => fotoDeCarpeta(p, colorDeLaFila(p.color, p.desc || p.modelo));
+  const conLas2 = PRODUCTOS.filter(p => p.imagen && Object.keys(p.fotosAdvapp || {}).length && propia(p));
   ok(conLas2.length > 0 && conLas2.every(p => !/googleusercontent|supabase/.test(p.imagen)),
      'con archivo propio en fotos/, la portada es la propia', conLas2.length + ' filas con las dos');
+  const deAdvapp = PRODUCTOS.filter(p => /googleusercontent|supabase/.test(p.imagen || ''));
+  R.push('  --  ' + deAdvapp.length + ' fila(s) sin foto propia usan la de ADVAPP'
+         + (deAdvapp.length ? ': ' + deAdvapp.slice(0, 3).map(p => p.id).join(', ') : ''));
 
   // Una fila de varios colores alineados con CODIGO_VAR, sin sus archivos
   const caso = PRODUCTOS.find(p => {

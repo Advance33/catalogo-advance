@@ -35,6 +35,11 @@ const esperar = setInterval(() => {
   reportar();
 }, 120);
 
+// La misma version escrita con las palabras en otro orden ("8GB/128GB 5G" y
+// "5G 8GB/128GB") es UNA version: la pagina la junta asi desde el 21/09
+// (palabrasClave en armarModelo). Se compara igual que ella.
+const palabras = t => norm(t).split(/\s+/).filter(Boolean).sort().join(' ');
+
 function correrPruebas(){
   const conVar = MODELOS.filter(m => m.multi);
 
@@ -42,9 +47,13 @@ function correrPruebas(){
   ok(conVar.every(m => m.variantes.every(v => (v.hermanasColor || []).includes(v))),
      'cada version esta entre sus propias hermanas de color');
 
-  ok(conVar.every(m => m.variantes.every(v =>
-       (v.hermanasColor || []).every(h => norm(h.etiquetaBase) === norm(v.etiquetaBase)))),
-     'las hermanas de color comparten la misma capacidad');
+  const otraCap = [];
+  conVar.forEach(m => m.variantes.forEach(v => (v.hermanasColor || []).forEach(h => {
+    if(palabras(h.etiquetaBase) !== palabras(v.etiquetaBase))
+      otraCap.push(m.desc + ': ' + v.id + ' [' + v.etiquetaBase + '] con ' + h.id + ' [' + h.etiquetaBase + ']');
+  })));
+  ok(!otraCap.length, 'las hermanas de color comparten la misma capacidad',
+     otraCap.length ? otraCap.length + ': ' + otraCap.slice(0, 2).join(' | ') : undefined);
 
   /* ---- 2. Los casos reales de la planilla de hoy ---- */
   const casos = [];

@@ -1,5 +1,9 @@
 {
  "enviados": {
+  "r_codigo|AUD-APP-013|AT-0055|AT-0055": {
+   "enviado": "2026-09-26",
+   "id": "AUD-APP-013"
+  },
   "r_codigo|CEL-APL-16PM-512-NAT-000|AT-0069|": {
    "enviado": "2026-09-21",
    "id": "CEL-APL-16PM-512-NAT-000"
@@ -80,6 +84,14 @@
    "enviado": "2026-09-21",
    "id": "CEL-XIA-POCOX8PROMAX-12G512-WHT-000"
   },
+  "r_codigo|CON-NIN-001|AT-0132|AT-0132": {
+   "enviado": "2026-09-26",
+   "id": "CON-NIN-001"
+  },
+  "r_codigo|GAF-RAY-046|AT-0529|AT-0529-01": {
+   "enviado": "2026-09-26",
+   "id": "GAF-RAY-046"
+  },
   "r_codigo|NBK-APL-MBA13M5-24G1TB-SLV-EN|AT-0429|AT-0429-03": {
    "enviado": "2026-09-21",
    "id": "NBK-APL-MBA13M5-24G1TB-SLV-EN"
@@ -139,6 +151,22 @@
   "r_nombre|AUR-APL-AIRPODSMAX2-000-STL-USBC|id|AIRPODSMAX2|AIRPODSMAX": {
    "enviado": "2026-09-26",
    "id": "AUR-APL-AIRPODSMAX2-000-STL-USBC"
+  },
+  "r_nombre|TAB-SAM-TABS10FE-12G256-GRY-CELLPENBOOK|el SKU dice celular/5G y el nombre dice Wifi": {
+   "enviado": "2026-09-26",
+   "id": "TAB-SAM-TABS10FE-12G256-GRY-CELLPENBOOK"
+  },
+  "r_nombre|TAB-SAM-TABS10FE-12G256-LBL-CELLPENBOOK|el SKU dice celular/5G y el nombre dice Wifi": {
+   "enviado": "2026-09-26",
+   "id": "TAB-SAM-TABS10FE-12G256-LBL-CELLPENBOOK"
+  },
+  "r_nombre|TAB-SAM-TABS10FE-8G128-LBL-CELLPENBOOK|el SKU dice celular/5G y el nombre dice Wifi": {
+   "enviado": "2026-09-26",
+   "id": "TAB-SAM-TABS10FE-8G128-LBL-CELLPENBOOK"
+  },
+  "r_repetido|CEL-APP-071|AT-0073-01|CEL-APL-17P-512-ORG-ESIM,CEL-APL-17P-512-ORG-SIM": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APP-071"
   },
   "r_repetido|CEL-APP-095|AT-0073-01|CEL-APL-17P-512-ORG-ESIM,CEL-APL-17P-512-ORG-SIM": {
    "enviado": "2026-09-26",
@@ -204,6 +232,18 @@
    "enviado": "2026-09-26",
    "id": "CEL-APL-17P-1TB-ORG-ESIM"
   },
+  "r_variante|CEL-SAM-S25ULT-12G256-SBL-000|AT-0092-03": {
+   "enviado": "2026-09-26",
+   "id": "CEL-SAM-S25ULT-12G256-SBL-000"
+  },
+  "r_variante|CEL-SAM-S26ULT-16G1TB-BLK-000|AT-0102-03": {
+   "enviado": "2026-09-26",
+   "id": "CEL-SAM-S26ULT-16G1TB-BLK-000"
+  },
+  "r_variante|CEL-SAM-S26ULT-16G1TB-VIO-000|AT-0102-04": {
+   "enviado": "2026-09-26",
+   "id": "CEL-SAM-S26ULT-16G1TB-VIO-000"
+  },
   "r_variante|NBK-APL-MBA13M5-24G512-MID-EN|AT-0522-02": {
    "enviado": "2026-09-21",
    "id": "NBK-APL-MBA13M5-24G512-MID-EN"
@@ -227,6 +267,10 @@
   "r_variante|NBK-APL-MBP14M5-32G1TB-SLV-ES|AT-0438-01": {
    "enviado": "2026-09-21",
    "id": "NBK-APL-MBP14M5-32G1TB-SLV-ES"
+  },
+  "r_variante|NBK-APL-MBP14M5P-48G1TB-SLV-EN|AT-0444-02": {
+   "enviado": "2026-09-26",
+   "id": "NBK-APL-MBP14M5P-48G1TB-SLV-EN"
   },
   "r_variante|NBK-APL-MBP16M5MAX-48G2TB-SLV-EN|AT-0441-01": {
    "enviado": "2026-09-21",
@@ -255,6 +299,18 @@
   "r_variante|SW-APP-017|AT-0455-04": {
    "enviado": "2026-09-26",
    "id": "SW-APP-017"
+  },
+  "r_variante|TAB-APL-IPADAIR13M4-128-STL-WIFI|AT-0472-03": {
+   "enviado": "2026-09-26",
+   "id": "TAB-APL-IPADAIR13M4-128-STL-WIFI"
+  },
+  "r_variante|TAB-APL-IPADPRO11M5-256-SBK-CELL|AT-0479-01": {
+   "enviado": "2026-09-26",
+   "id": "TAB-APL-IPADPRO11M5-256-SBK-CELL"
+  },
+  "r_variante|TAB-SAM-TABS11ULTRA-256-GRY-WIFIPEN|AT-0497-01": {
+   "enviado": "2026-09-26",
+   "id": "TAB-SAM-TABS11ULTRA-256-GRY-WIFIPEN"
   }
  }
 }

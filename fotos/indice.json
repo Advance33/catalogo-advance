@@ -1019,6 +1019,7 @@
 "samsung|celular|12:1,512:1,s26:1"
 ],
 "AT-0096": [
+"samsung|celular|12:1,256:1,s26:1",
 "samsung|celular|256:1,s26:1"
 ],
 "AT-0097": [
@@ -2639,6 +2640,7 @@
 "CEL-SAM-098": "AT-0511",
 "CEL-SAM-099": "AT-0093",
 "CEL-SAM-100": "AT-0512",
+"CEL-SAM-S26-12G256-WHT-000": "AT-0096",
 "CEL-XIA-088": "AT-0116",
 "CEL-XIA-092": "AT-0120",
 "CEL-XIA-093": "AT-0119",
@@ -3215,7 +3217,6 @@
 "celular~apple~17-iphone-max-pro~256gb-esim": "AT-0075",
 "celular~apple~17-iphone-max-pro~512gb-esim": "AT-0501",
 "celular~apple~17-iphone-pro-sim~512gb": "AT-0536",
-"celular~apple~17-iphone-pro-sim~512gb-sim": "AT-0536",
 "celular~apple~17-iphone-pro~1tb": "AT-0071",
 "celular~apple~17-iphone-pro~1tb-esim": "AT-0071",
 "celular~apple~17-iphone-pro~1tb-sim": "AT-0537",
@@ -3267,6 +3268,7 @@
 "celular~samsung~galaxy-s26-ultra~16gb-1tb-5g": "AT-0102",
 "celular~samsung~galaxy-s26-ultra~256gb-5g": "AT-0103",
 "celular~samsung~galaxy-s26-ultra~512gb-5g": "AT-0512",
+"celular~samsung~galaxy-s26~12g256": "AT-0096",
 "celular~samsung~galaxy-s26~12gb-512gb": "AT-0095",
 "celular~samsung~galaxy-s26~256gb": "AT-0096",
 "celular~xiaomi~13-note-redmi~6gb-128gb": "AT-0117",
@@ -3574,6 +3576,7 @@
 "smartwatch~apple~11-series-watch~42mm-s-gps": "AT-0453",
 "smartwatch~apple~11-series-watch~42mm-sm-gps": "AT-0453",
 "smartwatch~apple~11-series-watch~46mm-ml-gps": "AT-0454",
+"smartwatch~apple~11-series-watch~46mm-ml-gps-46-gps-ml": "AT-0454",
 "smartwatch~apple~3-se-watch~40mm-s-gps": "AT-0451",
 "smartwatch~apple~3-se-watch~40mm-sm-gps": "AT-0451",
 "smartwatch~apple~3-se-watch~44mm-m-gps": "AT-0452",
@@ -3581,9 +3584,12 @@
 "smartwatch~apple~3-ultra-watch~49mm": "AT-0455",
 "smartwatch~apple~3-ultra-watch~49mm-cellular-gps": "AT-0455",
 "smartwatch~apple~3-ultra-watch~49mm-l": "AT-0456",
+"smartwatch~apple~3-ultra-watch~49mm-l-49-cell-mill": "AT-0456",
 "smartwatch~apple~3-ultra-watch~49mm-m": "AT-0455",
 "smartwatch~apple~3-ultra-watch~49mm-oceanband": "AT-0455",
+"smartwatch~apple~3-ultra-watch~49mm-oceanband-49-cell-ocean": "AT-0455",
 "smartwatch~apple~3-ultra-watch~49mm-trailloop-ml": "AT-0455",
+"smartwatch~apple~3-ultra-watch~49mm-trailloop-ml-49-cell-trailml": "AT-0455",
 "smartwatch~apple~cell-se-watch~gen3-44mm": "AT-0516",
 "smartwatch~apple~s11-watch~42mm": "AT-0453",
 "smartwatch~apple~se-watch~gen2-40mm-m-gps": "AT-0449",
@@ -3616,6 +3622,7 @@
 "tablet~apple~air-ipad-m4~13in-256gb": "AT-0473",
 "tablet~apple~cell-glass-ipad-m5-pro-standard~11in-512gb-5g-cellular": "AT-0481",
 "tablet~apple~cell-ipad-m5-pro~11in-512gb-5g": "AT-0481",
+"tablet~apple~cell-ipad-m5-pro~11in-512gb-5g-cell": "AT-0481",
 "tablet~apple~glass-ipad-m5-pro-standard~11in-512gb-5g-cellular": "AT-0481",
 "tablet~apple~ipad-m4-pro~11in-256gb": "AT-0476",
 "tablet~apple~ipad-m4-pro~11in-2tb": "AT-0477",
@@ -3630,11 +3637,15 @@
 "tablet~apple~ipad-mini~gen7-256gb": "AT-0475",
 "tablet~samsung~a11-galaxy-plus-tab~6gb-128gb": "AT-0488",
 "tablet~samsung~a11-galaxy-plus-tab~6gb-128gb-5g": "AT-0487",
+"tablet~samsung~a11-galaxy-plus-tab~6gb-128gb-wifi": "AT-0488",
 "tablet~samsung~a11-galaxy-sm-tab~4gb-64gb": "AT-0486",
 "tablet~samsung~a11-galaxy-sm-tab~4gb-64gb-4g-cellular": "AT-0485",
+"tablet~samsung~a11-galaxy-sm-tab~4gb-64gb-4g-cellular-cell": "AT-0485",
+"tablet~samsung~a11-galaxy-sm-tab~4gb-64gb-wifi": "AT-0486",
 "tablet~samsung~a11-galaxy-tab~4gb-64gb": "AT-0486",
 "tablet~samsung~a11-galaxy-tab~4gb-64gb-4g-cellular": "AT-0485",
 "tablet~samsung~book-cover-fe-galaxy-pencil-s10-sm-tab~8gb-128gb-5g": "AT-0489",
+"tablet~samsung~book-cover-fe-galaxy-pencil-s10-sm-tab~8gb-128gb-5g-cellpenbook": "AT-0489",
 "tablet~samsung~book-cover-fe-galaxy-pencil-s10-tab~8gb-128gb-5g": "AT-0489",
 "tablet~samsung~fe-galaxy-incluye-plus-s-pen-s10-solo-tab~256gb": "AT-0490",
 "tablet~samsung~fe-galaxy-pencil-plus-s10-sm-tab~12gb-256gb": "AT-0491",
@@ -3643,7 +3654,9 @@
 "tablet~samsung~fe-galaxy-pencil-plus-s10-tab~13in-256gb": "AT-0490",
 "tablet~samsung~fe-galaxy-pencil-plus-s10-tab~8gb-128gb": "AT-0492",
 "tablet~samsung~fe-galaxy-pencil-s10-sm-tab~12gb-256gb": "AT-0493",
+"tablet~samsung~fe-galaxy-pencil-s10-sm-tab~12gb-256gb-wifipen": "AT-0493",
 "tablet~samsung~fe-galaxy-pencil-s10-sm-tab~8gb-128gb": "AT-0494",
+"tablet~samsung~fe-galaxy-pencil-s10-sm-tab~8gb-128gb-wifipen": "AT-0494",
 "tablet~samsung~fe-galaxy-pencil-s10-tab~12gb-256gb": "AT-0493",
 "tablet~samsung~fe-galaxy-pencil-s10-tab~8gb-128gb": "AT-0494",
 "tablet~samsung~fe-galaxy-s10-tab~12gb-256gb": "AT-0493",
@@ -4207,7 +4220,8 @@
 "black": "AT-0096-01",
 "black keys": "AT-0096-01",
 "negro": "AT-0096-01",
-"teclas negras": "AT-0096-01"
+"teclas negras": "AT-0096-01",
+"white": "AT-0096-02"
 },
 "AT-0097": {
 "blueberry": "AT-0097-02",
@@ -5916,5 +5930,5 @@
 }
 }
 },
-"generado": "2026-09-26T22:04:09"
+"generado": "2026-09-26T23:49:49"
 }

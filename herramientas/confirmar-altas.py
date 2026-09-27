@@ -128,6 +128,17 @@ def main():
                               'parece un ID reusado. No se anota; decidir de nuevo'
                               % (idf, fecha, cual, nombre[:48]))
                 continue
+        # Si el ID ya esta anotado en OTRO producto, esta decision es vieja y
+        # alguien la reemplazo despues. El 26/09 la del 16/09 ("CEL-APP-095 es
+        # AT-0073") volvio a meter el iPhone 17 Pro Sim adentro del eSIM, horas
+        # despues de que se le diera codigo propio (AT-0536). No se anota: se
+        # avisa, y se corrige la linea en altas-decididas.csv.
+        otros = {m['CODIGO'] for m in idx['por_id'].get(idf, []) if m['CODIGO'] != cual}
+        if otros:
+            quejas.append('%s: la decision dice %s, pero el ID ya es de %s en el catalogo. '
+                          'No se anota: corregir la linea en altas-decididas.csv'
+                          % (idf, cual, ', '.join(sorted(otros))))
+            continue
         sku = FS.sku_de(fila)
         cambios = []
         for m in destino:

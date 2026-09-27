@@ -77,6 +77,37 @@ def capacidad(texto):
     return (m[-1][0] + m[-1][1].upper()) if m else None
 
 
+def modelo_sin_variables(texto, marca=''):
+    """El nombre sin lo que no se ve en la foto: colores entre parentesis,
+    memoria, RAM y la conectividad Sim/eSIM no -- esa si cambia el producto."""
+    t = re.sub(r'\([^)]*\)', ' ', texto or '')
+    t = re.sub(r'\b\d+\s*(?:gb|tb|g|ram)?\s*/\s*\d+\s*(?:gb|tb)\b', ' ', t, flags=re.I)
+    t = re.sub(r'\b\d+\s*(?:gb|tb)\b', ' ', t, flags=re.I)
+    t = re.sub(r'\b(?:5g|4g)\b', ' ', t, flags=re.I)
+    # Tampoco se ven: Sim o eSIM, lo que trae la caja, y la marca repetida
+    t = re.sub(r'\be-?\s?sim\b|\bsim\b|\bsin cargador\b|\bcon cargador\b', ' ', t, flags=re.I)
+    if marca:
+        t = re.sub(r'\b' + re.escape(marca) + r'\b', ' ', t, flags=re.I)
+    return ' '.join(sorted(set(CM.norm(t).replace('"', ' ').split())))
+
+
+def mismo_modelo(fila, cod, idx):
+    """La fila y el producto `cod` son el mismo modelo con otra capacidad.
+
+    Pedro, 26/09/2026: el mismo modelo con otra memoria se ve igual, asi que
+    mostrar la foto del hermano no es un error y no hay nada que pedir. Solo
+    cuenta si el resto del nombre coincide: el Redmi Note 15 Pro no es el Pro
+    Plus, y ahi la foto si seria de otro producto."""
+    prod = (idx['por_codigo'].get(cod) or [{}])[0].get('Producto', '')
+    marca = fila.get('Marca') or ''
+    return modelo_sin_variables(_desc(fila), marca) == modelo_sin_variables(prod, marca)
+
+
+def sim_de(texto):
+    t = (texto or '').lower()
+    return 'esim' if re.search(r'\be-?\s?sim\b', t) else 'sim' if re.search(r'\bsim\b', t) else ''
+
+
 def otra_capacidad(fila, cod, idx):
     """El producto `cod` del maestro dice otra capacidad que la fila."""
     a = capacidad(_desc(fila))
@@ -97,6 +128,13 @@ def r_codigo(filas, ctx):
         if not cod or cod == tiene:
             continue
         var = CM.variante_de(cod, (f.get('Color') or '').strip(), idx) or ''
+        # Otra memoria (capacidad o RAM) del mismo modelo: la foto es la misma.
+        # Sim contra eSIM no entra aca: son productos distintos y ya tienen
+        # codigo propio cada uno (26/09).
+        if tiene and tiene in idx['por_codigo'] and mismo_modelo(f, tiene, idx) \
+                and sim_de(_desc(f)) == sim_de(idx['por_codigo'][tiene][0].get('Producto', '')):
+            yield {'id': f['ID'], 'clave': cod + '|' + var, 'omitir': 'misma foto: otra capacidad del mismo modelo'}
+            continue
         yield {'id': f['ID'], 'desc': _desc(f),
                'hoy': '%s  %s' % (tiene or '(vacio)', (f.get('CODIGO_VAR') or '').strip() or '(vacio)'),
                'poner': '%s  %s' % (cod, var or '(sin color: preguntar)'),
@@ -235,6 +273,8 @@ def r_sin_codigo_propio(filas, ctx):
         if cod_real:
             continue
         if cod and cod in idx['por_codigo'] and otra_capacidad(f, cod, idx):
+            if mismo_modelo(f, cod, idx):
+                continue                   # misma foto: no es un problema (Pedro, 26/09)
             yield {'id': f['ID'], 'desc': _desc(f), 'hoy': cod,
                    'poner': 'es de: ' + idx['por_codigo'][cod][0]['Producto'][:40],
                    'clave': cod, 'candidato': candidato(f, ctx)}
@@ -312,6 +352,7 @@ def main():
     enviados = reg.get('enviados', {})
 
     hallados = []                       # (regla, punto, clave)
+    omitidas = set()                    # siguen pasando, pero por criterio no se piden
     for r in REGLAS:
         vistos = set()
         for p in r['fn'](filas, ctx):
@@ -319,6 +360,9 @@ def main():
             if k in vistos:
                 continue
             vistos.add(k)
+            if p.get('omitir'):
+                omitidas.add(k)
+                continue
             hallados.append((r, p, k))
     # Lo que se resuelve de nuestro lado no va en el pedido: se escribe aparte.
     nuestros = [h for h in hallados if h[0]['donde'] == 'nosotros']
@@ -340,7 +384,7 @@ def main():
             enviados.setdefault(k, {'enviado': cuando, 'id': p['id']})
         # lo que se pidio y ya no aparece queda como arreglado
         for k, v in enviados.items():
-            if k not in claves_hoy and not v.get('arreglado'):
+            if k not in claves_hoy and k not in omitidas and not v.get('arreglado'):
                 v['arreglado'] = HOY.isoformat()
         reg['enviados'] = enviados
         json.dump(reg, open(REGISTRO, 'w', encoding='utf-8'), ensure_ascii=False, indent=1,
@@ -350,7 +394,7 @@ def main():
 
     nuevos = [h for h in hallados if h[2] not in enviados]
     arreglados = [(k, v) for k, v in enviados.items()
-                  if k not in claves_hoy and not v.get('arreglado')]
+                  if k not in claves_hoy and k not in omitidas and not v.get('arreglado')]
 
     L = []
     L.append('[BORRADOR] Armado por herramientas/pedido-advapp.py el %s contra la carga '

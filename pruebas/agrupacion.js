@@ -156,7 +156,18 @@ function correrPruebas(){
      'el precio de la tarjeta es el de alguna variante de verdad');
   ok(MODELOS.every(m => m.precio === null || m.variantes.every(v => v.precio === null || v.precio >= m.precio)),
      'y es el MENOR de todos (el "desde")');
-  const repetidas = MODELOS.filter(m => new Set(m.variantes.map(v=>v.etiqueta)).size !== m.variantes.length);
+  /* Dos filas con la misma etiqueta solo estan bien si la pagina las junta en
+     UN boton y el puntito de color las separa: el MacBook Neo 256GB ingles
+     tiene Blush e Indigo a USD 847 los dos, y el cliente elige por el color. */
+  const distinguibles = (m, et) => {
+    const g = m.variantes.filter(v => v.etiqueta === et);
+    return g.every(v => v.opcion === g[0].opcion && g.every(h => (v.hermanasColor || []).includes(h)));
+  };
+  const repetidas = MODELOS.filter(m => {
+    const c = {};
+    m.variantes.forEach(v => { c[v.etiqueta] = (c[v.etiqueta] || 0) + 1; });
+    return Object.keys(c).some(et => c[et] > 1 && !distinguibles(m, et));
+  });
   ok(repetidas.length === 0, 'en ningun modelo se repiten dos etiquetas',
      repetidas.map(m => m.desc + ': ' + m.variantes.map(v=>v.etiqueta).join('/')).join(' | ') || 'ninguno');
 

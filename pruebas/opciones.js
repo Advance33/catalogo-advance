@@ -40,7 +40,11 @@ const deVersion = () => botones().filter(b => !b.dataset.mem);
 // La misma version escrita con las palabras en otro orden ("8GB/128GB 5G" y
 // "5G 8GB/128GB") es UNA version: la pagina la junta asi desde el 21/09
 // (palabrasClave en armarModelo). Se compara igual que ella.
-const palabras = t => norm(t).split(/\s+/).filter(Boolean).sort().join(' ');
+// Sin la mencion del teclado: unas filas del MacBook Neo lo dicen en el nombre
+// ("8GB/256GB Teclado ES") y otras no, y son la misma version. El teclado se
+// compara aparte, con la columna (26/09).
+const palabras = t => norm(t).replace(/(·\s*)?teclado\s+\S+/g, ' ')
+  .split(/\s+/).filter(w => w && w !== '·').sort().join(' ');
 const texto = b => b.textContent.replace(/\s+/g, ' ').trim();
 
 /* Llegar a una version desde la ficha recien abierta: si su pestaña esta a la
@@ -197,13 +201,21 @@ function correrPruebas(){
   const teclado = [];
   multi.forEach(m => {
     const porBase = new Map();
-    m.variantes.forEach(v => { const k = norm(v.etiquetaBase); if(!porBase.has(k)) porBase.set(k, []); porBase.get(k).push(v); });
+    m.variantes.forEach(v => { const k = palabras(v.etiquetaBase); if(!porBase.has(k)) porBase.set(k, []); porBase.get(k).push(v); });
     porBase.forEach(g => {
       if(g.length > 1 && new Set(g.map(v => norm(v.teclado))).size > 1) teclado.push({ m, g });
     });
   });
   if(teclado.length){
-    const mal = teclado.filter(({ g }) => new Set(g.map(v => v.opcion)).size !== g.length ||
+    /* Desde el 21/09 los colores de un mismo teclado comparten boton, asi que
+       no se pide un boton por fila: se pide que un boton nunca junte dos
+       teclados, y que nombre el suyo. */
+    const tecladosPorBoton = g => {
+      const m = new Map();
+      g.forEach(v => { if(!m.has(v.opcion)) m.set(v.opcion, new Set()); m.get(v.opcion).add(norm(v.teclado)); });
+      return [...m.values()];
+    };
+    const mal = teclado.filter(({ g }) => tecladosPorBoton(g).some(s => s.size > 1) ||
                                         g.some(v => v.teclado && !/teclado/i.test(v.opcion)));
     ok(!mal.length, 'las versiones que cambian de teclado van separadas y el boton nombra el teclado',
        mal.map(({ m, g }) => m.desc + ': ' + g.map(v => v.opcion).join(' / ')).join(' | ') ||

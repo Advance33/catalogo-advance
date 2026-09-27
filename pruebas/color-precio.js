@@ -38,7 +38,10 @@ const esperar = setInterval(() => {
 // La misma version escrita con las palabras en otro orden ("8GB/128GB 5G" y
 // "5G 8GB/128GB") es UNA version: la pagina la junta asi desde el 21/09
 // (palabrasClave en armarModelo). Se compara igual que ella.
-const palabras = t => norm(t).split(/\s+/).filter(Boolean).sort().join(' ');
+// Sin la mencion del teclado, que unas filas dicen en el nombre y otras no;
+// el teclado se compara aparte, con la columna (26/09).
+const palabras = t => norm(t).replace(/(·\s*)?teclado\s+\S+/g, ' ')
+  .split(/\s+/).filter(w => w && w !== '·').sort().join(' ');
 
 function correrPruebas(){
   const conVar = MODELOS.filter(m => m.multi);
@@ -49,7 +52,7 @@ function correrPruebas(){
 
   const otraCap = [];
   conVar.forEach(m => m.variantes.forEach(v => (v.hermanasColor || []).forEach(h => {
-    if(palabras(h.etiquetaBase) !== palabras(v.etiquetaBase))
+    if(palabras(h.etiquetaBase) !== palabras(v.etiquetaBase) || norm(h.teclado) !== norm(v.teclado))
       otraCap.push(m.desc + ': ' + v.id + ' [' + v.etiquetaBase + '] con ' + h.id + ' [' + h.etiquetaBase + ']');
   })));
   ok(!otraCap.length, 'las hermanas de color comparten la misma capacidad',

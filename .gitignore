@@ -62,3 +62,9 @@ FOTOS-POR-MARCA.txt
 
 # El informe de lo que hay que corregir en la planilla: nota de trabajo
 CATALOGO-A-CORREGIR.txt
+
+# Los arma herramientas/pedido-advapp.py cada dia desde los datos: se
+# regeneran siempre, y lo que importa (que se mando y cuando) vive en
+# herramientas/pedidos-advapp.json, que si va al repo.
+PEDIDO-ADVAPP.txt
+PENDIENTES-NUESTROS.txt

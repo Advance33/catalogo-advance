@@ -1,0 +1,260 @@
+{
+ "enviados": {
+  "r_codigo|CEL-APL-16PM-512-NAT-000|AT-0069|": {
+   "enviado": "2026-09-21",
+   "id": "CEL-APL-16PM-512-NAT-000"
+  },
+  "r_codigo|CEL-APL-17P-1TB-BLU-SIM|AT-0537|AT-0537-03": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APL-17P-1TB-BLU-SIM"
+  },
+  "r_codigo|CEL-APL-17P-1TB-ORG-SIM|AT-0537|AT-0537-02": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APL-17P-1TB-ORG-SIM"
+  },
+  "r_codigo|CEL-APL-17P-1TB-SLV-SIM|AT-0537|AT-0537-01": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APL-17P-1TB-SLV-SIM"
+  },
+  "r_codigo|CEL-APL-17P-256-BLU-SIM|AT-0535|AT-0535-02": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APL-17P-256-BLU-SIM"
+  },
+  "r_codigo|CEL-APL-17P-256-ORG-SIM|AT-0535|AT-0535-03": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APL-17P-256-ORG-SIM"
+  },
+  "r_codigo|CEL-APL-17P-256-SLV-SIM|AT-0535|AT-0535-01": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APL-17P-256-SLV-SIM"
+  },
+  "r_codigo|CEL-APL-17P-512-BLU-ESIM|AT-0073|AT-0073-02": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APL-17P-512-BLU-ESIM"
+  },
+  "r_codigo|CEL-APL-17P-512-BLU-SIM|AT-0536|AT-0536-02": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APL-17P-512-BLU-SIM"
+  },
+  "r_codigo|CEL-APL-17P-512-SLV-ESIM|AT-0073|AT-0073-03": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APL-17P-512-SLV-ESIM"
+  },
+  "r_codigo|CEL-APL-17P-512-SLV-SIM|AT-0536|AT-0536-03": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APL-17P-512-SLV-SIM"
+  },
+  "r_codigo|CEL-APP-095|AT-0536|AT-0536-01": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APP-095"
+  },
+  "r_codigo|CEL-SAM-A17-8G256-BLU-000|AT-0083|AT-0083-02": {
+   "enviado": "2026-09-21",
+   "id": "CEL-SAM-A17-8G256-BLU-000"
+  },
+  "r_codigo|CEL-SAM-A27-8G256-BLU-000|AT-0503|AT-0503-02": {
+   "enviado": "2026-09-21",
+   "id": "CEL-SAM-A27-8G256-BLU-000"
+  },
+  "r_codigo|CEL-SAM-A27-8G256-PNK-000|AT-0503|AT-0503-03": {
+   "enviado": "2026-09-21",
+   "id": "CEL-SAM-A27-8G256-PNK-000"
+  },
+  "r_codigo|CEL-SAM-A56-8G256-BLK-000|AT-0087|": {
+   "enviado": "2026-09-21",
+   "id": "CEL-SAM-A56-8G256-BLK-000"
+  },
+  "r_codigo|CEL-SAM-A56-8G256-PNK-000|AT-0087|": {
+   "enviado": "2026-09-21",
+   "id": "CEL-SAM-A56-8G256-PNK-000"
+  },
+  "r_codigo|CEL-SAM-S25ULT-12G512-GRY-000|AT-0093|AT-0093-01": {
+   "enviado": "2026-09-21",
+   "id": "CEL-SAM-S25ULT-12G512-GRY-000"
+  },
+  "r_codigo|CEL-SAM-S25ULT-12G512-SBL-000|AT-0093|AT-0093-03": {
+   "enviado": "2026-09-21",
+   "id": "CEL-SAM-S25ULT-12G512-SBL-000"
+  },
+  "r_codigo|CEL-XIA-POCOX8PROMAX-12G512-WHT-000|AT-0115|": {
+   "enviado": "2026-09-21",
+   "id": "CEL-XIA-POCOX8PROMAX-12G512-WHT-000"
+  },
+  "r_codigo|NBK-APL-MBA13M5-24G1TB-SLV-EN|AT-0429|AT-0429-03": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBA13M5-24G1TB-SLV-EN"
+  },
+  "r_codigo|NBK-APL-MBP14M5-16G1TB-SBK-EN|AT-0437|AT-0437-02": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP14M5-16G1TB-SBK-EN"
+  },
+  "r_codigo|NBK-APL-MBP14M5-16G1TB-SLV-EN|AT-0437|AT-0437-01": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP14M5-16G1TB-SLV-EN"
+  },
+  "r_codigo|NBK-APL-MBP14M5P-24G2TB-SLV-EN|AT-0445|": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP14M5P-24G2TB-SLV-EN"
+  },
+  "r_codigo|NBK-APL-MBP16M5P-48G1TB-SBK-EN|AT-0447|AT-0447-01": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP16M5P-48G1TB-SBK-EN"
+  },
+  "r_codigo|NBK-APL-NEO13-8G256-BLS-ES|AT-0433|AT-0433-03": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G256-BLS-ES"
+  },
+  "r_codigo|NBK-APL-NEO13-8G256-IND-ES|AT-0433|AT-0433-04": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G256-IND-ES"
+  },
+  "r_codigo|NBK-APL-NEO13-8G256-SLV-EN|AT-0432|AT-0432-04": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G256-SLV-EN"
+  },
+  "r_codigo|TAB-APL-IPADAIR11M4-128-BLU-WIFI|AT-0468|AT-0468-03": {
+   "enviado": "2026-09-21",
+   "id": "TAB-APL-IPADAIR11M4-128-BLU-WIFI"
+  },
+  "r_codigo|TAB-APL-IPADAIR11M4-128-STL-WIFI|AT-0468|AT-0468-04": {
+   "enviado": "2026-09-21",
+   "id": "TAB-APL-IPADAIR11M4-128-STL-WIFI"
+  },
+  "r_nombre|AUR-APL-AIRPODSMAX2-000-BLU-USBC|id|AIRPODSMAX2|AIRPODSMAX": {
+   "enviado": "2026-09-26",
+   "id": "AUR-APL-AIRPODSMAX2-000-BLU-USBC"
+  },
+  "r_nombre|AUR-APL-AIRPODSMAX2-000-MID-USBC|id|AIRPODSMAX2|AIRPODSMAX": {
+   "enviado": "2026-09-26",
+   "id": "AUR-APL-AIRPODSMAX2-000-MID-USBC"
+  },
+  "r_nombre|AUR-APL-AIRPODSMAX2-000-ORG-USBC|id|AIRPODSMAX2|AIRPODSMAX": {
+   "enviado": "2026-09-26",
+   "id": "AUR-APL-AIRPODSMAX2-000-ORG-USBC"
+  },
+  "r_nombre|AUR-APL-AIRPODSMAX2-000-PUR-USBC|id|AIRPODSMAX2|AIRPODSMAX": {
+   "enviado": "2026-09-26",
+   "id": "AUR-APL-AIRPODSMAX2-000-PUR-USBC"
+  },
+  "r_nombre|AUR-APL-AIRPODSMAX2-000-STL-USBC|id|AIRPODSMAX2|AIRPODSMAX": {
+   "enviado": "2026-09-26",
+   "id": "AUR-APL-AIRPODSMAX2-000-STL-USBC"
+  },
+  "r_repetido|CEL-APP-095|AT-0073-01|CEL-APL-17P-512-ORG-ESIM,CEL-APL-17P-512-ORG-SIM": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APP-095"
+  },
+  "r_repetido|SW-APP-016|AT-0455-05|SWT-APL-WULTRA3-000-NAT-49-CELL-OCEAN,SWT-APL-WULTRA3-000-NAT-49-CELL-TRAILML": {
+   "enviado": "2026-09-26",
+   "id": "SW-APP-016"
+  },
+  "r_repetido|SW-APP-017|AT-0455-05|SWT-APL-WULTRA3-000-NAT-49-CELL-OCEAN,SWT-APL-WULTRA3-000-NAT-49-CELL-TRAILML": {
+   "enviado": "2026-09-26",
+   "id": "SW-APP-017"
+  },
+  "r_teclado|NBK-APL-MBP14M5-16G1TB-SBK-ES|ES": {
+   "enviado": "2026-09-26",
+   "id": "NBK-APL-MBP14M5-16G1TB-SBK-ES"
+  },
+  "r_teclado|NBK-APL-MBP14M5-16G1TB-SLV-ES|ES": {
+   "enviado": "2026-09-26",
+   "id": "NBK-APL-MBP14M5-16G1TB-SLV-ES"
+  },
+  "r_teclado|NBK-APL-MBP14M5-24G1TB-SBK-ES|ES": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP14M5-24G1TB-SBK-ES"
+  },
+  "r_teclado|NBK-APL-MBP14M5-24G1TB-SLV-ES|ES": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP14M5-24G1TB-SLV-ES"
+  },
+  "r_teclado|NBK-APL-MBP14M5-32G1TB-SBK-ES|ES": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP14M5-32G1TB-SBK-ES"
+  },
+  "r_teclado|NBK-APL-MBP14M5-32G1TB-SLV-ES|ES": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP14M5-32G1TB-SLV-ES"
+  },
+  "r_teclado|NBK-APL-NEO13-8G256-BLS-ES|ES": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G256-BLS-ES"
+  },
+  "r_teclado|NBK-APL-NEO13-8G256-IND-ES|ES": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G256-IND-ES"
+  },
+  "r_teclado|NBK-APL-NEO13-8G512-BLS-ES|ES": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G512-BLS-ES"
+  },
+  "r_teclado|NBK-APL-NEO13-8G512-CIT-ES|ES": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G512-CIT-ES"
+  },
+  "r_teclado|NBK-APL-NEO13-8G512-IND-ES|ES": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G512-IND-ES"
+  },
+  "r_teclado|NBK-APL-NEO13-8G512-SLV-ES|ES": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G512-SLV-ES"
+  },
+  "r_variante|CEL-APL-17P-1TB-ORG-ESIM|AT-0071-02": {
+   "enviado": "2026-09-26",
+   "id": "CEL-APL-17P-1TB-ORG-ESIM"
+  },
+  "r_variante|NBK-APL-MBA13M5-24G512-MID-EN|AT-0522-02": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBA13M5-24G512-MID-EN"
+  },
+  "r_variante|NBK-APL-MBP14M5-24G1TB-SBK-ES|AT-0438-02": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP14M5-24G1TB-SBK-ES"
+  },
+  "r_variante|NBK-APL-MBP14M5-24G1TB-SLV-ES|AT-0438-01": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP14M5-24G1TB-SLV-ES"
+  },
+  "r_variante|NBK-APL-MBP14M5-32G1TB-SBK-ES|AT-0438-02": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP14M5-32G1TB-SBK-ES"
+  },
+  "r_variante|NBK-APL-MBP14M5-32G1TB-SLV-EN|AT-0438-01": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP14M5-32G1TB-SLV-EN"
+  },
+  "r_variante|NBK-APL-MBP14M5-32G1TB-SLV-ES|AT-0438-01": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP14M5-32G1TB-SLV-ES"
+  },
+  "r_variante|NBK-APL-MBP16M5MAX-48G2TB-SLV-EN|AT-0441-01": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-MBP16M5MAX-48G2TB-SLV-EN"
+  },
+  "r_variante|NBK-APL-NEO13-8G512-BLS-ES|AT-0434-01": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G512-BLS-ES"
+  },
+  "r_variante|NBK-APL-NEO13-8G512-CIT-ES|AT-0434-02": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G512-CIT-ES"
+  },
+  "r_variante|NBK-APL-NEO13-8G512-IND-ES|AT-0434-03": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G512-IND-ES"
+  },
+  "r_variante|NBK-APL-NEO13-8G512-SLV-ES|AT-0434-04": {
+   "enviado": "2026-09-21",
+   "id": "NBK-APL-NEO13-8G512-SLV-ES"
+  },
+  "r_variante|SW-APP-016|AT-0455-03": {
+   "enviado": "2026-09-26",
+   "id": "SW-APP-016"
+  },
+  "r_variante|SW-APP-017|AT-0455-04": {
+   "enviado": "2026-09-26",
+   "id": "SW-APP-017"
+  }
+ }
+}

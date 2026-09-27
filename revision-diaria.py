@@ -17,7 +17,7 @@ Se instala una sola vez:  python revision-diaria.py --instalar  (python3 en Mac)
 En Windows queda como tarea programada; en Mac, como agente de launchd.
 Para probarlo a mano:  python revision-diaria.py
 """
-import os, sys, subprocess, datetime, glob
+import os, re, sys, subprocess, datetime, glob
 
 AQUI      = os.path.dirname(os.path.abspath(__file__))
 LOGS      = os.path.join(AQUI, 'logs')
@@ -289,6 +289,15 @@ def main():
             elif linea.strip().startswith('Se arreglan en'):
                 break
 
+    # Los colores que ADVAPP trajo y la web no sabe pintar. El validador los da
+    # como aviso leve y por eso nadie los veia: el 26/09 habia cuatro. Se
+    # avisan con el comando que los resuelve (mide el tono en nuestra foto).
+    nuevos = sorted({m.group(1) for m in re.finditer(
+        r'color "(.+?)" no está en el mapa COLORES', salida)})
+    colores_mal = (['[colores] %d color(es) sin puntito en la web: %s  ->  python3 '
+                    'herramientas/colores-nuevos.py' % (len(nuevos), ', '.join(nuevos))]
+                   if nuevos else [])
+
     # Si ADVAPP no cargo precios hoy, el sitio sigue mostrando los viejos con
     # toda naturalidad: esta es la unica forma de enterarse sin abrir ADVAPP.
     vieja = carga_vieja()
@@ -329,7 +338,27 @@ def main():
     with open(log, 'a', encoding='utf-8') as f:
         f.write('\nPruebas de la pagina (pruebas/correr.py):\n%s\n' % salida_p)
 
-    if (r.returncode == 1 and graves) or vieja or fotos_mal or pagina_mal:
+    # El pedido a ADVAPP se arma solo con los datos del dia
+    # (herramientas/pedido-advapp.py). Se avisa cuando aparece algo que todavia
+    # no se les pidio, y cuando hay filas que esperan un codigo nuestro.
+    rq = subprocess.run([exe, os.path.join('herramientas', 'pedido-advapp.py')],
+                        cwd=AQUI, capture_output=True, text=True,
+                        encoding='utf-8', errors='replace',
+                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+    salida_q = (rq.stdout or '') + (rq.stderr or '')
+    with open(log, 'a', encoding='utf-8') as f:
+        f.write('\nPedido a ADVAPP (herramientas/pedido-advapp.py):\n%s\n' % salida_q)
+    pedido_mal = []
+    m = re.search(r'\((\d+) nuevos', salida_q)
+    if m and int(m.group(1)):
+        pedido_mal.append('[ADVAPP] %s punto(s) nuevos para pedirles  ->  PEDIDO-ADVAPP.txt '
+                          '(cuando se mande: pedido-advapp.py --enviado)' % m.group(1))
+    m = re.search(r'Pendientes nuestros: (\d+)', salida_q)
+    if m and int(m.group(1)):
+        pedido_mal.append('[nuestro] %s fila(s) esperan que les demos codigo  ->  '
+                          'PENDIENTES-NUESTROS.txt' % m.group(1))
+
+    if (r.returncode == 1 and graves) or vieja or fotos_mal or pagina_mal or colores_mal or pedido_mal:
         # En Mac, corriendo desde launchd, el sistema puede no dejar escribir
         # en el Escritorio (permisos de privacidad). Entonces el aviso queda
         # en logs/ (que no se publica) y la notificacion igual sale.
@@ -356,12 +385,14 @@ def main():
                 'en la revision del dia siguiente.\n'
                 % (ahora, '=' * 60,
                    '\n'.join(graves + (['[ADVAPP] LOS PRECIOS NO SE ACTUALIZARON: ' + vieja] if vieja else [])
-                             + fotos_mal + pagina_mal),
+                             + fotos_mal + pagina_mal + colores_mal + pedido_mal),
                    '=' * 60, log))
         notificar('Catalogo Advance Tecno',
                   ('%d error(es) grave(s) en los datos. ' % len(graves) if graves else '')
                   + ('ADVAPP no cargo precios hoy. ' if vieja else '')
                   + ('%d prueba(s) de la pagina fallan. ' % len(pagina_mal) if pagina_mal else '')
+                  + ('Hay colores nuevos sin puntito. ' if colores_mal else '')
+                  + ('Hay cosas para pedirle a ADVAPP. ' if pedido_mal else '')
                   + ('Hay fotos que mirar. ' if fotos_mal else '')
                   + ('Mira el aviso en el Escritorio.' if aviso == AVISO
                      else 'Mira el aviso en la carpeta logs del catalogo.'))

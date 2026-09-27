@@ -144,19 +144,27 @@ function correrPruebas(){
     cerrarFicha();
   }
 
-  /* Dos tarjetas con el mismo nombre y distinto precio serian peor que un
-     nombre largo. Por eso el recorte se decide mirando a TODOS los modelos:
-     los Ray-Ban Meta, donde el parentesis del armazon es lo unico que los
-     separa, se quedan con el nombre entero. */
+  /* Dos tarjetas que dicen exactamente lo mismo y valen distinto serian peor
+     que un nombre largo. Desde el 26/09 (opcion B) el titulo es solo el
+     modelo y lo que separa a dos modelos va en la linea tecnica: los cuatro
+     DJI Mini 5 Pro se llaman igual y la linea dice "+ Combo More Fly · Rc 2".
+     Lo que no se puede repetir es titulo Y linea tecnica juntos. */
   const porTitulo = new Map();
   MODELOS.forEach(m => {
-    const t = m.titulo || m.desc;
+    const t = (m.titulo || m.desc) + (m.tecnica ? ' · ' + m.tecnica : '');
     if(!porTitulo.has(t)) porTitulo.set(t, []);
     porTitulo.get(t).push(m);
   });
   const chocan = [...porTitulo.entries()].filter(([, l]) =>
     l.length > 1 && l.some(x => x.desc !== l[0].desc));
-  ok(!chocan.length, 'y el recorte nunca deja dos modelos distintos llamandose igual',
+  /* La opcion B: el titulo es el modelo. Parentesis, la barra de la
+     referencia y el "F ... | L ..." de los Ray-Ban van a la linea tecnica.
+     Si ADVAPP estrena otra forma de escribirlo, esto lo nota. */
+  const sucios = MODELOS.filter(m => /[()|]|\sF\s.+\|\s*L\s/.test(m.titulo || ''));
+  ok(!sucios.length, 'el titulo de la tarjeta es solo el modelo: sin parentesis ni barras',
+     sucios.slice(0, 3).map(m => m.titulo).join(' | ') || MODELOS.length + ' titulos');
+
+  ok(!chocan.length, 'y el recorte nunca deja dos modelos distintos diciendo lo mismo (titulo y linea tecnica)',
      chocan.slice(0, 3).map(([t, l]) => '"' + t + '" x' + l.length).join(' | ')
      || MODELOS.length + ' modelos');
 

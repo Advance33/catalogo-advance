@@ -1114,6 +1114,13 @@
     overflow-wrap:anywhere;
   }
 
+  /* La linea tecnica (26/09, opcion B elegida con Pedro): lo que el nombre de
+     ADVAPP trae ademas del modelo -- "280Hz · Curved 1500R", el armazon y el
+     cristal de un Ray-Ban, "+ Fly More Combo" --. Un renglon: lo que no entra
+     sigue entero en la ficha. */
+  .tecnica{font:500 11px/1.35 var(--mono);color:var(--muted);margin:-2px 0 0;
+           white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
   .incluye{font:600 11px/1.35 var(--sans);color:var(--ok);background:var(--ok-soft);padding:6px 9px;border-radius:8px}
 
   /* La etiqueta del precio: el pie de la tarjeta es un bloque oscuro, como el
@@ -4892,21 +4899,81 @@ function agrupar(prods){
    Pro, donde el parentesis dice que control remoto trae. Dos tarjetas con el
    mismo nombre y distinto precio es peor que un nombre largo. */
 function ponerTitulos(ms){
+  const partes = new Map(ms.map(m => [m, partirTitulo(m)]));
   const porCorto = new Map();
   ms.forEach(m => {
-    const t = nombreSinMemoria(m.desc);
+    const t = partes.get(m).titulo;
     if(!porCorto.has(t)) porCorto.set(t, []);
     porCorto.get(t).push(m);
   });
   ms.forEach(m => {
-    const t = nombreSinMemoria(m.desc);
-    const juntos = porCorto.get(t) || [];
+    const { titulo, tecnica, colores } = partes.get(m);
+    const juntos = porCorto.get(titulo) || [];
     /* Solo es choque si el recorte los junto. Dos filas que YA se llamaban
        igual en la planilla -- el Quest 3S de 128 y el de 256 -- se siguen
-       llamando igual con el nombre entero: alargarlo no arregla nada. */
+       llamando igual con el nombre entero: alargarlo no arregla nada.
+       Desde el 26/09 el choque no alarga el titulo: lo que los separa va a la
+       linea tecnica, aunque sea el color (los Ray-Ban Meta, que solo se
+       distinguen por el armazon y el cristal). */
     const choca = juntos.some(x => x !== m && x.desc !== m.desc);
-    m.titulo = choca ? m.desc : t;
+    m.titulo = titulo;
+    m.tecnica = [tecnica, choca && !tecnica ? colores : ''].filter(Boolean).join(' · ');
   });
+}
+
+/* El nombre de ADVAPP partido en dos: el modelo, para el titulo, y lo demas,
+   para la linea tecnica. Se eligio el 26/09 mirando siete tarjetas reales
+   (muestras/titulos-tarjeta.html, opcion B). Nada se inventa ni se traduce:
+   solo cambia de renglon lo que la fila ya dice.
+
+     "Mag 276CXF | Msi Gaming 27" FHD (280Hz · Curved · 0.5ms)"
+        -> "Mag 276CXF Gaming 27" FHD"  ·  "280Hz · Curved · 0.5ms"
+     "Meta Gen 2 — Wayfarer F Shiny Black | L G15 Green"
+        -> "Meta Gen 2 Wayfarer"  ·  "Armazón Shiny Black · Cristal G15 Green"
+     "Drone DJI Mini 5 Pro + Combo More Fly"
+        -> "Drone DJI Mini 5 Pro"  ·  "+ Combo More Fly"
+
+   La memoria sale como siempre (se elige en la ficha) y el color tambien
+   (esta en los puntitos); los dos van aparte en `colores` por si hace falta
+   para separar dos modelos que quedaron con el mismo titulo. */
+function partirTitulo(m){
+  let d = String(m.desc || '');
+  const tec = [], colores = [];
+  const deLaFila = new Set((m.variantes || [m]).flatMap(v => partirColores(v.color || '')).map(norm));
+  // Ray-Ban: "F <armazon> | L <cristal>"
+  d = d.replace(/\s+F\s+(.+?)\s*\|\s*L\s+(.+)$/, (x, a, b) => {
+    tec.push('Armazón ' + a.trim(), 'Cristal ' + b.trim()); return '';
+  });
+  // "REFERENCIA | Marca resto": la referencia adelante, la marca afuera (ya esta arriba)
+  // (hasta tres palabras: "P2725H", "Mag 272F", "Mag 274QF X24")
+  const ref = d.match(/^\s*((?:[^\s|]+\s){0,2}[^\s|]+)\s*\|\s*(.+)$/);
+  if(ref){
+    let resto = ref[2];
+    const marca = String(m.marca || '').trim();
+    if(marca) resto = resto.replace(new RegExp('^' + marca.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s+', 'i'), '');
+    d = ref[1] + ' ' + resto;
+  }
+  // Los parentesis: color -> afuera; lo demas -> linea tecnica
+  d = d.replace(RE_PAREN, p => {
+    const dentro = p.slice(1, -1).trim();
+    if(!dentro) return ' ';
+    const lista = pintas(dentro);
+    const esColor = (lista.length && lista.every(c => c.hex)) || deLaFila.has(norm(dentro)) ||
+                    partirColores(dentro).every(c => deLaFila.has(norm(c)));
+    (esColor ? colores : tec).push(dentro);
+    return ' ';
+  });
+  // Lo que viene despues de " - " o " + " (con espacios) es un agregado del modelo
+  d = d.replace(/\s+([-+])\s+(.+)$/, (x, signo, resto) => {
+    tec.unshift((signo === '+' ? '+ ' : '') + resto.trim()); return '';
+  });
+  d = d.replace(/\s+—\s+/g, ' ')
+       .replace(/\s+F$/, '')          // "Blayzer Optics F": el armazon, sin el color que lo sigue
+       .replace(/[\s|]+$/, '');        // "Redmi Pad 2 — 11" |": la barra suelta del final
+  const titulo = (nombreSinMemoria(d.replace(/\s{2,}/g, ' ').trim()) || nombreSinMemoria(m.desc))
+    .replace(/[\s|]+$/, '');      // la barra puede quedar suelta recien al sacar la memoria
+  const limpio = s => s.replace(/\s{2,}/g, ' ').trim();
+  return { titulo, tecnica: tec.map(limpio).filter(Boolean).join(' · '), colores: colores.join(' · ') };
 }
 
 // El modelo que contiene esta variante. Sirve para abrir la ficha desde un link
@@ -4971,6 +5038,7 @@ function tarjeta(p){
     <div class="cuerpo">
       <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}</span>
       <h2 class="nombre">${esc(p.titulo || p.desc)}</h2>
+      ${p.tecnica ? `<p class="tecnica" title="${esc(p.tecnica)}">${esc(p.tecnica)}</p>` : ''}
       <div class="pie">
         <div class="plata">
           <span class="usd">${precioTarjeta(p)}</span>

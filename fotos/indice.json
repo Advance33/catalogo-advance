@@ -896,7 +896,8 @@
 "apple|auriculares|4:1"
 ],
 "AT-0056": [
-"apple|auriculares|2:1,max:1"
+"apple|auriculares|2:1,max:1",
+"apple|auriculares|max:1"
 ],
 "AT-0057": [
 "apple|auriculares|max:1"
@@ -2478,6 +2479,11 @@
 "AUD-JBL-002": "AT-0448",
 "AUD-KIE-001": "AT-0062",
 "AUD-SAM-001": "AT-0063",
+"AUR-APL-AIRPODSMAX2-000-BLU-USBC": "AT-0056",
+"AUR-APL-AIRPODSMAX2-000-MID-USBC": "AT-0056",
+"AUR-APL-AIRPODSMAX2-000-ORG-USBC": "AT-0056",
+"AUR-APL-AIRPODSMAX2-000-PUR-USBC": "AT-0056",
+"AUR-APL-AIRPODSMAX2-000-STL-USBC": "AT-0056",
 "CAM-CAN-003": "AT-0156",
 "CAM-CAN-004": "AT-0144",
 "CAM-CAN-006": "AT-0138",
@@ -5910,5 +5916,5 @@
 }
 }
 },
-"generado": "2026-09-26T20:14:18"
+"generado": "2026-09-26T22:04:09"
 }

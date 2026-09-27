@@ -4782,10 +4782,15 @@ function armarModelo(vs){
      distintos a filas del mismo botón y se desarmaban agrupaciones que ya
      estaban bien (salían "32GB/1TB · Space Black" y "512GB E-Sim · Orange"). */
   const palabrasClave = t => norm(t).split(/\s+/).filter(Boolean).sort().join(' ');
+  /* Para saber si una memoria existe con los dos teclados, la mencion del
+     teclado no cuenta: unas filas lo dicen en el nombre ("8GB/512GB Teclado
+     ES") y otras no, y sin esto el boton ingles salia sin nombrar su teclado
+     al lado de "8GB/512GB · Teclado español" (26/09). */
+  const sinTeclado = t => palabrasClave(String(t || '').replace(/(·\s*)?teclado\s+\S+/gi, ' ').replace(/·/g, ' '));
   const porVersion = new Map();
   const tecladosDe = new Map();
   vs.forEach(v => {
-    const base = norm(v.etiquetaBase);
+    const base = sinTeclado(v.etiquetaBase);
     const k = [palabrasClave(v.etiquetaBase), norm(v.teclado), norm(v.condicion)].join('|');
     if(!porVersion.has(k)) porVersion.set(k, []);
     porVersion.get(k).push(v);
@@ -4806,7 +4811,7 @@ function armarModelo(vs){
     vs.forEach(v => cuenta.set(v.etiquetaBase, (cuenta.get(v.etiquetaBase) || 0) + 1));
     const base = [...new Set(grupo.map(v => v.etiquetaBase))]
       .sort((a, b) => (cuenta.get(b) || 0) - (cuenta.get(a) || 0) || a.length - b.length)[0];
-    const mezclaTeclado = (tecladosDe.get(norm(base)) || new Set()).size > 1;
+    const mezclaTeclado = (tecladosDe.get(sinTeclado(base)) || new Set()).size > 1;
     // Si el nombre ya nombra el teclado, no se repite
     const et = mezclaTeclado && grupo[0].teclado && !/teclado/i.test(base)
              ? base + ' · ' + nombreTeclado(grupo[0].teclado)

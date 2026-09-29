@@ -102,6 +102,16 @@
    "filas": [],
    "pregunta": "Ray-Ban Meta: 7 filas dicen \"Rayban Meta GEN2 ...\" y otras 6 \"Meta Gen 2 — ...\". Conviene escribirlas igual, pero SIN cambiar ID, CODIGO ni SKU, y avisandonos antes: el 11/09 un renombre asi hizo que nuestras herramientas dejaran de reconocer siete filas. Prioridad baja.",
    "respondida": ""
+  },
+  {
+   "id": "P-10",
+   "fecha": "2026-09-29",
+   "hallazgo": 43,
+   "filas": [
+    {"ID": "TAB-SAM-035", "nombre": "Galaxy Tab A11+ 6/128GB (X230)"}
+   ],
+   "pregunta": "TAB-SAM-035 (Galaxy Tab A11+ 6/128GB Wifi, X230) viene sin color, y hay otra fila del mismo modelo en Gray (TAB-SAM-TABA11PLUS-6G128-GRY-WIFI). ¿De que color es TAB-SAM-035? Si es Silver, que la columna Color lo diga; si es la misma Gray, que no este dos veces. Mientras tanto la foto que tenemos es Silver y no se la ponemos al Gray.",
+   "respondida": ""
   }
  ]
 }

@@ -2,6 +2,8 @@
 // puesto en la hoja Landing y el primero, gviz, devolvio 19 filas de 556: la
 // pagina publicada mostro 19 productos sin que nada avisara. Esta tanda simula
 // ese recorte y exige que la pagina lo note contando contra Meta.
+// (29/09: desde la decision 1.3 A la planilla se lee solo con ADVAPP_URL
+// vacio; bajarCSV sigue siendo ese camino y se prueba igual.)
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 
@@ -82,8 +84,15 @@ async function correrPruebas(){
   const detalle = FUENTES.map((u, i) => nombreFuente(u) + ' ' + porFuente[i]).join(', ') + ' (Meta dice ' + esperadas + ')';
   R.push('  --  filas de cada fuente de la planilla: ' + detalle);
   const cortas = FUENTES.filter((u, i) => porFuente[i] < esperadas);
-  if(cortas.length)
-    R.push('AVISO la planilla de respaldo no trae lo mismo por las dos fuentes: ' + detalle +
-           '. Si ADVAPP falla, la pagina depende de ' + (cortas.length < FUENTES.length ? 'una sola' : 'ninguna completa') +
+  /* 29/09 (decision 1.3 A de Pedro): con ADVAPP_URL puesta la planilla ya no
+     es respaldo (si ADVAPP falla va la copia de este navegador o el aviso),
+     asi que una fuente recortada no le cambia nada al cliente: queda como
+     linea informativa. El AVISO vuelve solo si ADVAPP_URL se vacia y la
+     pagina pasa a leer la planilla. */
+  if(cortas.length && !ADVAPP_URL)
+    R.push('AVISO la planilla no trae lo mismo por las dos fuentes: ' + detalle +
+           '. La pagina depende de ' + (cortas.length < FUENTES.length ? 'una sola' : 'ninguna completa') +
            '. Suele ser un filtro o una vista puesta en la hoja Landing.');
+  else if(cortas.length)
+    R.push('  --  las dos fuentes de la planilla no traen lo mismo, pero con ADVAPP la planilla ya no es respaldo (decision 1.3 A)');
 }

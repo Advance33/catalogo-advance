@@ -77,7 +77,9 @@ function correrPruebas(){
      'y aclara quien lo cobra, con el texto de SERVICIO');
   let serv = $('ficha').querySelector('.fi-servicio');
   ok(!!serv, 'y debajo del boton, el retiro y la garantia');
-  const lineas = serv ? [...serv.querySelectorAll('li')] : [];
+  // Desde el 29/09 hay un renglon mas, el del pago, con su propia lista adentro
+  // (decision 2.5 B: lo mira decision-tarjeta.js). Aca, los de SERVICIO.
+  const lineas = serv ? [...serv.children].filter(l => l.dataset.servicio !== 'pago') : [];
   ok(lineas.length === Object.keys(SERVICIO).length - 1, 'una linea por cada una, sin repetir el envio',
      lineas.map(l => l.dataset.servicio).join(', '));
   ok(!lineas.some(l => l.dataset.servicio === 'envio'),

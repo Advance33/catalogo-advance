@@ -3,8 +3,10 @@ PRUEBAS DEL CATALOGO
 
 Cada archivo .js de esta carpeta es una tanda de comprobaciones que se corre
 sobre el catalogo de verdad, con los datos de hoy: la pagina baja los
-productos de ADVAPP (contrato landing/1.3) y la planilla de Google, congelada
-desde el 22/09, queda solo de respaldo. Entre todas son cientos de
+productos de ADVAPP (contrato landing/1.3). Si ADVAPP falla, la pagina usa
+la copia de la ultima respuesta buena guardada en el navegador, o muestra el
+aviso de no disponible: la planilla de Google, congelada desde el 22/09, ya
+no es respaldo (decision 1.3 A de Pedro, 29/09). Entre todas son cientos de
 comprobaciones.
 
 (29/09: este LEEME hablaba todavia de "la planilla de verdad", de PROBAR.bat
@@ -45,8 +47,9 @@ si alguna falta).
   carrusel.js     La vidriera de ofertas de arriba: de donde salen, las
                   flechas y que se frene sola.
   layout.js       Como se ve en 390, 900, 1440 y 1920 px de ancho.
-  advapp.js       ADVAPP como fuente: que se use cuando anda y que se vuelva a
-                  la planilla cuando falla, tarda o viene cortado.
+  advapp.js       ADVAPP como fuente: que se use cuando anda y que cuando
+                  falla, tarda o viene cortado se use la copia guardada en el
+                  navegador, nunca la planilla (decision 1.3 A, 29/09).
   analitica.js    La medicion: que mida lo que tiene que medir y que no mande
                   nada si esta apagada o el navegador pide no ser seguido.
   ayuda.js        La ayuda del final de la portada: las preguntas, la
@@ -73,6 +76,61 @@ si alguna falta).
   guardas-*.js    Las guardas de la auditoria del 29/09: una tanda por grupo
                   de arreglos, cada una con el caso real que la motivo, para
                   que lo arreglado no vuelva.
+  decision-pruebas-avisos.js
+                  Las decisiones 7.1 a 7.4 de Pedro (29/09): nuevas,
+                  conocidas y arregladas en correr.py, PUBLICAR y la
+                  revision de las 14:00, y el registro pruebas/conocidas.json.
+  decision-resiliencia.js
+                  Las decisiones 1.1 a 1.6 de Pedro (29/09), cuando ADVAPP
+                  falla: la copia de la ultima respuesta buena con su hora y
+                  la franja ambar, las 6 horas que vale, el aviso de no
+                  disponible con Reintentar, WhatsApp y reintentos solos, el
+                  total del pedido con la hora y la copia al instante.
+  decision-vista-previa.js
+                  La vista previa de WhatsApp por fila (decision 4.2, Pedro
+                  29/09): las paginas p/<ID>.html que arma
+                  herramientas/vista-previa.py, con la foto de la ficha, el
+                  modelo y la version, sin precio, y que esten al dia.
+  decision-tarjeta.js
+                  Las decisiones 2.1 a 2.8 de Pedro (29/09): la tarjeta con
+                  un filtro de version (precio, foto, ficha y + de esa
+                  version), los pesos marcados como aproximados, la ficha
+                  sin codigos del proveedor, el precio anterior en la
+                  ficha, el renglon de formas de pago, lo sin stock que no
+                  se agrega, y en el celular los botones y la X de la ficha
+                  pegados.
+  decision-busqueda.js
+                  Las decisiones 3.1 a 3.4 de Pedro (29/09): la busqueda
+                  sin resultados. Adentro de un rubro, el titulo, la grilla
+                  y el desplegable dicen lo mismo y ofrecen "Buscar en todo
+                  el catalogo"; la grilla vacia dice la causa y trae un
+                  boton con la cantidad; "Preguntanos si lo conseguimos"
+                  cuando no esta en ningun lado; y el precio que no sirve en
+                  el rubro nuevo se saca con aviso.
+  decision-ficha.js
+                  Las decisiones 4.1, 4.3, 4.4 y 4.5 de Pedro (29/09), y la
+                  parte de la web de la 4.2: el boton Compartir al lado de
+                  la X (en el celular, el menu del telefono; en la compu
+                  copia) con el link a p/<ID>.html si la fila tiene pagina,
+                  "Ver las N versiones" partida por memoria, el visor de la
+                  foto, y el #p= viejo: el ID de antes abre el producto de
+                  hoy y el que ya no esta muestra "Ya no esta".
+  decision-pedido.js
+                  Las decisiones 5.1 a 5.4 de Pedro (29/09): la foto y el
+                  nombre de cada linea del pedido abren su ficha (con
+                  "Cambiar version o color" solo donde hay algo para
+                  cambiar), la ficha avisa lo que ya esta cargado con
+                  "Cambiar por esta" y "Agregar tambien", el mensaje del
+                  pedido sale como hoy, y "Vaciar el pedido" es un link
+                  aparte con "Deshacer".
+  decision-identidad.js
+                  Las decisiones 6.1 a 6.9 de Pedro (29/09): el icono
+                  blanco sobre grafito, la barra del navegador que cambia
+                  sola, "Elegi un rubro" en Lilita en todos los anchos, el
+                  tenue y el verde con buen contraste (tambien en lo nuevo),
+                  mas zona para el dedo en pantallas tactiles, el pie con el
+                  WhatsApp, los nombres como la tarjeta en "Busca por marca"
+                  y en la ficha, y la cinta de la marca con todos sus rubros.
 
 COMO SE CORREN
 --------------
@@ -113,14 +171,48 @@ fotos a quien tuviera el catalogo abierto. Se apaga cerrando su ventana.
 
 COMO LEER EL RESULTADO
 ----------------------
+Desde el 29/09 (Pedro eligio 7.1 C), arriba va solo lo que falla ("44
+tandas: TODO OK" y una linea por tanda que falla), y abajo tres grupos:
+
+  NUEVAS      algo que falla y nadie pidio todavia. Frena: PUBLICAR pregunta
+              "Publicar igual?" solo por esto (7.2 B). Van fila por fila, con
+              el nombre del producto, y al final como anotarlas.
+  CONOCIDAS   ya se le pidio a alguien (casi siempre a ADVAPP). No frenan,
+              pero se listan siempre: una linea por pedido, con los dias que
+              lleva. El detalle fila por fila esta en pruebas/conocidas.json.
+  ARREGLADAS  eran conocidas y dejaron de fallar. Se avisan una vez y salen
+              solas de la lista.
+
+Todas las lineas tienen 50 caracteres o menos (se lee a ancho de celular);
+la unica excepcion es la CLAVE, que se copia entera. Con --detalle sale
+ademas cada FALLA tal cual, como antes.
+
+Una falla pasa a conocida SOLO cuando alguien la anota (7.4 B):
+
+    python3 herramientas/fallas-conocidas.py
+        (las nuevas de la ultima corrida, con su CLAVE y lo que figura
+        para esa fila en herramientas/pedidos-advapp.json)
+    python3 herramientas/fallas-conocidas.py --conocida CLAVE --pedido r_codigo
+    python3 herramientas/fallas-conocidas.py --conocida CLAVE --pedido ARCHIVO.txt --a ADVAPP
+
+La CLAVE es tanda|comprobacion|ID. El punto de pedidos-advapp.json tiene que
+pedir LO MISMO que falla. Nunca son conocidas: una tanda que revienta o que
+no llega a correr, una falla que no dice que filas, lo que no se ve de una
+lista cortada, ni una fila nueva en una comprobacion conocida.
+
+correr.py sale con 0 si pasa todo, 1 si hay algo nuevo, 3 si lo unico que
+falla ya esta pedido y 2 si no pudo correr. La revision de las 14:00 cuenta
+solo las nuevas y avisa "Reclamar a ADVAPP" cuando lo pedido lleva mas de 7
+dias sin arreglarse (7.3 C).
+
 Cada linea que empieza con FALLA es algo que el cliente veria mal. Una que
 empieza con EXCEPCION es una prueba que se rompio sola: tambien cuenta como
 falla y tambien frena la publicacion.
 Las que dicen OK estan bien. Al final de cada tanda hay numeros del dia
 (cuantas filas, cuantas tarjetas) que son informativos, no comprobaciones.
 Las que empiezan con AVISO se muestran pero no cuentan: algo que conviene
-saber y que el cliente no ve (por ejemplo, la planilla de respaldo que llega
-recortada por una de sus dos fuentes).
+saber y que el cliente no ve (por ejemplo, con ADVAPP_URL vacio, la planilla
+que llega recortada por una de sus dos fuentes).
 
 Si una tanda figura como NO LLEGO A CORRER, la linea de abajo dice por que:
 "Chrome no termino a tiempo" suele ser internet. "La tanda no escribio su

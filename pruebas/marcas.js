@@ -112,8 +112,24 @@ function correrPruebas(){
   ok(prods.length >= 1 && prods.length <= MV_CINTA && prods.every(m => m && m.marca === x.marca && m.stock && m.precio !== null && m.imagen),
      'muestra hasta ' + MV_CINTA + ' productos de esa marca, con stock, precio y foto', prods.length);
   ok(new Set(prods.map(m => clave(m))).size === prods.length, 'sin repetir ninguno en la cinta', prods.length);
-  const codigos = prods.map(codigoMasAlto);
-  ok(codigos.every((c, i) => i === 0 || codigos[i - 1] >= c), 'lo ultimo que entro va primero', codigos.join(' > '));
+  /* Desde el 29/09 (decision 6.9 C, muestra identidad.html) la cinta ya no va
+     por numero de codigo de punta a punta: los codigos del 10/09 se dieron por
+     rubro y en orden alfabetico, y la de Canon eran catorce objetivos. Va
+     primero lo que entro despues del 10/09, lo mas nuevo adelante, y despues
+     un producto de cada rubro por turno. La regla entera la mira
+     decision-identidad.js; aca, que lo nuevo vaya adelante y en orden. */
+  /* (29/09, revision) Se mira en una marca que SI tenga algo posterior al
+     10/09: con MV[2] sin nada nuevo, la lista quedaba vacia y la
+     comprobacion pasaba sin mirar nada */
+  const conNuevo = MV.find(y => y.hayNuevo);
+  if(conNuevo){
+    const d = document.createElement('div'); d.innerHTML = htmlPanelMarca(conNuevo, false);
+    const suyos = [...d.querySelectorAll('.mv-p:not([aria-hidden="true"])')].map(b => buscarModelo(b.dataset.key)).filter(Boolean);
+    const codigos = suyos.map(codigoMasAlto);
+    const nuevos = codigos.filter(c => c > ULTIMO_CODIGO_DEL_10_09);
+    ok(nuevos.length > 0 && codigos.slice(0, nuevos.length).every(c => c > ULTIMO_CODIGO_DEL_10_09) && nuevos.every((c, i) => i === 0 || nuevos[i - 1] >= c),
+       'lo que entro despues del 10/09 va primero, lo mas nuevo adelante', conNuevo.marca + ': ' + codigos.join(' > '));
+  } else R.push('  --  hoy ninguna marca de la vitrina tiene algo posterior al 10/09: no se mira el orden de lo nuevo');
   // Tocar un logo de la cinta lo trae al centro
   const otro = vitrina().querySelector('.mv-it[data-copia="1"][data-k="4"]');
   otro.click();

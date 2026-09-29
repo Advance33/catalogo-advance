@@ -44,6 +44,42 @@ const b1Verde  = () => document.querySelector('.stamp .dot').classList.contains(
 const b1Pie    = () => document.getElementById('pie-cotiz').textContent;
 const b1Dormir = ms => new Promise(r => setTimeout(r, ms));
 const b1Fecha  = /^Actualizado \d{2}\/\d{2}\/\d{4}$/;
+const b1Franja = () => !document.getElementById('franja').hidden;
+
+/* La copia de este navegador (29/09, decisiones 1.1 a 1.3 de Pedro): la
+   pagina guarda la ultima carga buena de ADVAPP y, si ADVAPP falla, usa esa
+   copia y nunca mas la planilla. Donde un bloque necesita una carga que falle
+   de verdad, se saca la copia un rato (b1SinCopia); donde necesita un
+   respaldo al que le falten productos, se arma una copia sin ellos
+   (b1CopiaSin). Siempre se devuelve como estaba. */
+const b1Copia = () => { try{ return [localStorage.getItem(COPIA_KEY), localStorage.getItem(COPIA_HORA_KEY)]; }catch(e){ return [null, null]; } };
+const b1DevolverCopia = ([c, h]) => {
+  try{
+    if(c === null) localStorage.removeItem(COPIA_KEY); else localStorage.setItem(COPIA_KEY, c);
+    if(h === null) localStorage.removeItem(COPIA_HORA_KEY); else localStorage.setItem(COPIA_HORA_KEY, h);
+  }catch(e){}
+};
+async function b1SinCopia(hacer){
+  const antes = b1Copia();
+  borrarCopia();
+  try{ return await hacer(); } finally { b1DevolverCopia(antes); }
+}
+async function b1CopiaSin(ids, hacer){
+  const antes = b1Copia();
+  try{
+    const c = JSON.parse(antes[0]);
+    const iId = c.filas[0].map(norm).indexOf('id');
+    const n0 = c.filas.length;
+    c.filas = [c.filas[0], ...c.filas.slice(1).filter(f => !ids.includes(f[iId]))];
+    /* (29/09, revision) Que de verdad las haya sacado: sin la columna id (o
+       con un ID que no esta) la copia quedaba entera y lo que se probaba
+       despues pasaba igual */
+    if(iId === -1 || c.filas.length !== n0 - ids.length)
+      throw new Error('b1CopiaSin no pudo sacar ' + ids.join(', ') + ' de la copia (columna id en ' + iId + ', ' + (n0 - c.filas.length) + ' de ' + ids.length + ' sacadas)');
+    localStorage.setItem(COPIA_KEY, JSON.stringify(c));
+    return await hacer(c);
+  }finally{ b1DevolverCopia(antes); }
+}
 
 async function correrPruebas(){
   const hoy = await (await fetch(ADVAPP_URL, { cache: 'no-store' })).json();
@@ -85,18 +121,28 @@ async function correrPruebas(){
     ok(TC === tc0 && b1Pie() === pie0, 'si dolarapi no contesta, siguen los pesos de la ultima cotizacion buena y su pie',
        TC + ' · ' + b1Pie());
 
+    /* 29/09 (decision 1.3 A): con ADVAPP caido la pagina ya no va a la
+       planilla, asi que Google colgado no la demora. Sin copia, termina y
+       avisa; con la copia, la muestra con su franja. */
     const t1 = Date.now();
-    await b1Fetch((u, o, f) => esAdvapp(u) ? b1Error() : esGoogle(u) ? b1Nunca() : f(u, o), () => actualizar(false));
-    ok(Date.now() - t1 < META_ESPERA_MS + 2 * PLANILLA_ESPERA_MS + 5000 && /^Sin actualizar desde/.test(b1Sello()),
-       'con ADVAPP caido y Google colgado, termina y avisa que no se pudo actualizar',
+    await b1SinCopia(() => b1Fetch((u, o, f) => esAdvapp(u) ? b1Error() : esGoogle(u) ? b1Nunca() : f(u, o), () => actualizar(false)));
+    ok(Date.now() - t1 < COTIZACION_ESPERA_MS + 3000 && /^Sin actualizar desde/.test(b1Sello()),
+       'con ADVAPP caido, Google colgado y sin copia, termina enseguida y avisa que no se pudo actualizar',
        (Date.now() - t1) + ' ms · ' + b1Sello());
-    /* [147] el error dice las dos cosas, y queda para la medicion */
-    ok(/ADVAPP: HTTP 500/.test(ULTIMO_FALLO) && /planilla: no contesto/.test(ULTIMO_FALLO),
-       'con las dos fuentes caidas, el motivo dice por que fallo cada una', ULTIMO_FALLO);
+    /* [147] el error dice por que fallo ADVAPP y que no habia copia, y queda para la medicion */
+    ok(/ADVAPP: HTTP 500/.test(ULTIMO_FALLO) && /sin copia/.test(ULTIMO_FALLO),
+       'sin copia, el motivo dice por que fallo ADVAPP y que no habia copia', ULTIMO_FALLO);
     ok(/carga_fallida/.test(actualizar.toString()) && /motivo/.test(actualizar.toString()),
        'la medicion anota la visita que no cargo y el motivo del respaldo');
+    const t2 = Date.now();
+    let aGoogle = 0;
+    await b1Fetch((u, o, f) => esAdvapp(u) ? b1Error() : esGoogle(u) ? (aGoogle++, b1Nunca()) : f(u, o), () => actualizar(false));
+    ok(Date.now() - t2 < COTIZACION_ESPERA_MS + 3000 && FUENTE.fuente === 'copia' && /^Precios de las \d{2}:\d{2}$/.test(b1Sello())
+       && b1Franja() && aGoogle === 0,
+       'con la copia, ADVAPP caido y Google colgado, termina enseguida con la copia y su franja, sin pedirle nada a Google',
+       (Date.now() - t2) + ' ms · ' + FUENTE.fuente + ' · ' + b1Sello() + ' · ' + aGoogle + ' pedidos a Google');
     await actualizar(false);
-    ok(ULTIMO_FALLO === '' && !/^Sin/.test(b1Sello()), 'y al volver todo, se limpia', b1Sello());
+    ok(ULTIMO_FALLO === '' && !/^Sin|^Precios de las/.test(b1Sello()) && !b1Franja(), 'y al volver todo, se limpia', b1Sello());
   }
 
   /* ---- [6] Stock y Activo: si, no, o no se entiende ---- */
@@ -117,13 +163,14 @@ async function correrPruebas(){
     const raro = await b1Fetch((u, o, f) => esAdvapp(u)
       ? b1Json({ ...hoy, productos: hoy.productos.map(p => ({ ...p, Stock: siNo(p.Stock) ? 'Disponible' : 'No' })) })
       : f(u, o), bajarDatos);
-    ok(conSi < nHoy * 0.1 || (raro.fuente === 'planilla' && /Stock/.test(raro.motivo)),
-       'un Stock que la web no entiende no se toma como "sin stock": va a la planilla', raro.fuente + ' · ' + raro.motivo);
+    // 29/09 (decision 1.3 A): el respaldo es la copia de este navegador, no la planilla
+    ok(conSi < nHoy * 0.1 || (raro.fuente === 'copia' && /Stock/.test(raro.motivo)),
+       'un Stock que la web no entiende no se toma como "sin stock": va la copia', raro.fuente + ' · ' + raro.motivo);
 
     const inactivos = await b1Fetch((u, o, f) => esAdvapp(u)
       ? b1Json({ ...hoy, productos: hoy.productos.map(p => ({ ...p, Activo: 'No' })) }) : f(u, o), bajarDatos);
-    ok(inactivos.fuente === 'planilla' && /activa/.test(inactivos.motivo),
-       'ADVAPP con ninguna fila activa no vacia el catalogo', inactivos.fuente + ' · ' + inactivos.motivo);
+    ok(inactivos.fuente === 'copia' && /activa/.test(inactivos.motivo),
+       'ADVAPP con ninguna fila activa no vacia el catalogo: va la copia', inactivos.fuente + ' · ' + inactivos.motivo);
 
     // El seguro de actualizar(): cero productos no se aplica ni poda el pedido
     const prods0 = PRODUCTOS, pedido0 = JSON.stringify(PEDIDO);
@@ -162,7 +209,8 @@ async function correrPruebas(){
        sinCol.productos.filter(p => p.codigo && !/^AT-\d{4}$/.test(p.codigo)).slice(0, 2).map(p => p.codigo).join(' | '));
   }
 
-  /* ---- [8] Una baja real de ADVAPP no deja pegado a la planilla ---- */
+  /* ---- [8] Una baja real de ADVAPP no deja pegado al respaldo ----
+     (29/09: el respaldo pasó de la planilla a la copia de este navegador) */
   {
     const filas0 = localStorage.getItem('advtecno.filas'), pend0 = localStorage.getItem('advtecno.filas.pendiente');
     metaHora = 0;
@@ -175,7 +223,7 @@ async function correrPruebas(){
       const d1 = await b1Fetch((u, o, f) => esAdvapp(u) ? corto('2026-09-29T10:00:00Z') : f(u, o), bajarDatos);
       const d2 = await b1Fetch((u, o, f) => esAdvapp(u) ? corto('2026-09-29T10:00:00Z') : f(u, o), bajarDatos);
       const d3 = await b1Fetch((u, o, f) => esAdvapp(u) ? corto('2026-09-29T10:02:00Z') : f(u, o), bajarDatos);
-      ok(d1.fuente === 'planilla' && d2.fuente === 'planilla',
+      ok(d1.fuente === 'copia' && d2.fuente === 'copia',
          'una baja de golpe no se cree de entrada, ni con la misma copia repetida', d1.fuente + ' · ' + d2.fuente);
       ok(d3.fuente === 'advapp' && filasDeAyer() === n,
          'otra respuesta con la misma cantidad es una baja real: se acepta y pasa a ser la vara',
@@ -193,7 +241,11 @@ async function correrPruebas(){
      Con el tope de META_ESPERA_MS, una Meta que contestaba a los 7 s daba
      "sin Meta": bajarCSV se quedaba con la primera fuente (gviz, que hoy trae
      54 de 583) y bajarDatos aceptaba un ADVAPP corto y bajaba la vara. Meta
-     acá contesta de verdad, pero un segundo despues del tope. */
+     acá contesta de verdad, pero un segundo despues del tope.
+     29/09 (decision 1.3 A): con ADVAPP caido ya no se lee la planilla, asi
+     que lo de la planilla entera se prueba directo sobre bajarCSV(), que es
+     el camino con ADVAPP_URL vacio; el ADVAPP corto rechazado va a la copia,
+     y el ADVAPP corto de ultimo recurso se prueba sin copia (va despues). */
   {
     const filas0 = localStorage.getItem('advtecno.filas'), pend0 = localStorage.getItem('advtecno.filas.pendiente');
     const esMeta = u => u.startsWith(META_URL);
@@ -211,15 +263,15 @@ async function correrPruebas(){
     }else{
       try{
         metaPromesa = null;
-        const lenta = await b1Fetch((u, o, f) => esAdvapp(u) ? b1Error() : esMeta(u) ? metaLenta(u, o, f) : f(u, o), bajarDatos);
-        ok(lenta.fuente === 'planilla' && nFilas(lenta.filas) >= filasMeta,
-           '[3] con ADVAPP caido y la hoja Meta lenta, el respaldo trae la planilla entera y no la fuente recortada',
-           lenta.fuente + ' · ' + nFilas(lenta.filas) + ' de ' + filasMeta);
+        const lenta = parseCSV(await b1Fetch((u, o, f) => esMeta(u) ? metaLenta(u, o, f) : f(u, o), bajarCSV));
+        ok(nFilas(lenta) >= filasMeta,
+           '[3] con la hoja Meta lenta, la planilla llega entera y no la fuente recortada',
+           nFilas(lenta) + ' de ' + filasMeta);
         metaPromesa = null;
-        const conError = await b1Fetch((u, o, f) => esAdvapp(u) || esMeta(u) ? b1Error() : f(u, o), bajarDatos);
-        ok(conError.fuente === 'planilla' && nFilas(conError.filas) >= filasMeta,
+        const conError = parseCSV(await b1Fetch((u, o, f) => esMeta(u) ? b1Error() : f(u, o), bajarCSV));
+        ok(nFilas(conError) >= filasMeta,
            '[3] y con la hoja Meta en error, lo mismo',
-           conError.fuente + ' · ' + nFilas(conError.filas) + ' de ' + filasMeta);
+           nFilas(conError) + ' de ' + filasMeta);
 
         const n = Math.floor(filasMeta * 0.7);
         if(n < nHoy * ADVAPP_MINIMO){
@@ -229,16 +281,16 @@ async function correrPruebas(){
           metaPromesa = null;
           const d1 = await b1Fetch((u, o, f) => esAdvapp(u) ? corto('2026-09-29T11:00:00Z')
                                              : esMeta(u) ? metaLenta(u, o, f) : f(u, o), bajarDatos);
-          ok(d1.fuente === 'planilla' && filasDeAyer() === nHoy,
-             '[3] un ADVAPP corto con la hoja Meta lenta no se acepta ni baja la vara',
+          ok(d1.fuente === 'copia' && filasDeAyer() === nHoy,
+             '[3] un ADVAPP corto con la hoja Meta lenta no se acepta ni baja la vara: va la copia',
              d1.fuente + ' · vara ' + filasDeAyer() + ' (era ' + nHoy + ')');
 
           localStorage.removeItem('advtecno.filas.pendiente');
           metaPromesa = null;
-          const d2 = await b1Fetch((u, o, f) => esAdvapp(u) ? corto('2026-09-29T11:00:00Z')
-                                             : esGoogle(u) ? b1Cae() : f(u, o), bajarDatos);
+          const d2 = await b1SinCopia(() => b1Fetch((u, o, f) => esAdvapp(u) ? corto('2026-09-29T11:00:00Z')
+                                             : esGoogle(u) ? b1Cae() : f(u, o), bajarDatos));
           ok(d2.fuente === 'advapp' && nFilas(d2.filas) === n && filasDeAyer() === nHoy && /Meta no contesto/.test(d2.motivo || ''),
-             '[3] con Google caido tambien, se muestra el ADVAPP corto de ultimo recurso, sin bajar la vara',
+             '[3] sin copia y con Google caido, se muestra el ADVAPP corto de ultimo recurso, sin bajar la vara',
              d2.fuente + ' · ' + nFilas(d2.filas) + ' filas · vara ' + filasDeAyer() + ' · ' + d2.motivo);
 
           // Y la baja de verdad se confirma sola: otra respuesta, misma cantidad
@@ -305,30 +357,34 @@ async function correrPruebas(){
     ok(!/^Sin/.test(b1Sello()), 'y el viejo que falla no tapa con un aviso los datos buenos', b1Sello());
   }
 
-  /* ---- [1] y [2] El respaldo: el sello no dice "hoy" y el pedido no pierde lineas ---- */
+  /* ---- [1] y [2] El respaldo: el sello no dice "hoy" y el pedido no pierde lineas ----
+     29/09 (decisiones 1.1 B y 1.3 A): el respaldo es la copia de este
+     navegador y no la planilla. Para tener lineas que el respaldo no trae se
+     usa una copia sin tres productos que hoy tienen stock. */
   {
-    const csv = parseCSV(await bajarCSV());
-    const iId = csv[0].map(norm).indexOf('id');
-    const enPlanilla = new Set(csv.slice(1).map(f => f[iId]));
-    const faltan = PRODUCTOS.filter(p => !enPlanilla.has(p.id)).slice(0, 3).map(p => clave(p));
+    const faltan = PRODUCTOS.filter(p => p.stock).slice(0, 3);
+    const claves = faltan.map(p => clave(p));
     const pedido0 = JSON.stringify(PEDIDO), ls0 = localStorage.getItem(PEDIDO_KEY);
-    faltan.forEach(k => { if(!enPedido(k)) PEDIDO.push({ k, n: 1, color: '' }); });
+    claves.forEach(k => { if(!enPedido(k)) PEDIDO.push({ k, n: 1, color: '' }); });
     guardarPedido();
     const lineas = PEDIDO.length;
-    await b1Fetch((u, o, f) => esAdvapp(u) ? b1Error() : f(u, o), () => actualizar(false));
-    ok(FUENTE.fuente === 'planilla', 'con ADVAPP en 500 se usa la planilla', FUENTE.fuente + ' · ' + FUENTE.motivo);
-    ok(b1Sello() !== 'Actualizado hoy' && !b1Verde() && b1Fecha.test(b1Sello()),
-       'con el respaldo el sello dice la fecha de la planilla, sin "hoy" ni punto verde',
-       b1Sello() + (b1Verde() ? ' (verde)' : ''));
-    ok(/Respaldo/.test(document.getElementById('stamp').title), 'y el sello dice que es el respaldo (al pasar el mouse)',
-       document.getElementById('stamp').title);
-    let enLs = -1;
-    try{ enLs = JSON.parse(localStorage.getItem(PEDIDO_KEY)).length; }catch(e){}
-    ok(!faltan.length || (PEDIDO.length === lineas && enLs === lineas),
-       'con el respaldo el pedido guardado no pierde las lineas que la planilla no tiene',
-       PEDIDO.length + ' de ' + lineas + ' · guardadas ' + enLs + ' · ' + faltan.join(', '));
+    await b1CopiaSin(faltan.map(p => p.id), async c => {
+      await b1Fetch((u, o, f) => esAdvapp(u) ? b1Error() : f(u, o), () => actualizar(false));
+      ok(FUENTE.fuente === 'copia' && FUENTE.hora === c.hora, 'con ADVAPP en 500 se usa la copia de este navegador',
+         FUENTE.fuente + ' · ' + FUENTE.motivo);
+      ok(b1Sello() === 'Precios de las ' + hhmm(c.hora) && !b1Verde(),
+         'con el respaldo el sello dice la hora de la copia, sin "hoy" ni punto verde',
+         b1Sello() + (b1Verde() ? ' (verde)' : ''));
+      ok(/Respaldo/.test(document.getElementById('stamp').title), 'y el sello dice que es el respaldo (al pasar el mouse)',
+         document.getElementById('stamp').title);
+      let enLs = -1;
+      try{ enLs = JSON.parse(localStorage.getItem(PEDIDO_KEY)).length; }catch(e){}
+      ok(!claves.length || (PEDIDO.length === lineas && enLs === lineas),
+         'con el respaldo el pedido guardado no pierde las lineas que la copia no tiene',
+         PEDIDO.length + ' de ' + lineas + ' · guardadas ' + enLs + ' · ' + claves.join(', '));
+    });
     await actualizar(false);
-    ok(FUENTE.fuente === 'advapp' && faltan.every(k => itemsPedido().some(it => clave(it.p) === k)),
+    ok(FUENTE.fuente === 'advapp' && claves.every(k => itemsPedido().some(it => clave(it.p) === k)),
        'al volver ADVAPP esas lineas se vuelven a ver', FUENTE.fuente);
     PEDIDO = JSON.parse(pedido0);
     try{ if(ls0 === null) localStorage.removeItem(PEDIDO_KEY); else localStorage.setItem(PEDIDO_KEY, ls0); }catch(e){}
@@ -352,13 +408,17 @@ async function correrPruebas(){
     await actualizar(false);
   }
 
-  /* ---- [11] Sin ninguna carga buena, el sello no inventa una hora ---- */
+  /* ---- [11] Sin ninguna carga buena, el sello no inventa una hora ----
+     29/09: "nada en pantalla" es HORA_DATOS en 0 (la copia al instante
+     tambien cuenta como algo en pantalla), y sin copia: con copia, ADVAPP
+     caido ya no es una carga que falla. Con señal el sello dice "No
+     disponible" (decision 1.4: "Sin conexion" es solo sin señal). */
   {
     const ultima = ULTIMA_OK;
-    ULTIMA_OK = 0;
-    await b1Fetch((u, o, f) => (esAdvapp(u) || esGoogle(u)) ? b1Cae() : f(u, o), () => actualizar(false));
-    ok(b1Sello() === 'Sin conexión' && !!grid.querySelector('.msg'),
-       'si nunca hubo una carga buena, es la pantalla de error y no "Sin actualizar desde 21:00"', b1Sello());
+    ULTIMA_OK = 0; HORA_DATOS = 0;
+    await b1SinCopia(() => b1Fetch((u, o, f) => (esAdvapp(u) || esGoogle(u)) ? b1Cae() : f(u, o), () => actualizar(false)));
+    ok(b1Sello() === (navigator.onLine === false ? 'Sin conexión' : 'No disponible') && !!grid.querySelector('.msg.sin-catalogo'),
+       'si nunca hubo una carga buena, es el aviso de no disponible y no "Sin actualizar desde 21:00"', b1Sello());
     // Como la primera vez: la firma vacia, y la carga siguiente dibuja todo
     FIRMA_DATOS = '';
     await actualizar(false);
@@ -404,9 +464,10 @@ async function correrPruebas(){
                                       { casa: 'bolsa', nombre: 'Bolsa', venta: 1556, compra: 1544 }]);
       await b1Fetch((u, o, f) => esDolar(u) ? diezMenos() : f(u, o), () => actualizar(false));
       ok(TC === tc0 && b1Pie() === pie0, 'dolarapi con un valor diez veces mas chico: siguen los pesos buenos', TC);
-      await b1Fetch((u, o, f) => (esAdvapp(u) || esGoogle(u)) ? b1Cae()
+      // Una carga que falla de verdad: sin copia (29/09, con copia no falla)
+      await b1SinCopia(() => b1Fetch((u, o, f) => (esAdvapp(u) || esGoogle(u)) ? b1Cae()
                               : esDolar(u) ? b1Json([{ casa: CFG.tipo, nombre: 'X', venta: 9999, compra: 9990 }]) : f(u, o),
-                    () => actualizar(false));
+                    () => actualizar(false)));
       ok(TC === tc0 && b1Pie() === pie0, 'si la carga falla, el pie no pasa a una cotizacion que no se usa', b1Pie());
       if(TC_BUENA) TC_BUENA.hora = Date.now() - 2 * COTIZACION_VIGENCIA_MS;
       await b1Fetch((u, o, f) => esDolar(u) ? b1Cae() : f(u, o), () => actualizar(false));
@@ -522,30 +583,29 @@ async function correrPruebas(){
      La planilla congelada no tiene 263 productos de ADVAPP. Con la ficha de
      uno de ellos abierta (un 17 Pro Max 2TB), una caida de ADVAPP decia "ya
      no esta en el catalogo", sacaba el WhatsApp y apagaba la tira, mientras
-     el pedido guardaba la linea porque vuelve sola. La baja la dice ADVAPP. */
+     el pedido guardaba la linea porque vuelve sola. La baja la dice ADVAPP.
+     29/09 (decision 1.3 A): el respaldo es la copia de este navegador; el
+     caso es una copia sin ese producto (uno nuevo desde que se guardo). */
   {
-    const csv = parseCSV(await bajarCSV());
-    const iId = csv[0].map(norm).indexOf('id');
-    const enPlanilla = new Set(csv.slice(1).map(f => f[iId]));
-    const p = PRODUCTOS.find(x => x.stock && !enPlanilla.has(x.id));
-    if(!p) R.push('  --   [88] hoy no hay productos con stock de ADVAPP que falten en la planilla: se saltea');
-    else {
+    const p = PRODUCTOS.find(x => x.stock && x.precio !== null);
+    if(!p) R.push('  --   [88] hoy no hay productos con stock: se saltea');
+    else await b1CopiaSin([p.id], async () => {
       abrirFicha(clave(p), null);
       const k = FICHA;
       await b1Fetch((u, o, f) => esAdvapp(u) ? b1Error() : f(u, o), () => actualizar(false));
       const d = document.getElementById('ficha');
       const precio = d && d.querySelector('.fi-precio');
-      ok(FUENTE.fuente === 'planilla' && FICHA === k && !!d
+      ok(FUENTE.fuente === 'copia' && FICHA === k && !!d
          && !/ya no está/.test((d.querySelector('.fi-botones') || {}).textContent || '')
          && !!d.querySelector('.fi-botones .cta') && !!precio && precio.style.display !== 'none'
          && !d.querySelector('.fi-pintas button:disabled, .fi-op:disabled'),
-         'con el respaldo, la ficha de algo que la planilla no tiene no dice "ya no esta" ni pierde el WhatsApp',
+         'con el respaldo, la ficha de algo que la copia no tiene no dice "ya no esta" ni pierde el WhatsApp',
          k + ' · ' + FUENTE.fuente);
       await actualizar(false);
       ok(FUENTE.fuente === 'advapp' && FICHA === k && !!document.querySelector('#ficha .fi-botones .cta'),
          'y al volver ADVAPP la ficha sigue con su WhatsApp', FUENTE.fuente);
       quitarFicha();
-    }
+    });
   }
 
   /* ---- [111] Un refresco sin cambios no rehace nada, y con cambios no pierde el lugar ---- */

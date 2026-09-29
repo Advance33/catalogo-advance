@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Esta dirección no existe — Advance Tecno</title>
+<meta name="robots" content="noindex, nofollow">
+<!-- Los cuatro íconos de index.html (decisión 6.1 B; 29/09, revisión: acá
+     quedaba el logo-mark.png viejo). Con la dirección entera: esta página se
+     muestra en cualquier dirección que no existe, y una relativa no sirve. -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://advance33.github.io/catalogo-advance/assets/icono-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://advance33.github.io/catalogo-advance/assets/icono-16.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://advance33.github.io/catalogo-advance/assets/icono-192.png">
+<link rel="apple-touch-icon" href="https://advance33.github.io/catalogo-advance/assets/icono-180.png">
+<!-- La página que GitHub Pages muestra cuando una dirección no existe (29/09).
+
+     Está por la vista previa de WhatsApp (decisión 4.2, Pedro 29/09): cada
+     producto tiene su página p/<ID>.html, y herramientas/vista-previa.py la
+     borra cuando ADVAPP da de baja la fila. Un link viejo a esa página caía en
+     el error genérico de GitHub; así lleva a la ficha de la web (#p=<ID>),
+     que es la que sabe qué decir de un producto que ya no está (decisión 5).
+
+     Solo redirige las direcciones p/<ID>.html: cualquier otra se queda acá con
+     el link al catálogo, para no armar un ida y vuelta entre páginas.
+
+     El prefijo empieza con UNA sola barra (29/09, revisión): con "//" al
+     principio, "//otro-sitio.com/p/X.html" daba "//otro-sitio.com/#p=X", que
+     el navegador lee como otro sitio. En github.io no llega (el 404 del
+     proyecto se sirve solo bajo /catalogo-advance/); con un dominio propio sí. -->
+<script>
+function destinoDe404(ruta){
+  const m = /^(\/(?!\/)(?:.*\/)?)p\/([A-Za-z0-9][A-Za-z0-9_-]{0,80})(?:\.html)?$/.exec(ruta || '');
+  return m ? m[1] + '#p=' + m[2] : '';
+}
+(() => {
+  const a = destinoDe404(location.pathname);
+  if(a) location.replace(a);
+})();
+</script>
+<style>
+  /* Los colores del sitio (index.html, :root) */
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:#F4EFFD;
+       font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#170F28}
+  main{width:min(360px,calc(100% - 32px));background:#FFFFFF;border-radius:14px;padding:24px 20px;
+       box-shadow:0 1px 2px rgba(24,18,38,.05),0 10px 30px rgba(24,18,38,.07);text-align:center}
+  h1{margin:0;font-size:19px;line-height:1.25}
+  p{margin:6px 0 0;color:#584D70;font-size:14px}
+  a{display:inline-block;margin-top:16px;padding:12px 18px;border-radius:999px;background:#7C3AED;
+    color:#FFFFFF;text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
+<main>
+  <h1>Esta dirección no existe</h1>
+  <p>Puede ser un link viejo.</p>
+  <a href="https://advance33.github.io/catalogo-advance/">Ir al catálogo</a>
+</main>
+</body>
+</html>

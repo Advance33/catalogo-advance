@@ -307,6 +307,9 @@ function botonesConNombre(){
   const mal = MODELOS.slice(0, 120).filter(m => {
     const el = tarjeta(m), n = nombreCorto(m);
     const mas = el.querySelector('.mas'), wa = el.querySelector('a.wa');
+    // La agotada no tiene + desde el 29/09 (decision 2.6 B, decision-tarjeta.js):
+    // ahi se mira solo el WhatsApp; con stock, el + tiene que estar
+    if(!mas) return !!m.stock || (wa && !wa.getAttribute('aria-label').includes(n));
     return !mas.getAttribute('aria-label').includes(n) || (wa && !wa.getAttribute('aria-label').includes(n));
   });
   ok(!mal.length, '[129] el "+" y el WhatsApp de la tarjeta nombran el producto',

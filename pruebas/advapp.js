@@ -1,8 +1,12 @@
-// ADVAPP como fuente de productos (17/09/2026). La web lee primero el JSON de
-// ADVAPP y queda la planilla de respaldo. Aca se prueba que use ADVAPP cuando
-// anda, que vuelva a la planilla en cada caso en que no sirve (error, demora,
-// vacio, cortado), que las claves de los productos sigan siendo los IDs de
-// siempre y que las fotos de ADVAPP se usen solo cuando no hay archivo propio.
+// ADVAPP como fuente de productos (17/09/2026). La web lee el JSON de ADVAPP.
+// Aca se prueba que use ADVAPP cuando anda, que en cada caso en que no sirve
+// (error, demora, vacio, cortado) use la copia de la ultima respuesta buena
+// guardada en este navegador y nunca la planilla, que las claves de los
+// productos sigan siendo los IDs de siempre y que las fotos de ADVAPP se usen
+// solo cuando no hay archivo propio.
+// (29/09: hasta la decision 1.3 A de Pedro esto exigia volver a la planilla
+// del 16/09 en cada falla. Ahora la planilla no es respaldo: primero la copia
+// y, sin copia, el aviso de no disponible. Ver decision-resiliencia.js.)
 // (Decia tambien "que no la confunda con una respuesta cortada solo porque
 // trae menos filas que la planilla": eso era cierto hasta que ADVAPP paso a
 // traer mas. Ver la seccion 6, 29/09.)
@@ -122,7 +126,23 @@ async function correrPruebas(){
            (nueva.fuente === 'advapp' ? ': sin vara, no hay control de tamaño (hallazgo 181)' : ''));
   }
 
-  /* ---- 6. Cada caso en que ADVAPP no sirve vuelve a la planilla ---- */
+  /* ---- 6. Cada caso en que ADVAPP no sirve usa la copia, nunca la planilla ----
+     29/09 (decision 1.3 A de Pedro): cada caso exigia "usa la planilla
+     entera". Ahora exige la copia de la ultima respuesta buena de ADVAPP que
+     este navegador guardo al cargar la pagina, entera y con su hora, sin
+     pedirle la planilla a Google. La hoja Meta si se puede pedir: cuenta
+     filas cuando ADVAPP viene corto, y no son los datos de la planilla. */
+  const copia = leerCopia();
+  ok(!!copia && copia.filas.length - 1 >= PRODUCTOS.length && Date.now() - copia.hora < 10 * 60000,
+     'la carga de ADVAPP quedo guardada como copia en este navegador, con su hora',
+     copia ? (copia.filas.length - 1) + ' filas de las ' + hhmm(copia.hora) : 'sin copia');
+  const esPlanilla = u => FUENTES.some(f => String(u).startsWith(f));
+  let aPlanilla = 0;
+  const contando = async hacer => {
+    const f = window.fetch;
+    window.fetch = (u, o) => { if(esPlanilla(u)) aPlanilla++; return f(u, o); };
+    try{ return await hacer(); } finally { window.fetch = f; }
+  };
   const casos = [
     ['si ADVAPP da error', () => Promise.resolve(new Response('fallo', { status: 500 }))],
     ['si la conexion falla', () => Promise.reject(new TypeError('Failed to fetch'))],
@@ -138,19 +158,40 @@ async function correrPruebas(){
     casos.push(['si trae la mitad de los productos de la ultima carga',
                 () => respuesta({ ...real, filas: n, productos: real.productos.slice(0, n) })]);
   }
+  const esLaCopia = d => !!copia && d.fuente === 'copia' && d.hora === copia.hora && cantidad(d) === copia.filas.length - 1;
   for(const [texto, responder] of casos){
-    const d = await conVara(() => conAdvapp(responder, bajarDatos));
-    ok(d.fuente === 'planilla' && cantidad(d) >= filasMeta, texto + ', usa la planilla entera',
-       d.fuente + ' · ' + cantidad(d) + ' filas · ' + (d.motivo || 'sin motivo'));
+    aPlanilla = 0;
+    const d = await conVara(() => contando(() => conAdvapp(responder, bajarDatos)));
+    ok(esLaCopia(d) && aPlanilla === 0, texto + ', usa la copia entera con su hora y no la planilla',
+       d.fuente + ' · ' + cantidad(d) + ' filas · ' + (d.motivo || 'sin motivo') + ' · ' + aPlanilla + ' pedidos a la planilla');
   }
 
   // La demora: ADVAPP no contesta nunca, y a los ADVAPP_ESPERA_MS se corta
   const t0 = Date.now();
-  const lento = await conAdvapp(opts => new Promise((_, rechazar) =>
+  aPlanilla = 0;
+  const lento = await contando(() => conAdvapp(opts => new Promise((_, rechazar) =>
     opts.signal.addEventListener('abort', () => rechazar(Object.assign(new Error('abortado'), { name: 'AbortError' })))),
-    bajarDatos);
-  ok(lento.fuente === 'planilla' && cantidad(lento) >= filasMeta,
-     `si ADVAPP tarda mas de ${ADVAPP_ESPERA_MS / 1000} s, usa la planilla`, lento.motivo + ' · ' + (Date.now() - t0) + ' ms');
+    bajarDatos));
+  ok(esLaCopia(lento) && aPlanilla === 0,
+     `si ADVAPP tarda mas de ${ADVAPP_ESPERA_MS / 1000} s, usa la copia`, lento.motivo + ' · ' + (Date.now() - t0) + ' ms');
+
+  /* Sin copia (primera visita, o vencida), ninguna falla termina en la
+     planilla: bajarDatos da error, y actualizar() muestra el aviso. */
+  {
+    const c0 = localStorage.getItem(COPIA_KEY), h0 = localStorage.getItem(COPIA_HORA_KEY);
+    try{
+      borrarCopia();
+      for(const [texto, responder] of casos.slice(0, 2)){
+        aPlanilla = 0;
+        let fallo = '';
+        try{ await conVara(() => contando(() => conAdvapp(responder, bajarDatos))); }catch(e){ fallo = e.message; }
+        ok(/sin copia/.test(fallo) && aPlanilla === 0, 'sin copia, ' + texto + ' no cae a la planilla: da error',
+           (fallo || 'no dio error') + ' · ' + aPlanilla + ' pedidos a la planilla');
+      }
+    }finally{
+      try{ if(c0 !== null) localStorage.setItem(COPIA_KEY, c0); if(h0 !== null) localStorage.setItem(COPIA_HORA_KEY, h0); }catch(e){}
+    }
+  }
 
   /* ---- 7. Fotos: la propia primero, la de ADVAPP solo si no hay ---- */
   /* "Con archivo propio" se pregunta de verdad, con fotoDeCarpeta, igual que

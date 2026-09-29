@@ -512,7 +512,7 @@ window.DECISIONES = [
     "pregunta": "Hallazgo #98. La ficha no sabe lo que ya cargaste: con el iPhone 17 Pro de 512GB en el pedido, la tarjeta lo marca como agregado, pero la ficha abre en 256GB y dice «Agregar al pedido». Si se toca, quedan dos iPhone 17 Pro. ¿Qué muestra la ficha?",
     "opciones": [
      {
-      "letra": "A",
+      "letra": "0",
       "texto": "Hoy (referencia): «Agregar al pedido», sin ningún aviso"
      },
      {
@@ -536,7 +536,7 @@ window.DECISIONES = [
     "pregunta": "Hallazgo #96. Retiro o envío en el mismo mensaje: hoy el mensaje del pedido lleva solo la lista y el total. ¿Sumamos datos opcionales? Sin tocar nada, el mensaje sale igual que hoy.",
     "opciones": [
      {
-      "letra": "A",
+      "letra": "0",
       "texto": "Hoy (referencia): la ventana no pregunta nada"
      },
      {
@@ -560,7 +560,7 @@ window.DECISIONES = [
     "pregunta": "Hallazgo #91. «Vaciar» borra todo de un toque: está pegado a «Enviar por WhatsApp», tiene el mismo tamaño y borra el pedido entero sin preguntar y sin forma de volver atrás, ni siquiera recargando.",
     "opciones": [
      {
-      "letra": "A",
+      "letra": "0",
       "texto": "Hoy (referencia): un toque y el pedido desaparece"
      },
      {

@@ -5,8 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Catálogo Advance — Los precios de hoy</title>
 <meta name="description" content="Catálogo con stock y precios actualizados en tiempo real. Consultá por WhatsApp desde cualquier producto.">
-<link rel="icon" href="assets/logo-mark.png">
-<meta name="theme-color" content="#FFFFFF">
+<!-- El ícono (29/09, muestra 6.1 B): el mismo triángulo del logo en blanco
+     sobre el grafito #151220 de la barra de arriba. El PNG del logo tal cual
+     era una línea finita sin fondo, y en la pestaña oscura casi no se veía.
+     En 16 y 32 px va con el trazo más grueso, para que aguante chiquito; el
+     de 180 es el de "Agregar a inicio" del iPhone, sin esquinas redondeadas
+     (las pone el teléfono), y el de 192 el que toma Android. Los PNG salen de
+     assets/icono.svg (el trazo grueso) y assets/icono-grande.svg. No hay
+     manifest a propósito: cómo se abre desde el inicio (con o sin la barra
+     del navegador) no se toca sin preguntarle a Pedro. -->
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icono-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icono-16.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icono-192.png">
+<link rel="apple-touch-icon" href="assets/icono-180.png">
+<!-- El nombre debajo del ícono en el inicio del celular: el mismo que ya usa
+     el link cuando se comparte (og:site_name). -->
+<meta name="apple-mobile-web-app-title" content="Advance Tecno">
+<meta name="application-name" content="Advance Tecno">
+<!-- El color de la barra del navegador en el celular (29/09, muestra 6.2 C):
+     cambia sola. Grafito mientras se ve la barra de arriba (la página abre
+     así) y lila cuando queda pegada la cinta de rubros; lo cambia
+     seguirBarraDelNavegador(), en el script. Era blanco y dejaba un corte
+     contra el grafito. Pedro lo tiene que mirar en un celular de verdad: si
+     parpadea al bajar, la opción B es dejar fijo el lila #F4EFFD. -->
+<meta name="theme-color" content="#151220">
 
 <!-- Mientras el catálogo sea de uso interno: le pide a Google y demás buscadores
      que NO lo indexen. El link sigue andando para cualquiera que lo tenga, pero
@@ -96,11 +118,22 @@
     --line:#E0D4F7;       /* bordes */
     --ink:#170F28;        /* texto principal */
     --muted:#584D70;      /* texto secundario */
-    --faint:#867AA6;      /* texto tenue */
+    /* El tenue (29/09, muestra 6.4 B): era #867AA6 y no llegaba al contraste
+       mínimo para letra chica (3,1 a 3,9). Un punto más oscuro se lee en
+       todos lados y sigue distinto del --muted. Sobre el lila del mundo
+       grande va --faint-lila, otro punto más. La excepción es el precio de
+       la tarjeta agotada, que va sobre la etiqueta oscura: ahí se queda el de
+       antes (ver .card.agotado .usd). */
+    --faint:#726496;      /* texto tenue */
+    --faint-lila:#6B5F8C; /* el tenue sobre el lila #E9E0FC del mundo grande */
     --acento:#7C3AED;     /* el morado: botones, chip activo */
     --glow:#6D28D9;       /* hover y detalle: un morado mas hondo */
-    --ok:#0F8A5F;
-    --ok-soft:rgba(15,138,95,.10);
+    /* El verde de "En stock", del regalo y de "Agregado" (29/09, muestra
+       6.5 B): el mismo, un poco más hondo. Era #0F8A5F y daba 3,7 a 4,4 de
+       contraste; este da 5,0 a 6,1. El fondo suave y el borde salen de él. */
+    --ok:#0A7050;
+    --ok-soft:rgba(10,112,80,.10);
+    --ok-borde:rgba(10,112,80,.45);
     --shadow:0 1px 2px rgba(24,18,38,.05), 0 10px 30px rgba(24,18,38,.07);
     --foto-bg:#F3EFFA;    /* lila claro: los productos blancos (Pencil, AirTag, AirPods) desaparecen sobre la tarjeta blanca */
     /* El fondo de la ficha. Casi blanco, pero no blanco: sobre blanco puro la
@@ -111,6 +144,13 @@
        fondo puesto en .fi-foto la mezcla tiene siempre contra que hacerse. */
     --ficha-bg:#FBF9FF;
     --radius:14px;
+    /* El ámbar de "precios de otra hora" (29/09, muestras 1.1 y 1.5): el del
+       punto del sello cuando no se pudo actualizar, con el fondo, el borde y
+       la tinta de la franja tal como los dibujó la muestra que eligió Pedro. */
+    --ambar:#C9A227;
+    --ambar-soft:#FDF4D8;
+    --ambar-line:#EBD58E;
+    --ambar-ink:#5E4500;
   }
 
   *{box-sizing:border-box}
@@ -236,6 +276,33 @@
     .dot.live{animation:pulse 2.4s ease-in-out infinite}
   }
 
+  /* La franja ámbar: Pedro eligió el 29/09 la copia con franja (muestra 1.1
+     B). Cuando ADVAPP no contesta y se ve la última lista buena guardada en
+     este navegador, va pegada abajo de la barra de arriba, a todo el ancho,
+     con la hora de esos precios y Reintentar. En el celular el botón baja a
+     su renglón, alineado con el texto. */
+  .franja{background:var(--ambar-soft);border-bottom:1px solid var(--ambar-line);color:var(--ambar-ink);
+          font:500 13.5px/1.4 var(--sans)}
+  .franja[hidden]{display:none}
+  .franja .wrap{display:flex;align-items:center;gap:10px 12px;padding-top:10px;padding-bottom:10px}
+  .franja p{margin:0;flex:1 1 auto;min-width:0}
+  .franja p b{font-weight:700}
+  .franja .dot{background:var(--ambar);align-self:flex-start;margin-top:6px}
+  .b-reint{flex:none;display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+           font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+           padding:9px 13px;border-radius:999px;border:1px solid #B8962A;background:#fff;
+           color:var(--ambar-ink);white-space:nowrap}
+  .b-reint svg{width:13px;height:13px;display:block}
+  .b-reint:hover{background:var(--ambar-soft)}
+  .b-reint[aria-disabled="true"]{opacity:.6;cursor:default}
+  .b-reint:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  @media (max-width:560px){
+    .franja{font-size:12.5px}
+    .franja .wrap{flex-wrap:wrap}
+    .franja p{flex:1 1 calc(100% - 30px)}
+    .franja .b-reint{margin-left:17px}
+  }
+
   .titulo-h{
     font:400 clamp(1.9rem,4.6vw,3.1rem)/0.98 var(--display);
     text-transform:uppercase;letter-spacing:-.005em;margin:14px 0 6px;
@@ -327,6 +394,11 @@
   .mundo-grande .mundo-cab p{font-size:12px}
   .mundo-grande .rubro{background:var(--surface)}
   .mundo-grande .rubro:hover{background:var(--acento)}
+  /* El tenue del mundo grande va un punto más oscuro (muestra 6.4 B): el
+     lila de atrás le come contraste. El número del rubro, igual que en la
+     muestra; al pasar el mouse vuelve al claro de .rubro:hover i. */
+  .mundo-grande .mundo-cab p,.mundo-grande .rubro i{color:var(--faint-lila)}
+  .mundo-grande .rubro:hover i{color:#DCCEFB}
   /* Lo que no está en ningún mundo va a lo ancho, al final: si quedara del
      tamaño normal, dejaría cuatro columnas vacías al lado. */
   .mundo-otros{grid-column:1 / -1}
@@ -454,6 +526,17 @@
   .qs-txt i{font:500 11px/1 var(--mono);font-style:normal;color:var(--faint)}
   .qs-cat .qs-txt b{font-weight:600}
   .qs-cat .qs-txt i{color:var(--acento)}
+  /* En el rubro no hay nada de lo escrito (29/09, muestra 3.1 B): el rótulo
+     "En Celulares no hay “airpods”" y, abajo, el renglón "Buscar … en todo el
+     catálogo" con la cantidad, con fondo como en la muestra. */
+  .qs-nada{display:block;padding:9px 11px 5px;font:600 10px/1.2 var(--mono);letter-spacing:.12em;
+           text-transform:uppercase;color:var(--faint)}
+  .qs-todo{background:var(--surface-2)}
+  /* Este renglón no se corta con "…" (29/09, revisión de la 3.1): en el
+     celular perdía justo lo que hace ("…, sin los filtros"). Puede ocupar
+     dos líneas, como el botón de la grilla. */
+  .qs-todo .qs-txt b{white-space:normal;overflow:visible}
+  .qs-todo:hover,.qs-todo.marcada{background:var(--line)}
 
   /* Sin stock el boton no invita a comprar: invita a que le avisen */
   .cta-aviso{background:var(--muted) !important;border-color:var(--muted) !important}
@@ -575,7 +658,7 @@
   .nv .mas{flex:none;padding:0 20px;background:var(--acento);color:#fff;border-color:var(--acento);
            box-shadow:0 12px 24px -12px rgba(124,58,237,.9)}
   .nv .mas:hover{background:var(--glow);border-color:var(--glow)}
-  .nv .mas[aria-pressed="true"]{background:var(--ok-soft);color:var(--ok);border-color:rgba(15,138,95,.45);box-shadow:none}
+  .nv .mas[aria-pressed="true"]{background:var(--ok-soft);color:var(--ok);border-color:var(--ok-borde);box-shadow:none}
   .nv-consultar{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;
                 background:var(--surface);border:1px solid rgba(124,58,237,.45);color:var(--acento);text-decoration:none;
                 font:700 11.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
@@ -751,6 +834,10 @@
   .mv-p-foto img{width:100%;height:100%;object-fit:contain;padding:10px;display:block;mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04)}
   .mv-p b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;
           padding:10px 12px 0;font:500 12px/1.3 var(--sans)}
+  /* La línea técnica abajo del modelo, hermana de .tecnica de la tarjeta
+     (muestra 6.8 B). Con alto propio aunque esté vacía: la cinta queda pareja. */
+  .mv-tec{display:block;padding:3px 12px 0;font:500 10.5px/1.35 var(--mono);color:var(--muted);
+          white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:calc(1.35em + 3px)}
   .mv-p i{margin:8px 12px 12px;font:600 12px/1 var(--mono);font-style:normal;color:var(--acento)}
   .mv-p i small{font:500 9.5px/1 var(--mono);color:var(--faint);margin-right:3px}
   /* La cinta corre sola. Con "reducir movimiento" se queda quieta y se recorre
@@ -1123,6 +1210,8 @@
   }
   /* El precio de antes, al lado del de hoy */
   .pie s.antes{font:500 11.5px/1 var(--mono);color:#A597C4;margin-left:7px}
+  /* "≈ $ …" (2.2 B): el signo no se separa del número */
+  .aprox{white-space:nowrap}
 
   .cuerpo{padding:0;display:flex;flex-direction:column;gap:7px;flex:1}
   .marca{
@@ -1194,10 +1283,41 @@
   .fi-botones .sec:hover{opacity:1}
   /* El contador de unidades y el "quitar" son una sola pieza dentro de la columna */
   #fi-pedido-caja{display:flex;flex-direction:column;gap:9px}
+  /* Sin stock queda vacía (2.6 B): que no deje el hueco del gap */
+  #fi-pedido-caja:empty{display:none}
+  /* Lo que ya está en el pedido: Pedro eligió B el 29/09 (muestra 5.2). Si la versión que se
+     mira no está cargada y otra del mismo modelo sí, en lugar de "Agregar al
+     pedido" va el aviso con "Cambiar por esta" y "Agregar también". */
+  .fi-ya{border:1px solid var(--line);border-radius:14px;padding:11px 12px;background:var(--surface);display:grid;gap:10px}
+  .fi-ya p{margin:0;font:500 12.5px/1.4 var(--sans);color:var(--muted);display:flex;gap:8px;align-items:baseline}
+  .fi-ya p::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--acento);flex:none;transform:translateY(-1px)}
+  .fi-ya b{color:var(--ink);font-weight:600}
+  /* Lado a lado si entran sin partirse; si no (la muestra: a 360 no entran),
+     uno debajo del otro. Con wrap y no con un ancho fijo: a 390 todavía entran,
+     y en el celular estos botones van en el pie pegado de la ficha (2.7 B),
+     donde cada renglón de más le saca lugar a los datos. */
+  .fi-ya .fila,.fi-ya-abajo .fila{display:flex;flex-wrap:wrap;gap:8px}
+  .fi-ya .fila .sec,.fi-ya-abajo .fila .sec{flex:1 1 0;min-width:max-content;padding-inline:10px}
+  /* Con .sec en el selector: si no, lo pisa .modal .sec, que va más abajo */
+  .fi-ya .sec.cambiar,.fi-ya-abajo .sec.cambiar{color:var(--glow);border-color:var(--acento);opacity:1;background:rgba(124,58,237,.05)}
+  .fi-ya .sec.cambiar:hover,.fi-ya-abajo .sec.cambiar:hover{color:var(--glow);border-color:var(--glow);background:rgba(124,58,237,.09)}
+  /* En el celular los dos botones del aviso van fuera del pie pegado, justo
+     debajo (29/09, revisión de la 5.2 con la 2.7): adentro, el pie crecía a
+     183-227 px y tapaba el precio y el nombre. Pegados quedan "Consultar por
+     WhatsApp" y la línea del aviso. Ver acomodarAvisoPedido. */
+  .fi-ya-abajo{display:flex;flex-direction:column;margin-top:10px}
+  /* Con la misma letra y forma que adentro del pie (.modal .botones button y
+     .fi-botones .sec), que acá no aplican porque no están en .botones */
+  .fi-ya-abajo .sec{padding:11px 10px;border-radius:999px;cursor:pointer;text-align:center;
+                    font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+  .fi-ya-abajo .sec:hover{opacity:1}
   /* .vis e img.ok van en el selector para pesar más que la regla de la
      entrada, que la pone en opacidad 1 */
   .card.agotado .foto img,.card.agotado.vis .foto img.ok{filter:grayscale(1);opacity:.5}
-  .card.agotado .usd,.card.agotado .ars{color:var(--faint)}
+  /* El precio de la tarjeta agotada va sobre la etiqueta oscura: ahí se queda
+     el tenue de antes (29/09, muestra 6.4 B). Con el nuevo bajaría de 4,7 a
+     3,5 de contraste. */
+  .card.agotado .usd,.card.agotado .ars{color:#867AA6}
 
   /* Modo compacto: mientras no haya NINGUNA foto cargada en el catálogo.
      Evita dibujar cientos de recuadros vacíos. Vuelve solo al cargar la primera. */
@@ -1207,8 +1327,61 @@
   /* ---------- Estados ---------- */
   .msg{padding:64px 20px;text-align:center;color:var(--muted)}
   .msg h2{color:var(--ink);font:400 20px/1.2 var(--display);text-transform:uppercase;margin:0 0 12px}
-  .msg code{background:var(--surface-2);padding:3px 8px;border-radius:6px;font:12px var(--mono);word-break:break-all}
-  .msg ol{text-align:left;max-width:520px;margin:16px auto 0;line-height:1.95}
+  /* El aviso cuando no carga nada (29/09): Pedro eligió el corto que prueba
+     solo (muestras 1.3 A y 1.4 C). Qué pasó, qué hacer, Reintentar y
+     WhatsApp, y una línea con la cuenta del próximo intento. Sin los pasos
+     de Google Drive ni el error crudo: quedan en la consola. */
+  .msg.sin-catalogo p{margin:0 auto;max-width:44ch}
+  .msg .botones{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+  .msg .b-prim{display:inline-flex;align-items:center;gap:8px;cursor:pointer;border:0;
+               font:600 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+               padding:14px 20px;border-radius:999px;background:var(--ink);color:#fff}
+  .msg .b-prim svg{width:14px;height:14px;display:block}
+  .msg .b-prim[aria-disabled="true"]{opacity:.55;cursor:default}
+  .msg .b-wa{display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+             font:600 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+             padding:13px 18px;border-radius:999px;color:var(--acento);
+             background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.42)}
+  .msg .b-wa svg{width:16px;height:16px;display:block}
+  .msg .b-prim:focus-visible,.msg .b-wa:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  .msg.sin-catalogo .aviso-solo{margin:16px auto 0;font:500 11.5px/1.4 var(--mono);color:var(--faint);display:flex;
+                                align-items:center;justify-content:center;gap:8px;max-width:none}
+  .msg.sin-catalogo .aviso-solo[hidden]{display:none}
+  /* La grilla vacía (29/09, muestras 3.1 B, 3.2 B y 3.3 A): dice la causa y
+     ofrece UNA salida. El botón va oscuro como "Filtrar", con la cantidad en
+     la burbuja, no morado lleno: el morado sólido queda para una sola cosa
+     por pantalla. El de WhatsApp copia al de la tarjeta. */
+  .msg.vacio{padding:46px 20px 44px}
+  .msg.vacio h2{margin:0 auto 10px;max-width:30ch;text-wrap:balance}
+  .msg.vacio p{margin:0 auto;max-width:46ch;font-size:15px}
+  .msg.vacio .v-acc{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:18px}
+  .msg .b-salida{display:inline-flex;align-items:center;gap:9px;padding:12px 18px;border-radius:999px;border:0;
+                 cursor:pointer;background:var(--ink);color:#fff;font:600 13.5px/1.2 var(--sans)}
+  .msg .b-salida b{display:grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;
+                   background:var(--acento);font:600 11px/1 var(--mono)}
+  .msg .b-consulta{display:inline-flex;align-items:center;gap:9px;padding:11px 18px;border-radius:999px;
+                   text-decoration:none;color:var(--acento);background:rgba(124,58,237,.06);
+                   border:1px solid rgba(124,58,237,.42);font:600 13.5px/1.2 var(--sans)}
+  .msg .b-consulta svg{width:19px;height:19px;flex:none;display:block}
+  .msg .b-salida:focus-visible,.msg .b-consulta:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  @media (max-width:560px){ .msg.vacio{padding:34px 4px 30px} }
+  /* El aviso de cuando la cinta saca el precio al cambiar de rubro (29/09,
+     muestra 3.4 B): una franja, no un cartel, entre el encabezado y la grilla */
+  .aviso-rubro{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px;margin:14px 0 0;padding:11px 14px;
+               border-radius:12px;background:var(--surface-2);border:1px solid #D8C8F6;
+               font:500 13.5px/1.45 var(--sans);color:var(--ink)}
+  .aviso-rubro[hidden]{display:none}
+  .giro{width:12px;height:12px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--acento);flex:none}
+  @keyframes giro{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion: no-preference){
+    .giro{animation:giro 1s linear infinite}
+  }
+  /* Sin catálogo a la vista (la copia venció con la pestaña abierta, 1.2 B):
+     queda el encabezado y el aviso, como en la primera visita. Se esconde con
+     una clase y no pieza por pieza: la próxima carga buena la saca y todo se
+     vuelve a dibujar como siempre. */
+  body.sin-catalogo :is(#ofertas,.barra-cats,.seccion,#rubro-fijo,#rubro-cab,#aviso-rubro,#mosaico,#sugeridos,#extras){display:none !important}
+  body.sin-catalogo #grid{display:grid !important}
   .skeleton{height:300px;border-radius:var(--radius);
     background:linear-gradient(90deg,var(--surface) 25%,var(--surface-2) 50%,var(--surface) 75%);
     background-size:200% 100%}
@@ -1381,6 +1554,9 @@
             padding-right:38px}
   .modal .fi-nombre{font:400 clamp(1.15rem,2.6vw,1.6rem)/1.15 var(--display);
                     text-transform:uppercase;margin:0;letter-spacing:.005em;padding-right:38px}
+  /* El armazón y el cristal de los Ray-Ban, debajo del título (2.3 B): la
+     hermana de .tecnica de la tarjeta, pero entera y con salto de línea */
+  .fi-linea{margin:-4px 0 0;font:500 12px/1.45 var(--mono);color:var(--muted)}
   .fi-detalle{font-size:12.5px;line-height:1.5;color:var(--muted);margin:0;white-space:pre-line}
   .fi-tabla{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;margin:0;
             font-size:12.5px;border-top:1px solid var(--line);padding-top:13px}
@@ -1395,6 +1571,18 @@
   .fi-servicio svg{width:18px;height:18px;flex:none;color:var(--acento);margin-top:1px}
   .fi-servicio b{display:block;font:600 12.5px/1.3 var(--sans);color:var(--ink)}
   .fi-servicio i{display:block;font-style:normal;font-size:12px;line-height:1.4;color:var(--muted)}
+  /* El renglón del precio sin factura y lo que despliega (2.5 B), como en la
+     muestra: un link subrayado en violeta con la flechita que gira */
+  .fi-desplegar{margin-top:5px;padding:0;border:0;background:none;cursor:pointer;color:var(--acento);
+                font:600 12px/1.3 var(--sans);text-decoration:underline;text-underline-offset:3px}
+  .fi-desplegar::after{content:" ▾"}
+  .fi-desplegar[aria-expanded="true"]::after{content:" ▴"}
+  .fi-desplegar:focus-visible{outline:2px solid var(--acento);outline-offset:2px;border-radius:3px}
+  .fi-pagos{margin-top:6px;font-size:12px;line-height:1.4;color:var(--muted)}
+  .fi-pagos[hidden]{display:none}
+  .fi-pagos p{margin:0 0 4px}
+  .fi-pagos ul{margin:0;padding-left:18px}
+  .fi-servicio .fi-pagos li{display:list-item}
 
   /* ---------- También te puede interesar: la cinta (21/09) ----------
      Cuatro pastillas parejas al pie, con la foto chica al costado del nombre.
@@ -1436,6 +1624,8 @@
      estirar la pastilla (abajo, en el celular, van dos) */
   .fi-rel .pc-txt b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;
                     overflow:hidden;overflow-wrap:anywhere;font:600 11.5px/1.25 var(--sans)}
+  /* La línea técnica, como en la tarjeta (muestra 6.8 B): un renglón y con … */
+  .fi-rel .pc-tec{font:500 10px/1.3 var(--mono);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .fi-rel .pc-txt i{display:block;margin-top:0;font:600 10.5px/1 var(--mono);font-style:normal;color:var(--glow)}
   .fi-rel .pc-txt i .desde{font:500 9px/1 var(--mono);font-style:normal;color:var(--faint);margin-right:3px}
 
@@ -1488,6 +1678,8 @@
   .fi-precio .ars{font:500 13px/1 var(--mono);color:#A597C4;padding-bottom:4px}
   /* El x2 al lado del precio: sin esto el total del pedido no se explica solo */
   .fi-precio .sub{flex-basis:100%;font:500 12px/1 var(--mono);color:#C4B5FD;margin-top:7px}
+  /* El precio anterior tachado, pegado al de hoy (2.4 C, el lila de los pesos) */
+  .fi-precio s.antes{font:500 13px/1 var(--mono);color:#A597C4;padding-bottom:4px;margin-right:auto}
 
   /* El color salió de la columna de datos (21/09): vive al costado de la foto,
      que es donde se ve el cambio. Debajo de la foto queda su nombre, y el
@@ -1579,9 +1771,119 @@
   .fi-ops.chicas .fi-op b{font:500 13px/1.2 var(--sans);color:var(--muted)}
   .fi-ops.chicas .fi-op[aria-pressed="true"] b{color:var(--ink)}
   /* Sin stock se puede elegir igual (el cliente quiere ver el precio), pero se
-     nota de una que no está disponible */
-  .fi-op.agotada{opacity:.5}
+     nota de una que no está disponible. Desde el 29/09 (muestra 6.4 B) sin
+     transparencia: sigue tachada, pero el precio se lee (con la mitad de
+     opacidad daba 1,8 de contraste). */
+  .fi-op.agotada{opacity:1}
   .fi-op.agotada b{text-decoration:line-through}
+
+  /* ---------- Compartir, al lado de la X (29/09) ----------
+     Pedro eligió un ícono redondo arriba, con el mismo estilo que la X y 8 px
+     de aire entre los dos (muestra 4.1 B): se ve sin bajar, en la compu y en
+     el celular, y no suma otro botón a la columna. 14 + 34 + 8 = 56 px desde
+     la derecha. En la compu la marca y el nombre dejan lugar para los dos
+     (eran 38 px, sólo la X); en el celular van arriba de la foto (ver el
+     @media de 640). */
+  .fi-compartir{
+    position:absolute;top:14px;right:56px;z-index:4;width:34px;height:34px;padding:0;
+    border-radius:50%;cursor:pointer;display:grid;place-items:center;
+    background:rgba(255,255,255,.82);color:var(--ink);border:1px solid var(--line);
+    backdrop-filter:blur(6px);
+  }
+  .fi-compartir svg{width:16px;height:16px;display:block;flex:none}
+  /* El :hover solo con mouse (29/09, revisión de la 4.1): en el celular,
+     después de tocar Compartir, el botón quedaba violeta como "activado". */
+  @media (hover:hover){
+    .fi-compartir:hover,.fi-lupa:hover{background:var(--acento);border-color:var(--acento);color:#fff}
+  }
+  .fi-compartir:focus-visible,.fi-lupa:focus-visible,.fi-fila:focus-visible,.fi-todas summary:focus-visible,
+  #visor .fi-cerrar:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  #ficha .fi-marca,#ficha .fi-nombre{padding-right:84px}
+  /* "Link copiado" (4.1): abajo al centro, por encima de las ventanas, y se va
+     solo. Si no se pudo copiar, se queda más y deja seleccionar el link. */
+  .brindis{position:fixed;left:50%;bottom:24px;z-index:960;translate:-50% 12px;opacity:0;pointer-events:none;
+           max-width:calc(100% - 32px);padding:11px 16px;border-radius:999px;background:var(--ink);color:#fff;
+           font:600 13px/1.3 var(--sans);text-align:center;overflow-wrap:anywhere;
+           box-shadow:0 12px 30px rgba(24,18,38,.3);transition:opacity .2s, translate .2s}
+  .brindis.ver{opacity:1;translate:-50% 0}
+  .brindis.largo{border-radius:14px;pointer-events:auto;user-select:text}
+
+  /* ---------- Todas las versiones juntas (29/09) ----------
+     Pedro eligió la lista partida por memoria, como las pestañas (muestra
+     4.3 C). Arranca cerrada y sólo está en los modelos con 6 versiones o más.
+     Cada renglón es una fila de ADVAPP con su precio tal cual: no se juntan
+     ni se corrigen. */
+  .fi-todas{border-top:1px solid var(--line);padding-top:12px}
+  .fi-todas summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer;
+                    font:600 13px/1.3 var(--sans);color:var(--glow)}
+  .fi-todas summary::-webkit-details-marker{display:none}
+  .fi-todas summary .cuenta{margin-left:auto;font:500 10.5px/1 var(--mono);color:var(--faint)}
+  .fi-todas summary svg{width:14px;height:14px;flex:none;transition:rotate .2s}
+  .fi-todas[open] summary svg{rotate:180deg}
+  .fi-lista{display:flex;flex-direction:column;margin-top:10px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .fi-fila{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;
+           padding:8px 12px;border:0;border-top:1px solid var(--line);background:#fff;text-align:left;
+           cursor:pointer;color:var(--ink);font:inherit}
+  .fi-lista > .fi-fila:first-child{border-top:0}
+  .fi-fila:hover{background:#FCFAFF}
+  .fi-fila .q{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .fi-fila .q b{display:flex;align-items:center;gap:7px;font:600 13px/1.25 var(--sans)}
+  .fi-fila .q i{font:600 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;font-style:normal;color:var(--ok)}
+  .fi-fila .p{font:600 12.5px/1 var(--mono);white-space:nowrap}
+  .fi-fila .pinta{width:10px;height:10px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(24,18,38,.18)}
+  /* Lo mismo que en las pestañas (muestra 6.4 B): la versión agotada ya no va
+     medio transparente. El nombre sigue tachado y el precio, en el tenue. */
+  .fi-fila.agotada .p{color:var(--faint)}
+  .fi-fila.agotada .q .t{text-decoration:line-through}
+  .fi-fila.agotada .q i{color:var(--faint)}
+  .fi-fila[aria-pressed="true"]{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--acento)}
+  .fi-grupo{padding:8px 12px 6px;font:600 9.5px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+            color:var(--faint);background:var(--paper);border-top:1px solid var(--line)}
+  .fi-lista > .fi-grupo:first-child{border-top:0}
+
+  /* ---------- La foto en grande (29/09) ----------
+     Pedro eligió el visor en la compu y en el celular (muestra 4.4 B): la
+     lupa avisa que se puede tocar, y se cierra con la X, tocando afuera o con
+     Esc. El fondo es el claro de la ficha: con uno oscuro volvería el
+     rectángulo blanco de las fotos del proveedor. Sin galería ni flechas:
+     casi todos los productos traen una sola foto. */
+  .fi-lupa{position:absolute;left:0;bottom:0;z-index:3;width:34px;height:34px;padding:0;border-radius:50%;
+           display:grid;place-items:center;cursor:zoom-in;background:rgba(255,255,255,.82);color:var(--ink);
+           border:1px solid var(--line);backdrop-filter:blur(6px)}
+  .fi-lupa svg{width:16px;height:16px;display:block}
+  /* Sin foto (el cartel con la marca) no hay nada que agrandar */
+  .fi-marco:not(:has(> img)) .fi-lupa{display:none}
+  #ficha .fi-marco > img{cursor:zoom-in}
+  #visor{position:fixed;inset:0;z-index:950;background:var(--ficha-bg)}
+  #visor .vi{position:absolute;inset:56px 24px 48px;pointer-events:none}
+  /* Pegada a los cuatro lados con margin:auto: centrada, a su tamaño (hasta
+     900 px) y sin pasarse de la pantalla */
+  #visor .vi img{position:absolute;inset:0;margin:auto;max-width:min(900px,100%);max-height:100%;
+                 width:auto;height:auto;pointer-events:auto;touch-action:pinch-zoom;
+                 mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04)}
+  #visor .fi-cerrar{position:fixed;top:14px;right:14px}
+  /* Hasta tres líneas (29/09, revisión de la 4.4): en una sola, en el
+     celular se cortaba justo el color, que va al final (111 de 749 filas a
+     390). Con dos todavía se cortaban los monitores MSI, que traen las
+     especificaciones en el nombre. Tres líneas (37 px desde los 18 de
+     arriba) terminan antes que la foto, que arranca a 56-60 px. */
+  .visor-rot{position:absolute;top:18px;left:20px;right:64px;font:600 9.5px/1.3 var(--mono);letter-spacing:.14em;
+             text-transform:uppercase;color:var(--faint);overflow:hidden;
+             display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3}
+  .visor-pie{position:absolute;left:0;right:0;bottom:14px;text-align:center;font-size:11.5px;color:var(--faint)}
+
+  /* ---------- Un link a un producto que ya no está (29/09) ----------
+     Pedro eligió una ventanita donde iba a estar la ficha (muestra 4.5 B),
+     con la misma caja que las otras ventanas: el botón que manda arriba y a
+     lo ancho, el otro abajo, como en la ficha. */
+  #ya-no-esta .caja{position:relative}
+  #ya-no-esta h3{margin:0 0 10px;padding-right:36px}
+  #ya-no-esta p{margin:0;font-size:13.5px;line-height:1.5;color:var(--muted)}
+  #ya-no-esta .fi-cerrar{top:14px;right:14px;width:30px;height:30px;font-size:18px}
+  #ya-no-esta .botones{flex-direction:column}
+  #ya-no-esta .botones a,#ya-no-esta .botones button{display:flex;align-items:center;justify-content:center;gap:7px;
+                                                     font-size:10px;line-height:1.2}
+  #ya-no-esta .botones svg{width:15px;height:15px;flex:none;display:block}
 
   /* ---------- La franja de envío (21/09) ----------
      Cruza la ficha entre los datos y los sugeridos, del mismo oscuro que la
@@ -1626,6 +1928,40 @@
     .fi-eje{grid-template-columns:1fr;gap:6px}
     .fi-envio{padding:12px 16px;align-items:flex-start}
     .fi-rel-tira{gap:8px}
+    /* "Consultar por WhatsApp" a la vista sin bajar (29/09): Pedro eligió que
+       los mismos botones queden pegados al pie de la ficha mientras se ven los
+       datos, con fondo y borde arriba (muestra 2.7 B). Con la barra del
+       Safari a la vista, en 1 de cada 4 fichas quedaba debajo del borde. Se
+       sueltan solos al llegar al envío: el sticky vive dentro de .fi-datos.
+       No hay estado nuevo: son los botones que ya actualizan
+       elegirColorFicha y elegirVariante. En la compu la ficha no cambia. */
+    #ficha .fi-botones{position:sticky;bottom:0;z-index:3;margin:0 -18px;padding:12px 18px 14px;
+                       background:var(--surface);border-top:1px solid var(--line);
+                       box-shadow:0 -12px 22px -18px rgba(24,18,38,.55)}
+    /* "Ya tenés en el pedido" en el pie pegado: solo la línea, sin el
+       recuadro (sus botones van debajo, en .fi-ya-abajo). Así el pie con el
+       aviso no es más alto que con "Agregar al pedido" y no tapa el precio
+       (29/09, revisión de la 5.2 con la 2.7). */
+    #ficha .fi-botones .fi-ya{border:0;border-radius:0;padding:2px 2px 0;background:none}
+    /* Lo enfocado con el teclado no queda detrás del pie (ver medirPieFicha):
+       --pie-ficha es su alto medido; 170 si todavía no se midió */
+    #ficha .caja{scroll-padding-bottom:calc(var(--pie-ficha, 170px) + 12px)}
+    /* La X acompaña al bajar (29/09, muestra 2.8 B, la regla del verificador):
+       se iba con la foto y para cerrar había que volver arriba o usar "atrás".
+       El margen de abajo negativo descuenta su alto: no empuja la foto.
+       Flota siempre y puede tapar un poco la punta de una pestaña. */
+    #ficha .fi-cerrar{position:sticky;top:14px;right:auto;align-self:flex-end;flex:none;
+                      margin:14px 14px -48px auto}
+    /* Compartir acompaña a la X (4.1 B): pegado arriba igual que ella, 8 px a
+       su izquierda (14 + 34 + 8 = 56). Los dos llevan el mismo margen
+       negativo: el segundo arranca a la misma altura que el primero y
+       ninguno empuja la foto. En el HTML Compartir va primero (29/09,
+       revisión): así el Tab los recorre de izquierda a derecha, como se ven. */
+    #ficha .fi-compartir{position:sticky;top:14px;right:auto;align-self:flex-end;flex:none;
+                         margin:14px 56px -48px auto}
+    /* Acá los dos flotan sobre la foto: el nombre queda como estaba */
+    #ficha .fi-marca,#ficha .fi-nombre{padding-right:38px}
+    #visor .vi{inset:60px 0 64px}
   }
 
   /* ---------- Especificaciones deducidas ---------- */
@@ -1690,7 +2026,7 @@
   .mas[aria-pressed="true"] .txt-ok{display:inline}
   .mas:hover{background:rgba(124,58,237,.20);border-color:var(--acento)}
   .mas:active{transform:scale(.97)}
-  .mas[aria-pressed="true"]{background:var(--ok-soft);color:var(--ok);border-color:rgba(15,138,95,.45)}
+  .mas[aria-pressed="true"]{background:var(--ok-soft);color:var(--ok);border-color:var(--ok-borde)}
   .card{cursor:pointer}
   .card:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
 
@@ -1727,6 +2063,11 @@
   .bp-total{display:flex;flex-direction:column;gap:3px;min-width:0}
   .bp-total b{font:400 19px/1 var(--display);letter-spacing:.01em}
   .bp-total i{font:500 11px/1 var(--mono);color:var(--faint);font-style:normal}
+  /* Los pesos del total, aproximados (2.2 B). El signo va por CSS y no en el
+     texto porque en el celular se saca: medido en el sitio a 390 px, #bp-ars
+     tiene 81 px y con "≈ " los pesos bajaban a un segundo renglón. Ahí el
+     pedido y el mensaje ya dicen "aprox.". */
+  #bp-ars:not(:empty)::before{content:"≈ "}
   .bp-enviar{
     margin-left:auto;flex:none;text-decoration:none;color:#fff;
     background:linear-gradient(135deg,var(--acento),#6D28D9);
@@ -1745,12 +2086,27 @@
     .bp-ver{padding:9px 11px;gap:6px;font-size:9.5px}
     .bp-enviar{padding:12px 16px}
     .bp-total b{font-size:17px}
+    #bp-ars:not(:empty)::before{content:none}
   }
   /* En 320 px los dos botones dejaban 25 px para el total, y "USD 650" salía
      partido en dos renglones. El total pasa a su propio renglón, en una línea. */
   @media (max-width:360px){
     .barra-pedido{flex-wrap:wrap;row-gap:8px}
     .bp-total{order:-1;flex:1 1 100%;flex-direction:row;align-items:baseline;gap:10px}
+  }
+  /* El total con la hora (29/09): Pedro eligió que mientras se ve la copia la
+     barra diga de qué hora son los precios (muestra 1.5 A). En el celular no
+     entra al lado de los botones: el total pasa a su renglón, como a 360, y
+     la hora abajo. */
+  .bp-total .aviso{font:600 10.5px/1.2 var(--mono);color:#8A6500;letter-spacing:.02em;
+                   display:flex;align-items:center;gap:6px}
+  .bp-total .aviso[hidden]{display:none}
+  .bp-total .aviso .dot{background:var(--ambar)}
+  @media (max-width:560px){
+    .barra-pedido.con-aviso{flex-wrap:wrap;row-gap:8px}
+    .barra-pedido.con-aviso .bp-total{order:-1;flex:1 1 100%;flex-direction:row;flex-wrap:wrap;
+                                       align-items:baseline;gap:4px 10px}
+    .barra-pedido.con-aviso .bp-total .aviso{flex:1 1 100%}
   }
 
   /* Lista del pedido */
@@ -1773,6 +2129,11 @@
   @media (max-width:520px){
     .pd-item{flex-wrap:wrap}
     .pd-txt{flex:1 1 100%;order:-1}
+    /* "no suma al total" se parte en dos renglones (29/09, revisión de la
+       2.6): en una sola línea, a 360 la cruz bajaba sola a un tercer renglón,
+       pegada a la izquierda. */
+    .pd-precio.sin-stock{white-space:normal;max-width:84px}
+    .pd-precio.sin-stock i{white-space:normal}
   }
   .pd-quitar{background:transparent;border:0;color:var(--faint);cursor:pointer;font-size:19px;
              line-height:1;padding:5px 8px;border-radius:8px;flex:none}
@@ -1782,7 +2143,50 @@
   .pd-total span{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
   .pd-total b{font:400 24px/1 var(--display)}
   .pd-total i{display:block;font:500 12px/1 var(--mono);color:var(--muted);font-style:normal;margin-top:6px;text-align:right}
+  /* El "≈ $" (2.2 B) es un span: no es el rótulo "Total" de al lado */
+  .pd-total i .aprox{font:inherit;letter-spacing:normal;text-transform:none;color:inherit}
+  /* Lo que se quedó sin stock en el pedido (2.6 B): la marca y el aviso de abajo del total */
+  .pd-precio .badge{display:inline-block}
+  .pd-total i.pd-mas{color:var(--faint);font-size:11px}
   .pd-vacio{color:var(--faint);font-size:13px;text-align:center;padding:22px 0}
+  /* Del pedido a la ficha: Pedro eligió B el 29/09 (muestra 5.1). La foto y el nombre de cada
+     línea son botones que abren la ficha en la versión y el color de esa
+     línea; el texto de adentro es el mismo de siempre. En la compu el nombre
+     se subraya al pasar el mouse. El renglón "Cambiar versión o color ›" va
+     sólo donde hay algo para cambiar (hayParaCambiar): en el celular no hay
+     mouse, y si nada lo dice nadie lo toca. Como botón, el nombre es el que
+     ocupa el lugar de .pd-txt en la fila (y su renglón entero en el celular). */
+  .pd-abre{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;text-align:left;
+           cursor:pointer;display:block}
+  .pd-abre-foto{flex:none;border-radius:9px}
+  .pd-abre-foto:empty{display:none}     /* la foto que no cargó se saca sola (onerror) */
+  .pd-abre-foto .pd-foto{display:block}
+  .pd-abre .pd-txt{display:block}
+  .pd-abre-txt{flex:1;min-width:0}
+  .pd-abre-txt:hover b{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px}
+  .pd-abre:focus-visible{outline:2px solid var(--acento);outline-offset:2px;border-radius:6px}
+  .pd-cambiar{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font:600 10px/1 var(--mono);
+              letter-spacing:.08em;text-transform:uppercase;color:var(--acento)}
+  .pd-cambiar::after{content:"";width:6px;height:6px;border:1.6px solid currentColor;border-left:0;
+                     border-bottom:0;transform:rotate(45deg)}
+  @media (max-width:520px){
+    .pd-abre-txt{flex:1 1 100%;order:-1}
+  }
+  /* "Vaciar" aparte: Pedro eligió B el 29/09 (muestra 5.4). Un link chico abajo, lejos de
+     "Enviar por WhatsApp", que queda solo y ocupa todo el ancho. Vacía de una
+     y deja "Deshacer" mientras la ventana siga abierta, sin temporizador. */
+  .pd-link{display:block;margin:14px auto 0;background:none;border:0;padding:4px 8px;cursor:pointer;
+           font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);
+           text-decoration:underline;text-underline-offset:3px}
+  .pd-link:hover{color:var(--ink)}
+  .pd-link:focus-visible{outline:2px solid var(--acento);outline-offset:2px;border-radius:6px}
+  .pd-deshecho{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 6px}
+  .pd-deshecho p{margin:0;font-size:13.5px;color:var(--muted)}
+  .pd-deshecho button{flex:none;padding:10px 16px;border-radius:999px;cursor:pointer;font:600 10.5px/1 var(--mono);
+                      letter-spacing:.1em;text-transform:uppercase;background:var(--surface);color:var(--glow);
+                      border:1px solid var(--acento)}
+  .pd-deshecho button:hover{background:rgba(124,58,237,.06)}
+  .pd-deshecho button:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
 
   /* Cargando la tanda siguiente */
   .centinela{grid-column:1/-1;height:1px}
@@ -2154,13 +2558,20 @@
   @media (min-width:1180px){
     .wrap{max-width:1680px}
     .barra-cats .wrap{max-width:1680px}
-    .seccion h2{font:400 27px/1.1 var(--display);margin:0;letter-spacing:-.01em}
     .seccion span{font:500 13px/1 var(--mono);color:var(--faint)}
   }
   /* El título "Elegí un rubro" es de la portada. Adentro de un rubro, lo que
      dice qué estás mirando es el encabezado. */
   .seccion{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:24px 0 12px;border-bottom:1px solid var(--line)}
   body:not(.portada) .seccion{display:none}
+  /* En Lilita y sin mayúsculas en todos los anchos (29/09, muestra 6.3 B):
+     27 px en la compu y 22 en el celular. Solo la compu de 1180 px o más lo
+     tenía; en las demás salía con la letra del sistema en negrita, y todos
+     los otros títulos de la portada van en Lilita. */
+  .seccion h2{font:400 27px/1.1 var(--display);margin:0;letter-spacing:-.01em}
+  @media (max-width:760px){
+    .seccion h2{font-size:22px}
+  }
 
   /* La barra de categorías queda pegada arriba también en pantalla chica */
   .barra-cats{position:sticky;top:0;z-index:21;background:var(--paper);
@@ -2178,7 +2589,8 @@
     .cats-logo img{height:17px}
   }
   @media (max-width:1179px){
-    body.portada .seccion{padding:20px 0 2px;border-bottom:0}
+    /* 22 y 4 (eran 20 y 2) con el título en Lilita, como la muestra 6.3 B */
+    body.portada .seccion{padding:22px 0 4px;border-bottom:0}
   }
 
   /* Antes, en un monitor muy ancho, la grilla sumaba columnas sola (llegaba a
@@ -2385,6 +2797,61 @@
     .modal-filtros{place-items:end stretch}
     .modal-filtros .caja{width:100%;height:auto;max-height:86vh;max-height:86dvh;border-radius:22px 22px 0 0}
   }
+
+  /* ---------- El pie con el contacto (29/09, muestra 6.7 B) ----------
+     Una línea arriba de la cotización. Sale de la configuración (DIRECCION,
+     MAPA, WHATSAPP y el "con cita previa" de SERVICIO.retiro): lo que quede
+     vacío no se muestra. Sin horario ni razón social: eso lo define Pedro
+     (opción C). En el celular va un dato por renglón. */
+  .pie-id{margin:0 0 12px;font:500 13px/1.6 var(--sans);letter-spacing:0;text-transform:none;color:var(--ink)}
+  .pie-id[hidden]{display:none}
+  .pie-id b{font:400 15px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;margin-right:2px}
+  .pie-id .sep{color:var(--line);margin:0 6px}
+  .pie-id a{color:var(--acento);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;white-space:nowrap}
+  .pie-id a:hover{color:var(--glow)}
+  .pie-id a:focus-visible{outline:2px solid var(--acento);outline-offset:2px;border-radius:4px}
+  .pie-legal{display:block}
+  @media (max-width:560px){
+    .pie-id{display:flex;flex-direction:column;gap:4px;align-items:center}
+    .pie-id[hidden]{display:none}
+    .pie-id .sep{display:none}
+  }
+
+  /* ---------- Botones a medida del dedo (29/09, muestra 6.6 B) ----------
+     Solo en pantallas táctiles, y sin cambiar nada de lo que se ve: lo que
+     crece es la zona que responde al toque, que es un ::before transparente
+     más grande que el botón. Con los vecinos pegados, cada uno crece hacia
+     su lado y no se pisan: el + y el WhatsApp de la tarjeta quedan de 43x44
+     (entre los dos hay 6 px), y la X y Compartir de la ficha también (8 px).
+     El contador de la ficha llega a 42, el del pedido y la X del pedido a
+     40, y "Ver pedido" a 44 de alto. Los puntitos de ofertas (eran de 8 px y
+     8 de separación) pasan a botones de 24 pegados, con el punto dibujado
+     adentro, como los de Recién llegados. En la compu no cambia nada.
+     Ojo al cambiar un número: el ::before se mide desde adentro del borde,
+     así que en los que tienen borde de 1 px (la X, Compartir, la lupa, el
+     contador, "Ver pedido") va 1 px más que lo que crece por fuera. */
+  @media (pointer:coarse){
+    .acciones .mas,.acciones .wa,.stepper button,.pd-quitar,.bp-ver{position:relative}
+    .acciones .mas::before,.acciones .wa::before,.fi-cerrar::before,.fi-compartir::before,.fi-lupa::before,
+    .stepper button::before,.pd-quitar::before,.bp-ver::before{content:"";position:absolute;border-radius:inherit}
+    .foto .acciones .mas::before{inset:-4px -3px -4px -4px}
+    .foto .acciones .wa::before{inset:-4px -4px -4px -3px}
+    .fi-cerrar::before{inset:-6px -6px -6px -5px}
+    .fi-compartir::before{inset:-6px -5px -6px -6px}
+    #visor .fi-cerrar::before,.fi-lupa::before{inset:-6px}
+    #ya-no-esta .fi-cerrar::before{inset:-8px}
+    .stepper button::before{inset:-7px}
+    .pd-item .stepper button::before{inset:-8px}
+    .pd-quitar::before{inset:-6px -7px}
+    /* "Ver pedido" cambia de alto con el ancho: la zona va de 44 fija, centrada */
+    .bp-ver::before{left:-1px;right:-1px;top:50%;height:44px;transform:translateY(-50%)}
+    .of-dots{gap:0}
+    .of-dots button{width:24px;height:24px;background:none;display:grid;place-items:center;border-radius:50%}
+    .of-dots button::before{content:"";width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.30);
+                            transition:background .2s ease, width .2s ease}
+    .of-dots button[aria-current="true"]{width:32px;background:none;border-radius:99px}
+    .of-dots button[aria-current="true"]::before{width:24px;border-radius:99px;background:#F0D98C}
+  }
 </style>
 </head>
 <body>
@@ -2440,6 +2907,20 @@
         </svg>
       </button>
     </div>
+  </div>
+</div>
+
+<!-- La franja ámbar (29/09, muestra 1.1 B): aparece sola cuando ADVAPP no
+     contesta y se está viendo la copia guardada en este navegador. El texto
+     con la hora lo pone pintarFranja(). -->
+<div class="franja" id="franja" role="status" hidden>
+  <div class="wrap">
+    <span class="dot" aria-hidden="true"></span>
+    <p id="franja-txt"></p>
+    <button class="b-reint" id="franja-reint" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>
+      Reintentar
+    </button>
   </div>
 </div>
 
@@ -2516,6 +2997,9 @@
   <!-- La portada: los rubros antes que los productos. Con 441 tarjetas de
        golpe el cliente entra a una pared y no sabe por donde empezar. -->
   <div class="mosaico" id="mosaico" hidden></div>
+  <!-- "Sacamos 'Más de USD 5.000': en Consolas no había nada en ese precio"
+       (3.4 B). Lo llena pintar(); se va solo al cambiar lo pedido. -->
+  <div class="aviso-rubro" id="aviso-rubro" hidden></div>
   <div class="grid" id="grid"></div>
   <!-- Lo que combina con lo que estás mirando. Lo llena el script y desaparece
        solo cuando no hay nada para sugerir. -->
@@ -2528,7 +3012,7 @@
 <!-- Barra del pedido. Aparece sola cuando hay algo cargado. -->
 <div class="barra-pedido" id="barra-pedido" hidden>
   <button class="bp-ver" id="bp-ver" type="button">0 productos</button>
-  <div class="bp-total"><b id="bp-usd">USD 0</b><i id="bp-ars"></i></div>
+  <div class="bp-total"><b id="bp-usd">USD 0</b><i id="bp-ars"></i><i class="aviso" id="bp-aviso" hidden><span class="dot" aria-hidden="true"></span><span id="bp-aviso-txt"></span></i></div>
   <a class="bp-enviar" id="bp-enviar" target="_blank" rel="noopener">Enviar pedido</a>
 </div>
 
@@ -2543,8 +3027,11 @@
 </a>
 
 <footer class="wrap">
-  <span id="pie-cotiz"></span>
-  Precios sujetos a cambio sin previo aviso · Consultá disponibilidad antes de comprar
+  <!-- La línea de contacto (29/09, muestra 6.7 B): la arma pintarPie() con
+       lo que ya está en la configuración. Sin eso queda escondida. -->
+  <p class="pie-id" id="pie-id" hidden></p>
+  <span class="pie-legal"><span id="pie-cotiz"></span>
+  Precios sujetos a cambio sin previo aviso · Consultá disponibilidad antes de comprar</span>
 </footer>
 
 <script>
@@ -2554,11 +3041,17 @@
 
 // ---------- DE DÓNDE SALEN LOS PRODUCTOS ----------
 //
-// Primero ADVAPP, el sistema interno: devuelve las mismas columnas que la
-// planilla, con los mismos nombres, en JSON. La planilla de abajo queda de
-// RESPALDO y se lee sola si ADVAPP da error, tarda más de ADVAPP_ESPERA_MS,
-// viene sin productos, trae menos de los que declara o trae menos de
-// ADVAPP_MINIMO de las filas que dice la hoja Meta de la planilla.
+// ADVAPP, el sistema interno: devuelve las mismas columnas que la planilla,
+// con los mismos nombres, en JSON. Si ADVAPP da error, tarda más de
+// ADVAPP_ESPERA_MS, viene sin productos, trae menos de los que declara o trae
+// menos de ADVAPP_MINIMO de las filas que dice la hoja Meta de la planilla, se
+// muestra la COPIA de la última respuesta buena que guardó este navegador,
+// con su hora, si tiene menos de COPIA_VIGENCIA_MS; y si no hay copia, un
+// aviso de no disponible con Reintentar y WhatsApp.
+// La planilla ya NO es respaldo con ADVAPP puesta: Pedro eligió el 29/09
+// (muestra 1.3 A) no mostrar nada antes que la lista congelada del 16/09, que
+// daba con stock 94 productos que ADVAPP daba sin stock. La hoja Meta se
+// sigue leyendo, solo para contar filas cuando ADVAPP viene corto.
 // Con ADVAPP_URL vacío la web vuelve a leer solo la planilla, como antes.
 const ADVAPP_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web';
 const ADVAPP_ESPERA_MS = 8000;
@@ -2578,6 +3071,21 @@ const META_ESPERA_MS       = 6000;
 const PLANILLA_ESPERA_MS   = 12000;   // cada una de sus dos fuentes
 const INDICE_ESPERA_MS     = 10000;
 
+// ---------- CUANDO ADVAPP NO CONTESTA (29/09, muestras 1.1 a 1.6) ----------
+//
+// Cuánto vale la copia de la última respuesta buena de ADVAPP guardada en el
+// navegador: 6 horas. Cubre una caída de media jornada; si dura más, que el
+// cliente pregunte por WhatsApp (Pedro eligió 1.2 B). Pasado eso, el aviso.
+const COPIA_VIGENCIA_MS = 6 * 60 * 60 * 1000;
+// Al entrar, si lo nuevo tarda más que esto y hay copia, se muestra la copia
+// mientras tanto, sin pesos hasta que llegue el dólar (1.6 B). Con buena
+// señal lo nuevo llega antes y la pantalla no titila.
+const COPIA_ESPERA_MS = 1000;
+// El aviso de no disponible prueba solo a los 5, 15 y 30 segundos de cada
+// falla, y apenas vuelve la señal: tres intentos y para, para no gastarle
+// datos al cliente (1.4 C). El refresco de cada REFRESCO_MIN sigue igual.
+const REINTENTOS_S = [5, 15, 30];
+
 // ID de tu planilla (lo que va entre /d/ y /edit en la URL)
 // OJO: esta es la planilla "Landing", NO la de Cami. La de Cami es la fuente
 // comercial, pero la carga diaria de precios le pisa la columna Color. La
@@ -2589,6 +3097,12 @@ const SHEET_GID = '482985525';
 
 // Tu WhatsApp con código de país, solo números
 const WHATSAPP = '5491122620770';   // +54 9 11 2262-0770
+
+// La dirección pública del catálogo, la que ven los clientes. El botón
+// Compartir de la ficha manda SIEMPRE esta, aunque se abra el catálogo desde
+// la compu local (29/09, muestra 4.1). Es la misma de las etiquetas og: de
+// arriba.
+const URL_PUBLICA = 'https://advance33.github.io/catalogo-advance/';   // ← direccion publica del catalogo en GitHub Pages
 
 // ---------- PRECIOS EN PESOS ----------
 //
@@ -3076,9 +3590,17 @@ function montarModal(d, alCerrar){
     if(e.key === 'Escape'){ e.preventDefault(); cerrar(); return; }
     if(e.key !== 'Tab') return;
     const f = focusables();
-    if(f.length < 2) return;
-    const pri = f[0], ult = f[f.length-1];
     const caja = d.querySelector('.caja') || d;
+    /* Con un solo botón (o ninguno) el Tab también queda adentro (29/09,
+       revisión de la 5.4): "Vaciaste el pedido" deja solo "Deshacer", y el
+       pedido vacío tras la ✕ no deja ninguno. Antes el Tab se iba a la
+       página de atrás con la ventana abierta. */
+    if(f.length < 2){
+      // Solo la ventana de más arriba: una de abajo no le roba el foco a otra
+      if([...document.querySelectorAll('.modal')].pop() !== d) return;
+      e.preventDefault(); (f[0] || caja).focus(); return;
+    }
+    const pri = f[0], ult = f[f.length-1];
     // Shift+Tab parado en la ventana misma: va al último, no se escapa afuera
     if(e.shiftKey && document.activeElement === caja){ e.preventDefault(); ult.focus(); }
     else if(e.shiftKey && document.activeElement === pri){ e.preventDefault(); ult.focus(); }
@@ -3626,7 +4148,8 @@ async function bajarAdvapp(){
      cargar() los tomaría como "no": el catálogo vacío o todo sin stock, y el
      sello en verde. Se mira acá, sobre lo crudo y antes de convertirlo, para
      entrar en la misma cadena que las otras fallas: bajarDatos lo anota como
-     motivo y sigue con la planilla. */
+     motivo y sigue con la copia de este navegador, o el aviso (desde la 1.3
+     A la planilla ya no es el respaldo). */
   for(const nombre of ['stock', 'activo']){
     const k = columnas.find(c => norm(c) === nombre);
     if(k === undefined) continue;
@@ -3648,13 +4171,15 @@ async function bajarAdvapp(){
   };
 }
 
-/* De donde sale la ultima carga buena: { fuente: 'advapp' | 'planilla',
-   manifiesto, motivo }. El manifiesto es el de esa fuente: el de ADVAPP viene
-   en su mismo JSON; el de la planilla es la hoja Meta. `motivo` dice por que
-   no se uso ADVAPP, si no se uso. */
+/* De donde sale la ultima carga buena: { fuente: 'advapp' | 'copia' |
+   'planilla', manifiesto, motivo, hora }. El manifiesto es el de esa fuente:
+   el de ADVAPP viene en su mismo JSON; el de la planilla es la hoja Meta; la
+   copia no tiene (29/09). `motivo` dice por que no se uso ADVAPP, si no se
+   uso. `hora`, solo en la copia: de cuando son esos precios. */
 let FUENTE = null;
 
-/* Primero ADVAPP; si no sirve, la planilla con sus dos caminos (bajarCSV).
+/* Primero ADVAPP; si no sirve, la copia de este navegador (ver guardarCopia),
+   y la planilla con sus dos caminos (bajarCSV) solo con ADVAPP_URL vacío.
    El control de filas de ADVAPP es contra lo que el mismo JSON dice haber
    escrito, y contra la planilla solo con margen: comparado exacto contra
    Meta, la web creeria que vino cortado (trae menos a proposito) y volveria
@@ -3679,6 +4204,65 @@ const leerPendiente = () => { try{ return JSON.parse(localStorage.getItem(FILAS_
 const guardarPendiente = x => {
   try{ if(x) localStorage.setItem(FILAS_PENDIENTES, JSON.stringify(x)); else localStorage.removeItem(FILAS_PENDIENTES); }catch(e){}
 };
+
+/* ---------- La copia de ADVAPP en este navegador (29/09) ----------
+   Pedro eligió el 29/09 (muestras 1.1 B, 1.2 B, 1.3 A y 1.6 B): si ADVAPP no
+   contesta, se ve la última lista buena de ADVAPP con su hora, y nunca más la
+   planilla congelada. Se guarda después de cada carga de ADVAPP que se aplica
+   (actualizar): las filas tal cual vinieron, el índice de fotos de ese momento
+   (para que la copia se arme igual aunque indice.json no llegue) y la hora.
+   Sin la cotización: los pesos salen siempre del dólar de ahora ("nunca un
+   precio en pesos con una cotización guardada", 1.6).
+   En localStorage a propósito: es sincrónico, así la copia se muestra sin
+   esperar a nada, y las pruebas con el reloj virtual de Chrome la ven (el
+   reloj no espera a IndexedDB). Son unos 560.000 caracteres (medido el
+   29/09: 1,1 MB en UTF-16, el 11 % de lo que deja Chrome y el 22 % de
+   Safari); la hora va además en una
+   clave chica, así que saber si hay copia vigente no obliga a leer todo en
+   cada visita. Si no entra (modo privado, sin lugar), no queda copia: se
+   borra todo antes que dejar una hora que no es la de esas filas. */
+const COPIA_KEY = 'advtecno.copia';
+const COPIA_HORA_KEY = 'advtecno.copia.hora';
+function guardarCopia(filas, hora){
+  try{
+    const indice = INDICE_FOTOS ? { archivos: [...INDICE_FOTOS], catalogo: CATALOGO || null } : null;
+    localStorage.setItem(COPIA_KEY, JSON.stringify({ hora, filas, indice }));
+    localStorage.setItem(COPIA_HORA_KEY, String(hora));
+    return true;
+  }catch(e){
+    console.warn('No se pudo guardar la copia de ADVAPP:', e);
+    borrarCopia();
+    return false;
+  }
+}
+function borrarCopia(){
+  try{ localStorage.removeItem(COPIA_KEY); localStorage.removeItem(COPIA_HORA_KEY); }catch(e){}
+}
+/* Una copia vale si tiene menos de COPIA_VIGENCIA_MS. Con la hora en el
+   futuro (un reloj cambiado) no se sabe de cuándo es: no vale. */
+const copiaVigente = hora => hora > 0 && Date.now() - hora >= 0 && Date.now() - hora < COPIA_VIGENCIA_MS;
+// La hora de la copia si vale, o 0, sin leer las filas
+function horaDeLaCopia(){
+  try{ const h = Number(localStorage.getItem(COPIA_HORA_KEY)) || 0; return copiaVigente(h) ? h : 0; }
+  catch(e){ return 0; }
+}
+// { hora, filas, indice } si hay una copia que vale, o null
+function leerCopia(){
+  if(!horaDeLaCopia()) return null;
+  try{
+    const c = JSON.parse(localStorage.getItem(COPIA_KEY) || 'null');
+    // La hora que manda es la guardada con las filas
+    if(!c || !copiaVigente(Number(c.hora)) || !Array.isArray(c.filas) || c.filas.length < 2) return null;
+    return { hora: Number(c.hora), filas: c.filas, indice: c.indice || null };
+  }catch(e){ return null; }
+}
+/* El índice de fotos de la copia, solo si no hay ninguno: ni recién bajado ni
+   de una carga anterior. Es "el de la carga anterior" de una visita nueva. */
+function usarIndiceDeLaCopia(ix){
+  if(INDICE_FOTOS || !ix || !Array.isArray(ix.archivos) || !ix.archivos.length) return;
+  INDICE_FOTOS = new Set(ix.archivos);
+  CATALOGO = ix.catalogo || null;
+}
 
 async function bajarDatos(){
   let metaP = null;                   // se pide recien cuando hace falta
@@ -3725,23 +4309,25 @@ async function bajarDatos(){
       return a;
     }catch(e){
       motivo = (e && e.message) || String(e);
-      console.warn('ADVAPP no sirvio (' + motivo + '): se usa la planilla.');
+      console.warn('ADVAPP no sirvio (' + motivo + ').');
     }
+    /* Pedro eligió el 29/09 (muestra 1.3 A): con ADVAPP puesta la planilla no
+       se muestra más, ni se le pide. Primero la copia de la última respuesta
+       buena de ADVAPP, si todavía vale (1.1 B y 1.2 B). */
+    const copia = leerCopia();
+    if(copia) return { fuente: 'copia', manifiesto: null, motivo, hora: copia.hora,
+                       filas: copia.filas, indice: copia.indice };
+    /* Sin copia, la carga corta que Meta no pudo juzgar se muestra antes que el
+       aviso (29/09), sin guardarFilas y sin guardarla como copia (lleva
+       motivo): la vara no baja por una carga que nadie aprobó. Son filas de
+       ADVAPP de ahora, no una lista vieja. */
+    if(corta) return { ...corta, motivo: `${motivo} · sin copia guardada` };
+    /* El error dice por qué no sirvió ADVAPP, que es lo que hay que ir a mirar
+       (queda en ULTIMO_FALLO para la medición), y que no había copia. */
+    throw new Error(`ADVAPP: ${motivo} · sin copia guardada que valga`);
   }
-  let txt;
-  try{ txt = await bajarCSV(); }
-  catch(e){
-    /* Que el error diga las dos cosas (29/09): sin esto, con las dos fuentes
-       caídas se perdía por qué no sirvió ADVAPP, que es lo que hay que ir a
-       mirar, y quedaba solo el error de Google. */
-    /* Con Google caído también, la carga corta que Meta no pudo juzgar se
-       muestra antes que la pantalla de error (29/09), pero sin guardarFilas:
-       la vara no baja por una carga que nadie aprobó. Así no queda peor que
-       antes del tope, cuando una Meta con error la dejaba pasar. */
-    if(corta) return { ...corta, motivo: `${motivo} · planilla: ${(e && e.message) || e}` };
-    if(motivo) throw new Error(`ADVAPP: ${motivo} · planilla: ${(e && e.message) || e}`);
-    throw e;
-  }
+  // Sin ADVAPP_URL: la planilla, como antes del 17/09
+  const txt = await bajarCSV();
   return { fuente: 'planilla', manifiesto: await meta(), motivo, filas: parseCSV(txt) };
 }
 
@@ -3844,6 +4430,15 @@ async function cargar(){
     INDICE_FOTOS = indice.archivos;
     CATALOGO = indice.catalogo;
   }
+  // La copia trae el índice de su momento: vale si no hay ningún otro (29/09)
+  else usarIndiceDeLaCopia(datos.indice);
+  return armarCarga(datos);
+}
+
+/* Arma los productos con una tabla ya bajada (29/09). Estaba adentro de
+   cargar(): quedó aparte para armar la copia de este navegador sin pedir nada
+   (la copia al instante de la muestra 1.6 B). La lectura no cambió. */
+function armarCarga(datos){
   const filas = datos.filas.filter(f => f.some(c => c.trim()));
   if(filas.length < 2) throw new Error('la planilla vino vacía');
 
@@ -4018,46 +4613,64 @@ async function cargar(){
   /* La fuente viaja con los productos y la asigna actualizar(), no esta
      función (29/09): con dos refrescos superpuestos, el viejo que terminaba
      último pisaba FUENTE con la de una carga que después se descartaba. */
-  return { productos,
-           fuente: { fuente: datos.fuente, manifiesto: datos.manifiesto, motivo: datos.motivo } };
+  /* `filas` es la tabla tal cual vino: con ella actualizar() guarda la copia
+     de este navegador (29/09). Viaja aparte de los productos y no se dibuja. */
+  return { productos, filas: datos.filas,
+           fuente: { fuente: datos.fuente, manifiesto: datos.manifiesto, motivo: datos.motivo,
+                     hora: datos.hora || 0 } };
   // Si la planilla tuviera "Proveedor" o "Costo USD", esos campos nunca se copian
   // acá. Lo que no existe en este objeto no puede filtrarse a la web.
 }
 
 /* ---------- Filtrado ---------- */
 
-function filtrar(){
-  const palabras = prepararBusqueda(filtros.q);
+/* Lo que se pide de una VERSION: stock, capacidad, memoria y precio. El
+   modelo entra si UNA de sus variantes cumple TODO junto (29/09). Antes
+   cada condición buscaba su propia variante: "Celular 1TB + USD 500 a
+   1.000" traía el Galaxy S25 Ultra por sus 256/512 a 860, con el 1TB a
+   1.005, y "256GB + 6GB" traía el A27 y el A36, que tienen 6GB solo con
+   128GB. Por variante sigue siendo: un iPhone agrupado tiene 256, 512 y 1TB
+   en la misma tarjeta, y buscando "256" tiene que aparecer igual. Y con que
+   UNA variante tenga stock, el modelo se muestra. Los "Consultar" no tienen
+   precio, así que no caen en ningún tramo.
+   Va aparte de filtrar() desde el 29/09 porque también la usa la grilla
+   (listaDeLaGrilla, 2.1 B). null si no hay ningún filtro de versión. */
+function versionPedida(){
   const r = filtros.rango ? RANGOS.find(x => x[0] === filtros.rango) : null;
-  /* Lo que se pide de una VERSION: stock, capacidad, memoria y precio. El
-     modelo entra si UNA de sus variantes cumple TODO junto (29/09). Antes
-     cada condición buscaba su propia variante: "Celular 1TB + USD 500 a
-     1.000" traía el Galaxy S25 Ultra por sus 256/512 a 860, con el 1TB a
-     1.005, y "256GB + 6GB" traía el A27 y el A36, que tienen 6GB solo con
-     128GB. Por variante sigue siendo: un iPhone agrupado tiene 256, 512 y 1TB
-     en la misma tarjeta, y buscando "256" tiene que aparecer igual. Y con que
-     UNA variante tenga stock, el modelo se muestra. Los "Consultar" no tienen
-     precio, así que no caen en ningún tramo. */
-  const porVersion = filtros.soloStock || filtros.capacidad || filtros.ram || r;
-  const versionOK = v =>
+  if(!(filtros.soloStock || filtros.capacidad || filtros.ram || r)) return null;
+  return v =>
     (!filtros.soloStock || v.stock) &&
     (!filtros.capacidad || capacidadDe(v) === filtros.capacidad) &&
     (!filtros.ram || ramDe(v) === filtros.ram) &&
     (!r || enTramo(v.precio, r));
+}
+
+/* Los modelos que entran, ya ordenados. Devuelve los de MODELOS tal cual (el
+   conteo de "Filtrar", las marcas y las pruebas los comparan con ===); lo que
+   dibuja la grilla sale de listaDeLaGrilla(), que los pasa a la versión
+   filtrada. */
+function filtrar(){
+  const palabras = prepararBusqueda(filtros.q);
+  const versionOK = versionPedida();
 
   const out = MODELOS.filter(p => {
     if(filtros.cat   && p.cat   !== filtros.cat)   return false;
     if(filtros.marca && p.marca !== filtros.marca) return false;
-    if(porVersion && !p.variantes.some(versionOK)) return false;
+    if(versionOK && !p.variantes.some(versionOK)) return false;
     if(filtros.montura  && p.montura  !== filtros.montura)  return false;
     if(filtros.apertura && p.apertura !== filtros.apertura) return false;
     return coincide(p, palabras);
   });
+  /* Con un filtro de versión, el orden y el "primero lo que hay" van por lo
+     que muestra la tarjeta (2.1 B): con 1TB, "Menor precio" ordena por el
+     precio del 1TB, y un modelo con el 1TB agotado va con los agotados. */
+  const vista = versionOK ? new Map(out.map(p => [p, vistaFiltrada(p, versionOK)])) : null;
+  const V = p => vista ? vista.get(p) : p;
 
   const porNombre = (a,b) => a.desc.localeCompare(b.desc,'es');
   // Los precios en null ("Consultar") van al final. El x===y evita
   // Infinity - Infinity, que da NaN y rompe el sort.
-  const pr = p => p.precio === null ? Infinity : p.precio;
+  const pr = p => V(p).precio === null ? Infinity : V(p).precio;
   const porPrecio = (a,b) => { const x=pr(a), y=pr(b); return x===y ? 0 : x-y; };
   /* Marca y modelo. La planilla se fue llenando por tandas, así que las cuatro
      PlayStation terminaron en las filas 86, 87, 402 y 446 y en la grilla salían
@@ -4112,7 +4725,52 @@ function filtrar(){
   const porDestacada = (a,b) =>
     dest ? (norm(b.marca) === dest) - (norm(a.marca) === dest) : 0;
 
-  return out.sort((a,b) => (b.stock - a.stock) || porDestacada(a,b) || orden(a,b));
+  return out.sort((a,b) => (V(b).stock - V(a).stock) || porDestacada(a,b) || orden(a,b));
+}
+
+// Lo que dibuja la grilla: filtrar(), con cada modelo en la versión que pide el filtro
+function listaDeLaGrilla(){
+  const versionOK = versionPedida();
+  return filtrar().map(p => versionOK ? vistaFiltrada(p, versionOK) : p);
+}
+
+/* La tarjeta con un filtro de versión puesto (29/09). Pedro eligió que muestre
+   el precio de las versiones que cumplen el filtro (muestra 2.1 B): con 1TB,
+   el 17 Pro Max decía "desde USD 1.330", que es el 256GB, la ficha abría en
+   el 256GB y el + cargaba el 256GB; y la cabecera decía "desde USD 860"
+   cuando no había ningún 1TB a ese precio.
+   Ahora, entre las versiones que cumplen TODO el filtro (capacidad, memoria,
+   tramo de precio y "Con stock", lo mismo que versionOK):
+     · el precio es el más barato con stock, y "desde" sólo si entre ELLAS hay
+       precios distintos (si ninguna tiene stock, el más barato de todas);
+     · data-key, la foto, el precio anterior y el regalo son los de esa
+       versión: la ficha abre en ella y el + carga esa misma
+       (togglePedidoModelo);
+     · la cabecera del rubro y el techo de "Te puede servir" leen LISTA, así
+       que se recalculan solos.
+   Es la misma regla que armarModelo, sobre menos filas. El modelo de MODELOS
+   no se toca: esto es una copia para la grilla. Si todas cumplen, es el
+   modelo tal cual. */
+function vistaFiltrada(m, cumple){
+  const vs = m.variantes.filter(cumple);
+  if(!vs.length || vs.length === m.variantes.length) return m;
+  // La misma regla que armarModelo (29/09, revisión): antes estaba copiada acá
+  const { conPrecio, precio, rep } = elegirRepresentante(vs);
+  /* Lo que es de la fila y se ve en la tarjeta. A propósito no es '...rep'
+     como en armarModelo: el nombre, la línea técnica (titulo/tecnica, 6.8),
+     la etiqueta y las versiones siguen siendo las del modelo. */
+  const fila = {};
+  ['id', 'sku', 'codigo', 'codigoVar', 'imagen', 'imagenGrande', 'fotosAdvapp', 'antes', 'incluye']
+    .forEach(k => { fila[k] = rep[k]; });
+  return {
+    ...m, ...fila,
+    precio,
+    precioMax: conPrecio.length ? Math.max(...conPrecio.map(v => v.precio)) : null,
+    stock: vs.some(v => v.stock),
+    multi: vs.length > 1,
+    rep,
+    filtrada: true
+  };
 }
 
 /* ---------- Datos derivados de cada producto ---------- */
@@ -4323,7 +4981,16 @@ const clave = p => p.id || ('#' + p.idx);
 const buscarProducto = k => PRODUCTOS.find(p => clave(p) === k);
 
 const precioUSD = p => p.precio === null ? 'Consultar' : 'USD ' + plata(p.precio);
-const precioARS = p => (TC && p.precio) ? '$ ' + plata(Math.round(p.precio * TC)) : '';
+/* Los pesos van marcados como aproximados (29/09): Pedro eligió "≈ $ …" con
+   el title "Referencia con la cotización del día" (muestra 2.2 B). Salían
+   pelados, "$ 2.108.050", y se podían leer como un precio cerrado; sólo el
+   mensaje de WhatsApp decía "aprox.". Va en la tarjeta, la ficha, la vidriera,
+   Recién llegados y el total del pedido. La barra del pedido lo pone con CSS
+   (#bp-ars::before) porque en el celular va sin marca: a 390 px no entra ni
+   el signo y los pesos bajaban de renglón. Es HTML: se usa dentro de plantillas. */
+const REF_PESOS = 'Referencia con la cotización del día';
+const htmlPesos = n => `<span class="aprox" title="${REF_PESOS}">≈ $ ${plata(n)}</span>`;
+const precioARS = p => (TC && p.precio) ? htmlPesos(Math.round(p.precio * TC)) : '';
 
 // El mensaje sale igual desde la tarjeta, la ficha y el pedido
 // El mensaje que el cliente manda al tocar Consultar. Sin código interno y sin
@@ -5146,12 +5813,13 @@ function mostrarFotoColor(p, color, d){
 /* `de` es el producto, para el lector de pantalla (29/09): en la lista del
    pedido cada fila tiene su "-" y su "+", y todos decían lo mismo. En la
    ficha no hace falta, que hay uno solo. Llega ya escapado. */
-function htmlStepper(n, de){
+// sinSumar: lo que se quedó sin stock en el pedido se baja pero no se suma (2.6 B)
+function htmlStepper(n, de, sinSumar){
   const d = de ? ' de ' + de : '';
   return `<div class="stepper">
     <button type="button" data-d="-1" aria-label="Quitar una unidad${d}">&minus;</button>
     <span class="n" aria-live="polite">${n}</span>
-    <button type="button" data-d="1" aria-label="Agregar una unidad${d}"${n >= MAX_CANT ? ' disabled' : ''}>+</button>
+    <button type="button" data-d="1" aria-label="Agregar una unidad${d}"${n >= MAX_CANT || sinSumar ? ' disabled' : ''}>+</button>
   </div>`;
 }
 
@@ -5558,6 +6226,21 @@ function fotoDeHermana(v, vs){
   return '';
 }
 
+/* Qué fila representa a un grupo de versiones: el "desde" y la fila que da
+   la foto y los datos de la tarjeta (las razones, en armarModelo). La usan
+   armarModelo y vistaFiltrada (2.1 B), así un cambio en la regla se hace una
+   sola vez (29/09, revisión). */
+function elegirRepresentante(vs){
+  const conPrecio = vs.filter(v => v.precio !== null);
+  const conStock  = conPrecio.filter(v => v.stock);
+  const base      = conStock.length ? conStock : conPrecio;
+  const precio    = base.length ? Math.min(...base.map(v => v.precio)) : null;
+  const conFoto   = xs => xs.find(v => v.imagen) || xs[0];
+  const baratas   = precio === null ? [] : base.filter(v => v.precio === precio);
+  const rep = conFoto(baratas) || conFoto(vs.filter(v => v.stock)) || conFoto(vs);
+  return { conPrecio, precio, rep };
+}
+
 function armarModelo(vs){
   /* Dos filas que al cliente le llegan IGUALES no son dos versiones: es la
      misma cosa cargada dos veces. Paso con el iPhone 17 PRO 256GB, que vino
@@ -5584,7 +6267,6 @@ function armarModelo(vs){
     if(u){ v.imagenGrande = u; v.imagen = fotoChica(u); }
   });
 
-  const conPrecio = vs.filter(v => v.precio !== null);
   /* El "desde" sale de lo que se puede comprar (29/09). Se calculaba sobre
      TODAS las filas y, si la más barata estaba agotada, la tarjeta del iPhone
      Air decía "desde USD 1.030" (el Skyblue, sin stock) cuando lo disponible
@@ -5595,9 +6277,6 @@ function armarModelo(vs){
      poniendo ADVAPP, acá sólo se elige cuál fila real se muestra. precioMax
      sigue mirando todas las filas: es el que decide si la tarjeta escribe
      "desde" (hay versiones más caras, con stock o sin). */
-  const conStock  = conPrecio.filter(v => v.stock);
-  const base      = conStock.length ? conStock : conPrecio;
-  const precioMin = base.length ? Math.min(...base.map(v => v.precio)) : null;
   // El representante da la foto y los datos de la tarjeta. Elegimos el más
   // barato CON stock: es el que corresponde al "desde" que se muestra.
   /* Y sale de la MISMA lista que el "desde", así rep.precio === precio. El
@@ -5608,9 +6287,7 @@ function armarModelo(vs){
      afuera de la vidriera porque el primero de dos empatados no tenia foto
      y el otro si. Solo entre empatados: subir a una fila mas cara porque
      tiene foto cambiaria el "desde" y la fila con la que abre la ficha. */
-  const conFoto = xs => xs.find(v => v.imagen) || xs[0];
-  const baratas = precioMin === null ? [] : base.filter(v => v.precio === precioMin);
-  const rep = conFoto(baratas) || conFoto(vs.filter(v => v.stock)) || conFoto(vs);
+  const { conPrecio, precio: precioMin, rep } = elegirRepresentante(vs);
   const nombre = nombreGrupo(vs);
   // "+ Batman": va al nombre del modelo y sale de los botones (agregadoComun)
   const agregado = agregadoComun(vs, nombre);
@@ -5958,7 +6635,12 @@ function tarjeta(p){
      … ¿Me pasás info?" por algo que no hay. La tarjeta queda agotada sólo si
      NINGUNA versión tiene stock (p.stock es el some() de armarModelo), así
      que acá el aviso corresponde siempre. */
-  const link  = linkWA(p.stock ? mensajeWA(p) : mensajeAviso(p));
+  /* Con un filtro de versión puesto, la tarjeta es la de esa versión (2.1 B,
+     ver vistaFiltrada): la consulta nombra la que abre la ficha y carga el +.
+     Así, si el 1TB está agotado pero el 256GB no, el aviso pide el 1TB y no
+     dice que todo el modelo "figura sin stock". */
+  const deQuien = p.filtrada ? p.rep : p;
+  const link  = linkWA(p.stock ? mensajeWA(deQuien) : mensajeAviso(deQuien));
   const txtWA = p.stock ? 'Consultar por WhatsApp' : 'Avisame cuando entre';
   const badge = htmlBadge(p);
   const ars   = precioARS(p);
@@ -5970,13 +6652,17 @@ function tarjeta(p){
      del título, así que se oía sin saber de qué. Igual que Recién llegados
      (htmlAgregarNuevo). El title, el que se ve al pasar el mouse, queda corto. */
   const quien = esc(nombreCorto(p));
+  /* Sin stock, sin + (29/09): Pedro eligió que lo agotado no se pueda sumar
+     al pedido (muestra 2.6 B). Se agregaba sin aviso y sumaba al total: el
+     pedido de ejemplo daba USD 1.590 con 260 de algo que no hay. Queda sólo
+     el WhatsApp, que en la agotada ya es "Avisame cuando entre". */
   const acciones = `
     <div class="acciones">
-      <button class="mas" type="button" aria-pressed="${enPedidoModelo(p)}"
+      ${p.stock ? `<button class="mas" type="button" aria-pressed="${enPedidoModelo(p)}"
               aria-label="Agregar ${quien} al pedido" title="Agregar al pedido">
         <span class="ico">${ICONO_MAS}</span>
         <b class="txt-add">Agregar</b><b class="txt-ok">Agregado</b>
-      </button>
+      </button>` : ''}
       ${link ? `<a class="wa" href="${link}" target="_blank" rel="noopener"
                    title="${txtWA}" aria-label="${txtWA}: ${quien}">${ICONO_WA}</a>` : ''}
     </div>`;
@@ -6654,8 +7340,7 @@ function pintarCabecera(texto){
   }
   cab.hidden = fijo.hidden = false;
 
-  const q = filtros.q.trim();
-  const titulo = filtros.cat ? plural(filtros.cat) : q ? `Resultados para “${q}”` : 'Todo el catálogo';
+  const titulo = tituloDeLaGrilla();
   // Las marcas van sólo adentro de un rubro: en "Todo" son veinte y pico, y
   // filtrar por marca sin decir de qué rubro no le sirve a nadie.
   const marcas = filtros.cat ? marcasDisponibles() : [];
@@ -6770,6 +7455,14 @@ function contarCon(cambios){
   const n = filtrar().length;
   Object.assign(filtros, antes);
   return n;
+}
+
+// Lo que dibujaría la grilla con ese cambio (29/09): lo usa el desplegable
+// del buscador, que muestra lo mismo que la grilla (3.1 B)
+function listaCon(cambios){
+  const antes = { ...filtros };
+  Object.assign(filtros, cambios);
+  try{ return listaDeLaGrilla(); } finally { Object.assign(filtros, antes); }
 }
 
 function gruposDeFiltros(){
@@ -6969,6 +7662,7 @@ function asegurarChipDelRubro(){
 function entrarAlRubro(cat, marca = ''){
   filtros.cat = cat;
   filtros.marca = marca;
+  soltarPrecioSinResultados(cat);   // 3.4 B (desde la portada no hay precio puesto: por las dudas)
   asegurarChipDelRubro();
   rendirCintaAuto();
   // El chip de la cinta tiene que quedar marcado igual que si lo hubiera
@@ -7495,15 +8189,51 @@ function datosMarcas(){
     const ms = MODELOS.filter(m => m.marca === marca);
     const porCat = new Map();
     ms.forEach(m => porCat.set(m.cat, (porCat.get(m.cat) || 0) + 1));
+    const cinta = cintaDeLaMarca(marca, ms);
     return {
       marca, n, rubros: porCat.size,
       cats: catsDeLaMarca(marca, new Map([...porCat].filter(([c]) => conStock.has(c)))),
-      /* Hasta catorce para la cinta. Mas que eso y la vuelta se hace eterna:
-         el cliente espera medio minuto para volver a ver la primera. */
-      nuevos: ms.filter(m => m.stock && m.precio !== null && m.imagen)
-                .sort((a, b) => codigoMasAlto(b) - codigoMasAlto(a) || a.idx - b.idx).slice(0, MV_CINTA),
+      nuevos: cinta.lista,
+      hayNuevo: cinta.hayNuevo,
     };
   });
+}
+
+/* El último código que se dio el 10/09, cuando se sembró el catálogo
+   maestro (herramientas/catalogo-maestro.csv: AT-0001 a AT-0499). Esos se
+   numeraron por rubro y en orden alfabético, no por fecha: el número no dice
+   cuál entró antes. Lo que entró después tiene 500 o más, y ese sí va en
+   orden. */
+const ULTIMO_CODIGO_DEL_10_09 = 499;
+const entroDespuesDel10_09 = m => codigoMasAlto(m) > ULTIMO_CODIGO_DEL_10_09;
+
+/* La cinta de la marca (29/09, muestra 6.9 C). Iba ordenada por número de
+   código y, como los del 10/09 van por rubro, la de Canon y la de Sony eran
+   catorce objetivos y ninguna cámara. Ahora va primero lo que entró después
+   del 10/09 (lo más nuevo adelante) y después un producto de cada rubro por
+   turno: los rubros de la marca en el orden de RUBROS_POR_MARCA y los demás
+   en orden alfabético; adentro de cada rubro, el código más alto primero.
+   Hasta catorce (MV_CINTA): más que eso y la vuelta se hace eterna, el
+   cliente espera medio minuto para volver a ver la primera.
+   hayNuevo dice si la cinta arranca con algo posterior al 10/09: el rótulo
+   dice "Lo último de" solo en ese caso (ver htmlPanelMarca). */
+function cintaDeLaMarca(marca, ms){
+  const porCodigo = (a, b) => codigoMasAlto(b) - codigoMasAlto(a) || a.idx - b.idx;
+  const hay = ms.filter(m => m.stock && m.precio !== null && m.imagen);
+  const nuevos = hay.filter(entroDespuesDel10_09).sort(porCodigo);
+  const resto = hay.filter(m => !entroDespuesDel10_09(m));
+  const suyos = (RUBROS_POR_MARCA[marca] || []).map(norm);
+  const lugar = c => { const i = suyos.indexOf(norm(c)); return i === -1 ? suyos.length : i; };
+  const rubros = [...new Set(resto.map(m => m.cat))]
+    .sort((a, b) => lugar(a) - lugar(b) || a.localeCompare(b, 'es'));
+  const filas = rubros.map(c => resto.filter(m => m.cat === c).sort(porCodigo));
+  const lista = nuevos.slice(0, MV_CINTA);
+  for(let vuelta = 0; lista.length < MV_CINTA; vuelta++){
+    const antes = lista.length;
+    filas.forEach(f => { if(lista.length < MV_CINTA && f[vuelta]) lista.push(f[vuelta]); });
+    if(lista.length === antes) break;
+  }
+  return { lista, hayNuevo: nuevos.length > 0 };
 }
 
 /* Los logos de marcas/ son cuadrados con la marca finita al medio: en la cinta
@@ -7523,12 +8253,18 @@ function htmlLogoMarca(marca){
 const MV_ANCHO = 180;     // 168 de tarjeta + 12 de separacion, como en el CSS
 
 function htmlPanelMarca(x, conFotos = true){
+  /* Cada producto se nombra como la tarjeta de la grilla (29/09, muestra
+     6.8 B): el modelo y abajo la línea técnica, lo que Pedro eligió el 26/09.
+     Con el nombre cortado salían tres "Drone DJI Mini 5 Pro" con tres
+     precios. La línea va siempre, aunque quede vacía, para que las tarjetas
+     de la cinta tengan todas el mismo alto. */
   // La copia de atras es decorado: ni la leen los lectores ni se llega con el tabulador
   const tarjetas = (copia) => x.nuevos.map(m => {
     const desde = m.multi && m.precio !== m.precioMax;
     return `<button class="mv-p" type="button" data-key="${esc(clave(m))}"${copia ? ' aria-hidden="true" tabindex="-1"' : ''}>
       <span class="mv-p-foto">${conFotos ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">` : ''}</span>
-      <b>${esc(nombreCorto(m))}</b><i>${desde ? '<small>desde</small>' : ''}USD ${plata(m.precio)}</i>
+      <b>${esc(m.titulo || m.desc)}</b><span class="mv-tec">${esc(m.tecnica || '')}</span>
+      <i>${desde ? '<small>desde</small>' : ''}USD ${plata(m.precio)}</i>
     </button>`;
   }).join('');
   /* La tira va DUPLICADA y la animacion corre exactamente el ancho de la
@@ -7552,7 +8288,7 @@ function htmlPanelMarca(x, conFotos = true){
         `<button class="mv-chip" type="button" data-cat="${esc(cat)}">${esc(plural(cat))}<i>${k}</i></button>`).join('')}</div>
       <button class="mv-ver" type="button">Ver ${x.n === 1 ? 'el' : 'los ' + x.n} de ${esc(x.marca)} →</button>
     </div>
-    ${prods ? `<div class="mv-prods"><span class="mv-rot">Lo último de ${esc(x.marca)}</span>${prods}</div>` : ''}
+    ${prods ? `<div class="mv-prods"><span class="mv-rot">${x.hayNuevo ? 'Lo último de' : 'De'} ${esc(x.marca)}</span>${prods}</div>` : ''}
   </div>`;
 }
 
@@ -7609,8 +8345,11 @@ function reservarAltoMarcas(){
   medidor.setAttribute('aria-hidden', 'true');
   medidor.style.cssText = `position:absolute;left:0;top:0;width:${lugar.offsetWidth}px;visibility:hidden;pointer-events:none`;
   lugar.parentElement.appendChild(medidor);
+  /* Redondeado para arriba (29/09): con la línea técnica de 6.8 B el panel
+     mide px con decimales, offsetHeight redondeaba para abajo y la marca más
+     alta pasaba la reserva por medio px (la vitrina saltaba de 411 a 412). */
   let alto = 0;
-  MV.forEach(x => { medidor.innerHTML = htmlPanelMarca(x, false); alto = Math.max(alto, medidor.offsetHeight); });
+  MV.forEach(x => { medidor.innerHTML = htmlPanelMarca(x, false); alto = Math.max(alto, Math.ceil(medidor.getBoundingClientRect().height)); });
   medidor.remove();
   lugar.style.minHeight = alto + 'px';
 }
@@ -7760,7 +8499,7 @@ function pintarExtras(){
     const mandar = () => {
       const q = inp.value.trim();
       if(q.length < 3) return;
-      open(linkWA('Hola! Estoy buscando: ' + q + '\n¿Lo consiguen?'), '_blank', 'noopener');
+      open(linkWA(mensajeBusco(q)), '_blank', 'noopener');   // el mismo de la grilla vacía (3.3 A)
     };
     bot.onclick = mandar;
     inp.addEventListener('keydown', e => { if(e.key === 'Enter') mandar(); });
@@ -7873,10 +8612,7 @@ function montarAyuda(sec){
 function pintarSeccion(cuenta){
   const t = $('sec-titulo'), c = $('sec-count');
   if(!t) return;
-  t.textContent = enPortada() ? 'Elegí un rubro'
-                : filtros.cat ? plural(filtros.cat)
-                : filtros.q   ? `Resultados para "${filtros.q.trim()}"`
-                : 'Todo el catálogo';
+  t.textContent = enPortada() ? 'Elegí un rubro' : tituloDeLaGrilla();
   if(c) c.textContent = cuenta || '';
   ponerTitulo();
 }
@@ -7893,14 +8629,26 @@ function pintarSeccion(cuenta){
    WhatsApp no corre el script. */
 const TITULO_PORTADA = document.title;
 const TITULO_BASE = 'Catálogo Advance';
+/* Cómo se llama la ficha: marca + el nombre limpio (2.3 B). Lo usan la
+   pestaña y el diálogo para el lector de pantalla (29/09, revisión): el
+   diálogo se anunciaba con el texto crudo del proveedor ("Meta Gen 2 —
+   Wayfarer F Shiny Black | L …"). */
+const nombreDelDialogo = (m, v) =>
+  [v.marca, nombreFicha(m, v)].map(x => String(x || '').trim()).filter(Boolean).join(' ') || m.desc;
+
 function ponerTitulo(){
   let t = '';
   if(FICHA_MODELO){
     const v = buscarProducto(FICHA) || FICHA_MODELO.rep;
-    t = [v.marca, nombreFicha(FICHA_MODELO, v)].map(x => String(x || '').trim()).filter(Boolean).join(' ');
+    t = nombreDelDialogo(FICHA_MODELO, v);
+    // Al cambiar de versión el nombre puede cambiar: el diálogo lo sigue
+    const dlg = document.querySelector('#ficha .caja[role="dialog"]');
+    if(dlg && t) dlg.setAttribute('aria-label', t);
   }else if(!enPortada()){
     const q = filtros.q.trim();
-    t = filtros.cat ? plural(filtros.cat) : q ? `“${q}”` : 'Todo el catálogo';
+    // Con rubro y algo escrito, las dos cosas, como el encabezado (3.1 B)
+    t = filtros.cat && q ? `“${q}” en ${plural(filtros.cat)}`
+      : filtros.cat ? plural(filtros.cat) : q ? `“${q}”` : 'Todo el catálogo';
   }
   document.title = t ? `${t} · ${TITULO_BASE}` : TITULO_PORTADA;
 }
@@ -7931,7 +8679,159 @@ function anunciar(txt){
   relojAnuncio = setTimeout(() => { const a = $('anuncio'); if(a) a.textContent = txt; }, txt ? 600 : 0);
 }
 
+/* Lo que dice qué estás mirando, en el encabezado y en la barra fija. Con
+   rubro y algo escrito dice las dos cosas (29/09, muestra 3.1 B): "“airpods”
+   en Celulares". Decía solo "Celulares" y no se entendía que la búsqueda
+   estaba encerrada en el rubro. */
+function tituloDeLaGrilla(){
+  const q = filtros.q.trim();
+  return filtros.cat && q ? `“${q}” en ${plural(filtros.cat)}`
+       : filtros.cat ? plural(filtros.cat)
+       : q ? `Resultados para “${q}”` : 'Todo el catálogo';
+}
+
+/* ---------- La grilla vacía (29/09) ----------
+   Pedro eligió (muestra de búsqueda) que el vacío diga la causa y ofrezca UNA
+   salida con la cantidad (3.1 B y 3.2 B), y que si lo buscado no está en
+   ningún lado ofrezca preguntarlo por WhatsApp (3.3 A). Decía siempre "No
+   encontramos nada" y, con algo escrito, "Probá con menos palabras": en
+   Celulares con "airpods" (en todo el catálogo hay 4) o en Consolas con "Más
+   de USD 5.000" (sin ese filtro hay 12) no decía por qué ni daba salida.
+   Las salidas se prueban de la que menos cambia a la que más, y va la
+   primera que muestra algo:
+     1. sacar UN filtro (3.2 B), el que más devuelve; si ninguno solo alcanza
+        y todos juntos sí, "Quitar los filtros";
+     2. buscar lo escrito en todo el catálogo (3.1 B), con el precio y "Con
+        stock" puestos; si así tampoco hay, sin ellos;
+     3. si lo escrito no está en ningún lado, con 3 letras o más, preguntarlo
+        por WhatsApp (3.3 A). Nunca cuando lo que vació la grilla es un
+        filtro: en ese caso ya hubo salida en 1 o 2.
+   Si no hay ninguna, el texto de siempre. El desplegable del buscador usa esta
+   misma cuenta (candidatosSug): los dos ofrecen lo mismo. */
+
+// Lo que es del rubro y se va con él: la marca, la montura y la apertura
+// (solo Objetivos), la capacidad y la memoria (valoresDe las ofrece solo
+// adentro de un rubro)
+const SIN_RUBRO = { cat:'', marca:'', montura:'', apertura:'', capacidad:'', ram:'' };
+const sinFiltro = c => ({ [c]: c === 'soloStock' ? false : '' });
+
+function salidaDelVacio(q){
+  q = String(q || '').trim();
+  const cuenta = cambios => contarCon({ q, ...cambios });
+  const puestos = filtrosActivos(true);
+  if(puestos.length){
+    const mejor = puestos.map(([c, t]) => ({ c, t, n: cuenta(sinFiltro(c)) }))
+                         .reduce((a, b) => b.n > a.n ? b : a);
+    if(mejor.n) return { tipo: 'filtro', t: mejor.t, n: mejor.n, cambios: sinFiltro(mejor.c),
+                         solo: puestos.length === 1 };
+    const todos = Object.assign({}, ...puestos.map(([c]) => sinFiltro(c)));
+    const n = cuenta(todos);
+    if(n) return { tipo: 'filtros', n, cambios: todos };
+  }
+  if(q && filtros.cat){
+    let n = cuenta(SIN_RUBRO);
+    if(n) return { tipo: 'todo', n, cambios: SIN_RUBRO };
+    const limpio = { ...SIN_RUBRO, rango: '', soloStock: false };
+    n = (filtros.rango || filtros.soloStock) ? cuenta(limpio) : 0;
+    if(n) return { tipo: 'todo', n, cambios: limpio, sinFiltros: true };
+  }
+  if(q.length >= 3 && !cuenta({ ...SIN_RUBRO, rango: '', soloStock: false })) return { tipo: 'consulta' };
+  return null;
+}
+
+// Cómo se dice cada filtro en el título del vacío: "de más de USD 5.000"
+function fraseFiltro(c){
+  const v = filtros[c];
+  if(c === 'rango') return 'de ' + (RANGOS.find(r => r[0] === v) || [0, v])[1].replace(/^(Hasta|Más)/, x => x.toLowerCase());
+  if(c === 'soloStock') return 'con stock';
+  if(c === 'ram') return 'de ' + v + ' de memoria';
+  if(c === 'montura') return 'con montura ' + v;
+  if(c === 'apertura'){
+    const [a, b] = String(TEXTO_APERTURA[v] || v).split(' · ');
+    return a.toLowerCase() + (b ? ' (' + b + ')' : '');
+  }
+  return 'de ' + v;          // la marca y la capacidad
+}
+const unirConY = xs => xs.length > 1 ? xs.slice(0, -1).join(', ') + ' y ' + xs[xs.length - 1] : (xs[0] || '');
+
+// El mismo mensaje del "¿Buscás algo que no está?" de la portada (3.3 A)
+const mensajeBusco = q => 'Hola! Estoy buscando: ' + q + '\n¿Lo consiguen?';
+
+/* El vacío en dos partes: los textos (textosVacio) y el HTML (htmlVacio).
+   #anuncio dice el título y la frase (29/09, revisión): decía siempre "No
+   encontramos nada" y el que usa lector de pantalla no se enteraba de la
+   salida. */
+function htmlVacio(){
+  const { h, p, acc } = textosVacio();
+  return `<div class="msg vacio" style="grid-column:1/-1"><h2>${esc(h)}</h2>${p ? `<p>${esc(p)}</p>` : ''}${
+    acc ? `<div class="v-acc">${acc}</div>` : ''}</div>`;
+}
+const anuncioVacio = () => { const { h, p } = textosVacio(); return h + '.' + (p ? ' ' + p : ''); };
+
+function textosVacio(){
+  const q = filtros.q.trim();
+  const s = salidaDelVacio(q);
+  const lugar = filtros.cat ? plural(filtros.cat) : '';
+  const boton = (t, n) => `<button type="button" class="b-salida" data-salida aria-label="${esc(t)}: ${n} producto${n !== 1 ? 's' : ''}">${esc(t)} <b aria-hidden="true">${n}</b></button>`;
+  let h = 'No encontramos nada', p = '', acc = '';
+  if(s && (s.tipo === 'filtro' || s.tipo === 'filtros')){
+    const que = unirConY(filtrosActivos(true).map(([c]) => fraseFiltro(c)));
+    h = `${lugar ? `En ${lugar} no hay` : 'No hay'} ${q ? `“${q}”` : 'nada'} ${que}`;
+    p = s.tipo === 'filtros' ? `Sin esos filtros hay ${s.n}.`
+      : s.solo ? `Sin ese filtro hay ${s.n}.` : `Sin “${s.t}” hay ${s.n}.`;
+    acc = boton(s.tipo === 'filtros' ? 'Quitar los filtros' : `Quitar “${s.t}”`, s.n);
+  }else if(s && s.tipo === 'todo'){
+    h = `No hay “${q}” en ${lugar}`;
+    p = s.sinFiltros ? `En todo el catálogo, sin los filtros, hay ${s.n}.` : `En todo el catálogo hay ${s.n}.`;
+    acc = boton(s.sinFiltros ? 'Buscar en todo el catálogo, sin filtros' : 'Buscar en todo el catálogo', s.n);
+  }else if(s && s.tipo === 'consulta'){
+    /* Pregunta, no promete: nunca "te lo conseguimos". El texto de abajo es
+       el del recuadro de la portada. Sin WhatsApp configurado no hay botón, y
+       entonces tampoco esa frase (no habría dónde preguntar). */
+    h = `“${q}” no está en el catálogo`;
+    p = WHATSAPP ? 'Conseguimos más marcas y modelos de los que están cargados acá.'
+                 : 'Probá con menos palabras, o buscá por marca (Apple, Canon, Samsung…).';
+    acc = WHATSAPP ? `<a class="b-consulta" href="${esc(linkWA(mensajeBusco(q)))}" target="_blank" rel="noopener" data-pedilo>${ICONO_WA}Preguntanos si lo conseguimos</a>` : '';
+  }else{
+    // Sin salida: el texto de siempre, y "menos palabras" solo si escribiste
+    p = q ? 'Probá con menos palabras, o buscá por marca (Apple, Canon, Samsung…).'
+          : 'Probá sacando alguno de los filtros de arriba.';
+  }
+  return { h, p, acc };
+}
+
+/* El botón del vacío y el renglón del desplegable hacen lo mismo: la salida
+   se vuelve a calcular al tocar, con lo que hay en ese momento. Desde el
+   desplegable el foco vuelve al buscador; desde la grilla, al título. */
+function usarSalida(desdeBuscador){
+  const s = salidaDelVacio(filtros.q);
+  if(!s || !s.cambios) return;
+  Object.assign(filtros, s.cambios);
+  sincronizarControles();         // si se salió del rubro, la cinta marca "Todo"
+  if(s.tipo === 'todo'){ rendirCintaAuto(); centrarChipElegido(); }
+  aplicarFiltro(true);
+  if(desdeBuscador) $('q').focus({ preventScroll: true });
+  else $('rubro-cab')?.querySelector('h2')?.focus({ preventScroll: true });
+}
+
+/* El aviso de 3.4 B se ve mientras lo pedido siga igual: el refresco de cada
+   5 minutos no lo borra, y cualquier cambio (otra marca, otro rubro, un
+   filtro, una búsqueda) sí. El orden no cuenta. */
+const firmaDelPedido = () => { const { orden, ...f } = filtros; return JSON.stringify({ ...f, q: f.q.trim() }); };
+function pintarAvisoRubro(){
+  const a = $('aviso-rubro');
+  const vale = !!AVISO_RUBRO && !enPortada() && AVISO_RUBRO.firma === firmaDelPedido();
+  if(!vale) AVISO_RUBRO = null;
+  if(a){ a.hidden = !vale; a.textContent = vale ? AVISO_RUBRO.texto : ''; }
+  return vale ? AVISO_RUBRO.texto : '';
+}
+
 function pintar(){
+  /* Sin catálogo manda el aviso (29/09, revisión de la 1.3 A y la 1.4 C):
+     escribir en el buscador dibujaba "“iphone” no está en el catálogo" (falso:
+     no cargó) y, al borrarlo, la grilla quedaba vacía, sin aviso ni
+     Reintentar, hasta el próximo intento (o 5 minutos después del último). */
+  if(document.body.classList.contains('sin-catalogo')){ pintarAviso(); anunciar(''); return; }
 
   // Portada: los rubros en vez de los productos. La grilla y sus adornos se
   // apagan enteros, no solo se esconden, para no dejar tarjetas cargando atras.
@@ -7947,34 +8847,32 @@ function pintar(){
     pintarSeccion('');
     pintarCabecera('');
     pintarSugeridos();
+    pintarAvisoRubro();
     anunciar('');
     return;
   }
 
   pintarExtras();          // fuera de la portada se vacia solo
   pararMundos();
-  LISTA = filtrar();
+  LISTA = listaDeLaGrilla();   // con un filtro de versión, cada tarjeta en esa versión (2.1 B)
   dibujadas = 0;
   // Con CARPETA_FOTOS todos tienen una URL "supuesta", exista o no el archivo,
   // así que contar p.imagen mentiría. En ese modo solo mostramos la cantidad.
   const n = `${LISTA.length} producto${LISTA.length!==1?'s':''}`;
-  const texto = !LISTA.length ? ''
+  // Sin nada, "0 productos" y no en blanco (29/09, muestra 3.1 B)
+  const texto = !LISTA.length ? n
     : CARPETA_FOTOS ? n
     : `${n} · ${LISTA.filter(p => p.imagen).length} con foto`;
   pintarSeccion(texto);
   pintarCabecera(texto);
   pintarSugeridos();
-  anunciar(LISTA.length ? n : 'No encontramos nada');
+  const aviso = pintarAvisoRubro();
+  anunciar(LISTA.length ? (aviso ? aviso + ' ' + n : n) : anuncioVacio());
 
   if(!LISTA.length){
     grid.replaceChildren();
-    // Sin búsqueda, lo que vació la grilla son los filtros: "probá con menos
-    // palabras" no ayudaba, y sugería marcas justo con una marca puesta (29/09)
-    grid.innerHTML = `<div class="msg" style="grid-column:1/-1">
-      <h2>No encontramos nada</h2>
-      <p>${filtros.q.trim() ? 'Probá con menos palabras, o buscá por marca (Apple, Canon, Samsung…).'
-                            : 'Probá sacando alguno de los filtros de arriba.'}</p>
-    </div>`;
+    // La causa y una salida (3.1 B, 3.2 B y 3.3 A): ver htmlVacio
+    grid.innerHTML = htmlVacio();
     return;
   }
   grid.replaceChildren(finGrilla);
@@ -8091,6 +8989,7 @@ function armarFiltros(){
       // ahí: sin esto la grilla quedaba vacía y parecía que no hay stock.
       soltarMarcaAjena();
       soltarBusquedaSinResultados(val);
+      soltarPrecioSinResultados(val);   // 3.4 B: lo mismo con el precio, con aviso
       [...$('cats').querySelectorAll('.chip')].forEach(x => x.setAttribute('aria-pressed', String(x === b)));
       aplicarFiltro(true);
       rendirCintaAuto();   // ya eligio: la cinta deja de pasearse sola
@@ -8137,6 +9036,27 @@ function soltarBusquedaSinResultados(cat){
   if(!pal.length || MODELOS.some(p => p.cat === cat && coincide(p, pal))) return;
   filtros.q = ''; $('q').value = ''; $('clear').hidden = true;
   cerrarBuscador();   // después de vaciar el input: con texto escrito no hace nada
+}
+
+/* El precio que traías de otro rubro (29/09, muestra 3.4 B). Pedro eligió
+   que la cinta haga con el precio lo mismo que ya hacía con la marca: en
+   Cámaras con "Más de USD 5.000" hay 4, y al tocar Consolas el filtro seguía
+   puesto y la grilla quedaba en 0 de 12. Ahora, si en el rubro nuevo no queda
+   nada y sin el precio sí, se saca y se avisa arriba de la grilla ("Sacamos
+   …: en Consolas no había nada en ese precio."). Si en ese precio hay algo,
+   se queda. Va después de soltar la marca y la búsqueda, y con lo que el
+   rubro nuevo no tiene (capacidad, montura) ya sacado: lo que se cuenta es lo
+   que se va a ver. */
+let AVISO_RUBRO = null;   // { texto, firma }: ver pintarAvisoRubro
+function soltarPrecioSinResultados(cat){
+  if(!filtros.rango || !cat || !MODELOS.length) return false;
+  sincronizarLentes();
+  if(contarCon({}) || !contarCon({ rango: '' })) return false;
+  const t = (RANGOS.find(r => r[0] === filtros.rango) || [0, filtros.rango])[1];
+  filtros.rango = '';
+  AVISO_RUBRO = { texto: `Sacamos “${t}”: en ${plural(cat)} no había nada en ese precio.`,
+                  firma: firmaDelPedido() };
+  return true;
 }
 
 /* ---------- Las marcas de la sección ----------
@@ -8207,26 +9127,130 @@ function sincronizarCapacidad(){
   });
 }
 
+/* ---------- Cuando no hay catálogo para mostrar (29/09) ----------
+   Pedro eligió el aviso corto que prueba solo (muestras 1.3 A y 1.4 C). Hasta
+   el 29/09 decía "No se pudo leer la planilla" con los pasos para compartir un
+   Google Sheet (eran para Advance, y desde que la fuente es ADVAPP no
+   arreglaban nada), el error crudo ("Failed to fetch") y ningún botón para
+   reintentar. El detalle técnico queda en la consola y en ULTIMO_FALLO. */
 function error(e){
   console.error(e);
-  // Un corte por tiempo (ver conTope) no es que falte compartir el Sheet (29/09)
-  const aTiempo = /no contesto en/.test(String((e && e.message) || e));
-  grid.innerHTML = `<div class="msg" style="grid-column:1/-1">
-    <h2>No se pudo leer la planilla</h2>
-    ${aTiempo ? `<p>No contestó a tiempo: puede ser la conexión. Recargá esta página en un momento.</p>` : `
-    <p>Casi siempre es porque todavía no está compartida públicamente. Se arregla así:</p>
-    <ol>
-      <li>Abrí el Sheet en Google Drive.</li>
-      <li>Botón <b>Compartir</b> (arriba a la derecha).</li>
-      <li>En "Acceso general" elegí <b>Cualquier usuario con el enlace</b>.</li>
-      <li>Dejalo como <b>Lector</b> y guardá.</li>
-      <li>Recargá esta página.</li>
-    </ol>`}
-    <p style="margin-top:18px"><code>${esc(String(e.message||e))}</code></p>
-  </div>`;
-  $('stamp').textContent = 'Sin conexión';
-  const d = document.querySelector('.dot');
-  d.style.background = '#5A6273'; d.classList.remove('live');
+  vaciarCatalogo();
+  pintarAviso();
+  programarReintento();
+}
+
+/* Saca de la pantalla todo lo que tenga precios (29/09). La pestaña que pasa
+   COPIA_VIGENCIA_MS sin poder actualizarse queda igual que una copia vencida:
+   "cuando la copia vence pasa lo que se elija en la 3" (1.2 B), el aviso sin
+   precios. Las líneas del pedido quedan guardadas y los filtros puestos, para
+   cuando vuelva ADVAPP. En la primera visita no hay nada que sacar: solo se
+   esconde la cinta de rubros vacía, como en la muestra (el encabezado y el
+   aviso). */
+function vaciarCatalogo(){
+  document.body.classList.add('sin-catalogo');
+  if(!PRODUCTOS.length && !HORA_DATOS) return;
+  if(FICHA) quitarFicha();
+  if(cerrarPedidoDOM){ pedidoEmpujado = false; const c = cerrarPedidoDOM; cerrarPedidoDOM = null; c(); }
+  try{ pararOfertas(); pararMundos(); pararPaseos(); }catch(x){}
+  PRODUCTOS = []; MODELOS = []; LISTA = [];
+  FIRMA_DATOS = ''; FIRMA_FILTROS = ''; HORA_DATOS = 0; COPIA_AL_INSTANTE = false;
+  $('cats').innerHTML = '';
+  pintarFranja(false);
+  pintarPedido();          // sin productos la barra se va; las líneas siguen guardadas
+}
+
+const ICONO_REINTENTAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>';
+
+/* El aviso, en la grilla y debajo del encabezado. El WhatsApp es el del
+   botón flotante: el mismo número y el mismo saludo. Con señal, la segunda
+   línea no culpa a la conexión: este aviso también sale por fallas nuestras
+   (1.4). Se arma una vez y después se actualiza en su lugar, así el foco de
+   quien tocó Reintentar con el teclado no se pierde. */
+function pintarAviso(){
+  const conSenal = navigator.onLine !== false;
+  const flotante = $('wa-flotante');
+  const wa = WHATSAPP && flotante ? (flotante.getAttribute('href') || '') : '';
+  let m = grid.querySelector('.msg.sin-catalogo');
+  if(!m){
+    const icono = wa && flotante.querySelector('svg') ? flotante.querySelector('svg').outerHTML : '';
+    grid.innerHTML = `<div class="msg sin-catalogo" style="grid-column:1/-1">
+      <h2>No pudimos cargar el catálogo</h2>
+      <p class="aviso-linea"></p>
+      <div class="botones">
+        <button class="b-prim" id="aviso-reint" type="button">${ICONO_REINTENTAR}Reintentar</button>
+        ${wa ? `<a class="b-wa" id="aviso-wa" href="${esc(wa)}" target="_blank" rel="noopener">${icono}Escribinos por WhatsApp</a>` : ''}
+      </div>
+      <p class="aviso-solo" id="aviso-solo" hidden><span class="giro" aria-hidden="true"></span><span></span></p>
+    </div>`;
+    m = grid.querySelector('.msg.sin-catalogo');
+    $('aviso-reint').addEventListener('click', () => reintentar());
+  }
+  m.querySelector('.aviso-linea').textContent = !conSenal ? 'Revisá tu conexión y probá de nuevo.'
+    : wa ? 'Probá de nuevo en un momento, o escribinos por WhatsApp.' : 'Probá de nuevo en un momento.';
+  sello(conSenal ? 'No disponible' : 'Sin conexión', 'gris');
+  $('stamp').title = ULTIMO_FALLO ? `No cargó: ${ULTIMO_FALLO}` : '';
+  pintarFranja(false);
+}
+
+/* Los reintentos solos del aviso (1.4 C): a los REINTENTOS_S de cada falla,
+   con la cuenta a la vista ("Probamos de nuevo solos en 15 s"), y apenas
+   vuelve la señal (ver el 'online' del final). Tres y para. Con la pestaña de
+   fondo no se baja nada: al volver la refresca el visibilitychange. */
+const REINT = { n: 0, reloj: 0, cuenta: 0, hasta: 0, probando: false };
+function pintarCuentaReintento(){
+  const el = $('aviso-solo');
+  if(!el) return;
+  const falta = Math.max(1, Math.ceil((REINT.hasta - Date.now()) / 1000));
+  el.lastElementChild.textContent = `Probamos de nuevo solos en ${falta} s`;
+  el.hidden = false;
+}
+function programarReintento(){
+  clearTimeout(REINT.reloj); clearInterval(REINT.cuenta);
+  if(REINT.n >= REINTENTOS_S.length){ const el = $('aviso-solo'); if(el) el.hidden = true; return; }
+  const s = REINTENTOS_S[REINT.n];
+  REINT.hasta = Date.now() + s * 1000;
+  REINT.reloj = setTimeout(() => {
+    clearInterval(REINT.cuenta);
+    REINT.n++;
+    if(document.hidden){ const el = $('aviso-solo'); if(el) el.hidden = true; return; }
+    reintentar();
+  }, s * 1000);
+  pintarCuentaReintento();
+  REINT.cuenta = setInterval(pintarCuentaReintento, 1000);
+}
+function frenarReintentos(){
+  clearTimeout(REINT.reloj); clearInterval(REINT.cuenta);
+  REINT.n = 0;
+}
+/* Reintentar, a mano (el botón del aviso o el de la franja) o solo. Mientras
+   prueba, el botón queda apagado con aria-disabled y no con disabled: así no
+   pierde el foco del teclado. Y la línea dice que está probando, porque con
+   ADVAPP colgado la respuesta puede tardar ADVAPP_ESPERA_MS. */
+async function reintentar(){
+  if(REINT.probando) return;
+  REINT.probando = true;
+  clearTimeout(REINT.reloj); clearInterval(REINT.cuenta);
+  const botones = () => [$('aviso-reint'), $('franja-reint')].filter(Boolean);
+  botones().forEach(b => b.setAttribute('aria-disabled', 'true'));
+  const el = $('aviso-solo');
+  if(el){ el.lastElementChild.textContent = 'Probando de nuevo…'; el.hidden = false; }
+  try{ await actualizar(false); }
+  finally{
+    REINT.probando = false;
+    botones().forEach(b => b.removeAttribute('aria-disabled'));
+  }
+}
+
+/* La franja de la copia (1.1 B), con la hora de los precios que se ven. */
+function pintarFranja(ver){
+  const f = $('franja');
+  if(!f) return;
+  f.hidden = !ver;
+  if(!ver) return;
+  // Solo si cambia: es role="status", y cada refresco lo volvería a leer en voz alta
+  const t = $('franja-txt'), html = `Estás viendo los precios de las <b>${hhmm(HORA_DATOS)}</b>. No pudimos actualizarlos.`;
+  if(t.innerHTML !== html) t.innerHTML = html;
 }
 
 /* El sello del encabezado. Cuando algo falla no lo dejamos diciendo
@@ -8234,14 +9258,19 @@ function error(e){
    avisar que no se pudo actualizar. */
 let ULTIMA_OK = 0;
 
+/* vivo: true es el verde que late (carga de hoy); false, el ámbar (precios de
+   otro momento); 'gris', sin catálogo (29/09: lo pintaba error() aparte). */
 function sello(txt, vivo){
   $('stamp').textContent = txt;
   const d = document.querySelector('.stamp .dot');
   if(!d) return;
-  d.style.background = vivo ? '' : '#C9A227';
-  d.classList.toggle('live', !!vivo);
+  d.style.background = vivo === 'gris' ? '#5A6273' : vivo ? '' : '#C9A227';
+  d.classList.toggle('live', vivo === true);
 }
-const hhmm = ms => new Date(ms).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
+/* En 24 horas, "01:52" (29/09): con toLocaleTimeString('es-AR') Chrome
+   escribe "01:52 a. m.", y la franja quedaba "de las 01:52 a. m.. No
+   pudimos". Es la hora del teléfono del cliente, la que ve arriba. */
+const hhmm = ms => { const d = new Date(ms); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
 
 /* Una fecha de la columna "Última actualización", en milisegundos (0 si no se
    entiende). La planilla la escribe "24/08/2026"; ADVAPP en ISO,
@@ -8309,15 +9338,101 @@ let fichaPendiente = true;
 let FIRMA_DATOS = '';
 // Por qué falló la última carga, o '' si anduvo. Lo lee la medición.
 let ULTIMO_FALLO = '';
+/* De cuándo son los precios que están en pantalla (29/09): la hora de la
+   carga, o la de la copia si se está viendo la copia; 0 si no hay nada. De
+   acá salen la franja, el total del pedido con la hora, el "Sin actualizar
+   desde" y el vencimiento de las 6 horas con la pestaña abierta. */
+let HORA_DATOS = 0;
+// La copia al instante está en pantalla mientras llega lo nuevo (1.6 B)
+let COPIA_AL_INSTANTE = false;
+
+/* Lo que se redibuja con cada carga, solo si cambió algo (FIRMA_DATOS). Vivía
+   adentro de actualizar(); desde el 29/09 lo usa también la copia al
+   instante. Con algo ya en pantalla, se redibuja en su lugar. */
+function dibujarDatos(prods, conFotos){
+  const habiaDatos = !!HORA_DATOS;
+  const firma = JSON.stringify(prods) + '|' + TC + '|' + conFotos;
+  if(firma === FIRMA_DATOS) return;
+  FIRMA_DATOS = firma;
+  document.body.classList.remove('sin-catalogo');
+  const mundosAntes = habiaDatos && enPortada() ? firmaMundos() : '';
+  PRODUCTOS = prods;
+  MODELOS   = agrupar(prods);   // las variantes del mismo modelo van a una sola tarjeta
+  CON_FOTOS = conFotos;
+  armarFiltros();          // también en los refrescos: la planilla pudo cambiar
+  pintarOfertas();         // la vidriera de arriba
+  limpiarPedido();         // saca del pedido lo que ya no está en la planilla
+  if(habiaDatos) pintarEnSuLugar(mundosAntes); else pintar();
+  if(habiaDatos) refrescarFichaAbierta();
+}
+
+/* La copia al instante (29/09): Pedro eligió B en la muestra 1.6, "pero solo
+   si lo nuevo tarda más de 1 segundo: con buena señal no hace falta y así la
+   pantalla no titila". Al entrar, si hay copia que vale y a COPIA_ESPERA_MS
+   todavía no llegó nada, se dibuja la copia con el sello ámbar "Precios de las
+   01:52 · actualizando…", sin franja y sin pesos hasta que conteste dolarapi
+   (nunca pesos con una cotización guardada). Lo nuevo la reemplaza solo, en
+   su lugar; si ADVAPP termina fallando, queda la copia y ahí sí la franja.
+   La ficha del #p= espera a la carga de verdad. */
+function copiaAlInstante(turno, vuelta){
+  if(turno <= TURNO_APLICADO || HORA_DATOS) return;   // ya hay algo aplicado
+  /* Lo nuevo ya llegó y solo falta el dólar: no se muestran precios más
+     viejos que los que ya están en la mano. Se espera como siempre, hasta
+     COTIZACION_ESPERA_MS como mucho. */
+  if(vuelta.lista) return;
+  const c = leerCopia();
+  if(!c) return;
+  try{
+    usarIndiceDeLaCopia(c.indice);
+    const datos = { fuente: 'copia', manifiesto: null, motivo: '', hora: c.hora, filas: c.filas };
+    const carga = armarCarga(datos);
+    if(!carga.productos.length) return;
+    COPIA_AL_INSTANTE = true;
+    vuelta.copia = datos;              // para ponerle los pesos cuando llegue el dólar
+    FUENTE = carga.fuente;
+    META = null;
+    if(vuelta.tc !== undefined) aplicarCotizacion(vuelta.tc);   // el dólar ya llegó
+    dibujarDatos(carga.productos, carga.productos.some(p => p.imagen));
+    HORA_DATOS = c.hora;
+    bajarAlLinkFiltrado();
+    sello(`Precios de las ${hhmm(c.hora)} · actualizando…`, false);
+    $('stamp').title = 'La copia guardada en este navegador, mientras llega lo nuevo de ADVAPP';
+    pintarFranja(false);
+    pintarPedido();
+  }catch(e){
+    console.warn('No se pudo mostrar la copia al instante:', e);
+  }
+}
 
 async function actualizar(primera){
   const turno = ++TURNO_CARGA;
   if(primera) grid.innerHTML = Array.from({length:10},()=>'<div class="skeleton"></div>').join('');
+  /* La cotización y el catálogo se piden a la vez, no uno después del otro.
+     La hoja Meta ya no va acá (29/09): se pedía en cada visita aunque con
+     ADVAPP no se use, y la primera pantalla esperaba a Google. */
+  const cargaP = cargar(), tcP = traerCotizacion();
+  let alInstante = 0;
+  if(primera && ADVAPP_URL && horaDeLaCopia()){
+    const vuelta = { tc: undefined, copia: null, lista: false };
+    cargaP.then(() => { vuelta.lista = true; }, () => {});
+    /* Con la copia a la vista, los pesos aparecen apenas contesta dolarapi. Si
+       lo nuevo ya llegó no hace falta: lo dibuja todo junto, con el dólar. */
+    tcP.then(tc => {
+      vuelta.tc = tc;
+      if(!vuelta.copia || vuelta.lista || turno <= TURNO_APLICADO) return;
+      try{
+        // Con productos recién armados: agrupar() ya marcó los que están a la vista
+        const carga = armarCarga(vuelta.copia);
+        aplicarCotizacion(tc);
+        dibujarDatos(carga.productos, carga.productos.some(p => p.imagen));
+        pintarPedido();
+      }catch(e){ console.warn('No se pudieron poner los pesos en la copia:', e); }
+    });
+    alInstante = setTimeout(() => copiaAlInstante(turno, vuelta), COPIA_ESPERA_MS);
+  }
   try{
-    /* La cotización y el catálogo se piden a la vez, no uno después del otro.
-       La hoja Meta ya no va acá (29/09): se pedía en cada visita aunque con
-       ADVAPP no se use, y la primera pantalla esperaba a Google. */
-    const [carga, tc] = await Promise.all([cargar(), traerCotizacion()]);
+    const [carga, tc] = await Promise.all([cargaP, tcP]);
+    clearTimeout(alInstante);
     const prods = carga.productos;
     /* Cero productos no es un catálogo: es un formato que cambió o un filtro
        puesto (29/09). Se trata como una falla, antes de tocar nada: en un
@@ -8332,43 +9447,58 @@ async function actualizar(primera){
       : prods.some(p => p.imagen);
     if(turno < TURNO_APLICADO) return;       // ya se aplicó una carga más nueva
     TURNO_APLICADO = turno;
-    const habiaDatos = !!ULTIMA_OK;
+    const habiaDatos = !!HORA_DATOS;         // con la copia al instante, también
     FUENTE = carga.fuente;
     // META queda para quien la mire (pruebas/meta.js): la hoja Meta, solo si
     // de ahí salieron los datos.
     META = FUENTE.fuente === 'planilla' ? FUENTE.manifiesto : null;
     aplicarCotizacion(tc);
-    const firma = JSON.stringify(prods) + '|' + TC + '|' + conFotos;
-    if(firma !== FIRMA_DATOS){
-      FIRMA_DATOS = firma;
-      const mundosAntes = habiaDatos && enPortada() ? firmaMundos() : '';
-      PRODUCTOS = prods;
-      MODELOS   = agrupar(prods);   // las variantes del mismo modelo van a una sola tarjeta
-      CON_FOTOS = conFotos;
-      armarFiltros();          // también en los refrescos: la planilla pudo cambiar
-      pintarOfertas();         // la vidriera de arriba
-      limpiarPedido();         // saca del pedido lo que ya no está en la planilla
-      if(habiaDatos) pintarEnSuLugar(mundosAntes); else pintar();
-      if(habiaDatos) refrescarFichaAbierta();
-    }
-    if(fichaPendiente){ fichaPendiente = false; if(!FICHA) abrirFichaDesdeURL(); }
+    dibujarDatos(prods, conFotos);
+    document.body.classList.remove('sin-catalogo');
+    COPIA_AL_INSTANTE = false;
+    /* Un link a algo que no está en la copia (o sin el índice de fotos para
+       traducir un ID viejo) no se da por perdido: se vuelve a probar con la
+       carga siguiente (4.5, ver destinoDelLink) */
+    if(fichaPendiente) fichaPendiente = !FICHA && !abrirFichaDesdeURL();
     if(!habiaDatos) bajarAlLinkFiltrado();
     ULTIMA_OK = Date.now();
     ULTIMO_FALLO = '';
-    const [texto, vivo] = textoDelSello();
-    sello(texto, vivo);
+    frenarReintentos();
+    /* La copia (29/09, 1.1 B): el sello dice de qué hora son los precios, en
+       ámbar y sin latir, y la franja lo dice con Reintentar. Nunca más
+       "Actualizado hoy" sobre datos viejos. */
+    const esCopia = FUENTE.fuente === 'copia';
+    HORA_DATOS = esCopia ? FUENTE.hora : ULTIMA_OK;
+    if(esCopia) sello(`Precios de las ${hhmm(HORA_DATOS)}`, false);
+    else{ const [texto, vivo] = textoDelSello(); sello(texto, vivo); }
+    pintarFranja(esCopia);
+    pintarPedido();          // el total con la hora, o sin ella (1.5 A)
     // Para el equipo: de dónde salió lo que se ve (pasando el mouse por el sello)
-    $('stamp').title = FUENTE.fuente === 'planilla'
-      ? `Respaldo: la planilla de Google${FUENTE.motivo ? ` (ADVAPP: ${FUENTE.motivo})` : ''}` : '';
+    $('stamp').title = esCopia
+      ? `Respaldo: la copia de las ${hhmm(HORA_DATOS)} guardada en este navegador${FUENTE.motivo ? ` (ADVAPP: ${FUENTE.motivo})` : ''}`
+      : FUENTE.fuente === 'planilla'
+      ? `Respaldo: la planilla de Google${FUENTE.motivo ? ` (ADVAPP: ${FUENTE.motivo})` : ''}`
+      : FUENTE.motivo ? `ADVAPP: ${FUENTE.motivo}` : '';
+    /* La copia de este navegador: la última respuesta de ADVAPP que se aplicó
+       sin ningún motivo en contra (la carga corta de último recurso lleva uno). */
+    if(FUENTE.fuente === 'advapp' && !FUENTE.motivo && Array.isArray(carga.filas))
+      guardarCopia(carga.filas, ULTIMA_OK);
   }catch(e){
+    clearTimeout(alInstante);
     console.warn('No se pudo actualizar:', e);
     if(turno < TURNO_APLICADO) return;       // una más nueva ya dejó datos buenos
     ULTIMO_FALLO = String((e && e.message) || e);
-    // Sin ninguna carga buena todavía, es la pantalla de error, no un "Sin
-    // actualizar desde" con la hora de 1970 (21:00 en la Argentina).
-    if(primera || !ULTIMA_OK) error(e);
-    // Ya había datos en pantalla: se quedan, pero avisamos que son de antes
-    else sello(`Sin actualizar desde ${hhmm(ULTIMA_OK)}`, false);
+    const esCopia = COPIA_AL_INSTANTE || (FUENTE && FUENTE.fuente === 'copia');
+    COPIA_AL_INSTANTE = false;
+    /* Sin nada en pantalla es el aviso, no un "Sin actualizar desde" con la
+       hora de 1970 (21:00 en la Argentina). Y con precios de hace más de
+       COPIA_VIGENCIA_MS también (29/09, 1.2 B): una pestaña abierta que no
+       pudo actualizarse en 6 horas queda igual que una copia vencida. */
+    if(!HORA_DATOS || !copiaVigente(HORA_DATOS)) error(e);
+    // La copia que estaba a la vista se queda, con su franja (1.1 B)
+    else if(esCopia){ sello(`Precios de las ${hhmm(HORA_DATOS)}`, false); pintarFranja(true); }
+    // Otra falla con datos de ahora en pantalla: se quedan, pero avisamos que son de antes
+    else sello(`Sin actualizar desde ${hhmm(HORA_DATOS)}`, false);
   }
 }
 
@@ -8448,7 +9578,9 @@ function refrescarFichaAbierta(){
        en el catálogo", sacaba el WhatsApp y apagaba la tira, mientras el
        pedido guardaba la misma línea porque vuelve sola (limpiarPedido). Mismo
        criterio: la baja la dice ADVAPP; con el respaldo la ficha queda como
-       estaba, y el próximo refresco bueno la redibuja o la da de baja. */
+       estaba, y el próximo refresco bueno la redibuja o la da de baja. Desde
+       el 29/09 el respaldo es la copia de este navegador (1.1 B): puede ser
+       de horas atrás, así que tampoco da de baja. */
     if(ADVAPP_URL && (!FUENTE || FUENTE.fuente !== 'advapp')) return;
     /* Salió del catálogo: no se la cambia por otra versión, que tendría otro
        precio. Se dice y se sacan los botones: sin esto, "Agregar al pedido"
@@ -8457,7 +9589,9 @@ function refrescarFichaAbierta(){
     if(botones) botones.innerHTML = '<p class="fi-nota">Este producto ya no está en el catálogo.</p>';
     const precio = d.querySelector('.fi-precio');
     if(precio) precio.style.display = 'none';      // es el de antes: mejor ninguno
-    d.querySelectorAll('.fi-pintas button, .fi-op').forEach(b => { b.disabled = true; });
+    // También los renglones de "Ver las N versiones" y Compartir (29/09):
+    // mandar el link de algo que ya no está lleva a "Ya no está"
+    d.querySelectorAll('.fi-pintas button, .fi-op, .fi-fila, .fi-compartir').forEach(b => { b.disabled = true; });
     devolverFoco();       // los botones ya no están o están apagados: a la ventana
     return;
   }
@@ -8552,6 +9686,18 @@ function volverArriba(){
 function aplicarFiltro(push){ sincronizarLentes(); escribirURL(push); volverArriba(); pintar(); }
 
 addEventListener('popstate', () => {
+  /* El visor de la foto (4.4 B, 29/09), igual que el pedido de abajo: el
+     Atrás del celular lo cierra y deja la ficha abierta. Si se vuelve de su
+     entrada, se saca sin tocar el historial; si con Adelante se cae en una
+     entrada de un visor que ya se cerró, se la neutraliza. */
+  const delVisor = !!(history.state && history.state.visor);
+  if(cerrarVisorDOM && !delVisor){
+    visorEmpujado = false;
+    const c = cerrarVisorDOM; cerrarVisorDOM = null;
+    c();
+  }else if(delVisor && !cerrarVisorDOM){
+    try{ history.replaceState(null, '', location.href); }catch{}
+  }
   /* El pedido (ver abrirPedido, 29/09): si se volvió de su entrada, la lista
      se saca sin tocar el historial. Y si con Adelante se cae en una entrada
      del pedido que ya se cerró, se la neutraliza: si no, el próximo Atrás
@@ -8580,7 +9726,18 @@ addEventListener('popstate', () => {
     else if(filtros.cat){ rendirCintaAuto(); centrarChipElegido(); }
   }
   const k = claveDeHash();
-  if(k && k !== FICHA){ quitarFicha(); abrirFicha(k, null); }
+  if(k && k !== FICHA){
+    quitarFicha();
+    /* Si estaba "Ya no está" y se pega otro link en la misma pestaña, se
+       saca (29/09, revisión de la 4.5): quedaban las dos ventanas juntas y,
+       al cerrar la ficha, el aviso reaparecía. */
+    if(cerrarYaNoEstaDOM){ const c = cerrarYaNoEstaDOM; cerrarYaNoEstaDOM = null; c(); }
+    /* Un link pegado en la barra también pasa por acá: el ID viejo abre el
+       producto de hoy y el que ya no está avisa (4.5, ver destinoDelLink) */
+    const dest = destinoDelLink(k);
+    if(dest.clave) abrirFicha(dest.clave, dest.clave === k ? null : false);
+    else if(dest.baja) avisarYaNoEsta();
+  }
   else if(!k && FICHA) quitarFicha();
 });
 
@@ -8595,9 +9752,17 @@ let COLOR_FICHA = '';       // color elegido en la ficha abierta
 let COLOR_ELEGIDO = false;
 let fichaEmpujada = false;  // ¿agregamos una entrada al historial al abrirla?
 let cerrarFichaDOM = null;  // saca la ventana de la pantalla, sin tocar el historial
+let visorEmpujado = false;  // lo mismo para el visor de la foto (4.4 B)
+let cerrarVisorDOM = null;
+/* "Ver las N versiones" (4.3 C) arranca cerrada en cada ficha, pero si el
+   cliente la abrió sigue abierta al elegir un renglón: los datos se redibujan
+   enteros (elegirVariante) y la lista se cerraba en la cara. */
+let TODAS_ABIERTA = false;
 
 function quitarFicha(){
   FICHA = null; FICHA_MODELO = null; fichaEmpujada = false;
+  // El visor de la foto (4.4 B) es de esta ficha: se va con ella
+  if(cerrarVisorDOM){ visorEmpujado = false; const v = cerrarVisorDOM; cerrarVisorDOM = null; v(); }
   const c = cerrarFichaDOM; cerrarFichaDOM = null;
   c?.();
   ponerTitulo();
@@ -8649,8 +9814,37 @@ function htmlElegido(m, v, color){
          `<span id="fi-elegido-color">${htmlElegidoColor(color)}</span>.</p>`;
 }
 
+/* Los códigos del proveedor, fuera del título de la ficha (29/09). Pedro
+   eligió limpiar sólo las fichas que los muestran, con las mismas reglas que
+   la tarjeta (partirTitulo) (muestra 2.3 B). Ese día eran 9:
+     · 3 Ray-Ban Meta Gen 2, "Meta Gen 2 — Wayfarer F Shiny Black | L G15
+       Green": el título queda "Meta Gen 2 Wayfarer" y el armazón y el
+       cristal van en una línea abajo, entera (.fi-linea): "Armazón Shiny
+       Black · Cristal G15 Green";
+     · 3 Dell y 3 MSI, "P2425HE | Dell Pro 24 Plus …": sin "| Dell", la marca
+       ya está arriba.
+   Las demás fichas no cambian: el "REFERENCIA |" sólo se toca si lo que sigue
+   a la barra es la marca, y el " — " sólo en los Ray-Ban. Nada se inventa:
+   es el mismo texto, en otro renglón. */
+function partirNombreFicha(m, v){
+  let t = m.desc || '';
+  const marca = (v.marca || '').trim();
+  let linea = '';
+  t = t.replace(/\s+F\s+(.+?)\s*\|\s*L\s+(.+)$/, (x, a, b) => {
+    linea = 'Armazón ' + a.trim() + ' · Cristal ' + b.trim(); return '';
+  });
+  if(linea) t = t.replace(/\s+—\s+/g, ' ');
+  const ref = t.match(/^\s*((?:[^\s|]+\s){0,2}[^\s|]+)\s*\|\s*(.+)$/);
+  if(ref && marca && new RegExp('^' + escRe(marca) + '\\s+', 'i').test(ref[2]))
+    t = ref[1] + ' ' + ref[2].replace(new RegExp('^' + escRe(marca) + '\\s+', 'i'), '');
+  return { nombre: nombreDeLaFicha(t, v), linea };
+}
+
 function nombreFicha(m, v){
-  const entero = m.desc || '';
+  return partirNombreFicha(m, v).nombre;
+}
+
+function nombreDeLaFicha(entero, v){
   let t = entero;
 
   const marca = (v.marca || '').trim();
@@ -8706,17 +9900,27 @@ function htmlDatosFicha(m, v){
   const lista = specs(v).filter(s => !dice || !dice.includes(plano(s)));
   const ars   = precioARS(v);
   const coti  = TC ? `Cotización: $ ${plata(Math.round(TC))} por dólar.` : '';
+  const { nombre, linea } = partirNombreFicha(m, v);
 
+  /* El precio anterior, tachado al lado del de hoy, en el lila de los pesos
+     (29/09, muestra 2.4 C, junto con el "Ahorrás" de arriba de la foto): la
+     tarjeta prometía el ahorro y al abrir la ficha desaparecía. Sale siempre
+     de la versión v, no del modelo, y el número lo carga Pedro en ADVAPP
+     ("Precio anterior"); acá sólo se resta, como en la tarjeta (ahorro()).
+     Una versión sin precio anterior no muestra ninguno de los dos. */
   return `
     <span class="fi-marca">${esc(v.marca)}</span>
-    <h3 class="fi-nombre">${esc(nombreFicha(m, v))}</h3>
+    <h3 class="fi-nombre">${esc(nombre)}</h3>
+    ${linea ? `<p class="fi-linea">${esc(linea)}</p>` : ''}
     ${lista.length ? `<div class="specs">${lista.map(s=>`<span>${esc(s)}</span>`).join('')}</div>` : ''}
     <div class="fi-precio">
       <div class="usd">${precioUSD(v)}</div>
+      ${ahorro(v) ? `<s class="antes">USD ${plata(v.antes)}</s>` : ''}
       ${ars ? `<div class="ars">${ars}</div>` : ''}
       <div class="sub" id="fi-sub" hidden></div>
     </div>
     ${ejes}
+    ${htmlTodasFicha(m, v)}
     ${v.incluye ? `<div class="incluye">${esc(v.incluye)}</div>` : ''}
     ${v.detalle ? `<p class="fi-detalle">${esc(v.detalle)}</p>` : ''}
     ${filas.length ? `<dl class="fi-tabla">${filas.map(([t,x]) =>
@@ -8740,6 +9944,9 @@ const ICONOS_SERVICIO = {
   envio:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.5h11v10h-11z"/><path d="M13.5 10h4.2l3.3 3.4v3.1h-7.5"/><circle cx="6.5" cy="17.6" r="1.9"/><circle cx="17" cy="17.6" r="1.9"/></svg>',
   retiro:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>',
   garantia: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"/><path d="M8.8 12.2l2.2 2.2 4.3-4.4"/></svg>',
+  // La tarjeta de pago, para el renglón del precio sin factura (2.5 B). Su
+  // texto no está en SERVICIO: sale de PREGUNTAS (ver htmlPagoFicha)
+  pago:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="2.2"/><path d="M2.5 9.8h19"/><path d="M6.5 14.6h4.5"/></svg>',
 };
 
 /* La franja de envío, cruzando la ficha entre los datos y los sugeridos. El
@@ -8754,6 +9961,7 @@ function htmlEnvioFicha(){
 
 function htmlServicio(v){
   const lineas = Object.keys(ICONOS_SERVICIO).filter(k => k !== 'envio').map(k => {
+    if(k === 'pago') return htmlPagoFicha();
     const t = SERVICIO[k];
     if(!t || !t[0]) return '';
     // Si la planilla trae la garantía de ESTE producto, manda sobre el texto
@@ -8763,6 +9971,32 @@ function htmlServicio(v){
       <span><b>${esc(t[0])}</b>${detalle ? `<i>${esc(detalle)}</i>` : ''}</span></li>`;
   }).join('');
   return lineas ? `<ul class="fi-servicio">${lineas}</ul>` : '';
+}
+
+/* El precio sin factura y cómo se paga, en la ficha (29/09). Estaba sólo en
+   las preguntas de la portada, y el que entra por el link de un producto o
+   recorre un rubro no lo veía. Pedro eligió un renglón junto a retiro y
+   garantía, con "Ver formas de pago" que despliega la respuesta de "¿Cómo
+   puedo pagar?" (muestra 2.5 B). Los textos NO se escriben acá: la muestra
+   los dejó en blanco para Pedro, así que se usan, tal cual, la pregunta y la
+   respuesta de "¿El precio incluye IVA?" y la respuesta de "¿Cómo puedo
+   pagar?" de PREGUNTAS, buscadas por la pregunta: hay una sola versión, y
+   si Pedro las cambia allá, cambian acá. Sin esas preguntas, no hay renglón
+   (o no hay botón). */
+const preguntaFrecuente = p => PREGUNTAS.find(q => norm(q.p) === norm(p));
+
+function htmlPagoFicha(){
+  const iva = preguntaFrecuente('¿El precio incluye IVA?');
+  const pagar = preguntaFrecuente('¿Cómo puedo pagar?');
+  const titulo = (iva || pagar)?.p;
+  if(!titulo) return '';
+  const detalle = iva ? (iva.r || []).join(' ') : '';
+  const pagos = pagar ? (pagar.r || []).map(t => `<p>${esc(t)}</p>`).join('') +
+    (pagar.lista ? `<ul>${pagar.lista.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : '') : '';
+  return `<li data-servicio="pago">${ICONOS_SERVICIO.pago}
+      <div><b>${esc(titulo)}</b>${detalle ? `<i>${esc(detalle)}</i>` : ''}${pagos ? `
+        <button class="fi-desplegar" type="button" aria-expanded="false" aria-controls="fi-pagos">Ver formas de pago</button>
+        <div class="fi-pagos" id="fi-pagos" hidden>${pagos}</div>` : ''}</div></li>`;
 }
 
 /* ---------- Elegir la versión, en dos pasos (21/09) ----------
@@ -8821,9 +10055,11 @@ function sinLoComun(et){
   return rec.some(t => !t) ? et : rec;
 }
 
-function htmlOpcionesFicha(m, v){
-  if(!m.multi) return '';
-  const elegida = clave(v);
+/* Las versiones de un modelo tal como las ordenan las pestañas de la ficha:
+   [opción, filas] por versión. Salió de htmlOpcionesFicha el 29/09 para que
+   "Ver las N versiones" (4.3 C) parta la lista con la misma regla que las
+   pestañas; `versiones` son todas, `reales` las que no son un color. */
+function versionesDelModelo(m){
   /* Una opcion por version (ver `opcion` en armarModelo). La pestaña de una
      version con varias filas marca la que se esta mirando, o si no la mas
      barata con stock, y dice "desde" cuando sus colores no valen lo mismo. */
@@ -8837,7 +10073,6 @@ function htmlOpcionesFicha(m, v){
      de la foto. Sin esto el iPhone 16 traía un botón "Ultramarine" y otro
      "White" además de la tira, diciendo dos veces lo mismo. */
   const reales = [...versiones.entries()].filter(([op, g]) => !opcionEsColor(g, op));
-  if(reales.length < 2) return '';
 
   /* Orden: primero lo que se puede comprar, después por precio. Venían en el
      orden en que la planilla las cargó, que no le dice nada al cliente: en el
@@ -8850,6 +10085,14 @@ function htmlOpcionesFicha(m, v){
   };
   reales.sort((a, b) => (a[1].some(x => x.stock) ? 0 : 1) - (b[1].some(x => x.stock) ? 0 : 1)
                      || barato(a[1]) - barato(b[1]));
+  return { versiones, reales };
+}
+
+function htmlOpcionesFicha(m, v){
+  if(!m.multi) return '';
+  const elegida = clave(v);
+  const { reales } = versionesDelModelo(m);
+  if(reales.length < 2) return '';
 
   const porPrecio = (a, b) => (a.precio ?? Infinity) - (b.precio ?? Infinity);
   /* Con el mismo criterio que la tarjeta (armarModelo, 29/09): el número es
@@ -8914,35 +10157,44 @@ function htmlOpcionesFicha(m, v){
   const hermanas = reales.filter(([op]) => memoriaDeOpcion(op) === memAct);
   let verTabs = '';
   if(hermanas.length > 1){
-    /* La versión a la que no le queda nada es "Base", salvo que ADVAPP diga
-       que es la Wifi y una hermana diga Cellular (29/09): el iPad Pro M5 11"
-       256GB ofrecía "Cellular" contra "Base", y el SKU de TAB-APP-015 termina
-       en -wifi. Sólo con las dos puntas dichas: el iPad Pro M4 11" 512GB es
-       "Space Black" contra una fila repetida (pedido a ADVAPP), y ahí decir
-       "Wifi" sería otra forma de engañar. Sin SKU que lo diga, "Base". */
-    const hayCell = hermanas.some(([op]) => /\bcell(?:ular)?\b/i.test(restoDeOpcion(op)));
-    const vacia = g => hayCell && g.every(x => x.conexion === 'Wifi') ? 'Wifi' : 'Base';
-    let et = sinLoComun(hermanas.map(([op, g]) => restoDeOpcion(op) || vacia(g)));
-    /* Si el recorte deja dos pestañas diciendo lo mismo, o una diciendo sólo
-       un número -"8", que es lo que queda de "8/256GB"-, se pasó de vivo: lo
-       que las distingue es justo lo que sacó. En ese caso vuelve el texto
-       entero de la planilla: más largo, pero no engaña.
-       Ojo que el "8" contra "8GB" sale de que la planilla escribe la misma RAM
-       de dos maneras; eso se arregla en la planilla, no acá. */
-    if(new Set(et).size !== et.length || et.some(t => /^\d+$/.test(t)))
-      et = hermanas.map(([op]) => op);
-    /* El idioma del teclado suelto va con mayúscula (29/09). La versión lo
-       escribe en minúscula porque va detrás de "Teclado" ("24GB/1TB · Teclado
-       español"), pero el recorte saca "Teclado" y el MacBook Neo quedaba con
-       "inglés / español", al lado de "Teclado: Inglés" en la tabla. Sólo en lo
-       que se dibuja: la opción (data-op) sigue igual, que es la clave con la
-       que se navega entre memorias. Y sólo el idioma: con una mayúscula
-       general, "iPad" quedaría "IPad". */
-    et = et.map(t => t.replace(/^(inglés|español)(?=\s|$)/, w => w[0].toUpperCase() + w.slice(1)));
+    const et = etiquetasDeVersion(hermanas);
     verTabs = hermanas.map(([, g], i) => pestana(et[i], g, g)).join('');
   }
   return `<div class="fi-ejes">${eje('Memoria', '', memTabs)}${
     verTabs ? eje('Versión', ' chicas', verTabs) : ''}</div>`;
+}
+
+/* Lo que dice la pestaña de cada versión de una misma memoria ([opción,
+   filas], en el orden de las pestañas). Salió de htmlOpcionesFicha el 29/09:
+   los renglones de "Ver las N versiones" (4.3 C) dicen lo mismo que la
+   pestaña, así la lista y las pestañas no hablan de dos maneras. */
+function etiquetasDeVersion(hermanas){
+  /* La versión a la que no le queda nada es "Base", salvo que ADVAPP diga
+     que es la Wifi y una hermana diga Cellular (29/09): el iPad Pro M5 11"
+     256GB ofrecía "Cellular" contra "Base", y el SKU de TAB-APP-015 termina
+     en -wifi. Sólo con las dos puntas dichas: el iPad Pro M4 11" 512GB es
+     "Space Black" contra una fila repetida (pedido a ADVAPP), y ahí decir
+     "Wifi" sería otra forma de engañar. Sin SKU que lo diga, "Base". */
+  const hayCell = hermanas.some(([op]) => /\bcell(?:ular)?\b/i.test(restoDeOpcion(op)));
+  const vacia = g => hayCell && g.every(x => x.conexion === 'Wifi') ? 'Wifi' : 'Base';
+  let et = sinLoComun(hermanas.map(([op, g]) => restoDeOpcion(op) || vacia(g)));
+  /* Si el recorte deja dos pestañas diciendo lo mismo, o una diciendo sólo
+     un número -"8", que es lo que queda de "8/256GB"-, se pasó de vivo: lo
+     que las distingue es justo lo que sacó. En ese caso vuelve el texto
+     entero de la planilla: más largo, pero no engaña.
+     Ojo que el "8" contra "8GB" sale de que la planilla escribe la misma RAM
+     de dos maneras; eso se arregla en la planilla, no acá. */
+  if(new Set(et).size !== et.length || et.some(t => /^\d+$/.test(t)))
+    et = hermanas.map(([op]) => op);
+  /* El idioma del teclado suelto va con mayúscula (29/09). La versión lo
+     escribe en minúscula porque va detrás de "Teclado" ("24GB/1TB · Teclado
+     español"), pero el recorte saca "Teclado" y el MacBook Neo quedaba con
+     "inglés / español", al lado de "Teclado: Inglés" en la tabla. Sólo en lo
+     que se dibuja: la opción (data-op) sigue igual, que es la clave con la
+     que se navega entre memorias. Y sólo el idioma: con una mayúscula
+     general, "iPad" quedaría "IPad". */
+  et = et.map(t => t.replace(/^(inglés|español)(?=\s|$)/, w => w[0].toUpperCase() + w.slice(1)));
+  return et;
 }
 
 /* ---------- También te puede interesar ----------
@@ -8982,7 +10234,10 @@ function relacionados(m, cuantos = RELACIONADOS){
 /* Una pastilla de la cinta: la foto al costado y chica, no en columna y
    grande como la tarjeta chica que tenían las filas de la portada hasta el
    18/09 (htmlProdChico, borrada el 29/09). El --i es el lugar en la fila, que
-   es lo que escalona la entrada. */
+   es lo que escalona la entrada.
+   El nombre es el de la tarjeta (29/09, muestra 6.8 B): el modelo y, si la
+   tiene, la línea técnica abajo. Con el nombre cortado, en los AirPods Pro
+   salían dos "AirPods 4" con distinto precio. */
 function htmlSugerido(m, i){
   const desde = m.multi && m.precio !== null && m.precio !== m.precioMax;
   return `<button class="pc" type="button" data-key="${esc(clave(m.rep))}" style="--i:${i}"
@@ -8991,7 +10246,7 @@ function htmlSugerido(m, i){
       ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`
       : ''}</span>
     <span class="pc-txt">
-      <b>${esc(nombreCorto(m))}</b>
+      <b>${esc(m.titulo || m.desc)}</b>${m.tecnica ? `<span class="pc-tec">${esc(m.tecnica)}</span>` : ''}
       <i>${desde ? '<span class="desde">desde</span>' : ''}${m.precio === null
         ? 'Consultar' : 'USD ' + plata(m.precio)}</i>
     </span>
@@ -9051,17 +10306,19 @@ function abrirFicha(k, historia = true){
      si no hay, queda marcado el de la foto, así la tira no abre toda en gris. */
   COLOR_ELEGIDO = !!colorDe(FICHA);
   COLOR_FICHA = colorDe(FICHA) || colorPorDefecto(v);
+  TODAS_ABIERTA = false;     // "Ver las N versiones" arranca cerrada (4.3 C)
   if(historia !== null){ fichaEmpujada = historia === true; escribirURL(historia === true); }
 
   const d = document.createElement('div');
   d.id = 'ficha'; d.className = 'modal';
   d.innerHTML = `
-    <div class="caja" role="dialog" aria-modal="true" aria-label="${esc(m.desc)}">
+    <div class="caja" role="dialog" aria-modal="true" aria-label="${esc(nombreDelDialogo(m, v))}">
+      <button class="fi-compartir" type="button" aria-label="Compartir" title="Compartir">${ICONO_COMPARTIR}</button>
       <button class="fi-cerrar" type="button" aria-label="Cerrar">&times;</button>
       <div class="fi-cols">
         <div class="fi-foto">
-          <div class="fi-arriba">${htmlBadge(v, true)}</div>
-          <div class="fi-marco">${htmlFoto(v, '', true)}</div>
+          <div class="fi-arriba">${htmlArribaFicha(v)}</div>
+          <div class="fi-marco">${htmlFoto(v, '', true)}${htmlLupa()}</div>
           <div class="fi-colores">${htmlColorFicha(v, m)}</div>
         </div>
         <div class="fi-datos">${htmlDatosFicha(m, v)}</div>
@@ -9072,6 +10329,16 @@ function abrirFicha(k, historia = true){
 
   cerrarFichaDOM = montarModal(d, () => { if(FICHA) cerrarFicha(); });
   d.querySelector('.fi-cerrar').onclick = () => cerrarFicha();
+  d.querySelector('.fi-compartir').onclick = () => compartirFicha();
+  /* La foto en grande (4.4 B): la lupa o la foto misma. El marco se queda y
+     se le cambia el contenido (pintarFotoFicha, mostrarFotoColor): por eso el
+     clic se escucha en él y no en la foto. */
+  d.querySelector('.fi-marco').addEventListener('click', e => {
+    if(e.target.closest('.fi-lupa') || e.target.tagName === 'IMG') abrirVisor(d);
+  });
+  // El índice de las páginas de vista previa (4.2 B), una vez por visita: así
+  // está leído cuando toque Compartir
+  paginasDeVistaPrevia();
   // Los relacionados van fuera de .fi-datos a propósito: dependen del modelo y
   // no de la versión, así que cambiar de color o capacidad no los redibuja.
   /* Un sugerido REEMPLAZA la entrada del historial y se queda con la marca de
@@ -9098,6 +10365,14 @@ function abrirFicha(k, historia = true){
 function engancharFicha(d, m, v){
   engancharPedidoFicha(d, v);
   pintarSubFicha(d, v);
+  // "Ver formas de pago" abre y cierra la respuesta de PREGUNTAS (2.5 B)
+  const desplegar = d.querySelector('.fi-desplegar');
+  if(desplegar) desplegar.onclick = () => {
+    const abierto = desplegar.getAttribute('aria-expanded') === 'true';
+    desplegar.setAttribute('aria-expanded', String(!abierto));
+    const p = d.querySelector('#fi-pagos');
+    if(p) p.hidden = abierto;
+  };
   d.querySelectorAll('.fi-pintas button').forEach(b => b.onclick = () => {
     // Si el color pertenece a otra versión (precio por color), se cambia de
     // versión y con eso cambia el precio; si no, sólo se cambia la foto.
@@ -9117,6 +10392,17 @@ function engancharFicha(d, m, v){
     const otra = conColor || m.variantes.find(x => clave(x) === b.dataset.k);
     if(otra && clave(otra) !== FICHA) elegirVariante(d, m, otra, conColor ? COLOR_FICHA : undefined);
   });
+  /* "Ver las N versiones" (4.3 C): tocar un renglón elige esa fila, con su
+     color, igual que tocar el puntito de otra versión. Cambian el precio, las
+     pestañas y el "Estás eligiendo"; la lista sigue abierta (TODAS_ABIERTA). */
+  const todas = d.querySelector('.fi-todas');
+  if(todas) todas.addEventListener('toggle', () => { TODAS_ABIERTA = todas.open; });
+  d.querySelectorAll('.fi-fila').forEach(b => b.onclick = () => {
+    const otra = m.variantes.find(x => clave(x) === b.dataset.k);
+    if(!otra) return;
+    if(clave(otra) !== FICHA) elegirVariante(d, m, otra, b.dataset.color || undefined);
+    else if(b.dataset.color && norm(b.dataset.color) !== norm(COLOR_FICHA)) elegirColorFicha(d, otra, b.dataset.color);
+  });
 }
 
 /* Dónde estaba el foco antes de rehacer .fi-datos y .fi-colores, y una
@@ -9133,14 +10419,17 @@ function guardarFocoFicha(d){
   const eje = f && f.classList && f.classList.contains('fi-op') && d.contains(f)
     ? (f.closest('.fi-ops')?.dataset.eje || '') : '';
   const pinta = !!f && !!f.matches && f.matches('.fi-pintas button') && d.contains(f);
-  const otro = !!f && !eje && !pinta &&
+  // Un renglón de "Ver las N versiones" (4.3 C) vuelve al renglón elegido
+  const fila = !!f && !!f.matches && f.matches('.fi-fila') && d.contains(f);
+  const otro = !!f && !eje && !pinta && !fila &&
     [...d.querySelectorAll('.fi-datos, .fi-colores')].some(x => x.contains(f));
   return () => {
-    if(!eje && !pinta && !otro) return;
+    if(!eje && !pinta && !fila && !otro) return;
     // Lo que no se rehizo ni se apagó (un link de más abajo) conserva el foco
     if(f.isConnected && !f.disabled && document.activeElement === f) return;
     const x = (eje && d.querySelector(`.fi-ops[data-eje="${CSS.escape(eje)}"] .fi-op[aria-pressed="true"]:not(:disabled)`)) ||
               (pinta && d.querySelector('.fi-pintas button[aria-pressed="true"]:not(:disabled)')) ||
+              (fila && d.querySelector('.fi-fila[aria-pressed="true"]:not(:disabled)')) ||
               d.querySelector('.caja');
     x?.focus({preventScroll:true});
   };
@@ -9172,18 +10461,26 @@ function elegirVariante(d, m, v, color){
   if(elegido) mostrarFotoColor(v, elegido, d);
 }
 
+/* Arriba de la foto: el stock y, si la versión tiene precio anterior, el
+   "Ahorrás USD …" de la tarjeta al lado (29/09, muestra 2.4 C): afuera y
+   adentro dicen lo mismo. Es de la versión v: al elegir otra sin precio
+   anterior, se va solo (pintarFotoFicha lo rehace). */
+function htmlArribaFicha(v){
+  return htmlBadge(v, true) + htmlAhorro(v);
+}
+
 // La foto se toca lo mínimo: si es la misma imagen, solo se actualiza el badge
 // de stock. Recargarla siempre haría un parpadeo blanco en cada clic.
 function pintarFotoFicha(d, v){
   // Otra version: la foto de un color que venia en camino ya no va (29/09)
   TURNO_FOTO++;
   const arriba = d.querySelector('.fi-arriba');
-  if(arriba) arriba.innerHTML = htmlBadge(v, true);
+  if(arriba) arriba.innerHTML = htmlArribaFicha(v);
   const cont = d.querySelector('.fi-marco');
   if(!cont) return;
   const img = cont.querySelector('img');
   const grande = v.imagenGrande || v.imagen;
-  if(!img || !v.imagen){ cont.innerHTML = htmlFoto(v, '', true); return; }
+  if(!img || !v.imagen){ cont.innerHTML = htmlFoto(v, '', true) + htmlLupa(); return; }
   if(img.getAttribute('src') !== grande){ img.classList.remove('ok'); img.src = grande; }
 }
 
@@ -9200,20 +10497,141 @@ function pintarColoresFicha(d, v, m){
    entera haría parpadear la foto en cada clic del "+". */
 
 // Sin nada cargado, un botón. Con algo cargado, el contador de unidades.
+/* Sin stock, nada (29/09, muestra 2.6 B): la ficha deja sólo "Avisame cuando
+   entre". Decía eso y, abajo, "Agregar al pedido". Si ya estaba en el pedido,
+   ahí se ve marcado y se saca con la cruz. La caja vacía no ocupa lugar
+   (#fi-pedido-caja:empty). */
 function htmlPedidoFicha(k){
+  if(buscarProducto(k)?.stock === false) return '';
   const n = cantDe(k);
-  if(!n) return `<button type="button" class="sec" id="fi-pedido">Agregar al pedido</button>`;
+  if(!n){
+    /* La ficha sabe lo que ya cargaste: Pedro eligió B el 29/09 (muestra 5.2). Con el iPhone
+       17 Pro de 512GB en el pedido, la ficha abría en 256GB y decía "Agregar
+       al pedido" como si nada: un toque y quedaban dos. Ahora, si la versión
+       que se mira no está y otra del mismo modelo sí, lo dice. "Agregar
+       también" queda siempre (dos memorias distintas es un pedido que vale)
+       y lleva el id de siempre; "Cambiar por esta", sólo con UNA versión
+       cargada: con dos o más, el aviso las nombra y no ofrece cambiar. */
+    const otras = otrasDelModeloEnPedido(k);
+    if(otras.length){
+      const nombres = otras.map(it => `<b>${esc(nombreDeLaVersion(it.p, it.color))}&nbsp;×${it.n}</b>`);
+      const lista = nombres.length > 1 ? nombres.slice(0, -1).join(', ') + ' y ' + nombres[nombres.length - 1] : nombres[0];
+      return `<div class="fi-ya" id="fi-ya"><p><span>Ya tenés en el pedido: ${lista}</span></p>
+        <div class="fila">${otras.length === 1
+          ? '<button type="button" class="sec cambiar" id="fi-cambiar">Cambiar por esta</button>' : ''}
+          <button type="button" class="sec" id="fi-pedido">Agregar también</button></div></div>`;
+    }
+    return `<button type="button" class="sec" id="fi-pedido">Agregar al pedido</button>`;
+  }
   return `<div class="fi-cant"><span class="lbl">Unidades</span>${htmlStepper(n)}</div>
     <button type="button" class="sec" id="fi-pedido">Quitar del pedido</button>`;
 }
 
+/* Las líneas del pedido que son OTRA versión del mismo modelo que la fila k,
+   en el orden del pedido. Las que no se pueden mostrar (itemsPedido) no
+   cuentan: no se avisa de algo que la lista del pedido tampoco muestra. */
+function otrasDelModeloEnPedido(k){
+  const m = buscarModelo(k);
+  if(!m || !m.variantes || m.variantes.length < 2) return [];
+  const suyas = new Set(m.variantes.map(clave));
+  return itemsPedido().filter(it => clave(it.p) !== k && suyas.has(clave(it.p)));
+}
+
+/* Cómo se nombra una versión cargada al lado de las demás del modelo:
+   "512GB E-Sim · Orange", lo que dicen la pestaña y el color. Si la versión
+   ES un color (Magic Mouse "White"), va una sola vez. El color es el de la
+   línea, o el de la fila si tiene uno solo: nunca uno que la fila no tiene. */
+function nombreDeLaVersion(p, color){
+  const m = buscarModelo(clave(p));
+  const op = String(p.opcion || p.etiqueta || '').trim();
+  const cols = partirColores(p.color);
+  const c = color || (cols.length === 1 ? cols[0] : '');
+  const partes = [];
+  const esColor = !!m && opcionEsColor(m.variantes.filter(x => (x.opcion || x.etiqueta) === op), op);
+  if(op && !esColor) partes.push(op);
+  if(c && !partes.some(t => norm(t).includes(norm(c)))) partes.push(c);
+  return partes.join(' · ') || op || p.desc;
+}
+
+/* "Cambiar por esta" (5.2 B): la línea de la otra versión pasa a ser la que
+   se mira, en el mismo lugar del pedido y con las mismas unidades. El color
+   es el de la versión nueva (el que muestra la ficha, igual que "Agregar"):
+   nunca se copia el de la otra, que esta fila puede no tener. Sólo con una
+   versión cargada y con stock, las mismas condiciones del botón. */
+function cambiarPorEsta(k, color){
+  const p = buscarProducto(k);
+  const otras = otrasDelModeloEnPedido(k);
+  if(!p || !p.stock || enPedido(k) || otras.length !== 1) return;
+  const i = PEDIDO.findIndex(l => l.k === clave(otras[0].p));
+  if(i === -1) return;
+  const suyo = color && pintas(p.color).some(x => norm(x.nombre) === norm(color)) ? color : '';
+  PEDIDO[i] = { k, n: PEDIDO[i].n, color: suyo };
+  guardarPedido();
+  pintarPedido();
+  refrescarBotonesPedido();
+}
+
 function engancharPedidoFicha(d, p){
   const k = clave(p);
+  acomodarAvisoPedido(d);        // antes de buscar los botones: pueden mudarse
   const b = d.querySelector('#fi-pedido');
   // Al agregar se lleva el color que el cliente haya elegido recién
   if(b) b.onclick = () => togglePedido(k, COLOR_FICHA);
+  const cambiar = d.querySelector('#fi-cambiar');
+  if(cambiar) cambiar.onclick = () => cambiarPorEsta(k, COLOR_FICHA);
   d.querySelectorAll('#fi-pedido-caja .stepper button').forEach(x =>
     x.onclick = () => cambiarCant(k, Number(x.dataset.d)));
+  medirPieFicha(d);
+}
+
+/* "Ya tenés en el pedido" en el celular (29/09, revisión de la 5.2 B con la
+   2.7 B). El aviso vive en el pie pegado de la ficha; con sus dos botones
+   adentro el pie llegaba a 183 px a 390 y a 227 a 360, y tapaba el precio
+   justo en el camino de la 5.1 (del pedido a la ficha, tocar otra memoria).
+   Hasta 640 px la fila de botones se muda a .fi-ya-abajo, justo debajo del
+   pie y fuera de él; en la compu vuelve adentro del recuadro, como la
+   muestra. Los botones son los mismos (con su id y su onclick), solo cambian
+   de lugar. Corre después de cada repintado del pedido y al cruzar los
+   640 px. */
+const FICHA_CELULAR = typeof matchMedia === 'function' ? matchMedia('(max-width:640px)') : null;
+function acomodarAvisoPedido(d){
+  const botones = d && d.querySelector('.fi-botones');
+  if(!botones) return;
+  const aviso = d.querySelector('#fi-ya');
+  let abajo = d.querySelector('.fi-ya-abajo');
+  // Una fila recién pintada adentro del aviso manda: la de abajo es de antes
+  const nueva = aviso && aviso.querySelector('.fila');
+  const fila = nueva || (aviso && abajo && abajo.querySelector('.fila'));
+  if(aviso && fila && FICHA_CELULAR && FICHA_CELULAR.matches){
+    if(!abajo){ abajo = document.createElement('div'); abajo.className = 'fi-ya-abajo'; botones.after(abajo); }
+    if(fila.parentNode !== abajo){ abajo.replaceChildren(); abajo.appendChild(fila); }
+  }else{
+    if(aviso && fila && fila.parentNode !== aviso) aviso.appendChild(fila);
+    if(abajo) abajo.remove();
+  }
+}
+if(FICHA_CELULAR){
+  const alCruzar = () => { const d = document.getElementById('ficha'); if(d) acomodarAvisoPedido(d); };
+  if(FICHA_CELULAR.addEventListener) FICHA_CELULAR.addEventListener('change', alCruzar);
+  else if(FICHA_CELULAR.addListener) FICHA_CELULAR.addListener(alCruzar);
+}
+
+/* Con el teclado en el celular, lo enfocado no queda debajo del pie pegado
+   (29/09, revisiones de la 2.7 y la 4.3): el navegador no movía la ficha
+   porque para él las pestañas de memoria o los renglones de "Ver las N
+   versiones" ya estaban a la vista, detrás de los botones. #ficha .caja
+   reserva abajo el alto del pie (scroll-padding-bottom, en el @media de
+   640) y acá se le pasa el alto de verdad, que cambia: 114, 165, 183 px... */
+let OBS_PIE_FICHA = null;
+function medirPieFicha(d){
+  const caja = d.querySelector('.caja'), pie = d.querySelector('.fi-botones');
+  if(!caja || !pie) return;
+  const poner = () => caja.style.setProperty('--pie-ficha', pie.offsetHeight + 'px');
+  poner();
+  if(typeof ResizeObserver !== 'function') return;
+  if(OBS_PIE_FICHA) OBS_PIE_FICHA.disconnect();
+  OBS_PIE_FICHA = new ResizeObserver(poner);
+  OBS_PIE_FICHA.observe(pie);
 }
 
 // El total por varias unidades, al lado del precio: sin esto el número de la
@@ -9222,9 +10640,11 @@ function pintarSubFicha(d, p){
   const s = d.querySelector('#fi-sub');
   if(!s) return;
   const n = cantDe(clave(p));
-  if(n < 2 || p.precio === null){ s.hidden = true; s.textContent = ''; return; }
+  // Sin stock no suma al pedido (2.6 B): no hay subtotal que explicar
+  if(n < 2 || p.precio === null || !p.stock){ s.hidden = true; s.textContent = ''; return; }
   const t = p.precio * n;
-  s.textContent = `${n} unidades · USD ${plata(t)}` + (TC ? ` · $ ${plata(Math.round(t * TC))}` : '');
+  // Los pesos, aproximados como en todas partes (2.2 B)
+  s.innerHTML = `${n} unidades · USD ${plata(t)}` + (TC ? ' · ' + htmlPesos(Math.round(t * TC)) : '');
   s.hidden = false;
 }
 
@@ -9243,12 +10663,14 @@ function refrescarFicha(){
        (el + en 99), a la ventana. Sólo si el foco estaba ahí: esto también
        corre por cambios hechos desde afuera (refrescarBotonesPedido). */
     const f = document.activeElement;
-    const tenia = !!f && caja.contains(f);
+    // Los botones del aviso pueden estar debajo del pie (acomodarAvisoPedido)
+    const abajo = d.querySelector('.fi-ya-abajo');
+    const tenia = !!f && (caja.contains(f) || (!!abajo && abajo.contains(f)));
     const dFoco = tenia ? (f.dataset.d || '1') : '';
     caja.innerHTML = htmlPedidoFicha(FICHA); engancharPedidoFicha(d, p);
     if(tenia){
       let x = cantDe(FICHA) ? caja.querySelector(`.stepper button[data-d="${CSS.escape(dFoco)}"]`)
-                            : caja.querySelector('#fi-pedido');
+                            : d.querySelector('#fi-pedido');
       if(!x || x.disabled) x = d.querySelector('.caja');
       x?.focus({preventScroll:true});
     }
@@ -9287,9 +10709,311 @@ function elegirColorFicha(d, p, color){
   mostrarFotoColor(p, color, d);
 }
 
+/* ---------- El link #p= que hoy no abre nada (29/09, muestra 4.5) ----------
+   De los 152 links viejos que abrían la portada sin decir nada, 143 eran de
+   productos que siguen publicados con otro ID: ADVAPP le cambió el ID a la
+   fila, pero el producto tiene su código propio AT-#### y CATALOGO.ids (el
+   mapa de fotos/indice.json) sabe de qué producto era el ID viejo. Ese link
+   abre el producto de hoy y la dirección pasa al ID nuevo, sin nada que se
+   vea distinto. Con varias filas de ese código (otra memoria, otro color) va
+   la de la tarjeta, o si no la más barata con stock: el ID viejo no dice
+   cuál de ellas era.
+   Los otros 9 eran de productos dados de baja. Para esos Pedro eligió una
+   ventanita donde iba a estar la ficha: "Ya no está", con "Escribinos por
+   WhatsApp" (el mismo mensaje que el botón flotante) y "Ver el catálogo"
+   (muestra 4.5 B). El #p= se saca de la dirección, así el link roto no se
+   vuelve a mandar. Acá caen también las páginas de vista previa que se
+   borraron (p/<ID>.html, 4.2): 404.html las manda a #p=<ID>. */
+function claveDeHoy(k){
+  if(!k) return '';
+  if(buscarModelo(k)) return k;
+  const cod = CATALOGO && CATALOGO.ids ? CATALOGO.ids[k] : '';
+  if(!cod) return '';
+  const filas = PRODUCTOS.filter(p => p.codigo === cod && buscarModelo(clave(p)));
+  if(!filas.length) return '';
+  const m = buscarModelo(clave(filas[0]));
+  const suyas = filas.filter(p => m.variantes.some(x => clave(x) === clave(p)));
+  if(!suyas.length) return clave(filas[0]);     // una gemela escondida: abre su modelo
+  if(suyas.some(p => clave(p) === clave(m.rep))) return clave(m.rep);
+  const con = suyas.filter(p => p.stock);
+  return clave([...(con.length ? con : suyas)]
+    .sort((a, b) => (a.precio ?? Infinity) - (b.precio ?? Infinity))[0]);
+}
+
+/* Qué se hace con el #p=: { clave } la ficha que se abre, { baja } el aviso
+   de "Ya no está" o { espera } todavía no se sabe. Que no esté en la copia de
+   este navegador no quiere decir que se dio de baja (el mismo criterio que
+   refrescarFichaAbierta), y sin el índice de fotos un ID viejo no se puede
+   traducir: en esos dos casos se vuelve a probar con la carga siguiente. */
+function destinoDelLink(k){
+  const hoy = claveDeHoy(k);
+  if(hoy) return { clave: hoy };
+  const firme = (!ADVAPP_URL || (FUENTE && FUENTE.fuente === 'advapp')) && !!(CATALOGO && CATALOGO.ids);
+  return firme ? { baja: true } : { espera: true };
+}
+
+// true si el link ya se resolvió (o no había ninguno); false si hay que esperar
 function abrirFichaDesdeURL(){
   const k = claveDeHash();
-  if(k) abrirFicha(k, false);
+  if(!k) return true;
+  const dest = destinoDelLink(k);
+  if(dest.clave){ abrirFicha(dest.clave, false); return true; }
+  if(dest.baja){ avisarYaNoEsta(); return true; }
+  return false;
+}
+
+let cerrarYaNoEstaDOM = null;   // saca "Ya no está" (el popstate lo usa)
+function avisarYaNoEsta(){
+  escribirURL(false);        // sin FICHA, la dirección sale sin el #p=
+  if(document.getElementById('ya-no-esta')) return;
+  const flotante = document.getElementById('wa-flotante');
+  const wa = WHATSAPP ? ((flotante && flotante.getAttribute('href')) || '') : '';
+  const d = document.createElement('div');
+  d.id = 'ya-no-esta'; d.className = 'modal';
+  d.innerHTML = `
+    <div class="caja" role="dialog" aria-modal="true" aria-labelledby="yne-titulo" aria-describedby="yne-texto">
+      <button class="fi-cerrar" type="button" aria-label="Cerrar">&times;</button>
+      <h3 id="yne-titulo">Ya no está</h3>
+      <p id="yne-texto">Ese producto ya no está en el catálogo. ${wa
+        ? 'Buscá otro en el catálogo o escribinos.' : 'Buscá otro en el catálogo.'}</p>
+      <div class="botones">
+        ${wa ? `<a class="pri" href="${esc(wa)}" target="_blank" rel="noopener">${ICONO_WA}Escribinos por WhatsApp</a>` : ''}
+        <button type="button" class="sec" data-ver>Ver el catálogo</button>
+      </div>
+    </div>`;
+  const cerrar = montarModal(d, () => { cerrarYaNoEstaDOM = null; });
+  cerrarYaNoEstaDOM = cerrar;
+  d.querySelector('.fi-cerrar').onclick = cerrar;
+  d.querySelector('[data-ver]').onclick = cerrar;
+  // WhatsApp se abre en otra pestaña: al volver, el catálogo ya está a la vista
+  d.querySelector('a.pri')?.addEventListener('click', () => setTimeout(cerrar, 0));
+}
+
+/* ---------- Compartir (29/09, muestras 4.1 B y 4.2 B) ----------
+   Se manda el nombre con la versión y el color que se está mirando, y el
+   link público: sin precio, que cambia y lo define ADVAPP. El link es la
+   página de vista previa de la fila (p/<ID>.html, la arma
+   herramientas/vista-previa.py en cada PUBLICAR), que en WhatsApp llega con
+   la foto, el modelo y la versión; si esa fila todavía no tiene página
+   (p/indice.json no la nombra, o no se pudo leer), el #p= de siempre.
+   Como en la muestra: en el celular abre el menú Compartir del teléfono, y en
+   la compu copia el texto con el link y lo avisa. Chrome y Safari de la compu
+   también tienen navigator.share, pero su menú no es lo que se eligió, y para
+   pegar en WhatsApp Web lo cómodo es tenerlo copiado. */
+const ICONO_COMPARTIR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11"/><path d="M7.5 8 12 3.5 16.5 8"/><path d="M8 11H6v9h12v-9h-2"/></svg>';
+const PAGINAS_P_ESPERA_MS = 4000;   // lo más que se espera p/indice.json
+const COMPARTIR_ESPERA_MS = 800;    // si todavía no llegó cuando se toca Compartir
+let PAGINAS_P = null;               // la promesa del índice: se pide una vez por visita
+let PAGINAS_P_LEIDAS = null;        // el Set de IDs con página, cuando llegó (vacío si falló)
+
+function paginasDeVistaPrevia(){
+  if(!PAGINAS_P) PAGINAS_P = conTope(PAGINAS_P_ESPERA_MS, async senal => {
+      const r = await fetch('p/indice.json', { signal: senal });
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(j => new Set(Array.isArray(j && j.ids) ? j.ids.filter(x => typeof x === 'string' && x) : []))
+    .catch(e => { console.warn('No se pudo leer p/indice.json:', e); return new Set(); })
+    .then(s => (PAGINAS_P_LEIDAS = s));
+  return PAGINAS_P;
+}
+
+function linkParaCompartir(k, conPagina){
+  const id = encodeURIComponent(k);
+  return conPagina && conPagina.has(k) ? `${URL_PUBLICA}p/${id}.html` : `${URL_PUBLICA}#p=${id}`;
+}
+
+// "Apple iPhone 17 Pro 256GB E-Sim (Orange)": el nombre del mensaje de
+// WhatsApp (partesMensaje), con el color entre paréntesis como en el pedido
+function textoParaCompartir(p, color){
+  const x = partesMensaje(p, color);
+  return textoMensaje(x) + (x.color ? ` (${x.color})` : '');
+}
+
+const esCelular = () => !!window.matchMedia && matchMedia('(pointer: coarse)').matches;
+
+async function compartirFicha(){
+  const p = FICHA && buscarProducto(FICHA);
+  if(!p) return;
+  const color = COLOR_FICHA;
+  const ids = PAGINAS_P_LEIDAS || await Promise.race([paginasDeVistaPrevia(),
+    new Promise(listo => setTimeout(() => listo(null), COMPARTIR_ESPERA_MS))]);
+  const link = linkParaCompartir(clave(p), ids);
+  const texto = textoParaCompartir(p, color);
+  if(typeof navigator.share === 'function' && esCelular()){
+    try{ await navigator.share({ text: texto, url: link }); return; }
+    catch(e){ if(e && e.name === 'AbortError') return; }   // lo cerró él; otro error: se copia
+  }
+  const copiado = await copiarAlPortapapeles(texto + '\n' + link);
+  brindis(copiado ? 'Link copiado' : 'No se pudo copiar. El link es: ' + link, !copiado);
+}
+
+async function copiarAlPortapapeles(t){
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){ await navigator.clipboard.writeText(t); return true; }
+  }catch(e){}
+  // Sin el portapapeles moderno (http de la red local, navegadores viejos)
+  try{
+    const antes = document.activeElement;
+    const ta = document.createElement('textarea');
+    ta.value = t; ta.setAttribute('readonly', ''); ta.setAttribute('aria-hidden', 'true');
+    ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0';
+    // Adentro de la ventana: el foco no puede salir de ella
+    (document.querySelector('#ficha .caja') || document.body).appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    try{ antes?.focus({preventScroll:true}); }catch{}
+    return !!ok;
+  }catch(e){ return false; }
+}
+
+let relojBrindis = 0;
+function brindis(texto, largo){
+  let b = document.getElementById('brindis');
+  const nuevo = !b;
+  if(nuevo){
+    b = document.createElement('div');
+    b.id = 'brindis'; b.className = 'brindis';
+    b.setAttribute('role', 'status');
+    document.body.appendChild(b);
+  }
+  const poner = () => {
+    b.textContent = texto;
+    b.classList.toggle('largo', !!largo);
+    b.classList.add('ver');
+    clearTimeout(relojBrindis);
+    relojBrindis = setTimeout(() => b.classList.remove('ver'), largo ? 9000 : 2200);
+  };
+  // Recién creado, el texto va un momento después: si no, el lector de
+  // pantalla no anuncia lo que ya estaba al aparecer el role="status"
+  if(nuevo) setTimeout(poner, 60); else poner();
+}
+
+/* ---------- La foto en grande (29/09, muestra 4.4 B) ----------
+   La foto de la ficha se veía a unos 330 px en la compu, y el archivo mide
+   900. El visor la muestra a pantalla completa, en la compu y en el celular,
+   con el fondo claro de la ficha. Es la misma foto que está en la ficha (la
+   del color elegido, si la hay). Se cierra con la X, tocando afuera o con Esc,
+   y en el celular también con el Atrás, como la ficha y el pedido; ahí,
+   además, se pellizca para agrandar más. */
+const ICONO_LUPA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8M10.5 7.8v5.4M7.8 10.5h5.4"/></svg>';
+const htmlLupa = () =>
+  `<button type="button" class="fi-lupa" aria-label="Ver la foto en grande" title="Ver la foto en grande">${ICONO_LUPA}</button>`;
+
+function abrirVisor(d){
+  const img = d.querySelector('.fi-marco > img');
+  const src = img && (img.currentSrc || img.getAttribute('src'));
+  if(!src || cerrarVisorDOM) return;
+  const p = buscarProducto(FICHA), m = FICHA_MODELO;
+  const rotulo = [p && p.marca, m && p ? partirNombreFicha(m, p).nombre : '', COLOR_FICHA]
+    .filter(Boolean).join(' · ');
+  const previo = document.activeElement;
+  const x = document.createElement('div');
+  x.id = 'visor';
+  x.setAttribute('role', 'dialog'); x.setAttribute('aria-modal', 'true'); x.setAttribute('aria-label', 'Foto en grande');
+  x.innerHTML = `<span class="visor-rot">${esc(rotulo)}</span>
+    <button class="fi-cerrar" type="button" aria-label="Cerrar la foto">&times;</button>
+    <div class="vi"><img src="${esc(src)}" alt="${esc(img.alt || rotulo)}"></div>
+    <span class="visor-pie">${esCelular() ? 'Pellizcá para agrandar más' : 'Tocá afuera o apretá Esc para cerrar'}</span>`;
+  const X = x.querySelector('.fi-cerrar');
+  /* Esc y Tab los atiende el visor antes que nadie (en la captura de window):
+     el Esc de la ficha la cerraba entera, y el Tab se iba a la ficha de atrás */
+  const porTecla = e => {
+    if(e.key !== 'Escape' && e.key !== 'Tab') return;
+    e.preventDefault(); e.stopPropagation();
+    if(e.key === 'Escape') cerrar(); else X.focus();
+  };
+  // Y si algo manda el foco afuera (la caja de la ficha, que se enfoca en un
+  // requestAnimationFrame al abrirla), vuelve a la X: el visor tapa todo
+  const retener = e => { if(!x.contains(e.target)) X.focus({preventScroll:true}); };
+  const quitar = () => {
+    if(!x.isConnected) return;
+    document.removeEventListener('focusin', retener);
+    x.remove();
+    removeEventListener('keydown', porTecla, true);
+    cerrarVisorDOM = null;
+    const volver = previo && previo !== document.body && previo.isConnected ? previo : d.querySelector('.caja');
+    try{ volver?.focus({preventScroll:true}); }catch{}
+  };
+  const cerrar = () => {
+    if(visorEmpujado){ visorEmpujado = false; history.back(); }   // el popstate lo saca
+    else quitar();
+  };
+  addEventListener('keydown', porTecla, true);
+  x.addEventListener('click', e => { if(e.target.tagName !== 'IMG') cerrar(); });
+  document.body.appendChild(x);
+  cerrarVisorDOM = quitar;
+  try{ history.pushState({ visor: true }, '', location.href); visorEmpujado = true; }
+  catch{ visorEmpujado = false; }
+  X.focus({preventScroll:true});
+  document.addEventListener('focusin', retener);
+}
+
+/* ---------- Todas las versiones juntas (29/09, muestra 4.3 C) ----------
+   El iPhone 17 Pro tiene 18 filas en ADVAPP, y para saber precio y stock de
+   cada una había que tocar memoria, versión y color, de a una. Pedro eligió
+   una lista partida por memoria, como las pestañas: se lee como se pregunta
+   ("¿el de 512 azul?") y cada memoria muestra sus precios juntos. Arranca
+   cerrada y sólo está en los modelos con TODAS_DESDE versiones o más (26 el
+   día de la muestra). Adentro de cada memoria, primero lo que tiene stock y
+   después por precio. Los precios van tal cual vienen de ADVAPP: no se
+   juntan, no se corrigen y no se marcan; con todos a la vista se ve de una
+   si alguno quedó mal cargado, y eso se corrige en ADVAPP.
+   Los grupos siguen a las pestañas: por memoria si la ficha tiene la pestaña
+   Memoria; por versión si tiene una sola fila de pestañas; y sin grupos si
+   no tiene ninguna (las versiones son colores, como el Watch Ultra 3). */
+const TODAS_DESDE = 6;
+const ICONO_BAJAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+
+// [{ rot, filas: [{ x: la fila, version: lo que dice su pestaña de versión }] }]
+function gruposDeVersiones(m){
+  const { versiones, reales } = versionesDelModelo(m);
+  const con = version => x => ({ x, version });
+  if(reales.length < 2) return [{ rot: '', filas: m.variantes.map(con('')) }];
+  const enReales = new Set(reales.map(([op]) => op));
+  const sueltas = [...versiones.entries()].filter(([op]) => !enReales.has(op)).flatMap(([, g]) => g);
+  const mems = [...new Set(reales.map(([op]) => memoriaDeOpcion(op)))];
+  let grupos;
+  if(mems.length < 2 || !mems.every(Boolean)){
+    grupos = reales.map(([op, g]) => ({ rot: op, filas: g.map(con('')) }));
+  } else {
+    grupos = [...mems].sort((a, b) => enGB(a) - enGB(b)).map(mm => {
+      const hermanas = reales.filter(([op]) => memoriaDeOpcion(op) === mm);
+      const et = hermanas.length > 1 ? etiquetasDeVersion(hermanas) : [];
+      return { rot: mm, filas: hermanas.flatMap(([, g], i) => g.map(con(et[i] || ''))) };
+    });
+  }
+  if(sueltas.length) grupos.push({ rot: '', filas: sueltas.map(con('')) });
+  return grupos;
+}
+
+function htmlTodasFicha(m, v){
+  const vs = m.variantes || [];
+  if(!m.multi || vs.length < TODAS_DESDE) return '';
+  const elegida = clave(v);
+  const gb = x => enGB(memoriaDeOpcion(x.opcion || x.etiqueta || ''));
+  const orden = (a, b) => (b.x.stock ? 1 : 0) - (a.x.stock ? 1 : 0)
+    || ((a.x.precio ?? Infinity) - (b.x.precio ?? Infinity) || 0)
+    || gb(a.x) - gb(b.x) || a.version.localeCompare(b.version)
+    || String(a.x.color || '').localeCompare(String(b.x.color || ''));
+  const renglon = ({ x, version }) => {
+    const colores = partirColores(x.color);
+    const texto = [version, colores.join(' / ') || x.opcion || x.etiqueta || ''].filter(Boolean).join(' · ');
+    // El puntito sólo si sabemos pintar el color: no se inventa un tono
+    const puntos = pintas(x.color).filter(c => c.hex)
+      .map(c => `<span class="pinta" style="background:${esc(c.hex)}"></span>`).join('');
+    return `<button type="button" class="fi-fila${x.stock ? '' : ' agotada'}" data-k="${esc(clave(x))}"${
+      colores.length === 1 ? ` data-color="${esc(colores[0])}"` : ''} aria-pressed="${clave(x) === elegida}">
+      <span class="q"><b>${puntos}<span class="t">${esc(texto)}</span></b><i>${x.stock ? 'En stock' : 'Sin stock'}</i></span>
+      <span class="p">${precioUSD(x)}</span></button>`;
+  };
+  const lista = gruposDeVersiones(m).map(g => (g.rot ? `<div class="fi-grupo">${esc(g.rot)}</div>` : '') +
+    [...g.filas].sort(orden).map(renglon).join('')).join('');
+  const hay = vs.filter(x => x.stock).length;
+  return `<details class="fi-todas"${TODAS_ABIERTA ? ' open' : ''}>
+    <summary>Ver las ${vs.length} versiones${ICONO_BAJAR}<span class="cuenta">${hay} con stock</span></summary>
+    <div class="fi-lista">${lista}</div></details>`;
 }
 
 /* ---------- Armar pedido ----------
@@ -9361,15 +11085,30 @@ const itemsPedido = () => PEDIDO
   .map(l => { const p = buscarProducto(l.k); return p ? {p, n:l.n, color:l.color} : null; })
   .filter(Boolean);
 
-const totalPedido    = () => itemsPedido().reduce((s,it) => s + (it.p.precio || 0) * it.n, 0);
+/* Lo sin stock no suma (29/09, muestra 2.6 B). Desde ese día no se puede
+   agregar, pero lo que ya estaba guardado y se quedó sin stock sigue en la
+   lista, marcado, sin borrarse: el cliente decide si lo saca. Hasta que lo
+   saque, no entra al total y el mensaje lo pide como aviso. */
+const totalPedido    = () => itemsPedido().reduce((s,it) => s + (it.p.stock ? (it.p.precio || 0) * it.n : 0), 0);
 const unidadesPedido = () => itemsPedido().reduce((s,it) => s + it.n, 0);
-const hayAConsultar  = () => itemsPedido().some(it => it.p.precio === null);
+const hayAConsultar  = () => itemsPedido().some(it => it.p.stock && it.p.precio === null);
+const sinStockPedido = () => itemsPedido().filter(it => !it.p.stock).length;
+/* Todo lo del pedido se quedó sin stock (29/09, revisión de la 2.6): no hay
+   total que dar. Decía "USD 0 · ≈ $ 0", que se lee como un precio de cero:
+   la barra, el total de la lista y el mensaje no ponen el monto. */
+const soloSinStockPedido = () => { const it = itemsPedido(); return it.length > 0 && it.every(x => !x.p.stock); };
 
 function guardarPedido(){ try{ localStorage.setItem(PEDIDO_KEY, JSON.stringify(PEDIDO)); }catch{} }
 
 function togglePedido(k, color){
   const i = PEDIDO.findIndex(l => l.k === k);
-  if(i === -1) PEDIDO.push({k, n:1, color: color || ''});
+  if(i === -1){
+    // Sin stock no entra (2.6 B), venga de donde venga: el + de la tarjeta ya
+    // no está, la ficha deja sólo "Avisame cuando entre", y esto cubre el resto
+    const p = buscarProducto(k);
+    if(p && !p.stock) return;
+    PEDIDO.push({k, n:1, color: color || ''});
+  }
   else PEDIDO.splice(i, 1);
   guardarPedido();
   pintarPedido();
@@ -9381,6 +11120,8 @@ function togglePedido(k, color){
 function cambiarCant(k, delta){
   const l = lineaPedido(k);
   if(!l) return;
+  // Lo que se quedó sin stock se puede bajar o sacar, pero no sumar (2.6 B)
+  if(delta > 0 && buscarProducto(k)?.stock === false) return;
   const n = l.n + delta;
   if(n < 1){ togglePedido(k); return; }
   l.n = Math.min(MAX_CANT, n);
@@ -9404,7 +11145,9 @@ function limpiarPedido(){
      congelada y no tiene 262 de los productos de ADVAPP: una caída momentánea
      de ADVAPP borraba para siempre esas líneas del pedido guardado (un 17 Pro
      Max 2TB, un iPad Pro M5), y al volver ADVAPP ya no estaban. Mientras dura
-     el respaldo, itemsPedido() las esconde sin borrarlas y vuelven solas. */
+     el respaldo, itemsPedido() las esconde sin borrarlas y vuelven solas.
+     Desde el 29/09 el respaldo es la copia de este navegador (1.1 B), que
+     puede ser de horas atrás: con ella tampoco se poda. */
   if(ADVAPP_URL && (!FUENTE || FUENTE.fuente !== 'advapp')){ pintarPedido(); return; }
   const antes = PEDIDO.length;
   PEDIDO = PEDIDO.filter(l => buscarProducto(l.k));
@@ -9445,11 +11188,17 @@ function refrescarBotonesPedido(){
    tenía cargada otra versión de ese mismo modelo, el botón la saca: si no,
    tocar "quitar" no haría nada visible y quedarían dos líneas del mismo
    producto sin que se entienda por qué. */
+/* La versión es la de la clave, no siempre la del "desde" del modelo (29/09,
+   muestra 2.1 B): con un filtro de versión puesto, la tarjeta lleva la clave
+   de la más barata CON stock entre las que cumplen el filtro (vistaFiltrada),
+   y el + tiene que cargar esa. Sin filtro, la clave de la tarjeta es la del
+   representante, así que no cambia nada. Si está agotada, togglePedido no la
+   agrega (2.6 B). */
 function togglePedidoModelo(k){
   const m = buscarModelo(k);
   if(!m) return togglePedido(k);
   const cargadas = m.variantes.filter(v => enPedido(clave(v)));
-  if(!cargadas.length) return togglePedido(clave(m.rep));
+  if(!cargadas.length) return togglePedido(m.variantes.some(v => clave(v) === k) ? k : clave(m.rep));
   cargadas.forEach(v => togglePedido(clave(v)));
 }
 
@@ -9465,15 +11214,33 @@ function mensajePedido(){
     /* Con varias unidades el número es el subtotal, y se dice cuánto es cada
        una (29/09): "x2 — USD 260" no aclaraba si 260 era el precio o el total.
        Igual que la lista del pedido, que ya muestra el "c/u". */
+    /* Lo que se quedó sin stock va como aviso y no suma (2.6 B): el vendedor
+       lo lee y no tiene que desarmar el pedido. */
+    if(!p.stock) return l + ' — sin stock (avisame cuando entre)';
     return l + ' — ' + (p.precio === null ? 'a consultar'
       : 'USD ' + plata(p.precio * it.n) + (it.n > 1 ? ` (USD ${plata(p.precio)} c/u)` : ''));
   });
   const total = totalPedido();
-  let cola = `Total: USD ${plata(total)}`;
-  if(TC) cola += ` (aprox. $ ${plata(Math.round(total * TC))})`;
-  if(hayAConsultar()) cola += ', más los productos a consultar';
-  return `Hola! Te paso mi pedido:\n\n${lineas.join('\n')}\n\n${cola}`;
+  let cola = '';
+  // Todo sin stock: sin "Total: USD 0"; cada renglón ya dice "sin stock"
+  if(!soloSinStockPedido()){
+    cola = `Total: USD ${plata(total)}`;
+    if(TC) cola += ` (aprox. $ ${plata(Math.round(total * TC))})`;
+    if(hayAConsultar()) cola += ', más los productos a consultar';
+    if(sinStockPedido()) cola += ', más los productos sin stock';
+  }
+  // Con la copia, el vendedor sabe de qué hora es cada precio (29/09, 1.5 A)
+  const h = horaDeLaCopiaALaVista();
+  if(h) cola += (cola ? '\n' : '') + `Precios de las ${hhmm(h)}, a confirmar.`;
+  return `Hola! Te paso mi pedido:\n\n${lineas.join('\n')}` + (cola ? `\n\n${cola}` : '');
 }
+
+/* La hora de los precios en pantalla si son los de la copia de este navegador
+   (la de entrada o la que quedó porque ADVAPP no contesta); 0 si son los de
+   ahora. Pedro eligió el 29/09 que entonces el total y el mensaje lo digan
+   (muestra 1.5 A): el cliente ve cuánto gasta y el vendedor sabe de qué hora
+   es cada precio. */
+const horaDeLaCopiaALaVista = () => (FUENTE && FUENTE.fuente === 'copia' && HORA_DATOS) || 0;
 
 function pintarPedido(){
   const items = itemsPedido();
@@ -9484,18 +11251,64 @@ function pintarPedido(){
   // Cuenta unidades, no líneas: si el cliente cargó tres iPhone iguales, el
   // botón tiene que decir tres.
   $('bp-ver').textContent = `Ver pedido (${u})`;
-  $('bp-usd').textContent = 'USD ' + plata(total) + (hayAConsultar() ? ' +' : '');
-  $('bp-ars').textContent = TC ? '$ ' + plata(Math.round(total * TC)) : '';
+  const nada = soloSinStockPedido();      // sin monto: ver soloSinStockPedido
+  $('bp-usd').textContent = nada ? 'Sin stock' : 'USD ' + plata(total) + (hayAConsultar() ? ' +' : '');
+  $('bp-ars').textContent = TC && !nada ? '$ ' + plata(Math.round(total * TC)) : '';
+  // El "≈ " lo pone el CSS (#bp-ars::before) y se va en el celular (2.2 B)
+  $('bp-ars').title = TC && !nada ? REF_PESOS : '';
+  // Con la copia a la vista, abajo del total: "Precios de las 01:52 · a confirmar" (1.5 A)
+  const h = horaDeLaCopiaALaVista();
+  $('barra-pedido').classList.toggle('con-aviso', !!h);
+  $('bp-aviso').hidden = !h;
+  $('bp-aviso-txt').textContent = h ? `Precios de las ${hhmm(h)} · a confirmar` : '';
   $('bp-enviar').href = linkWA(mensajePedido());
 }
 
 let pedidoEmpujado = false;   // ¿abrir el pedido sumó una entrada al historial?
 let cerrarPedidoDOM = null;   // saca la lista de la pantalla, sin tocar el historial
 
+/* ¿La línea tiene algo para cambiar desde su ficha? (Pedro eligió B el 29/09,
+   muestra 5.1: el renglón "Cambiar versión o color" va sólo ahí). Sí si el modelo tiene
+   otra fila que se pueda cargar (otra memoria, otra versión u otro color con
+   su precio) o si la fila misma trae más de un color. Una versión agotada no
+   cuenta: la ficha no la deja agregar (2.6 B) y el renglón prometería algo
+   que no se puede hacer. Los AirPods o una consola de una sola fila y un
+   color no lo llevan, pero igual abren su ficha. */
+function hayParaCambiar(p){
+  const m = buscarModelo(clave(p));
+  const otra = !!m && m.variantes.some(x => clave(x) !== clave(p) && x.stock);
+  return otra || pintas(p.color).length > 1;
+}
+
+/* De la línea del pedido a su ficha (5.1 B). Primero se cierra el pedido y
+   después se abre la ficha, en la versión de la línea y con su color
+   (abrirFicha lo toma de colorDe): nunca dos ventanas una arriba de la otra.
+   Al cerrar la ficha se queda en la página; el pedido se vuelve a abrir desde
+   la barra de abajo. El pedido había sumado una entrada al historial (ver
+   abrirPedido): la ficha la reemplaza con su #p=, así la X, el Escape o el
+   Atrás de la ficha vuelven a la página de antes y no queda una entrada del
+   pedido por delante ni por detrás. */
+function abrirDesdePedido(k){
+  if(!buscarModelo(k)) return;
+  const empujado = pedidoEmpujado;
+  pedidoEmpujado = false;
+  const c = cerrarPedidoDOM; cerrarPedidoDOM = null;
+  c?.();
+  if(empujado){ abrirFicha(k, false); if(FICHA) fichaEmpujada = true; }
+  else abrirFicha(k);
+}
+
 function abrirPedido(){
   if(document.getElementById('pedido')) return;
   const d = document.createElement('div');
   d.id = 'pedido'; d.className = 'modal';
+  /* Lo que había antes de "Vaciar el pedido" (Pedro eligió B el 29/09, muestra 5.4): vacía
+     de una y "Deshacer" lo devuelve tal cual (los mismos productos, colores,
+     unidades y orden) mientras la ventana siga abierta. No se va solo: en el
+     celular un aviso que desaparece es fácil de perder. Si se cierra la
+     ventana, se entiende que lo quería vaciar. Nada del cartel del navegador
+     ("¿Estás seguro?"), que en el iPhone se ve ajeno a la página. */
+  let vaciado = null;
 
   const dibujar = () => {
     /* Cada toque redibuja la lista entera, y el botón que tenía el foco
@@ -9509,8 +11322,14 @@ function abrirPedido(){
     const kFoco = tenia ? (f.closest('.pd-item')?.dataset.key || '') : '';
     const dFoco = tenia ? (f.dataset.d || '') : '';
     const items = itemsPedido(), total = totalPedido();
+    // Si otra pestaña cargó algo mientras tanto, ya no hay nada que deshacer
+    if(vaciado && items.length) vaciado = null;
     // tabindex en el HTML: la caja se rehace en cada dibujo y pierde el que le
     // pone montarModal, y es a donde vuelve el foco cuando no hay otro lugar
+    /* La foto y el nombre abren la ficha (5.1 B). La foto va fuera del Tab
+       (tabindex -1): el nombre hace lo mismo y es la parada del teclado, así
+       no son dos paradas por línea. Adentro de un <button> sólo va texto en
+       línea: por eso .pd-txt pasó de div a span (se ve igual, display:block). */
     d.innerHTML = `
       <div class="caja" role="dialog" aria-modal="true" aria-label="Tu pedido" tabindex="-1">
         <h3>Tu pedido</h3>
@@ -9525,30 +11344,39 @@ function abrirPedido(){
           const version = [x.sim, x.teclado].filter(Boolean).join(' · ');
           return `
           <div class="pd-item" data-key="${esc(clave(p))}">
-            ${p.imagen ? `<img class="pd-foto" src="${esc(p.imagen)}" alt="" onerror="this.remove()">` : ''}
-            <div class="pd-txt">
+            ${p.imagen ? `<button type="button" class="pd-abre pd-abre-foto" tabindex="-1" aria-label="Ver ${quien}"><img class="pd-foto" src="${esc(p.imagen)}" alt="" onerror="this.remove()"></button>` : ''}
+            <button type="button" class="pd-abre pd-abre-txt"><span class="pd-txt">
               <b>${esc(p.desc)}</b>
               <i>${esc(p.marca)}</i>
               ${version ? `<span class="pd-color">${esc(version)}</span>` : ''}
               ${color ? `<span class="pd-color">Color: ${esc(color)}</span>` : ''}
-            </div>
-            ${htmlStepper(n, quien)}
-            <span class="pd-precio">${p.precio === null ? 'Consultar' : 'USD ' + plata(p.precio * n)}
-              ${n > 1 && p.precio !== null ? `<i>USD ${plata(p.precio)} c/u</i>` : ''}</span>
+              ${hayParaCambiar(p) ? '<span class="pd-cambiar">Cambiar versión o color</span>' : ''}
+            </span></button>
+            ${htmlStepper(n, quien, !p.stock)}
+            ${!p.stock
+              /* Se quedó sin stock después de guardarlo (2.6 B): marcado y sin
+                 sumar, como lo dibuja la muestra; la cruz lo saca */
+              ? `<span class="pd-precio sin-stock"><span class="badge no">Sin stock</span><i>no suma al total</i></span>`
+              : `<span class="pd-precio">${p.precio === null ? 'Consultar' : 'USD ' + plata(p.precio * n)}
+              ${n > 1 && p.precio !== null ? `<i>USD ${plata(p.precio)} c/u</i>` : ''}</span>`}
             <button class="pd-quitar" type="button" aria-label="Quitar ${quien} del pedido">&times;</button>
           </div>`; }).join('')
-        : '<p class="pd-vacio">Todavía no agregaste nada. Tocá el + en cualquier producto.</p>'}
+        : vaciado
+          ? `<div class="pd-deshecho" aria-live="polite"><p id="pd-deshecho-txt">Vaciaste el pedido.</p>
+              <button type="button" id="pd-deshacer" aria-describedby="pd-deshecho-txt">Deshacer</button></div>`
+          : '<p class="pd-vacio">Todavía no agregaste nada. Tocá el + en cualquier producto.</p>'}
         ${items.length ? `
           <div class="pd-total">
             <span>Total</span>
-            <div><b>USD ${plata(total)}</b>${TC ? `<i>$ ${plata(Math.round(total*TC))}</i>` : ''}</div>
+            <div>${soloSinStockPedido()
+              ? `<i class="pd-mas">${sinStockPedido()} producto${sinStockPedido() > 1 ? 's' : ''} sin stock</i>`
+              : `<b>USD ${plata(total)}</b>${TC ? `<i>${htmlPesos(Math.round(total*TC))}</i>` : ''}${
+              sinStockPedido() ? `<i class="pd-mas">más ${sinStockPedido()} producto${sinStockPedido() > 1 ? 's' : ''} sin stock</i>` : ''}`}</div>
           </div>` : ''}
-        <div class="botones">
-          <button type="button" class="sec" id="pd-vaciar"${items.length ? '' : ' disabled'}>Vaciar</button>
-          ${WHATSAPP && items.length
-            ? `<a class="pri" href="${linkWA(mensajePedido())}" target="_blank" rel="noopener">Enviar por WhatsApp</a>`
+        ${items.length ? `${WHATSAPP
+            ? `<div class="botones"><a class="pri" href="${linkWA(mensajePedido())}" target="_blank" rel="noopener">Enviar por WhatsApp</a></div>`
             : ''}
-        </div>
+          <button type="button" class="pd-link" id="pd-vaciar">Vaciar el pedido</button>` : ''}
       </div>`;
 
     d.querySelectorAll('.pd-quitar').forEach(b => b.onclick = () => {
@@ -9559,15 +11387,32 @@ function abrirPedido(){
       cambiarCant(b.closest('.pd-item').dataset.key, Number(b.dataset.d));
       dibujar();
     });
+    d.querySelectorAll('.pd-abre').forEach(b => b.onclick = () =>
+      abrirDesdePedido(b.closest('.pd-item').dataset.key));
     const v = d.querySelector('#pd-vaciar');
     if(v) v.onclick = () => {
+      vaciado = PEDIDO.map(l => ({ ...l }));
       PEDIDO = []; guardarPedido(); pintarPedido(); refrescarBotonesPedido(); dibujar();
+      // El foco, a "Deshacer": con el teclado se deshace con un Enter
+      d.querySelector('#pd-deshacer')?.focus({preventScroll:true});
+    };
+    const u = d.querySelector('#pd-deshacer');
+    if(u) u.onclick = () => {
+      const antes = vaciado || [];
+      vaciado = null;
+      // Lo que otra pestaña haya guardado mientras tanto queda, detrás
+      const ya = new Set(antes.map(l => l.k));
+      PEDIDO = antes.concat(PEDIDO.filter(l => !ya.has(l.k)));
+      guardarPedido(); pintarPedido(); refrescarBotonesPedido(); dibujar();
     };
 
     if(tenia){
       let x = kFoco && dFoco
         ? d.querySelector(`.pd-item[data-key="${CSS.escape(kFoco)}"] .stepper button[data-d="${CSS.escape(dFoco)}"]`)
         : null;
+      // El nombre de la línea (5.1 B) también es un botón: vuelve a él
+      if(!x && kFoco && f.classList.contains('pd-abre-txt'))
+        x = d.querySelector(`.pd-item[data-key="${CSS.escape(kFoco)}"] .pd-abre-txt`);
       if(!x || x.disabled) x = d.querySelector('.caja');
       x?.focus({preventScroll:true});
     }
@@ -9639,23 +11484,32 @@ function candidatosSug(txt){
     if(/^accesorio/.test(norm(m.cat)) && !inicio.every(re => re.test(cabeza))) s -= 2;
     return s;
   };
-  const prods = MODELOS
+  /* Busca donde busca la grilla (29/09, muestra 3.1 B): con un rubro
+     abierto, en el rubro, con los filtros puestos y cada modelo en la versión
+     del filtro (listaDeLaGrilla, 2.1 B). Buscaba en todo el catálogo: en
+     Celulares, "airpods" sugería 4 AirPods y la grilla decía que no había
+     nada. Si en el rubro no hay nada y en todo el catálogo sí, `todo` es la
+     salida del vacío (salidaDelVacio), la misma que ofrece la grilla. */
+  const enLaGrilla = listaCon({ q: txt });
+  const prods = enLaGrilla
     .filter(m => m.stock && coincide(m, palabras))
     .map(m => [m, puntaje(m)])
     .sort((a, b) => b[1] - a[1] || (b[0].imagen ? 1 : 0) - (a[0].imagen ? 1 : 0) || a[0].idx - b[0].idx)
     .map(x => x[0])
     .slice(0, SUG_MAX);
+  const salida = filtros.cat && !enLaGrilla.length ? salidaDelVacio(txt) : null;
+  const todo = salida && salida.tipo === 'todo' ? salida : null;
 
-  return {cats, prods};
+  return {cats, prods, todo};
 }
 
 function pintarSug(){
   const caja = $('q-sug');
   if(!caja) return;
-  const {cats, prods} = candidatosSug($('q').value);
+  const {cats, prods, todo} = candidatosSug($('q').value);
   sugIdx = -1;
 
-  if(!cats.length && !prods.length){ cerrarSug(); return; }
+  if(!cats.length && !prods.length && !todo){ cerrarSug(); return; }
 
   /* role="option" con id, fuera del Tab (el foco se queda en #q y las flechas
      marcan con aria-activedescendant, ver moverSug): así el lector anuncia
@@ -9676,7 +11530,15 @@ function pintarSug(){
         <span class="qs-txt"><b>${esc(m.desc)}</b><i>${esc(m.marca)} · ${
           m.precio === null ? 'Consultar'
           : (m.multi && m.precio !== m.precioMax ? 'desde ' : '') + 'USD ' + plata(m.precio)}</i></span>
-      </button>`).join('');
+      </button>`).join('') +
+    /* En el rubro no hay nada y en todo el catálogo sí (3.1 B): lo mismo que
+       dice la grilla, con el mismo número. El rótulo no es una opción: lo lee
+       el lector como descripción del renglón. */
+    (todo ? `<span class="qs-nada" id="qs-nada">En ${esc(plural(filtros.cat))} no hay “${esc($('q').value.trim())}”</span>
+      <button class="qs qs-cat qs-todo" type="button" ${opcion(cats.length + prods.length)} data-todo aria-describedby="qs-nada">
+        <span class="qs-ic">▸</span>
+        <span class="qs-txt"><b>Buscar “${esc($('q').value.trim())}” en todo el catálogo${todo.sinFiltros ? ', sin filtros' : ''}</b><i>${todo.n} producto${todo.n !== 1 ? 's' : ''}</i></span>
+      </button>` : '');
 
   caja.hidden = false;
   $('q').setAttribute('aria-expanded', 'true');
@@ -9686,11 +11548,14 @@ function pintarSug(){
       filtros.cat = b.dataset.cat;
       soltarMarcaAjena();      // Apple puesta y "Consolas": quedaba en 0 (29/09)
       filtros.q = ''; $('q').value = ''; $('clear').hidden = true;
+      soltarPrecioSinResultados(filtros.cat);   // 3.4 B, como la cinta
       rendirCintaAuto();
       [...$('cats').querySelectorAll('.chip')].forEach(x =>
         x.setAttribute('aria-pressed', String(x.dataset.cat === filtros.cat)));
       aplicarFiltro(true);
       centrarChipElegido();   // el chip marcado quedaba fuera de la cinta (29/09)
+    }else if(b.hasAttribute('data-todo')){
+      usarSalida(true);       // "Buscar … en todo el catálogo" (3.1 B)
     }else{
       abrirFicha(b.dataset.key);
     }
@@ -9824,6 +11689,8 @@ grid.addEventListener('load', e => {
 }, true);
 
 grid.addEventListener('click', e => {
+  // La salida de la grilla vacía (3.1 B y 3.2 B)
+  if(e.target.closest('[data-salida]')){ usarSalida(false); return; }
   const card = e.target.closest('.card');
   if(!card) return;
   if(e.target.closest('.mas')){ togglePedidoModelo(card.dataset.key); return; }
@@ -10261,6 +12128,85 @@ if(WHATSAPP){
   wf.hidden = false;
 }
 
+/* ---------- El pie con el contacto (29/09, muestra 6.7 B) ----------
+   "Advance Tecno · Av. De los Incas 5150, 1A, CABA · Ver en mapa · WhatsApp
+   +54 9 11 2262-0770 · Atención con cita previa", arriba de la cotización,
+   como la muestra B que eligió Pedro. Todo sale de la configuración: la
+   dirección es DIRECCION y el mapa es MAPA (las mismas de la pregunta
+   "¿Puedo ir a verlos o retirar en persona?"), el número es WHATSAPP y el
+   link es el del botón flotante (el mismo número y el mismo saludo); "con
+   cita previa" va solo si el retiro de SERVICIO lo dice. Lo que quede vacío
+   no se muestra, y sin nada la línea no aparece. Horario, redes y razón
+   social los tiene que pasar Pedro (esa es la opción C). */
+// 5491122620770 → "+54 9 11 2262-0770". Un número con otra forma va con el + y nada más.
+const telefonoLegible = n => {
+  const r = /^549(11)(\d{4})(\d{4})$/.exec(String(n || ''));
+  return r ? `+54 9 ${r[1]} ${r[2]}-${r[3]}` : '+' + n;
+};
+// datos: { direccion, mapa } en lugar de DIRECCION y MAPA (las pruebas miran
+// que lo vacío no se muestre: las constantes no se pueden vaciar)
+function pintarPie(datos = {}){
+  const pie = $('pie-id');
+  if(!pie) return;
+  const flotante = $('wa-flotante');
+  const wa = WHATSAPP && flotante ? (flotante.getAttribute('href') || '') : '';
+  const cita = /cita previa/i.test((SERVICIO.retiro || []).join(' '));
+  const dir = String(('direccion' in datos ? datos.direccion : (typeof DIRECCION === 'string' ? DIRECCION : '')) || '').trim();
+  const mapa = String(('mapa' in datos ? datos.mapa : (typeof MAPA === 'string' ? MAPA : '')) || '').trim();
+  const partes = [];
+  if(dir) partes.push(`<span>${esc(dir)}</span>`);
+  if(/^https:\/\//i.test(mapa)) partes.push(`<a href="${esc(mapa)}" target="_blank" rel="noopener">Ver en mapa</a>`);
+  if(wa) partes.push(`<a href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp ${esc(telefonoLegible(WHATSAPP))}</a>`);
+  if(cita) partes.push('<span>Atención con cita previa</span>');
+  pie.hidden = !partes.length;
+  pie.innerHTML = partes.length
+    ? ['<b>Advance Tecno</b>', ...partes].join('<span class="sep" aria-hidden="true">·</span>') : '';
+}
+pintarPie();
+
+/* ---------- El color de la barra del navegador (29/09, muestra 6.2 C) ----------
+   El celular pinta su barra de arriba del color que le pide la página. Pedro
+   eligió que cambie sola: grafito mientras se ve la barra de arriba (así
+   abre la página, sin el corte blanco de antes) y el lila de la página
+   cuando ya no se ve, que es cuando queda pegada la cinta de rubros. No
+   escucha el scroll: el observador avisa solo cuando algo oscuro entra o
+   sale del borde de arriba. Si en un celular de verdad parpadea al bajar, la
+   opción B es dejar el lila fijo en la etiqueta y borrar esto.
+   (29/09, revisión) Sigue a lo que está debajo del borde de arriba, no solo
+   a la barra: en el celular, después de la barra viene la banda grafito de
+   Destacados (.ofertas > .wrap) y la cinta recién se pega después. Mirando
+   solo la barra, la etiqueta pasaba a lila con la banda oscura arriba: casi
+   una pantalla de corte, y la muestra C prometía "sin corte en ningún
+   momento". Ahora es grafito mientras la barra o esa banda crucen el borde
+   de arriba (el observador mira una línea: rootMargin -100% abajo), y lila
+   si no.
+   Lo que hace cada aviso va colgado del observador (BARRA_NAV.avisar y
+   BARRA_NAV.decidir), como en vigilarVista: las pruebas lo llaman directo,
+   porque el Chrome sin ventana deja de mirar la vista después de cargar. */
+const COLOR_BARRA_ARRIBA = '#151220';   // el grafito de .topbar
+const COLOR_BARRA_CINTA  = '#F4EFFD';   // el lila de la página (--paper), el de la cinta
+let BARRA_NAV = null;
+function seguirBarraDelNavegador(){
+  const meta = document.querySelector('meta[name="theme-color"]');
+  const barra = document.querySelector('.topbar');
+  if(!meta || !barra || typeof IntersectionObserver !== 'function') return;
+  // Lo grafito que puede quedar arriba de todo: la barra y la banda de Destacados
+  const oscuras = [barra, document.querySelector('.ofertas > .wrap')].filter(Boolean);
+  const avisar = oscuro => meta.setAttribute('content', oscuro ? COLOR_BARRA_ARRIBA : COLOR_BARRA_CINTA);
+  // ¿Alguna cruza el borde de arriba? (escondida mide 0 y no cuenta)
+  const decidir = () => avisar(oscuras.some(x => {
+    const r = x.getBoundingClientRect();
+    return r.height > 0 && r.top <= 0 && r.bottom > 0;
+  }));
+  BARRA_NAV = new IntersectionObserver(decidir, { rootMargin: '0px 0px -100% 0px' });
+  BARRA_NAV.avisar = avisar;
+  BARRA_NAV.decidir = decidir;
+  BARRA_NAV.barra = barra;
+  BARRA_NAV.oscuras = oscuras;
+  oscuras.forEach(x => BARRA_NAV.observe(x));
+}
+seguirBarraDelNavegador();
+
 /* ---------- Controles del carrusel ---------- */
 $('of-prev').onclick = () => { irOferta(ofIndice - 1); arrancarOfertas(); };
 $('of-next').onclick = () => { irOferta(ofIndice + 1); arrancarOfertas(); };
@@ -10503,7 +12449,8 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
   document.addEventListener('click', e => {
     try{
       const a = e.target.closest && e.target.closest('a[href*="wa.me/"]');
-      if(!a) return;
+      // La consulta de la grilla vacía se anota como "pedilo" (ver abajo)
+      if(!a || a.hasAttribute('data-pedilo')) return;
       /* (29/09) Las preguntas son #ayuda: '.faq' no existía más y ese clic
          llegaba como 'otro'. Y el "Consultar" de Recién llegados (.nv-tarj)
          también era 'otro' y sin producto: la tarjeta trae el mismo data-key. */
@@ -10512,7 +12459,8 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
         : a.closest('#ficha') ? 'ficha'
         : a.closest('.card') ? 'tarjeta'
         : a.closest('.nv-tarj') ? 'nuevos'
-        : a.closest('#ayuda') ? 'preguntas' : 'otro';
+        : a.closest('#ayuda') ? 'preguntas'
+        : a.closest('#pie-id') ? 'pie' : 'otro';    // el pie (6.7 B, 29/09)
       const card = a.closest('.card, .nv-tarj');
       const p = donde === 'ficha' ? buscarProducto(FICHA)
               : card ? buscarModelo(card.dataset.key) : null;
@@ -10541,6 +12489,17 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
   }, true);
   document.addEventListener('keydown', e => {
     if(e.key === 'Enter' && e.target && e.target.id === 'pedilo-q') pedilo();
+  }, true);
+  /* "Preguntanos si lo conseguimos" de la grilla vacía (29/09, muestra 3.3
+     A): es la misma consulta que la de la portada, con lo buscado. Se anota
+     igual, con desde: 'busqueda' para separarlas (así se ve cuántos clientes
+     entran por ahí). */
+  document.addEventListener('click', e => {
+    try{
+      if(!(e.target.closest && e.target.closest('#grid a[data-pedilo]'))) return;
+      anotar('pedilo', { q: filtros.q.trim().slice(0, 60), desde: 'busqueda' });
+      ANALITICA.mandar();
+    }catch(err){}
   }, true);
 
   /* La búsqueda, cuando deja de escribir. Se manda el texto y CUÁNTOS
@@ -10609,6 +12568,15 @@ setInterval(refrescoPeriodico, REFRESCO_MIN * 60 * 1000);
 document.addEventListener('visibilitychange', () => {
   if(!document.hidden && Date.now() - ULTIMA_OK > 60000) actualizar(false);
 });
+
+/* Cuando ADVAPP no contesta (29/09, muestras 1.1 y 1.4). El Reintentar de la
+   franja, y apenas vuelve la señal se prueba solo, con el aviso o con la
+   franja a la vista. Sin señal, el aviso lo dice ("Revisá tu conexión"). */
+$('franja-reint').addEventListener('click', () => reintentar());
+addEventListener('online', () => {
+  if(grid.querySelector('.msg.sin-catalogo') || !$('franja').hidden) reintentar();
+});
+addEventListener('offline', () => { if(grid.querySelector('.msg.sin-catalogo')) pintarAviso(); });
 </script>
 </body>
 </html>

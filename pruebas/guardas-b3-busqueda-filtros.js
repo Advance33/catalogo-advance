@@ -411,7 +411,11 @@ function marcaAjena(){
   // Red de seguridad: si igual queda puesta, se ve con su cruz
   filtros.cat = cat; filtros.marca = marca; verTodo = false; pintar();
   ok(!!cabB3().querySelector('[data-quitar="marca"]'), '[62] una marca puesta que no esta entre los botones se muestra con su cruz');
-  ok(/filtros/.test(grid.textContent), '[62] y la grilla vacia dice que son los filtros, no "menos palabras"', grid.textContent.trim().slice(0, 60));
+  // Desde el 29/09 (3.2 B) el vacio dice "En X no hay nada de <marca>" y
+  // "Sin ese filtro hay N", con el boton "Quitar": ya no "Probá sacando alguno
+  // de los filtros". Lo que se cuida es lo mismo: que no culpe a las palabras.
+  ok(/filtro/.test(grid.textContent) && !/menos palabras/.test(grid.textContent),
+     '[62] y la grilla vacia dice que son los filtros, no "menos palabras"', grid.textContent.trim().slice(0, 60));
 }
 
 /* ---- [65] Capacidad y memoria viajan en el link ---- */
@@ -683,9 +687,16 @@ async function anuncio(){
   const a = $('anuncio');
   ok(a && a.getAttribute('role') === 'status' && a.getAttribute('aria-live') === 'polite' && !a.closest('.seccion,#rubro-cab'),
      '[134] hay una region viva fija, afuera de lo que se rehace');
+  /* (29/09, revision de la 3.1) Sin resultados se anuncia lo mismo que se
+     ve en la grilla vacia (el titulo y la frase), no "No encontramos nada" */
+  const vacioVisto = () => {
+    const v = grid.querySelector('.msg.vacio'), t = e => e ? e.textContent.replace(/\s+/g, ' ').trim() : '';
+    return v ? t(v.querySelector('h2')) + '.' + (v.querySelector('p') ? ' ' + t(v.querySelector('p')) : '') : '(sin vacio)';
+  };
   $('q').value = 'zzqxw no existe'; filtros.q = $('q').value; sincronizarControles(); aplicarFiltro(false);
   await dormirB3(750);
-  ok(a && a.textContent === 'No encontramos nada', '[134] una busqueda sin resultados se anuncia', a && a.textContent);
+  ok(a && a.textContent === vacioVisto() && a.textContent !== 'No encontramos nada',
+     '[134] una busqueda sin resultados se anuncia, con lo que dice la grilla vacia', a && a.textContent);
   const w = norm((MODELOS.find(m => m.stock) || MODELOS[0]).marca || 'pro');
   $('q').value = w; filtros.q = w; aplicarFiltro(false);
   await dormirB3(750);
@@ -731,7 +742,7 @@ async function anuncio(){
     await buscarYEsperar('zzqxw uno');
     escritos.length = 0;
     await buscarYEsperar('zzqxw dos');
-    ok(escritos.includes('No encontramos nada'), '[134] dos busquedas seguidas sin nada se anuncian las dos',
+    ok(escritos.includes(vacioVisto()), '[134] dos busquedas seguidas sin nada se anuncian las dos',
        escritos.filter(Boolean).join(' | ') || 'nada');
 
     await buscarYEsperar(w);

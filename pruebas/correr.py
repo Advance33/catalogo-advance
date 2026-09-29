@@ -4,8 +4,9 @@
 Cada archivo .js de esta carpeta es una tanda de comprobaciones. Se inyecta
 antes de </body> en una copia del index.html y se abre con Chrome sin ventana;
 la tanda escribe el resultado en un <pre id="RESULTADO"> y de ahi lo leemos.
-La pagina baja los productos de ADVAPP (y la planilla de Google, congelada
-desde el 22/09, solo si ADVAPP falla), asi que hace falta internet.
+La pagina baja los productos de ADVAPP (si ADVAPP falla, la copia de este
+navegador, o el aviso: desde la 1.3 A del 29/09 nunca la planilla), asi que
+hace falta internet.
 
 Se corre con doble clic en "PROBAR.command", o a mano:  python3 pruebas/correr.py
 
@@ -18,15 +19,42 @@ Hace falta servir por HTTP: con file:// la funcion urlFoto() descarta todo lo
 que no sea http(s) y ademas el navegador no deja bajar los datos.
 Si el servidor no esta levantado, este script lo levanta y lo deja andando.
 
-Devuelve 0 si pasa todo y 1 si algo falla, asi PUBLICAR puede frenar.
+EL RESUMEN (Pedro eligio 7.1 C el 29/09, muestra pruebas.html): arriba va
+solo lo que falla, y abajo tres grupos: NUEVAS, fila por fila con el nombre
+del producto; CONOCIDAS (ya pedidas), una linea por pedido con los dias que
+lleva; y ARREGLADAS. Todas las lineas tienen 50 caracteres o menos, para que
+se lea tambien a ancho de celular (la unica excepcion es la CLAVE, que se
+copia entera). Lo que ya se pidio se anota a mano con
+herramientas/fallas-conocidas.py (7.4 B), que es tambien el que clasifica; el
+detalle fila por fila queda en pruebas/conocidas.json. Mientras corre, el
+avance va en una sola linea que se reescribe (por stderr).
+
+    --detalle     ademas, cada FALLA tal cual, como antes del 29/09 (la
+                  revision diaria lo usa para su log)
+    --json RUTA   la clasificacion en un JSON (la lee la revision diaria).
+                  Siempre queda tambien en pruebas/_ultima-corrida.json, que
+                  es lo que mira fallas-conocidas.py para anotar, y en
+                  pruebas/_ultima-corrida-<puerto>.json (la de ese puerto:
+                  fallas-conocidas.py --puerto N).
+
+Devuelve 0 si pasa todo; 1 si hay algo NUEVO (tambien una tanda que no llego
+a correr o que revento): PUBLICAR pregunta "Publicar igual?"; 3 si lo unico
+que falla ya esta pedido: PUBLICAR sigue sin preguntar (7.2 B); 2 si no se
+pudo correr. correr.py nunca anota una conocida: solo pasa a "arregladas" las
+que dejaron de fallar. Si no puede cargar el clasificador, todo cuenta como
+nuevo, como antes.
 """
 import html, tempfile, shutil
+import datetime
 import glob
+import importlib.util
 import io
+import json
 import os
 import re
 import subprocess
 import sys
+import textwrap
 import threading
 import time
 import urllib.error
@@ -117,6 +145,20 @@ def servidor_vivo():
         return False
 
 
+def sirve_esta_carpeta(nombre, contenido):
+    """(29/09, revision) Si el servidor que contesta en BASE sirve ESTA
+    carpeta: pide la copia apagada que esta corrida acaba de escribir
+    (PAGINA_SIN_MEDIR, con su PID en el nombre) y la compara byte a byte.
+    Antes se aceptaba cualquier servidor que tuviera un index.html: uno de
+    otra copia del catalogo en el mismo puerto contestaba, las copias de las
+    tandas daban 404 y los archivos que leen las guardas (fotos/indice.json,
+    p/indice.json, los .py) salian de la carpeta equivocada."""
+    try:
+        return urllib.request.urlopen(BASE + '/' + nombre, timeout=5).read() == contenido
+    except Exception:
+        return False
+
+
 def levantar_servidor():
     """Levanta servidor.py en segundo plano. Devuelve el proceso, o None si ya estaba."""
     if servidor_vivo():
@@ -184,6 +226,44 @@ IFRAMES_A_LA_COPIA = '''<script>
 '''
 
 
+# Los nombres de las filas (29/09, muestra 7.1 C). El resumen nombra cada
+# fila nueva por su producto, y eso lo sabe la pagina, no la tanda: cuando la
+# tanda escribe su RESULTADO, este script anota aparte, en un <pre> escondido,
+# el nombre de cada producto que ese RESULTADO nombra por su ID. Las tandas no
+# cambian. La forma del ID es la de RE_ID en herramientas/fallas-conocidas.py.
+# Anota tambien de donde saco los datos la pagina (FUENTE.fuente): con ADVAPP
+# caido, lo que se le pidio a ADVAPP puede no verse, y eso no es "arreglado".
+NOMBRES_FILAS = '''<script>
+/* correr.py (29/09, muestra 7.1): los nombres de las filas que nombra el
+   RESULTADO, para el resumen de las pruebas. */
+(() => {
+  const anotar = pre => {
+    const nombres = {};
+    try{
+      const vistos = new Set((pre.textContent || '').match(/[A-Z0-9]+(?:-[A-Z0-9]+)+/g) || []);
+      for(const p of (typeof PRODUCTOS !== 'undefined' ? PRODUCTOS : [])){
+        if(!p || !vistos.has(p.id) || nombres[p.id]) continue;
+        const d = String(p.desc || p.id), c = String(p.color || '');
+        nombres[p.id] = c && !d.toLowerCase().includes(c.toLowerCase()) ? d + ' (' + c + ')' : d;
+      }
+    }catch(e){}
+    const x = document.createElement('pre');
+    x.id = 'NOMBRES_FILAS';
+    x.hidden = true;
+    try{ x.dataset.fuente = (typeof FUENTE !== 'undefined' && FUENTE && FUENTE.fuente) || ''; }catch(e){}
+    x.textContent = JSON.stringify(nombres);
+    document.body.appendChild(x);
+  };
+  const obs = new MutationObserver(() => {
+    const pre = document.getElementById('RESULTADO');
+    if(pre){ obs.disconnect(); anotar(pre); }
+  });
+  obs.observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
+'''
+
+
 def pagina_sin_medir():
     """El index.html con la medicion apagada, en texto."""
     # En binario para no tocar los finales de linea del index.html
@@ -196,16 +276,19 @@ def pagina_sin_medir():
 
 
 def armar_pagina():
-    """La copia apagada, sin tanda, que abren los iframes. Una por corrida."""
-    io.open(os.path.join(RAIZ, PAGINA_SIN_MEDIR), 'wb').write(pagina_sin_medir().encode('utf-8'))
-    return PAGINA_SIN_MEDIR
+    """La copia apagada, sin tanda, que abren los iframes. Una por corrida.
+    Devuelve lo que escribio (con eso se mira que el servidor sea el de esta
+    carpeta: sirve_esta_carpeta)."""
+    contenido = pagina_sin_medir().encode('utf-8')
+    io.open(os.path.join(RAIZ, PAGINA_SIN_MEDIR), 'wb').write(contenido)
+    return contenido
 
 
 def armar_probe(js):
     """Escribe la copia de la pagina con la tanda adentro y devuelve su nombre."""
     src = pagina_sin_medir()
     tanda = io.open(js, encoding='utf-8').read()
-    salida = src.replace('</body>', IFRAMES_A_LA_COPIA % PAGINA_SIN_MEDIR +
+    salida = src.replace('</body>', IFRAMES_A_LA_COPIA % PAGINA_SIN_MEDIR + NOMBRES_FILAS +
                          '<script>\n' + tanda + '\n</script>\n</body>', 1)
     nombre = PREFIJO_PROBE + os.path.basename(js)[:-3] + '.html'
     io.open(os.path.join(RAIZ, nombre), 'wb').write(salida.encode('utf-8'))
@@ -263,7 +346,10 @@ SIN_RESULTADO = 'la pagina cargo pero la tanda no escribio su RESULTADO'
 
 def correr(chrome, probe, segundos=90):
     """Abre la copia `probe` sin ventana. Devuelve (texto del <pre
-    id="RESULTADO">, None) o (None, por que no hubo resultado).
+    id="RESULTADO">, None, anotado) o (None, por que no hubo resultado, {}).
+    anotado: lo que dejo NOMBRES_FILAS, {'nombres': {ID: nombre} de las filas
+    que nombra el RESULTADO, 'fuente': 'advapp', 'planilla' o 'copia'}, con
+    None en lo que no este.
 
     Cada tanda va con un perfil de Chrome recien creado. Hasta el 29/09 todas
     se servian desde la misma URL (/_probe.html) y, compartiendo perfil,
@@ -281,15 +367,90 @@ def correr(chrome, probe, segundos=90):
     finally:
         shutil.rmtree(perfil, ignore_errors=True)
     if dom is None:
-        return None, SIN_TERMINAR
-    m = re.search(r'<pre id="RESULTADO">(.*?)</pre>', dom.decode('utf-8', 'replace'), re.S)
-    return (html.unescape(m.group(1)), None) if m else (None, SIN_RESULTADO)
+        return None, SIN_TERMINAR, {}
+    pagina = dom.decode('utf-8', 'replace')
+    m = re.search(r'<pre id="RESULTADO">(.*?)</pre>', pagina, re.S)
+    if not m:
+        return None, SIN_RESULTADO, {}
+    n = re.search(r'<pre id="NOMBRES_FILAS"([^>]*)>(.*?)</pre>', pagina, re.S)
+    try:
+        nombres = json.loads(html.unescape(n.group(2))) if n else None
+    except ValueError:
+        nombres = None
+    f = re.search(r'data-fuente="([^"]*)"', n.group(1)) if n else None
+    return html.unescape(m.group(1)), None, {'nombres': nombres if isinstance(nombres, dict) else None,
+                                             'fuente': f.group(1) if f else None}
+
+
+ULTIMA = os.path.join(AQUI, '_ultima-corrida.json')   # el _ del principio: no va al repo
+# (29/09, revision) Y otra por puerto. La de arriba es de la ultima corrida que
+# termino: con dos a la vez (la del 9821 piso la del 9824) fallas-conocidas.py
+# anotaba desde la equivocada. Con --puerto N lee la de ese puerto, y siempre
+# dice de que puerto y hora es la que usa (las dos llevan "puerto" y "hora").
+ULTIMA_PUERTO = os.path.join(AQUI, '_ultima-corrida-%d.json')
+ANCHO = 50                                            # 7.1 C (el mismo de fallas-conocidas.py)
+
+
+def cargar_clasificador():
+    """herramientas/fallas-conocidas.py, que clasifica en nuevas, conocidas y
+    arregladas. Su nombre lleva guiones, asi que se carga por la ruta.
+    Devuelve (modulo, None) o (None, por que no se pudo)."""
+    ruta = os.path.join(RAIZ, 'herramientas', 'fallas-conocidas.py')
+    try:
+        spec = importlib.util.spec_from_file_location('fallas_conocidas', ruta)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod, None
+    except Exception as e:
+        return None, '%s: %s' % (type(e).__name__, e)
+
+
+def decir(texto, sangria='', primera=None):
+    """Imprime el texto partido a ANCHO (7.1 C: se lee a ancho de celular)."""
+    for l in textwrap.wrap(texto, ANCHO, initial_indent=sangria if primera is None else primera,
+                           subsequent_indent=sangria, break_long_words=False, break_on_hyphens=False):
+        print(l)
+
+
+def avance(i, total, nombre):
+    """La linea de avance, que se reescribe. Va por stderr y solo si es la
+    terminal: PUBLICAR guarda la salida con tee para leer el RESULTADO, y en
+    el log de la revision diaria no suma nada."""
+    try:
+        if sys.stderr.isatty():
+            sys.stderr.write(('\r  %d/%d  %-36s' % (i, total, nombre[:36])) if nombre else '\r' + ' ' * ANCHO + '\r')
+            sys.stderr.flush()
+    except Exception:
+        pass
+
+
+def escribir_json(ruta, datos):
+    """A un temporal y despues os.replace: la revision diaria nunca lee uno a
+    medio escribir."""
+    carpeta = os.path.dirname(os.path.abspath(ruta))
+    os.makedirs(carpeta, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(prefix='_corrida-', suffix='.tmp', dir=carpeta)
+    try:
+        with os.fdopen(fd, 'w', encoding='utf-8') as fh:
+            json.dump(datos, fh, ensure_ascii=False, indent=1)
+        os.replace(tmp, ruta)
+    finally:
+        if os.path.exists(tmp):
+            os.remove(tmp)
 
 
 def main():
     if PUERTO is None:
         print('El puerto pedido no es un numero de puerto. Uso: python3 pruebas/correr.py [--puerto N]')
         return 2
+    detalle = '--detalle' in sys.argv
+    ruta_json = None
+    if '--json' in sys.argv:
+        i = sys.argv.index('--json')
+        ruta_json = sys.argv[i + 1] if i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith('--') else None
+        if not ruta_json:
+            print('--json necesita la ruta del archivo. Uso: python3 pruebas/correr.py --json RUTA')
+            return 2
     chrome = buscar_chrome()
     if not chrome:
         print('No encontre Chrome ni Edge. Las pruebas necesitan uno de los dos.')
@@ -302,48 +463,30 @@ def main():
         return 2
 
     servidor = levantar_servidor()
-    fallas_totales = 0
-    sin_correr = {}
+    corridas = []
     try:
-        print('Corriendo %d tandas con los datos de hoy (%s)...\n' % (len(tandas), BASE))
-        armar_pagina()
-        for nombre in tandas:
+        if not sirve_esta_carpeta(PAGINA_SIN_MEDIR, armar_pagina()):
+            decir('El servidor de %s no sirve esta carpeta (%s): es de otra copia del catalogo, '
+                  'y las pruebas mirarian esa. No se corre. Apagalo, o usa otro puerto:  '
+                  'python3 pruebas/correr.py --puerto N' % (BASE, RAIZ))
+            return 2
+        print('Corriendo %d tandas con los datos de hoy' % len(tandas))
+        print('(%s)...' % BASE)
+        sys.stdout.flush()
+        for i, nombre in enumerate(tandas, 1):
+            avance(i, len(tandas), nombre)
             probe = armar_probe(os.path.join(AQUI, nombre + '.js'))
             try:
                 # 140 y no 90: desde que la portada dibuja seis filas de productos
                 # con foto, ademas de la grilla que piden las pruebas, con 90 varias
                 # tandas no llegaban a terminar y figuraban como caidas.
-                texto, motivo = correr(chrome, probe, PRESUPUESTO.get(nombre, 140))
+                texto, motivo, anotado = correr(chrome, probe, PRESUPUESTO.get(nombre, 140))
             finally:
                 borrar_probe(probe)
-            if not texto:
-                sin_correr[nombre] = motivo
-                # La linea termina siempre en "NO LLEGO A CORRER": es lo que
-                # busca revision-diaria.py. El porque va en la de abajo.
-                print('  %-14s NO LLEGO A CORRER' % nombre)
-                print('       (%s)' % motivo)
-                continue
-            # La cabecera la escribe la propia tanda y es la que manda. Si una
-            # prueba revienta, el detalle sale como EXCEPCION: contando solo las
-            # lineas 'FALLA' el runner decia "pasa todo" con exit 0 y
-            # PUBLICAR (entonces el .bat; hoy PUBLICAR.command en la Mac)
-            # dejaba subir el catalogo con el JS roto.
-            lineas = texto.split('\n')
-            fallas = [l for l in lineas
-                      if l.startswith('FALLA') or l.startswith('EXCEPCION')]
-            # Las lineas AVISO (29/09) se muestran y no se cuentan: algo que
-            # conviene saber pero que el cliente no ve (fuentes.js, la
-            # planilla de respaldo recortada). Quedan en el log de la revision
-            # diaria, que no las lleva a la notificacion (solo lee FALLA y
-            # EXCEPCION).
-            avisos = [l for l in lineas if l.startswith('AVISO')]
-            cabecera = next((l.strip() for l in lineas if l.strip()), '')
-            declaradas = re.search('(\\d+) FALLA', cabecera)
-            fallas_totales += max(len(fallas),
-                                  int(declaradas.group(1)) if declaradas else 0)
-            print('  %-14s %s' % (nombre, cabecera))
-            for l in fallas + avisos:
-                print('       ' + l.strip())
+            corridas.append({'tanda': nombre, 'texto': texto or None,
+                             'motivo': motivo or (None if texto else SIN_RESULTADO),
+                             'nombres': anotado.get('nombres'), 'fuente': anotado.get('fuente')})
+        avance(0, 0, '')
     finally:
         # Solo las copias de ESTA corrida: las de otra que este andando a la
         # vez (la revision de las 14:00, un PUBLICAR) son de ella.
@@ -355,36 +498,143 @@ def main():
             # terminar, y a quien tenia el catalogo abierto en el navegador se
             # le caian todas las fotos de golpe sin entender por que. Pesa
             # nada y sirve para seguir trabajando; se apaga cerrando su ventana.
-            print('\n(el servidor local quedo andando en %s%s)' % (
+            print()
+            decir('(el servidor local quedo andando en %s%s)' % (
                 BASE, '' if PUERTO == PUERTO_DE_SIEMPRE else '; se apaga con: kill %d' % servidor.pid))
+    return resumir(corridas, detalle, ruta_json)
 
+
+def resumir(corridas, detalle, ruta_json):
+    """Imprime el resumen y devuelve el codigo de salida (0, 1 o 3)."""
+    fc, error = cargar_clasificador()
+    c, registro = None, 'ok'
+    if fc:
+        try:
+            reg = fc.leer_conocidas()
+        except fc.RegistroDanado as e:
+            # Danado no es vacio: todo cuenta como nuevo (frena) y no se
+            # escribe nada encima.
+            reg, registro = {'conocidas': {}, 'arregladas': {}}, str(e)
+        try:
+            enviados = fc.leer_enviados()
+        except fc.RegistroDanado:
+            enviados = None           # sus conocidas pasan a nuevas (lo dice cada una)
+        try:
+            c = fc.clasificar(corridas, reg, enviados)
+        except Exception as e:
+            error = 'clasificar: %s: %s' % (type(e).__name__, e)
+
+    # ---- Arriba, solo lo que falla (7.1 C) ----
+    por_tanda = {}
+    for x in corridas:
+        if x['texto'] is None:
+            continue
+        lineas = x['texto'].split('\n')
+        # La cabecera la escribe la propia tanda y es la que manda. Si una
+        # prueba revienta, el detalle sale como EXCEPCION: contando solo las
+        # lineas 'FALLA' el runner decia "pasa todo" con exit 0 y PUBLICAR
+        # dejaba subir el catalogo con el JS roto.
+        fallas = [l for l in lineas if l.startswith('FALLA') or l.startswith('EXCEPCION')]
+        # Las lineas AVISO (29/09) se muestran y no se cuentan: algo que
+        # conviene saber pero que el cliente no ve (fuentes.js, la planilla
+        # de respaldo recortada). La revision diaria no las lleva a la
+        # notificacion.
+        avisos = [l for l in lineas if l.startswith('AVISO')]
+        cabecera = next((l.strip() for l in lineas if l.strip()), '')
+        declaradas = re.search('(\\d+) FALLA', cabecera)
+        n = max(len(fallas), int(declaradas.group(1)) if declaradas else 0)
+        por_tanda[x['tanda']] = (cabecera, fallas, avisos, n)
+    compacto = c is not None and not detalle
     print()
+    bien = [t for t, v in por_tanda.items() if not v[3]]
+    if compacto and bien:
+        print('  %d tanda%s: TODO OK' % (len(bien), 's' if len(bien) != 1 else ''))
+    for x in corridas:
+        nombre = x['tanda']
+        if x['texto'] is None:
+            # La linea termina siempre en "NO LLEGO A CORRER": es lo que
+            # busca revision-diaria.py. El porque va en la de abajo.
+            print('  %-14s NO LLEGO A CORRER' % nombre)
+            # (29/09, revision) Partida a ANCHO: "(la pagina cargo pero la
+            # tanda no escribio su RESULTADO)" salia de 63 caracteres.
+            decir('(%s)' % x['motivo'], '       ', '       ')
+            continue
+        cabecera, fallas, avisos, n = por_tanda[nombre]
+        if not compacto:
+            print('  %-14s %s' % (nombre, cabecera))
+            for l in fallas + avisos:
+                print('       ' + l.strip())
+            continue
+        if any(l.startswith('EXCEPCION') for l in fallas):
+            decir('%s: la tanda se rompio (abajo)' % nombre, '       ', '  ')
+        elif n:
+            decir('%s: %d comprobacion%s falla%s (abajo)' % (nombre, n, 'es' if n != 1 else '',
+                                                          'n' if n != 1 else ''), '       ', '  ')
+        for l in avisos:
+            decir(l.strip(), '       ', '  %s: ' % nombre)
+
+    # ---- Los tres grupos ----
+    sin_correr = [x for x in corridas if x['texto'] is None]
+    if c is not None:
+        grupos = fc.lineas_grupos(c)
+        if grupos:
+            print()
+            for l in grupos:
+                print(l)
+        if registro != 'ok':
+            decir('OJO: %s Mientras tanto todo cuenta como nuevo.' % registro, '   ')
+        # Las que dejaron de fallar pasan solas a "arregladas" (se avisan
+        # esta vez y nada mas). correr.py nunca anota una conocida.
+        if c['arregladas'] and registro == 'ok':
+            try:
+                fc.aplicar_arregladas(c['arregladas'])
+            except Exception as e:
+                decir('(no se pudieron guardar las arregladas en pruebas/conocidas.json: %s)' % e, '   ')
+        resultado, rc = fc.resultado(c)
+    else:
+        print()
+        decir('(no se pudo cargar herramientas/fallas-conocidas.py -%s-: todo cuenta como nuevo, '
+              'como antes del 29/09)' % error)
+        n = sum(v[3] for v in por_tanda.values()) + len(sin_correr)
+        resultado = (['RESULTADO: %d NUEVA%s. Revisar antes de publicar.' % (n, 'S' if n != 1 else '')]
+                     if n else ['RESULTADO: pasa todo.'])
+        rc = 1 if n else 0
+
     if sin_correr:
-        print('RESULTADO: %d tanda(s) no llegaron a correr (%s).'
-              % (len(sin_correr), ', '.join(sin_correr)))
+        print()
         # 29/09: el poco PRESUPUESTO no va en el primer aviso sino en el
         # segundo. Un presupuesto corto no hace que Chrome tarde: lo hace
         # volcar la pagina antes, sin RESULTADO. Y el segundo ya no culpa
         # primero a index.html: analitica.js salia asi de a ratos porque
         # esperaba un Blob.text(), que el reloj virtual no cuenta, y dos tandas
         # de la auditoria salieron a buscar un error en index.html que no habia.
-        if any(m == SIN_TERMINAR for m in sin_correr.values()):
-            print('Si Chrome no termino a tiempo, suele ser falta de internet: las pruebas bajan '
+        if any(x['motivo'] == SIN_TERMINAR for x in sin_correr):
+            decir('Si Chrome no termino a tiempo, suele ser falta de internet: las pruebas bajan '
                   'los datos de ADVAPP de verdad.')
-        if any(m == SIN_RESULTADO for m in sin_correr.values()):
-            print('Si la pagina cargo pero la tanda no escribio su RESULTADO, Chrome dio por gastado '
+        if any(x['motivo'] == SIN_RESULTADO for x in sin_correr):
+            decir('Si la pagina cargo pero la tanda no escribio su RESULTADO, Chrome dio por gastado '
                   'el reloj virtual antes de que terminara. Puede ser que la tanda necesite mas '
                   'PRESUPUESTO; que espere algo que no es un temporizador ni un pedido de red '
                   '(Blob.text(), el arrayBuffer() de una respuesta) y Chrome lo de por terminado, '
                   'que pasa de a ratos y mas con la maquina cargada (repetirla sola); que no hayan '
                   'llegado los datos; o un error de JS que la tanda no atrapo. Abrir la pagina en '
                   'el navegador y mirar la consola.')
-        return 1
-    if fallas_totales:
-        print('RESULTADO: %d comprobacion(es) fallaron. Revisar antes de publicar.' % fallas_totales)
-        return 1
-    print('RESULTADO: pasa todo.')
-    return 0
+    print()
+    for l in resultado:
+        print(l)
+
+    # La clasificacion, para fallas-conocidas.py (siempre) y para la revision
+    # diaria (--json). Sin clasificador no se escribe: la revision lee
+    # entonces las lineas FALLA, y todo cuenta como nuevo.
+    if c is not None:
+        ahora = datetime.datetime.now()
+        datos = dict(c, rc=rc, hora=ahora.strftime('%H:%M'), registro=registro, puerto=PUERTO)
+        for ruta in [ULTIMA, ULTIMA_PUERTO % PUERTO] + ([ruta_json] if ruta_json else []):
+            try:
+                escribir_json(ruta, datos)
+            except OSError as e:
+                decir('(no se pudo escribir %s: %s)' % (ruta, e))
+    return rc
 
 
 if __name__ == '__main__':

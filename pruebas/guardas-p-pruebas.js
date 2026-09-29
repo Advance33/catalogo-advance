@@ -118,10 +118,14 @@ async function correrPruebas(){
        siempreOk.slice(0, 5).join(', ') || tandas.length + ' tandas');
 
   /* ---- 4. Las pruebas usan la funcion de la pagina, no una copia (185) ---- */
+  /* 29/09 (decision 1.6 B de Pedro, la copia al instante): los productos se
+     arman en armarCarga(datos), que cargar() llama con lo que baja y la copia
+     de este navegador con lo guardado. La guarda mira ahi, no en cargar(). */
   if(indexSrc){
+    const armar = (indexSrc.match(/\nfunction armarCarga\(datos\)\{[\s\S]*?\n\}\r?\n/) || [''])[0];
     const cargar = (indexSrc.match(/async function cargar\(\)\{[\s\S]*?\n\}\r?\n/) || [''])[0];
-    ok(/function leerPrecio\(/.test(indexSrc) && /const num = leerPrecio;/.test(cargar),
-       'los precios los lee leerPrecio(), afuera de cargar(), y cargar() usa esa');
+    ok(/function leerPrecio\(/.test(indexSrc) && /const num = leerPrecio;/.test(armar) && /armarCarga\(datos\)/.test(cargar),
+       'los precios los lee leerPrecio(), afuera de armarCarga(), y armarCarga() (la que usa cargar()) usa esa');
   }
   const copias = tandas.filter(([n, s]) => /const num = s =>/.test(s)).map(([n]) => n);
   if(tandas.length)

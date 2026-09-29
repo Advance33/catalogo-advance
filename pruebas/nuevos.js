@@ -60,7 +60,10 @@ function correrPruebas(){
     if(t.querySelector('.nv-precio b').textContent !== 'USD ' + plata(m.precio)) return true;
     if(!!t.querySelector('.nv-precio small') !== (m.multi && m.precio !== m.precioMax)) return true;
     const ars = t.querySelector('.nv-precio i');
-    if(TC && (!ars || ars.textContent !== precioARS(m))) return true;
+    // precioARS devuelve HTML desde el 29/09 ("≈ $ …" con su title, decision
+    // 2.2 B): se compara el texto que se ve
+    const arsTxt = Object.assign(document.createElement('i'), { innerHTML: precioARS(m) }).textContent;
+    if(TC && (!ars || ars.textContent !== arsTxt)) return true;
     if(conRegalo(m) !== !!t.querySelector('.incluye')) return true;
     if(m.multi !== !!t.querySelector('.nv-opciones')) return true;
     return false;

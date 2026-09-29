@@ -1,0 +1,150 @@
+{
+ "arregladas": {},
+ "conocidas": {
+  "codigos|columna-codigo-nunca-apunta|CEL-APL-17P-1TB-BLU-SIM": {
+   "a": "ADVAPP",
+   "anotada": "2026-09-29",
+   "comprobacion": "la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)",
+   "detalle": "(Sim/-) lleva AT-0071, que es E-Sim/- (CEL-APL-17P-1TB-BLU-ESIM)",
+   "grupo": "iPhone 17 Pro Sim",
+   "id": "CEL-APL-17P-1TB-BLU-SIM",
+   "nombre": "iPhone 17 Pro 1TB Sim (Blue)",
+   "punto": "r_codigo|CEL-APL-17P-1TB-BLU-SIM|AT-0537|AT-0537-03",
+   "tanda": "codigos",
+   "titulo": "Con el codigo de otro producto"
+  },
+  "codigos|columna-codigo-nunca-apunta|CEL-APL-17P-1TB-ORG-SIM": {
+   "a": "ADVAPP",
+   "anotada": "2026-09-29",
+   "comprobacion": "la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)",
+   "detalle": "(Sim/-) lleva AT-0071, que es E-Sim/- (CEL-APL-17P-1TB-BLU-ESIM)",
+   "grupo": "iPhone 17 Pro Sim",
+   "id": "CEL-APL-17P-1TB-ORG-SIM",
+   "nombre": "iPhone 17 Pro 1TB Sim (Orange)",
+   "punto": "r_codigo|CEL-APL-17P-1TB-ORG-SIM|AT-0537|AT-0537-02",
+   "tanda": "codigos",
+   "titulo": "Con el codigo de otro producto"
+  },
+  "codigos|columna-codigo-nunca-apunta|CEL-APL-17P-1TB-SLV-SIM": {
+   "a": "ADVAPP",
+   "anotada": "2026-09-29",
+   "comprobacion": "la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)",
+   "detalle": "(Sim/-) lleva AT-0071, que es E-Sim/- (CEL-APL-17P-1TB-BLU-ESIM)",
+   "grupo": "iPhone 17 Pro Sim",
+   "id": "CEL-APL-17P-1TB-SLV-SIM",
+   "nombre": "iPhone 17 Pro 1TB Sim (Silver)",
+   "punto": "r_codigo|CEL-APL-17P-1TB-SLV-SIM|AT-0537|AT-0537-01",
+   "tanda": "codigos",
+   "titulo": "Con el codigo de otro producto"
+  },
+  "codigos|columna-codigo-nunca-apunta|CEL-APL-17P-256-BLU-SIM": {
+   "a": "ADVAPP",
+   "anotada": "2026-09-29",
+   "comprobacion": "la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)",
+   "detalle": "(Sim/-) lleva AT-0071, que es E-Sim/- (CEL-APL-17P-1TB-BLU-ESIM)",
+   "grupo": "iPhone 17 Pro Sim",
+   "id": "CEL-APL-17P-256-BLU-SIM",
+   "nombre": "iPhone 17 Pro 256GB Sim (Blue)",
+   "punto": "r_codigo|CEL-APL-17P-256-BLU-SIM|AT-0535|AT-0535-02",
+   "tanda": "codigos",
+   "titulo": "Con el codigo de otro producto"
+  },
+  "codigos|columna-codigo-nunca-apunta|CEL-APL-17P-256-ORG-SIM": {
+   "a": "ADVAPP",
+   "anotada": "2026-09-29",
+   "comprobacion": "la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)",
+   "detalle": "(Sim/-) lleva AT-0071, que es E-Sim/- (CEL-APL-17P-1TB-BLU-ESIM)",
+   "grupo": "iPhone 17 Pro Sim",
+   "id": "CEL-APL-17P-256-ORG-SIM",
+   "nombre": "iPhone 17 Pro 256GB Sim (Orange)",
+   "punto": "r_codigo|CEL-APL-17P-256-ORG-SIM|AT-0535|AT-0535-03",
+   "tanda": "codigos",
+   "titulo": "Con el codigo de otro producto"
+  },
+  "codigos|columna-codigo-nunca-apunta|CEL-APL-17P-256-SLV-SIM": {
+   "a": "ADVAPP",
+   "anotada": "2026-09-29",
+   "comprobacion": "la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)",
+   "detalle": "(Sim/-) lleva AT-0071, que es E-Sim/- (CEL-APL-17P-1TB-BLU-ESIM)",
+   "grupo": "iPhone 17 Pro Sim",
+   "id": "CEL-APL-17P-256-SLV-SIM",
+   "nombre": "iPhone 17 Pro 256GB Sim (Silver)",
+   "punto": "r_codigo|CEL-APL-17P-256-SLV-SIM|AT-0535|AT-0535-01",
+   "tanda": "codigos",
+   "titulo": "Con el codigo de otro producto"
+  },
+  "codigos|columna-codigo-nunca-apunta|CEL-APL-17P-512-BLU-SIM": {
+   "a": "ADVAPP",
+   "anotada": "2026-09-29",
+   "comprobacion": "la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)",
+   "detalle": "(Sim/-) lleva AT-0071, que es E-Sim/- (CEL-APL-17P-1TB-BLU-ESIM)",
+   "grupo": "iPhone 17 Pro Sim",
+   "id": "CEL-APL-17P-512-BLU-SIM",
+   "nombre": "iPhone 17 Pro 512GB Sim (Blue)",
+   "punto": "r_codigo|CEL-APL-17P-512-BLU-SIM|AT-0536|AT-0536-02",
+   "tanda": "codigos",
+   "titulo": "Con el codigo de otro producto"
+  },
+  "codigos|columna-codigo-nunca-apunta|CEL-APL-17P-512-SLV-SIM": {
+   "a": "ADVAPP",
+   "anotada": "2026-09-29",
+   "comprobacion": "la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)",
+   "detalle": "(Sim/-) lleva AT-0071, que es E-Sim/- (CEL-APL-17P-1TB-BLU-ESIM)",
+   "grupo": "iPhone 17 Pro Sim",
+   "id": "CEL-APL-17P-512-SLV-SIM",
+   "nombre": "iPhone 17 Pro 512GB Sim (Silver)",
+   "punto": "r_codigo|CEL-APL-17P-512-SLV-SIM|AT-0536|AT-0536-03",
+   "tanda": "codigos",
+   "titulo": "Con el codigo de otro producto"
+  },
+  "codigos|columna-codigo-nunca-apunta|CEL-APP-095": {
+   "a": "ADVAPP",
+   "anotada": "2026-09-29",
+   "comprobacion": "la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)",
+   "detalle": "(Sim/-) lleva AT-0073, que es E-Sim/- (CEL-APP-071)",
+   "grupo": "iPhone 17 Pro Sim",
+   "id": "CEL-APP-095",
+   "nombre": "iPhone 17 Pro 512GB Sim (Orange)",
+   "punto": "r_codigo|CEL-APP-095|AT-0536|AT-0536-01",
+   "tanda": "codigos",
+   "titulo": "Con el codigo de otro producto"
+  },
+  "codigos|columna-codigo-nunca-apunta|NBK-APL-NEO13-8G256-BLS-ES": {
+   "a": "ADVAPP",
+   "anotada": "2026-09-29",
+   "comprobacion": "la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)",
+   "detalle": "(-/ES) lleva AT-0434, que es -/EN (NB-APP-098)",
+   "grupo": "MacBook Neo 8/256 teclado ES",
+   "id": "NBK-APL-NEO13-8G256-BLS-ES",
+   "nombre": "MacBook Neo A18 13\" 8GB/256GB Teclado ES (Blush)",
+   "punto": "r_codigo|NBK-APL-NEO13-8G256-BLS-ES|AT-0433|AT-0433-03",
+   "tanda": "codigos",
+   "titulo": "Con el codigo de otro producto"
+  },
+  "codigos|columna-codigo-nunca-apunta|NBK-APL-NEO13-8G256-IND-ES": {
+   "a": "ADVAPP",
+   "anotada": "2026-09-29",
+   "comprobacion": "la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)",
+   "detalle": "(-/ES) lleva AT-0434, que es -/EN (NB-APP-098)",
+   "grupo": "MacBook Neo 8/256 teclado ES",
+   "id": "NBK-APL-NEO13-8G256-IND-ES",
+   "nombre": "MacBook Neo A18 13\" 8GB/256GB Teclado ES (Indigo)",
+   "punto": "r_codigo|NBK-APL-NEO13-8G256-IND-ES|AT-0433|AT-0433-04",
+   "tanda": "codigos",
+   "titulo": "Con el codigo de otro producto"
+  },
+  "codigos|todas-portadas-usan-esas|SWT-APL-WULTRA3-000-BLK-49-CELL-OCEAN": {
+   "a": "ADVAPP",
+   "anotada": "2026-09-29",
+   "archivo": "CARGA-CODIGOS-ADVAPP-26-09.txt",
+   "comprobacion": "y todas las portadas usan una de esas",
+   "detalle": "-> 1huLIXmTEPy9bEyBMCkLlWQFLU-Lpuy0F=w400",
+   "fecha": "2026-09-26",
+   "grupo": "Watch Ultra 3 Black Ocean",
+   "id": "SWT-APL-WULTRA3-000-BLK-49-CELL-OCEAN",
+   "nombre": "Watch Ultra 3 49mm (Black – Black Ocean Band)",
+   "tanda": "codigos",
+   "titulo": "Portada con la foto de ADVAPP"
+  }
+ }
+}

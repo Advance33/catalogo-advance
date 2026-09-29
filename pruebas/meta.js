@@ -61,7 +61,12 @@ function correrPruebas(){
   const diaAR_ = t => new Date(t).toLocaleDateString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
   const deHoy = !!(man && man.verificado_hoy === true && man.generado_en
                    && diaAR_(man.generado_en) === diaAR_(Date.now()));
-  if(deHoy)
+  /* 29/09 (decision 1.1 B): si lo que se ve es la copia de este navegador
+     porque ADVAPP no contesto, el sello dice de que hora son los precios. */
+  if(FUENTE && FUENTE.fuente === 'copia')
+    ok(texto === 'Precios de las ' + hhmm(FUENTE.hora) && !verde,
+       'con la copia de este navegador el sello dice la hora de esos precios, sin el punto verde', texto);
+  else if(deHoy)
     ok(texto === 'Actualizado hoy' && verde, 'con carga de hoy el sello dice "Actualizado hoy" en verde', texto);
   else
     ok(/^Actualizado \d{1,2}\/\d{1,2}\/\d{2,4}$/.test(texto) && !verde,

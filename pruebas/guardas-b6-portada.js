@@ -582,6 +582,7 @@ function preguntasDesplegables(){
 
 /* ---- [115] La medicion ve las salidas a WhatsApp de la portada ---- */
 async function medicionDeLaPortada(){
+  const fetchBlob = window.fetch.bind(window);   // el de verdad, para leer los blob:
   volverALaPortada();
   const mandados = [];
   const beaconReal = navigator.sendBeacon, openReal = window.open;
@@ -590,7 +591,13 @@ async function medicionDeLaPortada(){
   const frenar = e => { if(e.target.closest && e.target.closest('a')) e.preventDefault(); };
   document.addEventListener('click', frenar);
   ANALITICA_URL = 'https://ejemplo.invalid/api/eventos';
-  const eventos = async () => { ANALITICA.mandar(); return (await Promise.all(mandados.map(b => b.text())))
+  /* (29/09, revision) El Blob se lee con fetch() de un blob: y no con
+     b.text(): el reloj virtual no espera a b.text() y la tanda salia "NO
+     LLEGO A CORRER" de a ratos (lo explica pruebas/LEEME.txt y analitica.js,
+     leerBolsa). Desde la 7.x eso frena PUBLICAR. */
+  const leerBlob = async b => { const u = URL.createObjectURL(b);
+                                try{ return await (await fetchBlob(u)).text(); } finally { URL.revokeObjectURL(u); } };
+  const eventos = async () => { ANALITICA.mandar(); return (await Promise.all(mandados.map(leerBlob)))
                                   .flatMap(t => JSON.parse(t).eventos); };
   try{
     const otra = document.querySelector('#ayuda .ay-otra a');

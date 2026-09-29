@@ -149,6 +149,20 @@ async function correrPruebas(){
     }else{
       R.push('  --   no hay botón de WhatsApp en la grilla (¿WHATSAPP vacío?)');
     }
+    /* El WhatsApp escrito en el pie (6.7 B, 29/09) llega con desde: 'pie'
+       (MEDICION-ADVAPP.txt); antes caia en 'otro' */
+    const waPie = document.querySelector('#pie-id a[href*="wa.me/"]');
+    if(waPie){
+      const antesPie = (await hubo('whatsapp')).length;
+      const frenar = e => e.preventDefault();
+      document.addEventListener('click', frenar);
+      waPie.click();
+      document.removeEventListener('click', frenar);
+      const todos = await hubo('whatsapp'), nuevo = todos.slice(antesPie);
+      ok(nuevo.length === 1 && nuevo[0].desde === 'pie', 'el WhatsApp del pie se mide con desde: "pie"', JSON.stringify(nuevo[0] || {}).slice(0, 90));
+    }else{
+      R.push('  --   el pie no tiene WhatsApp (¿WHATSAPP vacío?)');
+    }
 
     /* ---- 5. Buscar, entrar a un rubro y volver al menú ---- */
     $('q').value = 'iphone';

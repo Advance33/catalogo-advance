@@ -3,7 +3,9 @@
 #
 # Doble clic lo abre en la Terminal. Hace lo mismo que el .bat de Windows y en
 # el mismo orden: revisa los datos de ADVAPP, revisa el catalogo de codigos,
-# revisa las fotos, corre las pruebas y recien ahi ofrece subir.
+# revisa las fotos, corre las pruebas y recien ahi ofrece subir. Desde el
+# 29/09, entre las fotos y las pruebas arma tambien las vistas previas para
+# WhatsApp (p/<ID>.html), que el .bat no tiene: la PC se retiro el 25/09.
 #
 # En Mac el comando es python3, no python.
 
@@ -179,23 +181,75 @@ if [ "$FOTOS" -eq 1 ]; then
   fi
 fi
 
+# ---- Las vistas previas para WhatsApp ------------------------------------
+#  Pedro eligio el 29/09 la B de la decision 4.2: cada fila tiene su pagina
+#  chica p/<ID>.html con la foto propia, el modelo y la version, sin precio,
+#  que es lo que muestra WhatsApp cuando se manda el link de un producto. Se
+#  rehacen aca: despues de las fotos (eligen la foto con fotos/indice.json,
+#  que verificar-fotos acaba de escribir) y antes de las pruebas
+#  (decision-vista-previa.js las revisa). Solo se reescriben las que
+#  cambiaron. No frena: si no se pudieron armar, p/ queda como estaba.
+echo
+echo "   Armando las vistas previas para WhatsApp..."
+echo
+$PY herramientas/vista-previa.py
+VISTAS=$?
+if [ "$VISTAS" = "2" ]; then
+  echo
+  echo "   AVISO: no se pudieron armar las vistas previas (el motivo esta"
+  echo "   arriba). Las paginas p/ quedaron como estaban: un producto nuevo"
+  echo "   se comparte con la tarjeta general hasta el proximo PUBLICAR."
+  echo "   Se puede publicar igual."
+  echo
+elif [ "$VISTAS" = "1" ]; then
+  echo
+  echo "   AVISO: quedaron paginas de filas que ADVAPP ya no trae (el detalle"
+  echo "   esta arriba). Se puede publicar igual."
+  echo
+fi
+
 # ---- Las pruebas --------------------------------------------------------
 echo
 echo "   Probando el catalogo..."
 echo
-$PY pruebas/correr.py
-PRUEBAS=$?
+# Pedro eligio 7.2 B el 29/09: se pregunta "Publicar igual?" solo por lo NUEVO.
+# Hasta ese dia se preguntaba siempre que algo fallaba, aunque ya estuviera
+# pedido a ADVAPP, y de tanto contestar S se contestaba S tambien el dia que
+# aparecia algo nuevo. correr.py sale con 1 si hay nuevas (y dice cuantas en
+# "RESULTADO: N NUEVA(S)"), con 3 si lo unico que falla ya esta pedido
+# (pruebas/conocidas.json) y con 0 si pasa todo. La salida se guarda (tee)
+# para leer ese numero; el avance va por stderr y se sigue viendo. -u: sin
+# eso, por el tee, la salida llega toda junta al final.
+PRUEBAS_SALIDA=$(mktemp -t publicar-pruebas.XXXXXX)
+$PY -u pruebas/correr.py | tee "$PRUEBAS_SALIDA"
+PRUEBAS=${PIPESTATUS[0]}
+NUEVAS=$(sed -n 's/^RESULTADO: \([0-9][0-9]*\) NUEVA.*/\1/p' "$PRUEBAS_SALIDA" | head -1)
+rm -f "$PRUEBAS_SALIDA"
 if [ "$PRUEBAS" = "1" ]; then
-  echo
   echo "   ------------------------------------------------------------"
-  echo "     HAY COMPROBACIONES QUE FALLAN"
-  echo
-  echo "     Cada linea que empieza con FALLA es algo que el cliente"
-  echo "     veria mal en la web: una tarjeta partida en dos, un boton"
-  echo "     repetido, un filtro que deja la grilla vacia."
+  if [ -n "$NUEVAS" ]; then
+    if [ "$NUEVAS" = "1" ]; then
+      echo "     HAY 1 FALLA NUEVA"
+    else
+      echo "     HAY $NUEVAS FALLAS NUEVAS"
+    fi
+    echo "     No estaban anotadas como pedidas: estan arriba, en"
+    echo "     NUEVAS. Es algo que el cliente puede estar viendo mal"
+    echo "     y nadie le pidio a nadie que lo arregle."
+  else
+    # Salio con 1 sin decir cuantas nuevas: se rompio en el medio
+    echo "     LAS PRUEBAS TERMINARON MAL"
+    echo
+    echo "     No llegaron a decir que es nuevo y que ya esta pedido."
+    echo "     Pasale a Claude lo que dice aca arriba."
+  fi
   echo "   ------------------------------------------------------------"
-  echo
   preguntar "Publicar igual?" || cancelado
+  echo
+elif [ "$PRUEBAS" = "3" ]; then
+  # Falla solo lo que ya se pidio: se recuerda (el RESULTADO de arriba dice
+  # cuantas y la mas vieja) y se sigue como cualquier dia.
+  echo "   Las pruebas no frenan: lo que falla ya esta pedido."
   echo
 elif [ "$PRUEBAS" = "2" ]; then
   echo "   AVISO: no se pudieron correr las pruebas (ver arriba). Se publica sin probar."

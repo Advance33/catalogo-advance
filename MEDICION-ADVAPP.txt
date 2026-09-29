@@ -81,14 +81,20 @@ no hay cookies ni cartel de consentimiento.
    pedido_quitar    lo sacó.
    pedido_cantidad  cambió unidades. cant.
    whatsapp         TOCÓ WHATSAPP. desde: "tarjeta", "ficha", "pedido",
-                    "flotante", "preguntas" o "nuevos" (el "Consultar" de
-                    Recién llegados, con el producto). Con desde="pedido" van
-                    también unidades y total. Es la conversión: lo único que
-                    dice si el catálogo sirvió.
+                    "flotante", "preguntas", "nuevos" (el "Consultar" de
+                    Recién llegados, con el producto) o "pie" (el WhatsApp
+                    escrito en el pie de la página, 29/09). Con desde="pedido"
+                    van también unidades y total. Es la conversión: lo único
+                    que dice si el catálogo sirvió.
    pedilo           TOCÓ WHATSAPP desde "¿Buscás algo que no está?". q: lo que
                     escribió en ese casillero (hasta 60 caracteres, desde 3).
                     También es conversión, y es la lista de lo que vinieron a
                     buscar y no tenemos. (29/09)
+                    Puede traer además desde: "busqueda": es el "Preguntanos
+                    si lo conseguimos" de la grilla vacía, cuando lo buscado
+                    no está en el catálogo; q es lo que escribió en el
+                    buscador (hasta 60 caracteres). Sin desde, vino del
+                    casillero de la portada. (29/09)
 
    Lo que NO se manda nunca: nada escrito por el cliente salvo la búsqueda y
    el casillero de "¿Buscás algo que no está?", ningún dato personal, ningún

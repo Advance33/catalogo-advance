@@ -118,18 +118,29 @@ echo   Probando el catalogo...
 echo.
 python pruebas\correr.py
 set PRUEBAS=%errorlevel%
+rem Pedro eligio 7.2 B el 29/09: se pregunta solo por lo NUEVO. correr.py
+rem sale con 1 si hay nuevas y con 3 si lo unico que falla ya esta pedido
+rem (pruebas\conocidas.json). Aca no se dice cuantas nuevas: Windows no tiene
+rem tee para leer el RESULTADO (lo dice arriba). El detalle en PUBLICAR.command.
 if "%PRUEBAS%"=="1" goto :fallan_pruebas
+if "%PRUEBAS%"=="3" goto :pruebas_conocidas
 if "%PRUEBAS%"=="2" echo   AVISO: no se pudieron correr las pruebas ^(ver arriba^). Se publica sin probar.
+goto :pruebas_listas
+
+:pruebas_conocidas
+echo   Las pruebas no frenan: lo que falla ya esta pedido.
+echo.
 goto :pruebas_listas
 
 :fallan_pruebas
 echo.
 echo   ------------------------------------------------------------
-echo     HAY COMPROBACIONES QUE FALLAN
+echo     HAY FALLAS NUEVAS
 echo.
-echo     Cada linea que empieza con FALLA es algo que el cliente
-echo     veria mal en la web: una tarjeta partida en dos, un boton
-echo     repetido, un filtro que deja la grilla vacia.
+echo     No estaban anotadas como pedidas: estan arriba, en
+echo     NUEVAS ^(el RESULTADO dice cuantas^). Es algo que el cliente
+echo     puede estar viendo mal y nadie le pidio a nadie que lo
+echo     arregle.
 echo   ------------------------------------------------------------
 echo.
 choice /c SN /n /m "   Publicar igual? [S = si, N = no]: "

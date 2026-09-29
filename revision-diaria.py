@@ -26,6 +26,14 @@ esta mostrando la planilla congelada del 22/09. Baja ADVAPP una sola vez, guarda
 la copia en logs/advapp-AAAA-MM-DD.json y se la pasa a validar, verificar-fotos
 y pedido-advapp (variable ADVAPP_COPIA): las tres miran el mismo dato, y al dia
 siguiente se puede ver con cual corrio.
+
+Las pruebas de la pagina (Pedro eligio 7.3 C el 29/09, muestra pruebas.html):
+la notificacion cuenta solo las fallas NUEVAS ("2 falla(s) NUEVAS en la
+pagina"), y avisa "Reclamar a ADVAPP" cuando algo ya pedido lleva mas de
+DIAS_RECLAMO dias sin arreglarse. En el archivo del Escritorio cada nueva va
+con cada ID en su linea, el reclamo agrupado por pedido, y las conocidas mas
+recientes solo con el numero. Que es nuevo y que ya se pidio lo decide
+pruebas/conocidas.json (se anota con herramientas/fallas-conocidas.py).
 """
 import os, re, sys, subprocess, datetime, glob
 
@@ -36,6 +44,9 @@ AVISO     = os.path.join(ESCRITORIO, 'AVISO - catalogo con errores.txt')
 DIAS_LOG  = 30
 TAREA     = 'Catalogo Advance Tecno - revision diaria'
 HORA_DEF  = '14:00'   # despues de la carga de precios del mediodia de ADVAPP
+# Lo pedido que lleva MAS de estos dias sin arreglarse se reclama (Pedro
+# eligio 7.3 C el 29/09: "los 7 dias los elegis vos"; con 7 justos todavia no)
+DIAS_RECLAMO = 7
 
 MAC       = sys.platform == 'darwin'
 AGENTE    = 'com.advancetecno.revision-diaria'
@@ -237,8 +248,10 @@ def limpiar_logs_viejos(carpeta=None):
     prefijo "revision-"; las copias pesan ~670 KB cada una, 29/09)."""
     carpeta = carpeta or LOGS
     corte = datetime.date.today() - datetime.timedelta(days=DIAS_LOG)
+    # pruebas-*.json (29/09, 7.3): lo que clasifico correr.py --json ese dia
     for f in (glob.glob(os.path.join(carpeta, 'revision-*.txt'))
-              + glob.glob(os.path.join(carpeta, 'advapp-*.json'))):
+              + glob.glob(os.path.join(carpeta, 'advapp-*.json'))
+              + glob.glob(os.path.join(carpeta, 'pruebas-*.json'))):
         m = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(f))
         if not m:
             continue                  # advapp-ultima-carga.json no tiene fecha: se queda
@@ -372,6 +385,52 @@ def rubros_que_se_vaciaron(copia, carpeta=None):
             % (c, fecha, n) for c, n in sorted(antes.items()) if n > 0 and not hoy.get(c)]
 
 
+def filas_sin_vista_previa(copia, carpeta=None):
+    """Las filas de ADVAPP de hoy que todavia no tienen su vista previa para
+    WhatsApp (decision 4.2, Pedro 29/09). Cada fila tiene su pagina p/<ID>.html
+    con la foto, el modelo y la version, y las arma herramientas/vista-previa.py
+    en cada PUBLICAR: una fila que ADVAPP sumo despues se comparte con la
+    tarjeta general hasta el proximo PUBLICAR, y sin este aviso nadie se
+    enteraba. Compara la copia del dia con p/indice.json; cuenta solo las
+    filas que la web muestra (validar.fila_activa, la misma regla que siNo)."""
+    import json
+    carpeta = carpeta or os.path.join(AQUI, 'p')
+    try:
+        with open(copia, 'rb') as fh:
+            productos = json.loads(fh.read().decode('utf-8')).get('productos') or []
+    except Exception:
+        return []                     # una copia ilegible ya la avisa validar
+    try:
+        with open(os.path.join(carpeta, 'indice.json'), encoding='utf-8') as fh:
+            hechas = set(json.load(fh).get('ids') or [])
+    except (OSError, ValueError, AttributeError):
+        hechas = set()                # sin indice, ninguna fila tiene la suya
+    try:
+        import validar
+        activa = validar.fila_activa
+    except Exception as e:
+        return ['[herramienta] no se pudieron mirar las vistas previas: %s' % str(e)[:140]]
+    texto = lambda v: '' if v is None else str(v)
+    faltan = sorted({texto(p.get('ID')).strip() for p in productos
+                     if texto(p.get('ID')).strip() and activa({k: texto(v) for k, v in p.items()})}
+                    - hechas)
+    if not faltan:
+        return []
+    return ['[publicar] %d fila(s) de ADVAPP sin vista previa para WhatsApp (%s%s): se comparten '
+            'con la tarjeta general hasta el proximo PUBLICAR, que las arma solo'
+            % (len(faltan), ', '.join(faltan[:5]), '...' if len(faltan) > 5 else '')]
+
+
+def separar_avisos(lineas):
+    """(errores, avisos). Lo que se arregla solo con el proximo PUBLICAR
+    ('[publicar] ...', hoy las filas sin vista previa) es un aviso: va al log
+    y, si el archivo del Escritorio sale por otra cosa, abajo, como aviso;
+    solo no deja el archivo ni la notificacion (29/09, revision). Lo demas
+    (que no se hayan podido mirar: '[herramienta] ...') es un error."""
+    avisos = [x for x in lineas if x.startswith('[publicar]')]
+    return [x for x in lineas if x not in avisos], avisos
+
+
 def ultimo_error(texto):
     """La ultima linea de un Traceback (la que dice QUE se rompio), o ''."""
     if 'Traceback' not in (texto or ''):
@@ -444,18 +503,53 @@ def analizar_fotos(salida, rc, sin_internet=False):
     return fotos_mal, fallo
 
 
-def analizar_pruebas(salida, rc, sin_internet=False):
+def analizar_pruebas(salida, rc, sin_internet=False, corrida=None):
     """(pagina_mal, fallo). rc None = se corto por tiempo.
 
     Hasta el 29/09 solo contaban las lineas FALLA. Una tanda que revienta sale
     como EXCEPCION y una que no termina como NO LLEGO A CORRER, y correr.py las
     cuenta como falla (es lo que ya habia dejado pasar JS roto en PUBLICAR):
-    aca se perdian las dos, y tambien el "no encontre Chrome" y el timeout."""
+    aca se perdian las dos, y tambien el "no encontre Chrome" y el timeout.
+
+    Con la clasificacion de correr.py (corrida: su --json) llegan solo las
+    NUEVAS, una entrada por comprobacion con cada ID en su linea (Pedro eligio
+    7.3 C el 29/09; antes cada falla era una linea cortada a 160 y el tercer ID
+    quedaba en "AT-00"). Lo ya pedido va aparte, en reclamos(). Sin el JSON
+    todo cuenta como nuevo, como antes. correr.py sale con 3 cuando lo unico
+    que falla ya esta pedido: eso no es "terminaron mal"."""
     lineas = salida.split('\n')
-    pagina_mal = ['[pagina] ' + (l.strip()[len('FALLA'):].strip() if l.strip().startswith('FALLA')
-                                 else l.strip())[:160]
-                  for l in lineas if l.strip().startswith('FALLA') or l.strip().startswith('EXCEPCION')]
-    no_corrieron = [l.split()[0] for l in lineas if l.strip().endswith('NO LLEGO A CORRER') and l.split()]
+    if corrida is not None:
+        pagina_mal, grupos = [], {}
+        for x in corrida.get('nuevas') or []:
+            if x.get('tipo') != 'no_corrio':          # esas van abajo, como siempre
+                grupos.setdefault((x.get('tanda'), x.get('comprobacion')), []).append(x)
+        for (tanda, comp), xs in grupos.items():
+            renglones = ['[pagina] NUEVA: %s' % (comp if any(x.get('id') for x in xs) else '%s: %s' % (tanda, comp))]
+            for x in xs:
+                if x.get('id'):
+                    renglones.append('         %s: %s' % (x['id'], x.get('detalle') or ''))
+                elif x.get('detalle'):
+                    renglones.append('         ' + x['detalle'])
+                if x.get('nota'):
+                    renglones.append('         ' + x['nota'])
+            pagina_mal.append('\n'.join(r.rstrip() for r in renglones))
+    else:
+        pagina_mal = ['[pagina] ' + (l.strip()[len('FALLA'):].strip() if l.strip().startswith('FALLA')
+                                     else l.strip())[:160]
+                      for l in lineas if l.strip().startswith('FALLA') or l.strip().startswith('EXCEPCION')]
+    # (29/09, revision) Cada tanda caida sale DOS veces en la salida de
+    # correr.py: arriba ("  guardas-b6-portada NO LLEGO A CORRER") y en NUEVAS
+    # ("  guardas-b6-portada | NO LLEGO A CORRER"). Juntando toda linea que
+    # terminara asi, el archivo decia "2 tanda(s) no llegaron a correr:
+    # guardas-b6-portada, guardas-b6-portada" y la notificacion "1 falla(s)".
+    # Con el JSON, las caidas son sus nuevas 'no_corrio'; sin el, solo la
+    # linea de arriba (la que no tiene "|"), y cada tanda una vez.
+    if corrida is not None:
+        no_corrieron = [x.get('tanda') or '?' for x in corrida.get('nuevas') or []
+                        if x.get('tipo') == 'no_corrio']
+    else:
+        no_corrieron = re.findall(r'^\s{2}(\S+)\s+NO LLEGO A CORRER\r?$', salida, re.M)
+    no_corrieron = list(dict.fromkeys(no_corrieron))
     if no_corrieron and not sin_internet:
         pagina_mal.append('[pagina] %d tanda(s) no llegaron a correr: %s'
                           % (len(no_corrieron), ', '.join(no_corrieron[:8])))
@@ -465,11 +559,85 @@ def analizar_pruebas(salida, rc, sin_internet=False):
     elif rc == 2:
         primera = next((l.strip() for l in lineas if l.strip()), '')
         fallo = '[herramienta] las pruebas no pudieron correr: ' + primera[:120]
-    elif rc != 0 and not pagina_mal and not (no_corrieron and sin_internet):
+    elif rc not in (0, 3) and not pagina_mal and not (no_corrieron and sin_internet):
         e = ultimo_error(salida)
         fallo = '[herramienta] las pruebas terminaron mal (salida %s) sin decir que fallo%s' % (
             rc, (': ' + e) if e else '')
     return pagina_mal, fallo
+
+
+def leer_corrida(ruta):
+    """La clasificacion que dejo correr.py --json, o None si no esta o no se
+    puede leer (entonces todo cuenta como nuevo, como antes del 29/09)."""
+    import json
+    try:
+        with open(ruta, encoding='utf-8') as fh:
+            d = json.load(fh)
+    except (OSError, ValueError):
+        return None
+    return d if isinstance(d, dict) and isinstance(d.get('nuevas'), list) else None
+
+
+def clasificador():
+    """herramientas/fallas-conocidas.py (lleva guion: se carga por la ruta),
+    o None si no carga. Se carga recien cuando hace falta: roto, la revision
+    igual corre y avisa (su --probar falla y eso llega al aviso)."""
+    import importlib.util
+    try:
+        spec = importlib.util.spec_from_file_location(
+            'fallas_conocidas', os.path.join(AQUI, 'herramientas', 'fallas-conocidas.py'))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+    except Exception:
+        return None
+
+
+def contar_nuevas(corrida, sin_internet=False):
+    """Las fallas nuevas, como las cuenta correr.py: cada fila una, y lo que no
+    se ve de una lista cortada, las que faltan. (29/09, revision) La cuenta es
+    la de fallas-conocidas.py, la misma que imprime correr.py: aca habia una
+    copia que podia quedar distinta. Sin internet no cuentan las tandas que no
+    corrieron. Si fallas-conocidas.py no carga, una por entrada (nunca menos
+    que nada)."""
+    nuevas = [x for x in corrida.get('nuevas') or []
+              if not (sin_internet and x.get('tipo') == 'no_corrio')]
+    fc = clasificador()
+    return fc.contar_nuevas(nuevas) if fc is not None else len(nuevas)
+
+
+def reclamos(corrida, hoy=None):
+    """(lineas para el archivo, frases para la notificacion, cuantas conocidas
+    recientes). Lo ya pedido que lleva MAS de DIAS_RECLAMO dias sin
+    arreglarse, agrupado por a quien y cuando se pidio (Pedro eligio 7.3 C el
+    29/09). Las conocidas mas recientes van solo con el numero."""
+    hoy = hoy or datetime.date.today()
+    viejas, recientes = {}, 0
+    for c in (corrida or {}).get('conocidas') or []:
+        try:
+            d = (hoy - datetime.date.fromisoformat(c.get('fecha'))).days
+        except (TypeError, ValueError):
+            continue
+        if d > DIAS_RECLAMO:
+            viejas.setdefault((c.get('a') or 'ADVAPP', c['fecha']), []).append(c)
+        else:
+            recientes += 1
+    lineas, por_quien = [], {}
+    for (a, f), cs in sorted(viejas.items(), key=lambda kv: kv[0][1]):
+        d = (hoy - datetime.date.fromisoformat(f)).days
+        grupos = {}
+        for c in cs:
+            g = c.get('grupo') or c.get('nombre') or c.get('id')
+            grupos[g] = grupos.get(g, 0) + 1
+        lineas.append('[%s] RECLAMAR: %d fila(s) pedidas el %s siguen igual (%d dias)\n%s' % (
+            a, len(cs), datetime.date.fromisoformat(f).strftime('%d/%m'), d,
+            '\n'.join('         %s (%d)' % (g, n) for g, n in grupos.items())))
+        n, dias = por_quien.get(a, (0, []))
+        por_quien[a] = (n + len(cs), dias + [d])
+    frases = ['Reclamar a %s: %d fila(s) pedidas hace %s dias.' % (
+        a, n, ('%d' % min(dias)) if min(dias) == max(dias) else '%d a %d' % (min(dias), max(dias)))
+        for a, (n, dias) in por_quien.items()]
+    return lineas, frases, recientes
 
 
 def analizar_pedido(salida, rc):
@@ -547,6 +715,8 @@ def main():
         env['ADVAPP_COPIA'] = advapp['copia']
     # Un rubro entero que ADVAPP dejo sin nada para vender (29/09)
     vaciados = rubros_que_se_vaciaron(advapp['copia']) if advapp['copia'] else []
+    # Las filas nuevas sin su vista previa para WhatsApp (decision 4.2, 29/09)
+    sin_vista = filas_sin_vista_previa(advapp['copia']) if advapp['copia'] else []
 
     r = correr(exe, ['validar.py', '--todo'], env)
     salida = (r.stdout or '') + (r.stderr or '')
@@ -591,6 +761,8 @@ def main():
                                                                    else 'al dia')))
         f.write('Rubros que quedaron sin nada para vender: %s\n' % ('\n  '.join([''] + vaciados) if vaciados
                                                                  else 'ninguno'))
+        f.write('Vistas previas para WhatsApp (p/): %s\n' % ('\n  '.join([''] + sin_vista) if sin_vista
+                                                             else 'todas las filas tienen la suya'))
 
     # Las fotos. verificar-fotos.py frena por las formas que tiene una ficha
     # de mostrar otro producto u otro color, y por la columna CODIGO de ADVAPP
@@ -609,12 +781,24 @@ def main():
     # datos de hoy en Chrome sin ventana y miran lo que ve el cliente. El
     # 26/09 fueron lo unico que encontro los errores de verdad; el validador
     # decia "sin errores graves". Tardan un par de minutos.
+    # 29/09 (7.3 C): con --detalle el log sigue teniendo cada FALLA tal cual, y
+    # con --json deja que es nuevo y que ya se pidio (pruebas/conocidas.json).
+    # El JSON del dia se borra antes: nunca se lee el de una corrida anterior.
+    json_p = os.path.join(LOGS, 'pruebas-%s.json' % hoy)
     try:
-        rp = correr(exe, [os.path.join('pruebas', 'correr.py')], env, timeout=900)
+        os.remove(json_p)
+    except OSError:
+        pass
+    try:
+        rp = correr(exe, [os.path.join('pruebas', 'correr.py'), '--detalle', '--json', json_p], env, timeout=900)
         salida_p, rc_p = (rp.stdout or '') + (rp.stderr or ''), rp.returncode
     except subprocess.TimeoutExpired:
         salida_p, rc_p = 'las pruebas tardaron mas de 15 minutos y se cortaron', None
-    pagina_mal, fallo_pruebas = analizar_pruebas(salida_p, rc_p, sin_internet)
+    corrida = leer_corrida(json_p) if rc_p is not None else None
+    pagina_mal, fallo_pruebas = analizar_pruebas(salida_p, rc_p, sin_internet, corrida)
+    n_nuevas = contar_nuevas(corrida, sin_internet) if corrida is not None else len(pagina_mal)
+    # Lo pedido hace mas de DIAS_RECLAMO dias y que sigue igual
+    reclamar, frases_reclamo, recientes = reclamos(corrida) if corrida is not None else ([], [], 0)
     herramienta_mal += [x for x in (fallo_pruebas,) if x]
     with open(log, 'a', encoding='utf-8') as f:
         f.write('\nPruebas de la pagina (pruebas/correr.py, salida %s):\n%s\n' % (rc_p, salida_p))
@@ -641,6 +825,10 @@ def main():
     # esta revision deja de leer una salida, se avisa aca y no el dia que se
     # necesitaba (29/09: asi se habian quedado ciegas sin que nadie lo note).
     for args in ([os.path.join('herramientas', 'pedido-advapp.py'), '--probar'],
+                 # 29/09 (7.1 a 7.4): el que decide que falla es nueva y que ya se pidio
+                 [os.path.join('herramientas', 'fallas-conocidas.py'), '--probar'],
+                 # 29/09 (4.2): las paginas de la vista previa para WhatsApp
+                 [os.path.join('herramientas', 'vista-previa.py'), '--probar'],
                  ['revision-diaria.py', '--probar']):
         try:
             ra = correr(exe, args, env, timeout=120)
@@ -654,8 +842,17 @@ def main():
             herramienta_mal.append('[herramienta] %s --probar falla: %s' % (
                 os.path.basename(args[0]), (malas[0] if malas else ultimo_error(salida_a) or 'mirar el log')[:140]))
 
+    # reclamar (7.3 C): un dia sin nada nuevo, lo pedido hace mas de
+    # DIAS_RECLAMO dias alcanza para dejar el aviso. Las conocidas recientes no.
+    # (29/09, revision) Las filas sin vista previa son un AVISO, no un error
+    # (como en la guarda del navegador, decision-vista-previa.js): se arreglan
+    # solas con el proximo PUBLICAR. Hasta hoy una sola fila nueva dejaba "EL
+    # CATALOGO TIENE ERRORES" en el Escritorio todos los dias hasta publicar.
+    # Si no se pudieron mirar, eso si es una herramienta caida.
+    vista_mal, vista_aviso = separar_avisos(sin_vista)
+    herramienta_mal += vista_mal
     if (r.returncode == 1 and graves) or vieja or fotos_mal or pagina_mal or colores_mal \
-            or pedido_mal or herramienta_mal or caida or vaciados:
+            or pedido_mal or herramienta_mal or caida or vaciados or reclamar:
         # En Mac, corriendo desde launchd, el sistema puede no dejar escribir
         # en el Escritorio (permisos de privacidad). Entonces el aviso queda
         # en logs/ (que no se publica) y la notificacion igual sale.
@@ -674,7 +871,7 @@ def main():
                 'EL CATALOGO TIENE ERRORES\n'
                 'Revisado el %s\n%s\n\n'
                 '%s'
-                '%s\n\n%s\n\n'
+                '%s\n\n%s\n\n%s'
                 # 29/09: validar.py marcaba sus graves [planilla] y aca se
                 # traducia; ahora los marca [ADVAPP], y su pedido sale con
                 # validar.py --pedido (las reglas de datos que el pedido de
@@ -689,34 +886,48 @@ def main():
                 '  fotos    = falta producir la imagen, o correr el comando\n'
                 '             que dice REVISAR-FOTOS.txt\n'
                 '  herramienta = no se pudo revisar: mirar el log (lo que\n'
-                '             esa herramienta controla hoy NO se controlo)\n\n'
+                '             esa herramienta controla hoy NO se controlo)\n'
+                '  publicar = se arregla solo abriendo PUBLICAR\n\n'
                 'El detalle completo esta en:\n%s\n\n'
                 'Cuando se resuelvan, este archivo desaparece solo\n'
                 'en la revision del dia siguiente.\n'
                 % (ahora, '=' * 60, encabezado,
                    '\n'.join(caida + herramienta_mal + graves
                              + (['[ADVAPP] LOS PRECIOS NO SE ACTUALIZARON: ' + vieja] if vieja else [])
-                             + vaciados + fotos_mal + pagina_mal + colores_mal + pedido_mal),
-                   '=' * 60, log))
+                             + vaciados + fotos_mal + pagina_mal + reclamar + colores_mal + pedido_mal),
+                   '=' * 60,
+                   # 7.3 C: las conocidas recientes, solo con el numero
+                   (('Ademas hay %d conocida(s) pedidas hace %d dias o menos.\n'
+                     'El detalle: pruebas/conocidas.json\n\n' % (recientes, DIAS_RECLAMO)) if recientes else '')
+                   + (('Avisos (no son errores):\n%s\n\n' % '\n'.join(vista_aviso)) if vista_aviso else ''),
+                   log))
         notificar('Catalogo Advance Tecno',
                   ('ADVAPP no contesta: la web muestra la planilla del 22/09. ' if caida else '')
                   + ('Alguna revision no pudo correr. ' if herramienta_mal else '')
                   + ('%d error(es) grave(s) en los datos. ' % len(graves) if graves else '')
                   + ('ADVAPP no cargo precios hoy. ' if vieja else '')
                   + ('ADVAPP dejo un rubro sin nada para vender. ' if vaciados else '')
-                  + ('%d prueba(s) de la pagina fallan. ' % len(pagina_mal) if pagina_mal else '')
+                  # 7.3 C (29/09): solo lo nuevo, y lo pedido hace mas de
+                  # DIAS_RECLAMO dias. La Mac corta el texto largo: va primero.
+                  + ('%d falla(s) NUEVAS en la pagina. ' % n_nuevas if pagina_mal else '')
+                  + ''.join(x + ' ' for x in frases_reclamo)
                   + ('Hay colores nuevos sin puntito. ' if colores_mal else '')
                   + ('Hay cosas para pedirle a ADVAPP. ' if pedido_mal else '')
                   + ('Hay fotos que mirar. ' if fotos_mal else '')
+                  # (29/09, revision) las filas sin vista previa no van: son
+                  # un aviso (quedan en el archivo, abajo, y en el log)
                   + ('Mira el aviso en el Escritorio.' if aviso == AVISO
                      else 'Mira el aviso en la carpeta logs del catalogo.'))
-        print('%d graves%s%s%s%s%s. Aviso dejado en %s'
+        print('%d graves%s%s%s%s%s%s. Aviso dejado en %s'
               % (len(graves), ' + ADVAPP caido' if caida else '', ' + carga vieja' if vieja else '',
-                 ' + fotos' if fotos_mal else '', ' + %d pruebas' % len(pagina_mal) if pagina_mal else '',
+                 ' + fotos' if fotos_mal else '', ' + %d falla(s) nuevas en la pagina' % n_nuevas if pagina_mal else '',
+                 ' + reclamar lo pedido hace mas de %d dias' % DIAS_RECLAMO if reclamar else '',
                  ' + %d herramienta(s) que no corrieron' % len(herramienta_mal) if herramienta_mal else '',
                  aviso))
         return 1
 
+    for x in vista_aviso:
+        print('Aviso (no es un error): %s' % x)
     if r.returncode == 2:
         print('No se pudo revisar (sin internet). Queda anotado en el log.')
         return 0     # no alarmamos por un problema de conexión
@@ -795,6 +1006,88 @@ def probar():
     pm, f = analizar_pruebas('  meta           1 FALLA(S)\n       FALLA el sello  [x]\n', 1)
     ok(pm == ['[pagina] el sello  [x]'] and not f, 'las FALLA se siguen leyendo igual')
 
+    # 29/09 (7.3 C): con la clasificacion de correr.py --json, lo del 29/09
+    comp = 'la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)'
+    fila = lambda i, d: {'tipo': 'fila', 'tanda': 'codigos', 'comprobacion': comp, 'id': i, 'detalle': d,
+                         'nombre': '', 'nota': '', 'clave': 'codigos|columna-codigo-nunca-apunta|' + i}
+    conocida = lambda i, g, f: {'id': i, 'grupo': g, 'a': 'ADVAPP', 'fecha': f}
+    corrida = {'nuevas': [fila('NBK-APL-MBA13M5-24G512-MID-EN', 'lleva AT-0522'),
+                          fila('NBK-APL-MBA13M5-24G512-SKY-EN', 'lleva AT-0522'),
+                          fila('CEL-APL-17P-256-ORG-SIM', 'lleva AT-0071')],
+               'conocidas': [conocida('NBK-APL-NEO13-8G256-BLS-ES', 'MacBook Neo 8/256 teclado ES', '2026-09-21'),
+                             conocida('NBK-APL-NEO13-8G256-IND-ES', 'MacBook Neo 8/256 teclado ES', '2026-09-21'),
+                             conocida('CEL-APL-17P-1TB-BLU-SIM', 'iPhone 17 Pro Sim', '2026-09-26'),
+                             conocida('X-1', 'Otro', '2026-09-22')]}
+    pm, f = analizar_pruebas('  codigos        2 FALLA(S)\n       FALLA %s  [3: ...]\n' % comp, 1, corrida=corrida)
+    ok(len(pm) == 1 and pm[0].startswith('[pagina] NUEVA: la columna CODIGO') and not f
+       and '\n         CEL-APL-17P-256-ORG-SIM: lleva AT-0071' in pm[0] and pm[0].count('\n') == 3,
+       'las nuevas llegan con cada ID en su linea, sin el corte a 160 (el tercer ID ya no queda en "AT-00")')
+    ok(contar_nuevas(corrida) == 3, 'y se cuentan por fila, como en correr.py')
+    lineas, frases, recientes = reclamos(corrida, datetime.date(2026, 9, 29))
+    ok(len(lineas) == 1 and lineas[0].startswith('[ADVAPP] RECLAMAR: 2 fila(s) pedidas el 21/09 siguen igual (8 dias)')
+       and '         MacBook Neo 8/256 teclado ES (2)' in lineas[0] and recientes == 2,
+       'lo pedido hace mas de %d dias se reclama, agrupado; lo de 7 dias justos (22/09) todavia no' % DIAS_RECLAMO)
+    ok(frases == ['Reclamar a ADVAPP: 2 fila(s) pedidas hace 8 dias.'], 'la notificacion dice "Reclamar a ADVAPP"')
+    lineas, frases, recientes = reclamos({'nuevas': [], 'conocidas': corrida['conocidas'][2:]},
+                                         datetime.date(2026, 9, 29))
+    ok(not lineas and not frases and recientes == 2, 'con solo conocidas recientes no hay reclamo (ni aviso)')
+    pm, f = analizar_pruebas('RESULTADO: nada nuevo. 4 conocidas siguen\n', 3,
+                             corrida={'nuevas': [], 'conocidas': corrida['conocidas']})
+    ok(not pm and not f, 'un dia sin nuevas (correr.py sale con 3) no es "terminaron mal" ni una falla')
+    pm, f = analizar_pruebas('       FALLA %s  [x]\n' % comp, 3)
+    ok(pm and not f, 'sin el JSON de correr.py, todo cuenta como nuevo (como antes)')
+    pm, f = analizar_pruebas('  sim            NO LLEGO A CORRER\n',
+                             1, corrida={'nuevas': [{'tipo': 'no_corrio', 'tanda': 'sim', 'comprobacion': 'NO LLEGO A CORRER'}]})
+    ok(pm == ['[pagina] 1 tanda(s) no llegaron a correr: sim'], 'con el JSON, las que no corrieron van en su linea de siempre')
+
+    # (29/09, revision) La salida de correr.py --detalle de la corrida del 9821
+    # (acortada la lista de codigos): la tanda caida sale arriba y en NUEVAS.
+    real = ('Corriendo 51 tandas con los datos de hoy\n(http://localhost:9821)...\n\n'
+            '  agrupacion     ===== TODO OK =====\n'
+            '  codigos        ===== 2 FALLA(S) =====\n'
+            '       FALLA y todas las portadas usan una de esas  [SWT-APL-WULTRA3-000-BLK-49-CELL-OCEAN -> '
+            '1huLIXmTEPy9bEyBMCkLlWQFLU-Lpuy0F=w400]\n'
+            '       FALLA %s  [11: CEL-APL-17P-1TB-BLU-SIM (Sim/-) lleva AT-0071, que es E-Sim/- '
+            '(CEL-APL-17P-1TB-BLU-ESIM) | ...]\n'
+            '  guardas-b6-portada NO LLEGO A CORRER\n'
+            '       (la pagina cargo pero la tanda no escribio\n'
+            '       su RESULTADO)\n\n'
+            '  ================================================\n'
+            '   1 NUEVA - frena la publicacion\n'
+            '  ================================================\n'
+            '  guardas-b6-portada | NO LLEGO A CORRER\n'
+            '   (la pagina cargo pero la tanda no escribio su\n'
+            '     RESULTADO). No se anota: se vuelve a correr.\n'
+            '  ------------------------------------------------\n'
+            '   12 CONOCIDAS - ya pedidas, no frenan\n'
+            '  ------------------------------------------------\n\n'
+            'RESULTADO: 1 NUEVA. Revisar antes de publicar.\n'
+            '           12 conocidas siguen esperando\n'
+            '           respuesta.\n') % comp
+    caida = {'nuevas': [{'tipo': 'no_corrio', 'tanda': 'guardas-b6-portada', 'comprobacion': 'NO LLEGO A CORRER',
+                         'id': '', 'detalle': 'la pagina cargo pero la tanda no escribio su RESULTADO'}],
+             'conocidas': corrida['conocidas']}
+    pm, f = analizar_pruebas(real, 1, corrida=caida)
+    ok(pm == ['[pagina] 1 tanda(s) no llegaron a correr: guardas-b6-portada'] and not f
+       and contar_nuevas(caida) == 1,
+       'con el JSON, la tanda caida (arriba y en NUEVAS) cuenta una vez, igual que en la notificacion')
+    pm, f = analizar_pruebas(real, 1)
+    ok([x for x in pm if 'no llegaron' in x] == ['[pagina] 1 tanda(s) no llegaron a correr: guardas-b6-portada'],
+       'sin el JSON tambien: la linea de NUEVAS (con "|") no se cuenta otra vez')
+
+    # (29/09, revision) contar_nuevas es la de fallas-conocidas.py, no una copia
+    fc = clasificador()
+    ok(fc is not None, 'se carga herramientas/fallas-conocidas.py para contar las nuevas')
+    if fc is not None:
+        salidas = [corrida['nuevas'], caida['nuevas'],
+                   corrida['nuevas'] + [{'tipo': 'no_se_ven', 'cuantas': 7}, {'tipo': 'no_se_ven', 'cuantas': None},
+                                        {'tipo': 'excepcion'}, {'tipo': 'sin_filas'}] + caida['nuevas'], []]
+        ok(all(contar_nuevas({'nuevas': n}) == fc.contar_nuevas(n) for n in salidas)
+           and contar_nuevas({'nuevas': salidas[2]}) == 3 + 7 + 1 + 1 + 1 + 1,
+           'cuenta igual que correr.py: cada fila una, y lo que no se ve, las que faltan')
+        ok(contar_nuevas({'nuevas': salidas[2]}, sin_internet=True) == fc.contar_nuevas(salidas[2]) - 1,
+           'sin internet no cuentan las tandas que no corrieron')
+
     ok(analizar_pedido('Pendientes nuestros: 3 (codigos: 1, colores sin registrar: 2) (en P)\n'
                        'Pedido a ADVAPP: 10 puntos (2 nuevos, 8 ya pedidos), 0 arreglados.\nVolvieron: 1\n', 1)[0]
        == ['[ADVAPP] 2 punto(s) nuevos para pedirles  ->  PEDIDO-ADVAPP.txt (cuando se mande: pedido-advapp.py --enviado)',
@@ -811,12 +1104,13 @@ def probar():
     viejo = (datetime.date.today() - datetime.timedelta(days=DIAS_LOG + 2)).isoformat()
     nuevo = datetime.date.today().isoformat()
     for n in ('revision-%s.txt' % viejo, 'advapp-%s.json' % viejo, 'revision-%s.txt' % nuevo,
-              'advapp-%s.json' % nuevo, 'advapp-ultima-carga.json'):
+              'advapp-%s.json' % nuevo, 'advapp-ultima-carga.json',
+              'pruebas-%s.json' % viejo, 'pruebas-%s.json' % nuevo):
         open(os.path.join(tmp, n), 'w').close()
     limpiar_logs_viejos(tmp)
     ok(sorted(os.listdir(tmp)) == sorted(['revision-%s.txt' % nuevo, 'advapp-%s.json' % nuevo,
-                                          'advapp-ultima-carga.json']),
-       'se borran los logs y las copias viejas, y nada mas')
+                                          'advapp-ultima-carga.json', 'pruebas-%s.json' % nuevo]),
+       'se borran los logs, las copias y las clasificaciones de las pruebas viejas, y nada mas')
     global LOGS
     viejo_logs, LOGS = LOGS, tmp
     try:
@@ -851,6 +1145,33 @@ def probar():
        'un rubro que ayer tenia para vender y hoy nada (sin precio o inactivo) se avisa como dato de ADVAPP')
     ok(rubros_que_se_vaciaron(os.path.join(tmp2, 'advapp-2026-09-27.json'), tmp2) == [],
        'sin copia anterior no se avisa nada')
+
+    # Las filas nuevas sin vista previa para WhatsApp (decision 4.2, 29/09)
+    p_dir = os.path.join(tmp2, 'p')
+    os.makedirs(p_dir)
+    fv = lambda i, activo='Sí', desc='X': {'ID': i, 'Activo': activo, 'Descripción completa': desc}
+    with open(hoy_json, 'w', encoding='utf-8') as fh:
+        json.dump({'productos': [fv('A-1'), fv('A-2'), fv('A-3'), fv('A-4', 'No'), fv('A-5', desc='')]}, fh)
+    with open(os.path.join(p_dir, 'indice.json'), 'w', encoding='utf-8') as fh:
+        json.dump({'ids': ['A-1', 'A-9']}, fh)
+    # (29/09, revision) al lado queda _generado.json (con que se armaron las
+    # paginas): no cambia que filas tienen la suya
+    with open(os.path.join(p_dir, '_generado.json'), 'w', encoding='utf-8') as fh:
+        json.dump({'generado_en': 'g', 'vistas': {'A-2': {'titulo': 'x', 'linea': '', 'foto': '', 'destino': 'A-2'}}}, fh)
+    v = filas_sin_vista_previa(hoy_json, p_dir)
+    ok(len(v) == 1 and v[0].startswith('[publicar] 2 fila(s)') and 'A-2, A-3' in v[0] and 'A-4' not in v[0]
+       and 'A-5' not in v[0], 'las filas nuevas sin pagina se avisan; las inactivas y sin nombre no')
+    # (29/09, revision) y son un aviso, no un error: solas no dejan "EL
+    # CATALOGO TIENE ERRORES" (se arreglan con el proximo PUBLICAR)
+    errores, avisos = separar_avisos(v)
+    ok(errores == [] and avisos == v, 'las filas sin vista previa son un aviso, no un error del catalogo')
+    roto = '[herramienta] no se pudieron mirar las vistas previas: x'
+    ok(separar_avisos(v + [roto]) == ([roto], v), 'pero no poder mirarlas si es un error (una herramienta caida)')
+    with open(os.path.join(p_dir, 'indice.json'), 'w', encoding='utf-8') as fh:
+        json.dump({'ids': ['A-1', 'A-2', 'A-3']}, fh)
+    ok(filas_sin_vista_previa(hoy_json, p_dir) == [], 'con todas las paginas hechas no se avisa nada')
+    ok(filas_sin_vista_previa(os.path.join(tmp2, 'no-esta.json'), p_dir) == [],
+       'sin copia de ADVAPP no se avisa nada')
     import shutil
     shutil.rmtree(tmp2, ignore_errors=True)
     print()

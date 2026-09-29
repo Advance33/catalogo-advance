@@ -4005,6 +4005,7 @@
 "black": "AT-0068-01",
 "black keys": "AT-0068-01",
 "desert titanium": "AT-0068-02",
+"natural": "AT-0068-03",
 "natural titanium": "AT-0068-03",
 "negro": "AT-0068-01",
 "teclas negras": "AT-0068-01",
@@ -4234,6 +4235,7 @@
 "garphite": "AT-0098-01",
 "grafito": "AT-0098-01",
 "graphite": "AT-0098-01",
+"pistachio": "AT-0098-03",
 "pistacho": "AT-0098-03"
 },
 "AT-0099": {
@@ -5549,6 +5551,7 @@
 "black alpine loop m": "AT-0455-02",
 "black keys": "AT-0455-01",
 "black ocean band": "AT-0455-06",
+"black – black alpine loop": "AT-0455-02",
 "black – black alpine loop m": "AT-0455-02",
 "black – black ocean band": "AT-0455-06",
 "blue": "AT-0455-05",
@@ -5605,10 +5608,13 @@
 "ice white · white leather+white silicone": "AT-0463-01"
 },
 "AT-0464": {
+"graphite black": "AT-0464-01",
 "graphite black · black metal + brown leather": "AT-0464-01",
 "graphite black · black metal+brown leather": "AT-0464-01",
+"moonlit silver": "AT-0464-03",
 "moonlit silver · silver metal + purple silicone": "AT-0464-03",
 "moonlit silver · silver metal+purple silicone": "AT-0464-03",
+"rose gold": "AT-0464-02",
 "rose gold · gold metal + white": "AT-0464-02",
 "rose gold · gold metal+white": "AT-0464-02"
 },
@@ -5830,7 +5836,9 @@
 "AT-0511": {
 "black": "AT-0511-01",
 "lavander": "AT-0511-04",
+"lavender": "AT-0511-04",
 "lima": "AT-0511-02",
+"lime": "AT-0511-02",
 "white": "AT-0511-03"
 },
 "AT-0512": {
@@ -5930,5 +5938,5 @@
 }
 }
 },
-"generado": "2026-09-26T23:49:49"
+"generado": "2026-09-29T07:37:56"
 }

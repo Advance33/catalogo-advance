@@ -23,6 +23,12 @@ logs/
 # Notas de trabajo internas: viven en la carpeta pero NO se publican.
 # GitHub Pages sirve todo lo que esta en el repo, asi que un .txt suelto
 # queda legible para cualquiera que adivine la direccion.
+# 29/09: estos patrones solos no alcanzaban. "*-AL-SHEET.txt" no agarra
+# RESPUESTA-AL-SHEET-11-09.txt (termina en la fecha), y los PEDIDO-*-dd-mm,
+# SUMAR-AL-PEDIDO y CARGA-CODIGOS no tenian ninguno: quedaron 15 notas
+# publicadas (ver el bloque del final). Para que no dependa del nombre de
+# cada una: las notas y pedidos nuevos van a una carpeta que empiece con
+# guion bajo (_notas/, por ejemplo), que el "_*" de arriba ya deja afuera.
 *-AL-SHEET.txt
 *-AL-SHEET*.csv
 Auditoria-*.pdf
@@ -68,3 +74,27 @@ CATALOGO-A-CORREGIR.txt
 # herramientas/pedidos-advapp.json, que si va al repo.
 PEDIDO-ADVAPP.txt
 PENDIENTES-NUESTROS.txt
+
+# Notas y pedidos con fecha en el nombre (29/09). Se commitearon uno por
+# uno como registro, pero el repo es PUBLICO y GitHub Pages los servia:
+# .../catalogo-advance/PEDIDO-ADVAPP-26-09.txt respondia 200, y ese arranca
+# con "[BORRADOR] Sin enviar". Lo que se pidio y cuando queda registrado en
+# herramientas/pedidos-advapp.json, que si va al repo.
+# Ojo: el .gitignore no saca lo que ya esta versionado. A los que ya estan
+# hay que hacerles "git rm --cached", y aun asi siguen en el historial.
+# NO van aca condicion-aceptada.txt (lo lee validar.py: sin el, los tres
+# productos que Pedro acepto vuelven a salir como GRAVE) ni
+# MEDICION-ADVAPP.txt (es la especificacion que cita index.html).
+/RESPUESTA-AL-SHEET-*.txt
+/PEDIDO-*-[0-9][0-9]-[0-9][0-9]*.txt
+/SUMAR-AL-PEDIDO-*.txt
+/CARGA-CODIGOS-*.txt
+
+# Basura del Finder de la Mac (29/09): aparece sola al abrir una carpeta y
+# se reescribe cada vez que cambia la vista. Con el "git add -A" de
+# PUBLICAR se subiria a la web (hasta hoy no paso nunca), y PUBLICAR
+# contaria "1 cambio" que no es nada.
+.DS_Store
+# Las carpetas de prueba de las auditorias (sondas_b1-datos/, etc.), por
+# si alguna queda sin borrar.
+sondas_*/

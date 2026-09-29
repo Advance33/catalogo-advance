@@ -1,5 +1,18 @@
 # Catálogo de uso interno: no queremos que los buscadores lo indexen todavía.
-# Cuando el catálogo salga al público, borrá este archivo y también la línea
-# <meta name="robots" content="noindex, nofollow"> del index.html.
+#
+# Ojo (29/09): este archivo NO hace nada, y está bien que así sea. GitHub Pages
+# lo sirve en /catalogo-advance/robots.txt, y los buscadores solo leen el
+# robots.txt de la raíz del dominio (advance33.github.io/robots.txt, que no
+# existe). Lo que evita la indexación es la línea
+# <meta name="robots" content="noindex, nofollow"> de index.html y de las
+# muestras.
+#
+# Por eso ya no dice "Disallow: /". Si alguna vez se leyera (copiado a la
+# raíz), NO tiene que bloquear nada: un buscador bloqueado no baja el HTML, no
+# llega a ver el noindex, y puede listar la dirección igual si alguien la
+# enlaza. Los dos juntos se anulan. Para que las fotos y los .txt no aparezcan,
+# hay que sacarlos de lo que se publica, no bloquearlos acá.
+#
+# Cuando el catálogo salga al público, alcanza con borrar ese meta noindex.
 User-agent: *
-Disallow: /
+Disallow:

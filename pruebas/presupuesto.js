@@ -21,6 +21,9 @@ const esperar = setInterval(() => {
 
 const sec = () => $('presupuesto');
 const vitrinas = () => [...sec().querySelectorAll('.pv-vit')].map(b => buscarModelo(b.dataset.key));
+// El mismo criterio de tramo que la pagina (29/09: el tope entra, "Hasta USD 200"
+// trae el de 200). Antes esta tanda repetia a mano el viejo, con el tope afuera.
+const enElTramo = (precio, t) => enTramo(precio, [t.val, t.txt, t.min, t.max]);
 
 function correrPruebas(){
   /* ---- 1. Dónde va y qué tramos tiene ---- */
@@ -28,7 +31,7 @@ function correrPruebas(){
   ok(hijos.indexOf(sec()) === hijos.indexOf($('marcas-vitrina')) + 1, 'va justo debajo de las marcas');
   ok(hijos.indexOf(sec()) < hijos.indexOf($('nuevos')), 'y antes de Recién llegados');
   const tabs = [...sec().querySelectorAll('.pv-tab')];
-  const conProductos = RANGOS.filter(([, , min, max]) => MODELOS.some(m => m.variantes.some(v => v.precio !== null && v.precio >= min && v.precio < max)));
+  const conProductos = RANGOS.filter(r => MODELOS.some(m => m.variantes.some(v => enTramo(v.precio, r))));
   ok(tabs.length === conProductos.length && tabs.every((b, i) => b.dataset.pv === conProductos[i][0]),
      'una pestaña por tramo con productos, en el orden de siempre', tabs.map(b => b.dataset.pv).join(' · '));
   const masGrande = PV.reduce((a, b) => b.n > a.n ? b : a);
@@ -41,10 +44,10 @@ function correrPruebas(){
     const ms = vitrinas();
     if(!ms.length || ms.length > PV_VITRINAS) mal.push(t.val + ': ' + ms.length + ' vitrinas');
     ms.forEach(m => {
-      if(!m || !m.stock || !m.imagen || m.precio === null || m.precio < t.min || m.precio >= t.max) mal.push(t.val + ': ' + (m && m.desc));
+      if(!m || !m.stock || !m.imagen || !enElTramo(m.precio, t)) mal.push(t.val + ': ' + (m && m.desc));
     });
     // Uno por rubro mientras haya rubros distintos para elegir
-    const rubrosDisponibles = new Set(MODELOS.filter(m => m.stock && m.imagen && m.precio !== null && m.precio >= t.min && m.precio < t.max).map(m => m.cat)).size;
+    const rubrosDisponibles = new Set(MODELOS.filter(m => m.stock && m.imagen && enElTramo(m.precio, t)).map(m => m.cat)).size;
     if(new Set(ms.map(m => m.cat)).size < Math.min(ms.length, rubrosDisponibles)) repetidos.push(t.val);
     const pressed = [...sec().querySelectorAll('.pv-tab[aria-pressed="true"]')].map(b => b.dataset.pv);
     if(pressed.length !== 1 || pressed[0] !== t.val) mal.push(t.val + ': pestaña marcada ' + pressed.join(','));
@@ -56,13 +59,19 @@ function correrPruebas(){
   const altos = PV.map(t => { elegirTramo(t.val); return Math.round(sec().getBoundingClientRect().height); });
   ok(new Set(altos).size === 1, 'el alto no cambia de un tramo a otro', altos.join(','));
 
-  /* ---- 4. Con el mouse alcanza con pasar; con el dedo, no ---- */
+  /* ---- 4. Con el mouse alcanza con quedarse; con el dedo, no ----
+     Desde el 29/09 el mouse tiene que quedarse PV_MIRA_MS sobre el tramo: de
+     pasada, camino a "Ver los N", cambiaba el tramo que el cliente habia
+     elegido. Esta tanda no espera (corre de un tiron), asi que aca se prueba
+     que pasar de largo NO lo cambia; que quedarse si, con la espera de
+     verdad, esta en guardas-b6-portada.js ([103]). */
   const [a, b] = [PV[0], PV[PV.length - 1]];
   elegirTramo(a.val);
   sec().querySelector(`.pv-tab[data-pv="${b.val}"]`).dispatchEvent(new PointerEvent('pointerover', { bubbles: true, pointerType: 'touch' }));
   ok(pvVal === a.val, 'con el dedo, pasar por encima no cambia el tramo');
   sec().querySelector(`.pv-tab[data-pv="${b.val}"]`).dispatchEvent(new PointerEvent('pointerover', { bubbles: true, pointerType: 'mouse' }));
-  ok(pvVal === b.val && vitrinas().every(m => m.precio >= b.min && m.precio < b.max), 'con el mouse, pasar por un tramo ya muestra los suyos', b.val);
+  ok(pvVal === a.val, 'con el mouse, pasar de largo por un tramo no lo cambia', pvVal);
+  sec().querySelector(`.pv-tab[data-pv="${b.val}"]`).dispatchEvent(new PointerEvent('pointerout', { bubbles: true, pointerType: 'mouse', relatedTarget: document.body }));
   sec().querySelector(`.pv-tab[data-pv="${a.val}"]`).click();
   ok(pvVal === a.val, 'tocar un tramo lo elige', a.val);
 

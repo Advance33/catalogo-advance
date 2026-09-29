@@ -154,8 +154,16 @@ function correrPruebas(){
   ok(!!nvTimer && !!$('nuevos'), 'y al volver a la portada gira de nuevo');
 }
 
-/* ---- 9. El giro, con el reloj corriendo ---- */
+/* ---- 9. El giro, con el reloj corriendo ----
+   Desde el 29/09 la vidriera no gira mientras no se ve (freno 'fuera', ver
+   vigilarVista), y a 1920x1080 queda dos pantallas abajo. Aca se prueba el
+   giro, no la vista: se la trae a la vista (por si el observador todavia
+   tiene un aviso pendiente, que diga "se ve") y se le dice lo mismo que diria
+   al llegar, porque el Chrome sin ventana no lo vuelve a consultar despues de
+   cargar. La vista se prueba en guardas-b6-portada.js, [142]. */
 function probarGiro(fin){
+  $('nuevos').scrollIntoView({ block: 'center' });
+  VIGIAS.get('nuevos')?.avisar?.(true);
   arrancarNuevos();
   irNuevo(0);
   nvDesde = Date.now() - NUEVOS_MS;          // como si ya hubieran pasado los 5 segundos

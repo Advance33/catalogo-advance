@@ -106,7 +106,8 @@ function correrPruebas(){
   ok(!panel(), 'y la cruz cierra el panel');
 
   // Lo elegido aparece arriba con su cruz, y la cruz lo saca
-  filtros.rango = RANGOS.find(r => cel.some(m => m.variantes.some(v => v.precio >= r[2] && v.precio < r[3])))[0];
+  // enTramo: el mismo criterio que el filtro (29/09, el tope entra)
+  filtros.rango = RANGOS.find(r => cel.some(m => m.variantes.some(v => enTramo(v.precio, r))))[0];
   aplicarFiltro(false);
   const cruz = cab().querySelector('.activo[data-quitar="rango"]');
   ok(!!cruz, 'el filtro elegido aparece arriba de los productos', cruz && cruz.textContent);

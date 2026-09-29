@@ -2,20 +2,42 @@ PRUEBAS DEL CATALOGO
 ====================
 
 Cada archivo .js de esta carpeta es una tanda de comprobaciones que se corre
-sobre el catalogo de verdad, con la planilla de verdad. Entre todas son mas
-de 350 comprobaciones.
+sobre el catalogo de verdad, con los datos de hoy: la pagina baja los
+productos de ADVAPP (contrato landing/1.3) y la planilla de Google, congelada
+desde el 22/09, queda solo de respaldo. Entre todas son cientos de
+comprobaciones.
+
+(29/09: este LEEME hablaba todavia de "la planilla de verdad", de PROBAR.bat
+y de "python pruebas\correr.py", y describia 9 de 29 tandas. Desde el 25/09
+todo corre en la Mac, donde el comando es python3.)
+
+LAS TANDAS
+----------
+Una linea por tanda; el detalle de cada una esta en la cabecera de su .js.
+Si agregas una, sumala aca (la tanda guardas-t3-fotos-publicar-repo.js avisa
+si alguna falta).
 
   agrupacion.js   Que filas se juntan en una tarjeta y cuales no, los botones
                   de cada version, los precios, la ficha, el pedido, el
                   buscador y los chips de categoria.
-  portada.js      La portada: que al entrar se vean los rubros y no los 441
+  portada.js      La portada: que al entrar se vean los rubros y no todos los
                   productos, que las cuentas de cada rubro sean las reales, y
                   que entrar a uno, volver a "Todo" y "Ver todo" funcionen.
-  precios.js      Como se lee cada forma de escribir un precio en la planilla
-                  ("8500", "USD 8500", "8.500") y que la etiqueta de oferta no
-                  muestre porcentajes.
+  extras.js       Los bloques de debajo del mosaico, el buscador con
+                  sugerencias y el aviso de stock: que se apaguen con un filtro.
+  precios.js      Como se lee cada forma de escribir un precio ("8500",
+                  "USD 8500", "8.500") y que la etiqueta de oferta no muestre
+                  porcentajes.
   color-precio.js Que al cambiar de color cambie el precio cuando cada color
                   es una fila distinta.
+  foto-color.js   Que el puntito de color muestre la foto de ESE color, y que
+                  si no existe la ficha lo diga.
+  codigos.js      El codigo propio AT-####: que la web llegue del producto al
+                  archivo correcto, y que no llegue cuando el vinculo no sirve.
+  nombres.js      Las notas de carga del proveedor ("+ Capa", "C/C") que no
+                  tienen que llegar al nombre que lee el cliente.
+  meta.js         El contrato con la fuente: el manifiesto, el sello
+                  "Actualizado", la portada del primer color de hoy.
   sugeridos.js    El bloque "Te puede servir": que recomienda cada categoria,
                   que no se recomiende a si misma y el techo de precio.
   destacada.js    El orden de la barra de categorias, la marca destacada y la
@@ -23,22 +45,71 @@ de 350 comprobaciones.
   carrusel.js     La vidriera de ofertas de arriba: de donde salen, las
                   flechas y que se frene sola.
   layout.js       Como se ve en 390, 900, 1440 y 1920 px de ancho.
+  advapp.js       ADVAPP como fuente: que se use cuando anda y que se vuelva a
+                  la planilla cuando falla, tarda o viene cortado.
+  analitica.js    La medicion: que mida lo que tiene que medir y que no mande
+                  nada si esta apagada o el navegador pide no ser seguido.
+  ayuda.js        La ayuda del final de la portada: las preguntas, la
+                  respuesta y el pedido por WhatsApp.
+  ficha.js        La ficha de producto tal como la eligio Pedro el 21/09.
+  fuentes.js      Un filtro olvidado en la hoja: que la pagina note que le
+                  llegaron menos filas de las que hay.
+  links.js        Los links que se comparten: que ?cat, ?marca, ?q, ?precio,
+                  ?stock y #p= abran lo que dicen, y que el ?config del
+                  equipo no quede en la direccion que se comparte (29/09).
+  marcas.js       La vitrina de marcas de la portada.
+  menu.js         El boton para volver al menu de rubros, tambien en celular.
+  miniaturas.js   Que lo chico use las fotos de 400 px de fotos/mini/ y la
+                  ficha la grande.
+  mundos.js       Los rubros de la portada en movimiento: que cada foto sea
+                  del rubro que marca.
+  nuevos.js       "Recien llegados" y "Segui mirando".
+  opciones.js     Elegir la version en la ficha: memoria y version en dos pasos.
+  presupuesto.js  "Cuanto queres gastar?": los tramos de precio.
+  rubro.js        El encabezado de cada rubro, Ordenar y Filtrar.
+  servicio.js     Envio, retiro, garantia y "Tambien te puede interesar".
+  sim.js          El rotulo Sim / E-Sim de los botones de version.
+  tarjeta.js      La tarjeta de la grilla tal como la eligio Pedro.
+  guardas-*.js    Las guardas de la auditoria del 29/09: una tanda por grupo
+                  de arreglos, cada una con el caso real que la motivo, para
+                  que lo arreglado no vuelva.
 
 COMO SE CORREN
 --------------
-Doble clic en "PROBAR.bat", en la carpeta de arriba. O a mano:
+Doble clic en "PROBAR.command", en la carpeta de arriba. O a mano, desde esa
+carpeta:
 
-    python pruebas\correr.py
+    python3 pruebas/correr.py
 
-Tarda un par de minutos: cada tanda abre el catalogo entero y espera a que
-baje la planilla.
+(En Windows era PROBAR.bat y "python pruebas\correr.py"; la PC se retiro el
+25/09.)
+
+En otro puerto, por ejemplo para probar una copia del repo sin tocar el
+servidor de siempre (29/09):
+
+    python3 pruebas/correr.py --puerto 9130
+    PRUEBAS_PUERTO=9130 python3 pruebas/correr.py
+
+Si en ese puerto no hay nada andando, el script levanta un servidor igual
+al de servidor.py y lo deja andando, como el de siempre (al terminar dice
+con que "kill" se apaga). Dos corridas a la vez no se pisan:
+cada tanda de cada corrida se abre en su propia copia
+(_probe-<numero de la corrida>-<tanda>.html) y cada corrida borra solo las
+suyas. En esas copias la medicion va SIEMPRE apagada, y los iframes que
+abren index.html van a otra copia apagada: las pruebas no le mandan eventos
+a ADVAPP aunque ANALITICA_URL este puesta.
+
+Tarda varios minutos: cada tanda abre el catalogo entero y espera a que
+bajen los datos.
 
 QUE NECESITAN
 -------------
-Chrome o Edge instalado, y internet (bajan la planilla Landing de verdad,
-no una copia: por eso avisan cuando algo cambia en el Sheet).
+Chrome (o Edge) instalado, e internet: bajan los datos de verdad de ADVAPP,
+no una copia, y por eso avisan cuando algo cambia en la fuente.
 
-El servidor local lo levanta y lo baja solo el propio script.
+Si no hay un servidor local andando en el puerto 8765, el script levanta
+servidor.py y lo DEJA andando a proposito: bajarlo al terminar le dejaba sin
+fotos a quien tuviera el catalogo abierto. Se apaga cerrando su ventana.
 
 COMO LEER EL RESULTADO
 ----------------------
@@ -47,10 +118,28 @@ empieza con EXCEPCION es una prueba que se rompio sola: tambien cuenta como
 falla y tambien frena la publicacion.
 Las que dicen OK estan bien. Al final de cada tanda hay numeros del dia
 (cuantas filas, cuantas tarjetas) que son informativos, no comprobaciones.
+Las que empiezan con AVISO se muestran pero no cuentan: algo que conviene
+saber y que el cliente no ve (por ejemplo, la planilla de respaldo que llega
+recortada por una de sus dos fuentes).
+
+Si una tanda figura como NO LLEGO A CORRER, la linea de abajo dice por que:
+"Chrome no termino a tiempo" suele ser internet. "La tanda no escribio su
+RESULTADO" es que Chrome dio por gastado el reloj virtual antes de que la
+tanda terminara. Puede ser poco presupuesto (PRESUPUESTO, en correr.py); una
+espera que el reloj no cuenta, como Blob.text() o el arrayBuffer() de una
+respuesta (la tanda falla de a ratos, mas con la maquina cargada, y sola
+pasa); datos que no llegaron; o un error de JS que la tanda no atrapo. No
+hay que dar por hecho que es un cambio en index.html: el 29/09 analitica.js
+salia asi de a ratos, tambien con el index.html de antes, por un
+Blob.text().
+
+Cuando no hay nada que probar ese dia, la tanda escribe una linea "  --  ",
+no un OK: un ok(true) suma al total sin mirar nada (guardas-p-pruebas.js lo
+controla).
 
 POR QUE NO TIENEN NUMEROS FIJOS
 -------------------------------
-La planilla cambia todos los dias, asi que las pruebas no verifican "hay 442
+Los datos cambian todos los dias, asi que las pruebas no verifican "hay 442
 tarjetas" sino cosas que tienen que ser ciertas siempre: que no se pierda
 ninguna fila, que no se dupliquen, que el precio de la tarjeta sea el menor
 de sus versiones, que ningun chip quede en singular. Asi siguen sirviendo
@@ -59,8 +148,12 @@ manana sin tener que actualizarlas.
 SI AGREGAS UNA TANDA NUEVA
 --------------------------
 Alcanza con dejar el .js en esta carpeta: correr.py toma todos los que
-encuentre. La tanda tiene que escribir su resultado en un <pre id="RESULTADO">
-y marcar las fallas con lineas que empiecen con FALLA (copiar el arranque de
-cualquiera de las que ya estan). Si la tanda deja algo girando (el carrusel,
-un temporizador), frenarlo al final: si no, el navegador no cierra y la tanda
-figura como "NO LLEGO A CORRER".
+encuentre. Sumale una linea en LAS TANDAS, arriba. La tanda tiene que
+escribir su resultado en un <pre id="RESULTADO"> y marcar las fallas con
+lineas que empiecen con FALLA (copiar el arranque de cualquiera de las que ya
+estan). Si la tanda deja algo girando (el carrusel, un temporizador),
+frenarlo al final: si no, el navegador no cierra y la tanda figura como
+"NO LLEGO A CORRER". Si la tanda lee un Blob (lo que manda la medicion, por
+ejemplo), leerlo con fetch() de un URL.createObjectURL() y no con .text():
+el fetch el reloj virtual lo espera, el .text() no (ver leerBolsa en
+analitica.js).

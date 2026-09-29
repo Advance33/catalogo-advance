@@ -1,10 +1,11 @@
 // ADVAPP como fuente de productos (17/09/2026). La web lee primero el JSON de
 // ADVAPP y queda la planilla de respaldo. Aca se prueba que use ADVAPP cuando
 // anda, que vuelva a la planilla en cada caso en que no sirve (error, demora,
-// vacio, cortado), que no la confunda con una respuesta cortada solo porque
-// trae menos filas que la planilla (las trae a proposito), que las claves de
-// los productos sigan siendo los IDs de siempre y que las fotos de ADVAPP se
-// usen solo cuando no hay archivo propio.
+// vacio, cortado), que las claves de los productos sigan siendo los IDs de
+// siempre y que las fotos de ADVAPP se usen solo cuando no hay archivo propio.
+// (Decia tambien "que no la confunda con una respuesta cortada solo porque
+// trae menos filas que la planilla": eso era cierto hasta que ADVAPP paso a
+// traer mas. Ver la seccion 6, 29/09.)
 //
 // Las demoras y los errores se simulan cambiando fetch solo para la URL de
 // ADVAPP: la planilla, Meta, la cotizacion y las fotos pasan de largo.
@@ -83,13 +84,42 @@ async function correrPruebas(){
     }finally{ window.fetch = real2; }
   }
 
-  /* ---- 6. Menos filas que la planilla NO es estar cortado ---- */
-  if(filasMeta){
-    const n = Math.ceil(filasMeta * 0.85);
-    const d = await conAdvapp(() => respuesta({ ...real, filas: n, productos: real.productos.slice(0, n) }), bajarDatos);
-    ok(d.fuente === 'advapp', 'con el 85 % de las filas de la planilla sigue usando ADVAPP', cantidad(d) + ' de ' + filasMeta);
-  }else{
-    R.push('  --   la hoja Meta no dice cuantas filas tiene: no se prueba el margen');
+  /* Las simulaciones de abajo pasan por bajarDatos(), que guarda en este
+     navegador cuantas filas trajo la ultima carga aceptada: es la vara con
+     la que decide si la proxima vino cortada. Sin devolverla, cada caso
+     dejaba la vara del anterior y el siguiente probaba otra cosa (29/09). */
+  const guardarVara = () => { try{ return [localStorage.getItem(ULTIMAS_FILAS), localStorage.getItem(FILAS_PENDIENTES)]; }catch(e){ return [null, null]; } };
+  const devolverVara = ([a, b]) => {
+    try{
+      if(a === null) localStorage.removeItem(ULTIMAS_FILAS); else localStorage.setItem(ULTIMAS_FILAS, a);
+      if(b === null) localStorage.removeItem(FILAS_PENDIENTES); else localStorage.setItem(FILAS_PENDIENTES, b);
+    }catch(e){}
+  };
+  const vara = guardarVara();
+  const conVara = async (hacer, antes) => {
+    try{ if(antes !== undefined) devolverVara(antes); return await hacer(); } finally { devolverVara(vara); }
+  };
+  const total = real.productos.length;
+
+  /* ---- 6. Una carga corta de ADVAPP ----
+     Hasta el 29/09 esto exigia que "con el 85 % de las filas de la planilla
+     siga usando ADVAPP" (496 de 583): era cuando ADVAPP traia MENOS filas que
+     la planilla a proposito. Hoy es al reves (758 contra una planilla
+     congelada en 583), y esa comprobacion fijaba justo el hueco del hallazgo
+     181: una carga con el 65 % de los productos de hoy se usa como completa,
+     porque la hoja Meta congelada la rescata. Que hacer ante una carga corta
+     -mostrar lo que vino de ADVAPP y avisar, o volver a la planilla del
+     16/09- lo decide Pedro; hasta entonces aca se informa lo que hace la
+     pagina, sin darlo por bueno ni por malo. */
+  {
+    const n = Math.ceil(total * 0.65);
+    const d = await conVara(() => conAdvapp(() => respuesta({ ...real, filas: n, productos: real.productos.slice(0, n) }), bajarDatos));
+    R.push('  --  con ' + n + ' de los ' + total + ' productos de hoy (65 %) la pagina usa ' + d.fuente +
+           (d.motivo ? ' (' + d.motivo + ')' : '') + ': que hacer ante una carga corta lo decide Pedro (hallazgo 181)');
+    const nueva = await conVara(() => conAdvapp(() => respuesta({ ...real, filas: 100, productos: real.productos.slice(0, 100) }), bajarDatos),
+                                [null, null]);
+    R.push('  --  un visitante nuevo (sin carga anterior en su navegador) con 100 de ' + total + ' usa ' + nueva.fuente +
+           (nueva.fuente === 'advapp' ? ': sin vara, no hay control de tamaño (hallazgo 181)' : ''));
   }
 
   /* ---- 6. Cada caso en que ADVAPP no sirve vuelve a la planilla ---- */
@@ -100,13 +130,16 @@ async function correrPruebas(){
     ['si trae 0 productos', () => respuesta({ ...real, filas: 0, productos: [] })],
     ['si trae menos productos de los que declara', () => respuesta({ ...real, productos: real.productos.slice(0, 100) })],
   ];
-  if(filasMeta){
-    const n = Math.floor(filasMeta * 0.5);
-    casos.push(['si trae menos del 80 % de las filas de la planilla',
+  /* Contra los productos de HOY y no contra las filas de la hoja Meta
+     (29/09, hallazgo 181): la hoja quedo congelada en 583 y ADVAPP trae 758.
+     Con la mitad, cualquiera sea la decision de arriba, no es un catalogo. */
+  {
+    const n = Math.floor(total * 0.5);
+    casos.push(['si trae la mitad de los productos de la ultima carga',
                 () => respuesta({ ...real, filas: n, productos: real.productos.slice(0, n) })]);
   }
   for(const [texto, responder] of casos){
-    const d = await conAdvapp(responder, bajarDatos);
+    const d = await conVara(() => conAdvapp(responder, bajarDatos));
     ok(d.fuente === 'planilla' && cantidad(d) >= filasMeta, texto + ', usa la planilla entera',
        d.fuente + ' · ' + cantidad(d) + ' filas · ' + (d.motivo || 'sin motivo'));
   }

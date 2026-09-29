@@ -166,9 +166,12 @@ function pruebasDelCarrusel(){
      'el giro no depende de "reducir movimiento"');
   ok(/\bquieto\b/.test(irOferta.toString()),
      'pero el deslizamiento suave si: con la opcion puesta cambia de golpe');
-  caja.dispatchEvent(new MouseEvent('mouseenter'));
+  /* Con pointerenter/leave de mouse desde el 29/09: el mouseenter que dispara
+     un toque en el celular la dejaba frenada para siempre (guardas-b6-portada,
+     [108], prueba el dedo, las flechas y el refresco). */
+  caja.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse' }));
   ok(!ofTimer, 'se frena al pasar el mouse por arriba');
-  caja.dispatchEvent(new MouseEvent('mouseleave'));
+  caja.dispatchEvent(new PointerEvent('pointerleave', { pointerType: 'mouse' }));
   ok(!!ofTimer, 'y vuelve a girar cuando te vas');
 
   /* ---- 6. Donde esta parado ---- */

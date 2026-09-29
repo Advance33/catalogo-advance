@@ -44,14 +44,15 @@ function correrPruebas(){
      nov.map(m => m.cat).join(' + '));
   ok(nov.every(m => m.stock && m.precio !== null && m.imagen),
      'todas con stock, precio y foto');
-  // Lo mas nuevo primero: ninguna puede ser mas vieja que la siguiente
-  const ts = p => { const m = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/.exec((p.fecha||'').trim());
-    if(!m) return 0; const d = new Date(+m[3]<100?2000+ +m[3]:+m[3], +m[2]-1, +m[1]);
-    return isNaN(d)?0:d.getTime(); };
-  ok(nov.every((m,i) => i === 0 || ts(nov[i-1].rep) >= ts(m.rep)),
-     'ordenadas de mas nueva a mas vieja',
-     nov.map(m => m.rep.fecha).join(' | '));
+  /* (29/09) Aca se comprobaba "ordenadas de mas nueva a mas vieja" por fecha,
+     y pasaba en vacio: ADVAPP manda las fechas en ISO y el regex no entendia
+     ninguna. Si las entendiera fallaria por diseño, porque novedades() ordena
+     por codigo AT. Ese orden ya lo prueba nuevos.js. */
 
+  // Lo que el codigo puede ofrecer desde `cat`: comprable y, desde el 29/09,
+  // compatible con lo que se mira (marca, montura). Sin la funcion, todo.
+  const sirveDesde = cat => typeof sirveParaLoQueMira === 'function' ? sirveParaLoQueMira(cat) : () => true;
+  const sinTecho = [];
   const sinMapa = [], vacias = [], detalle = [];
   cats.forEach(cat => {
     filtros.cat = cat;
@@ -61,7 +62,14 @@ function correrPruebas(){
     const modelos = items.map(b => buscarModelo(b.dataset.key)).filter(Boolean);
 
     if(!COMPLEMENTOS[cat]){ sinMapa.push(cat); return; }
-    if(!items.length){ vacias.push(cat); return; }
+    /* Vacia es FALLA solo si habia algo para dar (29/09). El codigo esconde la
+       caja a proposito cuando ningun complemento tiene nada con stock, precio
+       y foto: el 28/09 ADVAPP dejo los Objetivos fuera de venta y esta tanda
+       fallaba por algo que la pagina hacia bien. */
+    const sirve = sirveDesde(cat);
+    const habia = COMPLEMENTOS[cat].some(c => MODELOS.some(m => m.cat === c && m.stock
+                    && m.precio !== null && m.imagen && sirve(m)));
+    if(!items.length){ if(habia) vacias.push(cat); else sinTecho.push(cat + ' (nada comprable para ofrecer)'); return; }
 
     // Nunca recomendar lo mismo que estas mirando
     ok(modelos.every(m => m.cat !== cat), `${cat}: no se recomienda a sí misma`,
@@ -78,14 +86,18 @@ function correrPruebas(){
     // Un complemento no puede costar mucho mas que lo que la persona vino a ver
     const techo = techoSugeridos();
     const caros = modelos.filter(m => m.precio > techo);
-    ok(caros.length === 0, `${cat}: nada mas caro que el techo (USD ${techo})`,
-       caros.map(m => m.desc.slice(0,24) + ' USD ' + m.precio).join(', ') || 'ninguno');
     // Variedad: si hay mas de una categoria complementaria con productos,
     // no deberian venir los 3 de la misma
     const catsRec = [...new Set(modelos.map(m => m.cat))];
     const disponibles = COMPLEMENTOS[cat].filter(c =>
       MODELOS.some(m => m.cat === c && m.stock && m.precio !== null && m.imagen
-                        && m.precio <= techo));
+                        && m.precio <= techo && sirve(m)));
+    /* Pasarse del techo es FALLA solo si habia algo por debajo (29/09). Si no
+       habia nada, el codigo vuelve a elegir sin techo a proposito ("mas vale
+       una sugerencia cara que un espacio en blanco") y se anota aparte. */
+    if(caros.length && !disponibles.length) sinTecho.push(cat + ' (sin techo a propósito)');
+    else ok(caros.length === 0, `${cat}: nada mas caro que el techo (USD ${techo})`,
+       caros.map(m => m.desc.slice(0,24) + ' USD ' + m.precio).join(', ') || 'ninguno');
     ok(catsRec.length >= Math.min(disponibles.length, modelos.length),
        `${cat}: mezcla categorías en vez de repetir una`,
        catsRec.join(' + ') || 'ninguna');
@@ -95,8 +107,10 @@ function correrPruebas(){
 
   ok(sinMapa.length === 0, 'ninguna categoría del catálogo quedó sin complementos definidos',
      sinMapa.join(', ') || 'ninguna');
-  ok(vacias.length === 0, 'ninguna categoría con mapa se quedó sin nada para mostrar',
+  ok(vacias.length === 0, 'ninguna categoría con algo para ofrecer se quedó sin nada para mostrar',
      vacias.join(', ') || 'ninguna');
+  // No es falla: es el dato del dia. Queda a la vista para el que lee el log.
+  if(sinTecho.length) R.push('  --   por el dato de hoy, no por la pagina: ' + sinTecho.join(', '));
 
   // Tocar una recomendacion abre su ficha
   filtros.cat = 'Celular'; pintar();

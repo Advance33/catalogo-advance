@@ -33,8 +33,11 @@ function correrPruebas(){
   ok(presentes.every((c,i) => i===0 || cats.indexOf(presentes[i-1]) < cats.indexOf(c)),
      'la barra sigue el orden pedido', cats.slice(0,7).join(' > '));
   ok(cats[0] === 'Celular', 'arranca por Celulares');
-  const todas = [...new Set(PRODUCTOS.map(p => p.cat))];
-  ok(cats.length === todas.length, 'no falta ninguna categoria', cats.length + ' de ' + todas.length);
+  // Las que tienen algo con stock (29/09): la barra ya no ofrece un rubro sin
+  // stock, igual que la portada (guardas-b3-busqueda-filtros.js, [205]).
+  const todas = [...new Set(MODELOS.filter(m => m.stock).map(m => m.cat))];
+  ok(cats.length === todas.length && todas.every(c => cats.includes(c)),
+     'no falta ninguna categoria con stock', cats.length + ' de ' + todas.length);
   // Cualquier categoria que no figure en ORDEN_CATS tiene que aparecer igual,
   // al final. Se prueba con las que haya hoy, no con un nombre fijo: el
   // catalogo cambia (E-Reader existia ayer y hoy no).

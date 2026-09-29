@@ -71,7 +71,8 @@ function correrPruebas(){
   const chips = [...document.querySelectorAll('#cats .chip')];
   const txt = chips.map(b => b.textContent);
   ok(chips.length > 1, 'la barra tiene chips', chips.length);
-  ok(!txt.some(t => /^(Celular|Lente|Cámara|Consola|Tablet|iPad|MacBook|Drone|Filmadora|Desktop)$/.test(t)),
+  // Objetivo: el nombre que se muestra desde que 'Lente' se renombra (29/09)
+  ok(!txt.some(t => /^(Celular|Lente|Objetivo|Cámara|Consola|Tablet|iPad|MacBook|Drone|Filmadora|Desktop)$/.test(t)),
      'ningun chip quedo en singular', txt.join(' | '));
   // Los plurales inventados aparecen solos cuando se agrega una categoria nueva
   const raros = txt.filter(t => /(ses|sses)$/i.test(t) || /Watchs|Auricularess/.test(t));
@@ -154,8 +155,16 @@ function correrPruebas(){
      'nunca se mezclan categorias ni marcas dentro de un grupo');
   ok(MODELOS.every(m => m.precio === null || m.variantes.some(v => v.precio === m.precio)),
      'el precio de la tarjeta es el de alguna variante de verdad');
-  ok(MODELOS.every(m => m.precio === null || m.variantes.every(v => v.precio === null || v.precio >= m.precio)),
-     'y es el MENOR de todos (el "desde")');
+  /* 29/09: el "desde" es el menor de las que se pueden COMPRAR, y el de
+     todas solo si ninguna tiene stock. Antes se pedia "el MENOR de todos" y
+     eso fijaba el error: el iPhone Air decia "desde USD 1.030" por una fila
+     agotada, con lo disponible desde 1.200 (auditoria, hallazgo 19). */
+  const vendibles = m => {
+    const cp = m.variantes.filter(v => v.precio !== null);
+    return cp.some(v => v.stock) ? cp.filter(v => v.stock) : cp;
+  };
+  ok(MODELOS.every(m => m.precio === null || vendibles(m).every(v => v.precio >= m.precio)),
+     'y es el MENOR de los que tienen stock, o de todos si ninguno tiene (el "desde")');
   /* Dos filas con la misma etiqueta solo estan bien si la pagina las junta en
      UN boton y el puntito de color las separa: el MacBook Neo 256GB ingles
      tiene Blush e Indigo a USD 847 los dos, y el cliente elige por el color. */
@@ -258,10 +267,27 @@ function correrPruebas(){
      'el modelo figura con stock si al menos una variante lo tiene');
 
   // Lentes y camaras: lo mas delicado, no se debe agrupar NADA
-  const lentes = MODELOS.filter(m => m.cat === 'Lente');
-  ok(lentes.every(m => !m.multi), 'ningun lente se agrupo',
-     lentes.filter(m=>m.multi).map(m=>m.desc).join(' / ') || 'ninguno');
-  ok(lentes.length === cuenta('Lente'), 'los lentes siguen 1 a 1', lentes.length);
+  /* 29/09 (hallazgo 179): categoriaReal() renombra 'Lente' a 'Objetivo' al
+     cargar, y esta prueba seguia filtrando m.cat === 'Lente': miraba 0
+     modelos y las dos comprobaciones pasaban solas ("[ninguno]", "[0]") con
+     189 objetivos en el catalogo. La categoria sale ahora de la misma
+     funcion que usa la pagina, y no puede pasar en vacio: si hay filas que
+     ADVAPP manda como Lente, tiene que haber objetivos que mirar.
+     Hoy los 189 traen la columna Grupo de ADVAPP y familia() la usa antes que
+     cualquier regla del nombre: si esto falla, lo primero es ver si ADVAPP
+     repitio un Grupo en dos objetivos distintos, no tocar familia(). */
+  const CAT_OBJ = categoriaReal('Lente', '', '');
+  const lentes = MODELOS.filter(m => m.cat === CAT_OBJ);
+  const filasLente = PRODUCTOS.filter(p => norm(p.catPlanilla) === 'lente');
+  if(!filasLente.length && !lentes.length){
+    R.push('  --  hoy no hay objetivos: nada que probar');
+  }else{
+    ok(lentes.length > 0 && lentes.every(m => !m.multi), 'ningun objetivo se agrupo',
+       lentes.filter(m=>m.multi).map(m=>m.desc).join(' / ') || lentes.length + ' objetivos, ninguno agrupado');
+    ok(lentes.length === cuenta(CAT_OBJ), 'los objetivos siguen 1 a 1', lentes.length + ' de ' + cuenta(CAT_OBJ));
+    ok(filasLente.every(p => p.cat === CAT_OBJ), 'toda fila que llega como Lente se muestra como ' + CAT_OBJ,
+       filasLente.filter(p => p.cat !== CAT_OBJ).slice(0, 3).map(p => p.id + ' en ' + p.cat).join(' | ') || filasLente.length + ' filas');
+  }
   /* Las camaras no se agrupan por deduccion del texto -dos cuerpos parecidos
      son productos distintos- pero SI cuando la planilla lo dice con la columna
      Grupo. Es el caso de la Z6 III en ingles y en español: la misma camara con
@@ -281,7 +307,17 @@ function correrPruebas(){
      maneras ("Samsung Galaxy S26 ..." y "Galaxy S26 ...") y el grupo se llama
      entonces sin ella (sinMarca en nombreGrupo). */
   const empiezaCon = (v, n) => baja(v.desc).startsWith(baja(n)) || baja(sinMarca(v.desc, v.marca)).startsWith(baja(n));
-  const malNombre = multi.filter(m => !m.variantes.every(v => empiezaCon(v, m.desc)));
+  /* 29/09: si todas las filas terminan con el mismo agregado ("Quest 3S 128GB
+     + Batman" y "Quest 3S 256GB + Batman"), el nombre lo lleva al final
+     (agregadoComun en index.html, hallazgo 20 de la auditoria): sin el, el
+     bundle se llamaba igual que el Quest pelado. Lo que tiene que ser el
+     comienzo comun es el nombre SIN ese agregado. */
+  const sinPar = t => baja(String(t || '').replace(/\([^)]*\)/g, ' ').replace(/\s+/g, ' ').trim());
+  const nombreSinAgregado = m => {
+    const a = /\s[-+]\s.+$/.exec(m.desc || '');
+    return a && m.variantes.every(v => sinPar(v.desc).endsWith(sinPar(a[0]))) ? m.desc.slice(0, -a[0].length) : m.desc;
+  };
+  const malNombre = multi.filter(m => !m.variantes.every(v => empiezaCon(v, nombreSinAgregado(m))));
   ok(malNombre.length === 0, 'el nombre del grupo es el comienzo comun de todas sus variantes',
      malNombre.map(m=>m.desc)[0] || 'todos bien');
   // Y nunca es el nombre entero de una fila con capacidad o color: eso es rendirse
@@ -291,10 +327,40 @@ function correrPruebas(){
      enteros.map(m => m.desc).slice(0, 3).join(' | ') || 'ninguno');
   ok(multi.every(m => m.desc.split(/\s+/).length >= 2), 'ningun grupo quedo con nombre de una palabra');
 
-  const mini = MODELOS.find(m => /Mac Mini M4(?! Pro)/.test(m.desc));
-  ok(mini && mini.multi, 'los Mac Mini M4 quedaron juntos',
-     mini ? mini.desc + ' -> ' + mini.variantes.map(v=>v.etiqueta).join(' | ') : 'no esta');
-  ok(MODELOS.some(m => /Mac Mini M4 Pro/.test(m.desc)), 'el M4 Pro sigue siendo un modelo aparte');
+  /* "X" y "X Pro" son dos productos; la misma maquina con otra memoria, uno.
+     Hasta el 29/09 se probaba buscando los Mac Mini M4 y M4 Pro por nombre, y
+     el dia que ADVAPP diera de baja uno o le cambiara el nombre la suite
+     quedaba en rojo por un dato y no por un error (hallazgo 191) -lo mismo
+     que dice el comentario de porCap, abajo-. Ademas, con la columna Grupo de
+     ADVAPP mandando, ya no probaba la regla por nombre sino el Grupo.
+     Ahora: la regla, con filas armadas a mano y sin Grupo; y con los datos del
+     dia, cualquier par de filas del mismo rubro y marca donde una sea "<la
+     otra> Pro" tiene que quedar en tarjetas distintas. */
+  const mm = desc => familia({ cat: 'Desktop', marca: 'Apple', desc, grupo: '' });
+  ok(mm('Mac Mini M4 16GB/256GB') === mm('Mac Mini M4 16GB/512GB') &&
+     mm('Mac Mini M4 16GB/256GB') !== mm('Mac Mini M4 Pro 24GB/512GB'),
+     'por nombre, la misma maquina con otra memoria se junta y la "Pro" queda aparte',
+     mm('Mac Mini M4 16GB/256GB') + ' / ' + mm('Mac Mini M4 Pro 24GB/512GB'));
+  const tarjetaDe = new Map();
+  MODELOS.forEach(m => [...m.variantes, ...(m.gemelas || [])].forEach(v => tarjetaDe.set(v, m)));
+  const baseNombre = p => norm(nombreSinMemoria(sinMarca(p.desc, p.marca))).replace(/[^a-z0-9]+/g, ' ').trim();
+  const porBase = new Map();
+  PRODUCTOS.forEach(p => {
+    const k = norm(p.cat) + '|' + norm(p.marca) + '|' + baseNombre(p);
+    if(!porBase.has(k)) porBase.set(k, []);
+    porBase.get(k).push(p);
+  });
+  const paresPro = [];
+  for(const [k, filas] of porBase)
+    if(porBase.has(k + ' pro')) paresPro.push([filas[0], porBase.get(k + ' pro')[0]]);
+  if(paresPro.length){
+    const juntos = paresPro.filter(([a, b]) => tarjetaDe.get(a) === tarjetaDe.get(b));
+    ok(!juntos.length, 'un modelo y su version "Pro" nunca comparten tarjeta',
+       juntos.map(([a, b]) => a.desc + ' con ' + b.desc).slice(0, 3).join(' | ') ||
+       paresPro.length + ' pares: ' + paresPro.slice(0, 3).map(([a, b]) => a.desc + ' / ' + b.desc).join(' · '));
+  }else{
+    R.push('  --  hoy no hay ningun par "X" / "X Pro" en el catalogo: nada que probar');
+  }
 
   // Un modelo agrupado por capacidad, el que haya: buscarlo por nombre fijo
   // rompe el test cada vez que cambia el catalogo (paso con el iPad 11 A16).
@@ -461,7 +527,8 @@ function correrPruebas(){
     ok(filtrar().includes(m0), 'buscar por la capacidad de una variante tambien', cap);
   }
   filtros.q = '';
-  const tramo = RANGOS.find(r => m0.precioMax >= r[2] && m0.precioMax < r[3]);
+  // enTramo: el mismo criterio que el filtro (29/09, el tope entra)
+  const tramo = RANGOS.find(r => enTramo(m0.precioMax, r));
   filtros.rango = tramo[0];
   ok(filtrar().includes(m0), 'entra en el tramo de precio de su variante mas cara', tramo[1]);
   filtros.rango = '';

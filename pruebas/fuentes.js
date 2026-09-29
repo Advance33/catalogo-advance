@@ -59,4 +59,31 @@ async function correrPruebas(){
   //    con la primera que respondio
   const ambas = contarFilas(await conFuentesRecortadas([10, 30], bajarCSV));
   ok(ambas === 30, 'si ninguna llega completa, usa la que mas filas trajo', ambas);
+
+  /* 4. Cada fuente por separado (29/09, hallazgo 190). La 1 dice OK aunque
+     gviz traiga 54 de 583: bajarCSV salta sola a export. Y esta bien que la
+     pagina lo resuelva, pero entonces el respaldo depende de UNA fuente y
+     nadie lo sabe: hasta el 24/09 lo avisaba verificar-fotos.py ("las dos
+     fuentes no traen lo mismo") y desde que lee ADVAPP dejo de hacerlo.
+     No es una FALLA: la planilla es un respaldo congelado y el cliente no lo
+     ve, y frenar PUBLICAR por eso acostumbra a publicar igual. Es una linea
+     AVISO, que correr.py muestra sin contarla y queda en el log de la
+     revision diaria. Sacar el filtro de la hoja Landing lo hace quien edita
+     la planilla. */
+  const porFuente = [];
+  for(const url of FUENTES){
+    try{
+      const r = await fetch(url + '&_=' + Date.now());
+      const txt = r.ok ? await r.text() : '';
+      porFuente.push(/^\s*</.test(txt) || !txt ? 0 : contarFilas(txt));
+    }catch(e){ porFuente.push(0); }
+  }
+  const nombreFuente = u => /gviz/.test(u) ? 'gviz' : /export/.test(u) ? 'export' : u.slice(0, 40);
+  const detalle = FUENTES.map((u, i) => nombreFuente(u) + ' ' + porFuente[i]).join(', ') + ' (Meta dice ' + esperadas + ')';
+  R.push('  --  filas de cada fuente de la planilla: ' + detalle);
+  const cortas = FUENTES.filter((u, i) => porFuente[i] < esperadas);
+  if(cortas.length)
+    R.push('AVISO la planilla de respaldo no trae lo mismo por las dos fuentes: ' + detalle +
+           '. Si ADVAPP falla, la pagina depende de ' + (cortas.length < FUENTES.length ? 'una sola' : 'ninguna completa') +
+           '. Suele ser un filtro o una vista puesta en la hoja Landing.');
 }

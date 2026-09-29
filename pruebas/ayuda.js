@@ -43,7 +43,8 @@ function correrPruebas(){
   const malR = [];
   PREGUNTAS.forEach((q, i) => {
     const r = resp[i];
-    if(!r.querySelector('h4') || !r.querySelector('h4').textContent.includes(q.p)) malR.push(q.p + ': sin título');
+    // h3 desde el 29/09: el bloque es un h2 y cada pregunta cuelga de el
+    if(!r.querySelector('h3') || !r.querySelector('h3').textContent.includes(q.p)) malR.push(q.p + ': sin título');
     (q.r || []).forEach(t => { if(!r.textContent.includes(t)) malR.push(q.p + ': falta un párrafo'); });
     (q.lista || []).forEach(t => { if(!r.textContent.includes(t)) malR.push(q.p + ': falta "' + t + '"'); });
     if(!!q.lista !== !!r.querySelector('ul')) malR.push(q.p + ': la lista');
@@ -57,7 +58,9 @@ function correrPruebas(){
      'no inventa urgencias');
 
   /* ---- 3. Se ve una sola, y es la marcada ---- */
-  const marcadas = () => preg.filter(b => b.getAttribute('aria-pressed') === 'true').map(b => Number(b.dataset.ay));
+  // aria-expanded desde el 29/09: cada pregunta es un desplegable, no un
+  // boton que se prende (guardas-b6-portada.js, [136])
+  const marcadas = () => preg.filter(b => b.getAttribute('aria-expanded') === 'true').map(b => Number(b.dataset.ay));
   ok(respuestas().filter(r => r.classList.contains('ve')).length === 1, 'se ve una sola respuesta');
   ok(marcadas().length === 1 && marcadas()[0] === alAire() && alAire() === ayIndice,
      'la marcada en la lista es la que se ve', ayIndice);

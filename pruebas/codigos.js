@@ -92,12 +92,18 @@ function correrPruebas(){
      Se le cambia el nombre a uno que existe por el de otra gama y se
      comprueba que el vinculo se corta. Es la defensa contra que la planilla
      reutilice un ID, que es como empezo todo esto. */
-  const victima = conCodigo.find(p => CATALOGO.ids[p.id]);
+  /* 29/09 (hallazgo 184): el "(control)" decia ok(... || true) y no podia
+     fallar nunca. Como ADVAPP ya manda el codigo en casi todas las filas, la
+     firma casi no se usa al cargar: si se rompia, esto seguia en OK y las dos
+     de abajo pasaban solas (una fila que no resuelve tampoco resuelve con otro
+     nombre). Ahora la victima es una fila que SI resuelve sin su codigo, y que
+     haya una es la comprobacion de verdad del camino por firma. */
+  const victima = conCodigo.find(p => CATALOGO.ids[p.id] && codigoDeLaFila({ ...p, codigo: '' }));
+  ok(!!victima, 'la firma que calcula la web resuelve al menos una fila conocida sin su columna CODIGO',
+     victima ? victima.id + ' -> ' + codigoDeLaFila({ ...victima, codigo: '' }) : 'ninguna resuelve');
   if(victima){
     // se le saca el codigo guardado para forzar que lo resuelva de nuevo
     const base = Object.assign({}, victima, { codigo: '' });
-    ok(!!codigoDeLaFila(base) || true, '(control) la fila original resuelve',
-       codigoDeLaFila(base) || 'no resolvio: la descripcion ya viene limpia');
     const falso = Object.assign({}, base, { desc: base.desc + ' Pro Max 999GB' });
     ok(!codigoDeLaFila(falso), 'si el nombre cambia de gama, el vinculo se corta',
        victima.id + ' -> ' + (codigoDeLaFila(falso) || 'sin codigo'));
@@ -155,8 +161,15 @@ function correrPruebas(){
       paresOk++;
     }
   }
-  ok(paresMal.length === 0, 'dos colores distintos nunca caen en la misma variante',
-     paresMal.slice(0, 3).join(' | ') || paresOk + ' variantes revisadas');
+  /* Con ADVAPP cada fila trae un color (29/09: 0 de 758 con dos), asi que
+     casi siempre no hay nada que mirar aca: se dice, en vez de sumar un OK
+     con "[0 variantes revisadas]" (hallazgo 184). Lo mismo entre filas lo
+     mira la seccion 10. */
+  if(paresOk)
+    ok(paresMal.length === 0, 'dos colores distintos nunca caen en la misma variante',
+       paresMal.slice(0, 3).join(' | ') || paresOk + ' variantes revisadas');
+  else
+    R.push('  --  ninguna fila trae dos colores en su celda: dos colores en la misma variante se mira entre filas (10)');
 
   /* ---- 8. Las columnas del contrato landing/1.3 ----
      Desde el 11/09/2026 la planilla trae CODIGO y CODIGO_VAR. Es el final del
@@ -168,13 +181,51 @@ function correrPruebas(){
   ok(conCol.length > 0, 'la planilla trae la columna CODIGO poblada',
      conCol.length + ' de ' + PRODUCTOS.length);
 
+  /* Que la columna y el mapa no coincidan NO siempre es un error (29/09,
+     hallazgo 162). Pedro decidio el 26/09 que el mismo modelo con otra
+     memoria se ve igual: ADVAPP le pone al 16 Pro Max 512 el codigo del 256
+     (AT-0068) y la foto del hermano esta bien. Esta comprobacion fallaba
+     todos los dias por esos (36 de 51 el 29/09) y mostraba solo 3: una
+     alarma que no podia ponerse verde nunca, ni con ADVAPP corrigiendo todo,
+     y detras de la cual una falla nueva pasaba sin que nadie la viera.
+     Lo que SI es un error, siempre: Sim contra eSIM y teclado ES contra EN,
+     que son productos distintos (Pedro, 26/09), o el codigo de otro modelo.
+
+     Como se decide, con las funciones de la pagina y sin copiar el criterio
+     de Python: se miran las filas que ese codigo "tiene de verdad" (las que
+     la columna Y el mapa le dan). Si ninguna vende la misma Sim y el mismo
+     teclado (del SKU: simDelSku, tecladoDelSku), es otro producto. Si alguna
+     es de la misma familia() -la regla con la que la pagina junta un modelo
+     con sus memorias-, es otra memoria. Si ninguna fila tiene ese codigo,
+     desde la web no se puede juzgar: queda como aviso y lo decide
+     verificar-fotos.py, que tiene el catalogo maestro. */
+  const mapaDe = p => codigoDeLaFila({...p, codigo: '', codigoVar: ''});
   const choques = conCol.filter(p => {
-    const porElMapa = codigoDeLaFila({...p, codigo: '', codigoVar: ''});
+    const porElMapa = mapaDe(p);
     return porElMapa && porElMapa !== p.codigo.trim().toUpperCase();
   });
-  ok(choques.length === 0, 'la columna CODIGO dice lo mismo que el mapa del catalogo',
-     choques.slice(0, 3).map(p => p.id + ': ' + p.codigo).join(' | ')
-     || conCol.length + ' verificadas');
+  // Sin la marca adelante: ADVAPP escribe "Samsung Galaxy S26" y "Galaxy S26"
+  const fam = p => familia({ ...p, grupo: '', desc: sinMarca(p.desc, p.marca) });
+  const simTec = p => (simDelSku(p.sku) || '-') + '/' + (tecladoDelSku(p.sku) || '-');
+  const otraMemoria = [], sinReferencia = [], deOtro = [];
+  for(const p of choques){
+    const X = p.codigo.trim().toUpperCase();
+    const suyas = PRODUCTOS.filter(q => q !== p && (q.codigo || '').trim().toUpperCase() === X && mapaDe(q) === X);
+    const igual = suyas.filter(q => simTec(q) === simTec(p));
+    if(!suyas.length) sinReferencia.push(p.id + ' -> ' + X);
+    else if(!igual.length) deOtro.push(p.id + ' (' + simTec(p) + ') lleva ' + X + ', que es ' + simTec(suyas[0]) + ' (' + suyas[0].id + ')');
+    else if(igual.some(q => fam(q) === fam(p))) otraMemoria.push(p.id + ' -> ' + X);
+    else deOtro.push(p.id + ' lleva ' + X + ', que es otro modelo (' + igual[0].id + ')');
+  }
+  ok(deOtro.length === 0,
+     'la columna CODIGO nunca apunta a otro producto (otra Sim, otro teclado u otro modelo)',
+     deOtro.length ? deOtro.length + ': ' + deOtro.slice(0, 20).join(' | ') + (deOtro.length > 20 ? ' | ...' : '')
+                   : conCol.length + ' verificadas');
+  R.push('  --  ' + choques.length + ' donde la columna y el mapa no coinciden: ' + otraMemoria.length +
+         ' son otra memoria del mismo modelo (aceptado, Pedro 26/09), ' + sinReferencia.length +
+         ' sin otra fila con ese codigo para comparar' +
+         (sinReferencia.length ? ' (' + sinReferencia.join(', ') + ')' : '') +
+         ' y ' + deOtro.length + ' de otro producto');
 
   /* La celda de variantes tiene que tener tantas posiciones como colores la
      fila: una celda corrida le da a un color el archivo del color de al lado,
@@ -234,10 +285,40 @@ function correrPruebas(){
   /* Las dos guardas de varianteDeLaColumna(), probadas a mano: una celda
      corrida y un codigo que es de otro producto NO se usan. Son las dos
      formas en que una columna mal escrita pondria la foto de otro. */
-  const conVar = PRODUCTOS.find(p => (p.codigoVar || '').includes('/')
-                                && partirColores(p.color).length > 1);
+  /* 29/09 (hallazgo 180): solo corrian si ADVAPP mandaba una fila de varios
+     colores con CODIGO_VAR, y ADVAPP manda un color por fila: todos los dias
+     decia "las guardas no se probaron" y se podian romper sin que nada
+     avisara. Si no hay una fila asi, se arma una con un producto del mapa de
+     hoy que tenga dos variantes con nombre (sin nombres fijos). Los casos
+     inventados de punta a punta (AT-9001) estan en CASOS_COLUMNA de
+     herramientas/catalogo_maestro.py, que corre guardas-t1. */
+  const armarFila = () => {
+    for(const cod of Object.keys(CATALOGO.vars || {})){
+      const t = CATALOGO.vars[cod];
+      const nombres = Object.keys(t).filter(k => /^[a-z]{4,}$/.test(k));
+      const a = nombres[0], b = nombres.find(k => t[k] !== t[a]);
+      if(!a || !b) continue;
+      const fila = { id: '(armada)', codigo: cod, color: a + '/' + b, codigoVar: t[a] + '/' + t[b] };
+      if(partirColores(fila.color).length === 2) return fila;
+    }
+    return null;
+  };
+  const deVerdad = PRODUCTOS.find(p => (p.codigoVar || '').includes('/')
+                                  && partirColores(p.color).length > 1);
+  const conVar = deVerdad || armarFila();
   if(conVar){
+    R.push('  --  las guardas de la celda se prueban con ' + (deVerdad
+      ? 'la fila ' + conVar.id : 'una fila armada con ' + conVar.codigo + ' (' + conVar.color + ') del mapa de hoy'));
     const cols = partirColores(conVar.color);
+    // una variante con la forma de las del producto, pero dada de baja
+    let muerta = '';
+    for(let n = 99; n > 0 && !muerta; n--){
+      const v = conVar.codigo + '-' + String(n).padStart(2, '0');
+      if(!Object.values((CATALOGO.vars || {})[conVar.codigo] || {}).includes(v)) muerta = v;
+    }
+    const deBaja = {...conVar, codigoVar: [muerta, ...conVar.codigoVar.split('/').slice(1)].join('/')};
+    ok(varianteDeLaColumna(deBaja, conVar.codigo, cols[0]) === '',
+       'ni una variante que ya no esta en el catalogo', muerta);
     const bueno = varianteDeLaColumna(conVar, conVar.codigo, cols[0]);
     ok(bueno === conVar.codigoVar.split('/')[0].trim(),
        'varianteDeLaColumna toma la posicion del color', bueno);
@@ -295,4 +376,39 @@ function correrPruebas(){
   ok(deOtroColor.length === 0,
      'nadie devuelve, para un color, el archivo que el catalogo le dio a otro',
      [...new Set(deOtroColor)].slice(0, 4).join(' | ') || 'ninguno');
+
+  /* ---- 10. Dos filas del mismo producto, dos colores, dos fotos ----
+     Lo que MUESTRA la web, entre filas y no dentro de una (29/09, hallazgo
+     180). El Watch Ultra 3 "Natural – Blue Trail Loop M/L" (SW-APP-016) y
+     "Natural – Anchor Blue Ocean Band" (SW-APP-017) traian las dos
+     CODIGO_VAR AT-0455-05 y salian con la misma foto, la de la Ocean Band: la
+     celda pasaba todas las guardas (una fila, un color, codigo propio y vivo)
+     y lo de arriba solo mira dentro de cada fila. El juez es el mapa, no el
+     texto: esta mal si el mapa le da a los dos colores variantes DISTINTAS y
+     la web les muestra el mismo archivo. Mismo color en otra memoria ("foto
+     del hermano", Pedro 26/09) da la misma variante y no cuenta. */
+  const porProducto = new Map();
+  for(const p of PRODUCTOS){
+    const cols = partirColores(p.color);
+    if(!p.codigo || cols.length !== 1) continue;
+    const arch = decodeURIComponent(((fotosDeColor(p, cols[0])[0] || '').split('/').pop() || ''))
+                   .replace(/\.[a-z]+$/i, '');
+    const mapa = archivoDeVariante(p.codigo, cols[0]);
+    if(!/^AT-\d{4}-\d{2}$/.test(arch) || !mapa) continue;
+    if(!porProducto.has(p.codigo)) porProducto.set(p.codigo, []);
+    porProducto.get(p.codigo).push({ p, c: cols[0], arch, mapa });
+  }
+  const mismaFoto = [];
+  let filasVistas = 0;
+  for(const filas of porProducto.values()){
+    filasVistas += filas.length;
+    filas.forEach((a, i) => filas.slice(i + 1).forEach(b => {
+      if(a.arch === b.arch && a.mapa !== b.mapa)
+        mismaFoto.push(a.p.id + ' (' + a.c + ') y ' + b.p.id + ' (' + b.c + ') muestran ' + a.arch +
+                       '; el mapa dice ' + a.mapa + ' y ' + b.mapa);
+    }));
+  }
+  ok(mismaFoto.length === 0,
+     'dos filas del mismo producto con colores que el mapa separa nunca muestran la misma foto',
+     mismaFoto.slice(0, 3).join(' | ') || filasVistas + ' filas con foto de su color');
 }

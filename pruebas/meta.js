@@ -27,9 +27,15 @@ const esperar = setInterval(() => {
 }, 120);
 
 function correrPruebas(){
-  /* ---- 1. El manifiesto ---- */
+  /* ---- 1. El manifiesto ----
+     Desde el 29/09 la hoja Meta se pide solo si los datos salen de la
+     planilla (o si ADVAPP vino corto): con ADVAPP andando META queda en null
+     y lo de abajo no aplica. Se dice en vez de pasar en silencio. */
   ok(META === null || typeof META === 'object', 'META es el manifiesto o null (nunca revienta)');
-  if(META){
+  if(FUENTE && FUENTE.fuente === 'advapp'){
+    ok(META === null, 'con ADVAPP la hoja Meta no se pide ni se usa', JSON.stringify(META));
+    R.push('  --  la fuente es ADVAPP: el contrato y las ofertas de la hoja Meta no aplican');
+  }else if(META){
     ok(/^landing\/1\./.test(META.contrato || ''), 'el contrato es de la familia landing/1.x', META.contrato);
     ok(typeof META.verificado_hoy === 'boolean', 'dice si la carga del dia corrio', String(META.verificado_hoy));
     ok(Array.isArray(META.ofertas), 'trae la lista de ofertas', (META.ofertas || []).length + ' IDs');
@@ -43,13 +49,24 @@ function correrPruebas(){
     R.push('  --  el manifiesto no llego: se prueba solo lo que no depende de el');
   }
 
-  /* ---- 2. El sello dice la verdad ---- */
+  /* ---- 2. El sello dice la verdad ----
+     Contra el manifiesto de la fuente que se uso (FUENTE.manifiesto), no
+     contra la hoja Meta: esa quedo congelada el 16/09 con verificado_hoy en
+     true y hacia decir "hoy" sobre precios viejos. "Hoy" pide ademas que el
+     manifiesto sea de hoy. 'En vivo' ya no es una respuesta valida: salia en
+     verde justo cuando no habia carga (29/09). */
   const texto = document.getElementById('stamp').textContent.trim();
-  if(META && META.verificado_hoy === true)
-    ok(texto === 'Actualizado hoy', 'con carga de hoy el sello dice "Actualizado hoy"', texto);
+  const verde = document.querySelector('.stamp .dot').classList.contains('live');
+  const man = FUENTE && FUENTE.manifiesto;
+  const diaAR_ = t => new Date(t).toLocaleDateString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
+  const deHoy = !!(man && man.verificado_hoy === true && man.generado_en
+                   && diaAR_(man.generado_en) === diaAR_(Date.now()));
+  if(deHoy)
+    ok(texto === 'Actualizado hoy' && verde, 'con carga de hoy el sello dice "Actualizado hoy" en verde', texto);
   else
-    ok(/^Actualizado \d{1,2}\/\d{1,2}\/\d{2,4}$/.test(texto) || texto === 'En vivo',
-       'sin carga de hoy el sello muestra la fecha real de la fila mas nueva', texto);
+    ok(/^Actualizado \d{1,2}\/\d{1,2}\/\d{2,4}$/.test(texto) && !verde,
+       'sin carga de hoy el sello muestra la fecha real de la fila mas nueva, sin el punto verde',
+       texto + (verde ? ' (verde)' : ''));
 
   /* ---- 3. El indice de fotos y la portada por variante ----
      Las fotos se llaman por el codigo del catalogo: AT-0142-01.jpg. Lo que
@@ -64,10 +81,24 @@ function correrPruebas(){
       !INDICE_FOTOS.has(decodeURIComponent(p.imagen.split('/').pop().split('?')[0])));
     ok(fantasma.length === 0, 'y ninguna apunta a un archivo que no esta',
        fantasma.slice(0, 3).map(p => p.id).join(', ') || conFoto.length + ' portadas');
-    /* Un producto sin ningun archivo no manda a pedir nada: placeholder */
-    const sinNada = PRODUCTOS.find(p => !p.imagen);
-    if(sinNada) ok(!sinNada.imagen, 'sin archivos, la portada queda vacia y no se pide nada',
-                   sinNada.id);
+    /* Un producto sin ningun archivo no manda a pedir nada: placeholder.
+       29/09 (hallazgos 178 y 184): esto buscaba un producto sin imagen y
+       comprobaba que no tuviera imagen, y no podia fallar nunca. Ahora se
+       abre su ficha y se mira lo que ve el cliente: el cartel y ninguna foto.
+       Entre las variantes y no entre las filas: una gemela escondida abre la
+       ficha de la que se muestra, que puede tener foto. */
+    const sinNada = MODELOS.flatMap(m => m.variantes).find(p => !p.imagen);
+    if(sinNada){
+      abrirFicha(clave(sinNada), null);
+      const marco = document.querySelector('#ficha .fi-marco');
+      const img = marco && marco.querySelector('img');
+      ok(!!marco && !img && !!marco.querySelector('.sinfoto'),
+         'sin archivos, la ficha muestra el cartel "sin imagen" y no pide ninguna foto',
+         sinNada.id + (img ? ': muestra ' + img.getAttribute('src') : (marco ? '' : ': no se abrio la ficha')));
+      try{ cerrarFicha(); }catch(e){}
+    }else{
+      R.push('  --  hoy todos los productos tienen foto: el cartel no se probo');
+    }
     /* fotosDeColor no pide lo que el indice dice que no existe */
     let pedidas = 0, fantasmas = [];
     for(const p of PRODUCTOS.slice(0, 200)){

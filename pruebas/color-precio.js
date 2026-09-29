@@ -126,7 +126,8 @@ function correrPruebas(){
     }));
 
   if(!conRepe){
-    ok(true, 'no hay ningun modelo con hermanas que repitan color', 'nada que probar hoy');
+    // Una linea informativa y no un OK que no mira nada (29/09, hallazgo 184)
+    R.push('  --  no hay ningun modelo con hermanas que repitan color: nada que probar hoy');
   } else {
     abrirFicha(clave(conRepe.variantes[0]));
     const ns = [...document.querySelectorAll('.fi-pintas button')].map(b => norm(b.dataset.color));

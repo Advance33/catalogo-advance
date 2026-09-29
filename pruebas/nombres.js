@@ -75,8 +75,20 @@ function correrPruebas(){
   ok(!/garant/i.test(gar.desc), 'saca la garantía del nombre', gar.desc);
   ok(/3/.test(gar.garantia || ''), 'y se acuerda de cuántos años eran', gar.garantia);
 
+  /* El nombre EXACTO, no solo que ya no diga "garant" (29/09, hallazgo 186):
+     pasaba en OK dejando "(FHD/USB/ )", con la barra colgando, porque la
+     regla solo se comia un "·" antes del número. */
   const garVieja = sacarNotasDelNombre({ desc: '27" P2725H (FHD/USB/3Y Garantía)', garantia: '' });
-  ok(!/garant/i.test(garVieja.desc), 'también en la forma vieja "3Y Garantía"', garVieja.desc);
+  ok(garVieja.desc === '27" P2725H (FHD/USB)' && garVieja.garantia === '3 años',
+     'también en la forma vieja "3Y Garantía", sin dejar nada colgando', garVieja.desc + ' · ' + garVieja.garantia);
+  const garSola = sacarNotasDelNombre({ desc: 'Monitor (3Y Garantía)', garantia: '' });
+  ok(garSola.desc === 'Monitor' && garSola.garantia === '3 años',
+     'si el paréntesis era solo la garantía, no queda "()"', garSola.desc + ' · ' + garSola.garantia);
+  const garIngles = sacarNotasDelNombre({ desc: 'P2725H | Dell 27" FHD (1920x1080 · Vesa · USB · 3Y Warranty)', garantia: '' });
+  ok(garIngles.desc === 'P2725H | Dell 27" FHD (1920x1080 · Vesa · USB)' && garIngles.garantia === '3 años',
+     'y en inglés, "3Y Warranty" (el Dell P2725H de ADVAPP)', garIngles.desc + ' · ' + garIngles.garantia);
+  const conBarras = sacarNotasDelNombre({ desc: 'Magic Keyboard (M4/M5)', garantia: '' });
+  ok(conBarras.desc === 'Magic Keyboard (M4/M5)', 'un nombre sin notas no pierde sus barras', conBarras.desc);
 
   const garPropia = sacarNotasDelNombre({ desc: 'Monitor X · Garantía 2 Años', garantia: '5 años' });
   ok(garPropia.garantia === '5 años',
@@ -88,6 +100,10 @@ function correrPruebas(){
   ok(!sucios.length, 'ningún producto muestra una nota de carga en el nombre',
      sucios.length ? sucios.slice(0, 3).map(v => v.id + ': ' + v.desc).join(' | ')
                    : todos.length + ' productos');
+  // Y lo que queda despues de sacarla, en los datos de hoy (29/09, hallazgo 186)
+  const colgados = todos.filter(v => /[·\/|,]\s*\)|\(\s*\)|\s[·\/|,]\s*$/.test(v.desc || ''));
+  ok(!colgados.length, 'ningún nombre queda con "()" o un separador colgando',
+     colgados.slice(0, 3).map(v => v.id + ': ' + v.desc).join(' | ') || todos.length + ' productos');
 
   /* ---- 4. Titulos de la ficha sin separadores sueltos ----
      Sacar los chips del titulo dejaba "Kindle Touch 2024 | / Pantalla — Black"

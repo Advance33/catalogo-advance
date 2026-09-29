@@ -68,15 +68,22 @@ function correrPruebas(){
      'y ninguno aparece en dos mundos');
   ok(mundos.every(t => t.querySelector('h3').textContent.trim()), 'todos los mundos tienen nombre');
 
-  // Lo que dice cada boton y cada mundo tiene que coincidir con la planilla
-  const malRubro = rubros.filter(b => Number(b.querySelector('i').textContent) !== enStock(b.dataset.cat).length);
+  // Lo que dice cada boton y cada mundo tiene que coincidir con la planilla.
+  /* Desde el 29/09 el numero cuenta TODOS los modelos del rubro, con y sin
+     stock: es lo que dice la grilla al entrar ("189 productos"). Antes esta
+     prueba exigia solo los con stock, y el boton decia 169. El "desde" sigue
+     saliendo de los que tienen stock. (guardas-b6-portada.js, [107], compara
+     el boton con la grilla de verdad.) */
+  const todos = cat => MODELOS.filter(m => m.cat === cat);
+  const malRubro = rubros.filter(b => Number(b.querySelector('i').textContent) !== todos(b.dataset.cat).length);
   ok(malRubro.length === 0, 'la cantidad de cada rubro es la real',
      malRubro.slice(0, 3).map(b => b.dataset.cat).join(', ') || 'ninguna mal');
   const malMundo = mundos.filter(t => {
-    const ms = [...t.querySelectorAll('.rubro')].flatMap(b => enStock(b.dataset.cat));
-    const ps = ms.map(m => m.precio).filter(x => x !== null && x > 0);
+    const cats = [...t.querySelectorAll('.rubro')].map(b => b.dataset.cat);
+    const n = cats.flatMap(todos).length;
+    const ps = cats.flatMap(enStock).map(m => m.precio).filter(x => x !== null && x > 0);
     const txt = t.querySelector('.mundo-cab p').textContent;
-    return !new RegExp('^' + ms.length + ' producto').test(txt) ||
+    return !new RegExp('^' + n + ' producto').test(txt) ||
            (ps.length && !txt.includes('desde USD ' + plata(Math.min(...ps))));
   });
   ok(malMundo.length === 0, 'cada mundo suma bien sus productos y su "desde" es el mas bajo',
@@ -123,8 +130,14 @@ function correrPruebas(){
   todo.click();
   ok(!enPortada() && !$('grid').hidden, '"Ver todo" abre la grilla completa');
   ok($$('.card').length > 0, 'con productos', $$('.card').length);
-  ok(LISTA.length === MODELOS.filter(m => m.stock || true).length || LISTA.length > 100,
-     'y son todos, no los de un rubro', LISTA.length + ' de ' + MODELOS.length);
+  /* Todos, exacto (29/09, hallazgo 184). Decia "=== MODELOS.filter(m =>
+     m.stock || true) || LISTA.length > 100": el filtro no hacia nada y con
+     mas de 100 pasaba, asi que "Ver todo" podia abrir solo los 189 objetivos
+     y dar OK. Con los filtros limpios -soloStock arranca en false- la lista
+     son todos los modelos; si quedo algun filtro puesto, el mensaje lo dice. */
+  const puestos = Object.entries(filtros).filter(([k, x]) => k !== 'orden' && x).map(([k, x]) => k + '=' + x);
+  ok(LISTA.length === MODELOS.length, 'y son todos, no los de un rubro',
+     LISTA.length + ' de ' + MODELOS.length + (puestos.length ? ' (filtros puestos: ' + puestos.join(', ') + ')' : ''));
 
   /* ---- 6. Buscar tambien saca de la portada ---- */
   const chipTodo2 = [...$$('#cats .chip')].find(c => c.dataset.cat === '');

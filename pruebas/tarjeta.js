@@ -80,7 +80,8 @@ function correrPruebas(){
      capacidad adentro ("iPhone 15 Plus 128GB (Yellow)") y un modelo que agrupa
      dos capacidades se quedaba sin ella. Ahora en la grilla va el modelo y la
      capacidad se elige adentro de la ficha. El color tampoco esta en el texto:
-     ya se ve en los puntitos de al lado de la marca. */
+     se ve y se elige en la ficha, en la tira al costado de la foto (la
+     tarjeta no tiene puntitos desde el 21/09). */
   const CAP = /\d+(?:[.,]\d+)?\s*(?:GB|TB)\b/i;
   const conMemoria = cs.filter(c => CAP.test(c.querySelector('.nombre').textContent || ''));
   ok(!conMemoria.length, 'en la tarjeta el nombre no trae la memoria',
@@ -181,7 +182,8 @@ function correrPruebas(){
      rotos.slice(0, 3).map(m => '"' + m.desc + '" -> "' + nombreSinMemoria(m.desc) + '"').join(' | ')
      || MODELOS.length + ' modelos');
 
-  /* El color tampoco: ya esta en los puntitos de al lado de la marca, y
+  /* El color tampoco: se ve en la ficha (los puntitos de al lado de la marca
+     salieron de la tarjeta el 21/09; comentario corregido el 29/09), y
      repetirlo entre parentesis era la otra mitad de lo que emparejaba mal la
      fila. Solo cuenta cuando el parentesis ES exactamente sus colores; los que
      dicen otra cosa ("Pack x4", "Mini 3 Pro") se quedan. */
@@ -241,7 +243,12 @@ function correrPruebas(){
   cards()[0].querySelector('.mas').click();
   ok(enPedidoModelo(m0) === antes, 'y tocarlo de nuevo lo saca');
   const wa = c0.querySelector('.foto .wa');
-  ok(!WHATSAPP || (wa && decodeURIComponent(wa.href).includes(m0.desc.split(' ')[0])), 'el WhatsApp va con el producto escrito');
+  /* El nombre ENTERO con el que la pagina arma el mensaje (nombreConMarca), no
+     solo su primera palabra: "FE", "RF" y "Z" empiezan decenas de modelos y
+     asi casi no controlaba nada (29/09, hallazgo 184). No m0.rep.desc: en 73
+     modelos lleva el color entre parentesis y el link no. */
+  ok(!WHATSAPP || (wa && decodeURIComponent(wa.href).includes(nombreConMarca(m0))), 'el WhatsApp va con el producto escrito',
+     wa ? decodeURIComponent(wa.href).replace(/^[^?]*\?text=/, '').slice(0, 90) : 'sin boton');
 
   /* ---- 6. Sin fotos cargadas, los botones vuelven a la etiqueta ---- */
   const guardado = CON_FOTOS;
@@ -276,7 +283,3 @@ function correrPruebas(){
      'revelar escalona con --i', nuevas.map(n => n.style.getPropertyValue('--i')).join(','));
   nuevas.forEach(n => n.remove());
 }
-
-/* ---- 8. Los puntitos cambian la foto (18/09) ----
-   Se busca un modelo donde cada color es una fila con su código: ahí
-   preguntarle a la fila principal devolvía la misma foto para todos. */

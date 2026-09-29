@@ -43,15 +43,41 @@ function interceptar(){
     window.fetch = fetchReal;
   };
 }
-const leer = async m => JSON.parse(m.bolsa ? await m.bolsa.text() : m.opts.body);
+// 29/09: la bolsa se lee con fetch() de un blob: y no con bolsa.text(). La
+// tanda borra todos los temporizadores (arriba) y Chrome, con
+// --virtual-time-budget, cuando no le queda ni un temporizador ni un pedido
+// pendiente da el presupuesto por gastado y vuelca el DOM. bolsa.text() no
+// cuenta como pedido, y con la maquina cargada el volcado salia antes del
+// RESULTADO: "NO LLEGO A CORRER" de a ratos (sola pasaba; con cinco corridas
+// a la vez, 21 de 30), tambien con el index.html de HEAD. No era un error de
+// JS ni un cambio en index.html. Un fetch si cuenta y el reloj lo espera. Un
+// setInterval de latido no alcanza: el reloj salta de latido en latido y el
+// presupuesto se quema igual. El blob: es local: no sale nada a la red.
+// fetchDeVerdad se toma al cargar la tanda, antes de que interceptar()
+// cambie window.fetch (un blob: igual no es ANALITICA_URL y pasaria).
+const fetchDeVerdad = window.fetch.bind(window);
+const leerBolsa = async b => {
+  const u = URL.createObjectURL(b);
+  try{ return await (await fetchDeVerdad(u)).text(); }
+  finally{ URL.revokeObjectURL(u); }
+};
+const leer = async m => JSON.parse(m.bolsa ? await leerBolsa(m.bolsa) : m.opts.body);
 // Los eventos se juntan y se mandan de a tandas: para leerlos hay que vaciar
 // la cola primero, igual que hace la pagina al irse.
 const eventos = async () => { ANALITICA.mandar(); return (await Promise.all(mandados.map(leer))).flatMap(x => x.eventos); };
 const hubo = async t => (await eventos()).filter(e => e.t === t);
 
 async function correrPruebas(){
-  /* ---- 1. Apagada: no junta ni manda nada ---- */
-  ok(ANALITICA_URL === '', 'se publica apagada: sin endpoint no se mide nada', JSON.stringify(ANALITICA_URL));
+  /* ---- 1. Apagada: no junta ni manda nada ----
+     29/09 (hallazgo 187): decia "se publica apagada" y exigia la URL vacia en
+     index.html. Encender la medicion es poner la direccion y publicar
+     (MEDICION-ADVAPP.txt), y ese dia fallaban tres comprobaciones y PUBLICAR
+     preguntaba "Publicar igual?". Ahora correr.py apaga la medicion en la
+     copia de cada tanda (armar_probe), este encendida o no en index.html:
+     ninguna prueba le manda eventos de verdad a ADVAPP desde localhost. Lo
+     que se mira aca es que esa copia haya llegado apagada. */
+  const original = ANALITICA_URL;
+  ok(ANALITICA_URL === '', 'en la prueba arranca apagada (correr.py la apaga en su copia)', JSON.stringify(ANALITICA_URL));
   ok(ANALITICA.apagada() === true, 'la medición se declara apagada');
   anotar('prueba_apagada', { a: 1 });
   ok(ANALITICA.pendientes() === 0, 'con la medición apagada no se guarda ningún evento');
@@ -160,9 +186,11 @@ async function correrPruebas(){
     try{ anotar('con_error'); ANALITICA.mandar(); }catch(e){ reventó = true; }
     ok(!reventó, 'un error al mandar no llega a la página');
   }finally{
-    ANALITICA_URL = '';
+    // Como estaba al entrar, no '' fijo (29/09)
+    ANALITICA_URL = original;
     soltar();
   }
 
-  ok(ANALITICA.apagada() === true, 'al terminar la prueba queda apagada como estaba');
+  ok(ANALITICA_URL === original && ANALITICA.apagada() === !original,
+     'al terminar la prueba queda como estaba', JSON.stringify(ANALITICA_URL));
 }

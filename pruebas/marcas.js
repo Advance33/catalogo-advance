@@ -164,10 +164,18 @@ function correrPruebas(){
   filtros.cat = ''; filtros.marca = ''; pintar();
 }
 
-/* ---- 6. El giro, con el reloj corriendo ---- */
+/* ---- 6. El giro, con el reloj corriendo ----
+   Desde el 29/09 la vitrina no gira mientras no se ve (freno 'fuera', ver
+   vigilarVista). Aca se prueba el giro, no la vista: se la trae a la vista
+   (por si el observador tiene un aviso pendiente, que diga "se ve") y se le
+   dice lo mismo que diria al llegar, porque el Chrome sin ventana no lo
+   vuelve a consultar despues de cargar. La vista, en guardas-b6-portada.js,
+   [142]. */
 function probarGiro(fin){
   const n = MV.length;
   if(!vitrina()){ ok(false, 'la vitrina volvio a la portada'); return fin(); }
+  vitrina().scrollIntoView({ block: 'center' });
+  VIGIAS.get('marcas-vitrina')?.avisar?.(true);
   arrancarMarcas();
   irMarca(n, false);
   mvDesde = Date.now() - MARCAS_MS;          // como si ya hubiera pasado el tiempo

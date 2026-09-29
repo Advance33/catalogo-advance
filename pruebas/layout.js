@@ -32,7 +32,13 @@ function probar(){
       // La portada muestra rubros: lo que se mide aca es el layout de la
       // grilla, asi que hay que pedirla como la pide el cliente.
       try{ f.contentWindow.verTodoElCatalogo?.(); }catch{}
-      medir(f, w); f.remove(); probar();
+      /* Con try, como menu.js (29/09, hallazgo 182). Sin el, un error en
+         medir() -una clase que cambio de nombre, un elemento que se saco del
+         index- cortaba la cadena: RESULTADO no se escribia nunca y correr.py
+         lo mostraba como "NO LLEGO A CORRER", falta de internet. Ahora sale
+         como EXCEPCION con el ancho, y se siguen midiendo los otros. */
+      try{ medir(f, w); }catch(e){ R.push('EXCEPCION ' + w + 'px: ' + (e && e.stack || e)); fallas++; }
+      f.remove(); probar();
     }, 3500);
   };
 }

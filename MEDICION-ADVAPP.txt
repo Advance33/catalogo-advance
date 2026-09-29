@@ -4,6 +4,10 @@ La web ya manda los eventos; hoy está APAGADA porque falta el endpoint. Del
 lado del catálogo, encenderla es poner la dirección en ANALITICA_URL
 (index.html, bloque MEDICIÓN) y publicar. Nada más.
 
+Las pruebas corren siempre con la medición apagada (29/09): pruebas/correr.py
+la apaga en su copia de la página, así que ni PUBLICAR ni la revisión diaria
+le mandan eventos a ADVAPP desde localhost, esté encendida o no.
+
 Se eligió que los datos queden en ADVAPP y no en un servicio de terceros:
 así se pueden cruzar con el catálogo (qué SKU se mira contra cuál se vende) y
 no hay cookies ni cartel de consentimiento.
@@ -54,8 +58,15 @@ no hay cookies ni cartel de consentimiento.
    (AT-####), cat, marca, precio y nombre (hasta 80 caracteres).
 
    visita           una por pestaña. ancho (px), productos (cuántos se
-                    cargaron), fuente ("advapp" o "planilla"), ref (el dominio
-                    de donde vino, vacío si entró directo).
+                    cargaron), fuente ("advapp" o "planilla"), motivo (por
+                    qué no se usó ADVAPP: "tardo mas de 8 s", "HTTP 500"...;
+                    vacío si se usó), ref (el dominio de donde vino, vacío si
+                    entró directo).
+   carga_fallida    la visita que no pudo cargar el catálogo, una por pestaña.
+                    motivo (hasta 120 caracteres, con lo que dijo ADVAPP y la
+                    planilla) y ancho. Si después carga, llega también la
+                    visita. Si el cliente se quedó sin conexión no llega:
+                    sirve para las caídas del servidor o del código.
    rubro            entró a un rubro. rubro: "Celular".
    menu             volvió al menú de rubros.
    ver_todo         pidió el catálogo entero.
@@ -70,12 +81,18 @@ no hay cookies ni cartel de consentimiento.
    pedido_quitar    lo sacó.
    pedido_cantidad  cambió unidades. cant.
    whatsapp         TOCÓ WHATSAPP. desde: "tarjeta", "ficha", "pedido",
-                    "flotante" o "preguntas". Con desde="pedido" van también
-                    unidades y total. Es la conversión: lo único que dice si
-                    el catálogo sirvió.
+                    "flotante", "preguntas" o "nuevos" (el "Consultar" de
+                    Recién llegados, con el producto). Con desde="pedido" van
+                    también unidades y total. Es la conversión: lo único que
+                    dice si el catálogo sirvió.
+   pedilo           TOCÓ WHATSAPP desde "¿Buscás algo que no está?". q: lo que
+                    escribió en ese casillero (hasta 60 caracteres, desde 3).
+                    También es conversión, y es la lista de lo que vinieron a
+                    buscar y no tenemos. (29/09)
 
-   Lo que NO se manda nunca: nada escrito por el cliente salvo la búsqueda,
-   ningún dato personal, ningún teléfono, ningún texto del mensaje.
+   Lo que NO se manda nunca: nada escrito por el cliente salvo la búsqueda y
+   el casillero de "¿Buscás algo que no está?", ningún dato personal, ningún
+   teléfono, ningún texto del mensaje.
 
    Si el navegador pide no ser seguido (Do Not Track), la web no junta ni
    manda nada.

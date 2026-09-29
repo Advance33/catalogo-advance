@@ -29,22 +29,13 @@ const esperar = setInterval(() => {
 
 function correrPruebas(){
   /* ---- 1. Como se lee cada forma de escribir un precio ----
-     num() vive dentro del parseo y no se exporta, asi que se prueba la misma
-     logica: si esta copia y la del index se separan, la prueba deja de servir
-     y hay que mirar las dos. */
-  const num = s => {
-    const t = String(s ?? '').replace(/[^\d.,-]/g, '');
-    if(!t) return 0;
-    const corte = Math.max(t.lastIndexOf('.'), t.lastIndexOf(','));
-    if(corte === -1) return parseFloat(t) || 0;
-    const decimales = t.length - corte - 1;
-    const esMiles = (t.includes('.') && t.includes(','))
-      ? false
-      : (t.match(/[.,]/g) || []).length > 1 || decimales === 3;
-    return parseFloat(esMiles
-      ? t.replace(/[.,]/g, '')
-      : t.slice(0, corte).replace(/[.,]/g, '') + '.' + t.slice(corte + 1)) || 0;
-  };
+     Con la funcion de la pagina, leerPrecio(), la misma que usa cargar().
+     Hasta el 29/09 vivia adentro de cargar() y aca se probaba una COPIA: si
+     alguien cambiaba la del index, esto seguia en OK (hallazgo 185; extras.js
+     lo dice: una prueba que copia la cuenta que quiere verificar no
+     verifica nada). */
+  ok(typeof leerPrecio === 'function', 'la pagina lee los precios con leerPrecio()');
+  const num = typeof leerPrecio === 'function' ? leerPrecio : () => NaN;
   [['8500',8500],['USD 8500',8500],['$8500',8500],['8.500',8500],['8,500',8500],
    ['1.234.567',1234567],['1.585,50',1585.5],['12,5',12.5],['1585.75',1585.75],
    ['',0],['—',0],['sin precio',0]
@@ -91,10 +82,17 @@ function correrPruebas(){
      rotulo + ' con ' + enVidriera.filter(enOferta).length + ' de ' +
      enVidriera.length + ' en baja');
 
-  // Con un "antes" escrito con punto de miles tambien tiene que funcionar
+  /* Con un "antes" escrito con punto de miles tambien tiene que funcionar.
+     Hasta el 29/09 se miraba m0.antes despues de asignarle num('8.500'): la
+     copia contra si misma (hallazgo 185). Ahora se mira lo que se VE: el
+     precio tachado de ese producto en la vidriera. */
   m0.antes = num('8.500'); if(m0.rep) m0.rep.antes = m0.antes;
   pintarOfertas();
-  ok(m0.antes === 8500, 'un precio anterior escrito "8.500" vale 8500', m0.antes);
+  const suSlide = [...document.querySelectorAll('#ofertas .of-slide')].find(s => buscarModelo(s.dataset.key) === m0);
+  const suTachado = suSlide && suSlide.querySelector('.of-precio s');
+  ok(!!suTachado && suTachado.textContent.includes(plata(8500)),
+     'un precio anterior escrito "8.500" se ve tachado como ' + plata(8500),
+     suTachado ? suTachado.textContent : (suSlide ? 'sin tachado' : 'no esta en la vidriera'));
 
   m0.antes = guardado; if(m0.rep) m0.rep.antes = guardado;
   pintarOfertas();

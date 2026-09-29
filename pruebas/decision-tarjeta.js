@@ -52,6 +52,43 @@ async function dtEsperarA(cond, ms = 25000){
   }
   return false;
 }
+/* Esperar a que se asiente lo que se mide, con tope, y no un tiempo fijo
+   (29/09). Las ventanas entran con una animacion (cajaIn: .3 s con
+   scale(.97)) y, con la suite entera corriendo a la vez, un tiempo fijo a
+   veces no alcanzaba: getBoundingClientRect medía la ventana a medio entrar
+   (en decision-tarjeta, el pie de 114 px daba 111 = 114 x .97 y [2.7]
+   fallaba de a ratos). dtQuieto espera, cuadro a cuadro, a que no quede
+   ninguna animacion o transicion con final andando adentro de `raiz`; si al
+   tope siguen, las termina (finish) para medir el estado final. dtHasta
+   espera una condicion cuadro a cuadro (lo que depende de un ResizeObserver
+   o de un repintado cambia recien en un cuadro). */
+const dtCuadro = (w = window) => new Promise(r => {
+  let ya = false; const fin = () => { if(!ya){ ya = true; r(); } };
+  try{ w.requestAnimationFrame(fin); }catch(e){}
+  setTimeout(fin, 50);                     // por si ese documento no dibuja
+});
+async function dtQuieto(raiz, ms = 3000){
+  if(!raiz) return true;
+  const w = (raiz.ownerDocument && raiz.ownerDocument.defaultView) || window;
+  const andando = () => {
+    let as = [];
+    try{ as = raiz.getAnimations({ subtree: true }); }catch(e){}
+    return as.filter(a => { try{ return a.playState === 'running' && isFinite(a.effect.getComputedTiming().endTime); }catch(e){ return false; } });
+  };
+  const t0 = Date.now();
+  while(Date.now() - t0 < ms){
+    if(!andando().length) return true;
+    await dtCuadro(w);
+  }
+  andando().forEach(a => { try{ a.finish(); }catch(e){} });
+  await dtCuadro(w);
+  return false;
+}
+async function dtHasta(cond, w = window, ms = 3000){
+  const t0 = Date.now();
+  do{ try{ if(cond()) return true; }catch(e){} await dtCuadro(w); } while(Date.now() - t0 < ms);
+  try{ return !!cond(); }catch(e){ return false; }
+}
 /* Cierra la lista del pedido sin el history.back() (abrirPedido empuja una entrada) */
 function dtCerrarPedido(){
   pedidoEmpujado = false;
@@ -521,7 +558,7 @@ async function probarSinStock(){
       const w = f.contentWindow, doc = f.contentDocument;
       try{ w.pararOfertas?.(); w.pararPaseos?.(); w.pararMundos?.(); }catch(e){}
       w.eval('abrirPedido()');
-      await dtDormir(250);
+      await dtQuieto(doc.getElementById('pedido'));   // la ventana ya entro entera
       const fila = doc.querySelector(`#pedido .pd-item[data-key="${CSS.escape(clave(sin))}"]`);
       const pr = fila && fila.querySelector('.pd-precio'), x = fila && fila.querySelector('.pd-quitar');
       const rp = pr && pr.getBoundingClientRect(), rx = x && x.getBoundingClientRect(), rs = fila && fila.querySelector('.stepper').getBoundingClientRect();
@@ -567,7 +604,7 @@ async function probarCelular(){
     if(!listo) return;
     const w = f.contentWindow, doc = f.contentDocument;
     try{ w.pararOfertas?.(); w.pararPaseos?.(); w.pararMundos?.(); }catch(e){}
-    await dtDormir(400);
+    await dtQuieto(doc.getElementById('ficha'));     // la ficha ya entro entera (cajaIn)
     const caja = doc.querySelector('#ficha .caja');
     const bots = doc.querySelector('#ficha .fi-botones');
     const cta = bots.querySelector('.cta');
@@ -592,10 +629,17 @@ async function probarCelular(){
     ok(env && rb.bottom <= env.getBoundingClientRect().top + 1, '[2.7] al llegar al envio se sueltan (no lo tapan)',
        Math.round(rb.bottom) + ' <= ' + Math.round(env.getBoundingClientRect().top));
     /* (29/09, revisiones de la 2.7 y la 4.3) Con el teclado, lo enfocado no
-       queda detras del pie pegado: la ficha reserva abajo su alto medido */
-    const altoPie = bots.getBoundingClientRect().height, sp = parseFloat(cs(caja).scrollPaddingBottom);
+       queda detras del pie pegado: la ficha reserva abajo su alto medido.
+       (29/09) Contra el alto de layout (offsetHeight, el mismo que mide la
+       pagina) leido en el mismo momento que el scroll-padding: el de
+       getBoundingClientRect cambia con la animacion de entrada (dio 126 px
+       con un pie de 111 bajo carga). Y si el pie cambio de alto, se espera
+       con tope a que el ResizeObserver de la pagina lo alcance. */
+    const reserva = () => [parseFloat(cs(caja).scrollPaddingBottom), bots.offsetHeight];
+    await dtHasta(() => { const [s, a] = reserva(); return Math.abs(s - (a + 12)) <= 2; }, w);
+    const [sp, altoPie] = reserva();
     ok(Math.abs(sp - (altoPie + 12)) <= 2, '[2.7] la ficha reserva abajo el alto del pie para el foco',
-       sp + ' px con un pie de ' + Math.round(altoPie));
+       sp + ' px con un pie de ' + altoPie);
     const tapados = async sel => {
       const malos = [], els = [...doc.querySelectorAll(sel)].filter(el => el.getClientRects().length);
       for(const el of els){

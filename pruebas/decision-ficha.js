@@ -59,6 +59,43 @@ async function dfEsperarA(cond, ms = 25000){
   }
   return false;
 }
+/* Esperar a que se asiente lo que se mide, con tope, y no un tiempo fijo
+   (29/09). Las ventanas entran con una animacion (cajaIn: .3 s con
+   scale(.97)) y, con la suite entera corriendo a la vez, un tiempo fijo a
+   veces no alcanzaba: getBoundingClientRect medía la ventana a medio entrar
+   (en decision-tarjeta, el pie de 114 px daba 111 = 114 x .97 y [2.7]
+   fallaba de a ratos). dfQuieto espera, cuadro a cuadro, a que no quede
+   ninguna animacion o transicion con final andando adentro de `raiz`; si al
+   tope siguen, las termina (finish) para medir el estado final. dfHasta
+   espera una condicion cuadro a cuadro (lo que depende de un ResizeObserver
+   o de un repintado cambia recien en un cuadro). */
+const dfCuadro = (w = window) => new Promise(r => {
+  let ya = false; const fin = () => { if(!ya){ ya = true; r(); } };
+  try{ w.requestAnimationFrame(fin); }catch(e){}
+  setTimeout(fin, 50);                     // por si ese documento no dibuja
+});
+async function dfQuieto(raiz, ms = 3000){
+  if(!raiz) return true;
+  const w = (raiz.ownerDocument && raiz.ownerDocument.defaultView) || window;
+  const andando = () => {
+    let as = [];
+    try{ as = raiz.getAnimations({ subtree: true }); }catch(e){}
+    return as.filter(a => { try{ return a.playState === 'running' && isFinite(a.effect.getComputedTiming().endTime); }catch(e){ return false; } });
+  };
+  const t0 = Date.now();
+  while(Date.now() - t0 < ms){
+    if(!andando().length) return true;
+    await dfCuadro(w);
+  }
+  andando().forEach(a => { try{ a.finish(); }catch(e){} });
+  await dfCuadro(w);
+  return false;
+}
+async function dfHasta(cond, w = window, ms = 3000){
+  const t0 = Date.now();
+  do{ try{ if(cond()) return true; }catch(e){} await dfCuadro(w); } while(Date.now() - t0 < ms);
+  try{ return !!cond(); }catch(e){ return false; }
+}
 const dfTxt = el => el ? el.textContent.replace(/\s+/g, ' ').trim() : '';
 const dfCerca = (a, b, tol = 1.5) => Math.abs(a - b) <= tol;
 
@@ -114,7 +151,9 @@ async function dfAbrir(k){
   const raf = window.requestAnimationFrame;
   window.requestAnimationFrame = cb => setTimeout(() => cb(performance.now()), 0);
   try{ abrirFicha(k, false); } finally { window.requestAnimationFrame = raf; }
-  await dfDormir(500);          // la entrada de la caja (cajaIn) es una animacion de .3 s
+  // La entrada de la caja (cajaIn) es una animacion de .3 s: se espera a
+  // que termine, con tope, y no 500 ms fijos (29/09)
+  await dfQuieto(document.getElementById('ficha'));
   return document.getElementById('ficha');
 }
 
@@ -646,7 +685,7 @@ async function probarCelular(){
   if(f){
     try{
       const w = f.contentWindow, doc = f.contentDocument;
-      await dfDormir(500);
+      await dfQuieto(doc.getElementById('ficha'));   // la ficha ya entro entera (cajaIn)
       const caja = doc.querySelector('#ficha .caja'), X = doc.querySelector('#ficha .fi-cerrar'), C = doc.querySelector('#ficha .fi-compartir');
       const cs = el => w.getComputedStyle(el);
       ok(cs(C).position === 'sticky' && cs(C).top === '14px', '[4.1] en el celular Compartir va pegado arriba, como la X', cs(C).position + ' ' + cs(C).top);
@@ -747,6 +786,7 @@ async function probarCelular(){
          botones.map(dfTxt).join(' / '));
       ok(!!y.querySelector('.fi-cerrar[aria-label]'), '[4.5] con su X');
       ok(!/#p=/.test(w.location.href), '[4.5] el #p= sale de la direccion', w.location.href.replace(/^.*\//, ''));
+      await dfQuieto(y);                                 // la ventanita ya entro entera
       const r = y.querySelector('.caja').getBoundingClientRect();
       ok(r.left >= 0 && r.right <= 390 && r.width >= 300, '[4.5] entra en el celular', Math.round(r.left) + '-' + Math.round(r.right));
       botones[1].click();

@@ -1,6 +1,7 @@
 // Decisiones 5.1 a 5.4 de Pedro (29/09/2026): el pedido.
 // Muestra: muestras/auditoria/pedido.html. Pedro eligio la recomendada en las
-// cuatro (1B 2B 3A 4B), y la 3 queda como hoy (ver la nota de 5.3).
+// cuatro (1B 2B 3A 4B). La 3 primero quedo como hoy (la consigna lo decia asi)
+// y despues Pedro confirmo la A de la muestra: retiro o envio.
 //   5.1 B  la foto y el nombre de cada linea del pedido se tocan y abren la
 //          ficha en la version y el color de esa linea; el renglon "Cambiar
 //          version o color ›" va solo en las lineas que tienen algo para
@@ -13,9 +14,15 @@
 //          boton pasa a "Agregar tambien" y, con UNA version cargada, se suma
 //          "Cambiar por esta": reemplaza la linea en su lugar, con las mismas
 //          unidades y el color de la version nueva (nunca el de la otra)
-//   5.3    el mensaje del pedido sale igual que hoy: la lista y el total, sin
-//          retiro, envio, localidad ni forma de pago, y la ventana no pregunta
-//          nada de eso
+//   5.3 A  en "Tu pedido", entre el total y "Enviar", el recuadro "¿Como lo
+//          recibis? opcional" con dos botones, "Retiro en CABA" / "Envio" (y
+//          la ayuda de SERVICIO debajo); si elige envio, el campo "Localidad".
+//          El mensaje suma un renglon al final: "Lo retiro en CABA." o "Me lo
+//          mandan a Rosario?" ("Me lo mandan?" sin localidad). Sin elegir
+//          nada sale igual que hoy. Nada de forma de pago (eso era la B).
+//          Queda guardado en el navegador; "Vaciar" no lo borra, asi que
+//          "Deshacer" lo encuentra igual. La medicion anota solo "retiro" o
+//          "envio" en el evento whatsapp del pedido, nunca la localidad.
 //   5.4 B  "Vaciar el pedido" es un link chico abajo, aparte; "Enviar por
 //          WhatsApp" queda solo y a todo el ancho. Vaciar vacia de una y deja
 //          "Vaciaste el pedido. [Deshacer]" mientras la ventana siga abierta,
@@ -50,6 +57,43 @@ async function dpEsperarA(cond, ms = 25000){
     await dpDormir(150);
   }
   return false;
+}
+/* Esperar a que se asiente lo que se mide, con tope, y no un tiempo fijo
+   (29/09). Las ventanas entran con una animacion (cajaIn: .3 s con
+   scale(.97)) y, con la suite entera corriendo a la vez, un tiempo fijo a
+   veces no alcanzaba: getBoundingClientRect medía la ventana a medio entrar
+   (en decision-tarjeta, el pie de 114 px daba 111 = 114 x .97 y [2.7]
+   fallaba de a ratos). dpQuieto espera, cuadro a cuadro, a que no quede
+   ninguna animacion o transicion con final andando adentro de `raiz`; si al
+   tope siguen, las termina (finish) para medir el estado final. dpHasta
+   espera una condicion cuadro a cuadro (lo que depende de un ResizeObserver
+   o de un repintado cambia recien en un cuadro). */
+const dpCuadro = (w = window) => new Promise(r => {
+  let ya = false; const fin = () => { if(!ya){ ya = true; r(); } };
+  try{ w.requestAnimationFrame(fin); }catch(e){}
+  setTimeout(fin, 50);                     // por si ese documento no dibuja
+});
+async function dpQuieto(raiz, ms = 3000){
+  if(!raiz) return true;
+  const w = (raiz.ownerDocument && raiz.ownerDocument.defaultView) || window;
+  const andando = () => {
+    let as = [];
+    try{ as = raiz.getAnimations({ subtree: true }); }catch(e){}
+    return as.filter(a => { try{ return a.playState === 'running' && isFinite(a.effect.getComputedTiming().endTime); }catch(e){ return false; } });
+  };
+  const t0 = Date.now();
+  while(Date.now() - t0 < ms){
+    if(!andando().length) return true;
+    await dpCuadro(w);
+  }
+  andando().forEach(a => { try{ a.finish(); }catch(e){} });
+  await dpCuadro(w);
+  return false;
+}
+async function dpHasta(cond, w = window, ms = 3000){
+  const t0 = Date.now();
+  do{ try{ if(cond()) return true; }catch(e){} await dpCuadro(w); } while(Date.now() - t0 < ms);
+  try{ return !!cond(); }catch(e){ return false; }
 }
 // Espera el popstate de un history.back(); se engancha ANTES de moverse
 const dpPop = () => new Promise(r => {
@@ -124,7 +168,7 @@ async function correrPruebas(){
   await probarLaFichaAvisa(P);           // 5.2
   await probarElMensaje(P);              // 5.3
   await probarVaciar(P);                 // 5.4
-  await probarCelular(P);                // 5.1, 5.2 y 5.4 a 390 px
+  await probarCelular(P);                // 5.1, 5.2, 5.3 y 5.4 a 390 px
 }
 
 /* ---- 5.1 B Del pedido a la ficha ---- */
@@ -423,25 +467,220 @@ async function probarLaFichaAvisa(P){
      malos.slice(0, 3).join(' · ') || n + ' modelos');
 }
 
-/* ---- 5.3 El mensaje sale igual que hoy ---- */
+/* ---- 5.3 A Retiro o envio, en el mismo mensaje ----
+   (29/09) Hasta la tanda "decision-53" esta parte fijaba "como hoy": la
+   consigna de la primera vuelta lo pedia asi. Pedro confirmo la A. */
+/* Arranca sin eleccion y despues deja la de antes, tambien la guardada */
+async function dpConEntrega(fn){
+  const antes = JSON.stringify(ENTREGA);
+  let ls = null;
+  try{ ls = localStorage.getItem(ENTREGA_KEY); }catch(e){}
+  ENTREGA = { entrega: '', localidad: '' }; guardarEntrega(); pintarPedido();
+  try{ return await fn(); }
+  finally{
+    ENTREGA = JSON.parse(antes);
+    try{ if(ls === null) localStorage.removeItem(ENTREGA_KEY); else localStorage.setItem(ENTREGA_KEY, ls); }catch(e){}
+    pintarPedido();
+  }
+}
+const dpEntregaGuardada = () => { try{ return localStorage.getItem(ENTREGA_KEY); }catch(e){ return 'ERROR'; } };
+const dpDelLink = a => a ? decodeURIComponent(a.href.split('text=')[1] || '') : '';
+/* Toca "Enviar por WhatsApp" sin salir a WhatsApp y devuelve lo que anoto la
+   medicion: se cambia ANALITICA.medir un momento (anotar lo busca en cada
+   llamada), asi no sale nada a la red */
+function dpClicWA(a){
+  const medir0 = ANALITICA.medir, mandar0 = ANALITICA.mandar, ev = [];
+  ANALITICA.medir = (t, x) => { ev.push({ t, ...(x || {}) }); };
+  ANALITICA.mandar = () => {};
+  const frenar = e => e.preventDefault();
+  document.addEventListener('click', frenar);
+  try{ a.click(); }
+  finally{ document.removeEventListener('click', frenar); ANALITICA.medir = medir0; ANALITICA.mandar = mandar0; }
+  return ev.filter(x => x.t === 'whatsapp');
+}
+
 async function probarElMensaje(P){
   const lineas = [{ k: clave(P.a), n: 1, color: P.a.color || '' }, { k: clave(P.solo), n: 2, color: '' }];
+  await dpConEntrega(async () => {
   await dpConPedido(lineas, async () => {
-    const msj = mensajePedido();
-    const partes = msj.split('\n\n');
+    // Sin elegir nada: como hoy
+    const msj0 = mensajePedido();
+    const partes = msj0.split('\n\n');
     ok(partes[0] === 'Hola! Te paso mi pedido:' && partes.length === 3 && /^1\. .+\n2\. .+$/.test(partes[1]) &&
        /^Total: USD [\d.]+( \(aprox\. \$ [\d.]+\))?(\nPrecios de las \d\d:\d\d, a confirmar\.)?$/.test(partes[2]),
-       '[5.3] el mensaje: el saludo, la lista y el total, como hoy', JSON.stringify(partes[2]));
-    ok(!/retir|env[ií]o|mandan|localidad|pago con|efectivo|transferencia|cripto|paypal/i.test(msj),
-       '[5.3] sin retiro, envio, localidad ni forma de pago');
+       '[5.3] sin elegir nada, el mensaje sale como hoy: el saludo, la lista y el total', JSON.stringify(partes[2]));
+    ok(!/retir|mandan|localidad|pago con|efectivo|transferencia|cripto|paypal/i.test(msj0),
+       '[5.3] (sin retiro, envio, localidad ni forma de pago)');
     abrirPedido();
     await dpDormir(40);
     const d = document.getElementById('pedido');
-    ok(!d.querySelector('input, select, textarea, .pd-entrega, .chip, [aria-pressed]'),
-       '[5.3] la ventana del pedido no pregunta nada');
-    const a = d.querySelector('a.pri');
-    if(WHATSAPP) ok(a && decodeURIComponent(a.href.split('text=')[1] || '') === msj && $('bp-enviar').href === a.href,
-                    '[5.3] «Enviar por WhatsApp» y «Enviar pedido» mandan ese mismo mensaje');
+    const chip = v => d.querySelector(`.pd-chip[data-entrega="${v}"]`);
+    const loc = () => d.querySelector('#pd-localidad');
+    const pri = () => d.querySelector('.botones a.pri');
+    const apretado = b => !!b && b.getAttribute('aria-pressed') === 'true';
+    const e = d.querySelector('.pd-entrega');
+    if(!WHATSAPP){
+      ok(!e, '[5.3] sin WhatsApp no hay mensaje: tampoco el recuadro');
+      return;
+    }
+    ok(!!e, '[5.3] la ventana del pedido pregunta «¿Cómo lo recibís?»');
+    if(!e) return;
+    const tot = d.querySelector('.pd-total'), bot = d.querySelector('.botones');
+    ok(!!tot && !!bot && !!(tot.compareDocumentPosition(e) & Node.DOCUMENT_POSITION_FOLLOWING) &&
+       !!(e.compareDocumentPosition(bot) & Node.DOCUMENT_POSITION_FOLLOWING) &&
+       e.getBoundingClientRect().top >= tot.getBoundingClientRect().bottom && bot.getBoundingClientRect().top >= e.getBoundingClientRect().bottom,
+       '[5.3] va entre el total y «Enviar por WhatsApp», como la muestra');
+    const rot = e.querySelector('.pd-rot');
+    ok(dpTxt(rot) === '¿Cómo lo recibís? opcional' && dpTxt(rot && rot.querySelector('i')) === 'opcional',
+       '[5.3] el rotulo: «¿Cómo lo recibís?» y, aparte, «opcional»', dpTxt(rot));
+    ok(e.getAttribute('role') === 'group' && document.getElementById(e.getAttribute('aria-labelledby')) === rot,
+       '[5.3] el lector de pantalla lo lee como un grupo con ese rotulo');
+    const cse = getComputedStyle(e);
+    ok(cse.backgroundColor === 'rgb(241, 234, 253)' && parseFloat(cse.borderTopLeftRadius) === 14,
+       '[5.3] en el recuadro lila de la muestra', cse.backgroundColor + ' · ' + cse.borderTopLeftRadius);
+    const chips = [...e.querySelectorAll('.pd-chip')];
+    ok(chips.map(dpTxt).join(' | ') === 'Retiro en CABA | Envío' && chips.every(b => b.tagName === 'BUTTON' && b.type === 'button' && b.tabIndex === 0),
+       '[5.3] dos botones: «Retiro en CABA» y «Envío», que se alcanzan con el Tab', chips.map(dpTxt).join(' | '));
+    ok(chips.length === 2 && chips.every(b => b.getAttribute('aria-pressed') === 'false'), '[5.3] de entrada ninguno marcado: es opcional');
+    ok(!e.querySelector('.pd-ayuda') && !loc(), '[5.3] sin elegir, ni ayuda ni localidad');
+    ok(!d.querySelector('select, textarea') && !/pago|recargo/i.test(dpTxt(e)), '[5.3] nada de forma de pago (eso era la B)');
+    const w0 = dpClicWA(pri());
+    ok(w0.length === 1 && w0[0].desde === 'pedido' && !('entrega' in w0[0]),
+       '[5.3] sin elegir, la medicion del clic a WhatsApp queda como antes (sin entrega)', JSON.stringify(w0[0] || {}).slice(0, 100));
+
+    // Retiro
+    chip('retiro').focus();
+    chip('retiro').click();
+    await dpDormir(30);
+    ok(apretado(chip('retiro')) && !apretado(chip('envio')), '[5.3] tocar «Retiro en CABA» lo marca');
+    ok(getComputedStyle(chip('retiro')).backgroundColor === 'rgb(124, 58, 237)' && getComputedStyle(chip('envio')).backgroundColor === 'rgb(255, 255, 255)',
+       '[5.3] (el marcado en violeta y el otro en blanco, como la muestra)', getComputedStyle(chip('retiro')).backgroundColor);
+    ok(dpTxt(d.querySelector('.pd-entrega .pd-ayuda')) === SERVICIO.retiro[1],
+       '[5.3] debajo, la ayuda de retiro de la ficha (SERVICIO)', dpTxt(d.querySelector('.pd-ayuda')));
+    ok(!loc(), '[5.3] retiro no pide localidad');
+    const m1 = mensajePedido();
+    ok(m1 === msj0 + '\n\nLo retiro en CABA.', '[5.3] el mensaje suma al final «Lo retiro en CABA.» y lo demas queda igual', JSON.stringify(m1.slice(-40)));
+    ok(dpDelLink(pri()) === m1 && $('bp-enviar').href === pri().href,
+       '[5.3] «Enviar por WhatsApp» y «Enviar pedido» de la barra mandan ese mismo mensaje');
+    ok(dpEntregaGuardada() === '{"entrega":"retiro","localidad":""}', '[5.3] queda guardado en el navegador', dpEntregaGuardada());
+    ok(document.activeElement === chip('retiro'), '[5.3] el foco se queda en el boton que toco',
+       document.activeElement && (document.activeElement.dataset.entrega || document.activeElement.className));
+
+    // Envio
+    chip('envio').click();
+    await dpDormir(30);
+    ok(apretado(chip('envio')) && !apretado(chip('retiro')), '[5.3] tocar «Envío» cambia la eleccion: uno solo marcado');
+    ok(dpTxt(d.querySelector('.pd-entrega .pd-ayuda')) === SERVICIO.envio[1],
+       '[5.3] con la ayuda de envio de la ficha', dpTxt(d.querySelector('.pd-ayuda')));
+    let l = loc();
+    const lab = l && l.closest('label.pd-campo');
+    ok(!!l && l.type === 'text' && !!lab && lab.closest('.pd-entrega') === d.querySelector('.pd-entrega') && dpTxt(lab.querySelector('span')) === 'Localidad' &&
+       l.placeholder === 'Por ejemplo: Rosario' && l.getAttribute('autocomplete') === 'address-level2' && l.value === '',
+       '[5.3] aparece el campo «Localidad», vacio, con «Por ejemplo: Rosario»', l && l.placeholder);
+    ok(!!l && l.maxLength === 60, '[5.3] (hasta 60 letras)', l && l.maxLength);
+    ok(mensajePedido() === msj0 + '\n\nMe lo mandan?', '[5.3] sin localidad el renglon es «Me lo mandan?»', JSON.stringify(mensajePedido().slice(-30)));
+    l.focus(); l.value = 'Rosario'; l.dispatchEvent(new Event('input', { bubbles: true }));
+    ok(mensajePedido() === msj0 + '\n\nMe lo mandan a Rosario?', '[5.3] con la localidad: «Me lo mandan a Rosario?»', JSON.stringify(mensajePedido().slice(-30)));
+    ok(dpDelLink(pri()) === mensajePedido() && $('bp-enviar').href === pri().href, '[5.3] los dos botones ya lo mandan, letra por letra');
+    ok(loc() === l && document.activeElement === l, '[5.3] escribir no redibuja la ventana: el campo no pierde el foco');
+    ok(dpEntregaGuardada() === '{"entrega":"envio","localidad":"Rosario"}', '[5.3] y queda guardado', dpEntregaGuardada());
+    const w1 = dpClicWA(pri());
+    ok(w1.length === 1 && w1[0].desde === 'pedido' && w1[0].entrega === 'envio',
+       '[5.3] la medicion del clic a WhatsApp del pedido anota entrega: "envio"', JSON.stringify(w1[0] || {}).slice(0, 120));
+    ok(w1.length === 1 && !('localidad' in w1[0]) && !JSON.stringify(w1[0]).includes('Rosario'), '[5.3] y nunca la localidad');
+    l.value = '  Villa   María '; l.dispatchEvent(new Event('input', { bubbles: true }));
+    ok(mensajePedido().endsWith('\n\nMe lo mandan a Villa María?'), '[5.3] los espacios de mas no pasan al mensaje', JSON.stringify(mensajePedido().slice(-32)));
+    // Lo que escribe el cliente no se vuelve HTML al redibujar
+    window.__dp53 = 0;
+    l.value = '<img src=x onerror="window.__dp53=1">'; l.dispatchEvent(new Event('input', { bubbles: true }));
+    redibujarPedido();
+    await dpDormir(60);
+    ok(!d.querySelector('.pd-entrega img') && window.__dp53 === 0 && loc() && loc().value === '<img src=x onerror="window.__dp53=1">',
+       '[5.3] lo escrito en la localidad vuelve como texto, nunca como HTML');
+    l = loc(); l.value = 'Rosario'; l.dispatchEvent(new Event('input', { bubbles: true }));
+
+    // Tocar el marcado lo desmarca
+    chip('envio').click();
+    await dpDormir(30);
+    ok(!apretado(chip('envio')) && !apretado(chip('retiro')) && !loc() && !d.querySelector('.pd-entrega .pd-ayuda'),
+       '[5.3] tocar otra vez el marcado lo desmarca: vuelve a «nada»');
+    ok(mensajePedido() === msj0 && dpDelLink(pri()) === msj0, '[5.3] y el mensaje vuelve a salir como hoy');
+    chip('envio').click();
+    await dpDormir(30);
+    ok(loc() && loc().value === 'Rosario' && mensajePedido().endsWith('\n\nMe lo mandan a Rosario?'),
+       '[5.3] (la localidad escrita se recuerda si vuelve a elegir envio)');
+
+    // Con la hora de la copia (1.5 A): la hora va con el total y el renglon despues
+    const f0 = FUENTE, h0 = HORA_DATOS;
+    try{
+      FUENTE = { ...(FUENTE || {}), fuente: 'copia' }; HORA_DATOS = Date.now() - 3600e3;
+      const mh = mensajePedido();
+      ok(/\nTotal: USD [^\n]+\nPrecios de las \d\d:\d\d, a confirmar\.\n\nMe lo mandan a Rosario\?$/.test(mh),
+         '[5.3 + 1.5] con la copia, «Precios de las …» sigue pegado al total y el renglon va despues', JSON.stringify(mh.slice(-80)));
+    } finally { FUENTE = f0; HORA_DATOS = h0; }
+
+    // Vaciar y Deshacer (5.4 B): Vaciar no borra la eleccion, asi que Deshacer la encuentra
+    document.getElementById('pd-vaciar').click();
+    await dpDormir(30);
+    ok(!d.querySelector('.pd-entrega') && !!d.querySelector('.pd-deshecho'), '[5.3 + 5.4] con el pedido vaciado no se pregunta nada: queda solo «Deshacer»');
+    ok(ENTREGA.entrega === 'envio' && ENTREGA.localidad === 'Rosario' && dpEntregaGuardada() === '{"entrega":"envio","localidad":"Rosario"}',
+       '[5.3 + 5.4] «Vaciar el pedido» no borra la eleccion (la muestra: «Vaciar no lo borra»)', dpEntregaGuardada());
+    document.getElementById('pd-deshacer').click();
+    await dpDormir(30);
+    ok(apretado(chip('envio')) && loc() && loc().value === 'Rosario' && mensajePedido().endsWith('\n\nMe lo mandan a Rosario?') && dpDelLink(pri()) === mensajePedido(),
+       '[5.3 + 5.4] «Deshacer» devuelve el pedido con «Envío» y «Rosario» como estaban, y el mensaje con su renglon');
+
+    // Cerrar y volver a abrir: sigue
+    dpCerrarTodo();
+    abrirPedido();
+    await dpDormir(40);
+    const d2 = document.getElementById('pedido');
+    const chip2 = v => d2.querySelector(`.pd-chip[data-entrega="${v}"]`);
+    ok(apretado(chip2('envio')) && d2.querySelector('#pd-localidad') && d2.querySelector('#pd-localidad').value === 'Rosario',
+       '[5.3] al volver a abrir el pedido la eleccion sigue ahi');
+
+    // Otra pestana la cambia: esta ventana y la barra dicen lo mismo
+    localStorage.setItem(ENTREGA_KEY, JSON.stringify({ entrega: 'retiro', localidad: 'Rosario' }));
+    dispatchEvent(new StorageEvent('storage', { key: ENTREGA_KEY }));
+    await dpDormir(30);
+    ok(ENTREGA.entrega === 'retiro' && apretado(chip2('retiro')) && !d2.querySelector('#pd-localidad') &&
+       dpDelLink($('bp-enviar')).endsWith('\n\nLo retiro en CABA.'),
+       '[5.3] si otra pestaña la cambia, esta ventana y «Enviar pedido» se enteran');
+
+    // Lo guardado que no sirve, y el navegador que no deja guardar
+    localStorage.setItem(ENTREGA_KEY, '{"entrega":"moto","localidad":5}');
+    ok(JSON.stringify(leerEntrega()) === '{"entrega":"","localidad":""}', '[5.3] lo guardado que no sirve se ignora', JSON.stringify(leerEntrega()));
+    localStorage.setItem(ENTREGA_KEY, '{roto');
+    ok(leerEntrega() === null, '[5.3] y si no se puede leer, la copia en memoria no se toca (null)');
+    guardarEntrega();
+    const sp = Storage.prototype, gi = sp.getItem, si = sp.setItem, ri = sp.removeItem;
+    const errores = [];
+    const alError = ev => errores.push(String(ev.message || ev.error));
+    addEventListener('error', alError);
+    try{
+      sp.getItem = sp.setItem = sp.removeItem = function(){ throw new Error('bloqueado'); };
+      chip2('envio').click();
+      await dpDormir(30);
+      releerEntrega();
+    } finally { sp.getItem = gi; sp.setItem = si; sp.removeItem = ri; removeEventListener('error', alError); }
+    ok(!errores.length && ENTREGA.entrega === 'envio' && ENTREGA.localidad === 'Rosario' && mensajePedido().endsWith('\n\nMe lo mandan a Rosario?'),
+       '[5.3] sin poder guardar (incognito, bloqueado) igual anda, sin errores', errores.join(' | ') || ENTREGA.entrega);
+  });
+
+  // Con productos sin stock (2.6 B): sus avisos quedan y el renglon va al final
+  const sin = PRODUCTOS.find(p => !p.stock);
+  if(!sin){ info('[5.3 + 2.6] hoy no hay ningun producto sin stock para probar'); return; }
+  ENTREGA = { entrega: 'retiro', localidad: '' };
+  await dpConPedido([{ k: clave(P.a), n: 1, color: P.a.color || '' }, { k: clave(sin), n: 1, color: '' }], async () => {
+    const m = mensajePedido();
+    ok(/ — sin stock \(avisame cuando entre\)\n/.test(m) && /, más los productos sin stock/.test(m) && m.endsWith('\n\nLo retiro en CABA.'),
+       '[5.3 + 2.6] con algo sin stock, su aviso y el del total quedan, y el renglon va al final', JSON.stringify(m.slice(-60)));
+  });
+  await dpConPedido([{ k: clave(sin), n: 1, color: '' }], async () => {
+    const partes = mensajePedido().split('\n\n');
+    ok(partes.length === 3 && / — sin stock \(avisame cuando entre\)$/.test(partes[1]) && partes[2] === 'Lo retiro en CABA.',
+       '[5.3 + 2.6] con todo sin stock no hay total, y el renglon igual va', JSON.stringify(partes.slice(1)));
+  });
   });
 }
 
@@ -456,7 +695,7 @@ async function probarVaciar(P){
   try{
     await dpConPedido(lineas, async () => {
       abrirPedido();
-      await dpDormir(60);
+      await dpQuieto(document.getElementById('pedido'));
       const d = document.getElementById('pedido');
       const bot = d.querySelector('.botones');
       const v = document.getElementById('pd-vaciar');
@@ -555,6 +794,9 @@ async function probarCelular(P){
   PEDIDO = [{ k: clave(P.a), n: 1, color: P.a.color || '' }, { k: clave(P.solo), n: 2, color: '' },
             { k: clave(P.solo2), n: 1, color: '' }];
   guardarPedido();
+  // Con "Envío" y "Rosario" guardados (5.3 A): el recuadro entero a la vista
+  let lsE = null;
+  try{ lsE = localStorage.getItem(ENTREGA_KEY); localStorage.setItem(ENTREGA_KEY, JSON.stringify({ entrega: 'envio', localidad: 'Rosario' })); }catch(e){}
   // El pedido de los dos anchos: el de 390 lo cambia ("Cambiar por esta") y
   // lo guarda, y el storage de la otra ventana tambien lo trae aca
   const pedidoCel = JSON.stringify(PEDIDO);
@@ -570,7 +812,7 @@ async function probarCelular(P){
       const w = f.contentWindow, doc = f.contentDocument;
       try{ w.pararOfertas?.(); w.pararPaseos?.(); w.pararMundos?.(); }catch(e){}
       w.eval('abrirPedido()');
-      await dpDormir(300);
+      await dpQuieto(doc.getElementById('pedido'));   // la ventana ya entro entera
       const caja = doc.querySelector('#pedido .caja');
       const it = doc.querySelector(`#pedido .pd-item[data-key="${CSS.escape(clave(P.a))}"]`);
       const btn = it && it.querySelector('.pd-abre-txt');
@@ -585,12 +827,29 @@ async function probarCelular(P){
       if(WHATSAPP) ok(bot && Math.abs(bot.querySelector('a.pri').getBoundingClientRect().width - bot.getBoundingClientRect().width) < 1 &&
                       v.getBoundingClientRect().top >= bot.getBoundingClientRect().bottom, `[5.4 · ${ancho}] «Enviar» a todo el ancho y «Vaciar el pedido» abajo`);
       ok(caja.scrollWidth <= caja.clientWidth + 1, `[${ancho}] la ventana del pedido no se sale de costado`, caja.scrollWidth + ' / ' + caja.clientWidth);
+      if(WHATSAPP){
+        const e = doc.querySelector('#pedido .pd-entrega');
+        const cs = e ? [...e.querySelectorAll('.pd-chip')] : [];
+        const inp = doc.getElementById('pd-localidad');
+        const re = e && e.getBoundingClientRect(), rcj = caja.getBoundingClientRect();
+        ok(!!e && cs.length === 2 && Math.abs(cs[0].getBoundingClientRect().top - cs[1].getBoundingClientRect().top) < 1 &&
+           cs.every(b => b.getBoundingClientRect().right <= re.right + 0.5) && re.right <= rcj.right + 0.5,
+           `[5.3 · ${ancho}] «Retiro en CABA» y «Envío» en un renglon, adentro del recuadro`, cs.map(b => Math.round(b.getBoundingClientRect().width)).join(' + '));
+        ok(!!inp && inp.value === 'Rosario' && inp.getBoundingClientRect().right <= re.right + 0.5 &&
+           cs[1] && cs[1].getAttribute('aria-pressed') === 'true',
+           `[5.3 · ${ancho}] lo guardado vuelve: «Envío» marcado y «Rosario» en la localidad`);
+        ok(!!inp && parseFloat(w.getComputedStyle(inp).fontSize) >= 16,
+           `[5.3 · ${ancho}] la localidad en 16 px: el iPhone no agranda la pagina al tocarla`, inp && w.getComputedStyle(inp).fontSize);
+        ok(w.eval('mensajePedido()').endsWith('\n\nMe lo mandan a Rosario?') &&
+           decodeURIComponent(doc.getElementById('bp-enviar').href.split('text=')[1] || '').endsWith('\n\nMe lo mandan a Rosario?'),
+           `[5.3 · ${ancho}] y el mensaje, tambien el de «Enviar pedido» de la barra, lo trae`);
+      }
       // Al tocar el nombre, la ficha; y en otra version, el aviso en el pie pegado (2.7 B)
       btn.click();
       await dpDormir(300);
       ok(!doc.getElementById('pedido') && w.eval('FICHA') === clave(P.a), `[5.1 · ${ancho}] tocar el nombre abre la ficha`);
       w.eval(`elegirVariante(document.getElementById('ficha'), buscarModelo(${JSON.stringify(clave(P.b))}), buscarProducto(${JSON.stringify(clave(P.b))}))`);
-      await dpDormir(200);
+      await dpQuieto(doc.getElementById('ficha'));     // la ficha ya entro entera (cajaIn)
       /* (29/09, revision) En el celular el aviso queda en el pie pegado, pero
          sus dos botones van fuera, justo debajo (.fi-ya-abajo): con ellos
          adentro el pie media 183-227 px y tapaba el precio y el nombre. */
@@ -613,7 +872,7 @@ async function probarCelular(P){
            pedido" al que reemplaza (una linea, sin recuadro), asi el pie no
            crece y el precio se ve sin bajar */
         doc.querySelector('#ficha .caja').scrollTop = 0;
-        await dpDormir(100);
+        await dpQuieto(doc.getElementById('ficha'));
         const usd = doc.querySelector('#ficha .fi-precio .usd'), rp = usd && usd.getBoundingClientRect(), rpie = pieF.getBoundingClientRect();
         const cta = pieF.querySelector('.cta').getBoundingClientRect(), ry = ya.getBoundingClientRect();
         ok(ry.height <= 42 && rpie.height <= cta.height + 9 + 42 + 26 + 1,
@@ -643,5 +902,6 @@ async function probarCelular(P){
   }
   PEDIDO = JSON.parse(antes);
   try{ if(ls === null) localStorage.removeItem(PEDIDO_KEY); else localStorage.setItem(PEDIDO_KEY, ls); }catch(e){}
+  try{ if(lsE === null) localStorage.removeItem(ENTREGA_KEY); else localStorage.setItem(ENTREGA_KEY, lsE); }catch(e){}
   pintarPedido(); refrescarBotonesPedido();
 }

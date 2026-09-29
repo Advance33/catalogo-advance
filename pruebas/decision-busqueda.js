@@ -48,6 +48,43 @@ async function dbEsperarA(cond, ms = 25000){
   }
   return false;
 }
+/* Esperar a que se asiente lo que se mide, con tope, y no un tiempo fijo
+   (29/09). Las ventanas entran con una animacion (cajaIn: .3 s con
+   scale(.97)) y, con la suite entera corriendo a la vez, un tiempo fijo a
+   veces no alcanzaba: getBoundingClientRect medía la ventana a medio entrar
+   (en decision-tarjeta, el pie de 114 px daba 111 = 114 x .97 y [2.7]
+   fallaba de a ratos). dbQuieto espera, cuadro a cuadro, a que no quede
+   ninguna animacion o transicion con final andando adentro de `raiz`; si al
+   tope siguen, las termina (finish) para medir el estado final. dbHasta
+   espera una condicion cuadro a cuadro (lo que depende de un ResizeObserver
+   o de un repintado cambia recien en un cuadro). */
+const dbCuadro = (w = window) => new Promise(r => {
+  let ya = false; const fin = () => { if(!ya){ ya = true; r(); } };
+  try{ w.requestAnimationFrame(fin); }catch(e){}
+  setTimeout(fin, 50);                     // por si ese documento no dibuja
+});
+async function dbQuieto(raiz, ms = 3000){
+  if(!raiz) return true;
+  const w = (raiz.ownerDocument && raiz.ownerDocument.defaultView) || window;
+  const andando = () => {
+    let as = [];
+    try{ as = raiz.getAnimations({ subtree: true }); }catch(e){}
+    return as.filter(a => { try{ return a.playState === 'running' && isFinite(a.effect.getComputedTiming().endTime); }catch(e){ return false; } });
+  };
+  const t0 = Date.now();
+  while(Date.now() - t0 < ms){
+    if(!andando().length) return true;
+    await dbCuadro(w);
+  }
+  andando().forEach(a => { try{ a.finish(); }catch(e){} });
+  await dbCuadro(w);
+  return false;
+}
+async function dbHasta(cond, w = window, ms = 3000){
+  const t0 = Date.now();
+  do{ try{ if(cond()) return true; }catch(e){} await dbCuadro(w); } while(Date.now() - t0 < ms);
+  try{ return !!cond(); }catch(e){ return false; }
+}
 const dbTxt = el => el ? el.textContent.replace(/\s+/g, ' ').trim() : '';
 const dbLimpios = { q:'', cat:'', marca:'', soloStock:false, rango:'', montura:'', apertura:'', capacidad:'', ram:'' };
 const dbURL = location.pathname + location.search;
@@ -504,10 +541,11 @@ async function celular(){
         // Como el cliente: toca la lupa (en el celular el buscador se abre a lo ancho) y escribe
         w2.scrollTo(0, 0);
         doc.getElementById('lupa').click();
-        await dbDormir(200);
+        await dbQuieto(doc.querySelector('.topbar'));
         const q = doc.getElementById('q');
         q.value = w; q.dispatchEvent(new w2.Event('input', { bubbles: true }));
-        await dbDormir(300);
+        await dbHasta(() => doc.querySelector('#q-sug .qs[data-todo] .qs-txt b'), w2);
+        await dbQuieto(doc.querySelector('.topbar'));
         const b = doc.querySelector('#q-sug .qs[data-todo] .qs-txt b');
         ok(!!b && b.getBoundingClientRect().width > 150 && b.scrollWidth <= b.clientWidth + 1 && b.getBoundingClientRect().right <= 391,
            '[3.1] a 390 px el renglon "' + dbTxt(b) + '" se lee entero (puede ir en dos lineas)',

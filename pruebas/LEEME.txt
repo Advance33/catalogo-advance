@@ -120,9 +120,10 @@ si alguna falta).
                   nombre de cada linea del pedido abren su ficha (con
                   "Cambiar version o color" solo donde hay algo para
                   cambiar), la ficha avisa lo que ya esta cargado con
-                  "Cambiar por esta" y "Agregar tambien", el mensaje del
-                  pedido sale como hoy, y "Vaciar el pedido" es un link
-                  aparte con "Deshacer".
+                  "Cambiar por esta" y "Agregar tambien", el pedido
+                  pregunta "¿Como lo recibis?" (Retiro en CABA / Envio y
+                  la localidad, opcional) y el mensaje suma ese renglon, y
+                  "Vaciar el pedido" es un link aparte con "Deshacer".
   decision-identidad.js
                   Las decisiones 6.1 a 6.9 de Pedro (29/09): el icono
                   blanco sobre grafito, la barra del navegador que cambia
@@ -131,6 +132,14 @@ si alguna falta).
                   mas zona para el dedo en pantallas tactiles, el pie con el
                   WhatsApp, los nombres como la tarjeta en "Busca por marca"
                   y en la ficha, y la cinta de la marca con todos sus rubros.
+  decision-logo.js
+                  El logo como boton de inicio (pedido de Pedro, 29/09): los
+                  dos logos, el de arriba y el de la cinta pegada, son un
+                  link a la portada ("Ir al inicio"); el clic comun cierra
+                  lo abierto, saca rubro, busqueda, filtros y orden, deja la
+                  direccion limpia y sube arriba sin recargar; Cmd/Ctrl+clic
+                  lo deja al navegador; el triangulo sigue siendo el easter
+                  egg.
 
 COMO SE CORREN
 --------------

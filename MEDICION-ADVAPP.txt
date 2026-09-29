@@ -86,6 +86,10 @@ no hay cookies ni cartel de consentimiento.
                     escrito en el pie de la página, 29/09). Con desde="pedido"
                     van también unidades y total. Es la conversión: lo único
                     que dice si el catálogo sirvió.
+                    Con desde="pedido" puede venir además entrega: "retiro"
+                    o "envio", si el cliente lo eligió en "¿Cómo lo recibís?"
+                    de la ventana del pedido. La localidad que escribe no se
+                    manda nunca. (29/09, muestra 5.3 A)
    pedilo           TOCÓ WHATSAPP desde "¿Buscás algo que no está?". q: lo que
                     escribió en ese casillero (hasta 60 caracteres, desde 3).
                     También es conversión, y es la lista de lo que vinieron a

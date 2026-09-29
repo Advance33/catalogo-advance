@@ -266,6 +266,13 @@
   .logo a{text-decoration:none;color:var(--ink)}
   .logo b{font:400 17px/1 var(--display);text-transform:uppercase;letter-spacing:.06em}
   .logo b span{color:var(--glow)}
+  /* Los dos logos son links a la portada (pedido de Pedro, 29/09). Se ven
+     igual que cuando eran un span: sin subrayado ni color de link. Lo unico
+     nuevo es la manito (la de todo link) y el foco a la vista con el teclado. */
+  a.logo,a.cats-logo{text-decoration:none;color:inherit;border-radius:8px}
+  a.logo:focus-visible{outline:2px solid var(--acento);outline-offset:4px}
+  .topbar a.logo:focus-visible{outline-color:#A78BFA}
+  a.cats-logo:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
   .stamp{margin-left:auto;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
          color:var(--muted);display:flex;align-items:center;gap:8px;white-space:nowrap}
   .dot{width:7px;height:7px;border-radius:50%;background:#12A06A;flex:none}
@@ -2187,6 +2194,29 @@
                       border:1px solid var(--acento)}
   .pd-deshecho button:hover{background:rgba(124,58,237,.06)}
   .pd-deshecho button:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  /* "¿Cómo lo recibís?" (Pedro eligió A el 29/09, muestra 5.3): entre el total
+     y "Enviar por WhatsApp", en un recuadro lila, como la muestra. Los botones
+     llevan clase propia (.pd-chip) y no .chip: esa es la de los rubros, y la
+     página la busca para marcar el rubro elegido. */
+  .pd-entrega{margin-top:14px;padding:13px 14px 14px;border-radius:14px;background:var(--surface-2);display:grid;gap:10px}
+  .pd-rot{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .pd-rot i{font-style:normal;color:var(--faint);letter-spacing:.06em;text-transform:none;font-weight:500;margin-left:1px}
+  .pd-chips{display:flex;flex-wrap:wrap;gap:8px}
+  .pd-chip{flex:none;padding:8px 15px;border-radius:999px;cursor:pointer;font:600 10.5px/1.6 var(--mono);letter-spacing:.12em;
+           text-transform:uppercase;background:#fff;color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+  .pd-chip:hover{color:var(--acento);border-color:var(--acento)}
+  .pd-chip[aria-pressed="true"]{background:var(--acento);color:#fff;border-color:var(--acento);box-shadow:0 4px 14px rgba(124,58,237,.40)}
+  .pd-chip:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  .pd-ayuda{margin:-2px 0 0;font-size:12px;line-height:1.4;color:var(--muted)}
+  .pd-campo{display:grid;gap:5px}
+  .pd-campo > span{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .pd-campo input{width:100%;background:#fff;color:var(--ink);border:1px solid var(--line);
+                  border-radius:10px;padding:9px 11px;font:14px var(--sans)}
+  .pd-campo input::placeholder{color:var(--faint)}
+  .pd-campo input:focus{outline:2px solid var(--acento);outline-offset:0;border-color:transparent}
+  /* En el celular, 16 px: con menos, el iPhone agranda la página al tocar el
+     campo y el cliente queda con la ventana corrida (igual que el buscador) */
+  @media (max-width:520px), (hover:none){ .pd-campo input{font-size:16px} }
 
   /* Cargando la tanda siguiente */
   .centinela{grid-column:1/-1;height:1px}
@@ -2868,14 +2898,20 @@
      el primer momento y no compite con el titulo. -->
 <div class="topbar">
   <div class="wrap">
-    <span class="logo">
-      <!-- El triangulo NO navega: es el disparador del easter egg (7 clics).
-           El nombre tampoco: el catalogo no manda a ningun lado. -->
-      <button class="marca-btn" id="marca-btn" type="button" aria-label="Advance Tecno">
+    <!-- El logo lleva a la portada (pedido de Pedro, 29/09): hasta ahora no
+         hacia nada, y es lo primero que se toca para "volver al principio".
+         Es un link de verdad, a la direccion de la portada: con Cmd/Ctrl+clic
+         abre otra pestaña y sin script navega solo. El clic comun lo hace
+         irAlInicio(), sin recargar. El triangulo sigue siendo el disparador
+         del easter egg (7 clics seguidos): es un span y no un <button>,
+         porque un boton adentro de un link no vale; cada clic suyo tambien
+         lleva al inicio, que ya estando ahi no cambia nada. -->
+    <a class="logo" id="logo-inicio" href="./" aria-label="Ir al inicio">
+      <span class="marca-btn" id="marca-btn">
         <img src="assets/logo-mark.png" alt="">
-      </button>
+      </span>
       <b>Advance <span>Tecno</span></b>
-    </span>
+    </a>
     <!-- La barra de busqueda ocupaba el centro de la cabecera todo el tiempo.
          Ahora vive detras de la lupa: se abre cuando el cliente la pide y la
          marca se queda sola, que es lo primero que tiene que verse. -->
@@ -2963,8 +2999,10 @@
 <nav class="barra-cats" aria-label="Categorías">
   <div class="wrap">
     <!-- El triangulo ancla la barra cuando queda pegada arriba: al bajar, el
-         logo de la barra de arriba ya no se ve y la cinta quedaba huerfana. -->
-    <span class="cats-logo" aria-hidden="true"><img src="assets/logo-mark.png" alt=""></span>
+         logo de la barra de arriba ya no se ve y la cinta quedaba huerfana.
+         Desde el 29/09 (pedido de Pedro) tambien lleva a la portada, como el
+         de arriba: ya no es decorativo, asi que no va con aria-hidden. -->
+    <a class="cats-logo" id="cats-logo" href="./" aria-label="Ir al inicio"><img src="assets/logo-mark.png" alt=""></a>
     <div class="chips-wrap" id="cats-wrap">
       <button class="chip-nav izq" id="cats-izq" type="button" tabindex="-1" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
@@ -7587,6 +7625,53 @@ function irAlMenu(){
                         behavior: quieto ? 'auto' : 'smooth' });
 }
 
+/* El logo lleva al inicio (pedido de Pedro, 29/09): los dos, el de la barra de
+   arriba y el de la cinta pegada. Es "entrar de nuevo" sin recargar: se cierra
+   lo que haya abierto (ficha, visor, pedido, "Ya no está", Filtrar), se saca
+   TODO lo elegido como en irAlMenu -y también el orden, que en la dirección
+   es ?orden=: el inicio es la dirección limpia, como al entrar- y se sube
+   arriba de todo, no al título de los rubros como el botón del menú.
+
+   El historial, como un link: si se estaba en otro lado (un rubro, una
+   búsqueda, una ficha) suma una entrada, y el Atrás vuelve adonde estaba. Si
+   lo de arriba era la entrada del pedido o del visor, que son ventanas y no
+   direcciones, se la reemplaza: el Atrás no reabre la ventana. Y si la
+   dirección ya era la del inicio no suma nada: el triángulo son 7 clics para
+   el easter egg y no pueden ser 7 Atrás, y "Ver todo el catálogo" no cambia
+   la dirección (un Atrás ahí no haría nada). Lo que no cambió no se redibuja
+   (las fotos de los rubros no vuelven a la primera). */
+function urlDelInicio(){ return location.pathname; }
+function irAlInicio(){
+  const st = history.state;
+  const ventana = !!(st && (st.pedido || st.visor));
+  // Las ventanas se sacan sin tocar el historial (cada una tenía su history.back)
+  if(cerrarVisorDOM){ visorEmpujado = false; const c = cerrarVisorDOM; cerrarVisorDOM = null; c(); }
+  if(FICHA) quitarFicha();
+  if(cerrarPedidoDOM){ pedidoEmpujado = false; const c = cerrarPedidoDOM; cerrarPedidoDOM = null; c(); }
+  if(cerrarYaNoEstaDOM){ const c = cerrarYaNoEstaDOM; cerrarYaNoEstaDOM = null; c(); }
+  // Filtrar y el panel del equipo se cierran como al tocar afuera
+  document.querySelectorAll('.modal').forEach(d => d.dispatchEvent(new MouseEvent('click', { bubbles: true })));
+
+  const antes = JSON.stringify([filtros, verTodo]);
+  Object.assign(filtros, { q:'', cat:'', marca:'', orden: ORDEN_DEF, rango:'', soloStock:false,
+                           montura:'', apertura:'', capacidad:'', ram:'' });
+  verTodo = false;
+  cerrarMenusOrden();
+  sincronizarControles();
+  cerrarBuscador();
+
+  const limpia = urlDelInicio();
+  const otraURL = location.pathname + location.search + location.hash !== limpia;
+  try{
+    if(otraURL && !ventana) history.pushState(null, '', limpia);
+    else history.replaceState(null, '', limpia);
+  }catch{}
+  if(JSON.stringify([filtros, verTodo]) !== antes || !$('mosaico').children.length) pintar();
+  ponerTitulo();
+  retomarCintaAuto();
+  scrollTo({ top: 0, behavior: 'auto' });   // de una, como al entrar
+}
+
 /* Los rubros con stock, repartidos en los mundos de la configuración.
 
    Ningún rubro se puede perder por el camino: el que no está anotado en ningún
@@ -11100,6 +11185,57 @@ const soloSinStockPedido = () => { const it = itemsPedido(); return it.length > 
 
 function guardarPedido(){ try{ localStorage.setItem(PEDIDO_KEY, JSON.stringify(PEDIDO)); }catch{} }
 
+/* ¿Cómo lo recibís? (Pedro eligió A el 29/09, muestra 5.3): en la ventana del
+   pedido, dos botones opcionales, "Retiro en CABA" / "Envío", y si elige envío
+   la localidad. El mensaje suma un renglón: "Lo retiro en CABA." o "Me lo
+   mandan a Rosario?" ("Me lo mandan?" si no escribió la localidad). Sin
+   elegir nada, el mensaje sale igual que antes. Saber si es retiro o envío
+   ayuda a cotizar el envío; la forma de pago (la B) quedó para el chat.
+   Queda guardado en ese navegador para la próxima, aparte del pedido:
+   "Vaciar el pedido" no lo borra (así lo dice la muestra), y por eso
+   "Deshacer" (5.4) no tiene nada que devolver: la elección nunca se fue. El
+   nombre no se pide: WhatsApp ya muestra quién escribe. */
+const ENTREGA_KEY = 'advtecno.entrega';
+const LOCALIDAD_MAX = 60;
+// null si no se pudo leer: ahí se queda la copia en memoria, como el pedido
+function leerEntrega(){
+  try{
+    const g = JSON.parse(localStorage.getItem(ENTREGA_KEY) || 'null');
+    return {
+      entrega: g && (g.entrega === 'retiro' || g.entrega === 'envio') ? g.entrega : '',
+      localidad: g && typeof g.localidad === 'string' ? g.localidad.slice(0, LOCALIDAD_MAX) : ''
+    };
+  }catch{ return null; }
+}
+let ENTREGA = leerEntrega() || { entrega: '', localidad: '' };
+function guardarEntrega(){
+  try{
+    if(!ENTREGA.entrega && !ENTREGA.localidad) localStorage.removeItem(ENTREGA_KEY);
+    else localStorage.setItem(ENTREGA_KEY, JSON.stringify(ENTREGA));
+  }catch{}
+}
+const limpiarLocalidad = s => String(s || '').replace(/\s+/g, ' ').trim();
+// El renglón que se suma al final del mensaje; '' si no eligió nada
+function renglonEntrega(){
+  if(ENTREGA.entrega === 'retiro') return 'Lo retiro en CABA.';
+  if(ENTREGA.entrega === 'envio'){
+    const l = limpiarLocalidad(ENTREGA.localidad);
+    return l ? `Me lo mandan a ${l}?` : 'Me lo mandan?';
+  }
+  return '';
+}
+// Otra pestaña la cambió: "Enviar pedido" y la ventana abierta dicen lo mismo
+function releerEntrega(){
+  const g = leerEntrega();
+  if(!g || JSON.stringify(g) === JSON.stringify(ENTREGA)) return;
+  ENTREGA = g;
+  pintarPedido();
+  redibujarPedido?.();
+}
+addEventListener('storage', e => { if(e.key === ENTREGA_KEY || e.key === null) releerEntrega(); });
+addEventListener('pageshow', e => { if(e.persisted) releerEntrega(); });
+document.addEventListener('visibilitychange', () => { if(!document.hidden) releerEntrega(); });
+
 function togglePedido(k, color){
   const i = PEDIDO.findIndex(l => l.k === k);
   if(i === -1){
@@ -11232,7 +11368,9 @@ function mensajePedido(){
   // Con la copia, el vendedor sabe de qué hora es cada precio (29/09, 1.5 A)
   const h = horaDeLaCopiaALaVista();
   if(h) cola += (cola ? '\n' : '') + `Precios de las ${hhmm(h)}, a confirmar.`;
-  return `Hola! Te paso mi pedido:\n\n${lineas.join('\n')}` + (cola ? `\n\n${cola}` : '');
+  // Retiro o envío, si lo eligió (5.3 A): un renglón aparte, al final
+  const r = renglonEntrega();
+  return `Hola! Te paso mi pedido:\n\n${lineas.join('\n')}` + (cola ? `\n\n${cola}` : '') + (r ? `\n\n${r}` : '');
 }
 
 /* La hora de los precios en pantalla si son los de la copia de este navegador
@@ -11296,6 +11434,26 @@ function abrirDesdePedido(k){
   c?.();
   if(empujado){ abrirFicha(k, false); if(FICHA) fichaEmpujada = true; }
   else abrirFicha(k);
+}
+
+/* El recuadro "¿Cómo lo recibís?" de la ventana del pedido (Pedro eligió A el
+   29/09, muestra 5.3), con los textos de la muestra. La ayuda de abajo de los
+   botones es el detalle de SERVICIO, el mismo que la ficha pone debajo de
+   WhatsApp. Va sólo si hay WhatsApp: sin él no hay mensaje al que sumarle
+   nada. La localidad se llena después, como propiedad (ver dibujar). */
+function htmlEntrega(){
+  const e = ENTREGA.entrega;
+  const ayuda = e ? SERVICIO[e][1] : '';
+  return `<div class="pd-entrega" role="group" aria-labelledby="pd-rot">
+      <span class="pd-rot" id="pd-rot">¿Cómo lo recibís? <i>opcional</i></span>
+      <div class="pd-chips">
+        <button type="button" class="pd-chip" data-entrega="retiro" aria-pressed="${e === 'retiro'}">${esc(SERVICIO.retiro[0])}</button>
+        <button type="button" class="pd-chip" data-entrega="envio" aria-pressed="${e === 'envio'}">Envío</button>
+      </div>
+      ${ayuda ? `<p class="pd-ayuda">${esc(ayuda)}</p>` : ''}
+      ${e === 'envio' ? `<label class="pd-campo"><span>Localidad</span>
+        <input type="text" id="pd-localidad" maxlength="${LOCALIDAD_MAX}" placeholder="Por ejemplo: Rosario" autocomplete="address-level2"></label>` : ''}
+    </div>`;
 }
 
 function abrirPedido(){
@@ -11373,6 +11531,7 @@ function abrirPedido(){
               : `<b>USD ${plata(total)}</b>${TC ? `<i>${htmlPesos(Math.round(total*TC))}</i>` : ''}${
               sinStockPedido() ? `<i class="pd-mas">más ${sinStockPedido()} producto${sinStockPedido() > 1 ? 's' : ''} sin stock</i>` : ''}`}</div>
           </div>` : ''}
+        ${items.length && WHATSAPP ? htmlEntrega() : ''}
         ${items.length ? `${WHATSAPP
             ? `<div class="botones"><a class="pri" href="${linkWA(mensajePedido())}" target="_blank" rel="noopener">Enviar por WhatsApp</a></div>`
             : ''}
@@ -11405,6 +11564,26 @@ function abrirPedido(){
       PEDIDO = antes.concat(PEDIDO.filter(l => !ya.has(l.k)));
       guardarPedido(); pintarPedido(); refrescarBotonesPedido(); dibujar();
     };
+    /* Retiro o envío (5.3 A). Tocar el que ya está marcado lo desmarca: es
+       opcional y tiene que poder volver a "nada". La localidad actualiza el
+       mensaje letra por letra sin redibujar la ventana (le sacaría el foco
+       al campo); va como propiedad y no adentro del HTML porque viene del
+       navegador (ver abrirPanel). */
+    d.querySelectorAll('.pd-chip').forEach(b => b.onclick = () => {
+      const v = b.dataset.entrega;
+      ENTREGA = { ...ENTREGA, entrega: ENTREGA.entrega === v ? '' : v };
+      guardarEntrega(); pintarPedido(); dibujar();
+    });
+    const loc = d.querySelector('#pd-localidad');
+    if(loc){
+      loc.value = ENTREGA.localidad;
+      loc.oninput = () => {
+        ENTREGA = { ...ENTREGA, localidad: loc.value.slice(0, LOCALIDAD_MAX) };
+        guardarEntrega(); pintarPedido();
+        const a = d.querySelector('.botones a.pri');
+        if(a) a.href = linkWA(mensajePedido());
+      };
+    }
 
     if(tenia){
       let x = kFoco && dFoco
@@ -11413,6 +11592,10 @@ function abrirPedido(){
       // El nombre de la línea (5.1 B) también es un botón: vuelve a él
       if(!x && kFoco && f.classList.contains('pd-abre-txt'))
         x = d.querySelector(`.pd-item[data-key="${CSS.escape(kFoco)}"] .pd-abre-txt`);
+      // Retiro o envío (5.3 A): el foco se queda en el botón que tocó, o en
+      // la localidad si otra pestaña la cambió mientras escribía
+      if(!x && f.dataset.entrega) x = d.querySelector(`.pd-chip[data-entrega="${CSS.escape(f.dataset.entrega)}"]`);
+      if(!x && f.id === 'pd-localidad') x = d.querySelector('#pd-localidad');
       if(!x || x.disabled) x = d.querySelector('.caja');
       x?.focus({preventScroll:true});
     }
@@ -12271,6 +12454,17 @@ $('marca-btn').addEventListener('click', () => {
   if(eggN >= EGG_CLICS){ eggN = 0; abrirEgg(); }
 });
 
+/* Los dos logos llevan al inicio (pedido de Pedro, 29/09; ver irAlInicio).
+   Solo el clic común con el botón principal se hace acá, sin recargar: con
+   Cmd, Ctrl, Shift o Alt, o con la rueda, el navegador hace lo de siempre con
+   un link (otra pestaña, otra ventana, descargar). El Enter del teclado llega
+   como un clic común. */
+document.querySelectorAll('#logo-inicio, #cats-logo').forEach(a => a.addEventListener('click', e => {
+  if(e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  irAlInicio();
+}));
+
 /* ---------- Encabezado del rubro: eventos ---------- */
 $('rubro-cab').addEventListener('click', clicCabecera);
 $('rubro-fijo').addEventListener('click', clicCabecera);
@@ -12465,7 +12659,10 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
       const p = donde === 'ficha' ? buscarProducto(FICHA)
               : card ? buscarModelo(card.dataset.key) : null;
       anotar('whatsapp', { desde: donde, ...datos(p),
-        ...(donde === 'pedido' ? { unidades: unidadesPedido(), total: totalPedido() } : {}) });
+        ...(donde === 'pedido' ? { unidades: unidadesPedido(), total: totalPedido() } : {}),
+        /* Retiro o envío, si lo eligió (5.3 A): "retiro" o "envio", nada
+           más. La localidad la escribe el cliente y no se manda nunca. */
+        ...(donde === 'pedido' && ENTREGA.entrega ? { entrega: ENTREGA.entrega } : {}) });
       ANALITICA.mandar();     // se está yendo a WhatsApp: no esperar los 5 s
     }catch(err){}
   }, true);

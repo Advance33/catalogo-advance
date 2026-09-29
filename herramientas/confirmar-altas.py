@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Aplica al catalogo lo que una persona decidio sobre las filas sin codigo.
 
-    python herramientas/confirmar-altas.py             muestra que haria
-    python herramientas/confirmar-altas.py --aplicar   lo escribe
+    python3 herramientas/confirmar-altas.py             muestra que haria
+    python3 herramientas/confirmar-altas.py --aplicar   lo escribe
 
 Lee herramientas/altas-decididas.csv, que tiene una linea por fila resuelta:
 
@@ -45,26 +45,39 @@ HOY = __import__('datetime').date.today().isoformat()
 DECISIONES = os.path.join(AQUI, 'altas-decididas.csv')
 
 
-def filas_de_la_planilla():
-    """La planilla publicada, o un archivo con  --planilla <csv>.
+class SinAdvapp(Exception):
+    """ADVAPP no contesto (o vino cortado) y no se sigue con otra fuente."""
 
-    El equipo del sheet trabaja en la hoja Cami antes de publicar Landing, y
-    lo que manda para resolver (el sin_codigo del manifiesto) sale de ahi. Sin
-    esto, las decisiones se buscaban en la planilla del dia anterior y las
-    filas nuevas no aparecian.
+
+def filas_de_la_planilla():
+    """Los datos de ADVAPP, o un archivo con  --planilla <csv>.
+
+    El archivo sirve para trabajar sobre una copia armada a mano (antes, la
+    hoja Cami del equipo del sheet, antes de publicar Landing).
+
+    SOLO ADVAPP, nunca la planilla de respaldo (29/09, hallazgo 154). Esto
+    usaba validar.bajar_csv(), que si ADVAPP no contesta devuelve la planilla
+    congelada del 22/09 y solo avisa por stderr. Las decisiones de HOY no
+    pasan por el control de firma (ver main), asi que con --aplicar se le
+    anotaban al producto el ID, el SKU y el nombre de filas de hace una
+    semana, donde los IDs ya son de otra cosa: simulado con ADVAPP caido,
+    TAB-SAM-041 y TAB-SAM-047 quedaban en AT-0493 con los nombres del 22/09.
     """
     if '--planilla' in sys.argv:
         ruta = sys.argv[sys.argv.index('--planilla') + 1]
         with io.open(ruta, encoding='utf-8', newline='') as fh:
             return list(csv.DictReader(fh))
-    return validar.bajar_csv()
+    try:
+        return validar.bajar_advapp()
+    except Exception as e:
+        raise SinAdvapp(str(e))
 
 
 def main():
     sys.stdout.reconfigure(encoding='utf-8')
     if not os.path.exists(DECISIONES):
         print('No hay %s todavia.' % os.path.basename(DECISIONES))
-        print('Lo que falta resolver sale de:  python herramientas/altas-catalogo.py')
+        print('Lo que falta resolver sale de:  python3 herramientas/altas-catalogo.py')
         return 2
 
     with io.open(DECISIONES, encoding='utf-8', newline='') as fh:
@@ -81,8 +94,15 @@ def main():
 
     maestro = CM.leer()
     idx = CM.indexar(maestro)
-    filas = {(f.get('ID') or '').strip(): f
-             for f in filas_de_la_planilla() if (f.get('ID') or '').strip()}
+    try:
+        filas = {(f.get('ID') or '').strip(): f
+                 for f in filas_de_la_planilla() if (f.get('ID') or '').strip()}
+    except SinAdvapp as e:
+        print('ADVAPP no contesto (%s): no se sigue, ni con --aplicar ni en simulacion.' % e)
+        print('La planilla de respaldo esta congelada desde el 22/09 y sus IDs rotan:')
+        print('anotar sobre ella le pegaria a un producto el ID y el nombre de otro.')
+        print('Volver a correrlo cuando ADVAPP conteste. No se escribio nada.')
+        return 2
 
     hechos, nuevos, quejas = [], [], []
     for d in decisiones:
@@ -178,14 +198,14 @@ def main():
         print()
 
     if not APLICAR:
-        print('Simulacion. Para escribirlo:  python herramientas/confirmar-altas.py --aplicar')
+        print('Simulacion. Para escribirlo:  python3 herramientas/confirmar-altas.py --aplicar')
         return 1 if quejas else 0
     if not hechos:
         print('No hay nada nuevo que anotar.')
         return 1 if quejas else 0
 
     CM.escribir(maestro)
-    print('Anotado. Ahora:  python herramientas/altas-catalogo.py')
+    print('Anotado. Ahora:  python3 herramientas/altas-catalogo.py')
     return 1 if quejas else 0
 
 

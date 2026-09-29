@@ -10,15 +10,15 @@ Lo que si se puede automatizar es el reparto. Este script arma los lotes con
 todo lo que el agente necesita para decidir, y despues toma los veredictos y
 los vuelca al registro de fotos revisadas.
 
-  python revisar-fotos-con-agentes.py --preparar
+  python3 revisar-fotos-con-agentes.py --preparar
       Escribe lotes/lote-NN.json con las fotos que faltan mirar. Ordena por
       riesgo: primero las que ya tienen alguna senal en contra.
 
-  python revisar-fotos-con-agentes.py --aplicar lotes/veredictos.json
+  python3 revisar-fotos-con-agentes.py --aplicar lotes/veredictos.json
       Marca como miradas las que el agente dio por buenas y deja en
       FOTOS-QUE-ESTAN-MAL.txt las que no, con el motivo.
 
-  python revisar-fotos-con-agentes.py --preparar --todas --por-lote 25
+  python3 revisar-fotos-con-agentes.py --preparar --todas --por-lote 25
       Igual pero sin filtrar por riesgo: el catalogo entero.
 """
 import collections, csv, hashlib, io, json, os, re, sys, unicodedata, urllib.request
@@ -67,11 +67,16 @@ def leer_registro():
 
 
 def escribir_registro(reg):
-    with open(REVISADAS, 'w', encoding='utf-8') as fh:
+    # El mismo encabezado y los mismos finales de linea (CRLF) que escriben
+    # verificar-fotos.py, sacar-fotos-malas.py y migrar-fotos-a-*.py (29/09):
+    # si no, segun cual corrio ultimo el diff muestra el archivo entero
+    # cambiado. Aca iba con los finales de la maquina (LF en la Mac) y con
+    # "python", que en la Mac no existe.
+    with open(REVISADAS, 'w', encoding='utf-8', newline='\r\n') as fh:
         fh.write('# Fotos miradas contra el producto que dice la planilla.' + chr(10))
         fh.write('# Si una cambia, deja de coincidir y no se publica hasta mirarla.' + chr(10))
-        fh.write('# Anotar las miradas:  python verificar-fotos.py --revisadas' + chr(10))
-        fh.write('# Arrancar el registro: python verificar-fotos.py --sembrar' + chr(10))
+        fh.write('# Anotar las miradas:  python3 verificar-fotos.py --revisadas' + chr(10))
+        fh.write('# Arrancar el registro: python3 verificar-fotos.py --sembrar' + chr(10))
         for archivo in sorted(reg):
             huella, mirada = reg[archivo]
             fh.write('%s  %-34s # %s%s'

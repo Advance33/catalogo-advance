@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Pone a las fotos el nombre definitivo: el codigo del catalogo maestro.
 
-    python herramientas/migrar-fotos-a-codigo.py             simula
-    python herramientas/migrar-fotos-a-codigo.py --aplicar   renombra
+    python3 herramientas/migrar-fotos-a-codigo.py             simula
+    python3 herramientas/migrar-fotos-a-codigo.py --aplicar   renombra
 
 Es el ultimo renombre. De aca en mas los archivos no se mueven mas: el
 codigo se le asigna al producto una sola vez y no cambia aunque cambie su
@@ -57,11 +57,16 @@ def leer_registro():
 
 
 def escribir_registro(reg):
-    with io.open(REVISADAS, 'w', encoding='utf-8', newline='') as fh:
+    # El mismo encabezado y los mismos finales de linea (CRLF) que escriben
+    # verificar-fotos.py, revisar-fotos-con-agentes.py, sacar-fotos-malas.py
+    # y migrar-fotos-a-sku.py (29/09): si no, segun cual corrio ultimo el diff
+    # muestra el archivo entero cambiado. Aca iba con LF y "python", que en la
+    # Mac no existe.
+    with io.open(REVISADAS, 'w', encoding='utf-8', newline='\r\n') as fh:
         fh.write('# Fotos miradas contra el producto que dice la planilla.\n')
         fh.write('# Si una cambia, deja de coincidir y no se publica hasta mirarla.\n')
-        fh.write('# Anotar las miradas:  python verificar-fotos.py --revisadas\n')
-        fh.write('# Arrancar el registro: python verificar-fotos.py --sembrar\n')
+        fh.write('# Anotar las miradas:  python3 verificar-fotos.py --revisadas\n')
+        fh.write('# Arrancar el registro: python3 verificar-fotos.py --sembrar\n')
         for archivo in sorted(reg):
             h, mirada = reg[archivo]
             fh.write('%s  %-34s # %s\n' % (h, archivo, 'mirada' if mirada else 'sin mirar'))
@@ -72,7 +77,7 @@ def main():
     maestro = CM.leer()
     if not maestro:
         print('No hay catalogo maestro. Se siembra primero:')
-        print('   python herramientas/sembrar-catalogo-maestro.py --escribir')
+        print('   python3 herramientas/sembrar-catalogo-maestro.py --escribir')
         return 2
     if not os.path.exists(MAPA):
         print('Falta %s. Lo escribe el semillero.' % MAPA)
@@ -124,7 +129,7 @@ def main():
 
     if not APLICAR:
         print()
-        print('Simulacion. Para hacerlo:  python herramientas/migrar-fotos-a-codigo.py --aplicar')
+        print('Simulacion. Para hacerlo:  python3 herramientas/migrar-fotos-a-codigo.py --aplicar')
         return 1 if problemas else 0
     if problemas:
         print()
@@ -168,7 +173,7 @@ def main():
     print()
     print('Hecho. %d renombradas, %d apartadas. Registro: %d entradas.'
           % (len(mueve), len(quedan), len(nuevo_reg)))
-    print('Ahora hay que regenerar el indice:  python verificar-fotos.py')
+    print('Ahora hay que regenerar el indice:  python3 verificar-fotos.py')
     return 0
 
 

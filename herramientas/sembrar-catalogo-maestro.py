@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Arma por primera vez el catalogo maestro a partir de la planilla de hoy.
 
-    python herramientas/sembrar-catalogo-maestro.py             simula
-    python herramientas/sembrar-catalogo-maestro.py --escribir  lo escribe
+    python3 herramientas/sembrar-catalogo-maestro.py             simula
+    python3 herramientas/sembrar-catalogo-maestro.py --escribir  lo escribe
 
 Se corre UNA VEZ. De ahi en mas el catalogo solo crece y ningun codigo se
 reescribe nunca.
@@ -90,7 +90,7 @@ def main():
     if CM.leer():
         print('El catalogo maestro ya existe (%d filas). Esto se corre una sola vez.'
               % len(CM.leer()))
-        print('Para ver que le falta:  python herramientas/revisar-catalogo.py')
+        print('Para ver que le falta:  python3 herramientas/revisar-catalogo.py')
         print('Para sembrarlo de nuevo hay que borrar catalogo-maestro.csv, y eso')
         print('solo se puede hacer mientras el catalogo siga sin usarse.')
         return 2
@@ -271,7 +271,7 @@ def main():
 
     if not ESCRIBIR:
         print()
-        print('Simulacion. Para escribirlo:  python herramientas/sembrar-catalogo-maestro.py --escribir')
+        print('Simulacion. Para escribirlo:  python3 herramientas/sembrar-catalogo-maestro.py --escribir')
         return 0
 
     CM.escribir(maestro)

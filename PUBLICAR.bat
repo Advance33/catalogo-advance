@@ -18,11 +18,14 @@ if errorlevel 1 (
   exit /b 1
 )
 
-rem ---- Revision de la planilla antes de publicar -------------------------
-rem  validar.py baja la hoja Landing y controla lo que el catalogo necesita
+rem ---- Revision de los datos antes de publicar ---------------------------
+rem  validar.py baja los productos de ADVAPP (la planilla quedo congelada el
+rem  22/09 y es solo el respaldo) y controla lo que el catalogo necesita
 rem  para mostrarse bien. Codigos: 0 = todo bien, 1 = hay errores graves,
 rem  2 = no se pudo revisar (por ejemplo, sin internet).
-echo   Revisando la planilla...
+rem  La PC se retiro el 25/09, pero este archivo sigue diciendo lo mismo que
+rem  PUBLICAR.command, por si vuelve a hacer falta.
+echo   Revisando los datos de ADVAPP...
 echo.
 python validar.py
 set REVISION=%errorlevel%
@@ -41,14 +44,18 @@ echo     Arriba esta la lista. Son cosas que el cliente ve mal en la
 echo     web: un color que no coincide con el nombre, una nota interna
 echo     que quedo a la vista, una categoria sin definir.
 echo.
+rem 29/09: validar.py marcaba estos "planilla"; ahora dice ADVAPP. Aca los
+rem comandos siguen con "python": es el de Windows (en la Mac, python3).
 echo     Cada linea dice donde se arregla:
-echo       planilla = se le pide al equipo del sheet
+echo       ADVAPP   = se le pide a ADVAPP ^(de ahi salen los datos^)
 echo       codigo   = hay que tocar index.html
 echo       fotos    = falta producir la imagen
 echo.
-echo     Para lo de "planilla", el pedido ya redactado sale con:
+echo     Para lo de "ADVAPP", el pedido ya redactado sale con:
 echo        python validar.py --pedido
-echo     Queda en PEDIDO-AL-SHEET.txt, listo para copiar y mandar.
+echo     Queda en PEDIDO-AL-SHEET.txt ^(el nombre es de antes; adentro
+echo     dice ADVAPP^). Lo demas que hay que pedirles sale con:
+echo        python herramientas\pedido-advapp.py
 echo.
 echo     Cuando esten resueltos, volve a abrir este acceso directo.
 echo   ------------------------------------------------------------
@@ -62,7 +69,7 @@ goto :revision_lista
 
 :sin_revisar
 echo.
-echo   AVISO: no se pudo revisar la planilla ^(el detalle esta arriba^).
+echo   AVISO: no se pudieron revisar los datos ^(el detalle esta arriba^).
 echo   Suele ser falta de internet. Se puede publicar igual, pero
 echo   nadie controlo los datos.
 echo.
@@ -70,7 +77,7 @@ goto :revision_lista
 
 :sin_python
 echo.
-echo   AVISO: no se encontro Python, asi que no se reviso la planilla.
+echo   AVISO: no se encontro Python, asi que no se revisaron los datos.
 echo   Se puede publicar igual.
 echo.
 goto :revision_lista
@@ -131,28 +138,39 @@ echo.
 goto :pruebas_listas
 
 :fotos_dudosas
+rem 29/09: el .command separa en el titulo el caso en que lo unico que frena
+rem es la columna CODIGO de ADVAPP; aca, con la PC retirada el 25/09, se dice
+rem en la lista. La otra memoria del mismo modelo ya no frena (Pedro, 26/09).
 echo.
 echo   ------------------------------------------------------------
-echo     HAY FOTOS SIN REVISAR
+echo     HAY FOTOS ^(O CODIGOS DE ADVAPP^) SIN RESOLVER
 echo.
-echo     Puede ser una de tres cosas, y el detalle esta en
-echo     REVISAR-FOTOS.txt:
+echo     El detalle esta arriba y en REVISAR-FOTOS.txt. Puede ser:
 echo.
 echo      - Dos productos de modelos distintos con la misma imagen.
 echo        A veces esta bien (el mismo equipo en otra capacidad).
 echo        Si estan todas bien:  python verificar-fotos.py --aceptar
+echo        (suma a las ya aceptadas, no borra ninguna)
 echo.
 echo      - Una foto que CAMBIO despues de haberse revisado. Ojo con
 echo        esta: asi es como volvia la foto equivocada del iPhone 17.
 echo.
 echo      - Una foto NUEVA que nadie miro todavia.
-echo.
-echo      - Una PORTADA que es la foto de un color que la fila ya no
-echo        vende. Las fotos se llaman SKU-color.jpg y la portada es
-echo        la del primer color: alguien copio mal un archivo.
-echo.
-echo     Para las ultimas: mira la foto, y si esta bien anotala
+echo        Mirala, y si esta bien anotala:
 echo        python verificar-fotos.py --revisadas NOMBRE.jpg
+echo.
+echo      - Una FOTO DE OTRO COLOR: la fila vende un color y muestra
+echo        la foto de otro color del mismo producto. Casi siempre es
+echo        la columna CODIGO_VAR de ADVAPP; se pide con:
+echo        python herramientas\pedido-advapp.py
+echo.
+echo      - La columna CODIGO de ADVAPP apuntando a OTRO producto
+echo        ^(otra Sim, otro teclado u otro modelo^): se pide con
+echo        python herramientas\pedido-advapp.py. La otra memoria del
+echo        mismo modelo NO frena ^(Pedro, 26/09^).
+echo.
+echo      - El CATALOGO MAESTRO ROTO: ahi las fotos no se revisaron y
+echo        fotos\indice.json quedo como estaba.
 echo   ------------------------------------------------------------
 echo.
 choice /c SN /n /m "   Publicar igual? [S = si, N = no]: "
@@ -166,16 +184,40 @@ goto :probar_catalogo
 git status --porcelain > "%TEMP%\_pub.txt" 2>nul
 for /f %%A in ('type "%TEMP%\_pub.txt" ^| find /c /v ""') do set CANT=%%A
 
-if "%CANT%"=="0" (
-  echo   El sitio ya esta al dia. No hay nada nuevo para publicar.
-  echo.
-  echo   https://advance33.github.io/catalogo-advance/
-  echo.
-  del "%TEMP%\_pub.txt" >nul 2>&1
-  pause
-  exit /b 0
-)
+rem Las publicaciones que quedaron sin subir (29/09): si el push falla, el
+rem commit ya esta hecho y la vez siguiente el status da 0. Antes se decia
+rem "El sitio ya esta al dia" sin subir nada. origin/main avanza solo cuando
+rem un push sale bien, asi que el conteo sirve sin internet. El detalle esta
+rem en PUBLICAR.command.
+set PEND=0
+for /f %%A in ('git rev-list --count origin/main..main 2^>nul') do set PEND=%%A
 
+if not "%CANT%"=="0" goto :hay_algo
+if not "%PEND%"=="0" goto :hay_algo
+echo   El sitio ya esta al dia. No hay nada nuevo para publicar.
+echo.
+echo   https://advance33.github.io/catalogo-advance/
+echo.
+del "%TEMP%\_pub.txt" >nul 2>&1
+pause
+exit /b 0
+
+:hay_algo
+if "%PEND%"=="0" goto :sin_pendientes
+echo   OJO: hay %PEND% publicacion^(es^) anterior^(es^) que NO llegaron a
+echo   GitHub ^(se hicieron en esta compu, pero el envio fallo^):
+git log --oneline origin/main..main
+echo.
+if not "%CANT%"=="0" goto :sin_pendientes
+del "%TEMP%\_pub.txt" >nul 2>&1
+choice /c SN /n /m "   Subirlas ahora? [S = si, N = no]: "
+if errorlevel 2 goto :cancelado
+echo.
+echo   Subiendo...
+echo.
+goto :subir
+
+:sin_pendientes
 echo   Hay %CANT% cambio^(s^) sin publicar:
 echo   ------------------------------------------------------------
 git status --short
@@ -207,12 +249,29 @@ git add -A
 if errorlevel 1 goto :error
 git commit -m "Actualizacion del catalogo - %HOY% %AHORA%" >nul
 if errorlevel 1 goto :error
-git push origin main
-if errorlevel 1 goto :error
 
+:subir
+rem El envio, separando el rechazo (GitHub tiene commits que esta compu no
+rem tiene) de la falta de conexion: con el rechazo reintentar no sirve.
+git push origin main > "%TEMP%\_push.txt" 2>&1
+set PUSH=%errorlevel%
+type "%TEMP%\_push.txt"
+if "%PUSH%"=="0" goto :subido
+findstr /i /c:"rejected" /c:"non-fast-forward" /c:"fetch first" "%TEMP%\_push.txt" >nul
+if errorlevel 1 goto :error_push
+goto :rechazado
+
+:subido
+del "%TEMP%\_push.txt" >nul 2>&1
 echo.
 echo   ============================================================
-echo     LISTO. %CANT% cambio^(s^) publicados.
+if "%CANT%"=="0" (
+  echo     LISTO. Se subieron %PEND% publicacion^(es^) que habian quedado
+  echo     pendientes.
+) else (
+  echo     LISTO. %CANT% cambio^(s^) publicados.
+)
+if not "%CANT%"=="0" if not "%PEND%"=="0" echo     Y se subieron %PEND% publicacion^(es^) anterior^(es^) pendientes.
 echo.
 echo     En 1 o 2 minutos se ve en:
 echo     https://advance33.github.io/catalogo-advance/
@@ -236,9 +295,41 @@ echo.
 echo   ------------------------------------------------------------
 echo     NO SE PUDO PUBLICAR
 echo.
-echo     Suele ser falta de internet. Revisa la conexion y proba
-echo     de nuevo. Si el error se repite, pasale a Claude lo que
-echo     dice aca arriba.
+echo     Suele ser falta de internet o la cuenta de GitHub. Revisa
+echo     la conexion y proba de nuevo. Si el error se repite, pasale
+echo     a Claude lo que dice aca arriba.
+echo   ------------------------------------------------------------
+echo.
+pause
+exit /b 1
+
+:error_push
+del "%TEMP%\_push.txt" >nul 2>&1
+echo.
+echo   ------------------------------------------------------------
+echo     NO SE PUDO PUBLICAR
+echo.
+echo     Suele ser falta de internet o la cuenta de GitHub. Revisa
+echo     la conexion y proba de nuevo. Si el error se repite, pasale
+echo     a Claude lo que dice aca arriba.
+echo.
+echo     Lo de hoy quedo guardado en esta compu: la proxima vez que
+echo     abras PUBLICAR lo vuelve a intentar.
+echo   ------------------------------------------------------------
+echo.
+pause
+exit /b 1
+
+:rechazado
+del "%TEMP%\_push.txt" >nul 2>&1
+echo.
+echo   ------------------------------------------------------------
+echo     NO SE PUDO PUBLICAR: GitHub tiene cambios que esta compu
+echo     no tiene. No lo reintentes ni lo arregles a mano: pasale a
+echo     Claude lo que dice aca arriba.
+echo.
+echo     Lo de hoy quedo guardado en esta compu y se sube cuando
+echo     eso este resuelto.
 echo   ------------------------------------------------------------
 echo.
 pause

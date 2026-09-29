@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Pone a las fotos el nombre que les corresponde HOY segun la planilla.
 
-    python herramientas/migrar-fotos-a-sku.py             simula y muestra el plan
-    python herramientas/migrar-fotos-a-sku.py --aplicar   renombra de verdad
+    python3 herramientas/migrar-fotos-a-sku.py             simula y muestra el plan
+    python3 herramientas/migrar-fotos-a-sku.py --aplicar   renombra de verdad
 
 Las fotos se llaman por SKU (contrato landing/1.2): fotos/<SKU>-<color>.jpg,
 y fotos/<SKU>.jpg solo si el producto no tiene color. La regla vive en
@@ -72,11 +72,14 @@ def leer_registro():
 
 
 def escribir_registro(reg):
+    # El mismo encabezado que escriben verificar-fotos.py, sacar-fotos-malas.py,
+    # revisar-fotos-con-agentes.py y migrar-fotos-a-codigo.py, con python3
+    # (29/09): si difiere, va y viene en el diff segun cual corrio ultimo.
     with open(REVISADAS, 'w', encoding='utf-8', newline='\r\n') as fh:
         fh.write('# Fotos miradas contra el producto que dice la planilla.' + chr(10))
         fh.write('# Si una cambia, deja de coincidir y no se publica hasta mirarla.' + chr(10))
-        fh.write('# Anotar las miradas:  python verificar-fotos.py --revisadas' + chr(10))
-        fh.write('# Arrancar el registro: python verificar-fotos.py --sembrar' + chr(10))
+        fh.write('# Anotar las miradas:  python3 verificar-fotos.py --revisadas' + chr(10))
+        fh.write('# Arrancar el registro: python3 verificar-fotos.py --sembrar' + chr(10))
         for archivo in sorted(reg):
             h, mirada = reg[archivo]
             fh.write('%s  %-34s # %s%s' % (h, archivo, 'mirada' if mirada else 'sin mirar', chr(10)))
@@ -234,7 +237,7 @@ def main():
 
     if not APLICAR:
         print()
-        print('Simulacion. Para hacerlo de verdad:  python herramientas/migrar-fotos-a-sku.py --aplicar')
+        print('Simulacion. Para hacerlo de verdad:  python3 herramientas/migrar-fotos-a-sku.py --aplicar')
         return 0
 
     # ---- aplicar ----

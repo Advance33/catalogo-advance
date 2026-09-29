@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-Valida la planilla Landing contra las reglas que el catálogo necesita para
-mostrarse bien. Se corre ANTES de publicar:
+Valida los datos de ADVAPP (lo mismo que muestra la web) contra las reglas
+que el catálogo necesita para mostrarse bien. Si ADVAPP no contesta revisa
+la planilla Landing, que está congelada desde el 22/09 y es solo el
+respaldo, y lo dice. Se corre ANTES de publicar:
 
-    python validar.py
+    python3 validar.py
 
-Sale con código 1 si hay algún error GRAVE, así que PUBLICAR.bat puede
-frenar solo. Con --todo muestra también los avisos leves.
+Sale con código 1 si hay algún error GRAVE, así que PUBLICAR puede frenar
+solo. Con --todo muestra también los avisos leves. Con --pedido redacta lo
+que hay que pedirle a ADVAPP por las reglas de datos de acá (etiqueta
+[ADVAPP]); lo demás que se les pide sale de herramientas/pedido-advapp.py.
+(29/09: decía "planilla" y "PEDIDO PARA LA PLANILLA"; desde el 22/09 los
+datos y los pedidos son de ADVAPP.)
 
 Las listas de colores y de categorías NO se copian acá: se leen del propio
 index.html. Si mañana se agrega un color al mapa, el validador se entera
@@ -19,6 +25,10 @@ sys.path.insert(0, os.path.join(AQUI, 'herramientas'))
 import fotos_sku as FS       # los nombres de foto de antes del catalogo
 import catalogo_maestro as CM   # la identidad propia de cada producto
 INDEX     = os.path.join(AQUI, 'index.html')
+# El nombre del archivo quedo de cuando el pedido iba al equipo de la planilla
+# y NO se cambia a proposito (29/09): esta en el .gitignore, y con otro nombre
+# el "git add -A" de PUBLICAR lo subiria a la web (el repo es publico). Si se
+# renombra, primero se suma el nombre nuevo al .gitignore. Adentro dice ADVAPP.
 SALIDA_PEDIDO = os.path.join(AQUI, 'PEDIDO-AL-SHEET.txt')
 FOTOS     = os.path.join(AQUI, 'fotos')
 SHEET_ID  = '18xxslIKTBnVMrLixCGlQBJGje3vKBYQHXy0qvVp8tpQ'
@@ -88,6 +98,10 @@ def leer_index():
             que = re.search(r"que:\s*'([^']*)'", linea)
             if 'condicion:' in linea:
                 destino = 'Condición'
+            elif 'garantia:' in linea:
+                # 29/09: la garantía decía "(se borra)" y la página la manda a
+                # su renglón de la ficha (el "3Y Warranty" del Dell P2725H)
+                destino = 'Garantía'
             elif re.search(r"incluye:\s*'\S", linea):
                 destino = 'Incluye'
             else:
@@ -99,6 +113,22 @@ def leer_index():
     return colores, plurales, orden, renombre, notas
 
 
+def claves_repetidas_colores():
+    """Las claves que el mapa COLORES de index.html trae mas de una vez, con
+    el tono que vale (en un objeto de JavaScript gana la ULTIMA). Hasta el
+    29/09 estaban repetidas 'ice white', 'titan black', 'moonlit silver' y
+    'anchor blue': se corregia el tono de la de arriba y en pantalla no
+    cambiaba nada. leer_index() guarda las claves en un set y no lo veia."""
+    src = io.open(INDEX, encoding='utf-8').read()
+    bloque = re.search(r'const COLORES = \{(.*?)\n\};', src, re.S)
+    if not bloque:
+        return []
+    vistos = collections.OrderedDict()
+    for m in re.finditer(r"""'?([A-Za-z][A-Za-z0-9 ]*)'?\s*:\s*'(#[0-9A-Fa-f]{6})'""", bloque.group(1)):
+        vistos.setdefault(norm(m.group(1)), []).append(m.group(2))
+    return [(k, tonos) for k, tonos in vistos.items() if len(tonos) > 1]
+
+
 # Desde el 17/09/2026 la web lee ADVAPP, y desde el 22/09 la planilla no se
 # actualiza mas. Los controles leian la planilla: el 26/09 el validador decia
 # "sin errores graves" sobre 583 filas congeladas mientras la web mostraba 758
@@ -107,16 +137,70 @@ def leer_index():
 ADVAPP_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web'
 FUENTE = {'nombre': '', 'manifiesto': None}   # de donde salio la ultima bajada
 
+# Las mismas defensas que la web (index.html, bajarAdvapp y ADVAPP_MINIMO).
+# Hasta el 29/09 aca solo se rechazaba una respuesta SIN productos: una carga
+# cortada pasaba entera, y pedido-advapp.py le habria agradecido a ADVAPP como
+# "ya arreglado" todo lo que no vino. La web ya la descartaba; las
+# herramientas, que no tienen localStorage, guardan la cantidad de la ultima
+# carga buena en logs/ (no se publica: es de esta maquina).
+ADVAPP_MINIMO = 0.8
+ULTIMA_CARGA = os.path.join(AQUI, 'logs', 'advapp-ultima-carga.json')
+# La revision diaria baja ADVAPP UNA vez, guarda la copia en logs/ y le pasa
+# la ruta a validar, verificar-fotos y pedido-advapp con esta variable: asi las
+# tres herramientas miran exactamente el mismo dato, y el dia despues se puede
+# ver con que dato corrio (29/09: la falla del 28 no se podia reconstruir).
+COPIA_ENV = 'ADVAPP_COPIA'
+
+
+def _filas_de_ayer():
+    try:
+        return int(json.load(io.open(ULTIMA_CARGA, encoding='utf-8')).get('filas') or 0)
+    except Exception:
+        return 0
+
+
+def _guardar_filas(n, generado):
+    try:
+        os.makedirs(os.path.dirname(ULTIMA_CARGA), exist_ok=True)
+        tmp = ULTIMA_CARGA + '.tmp'
+        with io.open(tmp, 'w', encoding='utf-8') as fh:
+            json.dump({'filas': n, 'generado_en': generado,
+                       'guardado': datetime.datetime.now().isoformat(timespec='seconds')}, fh)
+        os.replace(tmp, ULTIMA_CARGA)
+    except OSError:
+        pass                     # no poder recordarlo no es motivo para frenar
+
 
 def bajar_advapp():
     """Los productos de ADVAPP como filas de la planilla, mas la columna SKUS
     (el JSON de los SKU por color, como lo arma bajarAdvapp() en la web)."""
-    req = urllib.request.Request(ADVAPP_URL, headers={'User-Agent': 'validar.py'})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        d = json.loads(r.read().decode('utf-8'))
+    copia = os.environ.get(COPIA_ENV)
+    if copia:
+        with io.open(copia, 'rb') as fh:
+            d = json.loads(fh.read().decode('utf-8'))
+    else:
+        req = urllib.request.Request(ADVAPP_URL, headers={'User-Agent': 'validar.py'})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            d = json.loads(r.read().decode('utf-8'))
     productos = d.get('productos') or []
     if not productos:
         raise ValueError('ADVAPP vino sin productos')
+    n = len(productos)
+    declaradas = d.get('filas')
+    if isinstance(declaradas, (int, float)) and declaradas > 0 and n < int(declaradas):
+        raise ValueError('ADVAPP trajo %d de las %d filas que declara' % (n, int(declaradas)))
+    # Contra la ultima carga buena, y solo si trae mucho menos: ahi se le
+    # pregunta a la planilla cuantas filas hay de verdad (igual que la web).
+    antes = _filas_de_ayer()
+    if antes and n < antes * ADVAPP_MINIMO:
+        try:
+            planilla = int((bajar_meta() or {}).get('filas') or 0)
+        except (TypeError, ValueError):
+            planilla = 0             # sin ese dato no se descarta nada, como la web
+        if planilla and n < planilla * ADVAPP_MINIMO:
+            raise ValueError('ADVAPP trajo %d filas y la ultima carga buena tenia %d '
+                             '(menos del %d %%)' % (n, antes, round(ADVAPP_MINIMO * 100)))
+    _guardar_filas(n, d.get('generado_en'))
     cols = [str(c) for c in (d.get('columnas') or [])] or \
         [k for k in productos[0] if k != 'SKUS']
     texto = lambda v: '' if v is None else str(v)
@@ -128,6 +212,7 @@ def bajar_advapp():
         filas.append(f)
     FUENTE['manifiesto'] = {k: d.get(k) for k in
                             ('contrato', 'fuente', 'generado_en', 'filas', 'verificado_hoy')}
+    FUENTE['manifiesto']['copia'] = copia or ''
     return filas
 
 
@@ -151,6 +236,7 @@ def bajar_csv(destino=None):
                          'que esta congelada desde el 22/09.\n' % e)
         FUENTE['nombre'] = 'planilla (respaldo: ADVAPP no contesto)'
         FUENTE['manifiesto'] = None
+        FUENTE['error'] = str(e)
         return bajar_planilla(destino)
     if destino:
         cols = list(filas[0].keys())
@@ -404,13 +490,114 @@ def regla_categorias(filas, ctx):
 RE_TELE = re.compile(r'\b(extender|teleconverter|converter|tc-\d|[\d.]+x\b)', re.I)
 
 
+def monturas_del_index():
+    """Las listas MONTURAS_SUFIJO y MONTURAS_PREFIJO de index.html, como
+    [(regex, montura)], en el mismo orden en que las prueba monturaDe().
+    Se leen del codigo, como regla_specs_dual lee specs(): si alguien suma
+    una forma nueva de escribir la montura, esta regla se entera sola."""
+    src = io.open(INDEX, encoding='utf-8').read()
+    listas = []
+    for nombre in ('MONTURAS_SUFIJO', 'MONTURAS_PREFIJO'):
+        ini = src.find('const %s = [' % nombre)
+        if ini < 0:
+            return None
+        fin = src.find('];', ini)
+        pares = re.findall(r"\[/(.+?)/\s*,\s*'([^']+)'\]", src[ini:fin])
+        try:
+            listas += [(re.compile(rx), m) for rx, m in pares]
+        except re.error:
+            return None
+    return listas
+
+
+def monturas_del_sku_del_index():
+    """La tabla MONTURAS_DEL_SKU de index.html ({'CANRF': 'Canon RF', ...}),
+    la que usa monturaDelSku() para leer la montura del final del SKU. Se lee
+    del codigo por lo mismo que monturas_del_index(): si la web suma un
+    sufijo, esta regla se entera sola (29/09). None si no la encuentra."""
+    src = io.open(INDEX, encoding='utf-8').read()
+    ini = src.find('const MONTURAS_DEL_SKU = {')
+    fin = src.find('};', ini)
+    if ini < 0 or fin < 0:
+        return None
+    pares = re.findall(r"""\b([A-Z]+)['"]?\s*:\s*['"]([^'"]+)['"]""", src[ini:fin])
+    return dict(pares) or None
+
+
+def _montura_del_sku(s, tabla):
+    """monturaDelSku() del index.html: el sufijo del final del SKU
+    ("...-canef") se compara entero contra la tabla, asi que CANRF no es
+    CANRFS. El "-000" de los que no la traen, o un sufijo que no esta en la
+    tabla, no dan nada. re.A porque el /i de JS no pliega letras que no son
+    ASCII y el re.I de Python si."""
+    m = re.search(r'[-~]([a-z]+)$', str(s or '').strip(), re.I | re.A)
+    return tabla.get(m.group(1).upper(), '') if m else ''
+
+
+def montura_del_sku_de_la_fila(f, tabla):
+    """p.monturaSku de la web (29/09): primero la columna SKU y, si no la
+    dice, los SKU por color, y solo si todos dicen la misma
+    (monturaDeLosSkus). Igual que sim_de_la_fila con la Sim."""
+    m = _montura_del_sku(f.get('SKU'), tabla)
+    if m:
+        return m
+    try:
+        lista = json.loads(f.get('SKUS') or '[]')
+    except ValueError:
+        return ''
+    if not isinstance(lista, list) or not lista:
+        return ''
+    dichos = [_montura_del_sku(x.get('sku') if isinstance(x, dict) else None, tabla) for x in lista]
+    return dichos[0] if all(d and d == dichos[0] for d in dichos) else ''
+
+
+def montura_de(f, monturas, del_sku=None):
+    """Lo mismo que p.montura del index.html:
+    (esLente(p) && p.monturaSku) || monturaDe(p) (29/09). Primero el SKU de
+    ADVAPP y, si no la dice, el nombre. Hasta el 29/09 decia "lo mismo que
+    monturaDe()" y leia solo el nombre: cuando la web paso a leer primero el
+    SKU (hallazgo 196), esto quedo avisando 8 lentes que la web si filtra y
+    dando Nikon F a los 7 Tamron "III NIKON" que la web da Nikon Z. Sin
+    del_sku (la tabla MONTURAS_DEL_SKU), solo el nombre."""
+    if del_sku:
+        m = montura_del_sku_de_la_fila(f, del_sku)
+        if m:
+            return m
+    t = re.sub(r'[.,]', ' ', (f.get('Modelo') or f['Descripción completa'] or '').upper()).strip()
+    for rx, m in monturas or []:
+        if rx.search(t):
+            return m
+    return ''
+
+
 def regla_lentes(filas, ctx):
     """Sin "mm" y con coma decimal el buscador no los encuentra."""
     fallas = []
+    # Sin montura el lente no aparece en el filtro Montura de la web (29/09):
+    # el Sigma "85MM ... ART EF CANON" la tenia dada vuelta y otros 10 decian
+    # solo "CANON", sin RF ni EF, y no los avisaba nadie. Desde el hallazgo
+    # 196 la web lee primero el final del SKU de ADVAPP, que resuelve 8 de
+    # esos 10: quedan LEN-SIG-002 y LEN-SIG-046, los mismos que pide
+    # r_montura en herramientas/pedido-advapp.py. Por eso aca se mira igual
+    # que la web, SKU y despues nombre: si no, se le pedia a ADVAPP un dato
+    # que ya manda. La web no la deduce ni la inventa: se pide a quien carga.
+    monturas = monturas_del_index()
+    if monturas is None:
+        fallas.append(('AVISO', '(código)', 'no se pudieron leer MONTURAS_SUFIJO/PREFIJO del index.html'))
+    del_sku = monturas_del_sku_del_index()
+    if del_sku is None:
+        fallas.append(('AVISO', '(código)', 'no se pudo leer MONTURAS_DEL_SKU del index.html: la montura '
+                                            'se mira solo en el nombre, como si la web no leyera el SKU'))
     for f in filas:
-        if f['Categoría'] != 'Lente':
+        if f['Categoría'] not in ('Lente', 'Objetivo'):
             continue
         d = f['Descripción completa']
+        if monturas and not montura_de(f, monturas, del_sku):
+            fallas.append(('AVISO', f['ID'],
+                           'ni el SKU ni el nombre dicen la montura: no aparece en el filtro Montura de la web'
+                           if del_sku else
+                           'el nombre no dice la montura ("CANON RF", "SONY FE", "NIKON Z"...) y el SKU '
+                           'no se pudo mirar (ver el aviso de código)'))
         if not RE_TELE.search(d) and not re.search(r'\d\s*mm\b', d, re.I):
             fallas.append(('AVISO', f['ID'], 'sin "mm" en el focal: no lo encuentra quien busca "50mm"'))
         if re.search(r'\d,\d', d):
@@ -428,7 +615,12 @@ def regla_specs_dual(filas, ctx):
     Así el día que cambie el código, esta regla se entera sola.
     """
     src = io.open(INDEX, encoding='utf-8').read()
-    m = re.search(r'const dual\s*=\s*/(.+?)/[gimsuy]*\.exec', src)
+    # La de specs() y no la primera del archivo (29/09): la primera "const
+    # dual" es la de capacidadDe(), que lee los TB por otro lado. Con esa, el
+    # dia que se sumaron los "16GB/1TB" esta regla los hubiera marcado GRAVE
+    # aunque specs() ya los entendiera.
+    ini = src.find('function specs(')
+    m = re.search(r'const dual\s*=\s*/(.+?)/[gimsuy]*\.exec', src[ini:]) if ini >= 0 else None
     if not m:
         return [('AVISO', '(código)', 'no se encontró la expresión dual en specs()')]
     try:
@@ -439,13 +631,40 @@ def regla_specs_dual(filas, ctx):
     fallas = []
     for f in filas:
         txt = ' '.join([f['Descripción completa'], f.get('Modelo') or ''])
-        # ¿Parece "RAM / almacenamiento" pero el catálogo no lo reconoce?
-        parece = re.search(r'\d{1,2}\s*(?:GB)?\s*/\s*\d{3,4}\s*GB', txt, re.I)
+        # ¿Parece "RAM / almacenamiento" pero el catálogo no lo reconoce? El
+        # disco tambien en TB (29/09): "16GB/1TB" pasaba sin que nadie mirara
+        # si specs() lo entendia, y no lo entendia (48 filas sin RAM).
+        parece = re.search(r'\d{1,2}\s*(?:GB)?\s*/\s*(?:\d{3,4}\s*GB|\d(?:[.,]\d)?\s*TB)', txt, re.I)
         if parece and not rx.search(txt):
             fallas.append(('GRAVE', f['ID'],
                            'memoria escrita como "%s": specs() no la reconoce y pierde el disco'
                            % parece.group(0)))
     return fallas
+
+
+def _sim_del_sku(s):
+    """Lo mismo que simDelSku() del index.html: -sim / -esim al final."""
+    x = (s or '').strip().lower()
+    if re.search(r'[-~]e-?sim$', x):
+        return 'e-sim'
+    return 'sim' if re.search(r'[-~]sim$', x) else ''
+
+
+def sim_de_la_fila(f):
+    """La Sim de una fila como la lee la web (index.html, armado de cada
+    producto): primero la columna SKU y, si no lo dice, los SKU por color, y
+    solo si todos dicen lo mismo. Sin SKU que lo diga, nada (29/09)."""
+    s = _sim_del_sku(f.get('SKU'))
+    if s:
+        return s
+    try:
+        lista = json.loads(f.get('SKUS') or '[]')
+    except ValueError:
+        return ''
+    if not isinstance(lista, list) or not lista:
+        return ''
+    dichos = [_sim_del_sku(x.get('sku') if isinstance(x, dict) else '') for x in lista]
+    return dichos[0] if all(d and d == dichos[0] for d in dichos) else ''
 
 
 def regla_color_por_precio(filas, ctx):
@@ -497,8 +716,13 @@ def regla_color_por_precio(filas, ctx):
         # color en dos productos distintos. El catálogo no se equivocaba; se
         # equivocaba el control. Si las dos claves se separan, una de las dos le
         # miente a alguien.
+        #
+        # Desde el 29/09 firmaVisible() suma la Sim del SKU (Pedro, 26/09: Sim
+        # y eSIM son productos distintos), y aca va la misma: sin ella, una Sim
+        # y una eSIM con el mismo nombre y color a precios distintos saltaban
+        # como GRAVE, cuando son dos productos y la web muestra los dos.
         extra = ((f.get('Incluye') or '') + '|' + (f.get('Teclado') or '') +
-                 '|' + (f.get('Condición') or ''))
+                 '|' + (f.get('Condición') or '') + '|' + sim_de_la_fila(f))
         return re.sub(r'\s+', ' ', norm(t)).strip() + ' || ' + norm(extra)
 
     porgrupo = collections.defaultdict(list)
@@ -660,6 +884,176 @@ def regla_tarjetas(filas, ctx):
     return fallas
 
 
+# --------------------------------------------------------------------------
+# La portada que muestra la web, paso por paso (29/09, hallazgo 48)
+# --------------------------------------------------------------------------
+# Los informes de fotos (esta regla y verificar-fotos.py) predecian la portada
+# solo con el texto del color, y la web hace mas: prueba primero la celda
+# CODIGO_VAR, despues cae a la foto que manda ADVAPP, y desde el 29/09 a la
+# de una hermana del mismo modelo y del mismo color (fotoDeHermana: Pedro,
+# 26/09, otra memoria se ve igual). Con eso el informe decia "sin foto" en
+# fichas que el cliente veia con foto, y no decia nada de las que mostraban
+# una foto de ADVAPP que nadie de aca miro. PortadaWeb repite el orden de la
+# web (cargar() y armarModelo() en index.html); si se cambia alla, se cambia
+# aca. Medido el 29/09 contra la pagina en Chrome: 757 de 758 iguales. La que
+# no, es una fila repetida (mismo nombre, color y precio) que colapsarIguales()
+# esconde: la web no la muestra y aca figura con la foto de la hermana. No se
+# copio colapsarIguales porque no cambia nada de lo que ve el cliente.
+
+def expresiones_de_familia():
+    """Las expresiones de familia() leidas de index.html, como hace _agrupar:
+    si la web cambia la regla, esto se entera solo. Las banderas tambien:
+    RE_TALLE distingue mayusculas a proposito."""
+    src = io.open(INDEX, encoding='utf-8').read()
+    salida = {}
+    for nombre, defecto in (
+            ('RE_PAREN', r'\([^)]*\)'), ('RE_CORCH', r'\[[^\]]*\]'),
+            ('RE_DUAL', r'\b\d{1,2}\s*/\s*\d{1,4}\s*(?:gb|tb)\b'),
+            ('RE_CAP', r'\b\d+(?:[.,]\d+)?\s*(?:gb|tb)\b'), ('RE_RAM', r'\b\d+\s*ram\b'),
+            ('RE_MM', r'\b\d{2}\s*mm\b'),
+            ('RE_CORREA', r'\b(?:sport band|ocean band|alpine loop|milanese loop|trail loop|sport loop)\b'),
+            ('RE_TALLE', r'\b[SML](?:/[SML])?(?:-[SML](?:/[SML])?)?\b'),
+            ('RE_COLOR', r'\b(?:midnight|starlight|silver|space gray|rose gold|jet black|natural|'
+                         r'anchor blue|dark green|black|gold|white|blue)\b')):
+        m = re.search(r'const %s\s*=\s*/(.+?)/([gimsuy]*);' % nombre, src)
+        patron, banderas = (m.group(1), m.group(2)) if m else (defecto, 'gi')
+        try:
+            salida[nombre] = re.compile(patron, re.I if 'i' in banderas else 0)
+        except re.error:
+            salida[nombre] = re.compile(defecto, re.I)
+    return salida
+
+
+def familia_web(cat, marca, desc, rx, grupo=''):
+    """familia() de index.html: con Grupo manda el Grupo; si no, el nombre sin
+    la marca adelante (sinMarca, como la llama pruebas/codigos.js), sin
+    parentesis, memoria ni RAM, y en los relojes sin medida, malla ni color."""
+    if (grupo or '').strip():
+        return 'G:' + norm(grupo)
+    d, m = desc or '', (marca or '').strip()
+    if m and norm(d).startswith(norm(m) + ' '):
+        d = d[len(m):].strip()
+    for n in ('RE_PAREN', 'RE_CORCH', 'RE_DUAL', 'RE_CAP', 'RE_RAM'):
+        d = rx[n].sub(' ', d)
+    if norm(cat) in ('apple watch', 'smartwatch'):
+        for n in ('RE_MM', 'RE_CORREA', 'RE_TALLE', 'RE_COLOR'):
+            d = rx[n].sub(' ', d)
+    return '|'.join([norm(cat), norm(marca), re.sub(r'[\s\-–/]+', ' ', norm(d)).strip()])
+
+
+def teclado_de_la_fila(f):
+    """p.teclado de la web: del final del SKU ("...-tecladoes") y, si no lo
+    dice, la columna Teclado."""
+    m = re.search(r'[-~]teclado(es|en)$', (f.get('SKU') or '').strip().lower())
+    return m.group(1).upper() if m else limpio(f.get('Teclado'))
+
+
+def fila_activa(f):
+    """Las filas que la web muestra: Activo vacio o que diga que si (siNo), y
+    con nombre."""
+    t = re.sub(r'[.!]+$', '', norm(f.get('Activo') or ''))
+    si = not t or bool(re.match(r'(si\b|s$|yes$|y$|true$|1$|x$)', t))
+    return si and bool((f.get('Descripción completa') or f.get('Modelo') or '').strip())
+
+
+def foto_de_advapp_del_color(f, color, propios):
+    """fotoDeAdvapp(p, color) de index.html para UN color pedido, que puede no
+    ser de la fila (fotoDeHermana le pregunta a la hermana por el color de la
+    otra). catalogo_maestro.foto_de_advapp no recibe el color: prueba todos
+    los de la fila, que es lo que hace la web para la portada propia."""
+    try:
+        skus = json.loads(f.get('SKUS') or '[]')
+    except ValueError:
+        return ''
+    fotos = {}
+    for s in skus if isinstance(skus, list) else []:
+        if not isinstance(s, dict):
+            continue
+        at = str(s.get('at') or '').strip().upper()
+        lst = s.get('fotos')
+        url = str(lst[0] or '') if isinstance(lst, list) and lst else ''
+        if at and url.startswith('http') and at not in fotos:
+            fotos[at] = url
+    if not fotos or not propios:
+        return ''
+    cvs = [x.strip().upper() for x in (f.get('CODIGO_VAR') or '').split('/')]
+    i = next((j for j, c in enumerate(propios) if norm(c) == norm(color)), -1)
+    cv = cvs[i] if i != -1 and len(cvs) == len(propios) else ''
+    if cv and cv in fotos:
+        return fotos[cv]
+    if len(propios) == 1 and len(fotos) == 1 and i == 0:
+        return next(iter(fotos.values()))
+    return ''
+
+
+class PortadaWeb(object):
+    """La portada de cada fila como la elige la web. de(fila) devuelve
+    (clase, que): 'nuestra' (la foto propia, AT-####-NN), 'advapp' (la de
+    ADVAPP de esa fila, url), 'hermana' (la nuestra de una hermana, AT-...),
+    'advapp-hermana' (la de ADVAPP de una hermana, url) o 'logo' ('' o el
+    primer nombre que se busco). Una fila sin codigo solo puede tener la de
+    ADVAPP o el logo."""
+
+    def __init__(self, filas, cidx, archivos, conocidos):
+        self.cidx, self.archivos, self.conocidos = cidx, archivos, conocidos
+        self.colores = lambda f: FS.colores_de_la_fila(f, pinta, conocidos)
+        self.codigo = {id(f): CM.codigo_de_la_fila(f, cidx, pinta, conocidos)[0] for f in filas}
+        rx = expresiones_de_familia()
+        self.grupos = collections.OrderedDict()
+        self.grupo_de = {}
+        for f in filas:
+            if not fila_activa(f):
+                continue
+            g = familia_web(f.get('Categoría'), f.get('Marca'),
+                            f.get('Descripción completa') or f.get('Modelo'), rx, f.get('Grupo'))
+            self.grupos.setdefault(g, []).append(f)
+            self.grupo_de[id(f)] = g
+
+    def candidatos(self, f):
+        """Los nombres que prueba fotoDeCarpeta(), en orden (nombresDeFoto)."""
+        cod = self.codigo.get(id(f)) or ''
+        cols = self.colores(f)
+        return CM.candidatos_foto(cod, cols, self.cidx, f.get('Descripción completa') or '',
+                                  self.conocidos, fila=f, propios=cols) if cod else []
+
+    def de_hermana(self, f):
+        cols = self.colores(f)
+        g = self.grupo_de.get(id(f))
+        if not cols or g is None:
+            return '', ''
+        c = cols[0]                            # solo el primer color: el de su portada
+        sim, tec = norm(sim_de_la_fila(f)), norm(teclado_de_la_fila(f))
+        hermanas = [x for x in self.grupos[g] if x is not f
+                    and norm(sim_de_la_fila(x)) == sim and norm(teclado_de_la_fila(x)) == tec]
+        for x in hermanas:                     # primero las fotos nuestras
+            cod = self.codigo.get(id(x))
+            if not cod:
+                continue
+            v = CM.variante_de_la_columna(x, cod, c, self.cidx, self.colores(x)) \
+                or CM.variante_de(cod, c, self.cidx)
+            if v and v in self.archivos:
+                return 'hermana', v
+        for x in hermanas:                     # despues las de ADVAPP
+            xc = self.colores(x)
+            u = foto_de_advapp_del_color(x, c, xc) if xc else ''
+            if u:
+                return 'advapp-hermana', u
+        return '', ''
+
+    def de(self, f):
+        cand = self.candidatos(f)
+        propia = next((c for c in cand if c in self.archivos), '')
+        if propia:
+            return 'nuestra', propia
+        u = CM.foto_de_advapp(f, self.colores(f))
+        if u:
+            return 'advapp', u
+        clase, que = self.de_hermana(f)
+        if clase:
+            return clase, que
+        return 'logo', cand[0] if cand else ''
+
+
 def regla_fotos(filas, ctx):
     if not os.path.isdir(FOTOS):
         return [('AVISO', '(fotos)', 'no existe la carpeta fotos/')]
@@ -681,7 +1075,7 @@ def regla_fotos(filas, ctx):
             en_indice = set(json.load(io.open(indice, encoding='utf-8')).get('archivos', []))
             if en_indice != set(n for n in nombres if n.lower().endswith('.jpg')):
                 fallas.append(('AVISO', '(fotos)',
-                               'fotos/indice.json no coincide con la carpeta: corré verificar-fotos.py (PUBLICAR.bat lo hace solo)'))
+                               'fotos/indice.json no coincide con la carpeta: corré python3 verificar-fotos.py (PUBLICAR lo hace solo)'))
         except Exception:
             fallas.append(('AVISO', '(fotos)', 'fotos/indice.json no se pudo leer'))
 
@@ -699,24 +1093,37 @@ def regla_fotos(filas, ctx):
     cidx = CM.indexar(maestro)
     validos = set(m['CODIGO_VAR'] for m in maestro)
     sin_codigo = 0
+    # La portada como la elige la web (29/09): con la fila entera (primero lo
+    # que dice CODIGO_VAR y despues el texto: "Lime" contra "lima" daba "sin
+    # foto" y la web mostraba AT-0511-02), y sin foto nuestra, la de ADVAPP o
+    # la de una hermana del mismo color. Solo se avisa lo que el cliente ve
+    # mal: el logo, o una foto de ADVAPP que nadie miro. La de la hermana no
+    # se avisa: es la decision de Pedro del 26/09 (otra memoria, misma foto).
+    portada = PortadaWeb(filas, cidx, archivos, conocidos)
     for f in filas:
-        cod, _ = CM.codigo_de_la_fila(f, cidx, pinta, conocidos)
+        cod = portada.codigo.get(id(f))
         if not cod:
             sin_codigo += 1
             continue
         cols = FS.colores_de_la_fila(f, pinta, conocidos)
-        cand = CM.candidatos_foto(cod, cols, cidx)
-        if cand and not any(c in archivos for c in cand):
-            fallas.append(('AVISO', f['ID'], 'sin foto de portada (%s.jpg)' % cand[0]))
+        cand = portada.candidatos(f)
+        if cand:
+            clase, que = portada.de(f)
+            if clase in ('advapp', 'advapp-hermana'):
+                fallas.append(('AVISO', f['ID'], 'sin foto nuestra: se ve la de ADVAPP%s, que nadie'
+                                                 ' reviso (%s.jpg)'
+                               % (' de una hermana' if clase == 'advapp-hermana' else '', cand[0])))
+            elif clase == 'logo':
+                fallas.append(('AVISO', f['ID'], 'sin foto de portada: se ve el logo (%s.jpg)' % cand[0]))
         for c in cols[1:]:                        # la primera es la portada
-            v = CM.variante_de(cod, c, cidx)
+            v = CM.variante_de_la_columna(f, cod, c, cidx, cols) or CM.variante_de(cod, c, cidx)
             if v and v not in archivos:
                 fallas.append(('AVISO', f['ID'],
                                'ofrece "%s" y falta %s.jpg' % (c, v)))
     if sin_codigo:
         fallas.append(('AVISO', '(fotos)',
                        '%d fila(s) sin codigo del catalogo, asi que no pueden tener foto:'
-                       ' python herramientas/revisar-catalogo.py' % sin_codigo))
+                       ' python3 herramientas/revisar-catalogo.py' % sin_codigo))
 
     viejas, sueltas = [], []
     for a in sorted(archivos):
@@ -729,7 +1136,7 @@ def regla_fotos(filas, ctx):
     if viejas:
         fallas.append(('AVISO', '(fotos)',
                        '%d foto(s) con nombre de antes del catalogo (%s.jpg…):'
-                       ' python herramientas/migrar-fotos-a-codigo.py --aplicar'
+                       ' python3 herramientas/migrar-fotos-a-codigo.py --aplicar'
                        % (len(viejas), viejas[0])))
     for a in sueltas:
         fallas.append(('AVISO', '(fotos)',
@@ -738,8 +1145,8 @@ def regla_fotos(filas, ctx):
 
 
 # Cada regla dice dónde se arregla lo que encuentra. No es lo mismo un dato mal
-# cargado (se pide al equipo del sheet) que una lista del catálogo que quedó
-# corta (se toca index.html) o una foto que falta (se produce la imagen).
+# cargado (se le pide a ADVAPP) que una lista del catálogo que quedó corta (se
+# toca index.html) o una foto que falta (se produce la imagen).
 CONDICION_ACEPTADA = os.path.join(AQUI, 'condicion-aceptada.txt')
 
 # Lo que delata un producto que no es nuevo y sellado. Va con \b a los dos
@@ -813,17 +1220,24 @@ def regla_condicion(filas, ctx):
     return fallas
 
 
-PLANILLA, CODIGO, FOTOS_ = 'planilla', 'código', 'fotos'
+# La etiqueta de los datos mal cargados decia 'planilla' hasta el 29/09. Desde
+# el 22/09 los datos vienen de ADVAPP y la planilla quedo congelada: la
+# etiqueta mandaba a pedirle al equipo de una hoja que ya no carga nada. El
+# nombre de la constante queda (la usan las reglas de abajo); lo que se ve,
+# no. Las siete reglas con esta etiqueta siguen enteras, y su pedido sale con
+# --pedido: todavia no estan en herramientas/pedido-advapp.py ("Color vs
+# precio", por ejemplo, no es lo mismo que su r_dos_precios), asi que sacar
+# --pedido las dejaria sin nadie que se las pida a ADVAPP.
+PLANILLA, CODIGO, FOTOS_ = 'ADVAPP', 'código', 'fotos'
 # Lo que no se arregla en ningún lado sino que se decide: sale de los pedidos
-# al equipo de la planilla, porque ahí no hay nada que corregir.
+# a ADVAPP, porque ahí no hay nada que corregir.
 DECISION = 'decisión'
 
 
-# Que decirle al equipo que carga la planilla cuando una regla encuentra algo.
-# El pedido va como REGLA y no como correccion de celda: la carga diaria
-# reescribe la hoja desde la lista del proveedor, asi que arreglar la fila de
-# hoy no sirve para mañana. Cada texto tiene que poder aplicarse sin mirar el
-# caso puntual.
+# Que decirle a ADVAPP cuando una regla encuentra algo. El pedido va como
+# REGLA y no como correccion de celda: la carga diaria reescribe los datos
+# desde la lista del proveedor, asi que arreglar la fila de hoy no sirve para
+# mañana. Cada texto tiene que poder aplicarse sin mirar el caso puntual.
 PEDIDO = {
     'IDs y precios':
         'Cada fila necesita ID unico y precio numerico. Sin precio la ficha no '
@@ -871,21 +1285,33 @@ REGLAS = [
 
 
 def escribir_pedido(graves, avisos):
-    """Arma el texto para mandarle al equipo que carga la planilla.
+    """Arma el texto para mandarle a ADVAPP (hasta el 29/09 iba "al equipo que
+    carga la planilla", que desde el 22/09 ya no carga nada).
 
     Agrupado por regla y no por fila: lo que se pide es como cargar de ahora
     en mas, y los casos del dia van abajo como ejemplo de lo que quedo mal.
+    Lo que se le pide a ADVAPP por otras reglas (codigos, variantes, erratas)
+    sale de herramientas/pedido-advapp.py, que ademas lleva la cuenta de lo
+    ya pedido; este pedido cubre las reglas de datos de validar.
     """
     porregla = collections.OrderedDict()
     for sev, lista in (('ARREGLAR', graves), ('CUANDO PUEDAN', avisos)):
         for nombre, pid, msg, donde in lista:
-            if donde != PLANILLA:
+            # Un '(código)' de una regla de datos (no poder leer una tabla del
+            # index.html) es nuestro, no de ADVAPP: no va al pedido (29/09).
+            if donde != PLANILLA or pid == '(código)':
                 continue
             porregla.setdefault((sev, nombre), []).append((pid, msg))
 
-    L = ['PEDIDO PARA LA PLANILLA — %s' % datetime.date.today().strftime('%d/%m/%Y'), '']
+    L = ['PEDIDO PARA ADVAPP (reglas de datos de validar.py) — %s'
+         % datetime.date.today().strftime('%d/%m/%Y'), '']
+    if FUENTE.get('nombre') and FUENTE['nombre'] != 'ADVAPP':
+        # Sobre la planilla congelada el pedido le pediria a ADVAPP arreglar
+        # cosas que no son suyas: se dice arriba de todo (29/09).
+        L += ['OJO: ADVAPP no contesto y esto se armo sobre la planilla de respaldo,',
+              'congelada desde el 22/09. NO mandarlo: volver a correrlo cuando ADVAPP ande.', '']
     if not porregla:
-        L.append('No hay nada para pedir: la planilla esta limpia.')
+        L.append('No hay nada para pedir: los datos de ADVAPP estan limpios.')
     n = 0
     for (sev, nombre), casos in porregla.items():
         n += 1
@@ -903,13 +1329,34 @@ def escribir_pedido(graves, avisos):
             L.append('     ... y %d mas' % (len(casos) - 12))
         L.append('')
     L.append('Estos pedidos son de como cargar, no de corregir la fila de hoy:')
-    L.append('la carga de mañana vuelve a escribir la hoja.')
+    L.append('la carga de mañana vuelve a escribir los datos.')
     txt = chr(10).join(L)
     io.open(SALIDA_PEDIDO, 'w', encoding='utf-8').write(txt)
     print()
     print(txt)
     print()
     print('(guardado en %s)' % SALIDA_PEDIDO)
+    print('Lo demas que hay que pedirle a ADVAPP:  python3 herramientas/pedido-advapp.py')
+
+
+def aviso_revision_diaria(horas=36):
+    """Si la revision diaria dejo de correr, lo dice. '' si esta al dia o si
+    en esta maquina no corre (no hay ningun log).
+
+    El agente de launchd corre a las 14:00 solo si la Mac esta prendida y con
+    la sesion abierta; si no, ese dia no corre y nadie se entera, porque el
+    aviso sale solo cuando hay errores: el silencio se leia como "todo bien"
+    (29/09). PUBLICAR corre este validador, asi que se ve al publicar. 36
+    horas y no un dia: el agente corre tambien sabado y domingo."""
+    import glob
+    logs = glob.glob(os.path.join(AQUI, 'logs', 'revision-*.txt'))
+    if not logs:
+        return ''
+    ultima = datetime.datetime.fromtimestamp(max(os.path.getmtime(x) for x in logs))
+    if datetime.datetime.now() - ultima <= datetime.timedelta(hours=horas):
+        return ''
+    return ('OJO: la revision diaria no corre desde el %s. Revisar con:  '
+            'python3 revision-diaria.py --estado' % ultima.strftime('%d/%m %H:%M'))
 
 
 def main():
@@ -918,20 +1365,47 @@ def main():
 
     ctx = leer_index()
     print('Mapa de colores: %d entradas · categorías con plural: %d' % (len(ctx[0]), len(ctx[1])))
+    for k, tonos in claves_repetidas_colores():
+        print('OJO: clave repetida en COLORES (index.html): "%s" %s. Vale la ultima (%s); '
+              'dejar una sola.' % (k, ' y '.join(tonos), tonos[-1]))
+    ojo = aviso_revision_diaria()
+    if ojo:
+        print(ojo)
 
     local = [a for a in sys.argv[1:] if not a.startswith('--')]
     try:
         if local:
             filas = list(csv.DictReader(io.open(local[0], encoding='utf-8')))
-            print('Planilla: %s (local)' % local[0])
+            print('Datos: %s (archivo local)' % local[0])
         else:
             filas = bajar_csv()
-            print('Fuente: %s, bajada recién' % FUENTE['nombre'])
+            man = FUENTE.get('manifiesto') or {}
+            if FUENTE['nombre'] == 'ADVAPP':
+                # generado_en y las filas declaradas quedan en el log de la
+                # revision: sin eso no se sabia con que dato corrio (29/09)
+                print('Fuente: ADVAPP, %s (generado_en %s, %s filas declaradas)'
+                      % ('copia de la revision diaria ' + os.path.basename(man['copia'])
+                         if man.get('copia') else 'bajada recién',
+                         man.get('generado_en') or '?', man.get('filas') or '?'))
+            else:
+                print('Fuente: %s, bajada recién' % FUENTE['nombre'])
+                # Una linea fija para que la revision diaria la reconozca sin
+                # depender del texto de arriba. Hasta el 29/09 ADVAPP caido
+                # terminaba en "Se puede publicar" sobre 583 filas del 22/09 y
+                # nadie se enteraba de que la web mostraba precios congelados.
+                print('FUENTE-RESPALDO: ADVAPP no contesto (%s). Se reviso la planilla, '
+                      'congelada desde el 22/09, que es lo que la web muestra mientras tanto.'
+                      % FUENTE.get('error', ''))
     except Exception as e:
         # No poder validar no es lo mismo que encontrar errores: sale con 2
-        # para que PUBLICAR.bat lo distinga y no diga que el catálogo está mal.
-        print('\nNo se pudo leer la planilla: %s' % e)
-        print('Suele ser falta de internet.')
+        # para que PUBLICAR lo distinga y no diga que el catálogo está mal.
+        # 29/09: decia "No se pudo leer la planilla", y lo que fallo primero
+        # es ADVAPP; la planilla es el respaldo que tampoco contesto.
+        if local:
+            print('\nNo se pudo leer %s: %s' % (local[0], e))
+        else:
+            print('\nNo se pudo leer ADVAPP ni la planilla de respaldo: %s' % e)
+            print('Suele ser falta de internet.')
         return 2
     print('Filas: %d\n' % len(filas))
 
@@ -947,7 +1421,7 @@ def main():
         for nombre, pid, msg, donde in graves:
             print('  [%-8s] %-14s %s' % (donde, pid, msg))
         print()
-        # Dónde se arregla cada cosa: no todo se pide al equipo del sheet.
+        # Dónde se arregla cada cosa: no todo se le pide a ADVAPP.
         por_donde = collections.Counter(d for _, _, _, d in graves)
         print('  Se arreglan en: ' + ' · '.join(
             '%s (%d)' % (d, c) for d, c in por_donde.most_common()))
@@ -974,6 +1448,8 @@ def main():
               % (len(graves), len(avisos)))
         return 1
     print('RESULTADO: sin errores graves, %d avisos. Se puede publicar.' % len(avisos))
+    if not local and FUENTE['nombre'] != 'ADVAPP':
+        print('OJO: eso vale para la planilla de respaldo, no para ADVAPP (no contesto).')
     return 0
 
 

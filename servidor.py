@@ -26,7 +26,14 @@ if __name__ == '__main__':
     # encolaban, alguna se colgaba y las pruebas figuraban como caidas.
     socketserver.ThreadingTCPServer.allow_reuse_address = True
     socketserver.ThreadingTCPServer.daemon_threads = True
-    with socketserver.ThreadingTCPServer(('', PUERTO), SinCache) as srv:
+    # Solo esta compu (127.0.0.1), no toda la red (29/09). Con '' escuchaba en
+    # todas las interfaces, y este servidor lista las carpetas: cualquiera en
+    # el mismo wifi podia recorrer backups/, logs/ y las notas que .gitignore
+    # deja afuera de la web, mientras estuviera abierto ABRIR CATALOGO o
+    # corrieran las pruebas de la revision diaria. Nada lo abre desde otro
+    # equipo: todo usa http://localhost:8765, y el celular se prueba con un
+    # iframe en Chrome sin ventana, no con un telefono de verdad.
+    with socketserver.ThreadingTCPServer(('127.0.0.1', PUERTO), SinCache) as srv:
         print('Catalogo andando en http://localhost:%d' % PUERTO)
         print('Para apagarlo, cerra esta ventana.')
         try:

@@ -82,17 +82,19 @@ Pasa seguido, y el puente no puede adivinar. El 11/09 movió cuatro productos
 de categoría, le agregó "GEN2" a siete anteojos y reescribió media docena de
 nombres. Para eso está el trabajo diario:
 
-    python herramientas/altas-catalogo.py     lista lo que no reconoce
+    python3 herramientas/altas-catalogo.py     lista lo que no reconoce
     (una persona escribe la decisión en herramientas/altas-decididas.csv)
-    python herramientas/confirmar-altas.py --aplicar
-    python herramientas/altas-catalogo.py --aplicar
+    python3 herramientas/confirmar-altas.py --aplicar
+    python3 herramientas/altas-catalogo.py --aplicar
 
 Confirmar no es sólo destrabar el día: el ID, el SKU, el nombre y la
 categoría con que vino quedan anotados en el producto, así que el mismo
 cambio no vuelve a preguntarse nunca más.
 """
 import csv
+import difflib
 import io
+import json
 import os
 import re
 import unicodedata
@@ -153,6 +155,11 @@ def leer(ruta=MAESTRO, tolerante=False):
 
 
 def escribir(filas, ruta=MAESTRO):
+    if ruta == MAESTRO:
+        # Antes de tocar nada: si hay un salto, no se escribe ni una fila.
+        salto = salto_en_la_numeracion(filas)
+        if salto:
+            raise CatalogoRoto(salto)
     with io.open(ruta, 'w', encoding='utf-8', newline='') as fh:
         w = csv.DictWriter(fh, fieldnames=COLUMNAS, extrasaction='ignore')
         w.writeheader()
@@ -162,14 +169,47 @@ def escribir(filas, ruta=MAESTRO):
         sincronizar_contador(filas)
 
 
+def salto_en_la_numeracion(filas, anterior=None):
+    """Si los códigos nuevos dejan un hueco. '' si está todo bien.
+
+    Los códigos que estrena una corrida tienen que ser los que siguen al
+    último entregado, sin saltear ninguno: anterior+1, anterior+2... Un
+    salto no lo produce nunca una alta de verdad (las numera proximo_codigo,
+    de a uno) sino un código que llegó de afuera. El 29/09 se probó con una
+    fila de ADVAPP con CODIGO AT-0600 mal tipeado: altas-catalogo la tomaba
+    como un producto que ya estaba, el contador pasaba de 537 a 600 y como
+    no baja nunca, los 62 números del medio quedaban quemados para siempre.
+    Sin número fijo de tolerancia a propósito: un lote de seis altas el
+    mismo día (el 15/09 hubo seis) es legítimo y no deja hueco.
+
+    Con el contador perdido (0) no se controla: se está reconstruyendo.
+    """
+    anterior = ultimo_asignado() if anterior is None else anterior
+    if not anterior:
+        return ''
+    nuevos = sorted({int(f['CODIGO'][3:]) for f in filas
+                     if RE_CODIGO.match((f.get('CODIGO') or '').strip())
+                     and int(f['CODIGO'][3:]) > anterior})
+    esperados = list(range(anterior + 1, anterior + 1 + len(nuevos)))
+    if nuevos == esperados:
+        return ''
+    faltan = sorted(set(range(anterior + 1, max(nuevos) + 1)) - set(nuevos))
+    return ('el catalogo saltaria del AT-%04d al AT-%04d y dejaria %d numero(s) sin '
+            'entregar (AT-%04d...). Un codigo asi no lo da una alta: casi seguro '
+            'vino de afuera mal tipeado. No se escribio nada.'
+            % (anterior, max(nuevos), len(faltan), faltan[0]))
+
+
 def sincronizar_contador(filas):
     """Deja el contador en el número más alto que se haya entregado.
 
-    Desde el contrato landing/1.3 los códigos los reparte el equipo de la
-    planilla, así que de este lado el contador dejó de ser una reserva y pasó
-    a ser un espejo: si no se actualizara, el día que el sheet entregue el
-    AT-0509 el chequeo diría que el contador retrocedió y frenaría la
-    publicación por algo que está bien.
+    Desde el 14/09 el maestro tiene un solo escritor y somos nosotros: los
+    códigos los reparte proximo_codigo(), de a uno. El contador no es el
+    espejo de lo que numere otro (así lo pensamos con el contrato landing/1.3,
+    cuando creíamos que asignaba el equipo de la planilla): esa idea de espejo
+    es la que dejaba pasar un AT-0600 mal tipeado. Por eso escribir() mira
+    antes salto_en_la_numeracion() y acá sólo se acompaña lo que ya pasó ese
+    control.
 
     Nunca baja. Un número que se entregó queda entregado aunque su producto
     se borre del archivo, porque su foto puede seguir en la carpeta.
@@ -704,6 +744,348 @@ def variante_conocida(codigo, fila, idx):
     return False
 
 
+# --------------------------------------------------------------------------
+# El mismo color escrito de otra forma
+# --------------------------------------------------------------------------
+# Como lo escribe el proveedor en castellano -> como esta en ingles. Vivia en
+# colores-nuevos.py; paso aca el 29/09 porque altas-catalogo.py necesita la
+# misma tabla: el Galaxy A36 tiene "lima" (AT-0511-02) y ADVAPP empezo a
+# mandar "Lime", y la herramienta le iba a estrenar el AT-0511-07.
+TRADUCCIONES = {'lima': 'lime', 'lavanda': 'lavender', 'negro': 'black',
+                'blanco': 'white', 'azul': 'blue', 'rosa': 'pink', 'verde': 'green',
+                'gris': 'gray', 'plata': 'silver', 'dorado': 'gold', 'violeta': 'violet'}
+PARECIDO_COLOR = 0.85
+
+
+def misma_escritura(a, b):
+    """Si dos textos son el mismo color escrito distinto: iguales, uno la
+    traduccion del otro, o casi iguales letra por letra ("lavander" y
+    "Lavender" dan 0.88, "Pistacho" y "Pistachio" 0.94).
+
+    Lo de letra por letra pide cinco letras o mas en los dos: con menos,
+    "gre" (Green cortado, AT-0085-02) y "grey" dan 0.86 y son dos colores.
+    """
+    x, y = norm(a), norm(b)
+    if not x or not y:
+        return False
+    if x == y or TRADUCCIONES.get(x) == y or TRADUCCIONES.get(y) == x:
+        return True
+    return (len(x) >= 5 and len(y) >= 5
+            and difflib.SequenceMatcher(None, x, y).ratio() >= PARECIDO_COLOR)
+
+
+def _palabras_sueltas(s):
+    return ' ' + re.sub(r'[^a-z0-9]+', ' ', norm(s)).strip() + ' '
+
+
+def variantes_vivas(codigo, idx):
+    return [f for f in idx['por_codigo'].get(codigo) or []
+            if not (f.get('Baja') or '').strip() and (f.get('NumVar') or '').strip()]
+
+
+def variantes_parecidas(codigo, texto, idx):
+    """Las variantes vivas de ese producto que parecen el mismo color que
+    `texto` (misma_escritura contra el nombre o cualquiera de sus
+    escrituras). Es la segunda red de altas-catalogo: lo que sale aca no se
+    numera, se pregunta."""
+    return [f['CODIGO_VAR'] for f in variantes_vivas(codigo, idx)
+            if any(misma_escritura(texto, e) for e in escrituras_de(f))]
+
+
+def se_parece_a(texto, codigo_var, idx):
+    """Si `texto` es otra forma de escribir la variante `codigo_var`.
+
+    Vale lo de misma_escritura, y ademas que el texto este ENTERO, palabra
+    por palabra, adentro del nombre o de una escritura: "Natural" en
+    "Natural Titanium", "Graphite Black" en "Graphite Black · Black Metal +
+    Brown Leather". Pero eso solo si esta adentro de UNA sola variante del
+    producto y es esa: en el Watch Ultra 3 "Black" esta adentro de "Black
+    Alpine Loop M" y de "Black Ocean Band", que son la caja con dos mallas
+    distintas, y ahi no hay forma de saber cual es.
+    """
+    f = idx['por_var'].get(codigo_var)
+    if not f or (f.get('Baja') or '').strip():
+        return False
+    if any(misma_escritura(texto, e) for e in escrituras_de(f)):
+        return True
+    t = _palabras_sueltas(texto)
+    if len(t.strip()) < 3:
+        return False
+    donde = [x for x in variantes_vivas(f['CODIGO'], idx)
+             if any(t in _palabras_sueltas(e) for e in escrituras_de(x))]
+    return len(donde) == 1 and donde[0] is f
+
+
+# --------------------------------------------------------------------------
+# Otra capacidad del mismo modelo, y el CODIGO de otro producto
+# --------------------------------------------------------------------------
+# La regla vive ACA y es una sola (29/09). Decide si la columna CODIGO de
+# ADVAPP, cuando no es la que da el puente, es otra memoria del mismo modelo
+# (Pedro, 26/09: se ve igual, la foto del hermano esta bien y no se pide) o
+# el codigo de otro producto (se pide).
+#
+# Hasta el 29/09 habia tres copias que decian ser "la misma regla" y no lo
+# eran. herramientas/pedido-advapp.py le habia sumado memoria_distinta() a
+# su mismo_modelo() y la de aca no la tenia. Y la Sim del producto que trae
+# la columna se leia del NOMBRE del maestro aca y en el pedido, y del SKU de
+# las filas de hoy en verificar-fotos.py: el iPhone 17 Pro 512GB E-Sim con
+# AT-0071 (que es el 1TB E-Sim, pero en el maestro se llama "iPhone 17 Pro
+# 1TB (Silver/Orange)" y no dice la Sim) salia en REVISAR-FOTOS como otra
+# memoria que no se pide, en revisar-catalogo como DISCREPAN y en el pedido
+# a ADVAPP como CODIGO DE OTRO PRODUCTO, con un comentario aca que juraba
+# que las tres decian lo mismo.
+#
+# Quien tenga que decidirlo llama a choque_de_codigo() con sim_tec_de_hoy().
+# Si en otra herramienta aparece una copia de estas funciones, la que sobra
+# es la copia: se reemplaza por un alias (mismo_modelo = CM.mismo_modelo) y
+# no se corrige a mano, porque dos copias se separan solas. La Sim y el
+# teclado se leen del SKU como la web (simDelSku y tecladoDelSku de
+# index.html) y como pruebas/codigos.js, seccion 8.
+
+def capacidad(texto):
+    """La memoria de guardado que dice un nombre: la ULTIMA cifra con GB o TB
+    ("8/256GB" -> 256GB, "12GB/256GB" -> 256GB, "16GB/1TB" -> 1TB). None si
+    no dice ninguna. Es lo que distingue un codigo de otra capacidad de un
+    nombre escrito distinto: "Galaxy S25 FE 8/256GB" y "Galaxy S25 FE 256GB"
+    son el mismo producto (medido el 26/09: comparar nombres enteros daba 60
+    falsos)."""
+    m = re.findall(r'(\d+)\s*(GB|TB)\b', texto or '', re.I)
+    return (m[-1][0] + m[-1][1].upper()) if m else None
+
+
+def ram_y_disco(texto):
+    """(RAM, disco) de un nombre: "8GB/256GB" -> (8, '256GB'), "12/512GB" ->
+    (12, '512GB'), "16ram 512gb" -> (16, '512GB'), "256GB" -> (None, '256GB').
+    La RAM es la primera cifra de "X/Y"; el disco, capacidad()."""
+    t = texto or ''
+    m = (re.search(r'\b(\d+)\s*(?:gb|g|ram)?\s*/\s*\d+\s*(?:gb|tb)\b', t, re.I)
+         or re.search(r'\b(\d+)\s*(?:gb\s*)?ram\b', t, re.I))
+    return (int(m.group(1)) if m else None), capacidad(t)
+
+
+def memoria_distinta(a, b):
+    """Si dos nombres dicen memorias distintas: otro disco, o otra RAM cuando
+    los dos la dicen. Sin memoria en alguno de los dos no se puede afirmar."""
+    (ra, da), (rb, db) = ram_y_disco(a), ram_y_disco(b)
+    if not da or not db:
+        return False
+    return da != db or (ra is not None and rb is not None and ra != rb)
+
+
+def modelo_sin_variables(texto, marca=''):
+    """El nombre sin lo que no se ve en la foto: colores entre parentesis,
+    memoria, RAM y la conectividad."""
+    t = re.sub(r'\([^)]*\)', ' ', texto or '')
+    t = re.sub(r'\b\d+\s*(?:gb|tb|g|ram)?\s*/\s*\d+\s*(?:gb|tb)\b', ' ', t, flags=re.I)
+    t = re.sub(r'\b\d+\s*(?:gb|tb)\b', ' ', t, flags=re.I)
+    t = re.sub(r'\b(?:5g|4g)\b', ' ', t, flags=re.I)
+    t = re.sub(r'\be-?\s?sim\b|\bsim\b|\bsin cargador\b|\bcon cargador\b', ' ', t, flags=re.I)
+    if marca:
+        t = re.sub(r'\b' + re.escape(marca) + r'\b', ' ', t, flags=re.I)
+    return ' '.join(sorted(set(norm(t).replace('"', ' ').split())))
+
+
+def _producto(codigo, idx):
+    return ((idx['por_codigo'].get(codigo) or [{}])[0].get('Producto') or '')
+
+
+def mismo_modelo(fila, codigo, idx):
+    """La fila y el producto `codigo` son el mismo modelo con OTRA memoria.
+
+    Pedro, 26/09/2026: el mismo modelo con otra memoria se ve igual, asi que
+    la foto del hermano no es un error. Solo cuenta si el resto del nombre
+    coincide: el Redmi Note 15 Pro no es el Pro Plus, y ahi la foto si seria
+    de otro producto.
+
+    Y la memoria tiene que ser distinta de verdad (29/09). Sin eso, dos
+    productos que se diferencian solo por lo que va entre parentesis pasaban
+    como "otra capacidad": el Watch Ultra 3 con malla Ocean y el de malla
+    Milanese dan los dos "3 49mm ultra watch", y el dia que el puente
+    reconozca la fila Ocean que trae AT-0456 (el Milanese) se la iba a dar
+    por buena en vez de pedirla. La RAM cuenta: el Galaxy A56 8/256 con el
+    codigo del 12/256 sigue siendo otra capacidad, como decidio Pedro."""
+    marca = fila.get('Marca') or ''
+    desc = fila.get('Descripción completa') or ''
+    prod = _producto(codigo, idx)
+    return (modelo_sin_variables(desc, marca) == modelo_sin_variables(prod, marca)
+            and memoria_distinta(desc, prod))
+
+
+def sim_de(texto):
+    t = (texto or '').lower()
+    return 'esim' if re.search(r'\be-?\s?sim\b', t) else 'sim' if re.search(r'\bsim\b', t) else ''
+
+
+def otra_capacidad(fila, codigo, idx):
+    """El producto `codigo` del maestro dice otra capacidad que la fila."""
+    a = capacidad(fila.get('Descripción completa'))
+    b = capacidad(_producto(codigo, idx))
+    return bool(a and b and a != b)
+
+
+def teclado_de(sku):
+    """ES o EN, del SKU ("...-tecladoes"). '' si no lo dice. El teclado
+    separa productos (Pedro, 26/09), igual que Sim y eSIM."""
+    m = re.search(r'teclado(es|en)\b', sku or '', re.I)
+    return m.group(1).lower() if m else ''
+
+
+def conectividad(*textos):
+    """'cell' si algun texto dice 5G, 4G, LTE o Cellular; 'wifi' si solo dice
+    Wifi; '' si no dice nada. En un celular no separa nada (todos tienen
+    red), pero una tablet Wifi y una 5G son dos productos: el Galaxy Tab A11+
+    Wifi (AT-0488) y el 5G (AT-0487) dan la misma firma dura, porque "5G" no
+    cuenta a proposito ("Galaxy A57" y "Galaxy A57 5G" son el mismo)."""
+    t = ' ' + re.sub(r'[^a-z0-9]+', ' ', ' '.join(norm(x) for x in textos if x)) + ' '
+    if re.search(r' (5g|4g|lte|cell|cellular) ', t):
+        return 'cell'
+    return 'wifi' if ' wifi ' in t else ''
+
+
+def mismo_producto_de_verdad(fila, entrada, pinta=None, conocidos=None):
+    """es_el_mismo(), y ademas mismo Sim/eSIM, mismo teclado y misma
+    conectividad (cuando los dos la dicen): cosas que la firma dura no cuenta
+    y que separan productos (Pedro, 26/09: Sim y eSIM, teclado ES y EN)."""
+    if not es_el_mismo(fila, entrada, pinta, conocidos):
+        return False
+    if sim_de(fila.get('Descripción completa')) != sim_de(entrada.get('Producto')):
+        return False
+    ta = teclado_de(fila.get('SKU'))
+    tb = {teclado_de(s) for s in todos(entrada, 'SKU_alta')} - {''}
+    if ta and tb and ta not in tb:
+        return False
+    ca = conectividad(fila.get('Descripción completa'), fila.get('SKU'))
+    cb = conectividad(*(nombres_de(entrada) + todos(entrada, 'SKU_alta')))
+    return not (ca and cb and ca != cb)
+
+
+def sim_del_sku(s):
+    """simDelSku() de index.html: 'E-Sim', 'Sim' o '' segun como TERMINA el
+    SKU ("...~512gb-esim", "...-sim")."""
+    x = (s or '').lower()
+    return 'E-Sim' if re.search(r'[-~]e-?sim$', x) else 'Sim' if re.search(r'[-~]sim$', x) else ''
+
+
+def teclado_del_sku(s):
+    """tecladoDelSku() de index.html: 'ES', 'EN' o '' ("...-tecladoes")."""
+    m = re.search(r'[-~]teclado(es|en)$', (s or '').lower())
+    return m.group(1).upper() if m else ''
+
+
+def sim_tec(fila):
+    """La Sim y el teclado de una fila de ADVAPP, leidos SOLO de su SKU, como
+    pruebas/codigos.js: "E-Sim/-", "Sim/-", "-/ES", "-/-"."""
+    s = (fila.get('SKU') or '').strip()
+    return (sim_del_sku(s) or '-') + '/' + (teclado_del_sku(s) or '-')
+
+
+def puente_de(fila, idx, pinta=None, conocidos=None):
+    """El codigo que le da el catalogo a la fila SIN mirar las columnas: con
+    ellas, codigo_de_la_fila() devuelve la misma columna y no puede discrepar
+    nunca (asi decia revisar-catalogo "0 DISCREPAN" hasta el 29/09)."""
+    return codigo_de_la_fila(dict(fila, CODIGO='', CODIGO_VAR=''), idx, pinta, conocidos)[0]
+
+
+def sim_tec_de_hoy(filas, idx, pinta=None, conocidos=None):
+    """codigo -> {sim_tec} de las filas de HOY que llevan ese codigo en la
+    columna CODIGO y a las que el puente les da ese mismo codigo: las que el
+    codigo "tiene de verdad". Se arma UNA vez con todas las filas de ADVAPP
+    (las que muestra la web) y se le pasa a choque_de_codigo().
+
+    Existe porque el nombre del maestro no siempre dice la Sim (29/09):
+    AT-0071 se llama "iPhone 17 Pro 1TB (Silver/Orange)", pero las filas que
+    lo llevan de verdad son las 1TB E-Sim. Leyendo el nombre, el 512 E-Sim
+    con AT-0071 era "eSIM contra nada" y se pedia; leyendo estas filas es
+    otra memoria con la misma Sim, que es lo que decidio Pedro el 26/09 que
+    no se pide."""
+    salida = {}
+    for f in filas:
+        dado = (f.get('CODIGO') or '').strip().upper()
+        if not RE_CODIGO.match(dado):
+            continue
+        if puente_de(f, idx, pinta, conocidos) == dado:
+            salida.setdefault(dado, set()).add(sim_tec(f))
+    return salida
+
+
+def sim_tec_del_maestro(codigo, idx):
+    """({sims}, {teclados}) que dice el producto en el maestro, en sus SKU y
+    en sus nombres (las variantes vivas). Conjuntos vacios si no dice nada.
+    Es el paso 5 de verificar-fotos.py: se usa cuando ninguna fila de hoy
+    lleva ese codigo de verdad."""
+    entradas = idx['por_codigo'].get(codigo) or []
+    vivas = [m for m in entradas if not (m.get('Baja') or '').strip()] or entradas
+    skus = {s for m in vivas for s in todos(m, 'SKU_alta')}
+    nombres = {n for m in vivas for n in nombres_de(m)}
+    sims = {sim_del_sku(s) for s in skus}
+    sims |= {('E-Sim' if re.search(r'\be-?\s?sim\b', n, re.I) else 'Sim')
+             for n in nombres if re.search(r'\b(e-?\s?)?sim\b', n, re.I)}
+    tecs = {teclado_del_sku(s) for s in skus}
+    tecs |= {m.group(1).upper() for m in (re.search(r'\bteclado\s+(es|en)\b', n, re.I)
+                                          for n in nombres) if m}
+    return sims - {''}, tecs - {''}
+
+
+def misma_sim_y_teclado(fila, codigo, idx, hoy=None):
+    """Si la fila vende la misma Sim y el mismo teclado que el producto
+    `codigo` (Pedro, 26/09: Sim y eSIM, teclado ES y EN, son productos
+    distintos). La fila se lee de su SKU. El producto, en este orden:
+      1. las filas de hoy que lo llevan de verdad (`hoy`, de sim_tec_de_hoy):
+         alguna tiene que decir exactamente lo mismo que la fila;
+      2. si hoy no hay ninguna, lo que dicen sus SKU y sus nombres en el
+         maestro. Lo que el maestro no dice no contradice a nadie.
+    Es lo mismo que hacen pruebas/codigos.js (seccion 8) y verificar-fotos.py.
+    """
+    mia = sim_tec(fila)
+    suyas = (hoy or {}).get(codigo)
+    if suyas:
+        return mia in suyas
+    sims, tecs = sim_tec_del_maestro(codigo, idx)
+    s, t = mia.split('/')
+    return not ((sims and s not in sims) or (tecs and t not in tecs))
+
+
+def choque_de_codigo(fila, idx, pinta=None, conocidos=None, hoy=None):
+    """Si la columna CODIGO de ADVAPP dice otro producto que el puente. Es LA
+    regla (ver el comentario de arriba de capacidad()): revisar-catalogo.py,
+    r_codigo de pedido-advapp.py y los choques de verificar-fotos.py tienen
+    que decir lo mismo que esta, y la manera de que lo digan es llamarla.
+
+    Devuelve (dado, puente, tipo). tipo es:
+      ''                sin columna, sin puente, o la columna es el puente;
+      'otra-capacidad'  el mismo modelo con otra memoria de verdad
+                        (mismo_modelo) y la misma Sim y el mismo teclado
+                        (misma_sim_y_teclado). Pedro, 26/09: misma foto, no
+                        se pide;
+      'choque'          todo lo demas, tambien un codigo que el maestro no
+                        tiene. Se pide.
+
+    `hoy` es sim_tec_de_hoy() de las filas de ADVAPP, armado una vez. Sin el
+    se decide solo contra el maestro, como cuando hoy ninguna fila lleva ese
+    codigo, y ahi un producto cuyo maestro no dice la Sim no contradice a
+    nadie: el 17 Pro 256 Sim con AT-0071 pasaria por otra capacidad si
+    AT-0071 no tuviera anotado su SKU "-esim". Por eso quien decide con las
+    filas de ADVAPP en la mano le pasa `hoy`.
+
+    La columna se compara tal cual viene, sin seguir Fusionado_en (29/09),
+    igual que r_codigo y pruebas/codigos.js. La web no sigue fusiones
+    (codigoDeLaFila devuelve la columna tal cual) y su mapa de variantes va
+    por el codigo vivo: con un codigo fusionado en la columna no encuentra
+    ninguna variante y busca la foto sin variante del codigo muerto, que casi
+    nunca existe. Eso se pide.
+
+    Una fila SIN columna y con puente devuelve '': no es un choque sino un
+    codigo que falta, y r_codigo lo pide por su lado."""
+    dado = (fila.get('CODIGO') or '').strip().upper()
+    puente = puente_de(fila, idx, pinta, conocidos)
+    if not dado or not puente or puente == dado:
+        return dado, puente, ''
+    if (dado in idx['por_codigo'] and mismo_modelo(fila, dado, idx)
+            and misma_sim_y_teclado(fila, dado, idx, hoy)):
+        return dado, puente, 'otra-capacidad'
+    return dado, puente, 'choque'
+
+
 def firma_de_producto(marca, categoria, nombre):
     """La huella de un producto, para que la web pueda verificar un vinculo
     sin repetir todo el comparador. Marca, categoria y la firma dura."""
@@ -799,15 +1181,145 @@ def variante_sin_color(codigo, nombre, idx, colores_conocidos=()):
     return next(iter(vivas))
 
 
-def candidatos_foto(codigo, textos_de_hoy, idx, nombre='', colores_conocidos=()):
-    """Los archivos que la web prueba para la portada de una fila, en orden:
-    la primera variante que vende hoy, después cualquier otra que venda, el
-    producto sin variante, y si la fila no trae color, la variante que el
-    nombre deja clara (variante_sin_color)."""
+RE_VARIANTE = re.compile(r'^AT-\d{4}-\d{2}$')
+_TALLE = re.compile(r'^(x{0,2}s|m|x{0,2}l)$', re.I)
+
+
+def partir_colores(txt):
+    """Igual que partirColores() en index.html (y que validar.partir_colores):
+    la barra separa colores, salvo cuando lo que sigue es un talle."""
+    salida = []
+    for t in [x.strip() for x in (txt or '').split('/') if x.strip()]:
+        if salida and _TALLE.match(t):
+            salida[-1] += '/' + t
+        else:
+            salida.append(t)
+    return salida
+
+
+def _tabla_web(codigo, idx):
+    """CATALOGO.vars[codigo] tal como lo arma mapa_para_la_web(): escritura ->
+    variante, sin las dadas de baja, y la ultima gana si dos dicen lo mismo."""
+    tabla = {}
+    for k, filas in idx['por_codigo'].items():
+        if k != codigo and seguir_fusion(k, idx) != codigo:
+            continue
+        for f in filas:
+            if (f.get('Baja') or '').strip():
+                continue
+            if f.get('NumVar'):
+                for e in escrituras_de(f):
+                    tabla[e] = f['CODIGO_VAR']
+            else:
+                tabla[''] = f['CODIGO_VAR']
+    return tabla
+
+
+def celda_de_la_columna(fila, color, propios):
+    """Lo que dice CODIGO_VAR para ese color, crudo: '' si la celda no esta
+    alineada con los colores de la fila o si ese color no esta entre ellos."""
+    # Sin pasar a mayusculas, igual que la web: una celda en minusculas no
+    # tiene la forma AT-####-NN y alla no se usa.
+    lista = [x.strip() for x in (fila.get('CODIGO_VAR') or '').split('/')]
+    if not (fila.get('CODIGO_VAR') or '').strip() or not propios or len(lista) != len(propios):
+        return ''
+    i = next((j for j, c in enumerate(propios) if norm(c) == norm(color)), -1)
+    return lista[i] if i != -1 else ''
+
+
+def variante_de_la_columna(fila, codigo, color, idx, propios):
+    """La variante que manda ADVAPP en CODIGO_VAR para ese color. Copia al pie
+    de la letra de varianteDeLaColumna() en index.html: si se cambia alla, se
+    cambia aca (y los CASOS_COLUMNA de abajo lo controlan en las dos puntas).
+
+    `propios` son los colores de ESA fila como los ve la web (colorDeLaFila,
+    que en Python es fotos_sku.colores_de_la_fila), no los que pide quien
+    llama. Vale solo si la celda esta alineada, el codigo es de este producto
+    y tiene la forma AT-####-NN, la variante esta viva, no es la que el
+    catalogo le da a OTRO color de la misma fila, ni contradice al maestro
+    cuando este tiene la escritura exacta de ESE color. Si algo no cierra, ''.
+
+    Existe desde el 29/09: los informes de Python predecian la foto solo por
+    el texto del color, y la web prueba primero esta celda. Con "Lime" y el
+    maestro diciendo "lima", Python decia "sin foto" y la web mostraba
+    AT-0511-02: nueve fichas mal contadas en el informe de todos los dias.
+    """
+    if not codigo or not (fila.get('CODIGO_VAR') or '').strip():
+        return ''
+    v = celda_de_la_columna(fila, color, propios)
+    if not v or not v.startswith(codigo + '-') or not RE_VARIANTE.match(v):
+        return ''
+    tabla = _tabla_web(codigo, idx)
+    if v not in tabla.values():
+        return ''
+    i = next(j for j, c in enumerate(propios) if norm(c) == norm(color))
+    if any(j != i and tabla.get(norm(c), '') == v for j, c in enumerate(propios)):
+        return ''
+    # Y que no contradiga al maestro para ESTE mismo color (29/09): si el mapa
+    # tiene la escritura exacta con otra variante, decide el mapa. El Watch
+    # Ultra 3 "Natural – Blue Trail Loop M/L" traia la Ocean Band (AT-0455-05)
+    # en la celda y el maestro dice AT-0455-03.
+    exacta = tabla.get(norm(color), '')
+    if exacta and exacta != v:
+        return ''
+    return v
+
+
+def foto_de_advapp(fila, propios):
+    """La foto de ADVAPP que la web usa de respaldo para la portada. Copia de
+    fotoDeAdvapp() en index.html: el color se ubica por su posicion en
+    CODIGO_VAR y esa variante por el `at` de la columna SKUS. '' si no hay.
+    Sirve para separar, en los informes, la ficha que el cliente ve con el
+    logo de la que ve con una foto que nadie de aca miro."""
+    try:
+        skus = json.loads(fila.get('SKUS') or '[]')
+    except ValueError:
+        return ''
+    fotos = {}
+    for s in skus if isinstance(skus, list) else []:
+        at = str((s or {}).get('at') or '').strip().upper() if isinstance(s, dict) else ''
+        lst = (s or {}).get('fotos') if isinstance(s, dict) else None
+        url = str(lst[0] or '') if isinstance(lst, list) and lst else ''
+        if at and url.startswith('http') and at not in fotos:
+            fotos[at] = url
+    if not fotos:
+        return ''
+    ats = list(fotos)
+    if not propios:
+        return fotos.get((fila.get('CODIGO') or '').strip().upper()) or (fotos[ats[0]] if len(ats) == 1 else '')
+    cvs = [x.strip().upper() for x in (fila.get('CODIGO_VAR') or '').split('/')]
+    for i in range(len(propios)):
+        cv = cvs[i] if len(cvs) == len(propios) else ''
+        if cv and cv in fotos:
+            return fotos[cv]
+    return fotos[ats[0]] if len(propios) == 1 and len(ats) == 1 else ''
+
+
+def candidatos_foto(codigo, textos_de_hoy, idx, nombre='', colores_conocidos=(),
+                    fila=None, propios=None):
+    """Los archivos que la web prueba para la portada de una fila, en orden
+    (nombresDeFoto en index.html): para cada color que vende hoy, primero la
+    variante que dice la columna CODIGO_VAR y si no la del texto del color;
+    despues el producto sin variante, y si la fila no trae color, la
+    variante que el nombre deja clara (variante_sin_color).
+
+    La columna se prueba solo si quien llama pasa la `fila` (y `propios`, los
+    colores de la fila como los ve la web; por omision, textos_de_hoy). Sin
+    fila queda como antes del 29/09, para no cambiarle el resultado a nadie
+    sin que lo pida."""
     if not codigo:
         return []
-    salida = [variante_de(codigo, t, idx) for t in (textos_de_hoy or [])]
-    salida.append(variante_de(codigo, '', idx) or codigo)
+    propios = textos_de_hoy if propios is None else propios
+    salida = [(variante_de_la_columna(fila, codigo, t, idx, propios or []) if fila else '')
+              or variante_de(codigo, t, idx) for t in (textos_de_hoy or [])]
+    # El producto sin variante no va si la fila dice un color que no resolvio
+    # y el producto no tiene NINGUNA variante (29/09): esa foto no tiene color
+    # anotado. El Galaxy Tab A11+ Gray salia con AT-0488.jpg, la plateada.
+    # Misma regla en nombresDeFoto() de index.html.
+    tabla = _tabla_web(codigo, idx)
+    sin_variantes = bool(tabla) and all(k == '' for k in tabla)
+    if not (textos_de_hoy and not any(salida) and sin_variantes):
+        salida.append(variante_de(codigo, '', idx) or codigo)
     if not textos_de_hoy:
         salida.append(variante_sin_color(codigo, nombre, idx, colores_conocidos))
     vistos, out = set(), []
@@ -816,3 +1328,195 @@ def candidatos_foto(codigo, textos_de_hoy, idx, nombre='', colores_conocidos=())
             vistos.add(n)
             out.append(n)
     return out
+
+
+# Los casos de varianteDeLaColumna(). Van en JSON a proposito: la tanda
+# pruebas/guardas-t1-maestro-altas.js los lee de ESTE archivo y los corre
+# contra la web, y probar_columna() los corre contra la copia de aca. Si una
+# de las dos puntas cambia la regla sin la otra, salta la prueba de la que
+# quedo atras. Cada caso: colores de la fila, color pedido, celda CODIGO_VAR,
+# codigo del producto, lo que tiene que dar, y por que.
+CASOS_COLUMNA = r'''
+{"vars": {"AT-9001": {"black": "AT-9001-01", "lima": "AT-9001-02", "white": "AT-9001-03"},
+          "AT-9002": {"black": "AT-9002-01"}},
+ "muertas": {"AT-9001-04": "violet"},
+ "casos": [
+  ["Lime", "Lime", "AT-9001-02", "AT-9001", "AT-9001-02", "ADVAPP dice la variante aunque el texto no este anotado (Lime/lima, 29/09)"],
+  ["Black/White", "White", "AT-9001-01/AT-9001-03", "AT-9001", "AT-9001-03", "alineada: cada color con el suyo"],
+  ["Black/White", "White", "AT-9001-03", "AT-9001", "", "corrida: menos codigos que colores"],
+  ["Black/White", "Black", "AT-9001-03/AT-9001-01", "AT-9001", "", "dada vuelta: es la de otro color de la fila"],
+  ["Black", "Black", "AT-9001-03", "AT-9001", "", "el maestro tiene ESTE texto en otra variante: manda el mapa (Trail Loop del Ultra 3, 29/09)"],
+  ["Black", "Black", "AT-9002-01", "AT-9001", "", "de otro producto (el Ultra 3 Ocean Band del 29/09)"],
+  ["Violet", "Violet", "AT-9001-04", "AT-9001", "", "dada de baja"],
+  ["Pink", "Pink", "AT-9001-07", "AT-9001", "", "no existe en el maestro"],
+  ["Black", "Black", "AT-9001-1", "AT-9001", "", "sin la forma AT-####-NN"],
+  ["Black/White", "White", "/AT-9001-03", "AT-9001", "AT-9001-03", "la posicion vacia se mantiene"],
+  ["Black/White", "Red", "AT-9001-01/AT-9001-03", "AT-9001", "", "un color que la fila no vende"],
+  ["Midnight Sport Band M/L", "Midnight Sport Band M/L", "AT-9001-02", "AT-9001", "AT-9001-02", "el talle no parte la celda"]
+ ]}
+'''
+
+
+def probar_columna():
+    """Corre CASOS_COLUMNA contra variante_de_la_columna. Devuelve las fallas."""
+    datos = json.loads(CASOS_COLUMNA)
+    filas = []
+    for cod, tabla in datos['vars'].items():
+        por_var = {}
+        for k, cv in tabla.items():
+            por_var.setdefault(cv, []).append(k)
+        for cv, ks in por_var.items():
+            filas.append({'CODIGO': cod, 'CODIGO_VAR': cv, 'NumVar': cv[-2:],
+                          'Variante': ks[0], 'Escrituras': juntar(ks[1:])})
+    for cv, texto in datos['muertas'].items():
+        filas.append({'CODIGO': cv[:7], 'CODIGO_VAR': cv, 'NumVar': cv[-2:],
+                      'Variante': texto, 'Escrituras': '', 'Baja': '2026-09-01'})
+    idx = indexar(filas)
+    fallas = []
+    for colores, color, celda, cod, espera, porque in datos['casos']:
+        da = variante_de_la_columna({'Color': colores, 'CODIGO_VAR': celda}, cod, color,
+                                    idx, partir_colores(colores))
+        if da != espera:
+            fallas.append('%s: dio %r y tenia que dar %r' % (porque, da, espera))
+    return fallas
+
+
+# Los casos de choque_de_codigo(), armados a mano (29/09). Codigos AT-9xxx
+# para que no se confundan con los de verdad; los nombres y los SKU, como los
+# manda ADVAPP. Salen de la auditoria del 29/09: el 17 Pro 512 E-Sim con
+# AT-0071 (que las tres herramientas daban distinto), el Ultra 3 Ocean con el
+# codigo del Milanese y el MacBook Neo ES con el del EN (que aca se daban por
+# otra capacidad). Estan como datos para que pedido-advapp.py --probar y
+# verificar-fotos.py los puedan correr contra lo suyo mientras tengan copias.
+#
+# Maestro: codigo, categoria, marca, producto, ID y SKU del alta, precio del
+# alta y en que codigo se fusiono.
+MAESTRO_CHOQUES = [
+    ('AT-9071', 'Celular', 'Apple', 'iPhone 17 Pro 1TB (Silver/Orange)', 'P17-1TB-ESIM',
+     'celular~apple~17-iphone-pro~1tb', '1900', ''),
+    ('AT-9072', 'Celular', 'Apple', 'iPhone 17 Pro 256GB E-Sim (Blue)', 'P17-256-ESIM',
+     'celular~apple~17-iphone-pro~256gb-esim', '1500', ''),
+    ('AT-9073', 'Celular', 'Apple', 'iPhone 17 Pro 512GB E-Sim (Blue)', 'P17-512-ESIM',
+     'celular~apple~17-iphone-pro~512gb-esim', '1700', ''),
+    ('AT-9535', 'Celular', 'Apple', 'iPhone 17 Pro 256GB Sim (Blue)', 'P17-256-SIM',
+     'celular~apple~17-iphone-pro~256gb-sim', '1500', ''),
+    ('AT-9537', 'Celular', 'Apple', 'iPhone 17 Pro 1TB Sim (Blue)', 'P17-1TB-SIM',
+     'celular~apple~17-iphone-pro~1tb-sim', '1950', ''),
+    ('AT-9432', 'Notebook', 'Apple', 'MacBook Neo A18 13" 8GB/256GB (Indigo)', 'NEO-256-EN',
+     'notebook~apple~a18-macbook-neo~13in-8gb-256gb-tecladoen', '1000', ''),
+    ('AT-9433', 'Notebook', 'Apple', 'MacBook Neo A18 13" 8GB/256GB (Silver)', 'NEO-256-ES',
+     'notebook~apple~a18-macbook-neo~13in-8gb-256gb-tecladoes', '1000', ''),
+    ('AT-9434', 'Notebook', 'Apple', 'MacBook Neo A18 13" 8GB/512GB (Blush)', 'NEO-512-EN',
+     'notebook~apple~a18-macbook-neo~13in-8gb-512gb-tecladoen', '1200', ''),
+    ('AT-9455', 'Smartwatch', 'Apple', 'Watch Ultra 3 49mm (Black/Black Alpine Loop M)', 'U3-OCEAN',
+     'smartwatch~apple~3-ultra-watch~49mm-m-49-cell-ocean', '900', ''),
+    ('AT-9456', 'Smartwatch', 'Apple', 'Watch Ultra 3 49mm (Black/Black Milanese Loop L)', 'U3-MILANESE',
+     'smartwatch~apple~3-ultra-watch~49mm-l-49-cell-mill', '1000', ''),
+    ('AT-9086', 'Celular', 'Samsung', 'Galaxy A56 12/256GB (Black)', 'A56-12-256',
+     'celular~samsung~a56-galaxy~12gb-256gb', '450', ''),
+    ('AT-9087', 'Celular', 'Samsung', 'Galaxy A56 8/256GB (Black)', 'A56-8-256',
+     'celular~samsung~a56-galaxy~8gb-256gb', '400', ''),
+    ('AT-9200', 'Tablet', 'Samsung', 'Galaxy Tab S10 FE 8/128GB (Gray)', 'TAB-S10FE-VIEJO',
+     'tablet~samsung~s10-fe-galaxy-tab~8gb-128gb-viejo', '500', 'AT-9201'),
+    ('AT-9201', 'Tablet', 'Samsung', 'Galaxy Tab S10 FE 8/128GB (Gray)', 'TAB-S10FE',
+     'tablet~samsung~s10-fe-galaxy-tab~8gb-128gb', '500', ''),
+]
+# Filas de hoy: ID, CODIGO, categoria, marca, descripcion, SKU, precio, lo que
+# tiene que dar choque_de_codigo() y por que.
+FILAS_CHOQUES = [
+    ('P17-1TB-ESIM', 'AT-9071', 'Celular', 'Apple', 'iPhone 17 Pro 1TB E-Sim (Blue)',
+     'celular~apple~17-iphone-pro~1tb-esim', '1900', '',
+     'la fila que AT-9071 tiene de verdad: su Sim (E-Sim) sale del SKU, no del nombre'),
+    ('P17-512-ESIM', 'AT-9071', 'Celular', 'Apple', 'iPhone 17 Pro 512GB E-Sim (Blue)',
+     'celular~apple~17-iphone-pro~512gb-esim', '1700', 'otra-capacidad',
+     '17 Pro 512 E-Sim con el codigo del 1TB E-Sim: otra memoria, misma Sim (AT-0071, 29/09)'),
+    ('P17-256-SIM', 'AT-9071', 'Celular', 'Apple', 'iPhone 17 Pro 256GB Sim (Blue)',
+     'celular~apple~17-iphone-pro~256gb-sim', '1500', 'choque',
+     '17 Pro Sim con el codigo de un E-Sim aunque el nombre del maestro no diga la Sim'),
+    ('P17-1TB-SIM', 'AT-9071', 'Celular', 'Apple', 'iPhone 17 Pro 1TB Sim (Blue)',
+     'celular~apple~17-iphone-pro~1tb-sim', '1950', 'choque',
+     'la misma memoria con otra Sim es otro producto'),
+    ('P17-256-ESIM', 'AT-9073', 'Celular', 'Apple', 'iPhone 17 Pro 256GB E-Sim (Blue)',
+     'celular~apple~17-iphone-pro~256gb-esim', '1500', 'otra-capacidad',
+     'ninguna fila de hoy tiene AT-9073: decide el maestro, que dice E-Sim como la fila'),
+    ('P17-256-SIM-B', 'AT-9073', 'Celular', 'Apple', 'iPhone 17 Pro 256GB Sim (Blue)',
+     'celular~apple~17-iphone-pro~256gb-sim', '1500', 'choque',
+     'ninguna fila de hoy tiene AT-9073: el maestro dice E-Sim y la fila es Sim'),
+    ('NEO-512-EN', 'AT-9434', 'Notebook', 'Apple', 'MacBook Neo A18 13" 8GB/512GB (Blush)',
+     'notebook~apple~a18-macbook-neo~13in-8gb-512gb-tecladoen', '1200', '',
+     'la fila que AT-9434 tiene de verdad (teclado EN)'),
+    ('NEO-256-ES', 'AT-9434', 'Notebook', 'Apple', 'MacBook Neo A18 13" 8GB/256GB (Silver)',
+     'notebook~apple~a18-macbook-neo~13in-8gb-256gb-tecladoes', '1000', 'choque',
+     'MacBook Neo ES con el codigo del EN: otro teclado es otro producto aunque cambie la memoria'),
+    ('NEO-256-EN', 'AT-9434', 'Notebook', 'Apple', 'MacBook Neo A18 13" 8GB/256GB (Indigo)',
+     'notebook~apple~a18-macbook-neo~13in-8gb-256gb-tecladoen', '1000', 'otra-capacidad',
+     'MacBook Neo EN 256 con el codigo del EN 512: otra memoria, mismo teclado'),
+    ('U3-MILANESE', 'AT-9456', 'Smartwatch', 'Apple', 'Watch Ultra 3 49mm (Black – Black Milanese Loop L)',
+     'smartwatch~apple~3-ultra-watch~49mm-l-49-cell-mill', '1000', '',
+     'la fila que AT-9456 tiene de verdad'),
+    ('U3-OCEAN', 'AT-9456', 'Smartwatch', 'Apple', 'Watch Ultra 3 49mm (Black – Black Ocean Band)',
+     'smartwatch~apple~3-ultra-watch~49mm-m-49-cell-ocean', '900', 'choque',
+     'Ultra 3 Ocean con el codigo del Milanese y el puente resuelto: sin otra memoria no es otra capacidad'),
+    ('A56-12-256', 'AT-9086', 'Celular', 'Samsung', 'Galaxy A56 12/256GB (Black)',
+     'celular~samsung~a56-galaxy~12gb-256gb', '450', '',
+     'la fila que AT-9086 tiene de verdad'),
+    ('A56-8-256', 'AT-9086', 'Celular', 'Samsung', 'Galaxy A56 8/256GB (Black)',
+     'celular~samsung~a56-galaxy~8gb-256gb', '400', 'otra-capacidad',
+     'Galaxy A56 8/256 con el codigo del 12/256: otra RAM tambien es otra memoria (Pedro, 26/09)'),
+    ('TAB-S10FE', 'AT-9200', 'Tablet', 'Samsung', 'Galaxy Tab S10 FE 8/128GB (Gray)',
+     'tablet~samsung~s10-fe-galaxy-tab~8gb-128gb', '500', 'choque',
+     'un codigo fusionado en la columna se pide: la web no sigue fusiones'),
+    ('FANTASMA', 'AT-9999', 'Tablet', 'Samsung', 'Galaxy Tab S10 FE 8/128GB (Gray)',
+     'tablet~samsung~s10-fe-galaxy-tab~8gb-128gb', '500', 'choque',
+     'un codigo que el maestro no tiene'),
+    ('SIN-COLUMNA', '', 'Tablet', 'Samsung', 'Galaxy Tab S10 FE 8/128GB (Gray)',
+     'tablet~samsung~s10-fe-galaxy-tab~8gb-128gb', '500', '',
+     'sin columna no hay choque: el codigo que falta lo pide r_codigo por su lado'),
+]
+
+
+def casos_de_choque():
+    """(maestro, filas de hoy) de los casos de arriba, como los leen las
+    herramientas: filas del catalogo-maestro.csv y filas de ADVAPP."""
+    maestro = [{'CODIGO': cod, 'CODIGO_VAR': cod + '-01', 'NumVar': '01', 'Categoria': cat,
+                'Marca': marca, 'Producto': prod, 'Variante': 'Black', 'ID_alta': id_alta,
+                'SKU_alta': sku, 'Precio_alta': precio, 'Fusionado_en': fusion}
+               for cod, cat, marca, prod, id_alta, sku, precio, fusion in MAESTRO_CHOQUES]
+    filas = [{'ID': i, 'CODIGO': cod, 'CODIGO_VAR': '', 'Categoría': cat, 'Marca': marca,
+              'Descripción completa': desc, 'SKU': sku, 'Precio USD': precio, 'Activo': 'Sí'}
+             for i, cod, cat, marca, desc, sku, precio, _, _ in FILAS_CHOQUES]
+    return maestro, filas
+
+
+def probar_choques():
+    """Corre FILAS_CHOQUES contra choque_de_codigo(), con sim_tec_de_hoy()
+    armado con esas mismas filas, como lo tiene que llamar cada herramienta.
+    Devuelve las fallas."""
+    maestro, filas = casos_de_choque()
+    idx = indexar(maestro)
+    hoy = sim_tec_de_hoy(filas, idx)
+    fallas = []
+    for f, caso in zip(filas, FILAS_CHOQUES):
+        espera, porque = caso[-2], caso[-1]
+        dado, puente, da = choque_de_codigo(f, idx, hoy=hoy)
+        if da != espera:
+            fallas.append('%s: %s con %s (el catalogo dice %s) dio %r y tenia que dar %r'
+                          % (porque, f['ID'], dado or '(vacio)', puente or '(nada)', da, espera))
+    return fallas
+
+
+if __name__ == '__main__':
+    import sys
+    sys.stdout.reconfigure(encoding='utf-8')
+    malas = probar_columna()
+    for m in malas:
+        print('FALLA  ' + m)
+    print('variante_de_la_columna: %d de %d casos bien'
+          % (len(json.loads(CASOS_COLUMNA)['casos']) - len(malas),
+             len(json.loads(CASOS_COLUMNA)['casos'])))
+    choques = probar_choques()
+    for m in choques:
+        print('FALLA  ' + m)
+    print('choque_de_codigo: %d de %d casos bien'
+          % (len(FILAS_CHOQUES) - len(choques), len(FILAS_CHOQUES)))
+    sys.exit(1 if (malas or choques) else 0)

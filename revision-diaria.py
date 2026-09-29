@@ -2,20 +2,30 @@
 """
 Revisión automática del catálogo, una vez por día.
 
-El sitio lee la planilla EN VIVO: si el parser rompe algo un martes, está
-roto en la web hasta que alguien lo note, aunque no se publique nada. Esto
-mira la planilla todos los días y avisa solo cuando hay algo grave.
+El sitio lee ADVAPP EN VIVO (desde el 22/09; la planilla quedó congelada como
+respaldo): si el parser rompe algo un martes, está roto en la web hasta que
+alguien lo note, aunque no se publique nada. Esto mira los datos todos los
+días y avisa solo cuando hay algo grave.
 
 Cómo avisa:
-  - Siempre deja el detalle en logs\\revision-AAAA-MM-DD.txt
-  - Si hay errores graves, la planilla no se actualiza, o las fotos tienen
-    algo que frenaría la publicación (verificar-fotos.py), pone un archivo
-    bien visible en el Escritorio y muestra una notificación.
+  - Siempre deja el detalle en logs/revision-AAAA-MM-DD.txt
+  - Si hay errores graves, ADVAPP no cargó precios, o las fotos tienen algo
+    que frenaría la publicación (verificar-fotos.py), pone un archivo bien
+    visible en el Escritorio y muestra una notificación.
   - Cuando los errores se resuelven, el archivo del Escritorio se borra solo.
 
-Se instala una sola vez:  python revision-diaria.py --instalar  (python3 en Mac).
-En Windows queda como tarea programada; en Mac, como agente de launchd.
-Para probarlo a mano:  python revision-diaria.py
+Se instala una sola vez:  python3 revision-diaria.py --instalar  (en Windows: python).
+En Mac queda como agente de launchd; en Windows, como tarea programada.
+Para probarlo a mano:  python3 revision-diaria.py
+Para probar como lee las salidas (sin red):  python3 revision-diaria.py --probar
+
+Desde el 29/09 tambien avisa cuando una herramienta NO PUDO correr (antes solo
+se leian lineas con formato, y una herramienta que reventaba quedaba callada y
+hasta borraba el aviso del dia anterior), y cuando ADVAPP no contesta y la web
+esta mostrando la planilla congelada del 22/09. Baja ADVAPP una sola vez, guarda
+la copia en logs/advapp-AAAA-MM-DD.json y se la pasa a validar, verificar-fotos
+y pedido-advapp (variable ADVAPP_COPIA): las tres miran el mismo dato, y al dia
+siguiente se puede ver con cual corrio.
 """
 import os, re, sys, subprocess, datetime, glob
 
@@ -43,7 +53,16 @@ def launchctl(*args):
 
 def instalar_mac(hora):
     """El equivalente Mac de la tarea programada: un agente de launchd del
-    usuario. Si la Mac estaba dormida a esa hora, corre al despertarse."""
+    usuario. Si la Mac estaba dormida a esa hora, corre al despertarse. Si
+    estaba APAGADA o sin la sesion abierta, ese dia NO corre (launchd solo
+    garantiza lo de dormida): por eso validar.py, que corre PUBLICAR, avisa
+    cuando el ultimo log tiene mas de 36 horas (29/09).
+
+    El interprete queda con la ruta de sys.executable a proposito: la de la
+    formula (/opt/homebrew/opt/python@3.14/...) aguanta las actualizaciones
+    3.14.x, y Pillow vive solo en ese site-packages. /opt/homebrew/bin/python3
+    saltaria a otra version con un brew upgrade y verificar-fotos perderia en
+    silencio el control de 900x900. --estado avisa si esa ruta desaparece."""
     import plistlib
     h, m = [int(x) for x in hora.split(':')]
     os.makedirs(LOGS, exist_ok=True)
@@ -63,6 +82,7 @@ def instalar_mac(hora):
     if r.returncode == 0:
         print('Listo. La revisión va a correr todos los días a las %s.' % hora)
         print('Si la Mac estaba dormida a esa hora, corre cuando se despierta.')
+        print('Si estaba apagada o sin la sesion abierta, ese dia no corre.')
         print('\nPara cambiar la hora:   python3 revision-diaria.py --instalar 14:00')
         print('Para sacarla:           python3 revision-diaria.py --desinstalar')
         return 0
@@ -86,14 +106,34 @@ def estado_mac():
         return 0
     import plistlib
     with open(PLIST, 'rb') as fh:
-        cal = plistlib.load(fh).get('StartCalendarInterval', {})
-    cargado = launchctl('print', 'gui/%d/%s' % (os.getuid(), AGENTE)).returncode == 0
+        datos = plistlib.load(fh)
+    cal = datos.get('StartCalendarInterval', {})
+    impreso = launchctl('print', 'gui/%d/%s' % (os.getuid(), AGENTE))
+    cargado = impreso.returncode == 0
     print('Instalada%s. Corre todos los días a las %02d:%02d.'
           % ('' if cargado else ' (pero no cargada: volvé a correr --instalar)',
              cal.get('Hour', 0), cal.get('Minute', 0)))
-    logs = sorted(glob.glob(os.path.join(LOGS, 'revision-*.txt')))
+    # 29/09: el agente apunta a un Python con la version en la ruta. Si esa
+    # ruta desaparece (otra version de Python), launchd falla en silencio.
+    interprete = (datos.get('ProgramArguments') or [''])[0]
+    if interprete and not os.path.exists(interprete):
+        print('OJO: el agente apunta a un Python que ya no esta (%s): volve a correr --instalar'
+              % interprete)
+    m = re.search(r'last exit code = (\S+)', impreso.stdout or '')
+    if m:
+        print('Como termino la ultima corrida del agente: %s' % m.group(1))
+    logs = glob.glob(os.path.join(LOGS, 'revision-*.txt'))
     if logs:
-        print('Ultima vez:  %s' % os.path.basename(logs[-1])[9:19])
+        ultima = datetime.datetime.fromtimestamp(max(os.path.getmtime(x) for x in logs))
+        horas = (datetime.datetime.now() - ultima).total_seconds() / 3600
+        print('Ultima vez:  %s (hace %s)' % (ultima.strftime('%d/%m/%Y %H:%M'),
+                                            '%d horas' % horas if horas < 48 else '%d dias' % (horas // 24)))
+        if horas > 36:
+            print('OJO: hace mas de 36 horas que no corre. Si la Mac estuvo apagada a las %02d:%02d, '
+                  'ese dia no corre: se puede correr a mano con  python3 revision-diaria.py'
+                  % (cal.get('Hour', 0), cal.get('Minute', 0)))
+    else:
+        print('Todavia no corrio nunca (no hay logs).')
     return 0
 
 
@@ -114,7 +154,7 @@ def instalar(hora):
         '$s = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries '
         '-DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Minutes 10);'
         'Register-ScheduledTask -TaskName "%s" -Action $a -Trigger $t -Settings $s '
-        '-Description "Revisa la planilla del catalogo y avisa si hay errores graves." '
+        '-Description "Revisa los datos del catalogo y avisa si hay errores graves." '
         '-Force | Out-Null;'
         '"ok"'
     ) % (pythonw, AQUI, hora, TAREA)
@@ -123,6 +163,8 @@ def instalar(hora):
     if r.returncode == 0 and 'ok' in (r.stdout or ''):
         print('Listo. La revisión va a correr todos los días a las %s.' % hora)
         print('Si la máquina estaba apagada a esa hora, corre cuando la prendas.')
+        # "python" y no python3 a proposito (29/09): esto solo se imprime en
+        # Windows, donde el comando es ese. En la Mac lo dice instalar_mac().
         print('\nPara cambiar la hora:   python revision-diaria.py --instalar 14:00')
         print('Para sacarla:           python revision-diaria.py --desinstalar')
         return 0
@@ -189,12 +231,19 @@ def notificar(titulo, texto):
         pass
 
 
-def limpiar_logs_viejos():
+def limpiar_logs_viejos(carpeta=None):
+    """Borra los logs y las copias de ADVAPP de mas de DIAS_LOG dias. La fecha
+    se busca en el nombre (antes se cortaba [9:19], que solo servia para el
+    prefijo "revision-"; las copias pesan ~670 KB cada una, 29/09)."""
+    carpeta = carpeta or LOGS
     corte = datetime.date.today() - datetime.timedelta(days=DIAS_LOG)
-    for f in glob.glob(os.path.join(LOGS, 'revision-*.txt')):
+    for f in (glob.glob(os.path.join(carpeta, 'revision-*.txt'))
+              + glob.glob(os.path.join(carpeta, 'advapp-*.json'))):
+        m = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(f))
+        if not m:
+            continue                  # advapp-ultima-carga.json no tiene fecha: se queda
         try:
-            fecha = datetime.date.fromisoformat(os.path.basename(f)[9:19])
-            if fecha < corte:
+            if datetime.date.fromisoformat(m.group(1)) < corte:
                 os.remove(f)
         except Exception:
             pass
@@ -214,32 +263,255 @@ def preparar_salida():
 
 
 ADVAPP_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web'
+INTENTOS  = 3          # antes de decir "ADVAPP no contesta"
+ESPERA    = 10         # segundos entre intento e intento
 
 
-def carga_vieja():
-    """Dice si ADVAPP no cargo precios hoy.
+def estado_advapp(hoy, intentos=INTENTOS, espera=ESPERA, url=None):
+    """Baja ADVAPP UNA vez para toda la revision y dice como esta.
 
-    Devuelve un texto con el motivo, o None si esta al dia (o si no se pudo
-    leer: por falta de internet no se alarma a nadie).
+    Devuelve {'vieja': motivo o None, 'caido': motivo o None, 'copia': ruta o
+    None, 'dato': texto para el log}.
 
-    Hasta el 26/09/2026 esto miraba la hoja Meta de la planilla, que dejo de
-    actualizarse el 22/09 cuando la web paso a leer ADVAPP: habria avisado
-    "la carga no corre" todos los dias. ADVAPP publica `verificado_hoy`, que
-    es true cuando hay algun costo cargado en el dia. Sabado y domingo no se
-    carga, asi que esos dias no se avisa.
-    """
-    import json, urllib.request
-    if datetime.date.today().weekday() >= 5:
-        return None
+    'vieja': ADVAPP no cargo precios hoy. Hasta el 26/09/2026 esto miraba la
+    hoja Meta de la planilla, que dejo de actualizarse el 22/09 cuando la web
+    paso a leer ADVAPP: habria avisado "la carga no corre" todos los dias.
+    ADVAPP publica `verificado_hoy`, que es true cuando hay algun costo cargado
+    en el dia. Sabado y domingo no se carga, asi que esos dias no se avisa.
+
+    'caido': no contesto despues de varios intentos, o vino cortado. Hasta el
+    29/09 esta funcion se tragaba el error y el fin de semana ni lo miraba: con
+    ADVAPP caido la revision corria entera sobre la planilla del 22/09 y no lo
+    decia. El que se saltea el fin de semana es verificado_hoy, no la caida. Si
+    tampoco hay internet, eso lo dice validar (sale con 2) y no se alarma.
+
+    'copia': la respuesta tal cual, en logs/advapp-AAAA-MM-DD.json. La reciben
+    validar, verificar-fotos y pedido-advapp para mirar el MISMO dato (29/09: la
+    falla del 28 no se pudo reconstruir porque cada una bajo el suyo)."""
+    import json, time, urllib.request
+    salida = {'vieja': None, 'caido': None, 'copia': None, 'dato': ''}
+    error = ''
+    for i in range(intentos):
+        if i:
+            time.sleep(espera)
+        try:
+            req = urllib.request.Request(url or ADVAPP_URL, headers={'User-Agent': 'revision-diaria.py'})
+            with urllib.request.urlopen(req, timeout=60) as r:
+                crudo = r.read()
+                etag = r.headers.get('ETag') or ''
+            d = json.loads(crudo.decode('utf-8'))
+            n = len(d.get('productos') or [])
+            declaradas = d.get('filas')
+            if not n:
+                raise ValueError('vino sin productos')
+            if isinstance(declaradas, (int, float)) and n < declaradas:
+                raise ValueError('trajo %d de las %d filas que declara' % (n, declaradas))
+        except Exception as e:
+            error = str(e)
+            continue
+        salida['dato'] = ('generado_en %s, %d filas (declara %s), etag %s'
+                          % (d.get('generado_en'), n, declaradas, etag or '-'))
+        try:
+            os.makedirs(LOGS, exist_ok=True)
+            copia = os.path.join(LOGS, 'advapp-%s.json' % hoy)
+            with open(copia, 'wb') as fh:
+                fh.write(crudo)
+            salida['copia'] = copia
+        except OSError:
+            pass                      # sin copia cada herramienta baja la suya
+        if datetime.date.today().weekday() < 5 and d.get('verificado_hoy') is False:
+            salida['vieja'] = ('ADVAPP dice que hoy no se verifico ningun precio '
+                               '(verificado_hoy = false): la web muestra los de la ultima carga')
+        return salida
+    salida['caido'] = '%d intentos: %s' % (intentos, error)
+    salida['dato'] = 'NO CONTESTO (%s)' % salida['caido']
+    return salida
+
+
+def rubros_que_se_vaciaron(copia, carpeta=None):
+    """Los rubros que en la copia anterior de ADVAPP tenian algo para vender y
+    en la de hoy nada (29/09). El 28/09 a las 14:00 ADVAPP dejo los Objetivos
+    enteros fuera de venta, y lo unico que lo noto fue la tanda de sugeridos,
+    como si fuera un error de la pagina (la caja de "Te puede servir" quedaba
+    vacia). La tanda ya no lo cuenta como falla; aca se avisa como lo que es,
+    un dato de ADVAPP. 'Para vender' = activo, con stock y con precio. Compara
+    contra la copia anterior que haya en logs/ (las guarda estado_advapp)."""
+    import json
+    carpeta = carpeta or LOGS
+    si = lambda v: str(v if v is not None else '').strip().lower() in ('sí', 'si', 'true', '1', 'yes')
+
+    def contar(ruta):
+        with open(ruta, 'rb') as fh:
+            d = json.loads(fh.read().decode('utf-8'))
+        n = {}
+        for p in d.get('productos') or []:
+            cat = str(p.get('Categoría') or '').strip()
+            if not cat:
+                continue
+            n.setdefault(cat, 0)
+            try:
+                precio = float(str(p.get('Precio USD') or '0').replace(',', '.'))
+            except ValueError:
+                precio = 0
+            activo = p.get('Activo') in (None, '') or si(p.get('Activo'))
+            if activo and si(p.get('Stock')) and precio > 0:
+                n[cat] += 1
+        return n
+
+    fechadas = lambda f: re.search(r'\d{4}-\d{2}-\d{2}', os.path.basename(f))
+    previas = sorted(f for f in glob.glob(os.path.join(carpeta, 'advapp-*.json'))
+                     if fechadas(f) and os.path.abspath(f) != os.path.abspath(copia))
+    if not previas:
+        return []
     try:
-        with urllib.request.urlopen(ADVAPP_URL, timeout=60) as r:
-            d = json.loads(r.read().decode('utf-8'))
-        if d.get('verificado_hoy') is False:
-            return ('ADVAPP dice que hoy no se verifico ningun precio '
-                    '(verificado_hoy = false): la web muestra los de la ultima carga')
-        return None
+        antes, hoy = contar(previas[-1]), contar(copia)
     except Exception:
-        return None
+        return []                     # una copia ilegible no es un rubro vacio
+    fecha = fechadas(previas[-1]).group(0)
+    return ['[ADVAPP] el rubro "%s" quedo sin nada para vender: el %s tenia %d con stock y precio, hoy 0'
+            % (c, fecha, n) for c, n in sorted(antes.items()) if n > 0 and not hoy.get(c)]
+
+
+def ultimo_error(texto):
+    """La ultima linea de un Traceback (la que dice QUE se rompio), o ''."""
+    if 'Traceback' not in (texto or ''):
+        return ''
+    cola = texto[texto.rindex('Traceback'):].strip().split('\n')
+    return cola[-1].strip()[:160] if cola else ''
+
+
+def analizar_validar(salida, rc):
+    """(graves, respaldo, fallo). validar sale con 1 cuando hay graves, con 2
+    cuando no pudo leer nada (sin internet): 1 SIN graves, u otro codigo, es
+    que revento (29/09: con el maestro roto terminaba en Traceback y la
+    revision decia "sin errores graves" y borraba el aviso)."""
+    graves, dentro = [], False
+    for linea in salida.split('\n'):
+        if 'ERRORES GRAVES' in linea:
+            dentro = True
+            continue
+        if dentro:
+            if linea.strip().startswith('['):
+                graves.append(linea.rstrip())
+            elif linea.strip().startswith('Se arreglan en'):
+                break
+    respaldo = next((l.strip() for l in salida.split('\n') if l.startswith('FUENTE-RESPALDO')), '')
+    fallo = ''
+    if (rc == 1 and not graves) or rc not in (0, 1, 2):
+        e = ultimo_error(salida)
+        fallo = '[herramienta] validar.py no pudo terminar (salida %s)%s' % (rc, (': ' + e) if e else '')
+    return graves, respaldo, fallo
+
+
+def analizar_fotos(salida, rc, sin_internet=False):
+    """(fotos_mal, fallo). verificar-fotos sale con 1 por lo que frena la
+    publicacion; si sale con 1 y ningun contador '<--' lo explica, o es el
+    choque de columnas CODIGO (que hasta el 29/09 quedaba callado: el 28/09
+    hubo 33) o es que revento. Desde el 29/09 verificar-fotos tiene su propio
+    contador '<--' para las columnas de ADVAPP que apuntan a otro producto, y
+    la otra memoria del mismo modelo va sin flecha (Pedro, 26/09: no se
+    avisa); la busqueda de "choque:" de abajo queda para una salida vieja.
+
+    29/09: sin internet (validar salio con 2) verificar-fotos tambien sale
+    con 1 y sin ningun '<--', porque no pudo bajar ni ADVAPP ni la planilla
+    (SystemExit 'ERROR: no se pudo bajar la planilla'). Eso no es una
+    herramienta rota y no se alarma, igual que el pedido y las pruebas ese
+    dia: si no, cada dia sin conexion dejaba el AVISO en el Escritorio y la
+    notificacion. Un Traceback, o el mismo corte con internet (validar si
+    bajo los datos), si avisa, y ahora con la linea ERROR que dice por que."""
+    fotos_mal = []
+    for linea in salida.split('\n'):
+        if '<--' in linea:
+            n = linea.strip().split()[0] if linea.strip() else ''
+            if n.isdigit() and int(n) > 0:
+                fotos_mal.append('[fotos] ' + ' '.join(linea.split('<--')[0].split()))
+    fallo = ''
+    e = ultimo_error(salida)
+    if rc == 1 and not fotos_mal:
+        choques = [l for l in salida.split('\n') if re.match(
+            r'\s+(choque:|codigo que no existe|celda corrida)', l)]
+        if 'LAS COLUMNAS DE LA PLANILLA NO COINCIDEN' in salida and choques and not e:
+            fotos_mal.append('[fotos] %d diferencia(s) entre la columna CODIGO de ADVAPP y el '
+                             'catalogo maestro  ->  python3 verificar-fotos.py' % len(choques))
+        elif sin_internet and not e and 'ERROR: no se pudo bajar la planilla' in salida:
+            pass                      # sin conexion: ya lo dice validar (ver arriba)
+        else:
+            # el SystemExit('ERROR: ...') no deja Traceback: se cita esa linea
+            e = e or next((l.strip() for l in salida.split('\n') if l.startswith('ERROR:')), '')[:160]
+            fallo = '[herramienta] verificar-fotos.py no pudo terminar%s' % ((': ' + e) if e else '')
+    elif rc not in (0, 1) or e:
+        fallo = '[herramienta] verificar-fotos.py no pudo terminar (salida %s)%s' % (rc, (': ' + e) if e else '')
+    return fotos_mal, fallo
+
+
+def analizar_pruebas(salida, rc, sin_internet=False):
+    """(pagina_mal, fallo). rc None = se corto por tiempo.
+
+    Hasta el 29/09 solo contaban las lineas FALLA. Una tanda que revienta sale
+    como EXCEPCION y una que no termina como NO LLEGO A CORRER, y correr.py las
+    cuenta como falla (es lo que ya habia dejado pasar JS roto en PUBLICAR):
+    aca se perdian las dos, y tambien el "no encontre Chrome" y el timeout."""
+    lineas = salida.split('\n')
+    pagina_mal = ['[pagina] ' + (l.strip()[len('FALLA'):].strip() if l.strip().startswith('FALLA')
+                                 else l.strip())[:160]
+                  for l in lineas if l.strip().startswith('FALLA') or l.strip().startswith('EXCEPCION')]
+    no_corrieron = [l.split()[0] for l in lineas if l.strip().endswith('NO LLEGO A CORRER') and l.split()]
+    if no_corrieron and not sin_internet:
+        pagina_mal.append('[pagina] %d tanda(s) no llegaron a correr: %s'
+                          % (len(no_corrieron), ', '.join(no_corrieron[:8])))
+    fallo = ''
+    if rc is None:
+        fallo = '[herramienta] las pruebas tardaron mas de 15 minutos y se cortaron'
+    elif rc == 2:
+        primera = next((l.strip() for l in lineas if l.strip()), '')
+        fallo = '[herramienta] las pruebas no pudieron correr: ' + primera[:120]
+    elif rc != 0 and not pagina_mal and not (no_corrieron and sin_internet):
+        e = ultimo_error(salida)
+        fallo = '[herramienta] las pruebas terminaron mal (salida %s) sin decir que fallo%s' % (
+            rc, (': ' + e) if e else '')
+    return pagina_mal, fallo
+
+
+def analizar_pedido(salida, rc):
+    """(pedido_mal, fallo, caido). pedido-advapp sale con 0 o 1 (1 = hay
+    nuevos o volvieron) y con 2 cuando no pudo armar el pedido: ADVAPP caido
+    (eso ya lo avisa la linea de ADVAPP) o el registro danado, que hasta el
+    29/09 nadie veia porque solo se buscaba "(N nuevos"."""
+    pedido_mal = []
+    if rc == 2 and 'ADVAPP no contesto' in salida:
+        return pedido_mal, '', True
+    if rc not in (0, 1) or 'Traceback' in salida or 'Pedido a ADVAPP:' not in salida:
+        ultima = ultimo_error(salida) or next((l.strip() for l in reversed(salida.split('\n')) if l.strip()), '')
+        return pedido_mal, '[herramienta] el pedido a ADVAPP no se pudo armar (salida %s): %s' % (
+            rc, ultima[:200]), False
+    m = re.search(r'\((\d+) nuevos', salida)
+    if m and int(m.group(1)):
+        pedido_mal.append('[ADVAPP] %s punto(s) nuevos para pedirles  ->  PEDIDO-ADVAPP.txt '
+                          '(cuando se mande: pedido-advapp.py --enviado)' % m.group(1))
+    # Un punto que habian arreglado y volvio no es "nuevo", pero hay que
+    # volver a pedirlo: hasta el 29/09 salia como "sigue igual" y no avisaba.
+    m = re.search(r'Volvieron: (\d+)', salida)
+    if m and int(m.group(1)):
+        pedido_mal.append('[ADVAPP] %s punto(s) que habian arreglado volvieron  ->  PEDIDO-ADVAPP.txt'
+                          % m.group(1))
+    m = re.search(r'Pendientes nuestros: (\d+)(?: \(codigos: (\d+), colores sin registrar: (\d+)\))?', salida)
+    if m and int(m.group(1)):
+        if m.group(2) is not None:
+            partes = [x for x in (
+                ('%s fila(s) esperan que les demos codigo' % m.group(2)) if int(m.group(2)) else '',
+                ('%s color(es) nuevo(s) sin registrar en el maestro (sin eso no hay foto)' % m.group(3))
+                if int(m.group(3)) else '') if x]
+            pedido_mal.append('[nuestro] %s  ->  PENDIENTES-NUESTROS.txt' % '; '.join(partes))
+        else:
+            pedido_mal.append('[nuestro] %s fila(s) esperan que les demos codigo  ->  '
+                              'PENDIENTES-NUESTROS.txt' % m.group(1))
+    return pedido_mal, '', False
+
+
+def correr(exe, args, env, timeout=None):
+    return subprocess.run([exe] + args, cwd=AQUI, capture_output=True, text=True,
+                          encoding='utf-8', errors='replace', env=env, timeout=timeout,
+                          creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
 
 
 def main():
@@ -253,6 +525,8 @@ def main():
         return desinstalar()
     if '--estado' in sys.argv:
         return estado()
+    if '--probar' in sys.argv:
+        return probar()
 
     os.makedirs(LOGS, exist_ok=True)
     hoy = datetime.date.today().isoformat()
@@ -266,99 +540,122 @@ def main():
         if os.path.exists(alt):
             exe = alt
 
-    r = subprocess.run([exe, 'validar.py', '--todo'],
-                       cwd=AQUI, capture_output=True, text=True,
-                       encoding='utf-8', errors='replace',
-                       creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+    # ADVAPP, una sola vez para todas (ver estado_advapp)
+    advapp = estado_advapp(hoy)
+    env = dict(os.environ)
+    if advapp['copia']:
+        env['ADVAPP_COPIA'] = advapp['copia']
+    # Un rubro entero que ADVAPP dejo sin nada para vender (29/09)
+    vaciados = rubros_que_se_vaciaron(advapp['copia']) if advapp['copia'] else []
+
+    r = correr(exe, ['validar.py', '--todo'], env)
     salida = (r.stdout or '') + (r.stderr or '')
 
     log = os.path.join(LOGS, 'revision-%s.txt' % hoy)
     with open(log, 'w', encoding='utf-8') as f:
-        f.write('Revisión del catálogo — %s\n%s\n\n%s' % (ahora, '=' * 60, salida))
+        f.write('Revisión del catálogo — %s\n%s\n\nADVAPP: %s%s\n\n%s'
+                % (ahora, '=' * 60, advapp['dato'],
+                   ('\nCopia usada por validar, verificar-fotos y pedido-advapp: %s' % advapp['copia'])
+                   if advapp['copia'] else '', salida))
     limpiar_logs_viejos()
 
     # Sólo las líneas de error grave, para el aviso
-    graves, dentro = [], False
-    for linea in salida.split('\n'):
-        if 'ERRORES GRAVES' in linea:
-            dentro = True
-            continue
-        if dentro:
-            if linea.strip().startswith('['):
-                graves.append(linea.rstrip())
-            elif linea.strip().startswith('Se arreglan en'):
-                break
+    graves, respaldo, fallo_validar = analizar_validar(salida, r.returncode)
+    sin_internet = r.returncode == 2
+    herramienta_mal = [x for x in (fallo_validar,) if x]
+
+    # ADVAPP no contesto y Google si (validar uso la planilla de respaldo): la
+    # web esta mostrando precios y stock del 22/09 con el sello de su fecha, y
+    # nadie se enteraba (29/09). Sin internet del todo, validar sale con 2 y no
+    # se alarma, como siempre.
+    caida = []
+    if respaldo and not sin_internet:
+        caida.append('[ADVAPP] NO CONTESTA: la web esta mostrando la planilla congelada del 22/09 '
+                     '(%s)' % (advapp['caido'] or respaldo[len('FUENTE-RESPALDO:'):].strip())[:200])
 
     # Los colores que ADVAPP trajo y la web no sabe pintar. El validador los da
     # como aviso leve y por eso nadie los veia: el 26/09 habia cuatro. Se
     # avisan con el comando que los resuelve (mide el tono en nuestra foto).
+    # Con ADVAPP caido se calcularian sobre la planilla: ese dia no.
     nuevos = sorted({m.group(1) for m in re.finditer(
         r'color "(.+?)" no está en el mapa COLORES', salida)})
     colores_mal = (['[colores] %d color(es) sin puntito en la web: %s  ->  python3 '
                     'herramientas/colores-nuevos.py' % (len(nuevos), ', '.join(nuevos))]
-                   if nuevos else [])
+                   if nuevos and not caida else [])
 
     # Si ADVAPP no cargo precios hoy, el sitio sigue mostrando los viejos con
     # toda naturalidad: esta es la unica forma de enterarse sin abrir ADVAPP.
-    vieja = carga_vieja()
+    vieja = advapp['vieja']
     with open(log, 'a', encoding='utf-8') as f:
-        f.write('\n\nCarga de precios en ADVAPP: %s\n' % (vieja or 'al dia'))
+        f.write('\n\nCarga de precios en ADVAPP: %s\n' % (vieja or ('no se pudo leer' if advapp['caido']
+                                                                   else 'al dia')))
+        f.write('Rubros que quedaron sin nada para vender: %s\n' % ('\n  '.join([''] + vaciados) if vaciados
+                                                                 else 'ninguno'))
 
-    # Las fotos. verificar-fotos.py frena por las cuatro formas que tiene una
-    # ficha de mostrar otro producto y por las fotos que perdieron su producto
-    # al cambiar el SKU (el 10/09/2026 cambiaron 36 de un dia para otro sin
-    # aviso en el manifiesto). Sin esto, eso se ve recien al publicar.
-    rf = subprocess.run([exe, 'verificar-fotos.py'],
-                        cwd=AQUI, capture_output=True, text=True,
-                        encoding='utf-8', errors='replace',
-                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
-    fotos_mal = []
-    for linea in (rf.stdout or '').split('\n'):
-        if '<--' in linea:
-            n = linea.strip().split()[0]
-            if n.isdigit() and int(n) > 0:
-                fotos_mal.append('[fotos] ' + ' '.join(linea.split('<--')[0].split()))
+    # Las fotos. verificar-fotos.py frena por las formas que tiene una ficha
+    # de mostrar otro producto u otro color, y por la columna CODIGO de ADVAPP
+    # cuando apunta a otro producto (otra Sim, otro teclado u otro modelo; la
+    # otra memoria del mismo modelo no, Pedro 26/09). Sin esto, eso se ve
+    # recien al publicar. (29/09: aca decia tambien "las fotos que perdieron
+    # su producto al cambiar el SKU", el 5b, que ya no existe.)
+    rf = correr(exe, ['verificar-fotos.py'], env)
+    salida_f = (rf.stdout or '') + (rf.stderr or '')
+    fotos_mal, fallo_fotos = analizar_fotos(salida_f, rf.returncode, sin_internet)
+    herramienta_mal += [x for x in (fallo_fotos,) if x]
     with open(log, 'a', encoding='utf-8') as f:
-        f.write('\nFotos (verificar-fotos.py, salida %s):\n%s\n' % (rf.returncode, rf.stdout or rf.stderr or ''))
+        f.write('\nFotos (verificar-fotos.py, salida %s):\n%s\n' % (rf.returncode, salida_f))
 
     # Las pruebas de la pagina (pruebas/correr.py): abren el catalogo con los
     # datos de hoy en Chrome sin ventana y miran lo que ve el cliente. El
     # 26/09 fueron lo unico que encontro los errores de verdad; el validador
     # decia "sin errores graves". Tardan un par de minutos.
     try:
-        rp = subprocess.run([exe, os.path.join('pruebas', 'correr.py')],
-                            cwd=AQUI, capture_output=True, text=True,
-                            encoding='utf-8', errors='replace', timeout=900,
-                            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
-        salida_p = (rp.stdout or '') + (rp.stderr or '')
+        rp = correr(exe, [os.path.join('pruebas', 'correr.py')], env, timeout=900)
+        salida_p, rc_p = (rp.stdout or '') + (rp.stderr or ''), rp.returncode
     except subprocess.TimeoutExpired:
-        salida_p = 'las pruebas tardaron mas de 15 minutos y se cortaron'
-    pagina_mal = ['[pagina] ' + l.strip()[len('FALLA'):].strip()[:160]
-                  for l in salida_p.split('\n') if l.strip().startswith('FALLA')]
+        salida_p, rc_p = 'las pruebas tardaron mas de 15 minutos y se cortaron', None
+    pagina_mal, fallo_pruebas = analizar_pruebas(salida_p, rc_p, sin_internet)
+    herramienta_mal += [x for x in (fallo_pruebas,) if x]
     with open(log, 'a', encoding='utf-8') as f:
-        f.write('\nPruebas de la pagina (pruebas/correr.py):\n%s\n' % salida_p)
+        f.write('\nPruebas de la pagina (pruebas/correr.py, salida %s):\n%s\n' % (rc_p, salida_p))
 
     # El pedido a ADVAPP se arma solo con los datos del dia
     # (herramientas/pedido-advapp.py). Se avisa cuando aparece algo que todavia
-    # no se les pidio, y cuando hay filas que esperan un codigo nuestro.
-    rq = subprocess.run([exe, os.path.join('herramientas', 'pedido-advapp.py')],
-                        cwd=AQUI, capture_output=True, text=True,
-                        encoding='utf-8', errors='replace',
-                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+    # no se les pidio, cuando vuelve algo que habian arreglado, cuando hay
+    # filas que esperan un codigo nuestro, y cuando no se pudo armar.
+    rq = correr(exe, [os.path.join('herramientas', 'pedido-advapp.py')], env)
     salida_q = (rq.stdout or '') + (rq.stderr or '')
     with open(log, 'a', encoding='utf-8') as f:
-        f.write('\nPedido a ADVAPP (herramientas/pedido-advapp.py):\n%s\n' % salida_q)
-    pedido_mal = []
-    m = re.search(r'\((\d+) nuevos', salida_q)
-    if m and int(m.group(1)):
-        pedido_mal.append('[ADVAPP] %s punto(s) nuevos para pedirles  ->  PEDIDO-ADVAPP.txt '
-                          '(cuando se mande: pedido-advapp.py --enviado)' % m.group(1))
-    m = re.search(r'Pendientes nuestros: (\d+)', salida_q)
-    if m and int(m.group(1)):
-        pedido_mal.append('[nuestro] %s fila(s) esperan que les demos codigo  ->  '
-                          'PENDIENTES-NUESTROS.txt' % m.group(1))
+        f.write('\nPedido a ADVAPP (herramientas/pedido-advapp.py, salida %s):\n%s\n'
+                % (rq.returncode, salida_q))
+    pedido_mal, fallo_pedido, pedido_caido = analizar_pedido(salida_q, rq.returncode)
+    if caida:
+        pedido_mal = []           # se calcularia sobre la planilla: ese dia no
+    herramienta_mal += [x for x in (fallo_pedido,) if x]
+    if pedido_caido and not caida and not sin_internet:
+        # validar alcanzo a bajar ADVAPP y el pedido no: se cayo en el medio
+        caida.append('[ADVAPP] NO CONTESTO al armar el pedido: no se armo (mirar el log)')
 
-    if (r.returncode == 1 and graves) or vieja or fotos_mal or pagina_mal or colores_mal or pedido_mal:
+    # Las autopruebas de las herramientas (--probar: casos armados a mano, sin
+    # red, un par de segundos). Si una regla del pedido deja de ver su caso, o
+    # esta revision deja de leer una salida, se avisa aca y no el dia que se
+    # necesitaba (29/09: asi se habian quedado ciegas sin que nadie lo note).
+    for args in ([os.path.join('herramientas', 'pedido-advapp.py'), '--probar'],
+                 ['revision-diaria.py', '--probar']):
+        try:
+            ra = correr(exe, args, env, timeout=120)
+            salida_a, rc_a = (ra.stdout or '') + (ra.stderr or ''), ra.returncode
+        except subprocess.TimeoutExpired:
+            salida_a, rc_a = 'se colgo', None
+        with open(log, 'a', encoding='utf-8') as f:
+            f.write('\nAutoprueba %s (salida %s):\n%s\n' % (' '.join(args), rc_a, salida_a))
+        if rc_a != 0:
+            malas = [l.strip() for l in salida_a.split('\n') if l.startswith('FALLA')]
+            herramienta_mal.append('[herramienta] %s --probar falla: %s' % (
+                os.path.basename(args[0]), (malas[0] if malas else ultimo_error(salida_a) or 'mirar el log')[:140]))
+
+    if (r.returncode == 1 and graves) or vieja or fotos_mal or pagina_mal or colores_mal \
+            or pedido_mal or herramienta_mal or caida or vaciados:
         # En Mac, corriendo desde launchd, el sistema puede no dejar escribir
         # en el Escritorio (permisos de privacidad). Entonces el aviso queda
         # en logs/ (que no se publica) y la notificacion igual sale.
@@ -367,38 +664,57 @@ def main():
             open(aviso, 'a').close()
         except OSError:
             aviso = os.path.join(LOGS, os.path.basename(AVISO))
+        encabezado = ('ADVAPP NO CONTESTA: la web esta mostrando la planilla\n'
+                      'congelada del 22/09, y lo de abajo se reviso sobre ella.\n\n'
+                      if respaldo else
+                      'Son cosas que el cliente esta viendo mal en la web AHORA,\n'
+                      'porque el sitio lee ADVAPP en vivo.\n\n')
         with open(aviso, 'w', encoding='utf-8') as f:
             f.write(
                 'EL CATALOGO TIENE ERRORES\n'
                 'Revisado el %s\n%s\n\n'
-                'Son cosas que el cliente esta viendo mal en la web AHORA,\n'
-                'porque el sitio lee ADVAPP en vivo.\n\n'
+                '%s'
                 '%s\n\n%s\n\n'
+                # 29/09: validar.py marcaba sus graves [planilla] y aca se
+                # traducia; ahora los marca [ADVAPP], y su pedido sale con
+                # validar.py --pedido (las reglas de datos que el pedido de
+                # herramientas/pedido-advapp.py todavia no tiene).
                 'Cada linea dice donde se arregla:\n'
-                '  planilla = se le pide a ADVAPP (el dato viene de ahi)\n'
+                '  ADVAPP   = se le pide a ADVAPP (PEDIDO-ADVAPP.txt; lo que marca\n'
+                '             validar.py sale con: python3 validar.py --pedido)\n'
+                '  nuestro  = lo resolvemos nosotros (PENDIENTES-NUESTROS.txt)\n'
                 '  pagina   = lo que ve el cliente, segun las pruebas\n'
                 '  codigo   = hay que tocar index.html\n'
+                '  colores  = colores nuevos sin puntito en la web\n'
                 '  fotos    = falta producir la imagen, o correr el comando\n'
-                '             que dice REVISAR-FOTOS.txt\n\n'
+                '             que dice REVISAR-FOTOS.txt\n'
+                '  herramienta = no se pudo revisar: mirar el log (lo que\n'
+                '             esa herramienta controla hoy NO se controlo)\n\n'
                 'El detalle completo esta en:\n%s\n\n'
                 'Cuando se resuelvan, este archivo desaparece solo\n'
                 'en la revision del dia siguiente.\n'
-                % (ahora, '=' * 60,
-                   '\n'.join(graves + (['[ADVAPP] LOS PRECIOS NO SE ACTUALIZARON: ' + vieja] if vieja else [])
-                             + fotos_mal + pagina_mal + colores_mal + pedido_mal),
+                % (ahora, '=' * 60, encabezado,
+                   '\n'.join(caida + herramienta_mal + graves
+                             + (['[ADVAPP] LOS PRECIOS NO SE ACTUALIZARON: ' + vieja] if vieja else [])
+                             + vaciados + fotos_mal + pagina_mal + colores_mal + pedido_mal),
                    '=' * 60, log))
         notificar('Catalogo Advance Tecno',
-                  ('%d error(es) grave(s) en los datos. ' % len(graves) if graves else '')
+                  ('ADVAPP no contesta: la web muestra la planilla del 22/09. ' if caida else '')
+                  + ('Alguna revision no pudo correr. ' if herramienta_mal else '')
+                  + ('%d error(es) grave(s) en los datos. ' % len(graves) if graves else '')
                   + ('ADVAPP no cargo precios hoy. ' if vieja else '')
+                  + ('ADVAPP dejo un rubro sin nada para vender. ' if vaciados else '')
                   + ('%d prueba(s) de la pagina fallan. ' % len(pagina_mal) if pagina_mal else '')
                   + ('Hay colores nuevos sin puntito. ' if colores_mal else '')
                   + ('Hay cosas para pedirle a ADVAPP. ' if pedido_mal else '')
                   + ('Hay fotos que mirar. ' if fotos_mal else '')
                   + ('Mira el aviso en el Escritorio.' if aviso == AVISO
                      else 'Mira el aviso en la carpeta logs del catalogo.'))
-        print('%d graves%s%s%s. Aviso dejado en %s'
-              % (len(graves), ' + carga vieja' if vieja else '', ' + fotos' if fotos_mal else '',
-                 ' + %d pruebas' % len(pagina_mal) if pagina_mal else '', aviso))
+        print('%d graves%s%s%s%s%s. Aviso dejado en %s'
+              % (len(graves), ' + ADVAPP caido' if caida else '', ' + carga vieja' if vieja else '',
+                 ' + fotos' if fotos_mal else '', ' + %d pruebas' % len(pagina_mal) if pagina_mal else '',
+                 ' + %d herramienta(s) que no corrieron' % len(herramienta_mal) if herramienta_mal else '',
+                 aviso))
         return 1
 
     if r.returncode == 2:
@@ -414,6 +730,132 @@ def main():
     else:
         print('Sin errores graves.')
     return 0
+
+
+def probar():
+    """Salidas armadas a mano de cada herramienta, sin red: que la revision
+    se entere de lo que antes quedaba callado."""
+    import tempfile
+    fallas = []
+
+    def ok(c, txt):
+        print(('  OK  ' if c else 'FALLA ') + txt)
+        if not c:
+            fallas.append(txt)
+
+    tb = ('Traceback (most recent call last):\n  File "x.py", line 1\n'
+          'catalogo_maestro.CatalogoRoto: catalogo-maestro.csv: 1 fila(s) sin CODIGO_VAR (línea 3).\n')
+    g, resp, f = analizar_validar('Fuente: ADVAPP\n' + tb, 1)
+    ok(not g and 'CatalogoRoto' in f, 'validar que revienta con 1 y sin graves es una herramienta caida')
+    g, resp, f = analizar_validar('╔══\n║ 1 ERRORES GRAVES\n╚══\n  [ADVAPP  ] X  algo\n\n  Se arreglan en: x\n', 1)
+    ok(g == ['  [ADVAPP  ] X  algo'] and not f, 'los graves se siguen leyendo igual (con la etiqueta ADVAPP)')
+    g, resp, f = analizar_validar('Fuente: planilla\nFUENTE-RESPALDO: ADVAPP no contesto (404).\n', 0)
+    ok(resp.startswith('FUENTE-RESPALDO') and not f, 'validar sobre la planilla de respaldo se reconoce')
+
+    fm, f = analizar_fotos('     0  MISMA FOTO  <-- mirar\nLAS COLUMNAS DE LA PLANILLA NO COINCIDEN CON EL CATALOGO\n'
+                           '   choque: A\n   choque: B\n   celda corrida: C\n', 1)
+    ok(fm and '3 diferencia' in fm[0] and not f, 'los choques de CODIGO avisan aunque ningun contador <-- lo diga')
+    # 29/09: la columna CODIGO que apunta a otro producto trae su contador
+    # '<--', y la otra memoria del mismo modelo (aceptada) no tiene que avisar
+    fm, f = analizar_fotos('    11  COLUMNAS DE ADVAPP QUE NO CIERRAN con el catalogo  <-- pedirlo a ADVAPP\n'
+                           '    40  codigos de otra memoria del mismo modelo (aceptado, Pedro 26/09)\n'
+                           'LAS COLUMNAS DE LA PLANILLA NO COINCIDEN CON EL CATALOGO\n   choque: A\n', 1)
+    ok(fm == ['[fotos] 11 COLUMNAS DE ADVAPP QUE NO CIERRAN con el catalogo'] and not f,
+       'las columnas de ADVAPP que apuntan a otro producto llegan al aviso por su contador')
+    fm, f = analizar_fotos('     0  COLUMNAS DE ADVAPP QUE NO CIERRAN con el catalogo  <-- pedirlo a ADVAPP\n'
+                           '    40  codigos de otra memoria del mismo modelo (aceptado, Pedro 26/09)\n', 0)
+    ok(not fm and not f, 'la otra memoria del mismo modelo (aceptada) no avisa')
+    fm, f = analizar_fotos('     0  MISMA FOTO  <-- mirar\n' + tb, 1)
+    ok(not fm and 'CatalogoRoto' in f, 'verificar-fotos que revienta es una herramienta caida')
+    fm, f = analizar_fotos('     2  MISMA FOTO en modelos distintos  <-- mirar primero\n', 1)
+    ok(fm == ['[fotos] 2 MISMA FOTO en modelos distintos'] and not f, 'los contadores <-- se siguen leyendo igual')
+    # 29/09: la salida real de verificar-fotos sin red (proxy muerto). Antes
+    # cada dia sin conexion terminaba en AVISO y notificacion por esto.
+    sin_red = ('AVISO: ADVAPP no contesto (<urlopen error [Errno 61] Connection refused>); se usa la '
+               'planilla, congelada desde el 22/09.\n'
+               'ERROR: no se pudo bajar la planilla (<urlopen error [Errno 61] Connection refused>)\n')
+    fm, f = analizar_fotos(sin_red, 1, sin_internet=True)
+    ok(not fm and not f, 'sin internet verificar-fotos no es una herramienta rota')
+    fm, f = analizar_fotos(sin_red, 1)
+    ok(not fm and 'no se pudo bajar la planilla' in f,
+       'si validar si bajo los datos y verificar-fotos no, es un fallo y dice por que')
+    fm, f = analizar_fotos('     0  MISMA FOTO  <-- mirar\n' + tb, 1, sin_internet=True)
+    ok(not fm and 'CatalogoRoto' in f, 'sin internet, un Traceback de verificar-fotos igual avisa')
+
+    pm, f = analizar_pruebas('  codigos        1 FALLA(S)\n       EXCEPCION: TypeError: x is null\n', 1)
+    ok(pm == ['[pagina] EXCEPCION: TypeError: x is null'] and not f, 'una tanda que revienta llega al aviso')
+    pm, f = analizar_pruebas('  sim            NO LLEGO A CORRER\n  meta           NO LLEGO A CORRER\n', 1)
+    ok(pm == ['[pagina] 2 tanda(s) no llegaron a correr: sim, meta'], 'las tandas que no llegaron a correr se cuentan')
+    pm, f = analizar_pruebas('  sim            NO LLEGO A CORRER\n', 1, sin_internet=True)
+    ok(not pm and not f, 'sin internet no se alarma por las tandas que no corrieron')
+    pm, f = analizar_pruebas('No encontre Chrome ni Edge. Las pruebas necesitan uno de los dos.\n', 2)
+    ok(not pm and 'Chrome' in f, 'sin Chrome es una herramienta que no pudo correr')
+    pm, f = analizar_pruebas('las pruebas tardaron mas de 15 minutos y se cortaron', None)
+    ok('15 minutos' in f, 'el corte por tiempo se avisa')
+    pm, f = analizar_pruebas('  meta           1 FALLA(S)\n       FALLA el sello  [x]\n', 1)
+    ok(pm == ['[pagina] el sello  [x]'] and not f, 'las FALLA se siguen leyendo igual')
+
+    ok(analizar_pedido('Pendientes nuestros: 3 (codigos: 1, colores sin registrar: 2) (en P)\n'
+                       'Pedido a ADVAPP: 10 puntos (2 nuevos, 8 ya pedidos), 0 arreglados.\nVolvieron: 1\n', 1)[0]
+       == ['[ADVAPP] 2 punto(s) nuevos para pedirles  ->  PEDIDO-ADVAPP.txt (cuando se mande: pedido-advapp.py --enviado)',
+           '[ADVAPP] 1 punto(s) que habian arreglado volvieron  ->  PEDIDO-ADVAPP.txt',
+           '[nuestro] 1 fila(s) esperan que les demos codigo; 2 color(es) nuevo(s) sin registrar en el maestro '
+           '(sin eso no hay foto)  ->  PENDIENTES-NUESTROS.txt'],
+       'el pedido: nuevos, los que volvieron y los pendientes nuestros')
+    pm, f, c = analizar_pedido('REGISTRO DANADO: pedidos-advapp.json no se puede leer (x).\n', 2)
+    ok(not pm and 'REGISTRO DANADO' in f and not c, 'el registro danado es una herramienta que no pudo correr')
+    pm, f, c = analizar_pedido('ADVAPP no contesto (HTTP Error 404): no se arma el pedido.\n', 2)
+    ok(not pm and not f and c, 'ADVAPP caido en el pedido no es una herramienta rota: es la caida')
+
+    tmp = tempfile.mkdtemp(prefix='revision-probar-')
+    viejo = (datetime.date.today() - datetime.timedelta(days=DIAS_LOG + 2)).isoformat()
+    nuevo = datetime.date.today().isoformat()
+    for n in ('revision-%s.txt' % viejo, 'advapp-%s.json' % viejo, 'revision-%s.txt' % nuevo,
+              'advapp-%s.json' % nuevo, 'advapp-ultima-carga.json'):
+        open(os.path.join(tmp, n), 'w').close()
+    limpiar_logs_viejos(tmp)
+    ok(sorted(os.listdir(tmp)) == sorted(['revision-%s.txt' % nuevo, 'advapp-%s.json' % nuevo,
+                                          'advapp-ultima-carga.json']),
+       'se borran los logs y las copias viejas, y nada mas')
+    global LOGS
+    viejo_logs, LOGS = LOGS, tmp
+    try:
+        e = estado_advapp(nuevo, intentos=2, espera=0, url='file://' + os.path.join(tmp, 'no-existe.json'))
+        ok(e['caido'] and not e['copia'], 'ADVAPP que no contesta se reintenta y queda como caido')
+        with open(os.path.join(tmp, 'corto.json'), 'w') as fh:
+            fh.write('{"filas": 10, "productos": [{"ID": "A"}]}')
+        e = estado_advapp(nuevo, intentos=1, espera=0, url='file://' + os.path.join(tmp, 'corto.json'))
+        ok(e['caido'] and 'trajo 1 de las 10' in e['caido'], 'una carga cortada cuenta como caida')
+        with open(os.path.join(tmp, 'bien.json'), 'w') as fh:
+            fh.write('{"filas": 1, "generado_en": "g", "productos": [{"ID": "A"}]}')
+        e = estado_advapp(nuevo, intentos=1, espera=0, url='file://' + os.path.join(tmp, 'bien.json'))
+        ok(not e['caido'] and e['copia'] and os.path.exists(e['copia']) and 'generado_en g' in e['dato'],
+           'la carga buena se guarda en logs/ y anota generado_en')
+    finally:
+        LOGS = viejo_logs
+
+    # Un rubro entero fuera de venta de un dia para el otro (el 28/09, los Objetivos)
+    tmp2 = tempfile.mkdtemp(prefix='revision-rubros-')
+    import json
+    fila = lambda cat, stock, precio='100', activo='Sí': {'Categoría': cat, 'Stock': stock,
+                                                          'Precio USD': precio, 'Activo': activo}
+    with open(os.path.join(tmp2, 'advapp-2026-09-27.json'), 'w', encoding='utf-8') as fh:
+        json.dump({'productos': [fila('Lente', 'Sí'), fila('Lente', 'No'), fila('Celular', 'Sí'),
+                                 fila('Drone', 'No')]}, fh)
+    hoy_json = os.path.join(tmp2, 'advapp-2026-09-28.json')
+    with open(hoy_json, 'w', encoding='utf-8') as fh:
+        json.dump({'productos': [fila('Lente', 'Sí', '0'), fila('Lente', 'Sí', '100', 'No'),
+                                 fila('Celular', 'Sí'), fila('Drone', 'No')]}, fh)
+    v = rubros_que_se_vaciaron(hoy_json, tmp2)
+    ok(len(v) == 1 and '"Lente"' in v[0] and '2026-09-27' in v[0] and v[0].startswith('[ADVAPP]'),
+       'un rubro que ayer tenia para vender y hoy nada (sin precio o inactivo) se avisa como dato de ADVAPP')
+    ok(rubros_que_se_vaciaron(os.path.join(tmp2, 'advapp-2026-09-27.json'), tmp2) == [],
+       'sin copia anterior no se avisa nada')
+    import shutil
+    shutil.rmtree(tmp2, ignore_errors=True)
+    print()
+    print('RESULTADO: %s' % ('%d FALLA(S)' % len(fallas) if fallas else 'pasa todo'))
+    return 1 if fallas else 0
 
 
 if __name__ == '__main__':

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Saca del sitio las fotos que alguien miro y dio por equivocadas.
 
-    python herramientas/sacar-fotos-malas.py             muestra cuales
-    python herramientas/sacar-fotos-malas.py --aplicar   las saca
-    python herramientas/sacar-fotos-malas.py --volver    las devuelve
+    python3 herramientas/sacar-fotos-malas.py             muestra cuales
+    python3 herramientas/sacar-fotos-malas.py --aplicar   las saca
+    python3 herramientas/sacar-fotos-malas.py --volver    las devuelve
 
 Una foto que muestra otro producto es peor que no tener foto: el producto
 queda sin imagen, pero deja de mentirle al cliente. Las fotos NO se borran,
@@ -58,11 +58,15 @@ def registro():
 
 
 def escribir_registro(reg):
-    with io.open(REVISADAS, 'w', encoding='utf-8', newline='') as fh:
+    # El mismo encabezado y los mismos finales de linea (CRLF) que escriben
+    # verificar-fotos.py, revisar-fotos-con-agentes.py y migrar-fotos-a-*.py
+    # (29/09): si no, segun cual corrio ultimo el diff muestra el archivo
+    # entero cambiado. Aca iba con LF y "python", que en la Mac no existe.
+    with io.open(REVISADAS, 'w', encoding='utf-8', newline='\r\n') as fh:
         fh.write('# Fotos miradas contra el producto que dice la planilla.\n')
         fh.write('# Si una cambia, deja de coincidir y no se publica hasta mirarla.\n')
-        fh.write('# Anotar las miradas:  python verificar-fotos.py --revisadas\n')
-        fh.write('# Arrancar el registro: python verificar-fotos.py --sembrar\n')
+        fh.write('# Anotar las miradas:  python3 verificar-fotos.py --revisadas\n')
+        fh.write('# Arrancar el registro: python3 verificar-fotos.py --sembrar\n')
         for a in sorted(reg):
             h, m = reg[a]
             fh.write('%s  %-34s # %s\n' % (h, a, 'mirada' if m else 'sin mirar'))
@@ -83,7 +87,7 @@ def volver():
         shutil.move(os.path.join(APARTE, a), destino)
         print('  vuelve: %s' % a)
         hubo += 1
-    print('%d foto(s) devueltas. Ahora: python verificar-fotos.py' % hubo)
+    print('%d foto(s) devueltas. Ahora: python3 verificar-fotos.py' % hubo)
     return 0
 
 
@@ -110,7 +114,7 @@ def main():
 
     if '--aplicar' not in sys.argv:
         print()
-        print('Para sacarlas:  python herramientas/sacar-fotos-malas.py --aplicar')
+        print('Para sacarlas:  python3 herramientas/sacar-fotos-malas.py --aplicar')
         print('Para devolverlas despues:  ... --volver')
         return 0
 
@@ -128,7 +132,7 @@ def main():
     escribir_registro(reg)
     print()
     print('Hecho. %d fotos apartadas. Ahora hay que regenerar el indice:' % len(malas))
-    print('   python verificar-fotos.py')
+    print('   python3 verificar-fotos.py')
     return 0
 
 

@@ -1,0 +1,107 @@
+{
+ "LEEME": [
+  "Preguntas a ADVAPP que ninguna regla de herramientas/pedido-advapp.py puede medir sola.",
+  "Salen en PEDIDO-ADVAPP.txt (seccion PREGUNTAS QUE NO SALEN DE UNA REGLA) hasta que se completa",
+  "'respondida' con la fecha y lo que contestaron, por ejemplo: \"2026-10-02: es EF-M\".",
+  "El registro de enviados (pedidos-advapp.json) las sigue como a cualquier punto: NUEVO, pedido el dd/mm.",
+  "'espera_codigo': true saca esas filas de PENDIENTES-NUESTROS.txt mientras su nombre sea el anotado:",
+  "ADVAPP reusa IDs, y si contesta cambiando el nombre la fila vuelve sola a pendientes.",
+  "'fecha' (AAAA-MM-DD) es cuando se anoto aca; 'antes', si ya se habia preguntado a mano.",
+  "Si esto no se puede leer, pedido-advapp.py NO arma el pedido (sale con 2): revisar las comas."
+ ],
+ "preguntas": [
+  {
+   "id": "P-01",
+   "fecha": "2026-09-29",
+   "hallazgo": 166,
+   "espera_codigo": true,
+   "filas": [
+    {"ID": "GAF-RAY-049", "nombre": "Metaverse / Smart Glasses — Wayfarer"},
+    {"ID": "GAF-RAY-050", "nombre": "Metaverse / Smart Glasses — Skyler"}
+   ],
+   "antes": "a mano el 15/09 y el 16/09 (RESPUESTA-AL-SHEET-15-09.txt y -16-09.txt)",
+   "pregunta": "Que referencia de fabrica son (montura y cristal, por ejemplo 601/1M52)? Sin montura ni lente no se pueden identificar, y no les podemos dar codigo ni foto. Si Pedro sabe que modelo son, les damos nosotros un AT-#### y esta pregunta se marca respondida.",
+   "respondida": ""
+  },
+  {
+   "id": "P-02",
+   "fecha": "2026-09-29",
+   "hallazgo": 166,
+   "espera_codigo": true,
+   "filas": [
+    {"ID": "GAF-RAY-056", "nombre": "Meta Skyler 601/1M52 · 601/CH52 (Shiny Black · Transitions Green | Shiny Black · Transitions Amethyst)"}
+   ],
+   "antes": "a mano el 16/09 (RESPUESTA-AL-SHEET-16-09.txt)",
+   "pregunta": "Esta fila son DOS anteojos. Una fila por anteojo: 601/1M52 (Shiny Black · Transitions Green) = AT-0412-01 y 601/CH52 (Shiny Black · Transitions Amethyst) = AT-0413-01, cada una con su precio y su stock.",
+   "respondida": ""
+  },
+  {
+   "id": "P-03",
+   "fecha": "2026-09-29",
+   "hallazgo": 50,
+   "filas": [
+    {"ID": "NBK-APL-MBP14M5MAX-36G2TB-MID-EN", "nombre": "MacBook Pro M5 Max 14\" 36GB/2TB (Midnight)"}
+   ],
+   "pregunta": "El MacBook Pro no viene en Midnight (ese es un color del MacBook Air): viene en Space Black y Silver, y la foto de AT-0440-02 es la Space Black. Es la Space Black? Si es asi: Color \"Space Black\" y SKU_VARIANTE ...-SBK-EN, manteniendo CODIGO_VAR AT-0440-02. No lo cambiamos nosotros en la web: seria inventar un color.",
+   "respondida": ""
+  },
+  {
+   "id": "P-04",
+   "fecha": "2026-09-29",
+   "hallazgo": 145,
+   "filas": [],
+   "pregunta": "El ETag de resource=tecno-web cambia cada ~60 segundos aunque los datos sean los mismos (solo cambia generado_en), asi que la web nunca recibe un 304 y baja los ~77 KB en cada refresco. Pueden calcular el ETag sobre columnas y productos, o actualizar generado_en solo cuando cambian los datos? Por favor NO saquen las columnas SKU_* de tecno-web: nuestras herramientas usan SKU_VARIANTE. Si quieren un recurso liviano, que sea otro resource.",
+   "respondida": ""
+  },
+  {
+   "id": "P-05",
+   "fecha": "2026-09-29",
+   "hallazgo": 58,
+   "filas": [
+    {"ID": "CON-SON-003", "nombre": "PlayStation 5 Física 1TB"}
+   ],
+   "pregunta": "Sumar \"ps5\" a los Terminos de busqueda de CON-SON-003, como las otras dos PS5: hoy buscando \"ps5\" no aparece.",
+   "respondida": ""
+  },
+  {
+   "id": "P-06",
+   "fecha": "2026-09-29",
+   "hallazgo": 58,
+   "filas": [
+    {"ID": "CON-NIN-002", "nombre": "Switch - Choose One Game"}
+   ],
+   "pregunta": "Es la Switch 2, como dicen el SKU (CON-NIN-SWITCH2-...) y los terminos de busqueda (y lo sugiere el precio, USD 710)? Si lo es, que el Modelo y la Descripcion digan \"Switch 2\"; si no, que saquen el 2 del SKU y de los terminos. La tarjeta hoy se titula \"Switch\".",
+   "respondida": ""
+  },
+  {
+   "id": "P-07",
+   "fecha": "2026-09-29",
+   "hallazgo": 30,
+   "filas": [
+    {"ID": "SW-APP-002", "nombre": "Watch SE 2nd Gen 44mm GPS Midnight Sport Band S/L"},
+    {"ID": "SW-APP-001", "nombre": "Watch SE 2nd Gen 40mm GPS Midnight Sport Band M/L"}
+   ],
+   "pregunta": "SW-APP-002 dice talle \"S/L\" (tambien el SKU, -SL): Apple hace S/M y M/L. Cual es? Y en las dos filas el color y la malla van en el titulo de la tarjeta: que el color vaya entre parentesis al final, como en las demas filas de relojes.",
+   "respondida": ""
+  },
+  {
+   "id": "P-08",
+   "fecha": "2026-09-29",
+   "hallazgo": 31,
+   "filas": [
+    {"ID": "CEL-SAM-088", "nombre": "Galaxy A57 8/256GB (Dark Blue)"},
+    {"ID": "CEL-SAM-A57-8G256-GRY-000", "nombre": "Galaxy A57 5G 8GB/256GB (Gray)"}
+   ],
+   "pregunta": "Son el mismo equipo? CEL-SAM-088 \"8/256GB\" vale USD 460 y CEL-SAM-A57-8G256-GRY-000 \"5G 8GB/256GB\" vale 430 (y trae el CODIGO del 8/128). La ficha muestra dos botones, \"5G\" y \"8GB\", que no dicen nada. Si son el mismo, que se escriban igual; el precio lo dicen ustedes.",
+   "respondida": ""
+  },
+  {
+   "id": "P-09",
+   "fecha": "2026-09-29",
+   "hallazgo": 34,
+   "filas": [],
+   "pregunta": "Ray-Ban Meta: 7 filas dicen \"Rayban Meta GEN2 ...\" y otras 6 \"Meta Gen 2 — ...\". Conviene escribirlas igual, pero SIN cambiar ID, CODIGO ni SKU, y avisandonos antes: el 11/09 un renombre asi hizo que nuestras herramientas dejaran de reconocer siete filas. Prioridad baja.",
+   "respondida": ""
+  }
+ ]
+}

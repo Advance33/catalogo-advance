@@ -2,8 +2,8 @@
 # Publicar el catalogo - Advance Tecno  (version Mac de PUBLICAR.bat)
 #
 # Doble clic lo abre en la Terminal. Hace lo mismo que el .bat de Windows y en
-# el mismo orden: revisa la planilla, revisa el catalogo de codigos, revisa las
-# fotos, corre las pruebas y recien ahi ofrece subir.
+# el mismo orden: revisa los datos de ADVAPP, revisa el catalogo de codigos,
+# revisa las fotos, corre las pruebas y recien ahi ofrece subir.
 #
 # En Mac el comando es python3, no python.
 
@@ -41,10 +41,13 @@ if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   pausa; exit 1
 fi
 
-# ---- Revision de la planilla -------------------------------------------
-#  validar.py baja la hoja Landing y controla lo que el catalogo necesita para
+# ---- Revision de los datos ---------------------------------------------
+#  validar.py baja los productos de ADVAPP (la planilla quedo congelada el
+#  22/09 y es solo el respaldo) y controla lo que el catalogo necesita para
 #  mostrarse bien. 0 = todo bien, 1 = errores graves, 2 = no se pudo revisar.
-echo "   Revisando la planilla..."
+#  (29/09: los textos de aca decian "planilla" y "equipo del sheet", y desde
+#  el 22/09 los pedidos van a ADVAPP.)
+echo "   Revisando los datos de ADVAPP..."
 echo
 $PY validar.py
 REVISION=$?
@@ -58,14 +61,18 @@ if [ "$REVISION" = "1" ]; then
   echo "     web: un color que no coincide con el nombre, una nota interna"
   echo "     que quedo a la vista, una categoria sin definir."
   echo
+  # 29/09: validar.py marcaba estos "planilla"; ahora dice ADVAPP, que es de
+  # donde salen los datos desde el 22/09.
   echo "     Cada linea dice donde se arregla:"
-  echo "       planilla = se le pide al equipo del sheet"
+  echo "       ADVAPP   = se le pide a ADVAPP (de ahi salen los datos)"
   echo "       codigo   = hay que tocar index.html"
   echo "       fotos    = falta producir la imagen"
   echo
-  echo "     Para lo de \"planilla\", el pedido ya redactado sale con:"
+  echo "     Para lo de \"ADVAPP\", el pedido ya redactado sale con:"
   echo "        $PY validar.py --pedido"
-  echo "     Queda en PEDIDO-AL-SHEET.txt, listo para copiar y mandar."
+  echo "     Queda en PEDIDO-AL-SHEET.txt (el nombre es de antes; adentro"
+  echo "     dice ADVAPP). Lo demas que hay que pedirles sale con:"
+  echo "        $PY herramientas/pedido-advapp.py"
   echo
   echo "     Cuando esten resueltos, volve a abrir este acceso directo."
   echo "   ------------------------------------------------------------"
@@ -76,7 +83,7 @@ if [ "$REVISION" = "1" ]; then
   echo
 elif [ "$REVISION" = "2" ]; then
   echo
-  echo "   AVISO: no se pudo revisar la planilla (el detalle esta arriba)."
+  echo "   AVISO: no se pudieron revisar los datos (el detalle esta arriba)."
   echo "   Suele ser falta de internet. Se puede publicar igual, pero"
   echo "   nadie controlo los datos."
   echo
@@ -104,34 +111,72 @@ fi
 echo
 echo "   Revisando las fotos..."
 echo
-$PY verificar-fotos.py
-if [ $? -eq 1 ]; then
+# La salida se guarda para ver QUE frena (29/09). Hasta ese dia, lo unico que
+# frenaba casi siempre era la columna CODIGO de ADVAPP, y el titulo decia "HAY
+# FOTOS SIN REVISAR" con cuatro causas y ninguna era esa. La otra memoria del
+# mismo modelo ya no frena (Pedro, 26/09: verificar-fotos la lista aparte y
+# sale con 0 si es lo unico); si frena, es otra Sim, otro teclado u otro
+# modelo, y el titulo lo dice. -u: sin eso, por el tee, la salida llega toda
+# junta al final.
+FOTOS_SALIDA=$(mktemp -t publicar-fotos.XXXXXX)
+$PY -u verificar-fotos.py | tee "$FOTOS_SALIDA"
+FOTOS=${PIPESTATUS[0]}
+# Los contadores con "<--" que no estan en 0: los de fotos y el de codigos
+CODIGOS=$(grep -E '^ *[1-9][0-9]* .*COLUMNAS DE ADVAPP.*<--' "$FOTOS_SALIDA" | wc -l | tr -d ' ')
+OTROS=$(grep -E '^ *[1-9][0-9]* .*<--' "$FOTOS_SALIDA" | grep -v 'COLUMNAS DE ADVAPP' | wc -l | tr -d ' ')
+rm -f "$FOTOS_SALIDA"
+if [ "$FOTOS" -eq 1 ]; then
   echo
   echo "   ------------------------------------------------------------"
-  echo "     HAY FOTOS SIN REVISAR"
-  echo
-  echo "     Puede ser una de tres cosas, y el detalle esta en"
-  echo "     REVISAR-FOTOS.txt:"
-  echo
-  echo "      - Dos productos de modelos distintos con la misma imagen."
-  echo "        A veces esta bien (el mismo equipo en otra capacidad)."
-  echo "        Si estan todas bien:  $PY verificar-fotos.py --aceptar"
-  echo
-  echo "      - Una foto que CAMBIO despues de haberse revisado. Ojo con"
-  echo "        esta: asi es como volvia la foto equivocada del iPhone 17."
-  echo
-  echo "      - Una foto NUEVA que nadie miro todavia."
-  echo
-  echo "      - Una PORTADA que es la foto de un color que la fila ya no"
-  echo "        vende. Las fotos se llaman SKU-color.jpg y la portada es"
-  echo "        la del primer color: alguien copio mal un archivo."
-  echo
-  echo "     Para las ultimas: mira la foto, y si esta bien anotala"
-  echo "        $PY verificar-fotos.py --revisadas NOMBRE.jpg"
-  echo "   ------------------------------------------------------------"
-  echo
-  preguntar "Publicar igual?" || cancelado
-  echo
+  if [ "$CODIGOS" != "0" ] && [ "$OTROS" = "0" ]; then
+    echo "     LA COLUMNA CODIGO DE ADVAPP APUNTA A OTRO PRODUCTO"
+    echo
+    echo "     Las fotos estan bien: lo que frena es el codigo que manda"
+    echo "     ADVAPP. Esta arriba y en REVISAR-FOTOS.txt (bloque 14)."
+    echo "     Si dice \"pedido a ADVAPP el ...\", ya se les pidio y falta"
+    echo "     que lo corrijan. Lo que no, se pide con:"
+    echo "        $PY herramientas/pedido-advapp.py"
+    echo
+    echo "     Mientras tanto, esas fichas pueden mostrar la foto de la"
+    echo "     otra Sim, del otro teclado o de otro modelo."
+    echo "   ------------------------------------------------------------"
+    echo
+    preguntar "Publicar igual?" || cancelado
+    echo
+  else
+    echo "     HAY FOTOS SIN REVISAR"
+    echo
+    echo "     El detalle esta arriba y en REVISAR-FOTOS.txt. Puede ser:"
+    echo
+    echo "      - Dos productos de modelos distintos con la misma imagen."
+    echo "        A veces esta bien (el mismo equipo en otra capacidad)."
+    echo "        Si estan todas bien:  $PY verificar-fotos.py --aceptar"
+    echo "        (suma a las ya aceptadas, no borra ninguna)"
+    echo
+    echo "      - Una foto que CAMBIO despues de haberse revisado. Ojo con"
+    echo "        esta: asi es como volvia la foto equivocada del iPhone 17."
+    echo
+    echo "      - Una foto NUEVA que nadie miro todavia."
+    echo "        Mirala, y si esta bien anotala:"
+    echo "        $PY verificar-fotos.py --revisadas NOMBRE.jpg"
+    echo
+    echo "      - Una FOTO DE OTRO COLOR: la fila vende un color y muestra"
+    echo "        la foto de otro color del mismo producto. Casi siempre es"
+    echo "        la columna CODIGO_VAR de ADVAPP; se pide con:"
+    echo "        $PY herramientas/pedido-advapp.py"
+    echo
+    echo "      - La columna CODIGO de ADVAPP apuntando a OTRO producto"
+    echo "        (otra Sim, otro teclado u otro modelo): se pide con"
+    echo "        $PY herramientas/pedido-advapp.py. La otra memoria del"
+    echo "        mismo modelo NO frena (Pedro, 26/09)."
+    echo
+    echo "      - El CATALOGO MAESTRO ROTO: ahi las fotos no se revisaron"
+    echo "        y fotos/indice.json quedo como estaba."
+    echo "   ------------------------------------------------------------"
+    echo
+    preguntar "Publicar igual?" || cancelado
+    echo
+  fi
 fi
 
 # ---- Las pruebas --------------------------------------------------------
@@ -159,11 +204,94 @@ fi
 # ---- Subir --------------------------------------------------------------
 CANT=$(git status --porcelain | wc -l | tr -d ' ')
 
-if [ "$CANT" = "0" ]; then
+# Las publicaciones que quedaron sin subir (29/09). Si el push falla, el
+# commit ya esta hecho y queda solo en esta compu; la vez siguiente el status
+# da 0 y se decia "El sitio ya esta al dia" sin subir nada. No se notaba
+# porque verificar-fotos reescribia fotos/indice.json todos los dias por la
+# fecha, y eso forzaba otro commit que se llevaba el pendiente; desde que
+# solo lo escribe si cambio algo, quedaba a la vista. origin/main avanza solo
+# cuando un push sale bien, asi que el conteo sirve sin internet y sin fetch.
+PEND=$(git rev-list --count origin/main..main 2>/dev/null || echo 0)
+
+if [ "$CANT" = "0" ] && [ "$PEND" = "0" ]; then
   echo "   El sitio ya esta al dia. No hay nada nuevo para publicar."
   echo
   echo "   https://advance33.github.io/catalogo-advance/"
   pausa; exit 0
+fi
+
+AHORA=$(date '+%d/%m/%Y %H:%M')
+
+error(){
+  echo
+  echo "   ------------------------------------------------------------"
+  echo "     NO SE PUDO PUBLICAR"
+  echo
+  echo "     Suele ser falta de internet o la cuenta de GitHub. Revisa"
+  echo "     la conexion y proba de nuevo. Si el error se repite, pasale"
+  echo "     a Claude lo que dice aca arriba."
+  echo "   ------------------------------------------------------------"
+  pausa; exit 1
+}
+
+# El envio a GitHub, separando el rechazo de la falta de conexion. Si GitHub
+# tiene commits que esta compu no tiene (se publica tambien desde otra
+# carpeta), reintentar no sirve y un "git pull" a mano puede dejar a quien
+# publica en medio de un conflicto en index.html: eso lo resuelve Claude.
+# En los dos casos el commit ya quedo hecho aca y el proximo PUBLICAR lo
+# vuelve a intentar solo (PEND, arriba).
+subir(){
+  local salida rc
+  salida=$(git push origin main 2>&1)
+  rc=$?
+  echo "$salida" | sed 's/^/   /'
+  [ $rc -eq 0 ] && return 0
+  echo
+  echo "   ------------------------------------------------------------"
+  if echo "$salida" | grep -qiE 'rejected|non-fast-forward|fetch first'; then
+    echo "     NO SE PUDO PUBLICAR: GitHub tiene cambios que esta compu"
+    echo "     no tiene. No lo reintentes ni lo arregles a mano: pasale a"
+    echo "     Claude lo que dice aca arriba."
+    echo
+    echo "     Lo de hoy quedo guardado en esta compu y se sube cuando"
+    echo "     eso este resuelto."
+  else
+    echo "     NO SE PUDO PUBLICAR"
+    echo
+    echo "     Suele ser falta de internet o la cuenta de GitHub. Revisa"
+    echo "     la conexion y proba de nuevo. Si el error se repite, pasale"
+    echo "     a Claude lo que dice aca arriba."
+    echo
+    echo "     Lo de hoy quedo guardado en esta compu: la proxima vez que"
+    echo "     abras PUBLICAR lo vuelve a intentar."
+  fi
+  echo "   ------------------------------------------------------------"
+  pausa; exit 1
+}
+
+if [ "$PEND" != "0" ]; then
+  echo "   OJO: hay $PEND publicacion(es) anterior(es) que NO llegaron a"
+  echo "   GitHub (se hicieron en esta compu, pero el envio fallo):"
+  git log --oneline origin/main..main | sed 's/^/      /'
+  echo
+fi
+
+if [ "$CANT" = "0" ]; then
+  preguntar "Subirlas ahora?" || cancelado
+  echo
+  echo "   Subiendo..."
+  echo
+  subir
+  echo
+  echo "   ============================================================"
+  echo "     LISTO. Se subieron $PEND publicacion(es) que habian quedado"
+  echo "     pendientes."
+  echo
+  echo "     En 1 o 2 minutos se ve en:"
+  echo "     https://advance33.github.io/catalogo-advance/"
+  echo "   ============================================================"
+  pausa
+  exit 0
 fi
 
 echo "   Hay $CANT cambio(s) sin publicar:"
@@ -173,6 +301,23 @@ echo "   ------------------------------------------------------------"
 echo
 echo "     M = modificado    ?? = nuevo    D = borrado"
 echo
+
+# Un archivo que cambio TODOS sus finales de linea (CRLF <-> LF) (29/09).
+# .gitattributes dice "* -text" a proposito (26/08: git no toca los finales),
+# asi que si alguien guarda un archivo con otros finales, el diff lo muestra
+# entero y tapa el cambio real: le paso a herramientas/altas-decididas.csv el
+# 26/09 (169 lineas de diff para un cambio de 3). No rompe nada; se avisa.
+git diff --name-only -z | while IFS= read -r -d '' f; do
+  todo=$(git diff --numstat -- "$f" | awk '$1 != "-" {print $1 + $2}')
+  real=$(git diff --numstat --ignore-cr-at-eol -- "$f" | awk '$1 != "-" {print $1 + $2}')
+  if [ "${todo:-0}" -gt 20 ] && [ $(( ${real:-0} * 4 )) -lt "${todo:-0}" ]; then
+    echo "   OJO: $f cambio sus finales de linea (CRLF/LF): el diff"
+    echo "   lo muestra entero ($todo lineas) y el cambio real son ${real:-0}."
+    echo "   No rompe nada; si no fue a proposito, pasale esto a Claude."
+    echo
+  fi
+done
+
 echo "   Una vez publicado, los clientes lo ven en 1 o 2 minutos."
 echo
 preguntar "Publicar estos cambios?" || cancelado
@@ -181,27 +326,17 @@ echo
 echo "   Subiendo..."
 echo
 
-AHORA=$(date '+%d/%m/%Y %H:%M')
-
-error(){
-  echo
-  echo "   ------------------------------------------------------------"
-  echo "     NO SE PUDO PUBLICAR"
-  echo
-  echo "     Suele ser falta de internet. Revisa la conexion y proba"
-  echo "     de nuevo. Si el error se repite, pasale a Claude lo que"
-  echo "     dice aca arriba."
-  echo "   ------------------------------------------------------------"
-  pausa; exit 1
-}
-
 git add -A                                              || error
 git commit -m "Actualizacion del catalogo - $AHORA" >/dev/null || error
-git push origin main                                    || error
+subir
 
 echo
 echo "   ============================================================"
 echo "     LISTO. $CANT cambio(s) publicados."
+if [ "$PEND" != "0" ]; then
+  echo "     Y se subieron $PEND publicacion(es) anterior(es) que habian"
+  echo "     quedado pendientes."
+fi
 echo
 echo "     En 1 o 2 minutos se ve en:"
 echo "     https://advance33.github.io/catalogo-advance/"

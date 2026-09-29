@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Baja fotos de producto desde una lista de direcciones y las deja listas.
 
-    python herramientas/bajar-fotos.py                 baja y prepara
-    python herramientas/bajar-fotos.py --aplicar       ademas las mete en fotos/
+    python3 herramientas/bajar-fotos.py                 baja y prepara
+    python3 herramientas/bajar-fotos.py --aplicar       ademas las mete en fotos/
 
 Lee _fotos-buscadas/candidatas.txt, una linea por foto:
 
@@ -207,14 +207,14 @@ def main():
     if not APLICAR:
         print()
         print('Para meterlas en el catalogo:')
-        print('   python herramientas/bajar-fotos.py --aplicar')
+        print('   python3 herramientas/bajar-fotos.py --aplicar')
         return 1 if quejas else 0
 
     import shutil
     for archivo, ruta in hechas:
         shutil.copy2(ruta, os.path.join(FOTOS, archivo))
     print()
-    print('%d fotos agregadas. Ahora:  python verificar-fotos.py' % len(hechas))
+    print('%d fotos agregadas. Ahora:  python3 verificar-fotos.py' % len(hechas))
     return 1 if quejas else 0
 
 

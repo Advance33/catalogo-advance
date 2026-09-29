@@ -1,6 +1,11 @@
 #!/bin/bash
-# Revisar la planilla del catalogo  (version Mac de "REVISAR CATALOGO.bat")
+# Revisar los datos del catalogo  (version Mac de "REVISAR CATALOGO.bat")
 # No publica nada: solo mira.
+#
+# 29/09: decia "Baja la hoja Landing" y "el sitio lee la planilla en vivo".
+# Desde el 22/09 los productos vienen de ADVAPP (validar.py dice "Fuente:
+# ADVAPP") y la planilla quedo congelada como respaldo; los pedidos van a
+# ADVAPP, no al "equipo del sheet".
 
 cd "$(dirname "$0")" || exit 1
 
@@ -9,11 +14,11 @@ command -v $PY >/dev/null 2>&1 || PY=python
 
 echo
 echo "   ============================================================"
-echo "     REVISAR LA PLANILLA DEL CATALOGO"
+echo "     REVISAR LOS DATOS DEL CATALOGO"
 echo "   ============================================================"
 echo
-echo "   Baja la hoja Landing y controla que este todo bien para"
-echo "   mostrarse en la web. No publica nada: solo mira."
+echo "   Baja los productos de ADVAPP y controla que este todo bien"
+echo "   para mostrarse en la web. No publica nada: solo mira."
 echo
 
 $PY validar.py --todo
@@ -25,10 +30,12 @@ if [ "$RES" = "1" ]; then
   echo "     HAY ERRORES GRAVES"
   echo
   echo "     Son cosas que el cliente esta viendo mal AHORA en la web,"
-  echo "     porque el sitio lee la planilla en vivo."
+  echo "     porque el sitio lee ADVAPP en vivo."
   echo
   echo "     Cada linea dice donde se arregla:"
-  echo "       planilla = se le pide al equipo del sheet"
+  # 29/09: validar.py marcaba estos "planilla"; desde hoy dice ADVAPP
+  echo "       ADVAPP   = se le pide a ADVAPP; el pedido redactado:"
+  echo "                  $PY validar.py --pedido"
   echo "       codigo   = hay que tocar index.html"
   echo "       fotos    = falta producir la imagen"
   echo "   ------------------------------------------------------------"
@@ -42,7 +49,7 @@ elif [ "$RES" = "127" ]; then
   echo "   ------------------------------------------------------------"
   echo "     NO SE ENCONTRO PYTHON"
   echo
-  echo "     Hace falta para revisar la planilla (python3 --version)."
+  echo "     Hace falta para revisar los datos (python3 --version)."
   echo "   ------------------------------------------------------------"
 else
   echo "   ------------------------------------------------------------"

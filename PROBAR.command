@@ -10,7 +10,7 @@ echo
 echo "   ============================================================"
 echo "     PROBAR EL CATALOGO"
 echo
-echo "     Abre el catalogo con la planilla de verdad y controla que"
+echo "     Abre el catalogo con los datos de hoy de ADVAPP y controla que"
 echo "     todo siga andando: la agrupacion en tarjetas, que se"
 echo "     recomienda en cada categoria, el orden de la barra y como"
 echo "     se ve en celular, tablet y pantalla grande."

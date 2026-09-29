@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Trae al catalogo las fotos que Pedro pego en el panel.
 
-    python herramientas/traer-del-panel.py                prepara y muestra
-    python herramientas/traer-del-panel.py --aplicar      ademas las guarda
+    python3 herramientas/traer-del-panel.py                prepara y muestra
+    python3 herramientas/traer-del-panel.py --aplicar      ademas las guarda
 
 El panel guarda cada foto en su base con la imagen adentro, ademas del
 codigo, el producto y el color que tenia la parada donde se pego. Este
@@ -224,14 +224,14 @@ def main():
     if not APLICAR:
         print()
         print('Para guardarlas:')
-        print('   python herramientas/traer-del-panel.py --aplicar')
+        print('   python3 herramientas/traer-del-panel.py --aplicar')
         return 1 if quejas else 0
 
     import shutil
     for archivo, ruta in nuevas:
         shutil.copy2(ruta, os.path.join(FOTOS, archivo))
     print()
-    print('%d fotos guardadas. Ahora:  python verificar-fotos.py' % len(nuevas))
+    print('%d fotos guardadas. Ahora:  python3 verificar-fotos.py' % len(nuevas))
     return 1 if quejas else 0
 
 

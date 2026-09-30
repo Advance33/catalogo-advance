@@ -8,8 +8,9 @@
 //       En la agotada y la de "Consultar" el renglon esta pero invisible,
 //       para que las etiquetas de una fila queden parejas.
 //   2B  la ficha lleva los planes como botones ADENTRO de la etiqueta del
-//       precio; tocar uno dice la cuota y el total, tocarlo otra vez lo
-//       desmarca. Sigue al cambiar de version; arranca sin nada en cada ficha.
+//       precio; tocar uno dice la cuota ("6 cuotas de $ 471.437", sin "≈" ni
+//       el renglon del total: Pedro los saco al verlo publicado), tocarlo
+//       otra vez lo desmarca. Sigue al cambiar de version; arranca sin nada en cada ficha.
 //   3C  el pedido pregunta "¿Pagás con tarjeta? opcional" debajo de "¿Cómo lo
 //       recibís?"; el plan elegido va al mensaje con los montos y a la
 //       medicion (cuotas: N). Queda guardado aparte del pedido.
@@ -182,8 +183,8 @@ async function probarLaFicha(){
   b6.focus(); b6.click();
   await cuDormir(20);
   const res = () => cuRenglones(d.querySelector('.fi-cuotas-res'));
-  const esperado = vv => { const e = cuEsperado(vv.precio, c6); return `${c6.cuotas} cuotas de ≈ $ ${cuPlata(e.cuota)} Total ≈ $ ${cuPlata(e.total)} · +${pctCuotas(c6.recargo)}`; };
-  if(TC) ok(res() === esperado(v), `[2B] tocar ${c6.cuotas} dice la cuota y el total`, res());
+  const esperado = vv => { const e = cuEsperado(vv.precio, c6); return `${c6.cuotas} cuotas de $ ${cuPlata(e.cuota)}`; };
+  if(TC) ok(res() === esperado(v), `[2B] tocar ${c6.cuotas} dice la cuota y nada mas (sin «≈» ni total)`, res());
   ok(b6.getAttribute('aria-pressed') === 'true' && document.activeElement === b6 && d.querySelector('.fi-cuotas') === box,
      '[2B] queda marcado, con el foco, y sin rehacer la ficha');
   ok(getComputedStyle(b6).backgroundColor === 'rgb(124, 58, 237)', '[2B] el marcado en violeta, como la muestra', getComputedStyle(b6).backgroundColor);
@@ -191,7 +192,7 @@ async function probarLaFicha(){
   if(uno && TC){
     uno.click();
     const e1 = cuEsperado(v.precio, planCuotas(1));
-    ok(res() === `1 pago de ≈ $ ${cuPlata(e1.total)} +${pctCuotas(planCuotas(1).recargo)} sobre el precio en pesos`, '[2B] «1 pago» dice el total con su recargo', res());
+    ok(res() === `1 pago de $ ${cuPlata(e1.total)}`, '[2B] «1 pago» dice cuanto es, con el recargo ya sumado', res());
     uno.click();
     ok(uno.getAttribute('aria-pressed') === 'false' && res() === 'Tocá un plan y ves cuánto es cada cuota.', '[2B] tocar el marcado lo desmarca');
     b6.click();
@@ -291,7 +292,7 @@ async function probarElPedido(){
     const e = TC ? cuEsperado(totalPedido(), c) : null;
     const renglon = e ? `Lo pago con tarjeta en ${c.cuotas} cuotas: aprox. $ ${cuPlata(e.cuota)} c/u (total aprox. $ ${cuPlata(e.total)}).`
                       : `Lo pago con tarjeta en ${c.cuotas} cuotas.`;
-    if(e) ok(cuTxt(b2.querySelector('.pd-ayuda')) === `${c.cuotas} cuotas de ≈ $ ${cuPlata(e.cuota)} · total ≈ $ ${cuPlata(e.total)} (+${pctCuotas(c.recargo)})`,
+    if(e) ok(cuTxt(b2.querySelector('.pd-ayuda')) === `${c.cuotas} cuotas de $ ${cuPlata(e.cuota)} · total $ ${cuPlata(e.total)} (+${pctCuotas(c.recargo)})`,
              '[3C] la ayuda dice la cuota y el total del pedido', cuTxt(b2.querySelector('.pd-ayuda')));
     const partes = mensajePedido().split('\n\n');
     ok(partes[partes.length - 1] === renglon, '[3C] el mensaje suma el plan, con los montos, al final', partes[partes.length - 1]);

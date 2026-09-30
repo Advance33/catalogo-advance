@@ -10314,8 +10314,11 @@ function htmlDatosFicha(m, v){
 }
 
 /* Los planes adentro de la etiqueta del precio (2B de muestras/cuotas, 30/09).
-   Arranca sin ninguno marcado; tocar uno dice la cuota y el total, tocarlo
-   otra vez lo desmarca. El elegido sigue al cambiar de versión o color
+   Arranca sin ninguno marcado; tocar uno dice la cuota ("6 cuotas de
+   $ 471.437"), tocarlo otra vez lo desmarca. Pedro, ya publicado: el "≈" se
+   veía raro en esa letra y el renglón del total y el recargo, sobraba; los
+   dos se fueron. El recargo sigue en "¿Puedo pagar en cuotas?".
+   El elegido sigue al cambiar de versión o color
    (CUOTA_FICHA) y vuelve a cero con cada ficha nueva (abrirFicha). Tocar no
    rehace la ficha: sólo los botones y el resultado (elegirCuotaFicha). */
 let CUOTA_FICHA = 0;
@@ -10334,8 +10337,8 @@ function textoCuotasFicha(v){
   // Sin cotización no hay pesos: el plan y su recargo, sin montos
   if(!x) return `<b>${esc(nombreCuotas(c.cuotas))}</b><span>+${pct} sobre el precio en pesos</span>`;
   return c.cuotas === 1
-    ? `<b>1 pago de ≈ $ ${plata(x.total)}</b><span>+${pct} sobre el precio en pesos</span>`
-    : `<b>${c.cuotas} cuotas de ≈ $ ${plata(x.cuota)}</b><span>Total ≈ $ ${plata(x.total)} · +${pct}</span>`;
+    ? `<b>1 pago de $ ${plata(x.total)}</b>`
+    : `<b>${c.cuotas} cuotas de $ ${plata(x.cuota)}</b>`;
 }
 function elegirCuotaFicha(d, v, n){
   CUOTA_FICHA = CUOTA_FICHA === n ? 0 : n;
@@ -11871,8 +11874,8 @@ function htmlCuotasPedido(){
   const c = planCuotas(CUOTAS_PEDIDO), x = cuentaCuotasPedido();
   let ayuda = 'Por Mercado Pago, con cualquier tarjeta bancarizada. Si no marcás nada, lo hablamos por WhatsApp.';
   if(c && x) ayuda = c.cuotas === 1
-    ? `<b>1 pago de ≈ $ ${plata(x.total)}</b> (+${pctCuotas(c.recargo)})`
-    : `<b>${c.cuotas} cuotas de ≈ $ ${plata(x.cuota)}</b> · total ≈ $ ${plata(x.total)} (+${pctCuotas(c.recargo)})`;
+    ? `<b>1 pago de $ ${plata(x.total)}</b> (+${pctCuotas(c.recargo)})`
+    : `<b>${c.cuotas} cuotas de $ ${plata(x.cuota)}</b> · total $ ${plata(x.total)} (+${pctCuotas(c.recargo)})`;
   else if(c) ayuda = `<b>${esc(nombreCuotas(c.cuotas))}</b> (+${pctCuotas(c.recargo)} sobre el precio en pesos)`;
   return `<div class="pd-cuotas" role="group" aria-labelledby="pd-rot-cuotas">
       <span class="pd-rot" id="pd-rot-cuotas">¿Pagás con tarjeta? <i>opcional</i></span>

@@ -1591,6 +1591,84 @@
   .fi-pagos ul{margin:0;padding-left:18px}
   .fi-servicio .fi-pagos li{display:list-item}
 
+  /* ---------- La descripción del producto (30/09) ----------
+     Pedro eligió la A2 de muestras/descripciones-desplegables: un acordeón de
+     tres renglones que se abren de a uno. Las medidas y los colores son los de
+     la muestra, con los tonos del sitio (el --faint del sitio es el de la 6.4 B,
+     un punto más oscuro que el de la muestra). Lo arma htmlDescripcion(). */
+  .fi-desc{display:grid;gap:10px;padding-top:14px;border-top:1px solid var(--line);min-width:0}
+  .fi-acd{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .fi-acd-it + .fi-acd-it{border-top:1px solid var(--line)}
+  .fi-acd-h{margin:0}
+  .fi-acd-b{display:flex;align-items:center;gap:10px;width:100%;min-height:50px;padding:10px 2px;border:0;background:none;
+            cursor:pointer;text-align:left;color:var(--ink);font:600 14.5px/1.25 var(--sans)}
+  /* El contador ("2 frases", "5 puntos", "31 datos") dice lo que hay adentro
+     sin abrir; abierto ya no hace falta, pero guarda su lugar */
+  .fi-acd-b small{margin-left:auto;font:500 10.5px/1 var(--mono);color:var(--faint);white-space:nowrap}
+  .fi-acd-b[aria-expanded="true"]{color:var(--glow)}
+  .fi-acd-b[aria-expanded="true"] small{visibility:hidden}
+  .fi-acd-b svg{width:18px;height:18px;flex:none;color:var(--acento);transition:transform .3s cubic-bezier(.2,.75,.25,1)}
+  .fi-acd-b[aria-expanded="true"] svg{transform:rotate(180deg)}
+  .fi-acd-b:focus-visible{outline:2px solid var(--acento);outline-offset:2px;border-radius:6px}
+  .fi-acd-num{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+              font:600 10.5px/1 var(--mono);background:var(--surface-2);color:var(--glow)}
+  .fi-acd-b[aria-expanded="true"] .fi-acd-num{background:var(--acento);color:#fff}
+  .fi-acd-c{display:grid;gap:12px;padding:0 2px 16px}
+  /* Abre y cierra animando la altura con grid-template-rows 0fr -> 1fr (sin
+     medir en JS). Cerrado va con visibility:hidden: lo de adentro no se
+     enfoca con Tab ni lo lee el lector de pantalla. Con "reducir movimiento",
+     seco. */
+  .fi-plg{display:grid;grid-template-rows:0fr;visibility:hidden;
+          transition:grid-template-rows .3s cubic-bezier(.2,.75,.25,1),visibility 0s linear .3s}
+  .fi-plg.abierto{grid-template-rows:1fr;visibility:visible;
+                  transition:grid-template-rows .3s cubic-bezier(.2,.75,.25,1),visibility 0s}
+  .fi-plg-in{overflow:hidden;min-height:0;min-width:0}
+  .fi-plg-in > *{opacity:0;transform:translateY(-4px);transition:opacity .2s ease,transform .3s cubic-bezier(.2,.75,.25,1)}
+  .fi-plg.abierto .fi-plg-in > *{opacity:1;transform:none;transition-delay:.06s}
+  @media (prefers-reduced-motion: reduce){
+    .fi-plg,.fi-plg.abierto,.fi-plg-in > *,.fi-acd-b svg{transition:none !important}
+    .fi-plg-in > *{transform:none}
+  }
+  .fi-desc-venta{margin:0;font:400 14px/1.55 var(--sans);color:var(--ink);text-wrap:pretty}
+  .fi-desc-venta + .fi-desc-venta{margin-top:-4px}
+  .fi-desc-puntos{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+  .fi-desc-puntos li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:9px;align-items:start}
+  .fi-desc-puntos li::before{content:"";width:20px;height:20px;border-radius:50%;margin-top:1px;
+    background:var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.4l3 3 6-6.4' fill='none' stroke='%237C3AED' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repeat}
+  .fi-desc-puntos b{display:block;font:600 13.5px/1.35 var(--sans);color:var(--ink)}
+  .fi-desc-puntos div > span{display:block;font:400 12.5px/1.45 var(--sans);color:var(--muted)}
+  /* "según versión" y "proveedor": las marquitas de un dato que cambia con la
+     versión y de uno que no sale del fabricante (el naranja es el de la muestra) */
+  .fi-desc-varia,.fi-desc-prov{display:inline-block;margin-left:4px;font:600 8.5px/1.5 var(--mono);letter-spacing:.08em;
+            text-transform:uppercase;border-radius:4px;padding:0 5px;vertical-align:1px;white-space:nowrap}
+  .fi-desc-varia{color:var(--glow);background:var(--surface-2)}
+  .fi-desc-prov{color:#C2410C;background:#FDEBDD}
+  .fi-desc-fuente{margin:0;font:500 10.5px/1.45 var(--mono);color:var(--faint);overflow-wrap:anywhere}
+  .fi-desc-fuente a{color:var(--faint);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:2px}
+  .fi-desc-fuente a:hover{color:var(--glow)}
+  .fi-desc-fuente a:focus-visible{outline:2px solid var(--acento);outline-offset:2px;border-radius:3px}
+  .fi-desc-fuente .prov{color:#C2410C}
+  /* La ficha técnica: grupos con renglones. El dato de la versión elegida va
+     resaltado, con los de las otras versiones en chiquito */
+  .fi-desc-tabla{display:grid;gap:14px}
+  .fi-desc-sec h5{margin:0 0 4px;font:600 9.5px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--glow)}
+  .fi-desc-sec dl{margin:0;display:grid;grid-template-columns:minmax(78px,34%) minmax(0,1fr)}
+  .fi-desc-sec dt,.fi-desc-sec dd{padding:7px 0;border-top:1px solid var(--line)}
+  .fi-desc-sec dt{font:500 12px/1.4 var(--sans);color:var(--muted);padding-right:10px}
+  .fi-desc-sec dd{margin:0;font:500 12.5px/1.45 var(--sans);color:var(--ink);overflow-wrap:anywhere}
+  .fi-desc-sec dd small{display:block;font:400 11.5px/1.4 var(--sans);color:var(--faint);margin-top:2px}
+  .fi-desc-sec dd.var{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--acento);padding-left:10px;padding-right:6px}
+  .fi-desc-sec dd.var b{font-weight:600}
+  /* En la compu la descripción alarga la columna de la derecha, y la foto,
+     centrada en su columna, bajaba con ella: la vitrina de colores quedaba
+     debajo del borde. Con descripción, la columna de la foto se queda pegada
+     arriba y del alto de lo que se ve: foto y colores a la vista mientras se
+     lee. Sin descripción la ficha queda como estaba. */
+  @media (min-width:641px){
+    #ficha .fi-cols:has(.fi-desc) .fi-foto{position:sticky;top:0;align-self:start;
+      height:calc(100vh - 40px);height:calc(100dvh - 40px)}
+  }
+
   /* ---------- También te puede interesar: la cinta (21/09) ----------
      Cuatro pastillas parejas al pie, con la foto chica al costado del nombre.
 
@@ -10113,6 +10191,7 @@ function htmlDatosFicha(m, v){
     ${v.detalle ? `<p class="fi-detalle">${esc(v.detalle)}</p>` : ''}
     ${filas.length ? `<dl class="fi-tabla">${filas.map(([t,x]) =>
       `<dt>${esc(t)}</dt><dd>${esc(x)}</dd>`).join('')}</dl>` : ''}
+    ${htmlDescripcion(v)}
     ${htmlElegido(m, v, COLOR_FICHA)}
     <div class="botones fi-botones">
       ${WHATSAPP ? (v.stock
@@ -10122,6 +10201,240 @@ function htmlDatosFicha(m, v){
     </div>
     ${htmlServicio(v)}
     <p class="fi-nota">Precio sujeto a cambio sin previo aviso. Consultá disponibilidad antes de comprar.${coti ? ' ' + esc(coti) : ''}</p>`;
+}
+
+/* ---------- La descripción del producto (30/09) ----------
+   Pedro eligió la A2 de muestras/descripciones-desplegables ("Acordeón: Por
+   qué elegirlo / Lo más importante / Ficha técnica"): tres renglones que se
+   abren de a uno. "Por qué elegirlo" (la frase de venta) arranca abierto al
+   entrar; abrir otro cierra el que estaba y tocar el abierto lo cierra. Cada
+   título dice cuánto trae ("2 frases", "5 puntos", "31 datos") y abajo va,
+   siempre, la fuente oficial en chiquito.
+   Dónde: en el celular antes de "Estás eligiendo" y del pie pegado (el botón
+   de WhatsApp acompaña mientras se lee); en la compu en la columna de la
+   derecha, abajo de los botones y antes de retiro y garantía. Mismo nodo,
+   que acomodarDescripcion() muda al cruzar los 640 px (sin perder lo abierto).
+   Los textos NO se escriben acá: salen de datos/descripciones.json (formato
+   en datos/LEEME-descripciones.md). La descripción es del MODELO y se busca
+   por el código AT-#### de la fila que se mira; si ese código no tiene
+   entrada, no se muestra nada (ni un renglón vacío).
+   Un dato que cambia con la versión (la RAM del S26 Ultra de 1TB, la SIM del
+   iPhone) se resuelve con lo que la ficha ya sabe de la fila -la Sim, la
+   memoria de la pestaña, la montura, el nombre- y NO con el código: el
+   30/09 la columna CODIGO de ADVAPP traía en 11 de las 18 filas del iPhone
+   17 Pro el código de otra memoria o de la eSIM (el Sim de 256GB decía
+   AT-0071, el eSIM de 1TB), y en 16 de las 52 filas con descripción el de
+   otra versión. Si una fila no calza en una sola versión, el dato no se
+   resalta: se muestran todos, cada uno con su versión.
+   El archivo se pide recién al abrir la primera ficha, con tope de tiempo:
+   el que sólo mira la grilla no lo baja. Si no llega, la ficha queda como
+   antes y se prueba otra vez con la próxima ficha. */
+const DESC_URL = 'datos/descripciones.json';
+const DESC_ESPERA_MS = 6000;   // lo más que se espera el archivo
+let DESC_P = null;             // la promesa del archivo (se pide una vez, salvo que falle)
+let DESCRIPCIONES = null;      // Map código AT -> entrada, cuando llegó
+let DESC_ABIERTO = 'por';      // el renglón abierto: 'por', 'imp', 'ficha' o ''
+
+function cargarDescripciones(){
+  if(DESCRIPCIONES) return Promise.resolve(DESCRIPCIONES);
+  if(!DESC_P) DESC_P = conTope(DESC_ESPERA_MS, async senal => {
+      const r = await fetch(DESC_URL, { cache:'no-cache', signal: senal });
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(j => (DESCRIPCIONES = indiceDescripciones(j)))
+    .catch(e => { console.warn('No se pudo leer ' + DESC_URL + ':', e); DESC_P = null; return null; });
+  return DESC_P;
+}
+
+/* Código -> entrada. Una entrada a la que le falta algo que la ficha necesita
+   se saltea entera (mejor nada que media descripción); un código repetido
+   queda con la primera (la prueba decision-descripciones.js no deja
+   publicar ninguna de las dos cosas). */
+function indiceDescripciones(j){
+  const mapa = new Map();
+  const lista = j && Array.isArray(j.descripciones) ? j.descripciones : [];
+  const esLista = x => Array.isArray(x);
+  for(const e of lista){
+    if(!e || !esLista(e.codigos) || !esLista(e.venta) || !esLista(e.importante) || !esLista(e.ficha) ||
+       !esLista(e.fuentes) || !e.fuentes.some(f => f && urlFoto(f.url))) continue;
+    e.codigos.forEach(c => {
+      const k = typeof c === 'string' ? c.trim().toUpperCase() : '';
+      if(k && !mapa.has(k)) mapa.set(k, e);
+    });
+  }
+  return mapa;
+}
+
+function descripcionDe(v){
+  if(!DESCRIPCIONES || !v || !v.codigo) return null;
+  return DESCRIPCIONES.get(String(v.codigo).trim().toUpperCase()) || null;
+}
+
+// Minúsculas, sin tildes y sin signos: "(Rc-N3)" y "rc-n3" dicen "rc n3"
+const normDesc = t => norm(String(t || '')).replace(/[^a-z0-9]+/g, ' ').trim();
+
+/* La versión de la entrada que es esta fila: la única cuyas condiciones (si)
+   se cumplen todas. Sin versiones, o si calzan ninguna o dos, null. */
+function versionDescripcion(e, v){
+  const vs = Array.isArray(e.versiones) ? e.versiones : [];
+  if(!vs.length || !v) return null;
+  const texto = normDesc([v.desc, v.modelo, v.incluye].filter(Boolean).join(' '));
+  const memoria = memoriaDeOpcion(v.opcion || v.etiqueta) || capacidadDe(v) || '';
+  const lista = x => [].concat(x).filter(t => typeof t === 'string' && t.trim());
+  const cumple = si => !!si && typeof si === 'object' && Object.keys(si).length > 0 &&
+    Object.entries(si).every(([k, x]) => {
+      if(k === 'sim')     return !!v.sim && norm(v.sim) === norm(x);
+      if(k === 'memoria') return !!memoria && norm(memoria) === norm(x);
+      if(k === 'teclado') return !!v.teclado && norm(v.teclado) === norm(x);
+      if(k === 'montura') return !!v.montura && norm(v.montura) === norm(x);
+      if(k === 'texto')   return lista(x).length > 0 && lista(x).every(t => texto.includes(normDesc(t)));
+      if(k === 'sin')     return !lista(x).some(t => texto.includes(normDesc(t)));
+      return false;       // una condición que la web no conoce no se cumple
+    });
+  const suyas = vs.filter(x => x && typeof x.nombre === 'string' && cumple(x.si));
+  return suyas.length === 1 ? suyas[0].nombre : null;
+}
+
+/* Un dato es un texto (del fabricante, igual en todas las versiones) o
+   {segun: {versión: texto}, proveedor: {versión: texto}}. Devuelve lo que se
+   muestra en la versión `ver`: txt, si cambia con la versión (varia), si es
+   del proveedor (prov) y los de las otras versiones ("Sim: 204 g"). Sin
+   versión, txt queda vacío y `otros` los trae todos. */
+function datoDesc(x, ver){
+  if(typeof x === 'string') return { txt: x, varia: false, prov: false, otros: [] };
+  if(!x || typeof x !== 'object') return { txt: '', varia: false, prov: false, otros: [] };
+  if(typeof x.proveedor === 'string' && !x.segun) return { txt: x.proveedor, varia: false, prov: true, otros: [] };
+  const obj = o => (o && typeof o === 'object') ? Object.entries(o).filter(([, t]) => typeof t === 'string') : [];
+  const fab = obj(x.segun), prv = obj(x.proveedor);
+  const deFab = fab.find(([k]) => k === ver), deProv = !deFab && prv.find(([k]) => k === ver);
+  const suyo = deFab || deProv;
+  const otros = [...fab, ...prv].filter(([k]) => !suyo || k !== ver).map(([k, t]) => `${k}: ${t}`);
+  return { txt: suyo ? suyo[1] : '', varia: true, prov: !!deProv, otros };
+}
+
+const cuantos = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
+const MARCA_VARIA = '<span class="fi-desc-varia">según versión</span>';
+const MARCA_PROV = '<span class="fi-desc-prov">proveedor</span>';
+
+function htmlDescripcion(v){
+  const e = descripcionDe(v);
+  if(!e) return '';
+  const ver = versionDescripcion(e, v);
+  let hayProv = false;
+
+  const venta = e.venta.filter(t => typeof t === 'string' && t.trim());
+  // Un punto que cambia con la versión y no se sabe la versión no va: no se
+  // puede decir cuál es
+  const puntos = e.importante.map(p => {
+    if(!p) return '';
+    const t = datoDesc(p.titulo, ver), d = datoDesc(p.texto, ver);
+    if(!t.txt) return '';
+    const prov = t.prov || d.prov;
+    if(prov) hayProv = true;
+    return `<li><div><b>${esc(t.txt)}${t.varia || d.varia ? MARCA_VARIA : ''}${prov ? MARCA_PROV : ''}</b>${
+      d.txt ? `<span>${esc(d.txt)}</span>` : ''}</div></li>`;
+  }).filter(Boolean);
+
+  let datos = 0;
+  const grupos = e.ficha.map(g => {
+    const filas = (g && Array.isArray(g.datos) ? g.datos : []).map(r => {
+      if(!Array.isArray(r) || typeof r[0] !== 'string') return '';
+      const x = datoDesc(r[1], ver);
+      if(!x.txt && !x.otros.length) return '';
+      datos++;
+      if(x.prov) hayProv = true;
+      if(!x.varia) return `<dt>${esc(r[0])}</dt><dd>${esc(x.txt)}${x.prov ? MARCA_PROV : ''}</dd>`;
+      if(!x.txt) return `<dt>${esc(r[0])}</dt><dd>${esc(x.otros.join(' · '))}</dd>`;
+      return `<dt>${esc(r[0])}</dt><dd class="var"><b>${esc(x.txt)}</b>${x.prov ? MARCA_PROV : ''}<small>En esta versión${
+        x.prov ? ' (dato del proveedor, no del fabricante)' : ''}.${x.otros.length ? ' ' + esc(x.otros.join(' · ')) : ''}</small></dd>`;
+    }).join('');
+    return filas ? `<div class="fi-desc-sec"><h5>${esc(g.grupo || '')}</h5><dl>${filas}</dl></div>` : '';
+  }).join('');
+
+  const secs = [
+    ['por',   'Por qué elegirlo',  cuantos(venta.length, 'frase', 'frases'),
+     venta.map(t => `<p class="fi-desc-venta">${esc(t)}</p>`).join('')],
+    ['imp',   'Lo más importante', cuantos(puntos.length, 'punto', 'puntos'),
+     puntos.length ? `<ul class="fi-desc-puntos">${puntos.join('')}</ul>` : ''],
+    ['ficha', 'Ficha técnica',     cuantos(datos, 'dato', 'datos'),
+     grupos ? `<div class="fi-desc-tabla">${grupos}</div>` : '']
+  ].filter(s => s[3]);
+  if(!secs.length) return '';
+
+  const links = e.fuentes.filter(f => f && urlFoto(f.url)).map(f =>
+    `<a href="${esc(urlFoto(f.url))}" target="_blank" rel="noopener">${esc(f.texto || f.url)}</a>`).join(' · ');
+  const aviso = (e.proveedor && typeof e.proveedor.aviso === 'string' && e.proveedor.aviso) || 'dato del proveedor';
+
+  return `<section class="fi-desc" aria-label="Descripción">
+    <div class="fi-acd">${secs.map(([k, t, n, html], i) => {
+      const abierto = DESC_ABIERTO === k;
+      return `<div class="fi-acd-it">
+        <h4 class="fi-acd-h"><button type="button" class="fi-acd-b" id="fi-desc-b-${k}" data-desc="${k}"
+          aria-expanded="${abierto}" aria-controls="fi-desc-${k}"><span class="fi-acd-num" aria-hidden="true">${i + 1}</span><span>${t}</span><small>${n}</small>${ICONO_BAJAR}</button></h4>
+        <div class="fi-plg${abierto ? ' abierto' : ''}" id="fi-desc-${k}" role="region" aria-labelledby="fi-desc-b-${k}"><div class="fi-plg-in"><div class="fi-acd-c">${html}</div></div></div>
+      </div>`;
+    }).join('')}</div>
+    <p class="fi-desc-fuente">Fuente: ${links}${hayProv ? ` · <span class="prov">${ver ? `«${esc(ver)}»: ` : ''}${esc(aviso)}</span>` : ''}</p>
+  </section>`;
+}
+
+/* Abrir y cerrar SIN redibujar (así se ve la animación). De a uno: abrir un
+   renglón cierra el que estaba. Lo abierto queda en DESC_ABIERTO: cambiar de
+   versión o de color rehace los datos y no cierra lo que el cliente abrió. */
+function alternarDescripcion(d, k){
+  DESC_ABIERTO = DESC_ABIERTO === k ? '' : k;
+  d.querySelectorAll('.fi-acd-b').forEach(b => {
+    const on = b.dataset.desc === DESC_ABIERTO;
+    b.setAttribute('aria-expanded', String(on));
+    const r = d.querySelector('#fi-desc-' + b.dataset.desc);
+    if(r) r.classList.toggle('abierto', on);
+  });
+  /* Al abrir uno de abajo se cierra el de arriba y el título tocado sube: si
+     se va por encima de lo que se ve, vuelve a la vista cuando termina de
+     moverse (la muestra avisaba que "el salto puede desorientar") */
+  const b = d.querySelector(`.fi-acd-b[data-desc="${k}"]`), caja = d.querySelector('.caja');
+  if(b && caja && DESC_ABIERTO === k){
+    const quieto = !!window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setTimeout(() => {
+      if(!b.isConnected) return;
+      if(b.getBoundingClientRect().top < caja.getBoundingClientRect().top + 8)
+        b.scrollIntoView({ block: 'start', behavior: quieto ? 'auto' : 'smooth' });
+    }, quieto ? 0 : 340);
+  }
+}
+
+function engancharDescripcion(d){
+  d.querySelectorAll('.fi-acd-b').forEach(b => b.onclick = () => alternarDescripcion(d, b.dataset.desc));
+  acomodarDescripcion(d);
+}
+
+/* Celular: antes de "Estás eligiendo" (así el pie pegado la acompaña). Compu:
+   después de los botones. Es el mismo nodo, así que lo abierto sigue abierto
+   y el foco no se pierde. Corre después de cada redibujo y al cruzar 640 px. */
+function acomodarDescripcion(d){
+  const ds = d && d.querySelector('.fi-desc');
+  if(!ds) return;
+  if(FICHA_CELULAR && FICHA_CELULAR.matches){
+    const eleg = d.querySelector('#fi-elegido');
+    if(eleg && ds.nextElementSibling !== eleg) eleg.before(ds);
+  }else{
+    const bot = d.querySelector('.fi-datos .fi-botones');
+    if(bot && bot.nextElementSibling !== ds) bot.after(ds);
+  }
+}
+
+/* El archivo llegó con la ficha ya abierta: se agrega la descripción sin
+   tocar lo demás (la ficha abierta no se redibuja entera). */
+function ponerDescripcionTarde(){
+  const d = document.getElementById('ficha');
+  if(!d || !FICHA || d.querySelector('.fi-desc')) return;
+  const v = buscarProducto(FICHA), eleg = d.querySelector('#fi-elegido');
+  if(!v || !eleg) return;
+  const html = htmlDescripcion(v);
+  if(!html) return;
+  eleg.insertAdjacentHTML('beforebegin', html);
+  engancharDescripcion(d);
 }
 
 /* Retiro y garantía, justo debajo del botón. Es lo que el cliente se pregunta
@@ -10495,6 +10808,7 @@ function abrirFicha(k, historia = true){
   COLOR_ELEGIDO = !!colorDe(FICHA);
   COLOR_FICHA = colorDe(FICHA) || colorPorDefecto(v);
   TODAS_ABIERTA = false;     // "Ver las N versiones" arranca cerrada (4.3 C)
+  DESC_ABIERTO = 'por';      // la descripción entra con "Por qué elegirlo" abierto (A2, 30/09)
   if(historia !== null){ fichaEmpujada = historia === true; escribirURL(historia === true); }
 
   const d = document.createElement('div');
@@ -10548,12 +10862,16 @@ function abrirFicha(k, historia = true){
   const im = d.querySelector('.fi-foto img');
   if(im?.complete) im.classList.add('ok');
   ponerTitulo();
+  // La descripción (A2, 30/09): el archivo se pide recién ahora, con la
+  // primera ficha; si llega con esta abierta, se agrega sola
+  if(!DESCRIPCIONES) cargarDescripciones().then(ponerDescripcionTarde);
 }
 
 // Todo lo que hay que volver a atar cada vez que se redibuja el panel de datos
 function engancharFicha(d, m, v){
   engancharPedidoFicha(d, v);
   pintarSubFicha(d, v);
+  engancharDescripcion(d);     // el acordeón y su lugar (celular o compu)
   // "Ver formas de pago" abre y cierra la respuesta de PREGUNTAS (2.5 B)
   const desplegar = d.querySelector('.fi-desplegar');
   if(desplegar) desplegar.onclick = () => {
@@ -10617,15 +10935,18 @@ function guardarFocoFicha(d){
   const pinta = !!f && !!f.matches && f.matches('.fi-tono') && d.contains(f);
   // Un renglón de "Ver las N versiones" (4.3 C) vuelve al renglón elegido
   const fila = !!f && !!f.matches && f.matches('.fi-fila') && d.contains(f);
-  const otro = !!f && !eje && !pinta && !fila &&
+  // Un título de la descripción (A2, 30/09) vuelve al mismo título
+  const acd = !!f && !!f.matches && f.matches('.fi-acd-b') && d.contains(f) ? f.dataset.desc : '';
+  const otro = !!f && !eje && !pinta && !fila && !acd &&
     [...d.querySelectorAll('.fi-datos, .fi-colores')].some(x => x.contains(f));
   return () => {
-    if(!eje && !pinta && !fila && !otro) return;
+    if(!eje && !pinta && !fila && !acd && !otro) return;
     // Lo que no se rehizo ni se apagó (un link de más abajo) conserva el foco
     if(f.isConnected && !f.disabled && document.activeElement === f) return;
     const x = (eje && d.querySelector(`.fi-ops[data-eje="${CSS.escape(eje)}"] .fi-op[aria-pressed="true"]:not(:disabled)`)) ||
               (pinta && d.querySelector('.fi-tono[aria-pressed="true"]:not(:disabled)')) ||
               (fila && d.querySelector('.fi-fila[aria-pressed="true"]:not(:disabled)')) ||
+              (acd && d.querySelector(`.fi-acd-b[data-desc="${CSS.escape(acd)}"]`)) ||
               d.querySelector('.caja');
     x?.focus({preventScroll:true});
   };
@@ -10811,7 +11132,7 @@ function acomodarAvisoPedido(d){
   }
 }
 if(FICHA_CELULAR){
-  const alCruzar = () => { const d = document.getElementById('ficha'); if(d) acomodarAvisoPedido(d); };
+  const alCruzar = () => { const d = document.getElementById('ficha'); if(d){ acomodarAvisoPedido(d); acomodarDescripcion(d); } };
   if(FICHA_CELULAR.addEventListener) FICHA_CELULAR.addEventListener('change', alCruzar);
   else if(FICHA_CELULAR.addListener) FICHA_CELULAR.addListener(alCruzar);
 }

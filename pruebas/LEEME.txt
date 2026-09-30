@@ -153,6 +153,19 @@ si alguna falta).
                   de la version abierta, el mismo color al cambiar de
                   memoria (si no esta, el mas barato con stock) y el mismo
                   orden en todas las versiones.
+  decision-descripciones.js
+                  La descripcion de cada producto en la ficha (Pedro, 30/09:
+                  la A2 de muestras/descripciones-desplegables): el acordeon
+                  "Por que elegirlo / Lo mas importante / Ficha tecnica" de
+                  a uno, con "Por que elegirlo" abierto al entrar, los
+                  contadores, el dato de la version elegida resaltado, la
+                  fuente oficial chiquita y "proveedor" donde corresponde;
+                  en el celular antes del pie pegado y en la compu abajo de
+                  los botones. Y el archivo datos/descripciones.json: que
+                  cumpla el formato (codigos del maestro, sin repetidos,
+                  fuente, sin palabras comerciales), que se pida recien con
+                  la primera ficha y con tope, y que sin entrada no quede
+                  ningun hueco.
 
 COMO SE CORREN
 --------------

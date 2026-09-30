@@ -1,0 +1,565 @@
+{
+  "formato": "descripciones/1",
+  "leeme": "El formato está en datos/LEEME-descripciones.md",
+  "descripciones": [
+    {
+      "modelo": "iPhone 17 Pro",
+      "codigos": ["AT-0071", "AT-0072", "AT-0073", "AT-0535", "AT-0536", "AT-0537"],
+      "versiones": [
+        {"nombre": "Sim", "codigos": ["AT-0535", "AT-0536", "AT-0537"], "si": {"sim": "Sim"}},
+        {"nombre": "E-Sim", "codigos": ["AT-0071", "AT-0072", "AT-0073"], "si": {"sim": "E-Sim"}}
+      ],
+      "venta": [
+        "Tres cámaras de 48 MP atrás, con un teleobjetivo que llega a 8x con calidad óptica: lo que antes quedaba lejos, ahora sale nítido.",
+        "Pantalla de 6,3\" con ProMotion hasta 120 Hz y hasta 3.000 nits al sol. Cuerpo de aluminio y resistencia al agua IP68."
+      ],
+      "importante": [
+        {
+          "titulo": "Tres cámaras de 48 MP",
+          "texto": "Gran angular, ultra gran angular y teleobjetivo 4x. Zoom de hasta 8x con calidad óptica."
+        },
+        {
+          "titulo": "Chip A19 Pro",
+          "texto": "CPU de 6 núcleos, GPU de 6 núcleos y Neural Engine de 16 núcleos."
+        },
+        {
+          "titulo": "Pantalla de 6,3\"",
+          "texto": "Super Retina XDR con ProMotion hasta 120 Hz. Hasta 3.000 nits en exteriores."
+        },
+        {
+          "titulo": {"segun": {"Sim": "Hasta 31 h de video", "E-Sim": "Hasta 33 h de video"}},
+          "texto": "De reproducción. Carga rápida: hasta 50% en 20 minutos con un adaptador de 40 W o más."
+        },
+        {
+          "titulo": {"segun": {"Sim": "Chip físico y eSIM", "E-Sim": "Sólo eSIM"}},
+          "texto": {
+            "segun": {
+              "Sim": "Tiene bandeja para nano-SIM y además admite eSIM.",
+              "E-Sim": "No tiene bandeja para chip físico: usa dos eSIM activas."
+            }
+          }
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Pantalla",
+          "datos": [
+            ["Tamaño", "6,3\" (diagonal), OLED sin marco"],
+            ["Tecnología", "Super Retina XDR, ProMotion hasta 120 Hz, siempre activa, Dynamic Island"],
+            ["Resolución", "2622 x 1206 a 460 ppi"],
+            ["Brillo", "1.000 nits normal · 1.600 nits HDR · 3.000 nits en exteriores"]
+          ]
+        },
+        {
+          "grupo": "Chip",
+          "datos": [
+            ["Chip", "A19 Pro"],
+            ["CPU", "6 núcleos (2 de rendimiento y 4 de eficiencia)"],
+            ["GPU", "6 núcleos con aceleradores neurales"],
+            ["Neural Engine", "16 núcleos"]
+          ]
+        },
+        {
+          "grupo": "Cámaras",
+          "datos": [
+            ["Principal", "Fusion de 48 MP, 24 mm, ƒ/1.78, estabilización por desplazamiento del sensor"],
+            ["Ultra gran angular", "Fusion de 48 MP, 13 mm, ƒ/2.2, 120°"],
+            ["Teleobjetivo", "Fusion de 48 MP, 100 mm (4x), ƒ/2.8"],
+            ["Zoom", "8x de calidad óptica para acercar, 2x óptico para alejar, digital hasta 40x"],
+            ["Frontal", "Center Stage de 18 MP, ƒ/1.9"],
+            ["Video", "4K Dolby Vision hasta 120 fps; ProRes RAW y Apple Log 2"]
+          ]
+        },
+        {
+          "grupo": "Batería y carga",
+          "datos": [
+            ["Video", {"segun": {"Sim": "Hasta 31 horas", "E-Sim": "Hasta 33 horas"}}],
+            ["Video en streaming", {"segun": {"Sim": "Hasta 28 horas", "E-Sim": "Hasta 30 horas"}}],
+            ["Carga con cable", "Hasta 50% en 20 minutos con un adaptador de 40 W o más"],
+            ["Inalámbrica", "Hasta 25 W con cargadores MagSafe o Qi2"]
+          ]
+        },
+        {
+          "grupo": "Diseño",
+          "datos": [
+            ["Materiales", "Aluminio unibody; frente de Ceramic Shield 2"],
+            ["Agua y polvo", "IP68: hasta 6 m de profundidad durante 30 minutos"],
+            ["Medidas", "150 x 71,9 x 8,75 mm"],
+            ["Peso", {"segun": {"Sim": "204 g", "E-Sim": "206 g"}}],
+            ["Botones", "Botón de Acción y Control de la Cámara"],
+            ["Colores de Apple", "Plata, naranja cósmico y azul profundo"]
+          ]
+        },
+        {
+          "grupo": "Conectividad",
+          "datos": [
+            ["SIM", {"segun": {"Sim": "Nano-SIM y eSIM", "E-Sim": "Doble eSIM, sin SIM física"}}],
+            ["Red", "5G"],
+            ["Wi-Fi y Bluetooth", "Wi-Fi 7 · Bluetooth 6"],
+            ["USB-C", "USB 3, hasta 10 Gb/s"],
+            ["Otros", "NFC, banda ultraancha de 2.ª generación"],
+            ["Capacidades", "256 GB, 512 GB y 1 TB"],
+            ["Sistema", "iOS (se lanzó con iOS 26)"]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "support.apple.com/es-la/125090",
+          "url": "https://support.apple.com/es-la/125090"
+        },
+        {
+          "texto": "versión con nano-SIM: support.apple.com/es-es/125090",
+          "url": "https://support.apple.com/es-es/125090"
+        }
+      ],
+      "verificado": "2026-09-30",
+      "notas": "A confirmar (de la muestra del 30/09): la «Sim» del proveedor se tomó como el modelo con nano-SIM + eSIM (A3523/A3526); la fuente de esa versión es la página de Apple España."
+    },
+    {
+      "modelo": "Galaxy S26 Ultra",
+      "codigos": ["AT-0102", "AT-0103", "AT-0512"],
+      "versiones": [
+        {"nombre": "256GB", "codigos": ["AT-0103"], "si": {"memoria": "256GB"}},
+        {"nombre": "512GB", "codigos": ["AT-0512"], "si": {"memoria": "512GB"}},
+        {"nombre": "1TB", "codigos": ["AT-0102"], "si": {"memoria": "1TB"}}
+      ],
+      "venta": [
+        "Pantalla de 6,9\" con privacidad integrada: decidís si ocultar toda la pantalla, algunas apps o las notificaciones.",
+        "Cuatro cámaras atrás, con una principal de 200 MP y zoom óptico de 3x y 5x. Y el S Pen viene guardado adentro del teléfono."
+      ],
+      "importante": [
+        {
+          "titulo": "Pantalla de 6,9\"",
+          "texto": "Dynamic AMOLED 2X, 120 Hz, hasta 2.600 nits, con pantalla de privacidad integrada."
+        },
+        {
+          "titulo": "Principal de 200 MP",
+          "texto": "Cuatro cámaras. Zoom óptico 3x y 5x, calidad óptica 10x y digital hasta 100x. Video 8K."
+        },
+        {
+          "titulo": "Snapdragon 8 Elite Gen 5",
+          "texto": {
+            "segun": {
+              "256GB": "Para Galaxy. Con 12 GB de RAM.",
+              "512GB": "Para Galaxy. Con 12 GB de RAM.",
+              "1TB": "Para Galaxy. Con 16 GB de RAM."
+            }
+          }
+        },
+        {
+          "titulo": "5.000 mAh y carga de 60 W",
+          "texto": "Hasta 75% en unos 30 minutos con un cargador de 60 W. Hasta 31 h de video."
+        },
+        {"titulo": "S Pen incorporado", "texto": "Se guarda adentro del teléfono."}
+      ],
+      "ficha": [
+        {
+          "grupo": "Pantalla",
+          "datos": [
+            ["Tamaño", "6,9\" (rectángulo completo); 6,7\" con las esquinas redondeadas"],
+            ["Tipo", "Dynamic AMOLED 2X"],
+            ["Resolución", "3120 x 1440 (Quad HD+)"],
+            ["Frecuencia", "120 Hz adaptativa (1 a 120 Hz)"],
+            ["Brillo máximo", "2.600 nits"],
+            ["Privacidad", "Pantalla de privacidad integrada"]
+          ]
+        },
+        {
+          "grupo": "Rendimiento",
+          "datos": [
+            ["Procesador", "Snapdragon 8 Elite Gen 5 para Galaxy (8 núcleos, 4,74 GHz y 3,6 GHz)"],
+            ["RAM", {"segun": {"256GB": "12 GB", "512GB": "12 GB", "1TB": "16 GB"}}],
+            ["Memorias", "256 GB, 512 GB y 1 TB"]
+          ]
+        },
+        {
+          "grupo": "Cámaras",
+          "datos": [
+            ["Gran angular", "200 MP, f/1.4"],
+            ["Ultra gran angular", "50 MP, f/1.9"],
+            ["Teleobjetivo 5x", "50 MP, f/2.9"],
+            ["Teleobjetivo 3x", "10 MP, f/2.4"],
+            ["Zoom", "Óptico 3x y 5x · calidad óptica 2x y 10x · digital hasta 100x"],
+            ["Frontal", "12 MP"],
+            ["Video", "8K (7680 x 4320) a 30 fps"]
+          ]
+        },
+        {
+          "grupo": "Batería y carga",
+          "datos": [
+            ["Batería", "5.000 mAh (típica)"],
+            ["Video", "Hasta 31 horas"],
+            ["Carga con cable", "60 W: hasta 75% en unos 30 minutos con cargador de 60 W"],
+            ["Inalámbrica", "Carga inalámbrica rápida y Wireless PowerShare"]
+          ]
+        },
+        {
+          "grupo": "Diseño",
+          "datos": [
+            ["Medidas", "163,6 x 78,1 x 7,9 mm"],
+            ["Peso", "214 g"],
+            ["Agua y polvo", "IP68: hasta 1,5 m de agua dulce durante 30 minutos"],
+            ["Materiales", "Marco de Armor Aluminum; Gorilla Armor 2 adelante y Gorilla Glass Victus 2 atrás"],
+            ["S Pen", "Incorporado"],
+            ["Colores de Samsung", "Cobalt Violet, Sky Blue, Black y White"]
+          ]
+        },
+        {
+          "grupo": "Conectividad y sistema",
+          "datos": [
+            ["Red", "5G"],
+            ["SIM", "Nano-SIM y eSIM"],
+            ["Wi-Fi y Bluetooth", "Wi-Fi 7 · Bluetooth 6.0"],
+            ["USB", "USB-C 3.2 Gen 1"],
+            ["Otros", "NFC y UWB"],
+            ["Sistema", "Android 16 con One UI 8.5"],
+            ["Actualizaciones de seguridad", "Hasta el 28/02/2033, según Samsung"]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "samsung.com/ar/…/galaxy-s26-ultra/specs",
+          "url": "https://www.samsung.com/ar/smartphones/galaxy-s26-ultra/specs/"
+        },
+        {
+          "texto": "samsung.com/ar/…/galaxy-s26-ultra",
+          "url": "https://www.samsung.com/ar/smartphones/galaxy-s26-ultra/"
+        },
+        {
+          "texto": "news.samsung.com",
+          "url": "https://news.samsung.com/global/samsung-unveils-galaxy-s26-series-the-most-intuitive-galaxy-ai-phone-yet"
+        }
+      ],
+      "verificado": "2026-09-30"
+    },
+    {
+      "modelo": "MacBook Neo",
+      "codigos": ["AT-0432", "AT-0433", "AT-0434"],
+      "versiones": [
+        {"nombre": "256GB", "codigos": ["AT-0432", "AT-0433"], "si": {"memoria": "256GB"}},
+        {"nombre": "512GB", "codigos": ["AT-0434"], "si": {"memoria": "512GB"}}
+      ],
+      "venta": [
+        "Una Mac liviana, de 1,23 kg, con chip A18 Pro y pantalla Liquid Retina de 13 pulgadas.",
+        "Hasta 16 horas de video en streaming, y como no tiene ventilador, trabaja en silencio."
+      ],
+      "importante": [
+        {
+          "titulo": "Chip A18 Pro",
+          "texto": "CPU de 6 núcleos, GPU de 5 núcleos y Neural Engine de 16 núcleos. 8 GB de memoria unificada."
+        },
+        {
+          "titulo": "Pantalla Liquid Retina de 13\"",
+          "texto": "2408 x 1506 a 219 ppi, 500 nits y mil millones de colores."
+        },
+        {
+          "titulo": "Hasta 16 h de batería",
+          "texto": "De video en streaming. Navegando por Wi-Fi, hasta 11 horas."
+        },
+        {"titulo": "1,23 kg, sin ventilador", "texto": "1,27 cm de alto. Trabaja en silencio."},
+        {
+          "titulo": {"segun": {"256GB": "Sin Touch ID", "512GB": "Con Touch ID"}},
+          "texto": {
+            "segun": {
+              "256GB": "El de 256 GB trae Magic Keyboard sin Touch ID.",
+              "512GB": "El de 512 GB trae Magic Keyboard con Touch ID: desbloqueás e iniciás sesión con un toque."
+            }
+          }
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Pantalla",
+          "datos": [
+            ["Tamaño", "13\" (diagonal), Liquid Retina, LED con tecnología IPS"],
+            ["Resolución", "2408 x 1506 a 219 ppi"],
+            ["Brillo", "500 nits"],
+            ["Color", "Mil millones de colores, sRGB"]
+          ]
+        },
+        {
+          "grupo": "Rendimiento",
+          "datos": [
+            ["Chip", "A18 Pro"],
+            ["CPU", "6 núcleos (2 de rendimiento y 4 de eficiencia)"],
+            ["GPU", "5 núcleos, ray tracing por hardware"],
+            ["Neural Engine", "16 núcleos"],
+            ["Memoria", "8 GB unificada"],
+            ["Almacenamiento", {"segun": {"256GB": "256 GB SSD", "512GB": "512 GB SSD"}}]
+          ]
+        },
+        {
+          "grupo": "Batería",
+          "datos": [
+            ["Video en streaming", "Hasta 16 horas"],
+            ["Navegación web", "Hasta 11 horas"],
+            ["Batería", "36,5 Wh"],
+            ["Cargador en la caja", "Adaptador USB-C de 20 W y cable USB-C de 1,5 m"]
+          ]
+        },
+        {
+          "grupo": "Teclado, cámara y audio",
+          "datos": [
+            ["Teclado", {"segun": {"256GB": "Magic Keyboard, sin Touch ID", "512GB": "Magic Keyboard con Touch ID"}}],
+            ["Cámara", "FaceTime HD 1080p"],
+            ["Parlantes", "Dos, con Audio Espacial (Dolby Atmos)"],
+            ["Micrófonos", "Dos, con beamforming direccional"]
+          ]
+        },
+        {
+          "grupo": "Diseño y puertos",
+          "datos": [
+            ["Peso", "1,23 kg"],
+            ["Medidas", "1,27 x 29,75 x 20,64 cm"],
+            ["Puertos", "1 USB-C USB 3 (10 Gb/s, DisplayPort) · 1 USB-C USB 2 (480 Mb/s) · auriculares 3,5 mm"],
+            ["Monitor externo", "Uno, hasta 4K a 60 Hz"],
+            ["Ventilador", "No tiene"],
+            ["Colores de Apple", "Plata, rosa rubor, amarillo cítrico e índigo"]
+          ]
+        },
+        {
+          "grupo": "Conectividad y sistema",
+          "datos": [
+            ["Wi-Fi y Bluetooth", "Wi-Fi 6E · Bluetooth 6"],
+            ["Sistema", "macOS (se lanzó con macOS Tahoe)"]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "apple.com/la/macbook-neo/specs",
+          "url": "https://www.apple.com/la/macbook-neo/specs/"
+        },
+        {
+          "texto": "apple.com/newsroom",
+          "url": "https://www.apple.com/newsroom/2026/03/say-hello-to-macbook-neo/"
+        }
+      ],
+      "verificado": "2026-09-30"
+    },
+    {
+      "modelo": "Sigma 17-40mm F1.8 DC Art",
+      "codigos": ["AT-0316", "AT-0317"],
+      "versiones": [
+        {"nombre": "Sony E", "codigos": ["AT-0317"], "si": {"montura": "Sony E"}},
+        {"nombre": "Canon RF", "codigos": ["AT-0316"], "si": {"montura": "Canon RF"}}
+      ],
+      "venta": [
+        "Un zoom que mantiene F1.8 de 17 a 40 mm: rinde con poca luz, adentro o de noche, y desenfoca bien el fondo.",
+        "Hecho para mirrorless APS-C y pensado para viaje, día a día y video. El zoom es interno: no cambia de largo al hacer zoom ni al enfocar."
+      ],
+      "importante": [
+        {
+          "titulo": "F1.8 en todo el zoom",
+          "texto": "La misma apertura de 17 a 40 mm: sirve con poca luz y para desenfocar el fondo."
+        },
+        {
+          "titulo": {"segun": {"Sony E": "Equivale a 25,5-60 mm", "Canon RF": "Equivale a 27,2-64 mm"}},
+          "texto": {
+            "segun": {
+              "Sony E": "En formato 35 mm. Es un lente para cámaras APS-C.",
+              "Canon RF": "Aproximado, en formato 35 mm. Es un lente para cámaras APS-C."
+            }
+          }
+        },
+        {
+          "titulo": "Enfoque rápido y silencioso",
+          "texto": "Motor lineal HLA. Sirve para foto y para video con gimbal o vlog."
+        },
+        {
+          "titulo": "Resiste polvo y salpicaduras",
+          "texto": "El frente repele agua y aceite. No es sumergible."
+        },
+        {
+          "titulo": {"segun": {"Sony E": "Pesa 525 g", "Canon RF": "Pesa 560 g"}},
+          "texto": {
+            "segun": {
+              "Sony E": "Con anillo de apertura, clic desactivable para video y traba.",
+              "Canon RF": "En Canon RF trae anillo de control en lugar de anillo de apertura."
+            }
+          }
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Óptica",
+          "datos": [
+            ["Distancia focal", "17-40 mm"],
+            ["Equivalente en 35 mm", {"segun": {"Sony E": "25,5-60 mm", "Canon RF": "Aprox. 27,2-64 mm"}}],
+            ["Formato", "APS-C (DC), para cámaras mirrorless"],
+            ["Apertura", "F1.8 constante; mínima F16"],
+            ["Construcción", "17 elementos en 11 grupos (4 SLD y 4 asféricos)"],
+            ["Ángulo de visión", {"segun": {"Sony E": "79,7° a 39,1°", "Canon RF": "76,5° a 37,1°"}}],
+            ["Diafragma", "11 hojas, redondeado"],
+            ["Enfoque mínimo", "28 cm"],
+            ["Ampliación máxima", "1:4,8 (a 40 mm)"]
+          ]
+        },
+        {
+          "grupo": "Enfoque y controles",
+          "datos": [
+            ["Motor de enfoque", "HLA (actuador lineal)"],
+            ["Zoom", "Interno: el largo no cambia al hacer zoom ni al enfocar"],
+            ["Anillo", {"segun": {"Sony E": "De apertura, con clic desactivable y traba", "Canon RF": "De control (sin anillo de apertura)"}}]
+          ]
+        },
+        {
+          "grupo": "Construcción",
+          "datos": [
+            ["Resistencia", "Polvo y salpicaduras; frente con recubrimiento que repele agua y aceite (no es sumergible)"],
+            ["Filtro", "67 mm"],
+            ["Medidas", {"segun": {"Sony E": "72,9 x 117,9 mm", "Canon RF": "72,9 x 115,9 mm"}}],
+            ["Peso", {"segun": {"Sony E": "525 g", "Canon RF": "560 g"}}],
+            ["Monturas del modelo", "L, Canon RF, Fujifilm X y Sony E"],
+            ["Accesorios de Sigma", "Funda, parasol LH728-02, tapa delantera y tapa trasera"]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "sigma-global.com/en/lenses/a025_17_40_18",
+          "url": "https://www.sigma-global.com/en/lenses/a025_17_40_18/"
+        },
+        {"texto": "sigmaphoto.com", "url": "https://www.sigmaphoto.com/17-40mm-f1-8-dc-a"}
+      ],
+      "verificado": "2026-09-30"
+    },
+    {
+      "modelo": "DJI Mini 5 Pro",
+      "codigos": ["AT-0208", "AT-0209", "AT-0210", "AT-0211"],
+      "versiones": [
+        {"nombre": "RC-N3", "codigos": ["AT-0211"], "si": {"texto": ["rc-n3"]}},
+        {"nombre": "4 baterías", "codigos": ["AT-0208"], "si": {"texto": ["4 bat"]}},
+        {
+          "nombre": "RC 2 + Combo More Fly",
+          "codigos": ["AT-0209"],
+          "si": {"texto": ["more fly"], "sin": ["plus"]}
+        },
+        {
+          "nombre": "RC 2 + Combo More Fly Plus",
+          "codigos": ["AT-0210"],
+          "si": {"texto": ["more fly plus"]}
+        }
+      ],
+      "venta": [
+        "Un drone chico con cámara de sensor de 1 pulgada y 50 MP: fotos y video 4K con detalle, aun con poca luz.",
+        "Detecta obstáculos para todos lados, con LiDAR adelante, y el gimbal gira para filmar en vertical. Hasta 36 minutos por batería, 52 con la batería Plus."
+      ],
+      "importante": [
+        {
+          "titulo": "Sensor de 1\" y 50 MP",
+          "texto": "Lente de 24 mm, f/1.8. Fotos de hasta 8192 x 6144, también en RAW."
+        },
+        {
+          "titulo": "Video 4K hasta 120 fps",
+          "texto": "HDR en 4K a 60 fps y color de 10 bits (D-Log M y HLG)."
+        },
+        {
+          "titulo": "Hasta 36 min de vuelo",
+          "texto": "Con la batería estándar. Con la batería Plus, hasta 52 minutos."
+        },
+        {
+          "titulo": "Esquiva obstáculos",
+          "texto": "Visión en todas direcciones, LiDAR adelante e infrarrojo abajo. También de noche."
+        },
+        {
+          "titulo": {
+            "segun": {
+              "RC-N3": "Control RC-N3",
+              "RC 2 + Combo More Fly": "Control DJI RC 2",
+              "RC 2 + Combo More Fly Plus": "Control DJI RC 2"
+            },
+            "proveedor": {"4 baterías": "Control remoto con pantalla"}
+          },
+          "texto": {
+            "segun": {
+              "RC-N3": "Usás tu celular como pantalla.",
+              "RC 2 + Combo More Fly": "Con pantalla propia de 5,5\", 1080p y 700 nits.",
+              "RC 2 + Combo More Fly Plus": "Con pantalla propia de 5,5\", 1080p y 700 nits."
+            },
+            "proveedor": {"4 baterías": "Viene con control remoto con pantalla (dato del proveedor)."}
+          }
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Cámara",
+          "datos": [
+            ["Sensor", "CMOS de 1\", 50 MP efectivos"],
+            ["Lente", "24 mm equivalente, f/1.8, 84°; enfoque de 0,5 m a infinito"],
+            ["Foto", "Hasta 8192 x 6144; JPEG y RAW (DNG)"],
+            ["Video", "4K hasta 120 fps (cámara lenta) · Full HD hasta 240 fps"],
+            ["HDR", "4K a 60 fps, hasta 14 pasos de rango dinámico"],
+            ["Color", "10 bits en Normal, HLG y D-Log M"],
+            ["Zoom", "Modo Med-Tele de 48 mm (2x)"]
+          ]
+        },
+        {
+          "grupo": "Gimbal",
+          "datos": [
+            ["Estabilización", "Mecánica de 3 ejes"],
+            ["Inclinación", "−90° a 55° (toma hacia arriba)"],
+            ["Rotación", "−180° a 45°: 225° en total, filma en vertical"]
+          ]
+        },
+        {
+          "grupo": "Vuelo",
+          "datos": [
+            ["Peso", "Aprox. 249,9 g con la batería estándar; con la batería Plus supera los 249 g"],
+            ["Tiempo de vuelo", "Hasta 36 min (batería estándar) · hasta 52 min (batería Plus)"],
+            ["Velocidad máxima", "18 m/s (19 m/s con la batería Plus)"],
+            ["Viento", "Resiste hasta 12 m/s"],
+            ["Obstáculos", "Visión omnidireccional binocular, LiDAR adelante e infrarrojo abajo"],
+            ["Funciones", "ActiveTrack 360°, MasterShots, QuickShots, Timelapse y Panorámica"]
+          ]
+        },
+        {
+          "grupo": "Transmisión y memoria",
+          "datos": [
+            ["Transmisión", "O4+, video en vivo 1080p a 30 o 60 fps"],
+            ["Alcance", "Hasta 20 km (FCC) · 10 km (CE)"],
+            ["Memoria interna", "42 GB, más ranura microSD"]
+          ]
+        },
+        {
+          "grupo": "Qué trae",
+          "datos": [
+            [
+              "En la caja",
+              {
+                "segun": {
+                  "RC-N3": "Drone, control RC-N3, 1 batería, funda, hélices de repuesto y cables",
+                  "RC 2 + Combo More Fly": "Drone, control DJI RC 2, 3 baterías, centro de carga, filtros ND, 3 pares de hélices y bolso",
+                  "RC 2 + Combo More Fly Plus": "Drone, control DJI RC 2, 3 baterías Plus, centro de carga, filtros ND, 3 pares de hélices y bolso"
+                },
+                "proveedor": {
+                  "4 baterías": "Trae el dron, el control remoto con pantalla y un total de cuatro baterías inteligentes, junto con accesorios de carga y traslado"
+                }
+              }
+            ],
+            ["Normas", "DJI pide revisar las normas locales de registro antes de volar"]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "dji.com/mx/mini-5-pro/specs",
+          "url": "https://www.dji.com/mx/mini-5-pro/specs"
+        },
+        {"texto": "dji.com/mx/mini-5-pro", "url": "https://www.dji.com/mx/mini-5-pro"},
+        {
+          "texto": "packs: store.dji.com/es",
+          "url": "https://store.dji.com/es/product/dji-mini-5-pro?set_region=ES"
+        }
+      ],
+      "proveedor": {
+        "fuente": "Pedro, del proveedor (30/09/2026). No es un pack oficial de DJI.",
+        "aviso": "lo que trae es dato del proveedor"
+      },
+      "verificado": "2026-09-30",
+      "notas": "La versión «4 baterías» no es un pack de DJI: lo que trae lo pasó Pedro del proveedor (30/09/2026)."
+    }
+  ]
+}

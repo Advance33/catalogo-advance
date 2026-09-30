@@ -558,12 +558,12 @@ async function correrPruebas(){
          && (a.closest('.fi-ops')?.dataset.eje || '') === eje,
          '[88] con el foco en la pestaña marcada, un refresco con cambios lo deja en ella',
          a ? (a.id || a.className || a.tagName) : 'nada');
-      const pinta = d.querySelector('.fi-pintas button[aria-pressed="true"]');
+      const pinta = d.querySelector('.fi-tono[aria-pressed="true"]');
       if(pinta){
         pinta.focus();
         await actualizar(false);
         const b = document.activeElement;
-        ok(b && b.matches('.fi-pintas button[aria-pressed="true"]') && d.contains(b),
+        ok(b && b.matches('.fi-tono[aria-pressed="true"]') && d.contains(b),
            '[88] y con el foco en el puntito elegido, en el puntito', b ? (b.id || b.className || b.tagName) : 'nada');
       }
       const ped = d.querySelector('#fi-pedido');
@@ -598,7 +598,7 @@ async function correrPruebas(){
       ok(FUENTE.fuente === 'copia' && FICHA === k && !!d
          && !/ya no está/.test((d.querySelector('.fi-botones') || {}).textContent || '')
          && !!d.querySelector('.fi-botones .cta') && !!precio && precio.style.display !== 'none'
-         && !d.querySelector('.fi-pintas button:disabled, .fi-op:disabled'),
+         && !d.querySelector('.fi-tono:disabled, .fi-op:disabled'),
          'con el respaldo, la ficha de algo que la copia no tiene no dice "ya no esta" ni pierde el WhatsApp',
          k + ' · ' + FUENTE.fuente);
       await actualizar(false);

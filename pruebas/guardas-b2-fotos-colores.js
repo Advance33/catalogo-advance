@@ -159,16 +159,21 @@ async function fotoDelUltimoToque(){
     await conFotoLentaB2(a.u, async () => {
       abrirFicha(clave(v), null);
       await dormirB2(200);
-      const boton = n => [...document.querySelectorAll('#ficha .fi-pintas button')].find(x => x.dataset.color === n);
+      const boton = n => [...document.querySelectorAll('#ficha .fi-tono')].find(x => x.dataset.color === n);
       boton(a.c.nombre)?.click();
       await dormirB2(30);
       boton(b.c.nombre)?.click();
       await dormirB2(DEMORA_B2 + 900);
     });
-    const marcado = [...document.querySelectorAll('#ficha .fi-pintas button')]
+    const marcado = [...document.querySelectorAll('#ficha .fi-tono')]
                       .find(x => x.getAttribute('aria-pressed') === 'true');
-    const texto = document.querySelector('#fi-color-txt')?.textContent || '';
-    ok(fotoFichaB2() === b.u && marcado && marcado.dataset.color === b.c.nombre && texto.includes(b.c.nombre),
+    /* 30/09 (vitrina, opcion C): con un nombre de dos partes el renglon dice
+       solo la que cambia ("Black Ocean Band" de "Black – Black Ocean Band");
+       el color entero va en data-color */
+    const nomB2 = document.querySelector('#fi-color-txt');
+    const texto = nomB2?.textContent || '';
+    ok(fotoFichaB2() === b.u && marcado && marcado.dataset.color === b.c.nombre &&
+       nomB2?.dataset.color === b.c.nombre && b.c.nombre.includes(texto.trim()),
        '[38] dos colores tocados rapido: la foto, el puntito y el nombre son del segundo',
        v.id + ': ' + a.c.nombre + ' (lenta) y ' + b.c.nombre + ' -> foto ' + archivoB2(fotoFichaB2())
          + ', marcado ' + (marcado ? marcado.dataset.color : '-') + ', dice "' + texto + '"');
@@ -209,7 +214,7 @@ async function fotoDelUltimoToque(){
     await conFotoLentaB2(a.u, async () => {
       abrirFicha(clave(v), null);
       await dormirB2(200);
-      [...document.querySelectorAll('#ficha .fi-pintas button')].find(x => x.dataset.color === a.c.nombre)?.click();
+      [...document.querySelectorAll('#ficha .fi-tono')].find(x => x.dataset.color === a.c.nombre)?.click();
       await dormirB2(30);
       const op = [...document.querySelectorAll('#ficha .fi-op')].find(bt => {
         const grupo = m.variantes.filter(x => x.opcion === bt.dataset.op);

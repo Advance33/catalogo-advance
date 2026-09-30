@@ -1,6 +1,7 @@
 // La ficha de producto (21/09). Pedro la armó eligiendo de a una cosa, igual
-// que la tarjeta: la foto sin caja con los colores en tira a la derecha,
-// apagados menos el elegido y con el nombre debajo; memoria y versión como
+// que la tarjeta: la foto sin caja con los colores debajo (desde el 30/09 la
+// vitrina de fotos, opcion C de la muestra de los colores; antes una tira a
+// la derecha, apagados menos el elegido); memoria y versión como
 // pestañas con el rótulo a la izquierda; el precio en etiqueta oscura; y una
 // franja oscura que cruza la ficha con el envío. Esta tanda fija esas
 // elecciones, para que un cambio de otro lado no las desarme sin que nadie se
@@ -153,10 +154,15 @@ function correrPruebas(){
   ok(d.querySelectorAll('.fi-envio').length === 1, 'y una sola vez');
   cerrarFicha();
 
-  /* ---- 4. Los colores, en tira al costado de la foto ----
+  /* ---- 4. Los colores, en la vitrina debajo de la foto ----
      Que "hoy no hay ninguna" no puede ser la salida facil: si la planilla dice
-     que este modelo tiene varios colores, la ficha TIENE que mostrar la tira.
-     Sin esto, borrar la tira entera hacia que esta parte se saltara sola. */
+     que este modelo tiene varios colores, la ficha TIENE que mostrar la
+     vitrina. Sin esto, borrarla entera hacia que esta parte se saltara sola.
+     30/09: hasta hoy aca se pedia la tira del 21/09 (en vertical, al costado
+     de la foto, con los no elegidos en gris). Pedro eligio la vitrina de
+     fotos (muestra de los colores, opcion C): una fila horizontal DEBAJO de
+     la foto, todas a color, y en gris solo lo agotado. Se cambio lo que se
+     mide; lo demas de la opcion C lo cuida decision-colores.js. */
   /* Ojo con como se cuentan: preguntarle a coloresFicha() cuantos colores
      hay es repetir la cuenta que se quiere verificar, y si esa funcion
      devuelve cero la prueba se salta sola. Se cuenta de la planilla: una
@@ -170,7 +176,7 @@ function correrPruebas(){
   let conColores = null, cualquiera = null;
   for(const m of deberian){
     abrirFicha(clave(m.rep), null);
-    const bs = [...document.querySelectorAll('#ficha .fi-pintas button')];
+    const bs = [...document.querySelectorAll('#ficha .fi-tono')];
     const unaSola = bs.length >= 2 && new Set(bs.map(b => b.dataset.k)).size === 1;
     cerrarFicha();
     if(bs.length >= 2 && !cualquiera) cualquiera = m;
@@ -178,41 +184,45 @@ function correrPruebas(){
   }
   conColores = conColores || cualquiera;
   ok(!deberian.length || !!conColores,
-     'las fichas de varios colores muestran la tira',
+     'las fichas de varios colores muestran la vitrina',
      deberian.length + ' modelo(s) con varios colores en la planilla');
   if(!conColores){
     R.push('  --  hoy ninguna ficha tiene dos colores para elegir');
   }else{
     abrirFicha(clave(conColores.rep), null);
     d = document.getElementById('ficha');
-    const tira = d.querySelector('.fi-pintas');
-    const botones = [...tira.querySelectorAll('button')];
+    const tira = d.querySelector('.fi-vitrina');
+    const botones = [...tira.querySelectorAll('.fi-tono')];
     ok(tira.closest('.fi-foto') === d.querySelector('.fi-foto'),
-       'la tira de colores cuelga de la foto, no de la columna de datos', conColores.desc);
-    ok(estilo(tira, 'position') === 'absolute' && estilo(tira, 'flex-direction') === 'column',
-       'va en vertical, al costado', estilo(tira, 'position') + ' / ' + estilo(tira, 'flex-direction'));
-    // A la derecha: el borde izquierdo de la tira pasa del medio de la foto
-    const rf = d.querySelector('.fi-foto').getBoundingClientRect();
+       'la vitrina de colores cuelga de la foto, no de la columna de datos', conColores.desc);
+    ok(estilo(tira, 'position') !== 'absolute' && estilo(tira, 'flex-direction') === 'row' &&
+       estilo(tira, 'flex-wrap') === 'nowrap' && estilo(tira, 'overflow-x') === 'auto',
+       'va en una fila que se desliza de costado',
+       estilo(tira, 'position') + ' / ' + estilo(tira, 'flex-direction') + ' / ' + estilo(tira, 'overflow-x'));
+    // Debajo: arranca donde termina la foto
+    const rm = d.querySelector('.fi-marco').getBoundingClientRect();
     const rt = tira.getBoundingClientRect();
-    ok(rt.left > rf.left + rf.width / 2, 'y a la derecha de la foto',
-       Math.round(rt.left) + ' > ' + Math.round(rf.left + rf.width / 2));
+    ok(rt.top >= rm.bottom - 1, 'y debajo de la foto', Math.round(rt.top) + ' >= ' + Math.round(rm.bottom));
 
     // Puede abrir sin color elegido (nadie lo toco todavia): se elige uno
     if(!botones.some(b => b.getAttribute('aria-pressed') === 'true')) botones[0].click();
     terminarTransiciones();
-    const vivos = [...document.querySelectorAll('#ficha .fi-pintas button')];
+    const vivos = [...document.querySelectorAll('#ficha .fi-tono')];
     const elegido = vivos.find(b => b.getAttribute('aria-pressed') === 'true');
     const otro = vivos.find(b => b !== elegido);
     ok(!!elegido && !!otro, 'hay un color elegido y otros para elegir',
        vivos.map(b => b.dataset.color).join(' / '));
-    ok(estilo(elegido, 'filter') === 'none' && parseFloat(estilo(elegido, 'opacity')) === 1,
-       'el color elegido se ve a color', estilo(elegido, 'filter'));
-    ok(/grayscale/.test(estilo(otro, 'filter')) && parseFloat(estilo(otro, 'opacity')) < 1,
-       'y los demas, apagados', estilo(otro, 'filter') + ' / ' + estilo(otro, 'opacity'));
+    const foto = b => b.querySelector('.ph, .sw');
+    const aColor = b => b.classList.contains('agotada') ||
+      (estilo(foto(b), 'filter') === 'none' && parseFloat(estilo(foto(b), 'opacity')) === 1);
+    ok(!!foto(elegido) && aColor(elegido), 'el color elegido se ve a color', estilo(foto(elegido), 'filter'));
+    ok(!!foto(otro) && aColor(otro),
+       'y los demas tambien (en gris va solo lo agotado, no lo que no elegiste)',
+       otro.dataset.color + ': ' + estilo(foto(otro), 'filter') + ' / ' + estilo(foto(otro), 'opacity'));
 
     const nom = d.querySelector('#fi-color-txt');
     ok(!!nom && nom.closest('.fi-foto') === d.querySelector('.fi-foto'),
-       'el nombre del color va debajo de la foto');
+       'el nombre del color va debajo de la foto, arriba de la vitrina');
     ok(nom && nom.getBoundingClientRect().top > d.querySelector('.fi-marco').getBoundingClientRect().top,
        'debajo y no encima');
 
@@ -220,12 +230,16 @@ function correrPruebas(){
     otro.click();
     terminarTransiciones();
     d = document.getElementById('ficha');
-    const ahora = [...d.querySelectorAll('.fi-pintas button')]
+    const ahora = [...d.querySelectorAll('.fi-tono')]
                     .find(b => b.dataset.color === otro.dataset.color);
     ok(ahora && ahora.getAttribute('aria-pressed') === 'true',
        'tocar un color lo deja marcado', otro.dataset.color);
-    ok(d.querySelector('#fi-color-txt').textContent.trim() === otro.dataset.color,
-       'y el nombre de abajo lo dice', d.querySelector('#fi-color-txt').textContent.trim());
+    /* El nombre es el de ese color, o su parte que cambia si es de dos partes
+       ("Black – Black Ocean Band" dice "Black Ocean Band"): un pedazo del
+       nombre entero, sin palabras que no tenga */
+    const dice = d.querySelector('#fi-color-txt');
+    ok(dice && dice.dataset.color === otro.dataset.color && otro.dataset.color.includes(dice.textContent.trim()),
+       'y el nombre de abajo lo dice', dice && dice.textContent.trim());
     ok(COLOR_FICHA === otro.dataset.color, 'y queda elegido para el pedido', COLOR_FICHA);
     cerrarFicha();
 
@@ -242,10 +256,10 @@ function correrPruebas(){
     abrirFicha(clave(conColores.rep), null);
     d = document.getElementById('ficha');
     const fila = buscarProducto(FICHA);
-    const nomAntes = d.querySelector('#fi-color-txt').textContent.trim();
+    const nomAntes = d.querySelector('#fi-color-txt').dataset.color;
     /* Uno DISTINTO del que ya dice el nombre: si se prueba con el mismo, la
        ficha ya lo mostraba antes de llamar a nada y la prueba pasa sola. */
-    const suyo = [...d.querySelectorAll('.fi-pintas button')]
+    const suyo = [...d.querySelectorAll('.fi-tono')]
                    .map(b => b.dataset.color).find(c => c && c !== nomAntes);
     if(!suyo){
       R.push('  --  la ficha abierta tiene un solo color: no se prueba el camino corto');
@@ -254,12 +268,13 @@ function correrPruebas(){
       elegirColorFicha(d, fila, suyo);
       ok(COLOR_FICHA === suyo, 'elegir un color de la misma fila lo deja elegido para el pedido',
          fila.id + ' / ' + nomAntes + ' -> ' + COLOR_FICHA);
-      ok(d.querySelector('#fi-color-txt').textContent.trim() === suyo,
+      const dice = d.querySelector('#fi-color-txt');
+      ok(dice.dataset.color === suyo && suyo.includes(dice.textContent.trim()),
          'y el nombre debajo de la foto lo dice',
-         nomAntes + ' -> ' + d.querySelector('#fi-color-txt').textContent.trim());
-      const marcado = [...d.querySelectorAll('.fi-pintas button')]
+         nomAntes + ' -> ' + dice.textContent.trim());
+      const marcado = [...d.querySelectorAll('.fi-tono')]
                         .find(b => b.getAttribute('aria-pressed') === 'true');
-      ok(marcado && marcado.dataset.color === suyo, 'y queda marcado en la tira',
+      ok(marcado && marcado.dataset.color === suyo, 'y queda marcado en la vitrina',
          marcado && marcado.dataset.color);
       const ahoraWA = (d.querySelector('.fi-botones .cta') || {}).href || '';
       ok(!antesWA || (ahoraWA !== antesWA && decodeURIComponent(ahoraWA).includes(suyo)),
@@ -349,13 +364,13 @@ function correrPruebas(){
     cerrarFicha();
   }
 
-  /* ---- 6. Cambiar de version redibuja la tira ----
-     La tira cuelga de la foto, no de .fi-datos: si no se redibuja aparte queda
+  /* ---- 6. Cambiar de version redibuja la vitrina ----
+     La vitrina cuelga de la foto, no de .fi-datos: si no se redibuja aparte queda
      mostrando los colores y los precios de la version anterior. */
   const conAmbos = MODELOS.find(m => {
     if(!m.multi || !conPestanas(m)) return false;
     abrirFicha(clave(m.rep), null);
-    const hay = document.querySelectorAll('#ficha .fi-pintas button').length >= 2 &&
+    const hay = document.querySelectorAll('#ficha .fi-tono').length >= 2 &&
                 document.querySelectorAll('#ficha .fi-op').length >= 2;
     cerrarFicha();
     return hay;
@@ -365,14 +380,14 @@ function correrPruebas(){
   }else{
     abrirFicha(clave(conAmbos.rep), null);
     d = document.getElementById('ficha');
-    const antes = todos('#ficha .fi-pintas button').map(b => b.dataset.k).join(',');
+    const antes = todos('#ficha .fi-tono').map(b => b.dataset.k).join(',');
     const otra = todos('#ficha .fi-op').find(b => b.getAttribute('aria-pressed') !== 'true');
     otra.click();
-    const despues = todos('#ficha .fi-pintas button').map(b => b.dataset.k).join(',');
+    const despues = todos('#ficha .fi-tono').map(b => b.dataset.k).join(',');
     const suyos = new Set((buscarModelo(FICHA).variantes || []).map(clave));
-    ok(todos('#ficha .fi-pintas button').every(b => suyos.has(b.dataset.k)),
+    ok(todos('#ficha .fi-tono').every(b => suyos.has(b.dataset.k)),
        'al cambiar de version la tira sigue siendo del mismo modelo', conAmbos.desc);
-    ok(todos('#ficha .fi-pintas').length === 1 && todos('#ficha .fi-colores').length === 1,
+    ok(todos('#ficha .fi-vitrina').length === 1 && todos('#ficha .fi-colores').length === 1,
        'y no se duplica');
     R.push('  --  ' + conAmbos.desc + ': ' + (antes === despues ? 'la tira no cambio' : 'la tira se redibujo'));
     cerrarFicha();
@@ -530,14 +545,15 @@ function probarFotoDeColor(listo){
     const d = document.getElementById('ficha');
     const img = d.querySelector('.fi-marco img');
     const antes = img && img.getAttribute('src');
-    const boton = [...d.querySelectorAll('.fi-pintas button')]
+    const boton = [...d.querySelectorAll('.fi-tono')]
                     .find(b => b.dataset.color === caso.color);
     if(!boton){
       R.push('  --  ' + caso.v.id + ': el color ' + caso.color + ' no salio en la tira');
       return listo();
     }
-    // La tira muestra la foto de cada color cuando la hay
-    ok(/url\(/.test(boton.getAttribute('style') || ''),
+    // La vitrina muestra la foto de cada color cuando la hay (30/09: en la
+    // fotito de adentro del boton, .ph, y no en el boton como la tira vieja)
+    ok(/url\(/.test(boton.querySelector('.ph')?.getAttribute('style') || ''),
        'el boton del color muestra la foto de ese color',
        caso.v.id + ' / ' + caso.color);
     boton.click();

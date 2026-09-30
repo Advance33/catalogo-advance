@@ -555,7 +555,7 @@ async function probarVisor(){
        '[4.4] el Atras cierra el visor y deja la ficha');
   }
   // Con otro color elegido, el visor muestra la foto que esta en la ficha
-  const pinta = [...d.querySelectorAll('.fi-pintas button')].find(b => b.getAttribute('aria-pressed') !== 'true');
+  const pinta = [...d.querySelectorAll('.fi-tono')].find(b => b.getAttribute('aria-pressed') !== 'true');
   if(pinta){
     pinta.click();
     await dfDormir(1500);

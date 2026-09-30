@@ -32,7 +32,7 @@ si alguna falta).
                   porcentajes.
   color-precio.js Que al cambiar de color cambie el precio cuando cada color
                   es una fila distinta.
-  foto-color.js   Que el puntito de color muestre la foto de ESE color, y que
+  foto-color.js   Que el color elegido muestre la foto de ESE color, y que
                   si no existe la ficha lo diga.
   codigos.js      El codigo propio AT-####: que la web llegue del producto al
                   archivo correcto, y que no llegue cuando el vinculo no sirve.
@@ -140,6 +140,19 @@ si alguna falta).
                   direccion limpia y sube arriba sin recargar; Cmd/Ctrl+clic
                   lo deja al navegador; el triangulo sigue siendo el easter
                   egg.
+  decision-colores.js
+                  Como se elige el color en la ficha (Pedro, 30/09: la C,
+                  "Vitrina de fotos", de muestras/colores): debajo de la
+                  foto, "Color" con el nombre del elegido y una fila de
+                  fotos a color con el nombre y, si cambia, el precio; lo
+                  agotado en gris con "Sin stock" y se puede tocar ("Avisame
+                  cuando entre"); los nombres de dos partes partidos en su
+                  guion o punto, sin palabras agregadas; muchos colores se
+                  deslizan (en el celular, cuatro y un pedacito); un solo
+                  color, el nombre sin fila. Y las reglas: solo los colores
+                  de la version abierta, el mismo color al cambiar de
+                  memoria (si no esta, el mas barato con stock) y el mismo
+                  orden en todas las versiones.
 
 COMO SE CORREN
 --------------

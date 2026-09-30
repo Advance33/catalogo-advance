@@ -76,14 +76,20 @@ function correrPruebas(){
   const nombre = v.desc + ' (' + v.id + ')';
   abrirFicha(clave(v), null);
 
-  const puntos = [...document.querySelectorAll('.fi-pintas button')];
+  const puntos = [...document.querySelectorAll('.fi-tono')];
   ok(puntos.length >= 2, 'la ficha muestra los colores de todas las hermanas', nombre);
 
   const deOtra = puntos.filter(b => b.dataset.k && b.dataset.k !== clave(v));
   ok(deOtra.length > 0, 'hay puntitos que llevan a otra version', deOtra.length + ' de ' + puntos.length);
 
-  ok(!!document.querySelector('#fi-color-hint'),
-     'la ficha avisa que el precio cambia segun el color');
+  /* 30/09: el aviso "El precio cambia segun el color" se fue con la tira. En
+     la vitrina (opcion C de la muestra de los colores) cada color dice su
+     precio abajo de la foto, que es mas que avisar que cambia. */
+  const conPrecio = puntos.filter(b => (b.querySelector('.pr')?.textContent || '').trim());
+  ok(conPrecio.length === puntos.length &&
+     new Set(conPrecio.map(b => b.querySelector('.pr').textContent.trim())).size > 1,
+     'la ficha dice el precio de cada color, abajo de su foto',
+     conPrecio.map(b => b.dataset.color + ' ' + b.querySelector('.pr').textContent.trim()).join(' / '));
 
   /* Ojo con cual se toca: dos hermanas pueden valer lo mismo y entonces tocar
      ese color NO tiene por que cambiar el precio. Se busca a proposito uno
@@ -102,7 +108,7 @@ function correrPruebas(){
        'tocar un color de otra version cambia el precio', antes + ' -> ' + despues);
 
     // Y el color tocado queda marcado, no se pierde al redibujar la ficha
-    const marcado = [...document.querySelectorAll('.fi-pintas button')]
+    const marcado = [...document.querySelectorAll('.fi-tono')]
                       .some(b => b.getAttribute('aria-pressed') === 'true');
     ok(marcado, 'el color elegido queda marcado despues de cambiar de version');
   }
@@ -130,7 +136,7 @@ function correrPruebas(){
     R.push('  --  no hay ningun modelo con hermanas que repitan color: nada que probar hoy');
   } else {
     abrirFicha(clave(conRepe.variantes[0]));
-    const ns = [...document.querySelectorAll('.fi-pintas button')].map(b => norm(b.dataset.color));
+    const ns = [...document.querySelectorAll('.fi-tono')].map(b => norm(b.dataset.color));
     ok(ns.length > 0 && new Set(ns).size === ns.length,
        'ningun color se repite en los puntitos, ni juntando hermanas',
        conRepe.desc + ': ' + ns.join(' / '));

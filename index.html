@@ -1688,15 +1688,6 @@
   /* El precio anterior tachado, pegado al de hoy (2.4 C, el lila de los pesos) */
   .fi-precio s.antes{font:500 13px/1 var(--mono);color:#A597C4;padding-bottom:4px;margin-right:auto}
 
-  /* El color salió de la columna de datos (21/09): vive al costado de la foto,
-     que es donde se ve el cambio. Debajo de la foto queda su nombre, y el
-     aviso -"sin foto de este color", "el precio cambia"- debajo del nombre. */
-  .fi-colores{display:flex;flex-direction:column;gap:4px;align-items:center}
-  .fi-color-nom{display:block;text-align:center;font:600 12.5px/1.3 var(--sans);
-                color:var(--muted);overflow-wrap:anywhere}
-  .fi-color-nom b{font-weight:600;color:var(--glow)}
-  .fi-colores .fi-hint{display:block;text-align:center;font-size:11px;color:var(--faint)}
-  .fi-colores .fi-hint[hidden]{display:none}
   .fi-nota{font-size:11px;color:var(--faint);margin:0}
   /* Lo que el cliente esta eligiendo, escrito de corrido, justo arriba del
      boton. La ficha ya lo dice, pero en pedazos: el modelo en el titulo, la
@@ -1706,44 +1697,70 @@
               font:500 13px/1.45 var(--sans);color:var(--muted)}
   .fi-elegido b{color:var(--ink);font-weight:600}
 
-  /* ---------- Elegir color: la tira al costado de la foto (21/09) ----------
-     En la grilla los puntitos son decorativos. Acá el cliente está decidiendo,
-     así que son botones: tocás uno y ese color queda elegido para el pedido y
-     para el mensaje de WhatsApp. Si existe la foto de ese color, la foto cambia.
-
-     Cada botón muestra la foto chica de su color cuando la hay; si no, el tono.
-     Los que no están elegidos van apagados: el elegido se reconoce por ser el
-     único a color, sin necesidad de marcos ni anillos. */
-  /* Sin transform para centrarla: un transform acá arma un grupo aparte y las
-     fotitos de adentro dejarían de fundirse con el fondo de la ficha. Se
-     centra estirándola de arriba a abajo y repartiendo con flex. */
-  .fi-pintas{position:absolute;z-index:3;right:12px;top:0;bottom:0;margin:0;
-             display:flex;flex-direction:column;justify-content:center;gap:10px;align-items:center}
-  .fi-pintas button{
-    width:52px;height:52px;padding:0;border-radius:12px;cursor:pointer;display:block;
-    border:0;background-color:var(--surface-2);
-    background-size:contain;background-repeat:no-repeat;background-position:center;
-    box-shadow:inset 0 0 0 1px rgba(24,18,38,.10);
-    filter:grayscale(1);opacity:.5;
-    transition:filter .16s ease, opacity .16s ease, box-shadow .16s ease, transform .16s ease;
+  /* ---------- Elegir color: la vitrina de fotos (30/09) ----------
+     Pedro eligió la C de la muestra de los colores (muestras/colores,
+     "Vitrina de fotos"): debajo de la foto grande, una fila de fotos A COLOR
+     con el nombre de cada una abajo, y abajo del nombre el precio si cambia
+     con el color. Reemplaza la tira de fotitos al costado de la foto (21/09):
+     ahí las que no estaban elegidas iban en gris y parecían agotadas, sólo se
+     leía el nombre del elegido, el precio de cada color no se sabía hasta
+     tocarlo y un agotado no se notaba.
+     Arriba de la fila, el rótulo "Color" y el nombre del elegido. Lo gris con
+     "Sin stock" encima es SÓLO lo agotado, y se puede tocar igual (ves su
+     precio y el botón pasa a "Avisame cuando entre"). Un color sin foto es un
+     círculo de su tono, o rayas si no lo sabemos pintar: el tono no se
+     inventa. Con más colores de los que entran, la fila se desliza de costado
+     y el borde derecho se esfuma (.corre, lo pone acomodarVitrina()). Las
+     fotos van en su cuadrado blanco, sin multiply: son botones, no la foto
+     que se funde con la ficha. */
+  .fi-colores{display:grid;gap:8px;min-width:0}
+  .fi-vit-cab{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;min-width:0}
+  .fi-vit-rot{flex:none;font:600 9.5px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .fi-vit-cab b{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+                font:600 13px/1.3 var(--sans);color:var(--ink)}
+  /* Con un solo color no hay fila: el nombre entero, aunque ocupe dos renglones */
+  .fi-vit-cab.solo b{white-space:normal;overflow-wrap:anywhere}
+  .fi-vit-cab small{font:500 11px/1.3 var(--sans);color:var(--faint);white-space:nowrap}
+  .fi-vit-cab small[hidden]{display:none}
+  .fi-vitrina{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;overscroll-behavior-x:contain;
+              padding:3px 3px 6px;margin:0 -3px;scrollbar-width:none}
+  .fi-vitrina::-webkit-scrollbar{display:none}
+  /* Con mouse no hay dedo que deslice: ahí va una barra finita (con el
+     trackpad o Shift+rueda también anda) */
+  @media (hover:hover) and (pointer:fine){ .fi-vitrina{scrollbar-width:thin} }
+  .fi-vitrina.corre{-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);
+                    mask-image:linear-gradient(90deg,#000 82%,transparent)}
+  .fi-tono{flex:none;width:74px;display:flex;flex-direction:column;gap:5px;padding:0;border:0;background:none;
+           cursor:pointer;scroll-snap-align:start;text-align:center;color:var(--ink);font:inherit}
+  .fi-tono-img{position:relative;display:block;width:100%;aspect-ratio:1;border-radius:12px;background:#fff;
+               box-shadow:inset 0 0 0 1px var(--line);transition:box-shadow .15s}
+  .fi-tono-img .ph{position:absolute;inset:2px;border-radius:10px;background:center/contain no-repeat}
+  .fi-tono-img .sw{position:absolute;inset:18%;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(24,18,38,.12)}
+  .fi-tono-img .sw.raya{background-image:repeating-linear-gradient(45deg,var(--line),var(--line) 3px,transparent 3px,transparent 6px);
+                        box-shadow:inset 0 0 0 1px var(--faint)}
+  .fi-tono[aria-pressed="true"] .fi-tono-img{box-shadow:inset 0 0 0 2px var(--acento)}
+  .fi-tono.agotada .ph,.fi-tono.agotada .sw{filter:grayscale(1);opacity:.45}
+  .fi-tono .sin{position:absolute;left:4px;right:4px;bottom:4px;padding:4px 0;border-radius:5px;
+                background:rgba(23,15,40,.78);color:#fff;font:600 8px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+  .fi-tono .nm{font:500 11px/1.25 var(--sans);color:var(--muted);overflow-wrap:anywhere;
+               display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .fi-tono[aria-pressed="true"] .nm{color:var(--ink);font-weight:600}
+  .fi-tono.agotada .nm{text-decoration:line-through}
+  .fi-tono .pr{font:500 10.5px/1 var(--mono);color:var(--faint)}
+  .fi-tono[aria-pressed="true"] .pr{color:var(--glow)}
+  .fi-tono:focus-visible{outline:none}
+  .fi-tono:focus-visible .fi-tono-img{outline:2px solid var(--acento);outline-offset:2px}
+  @media (hover:hover){
+    .fi-tono:hover .fi-tono-img{box-shadow:inset 0 0 0 1px #C9B6F2}
+    .fi-tono[aria-pressed="true"]:hover .fi-tono-img{box-shadow:inset 0 0 0 2px var(--acento)}
   }
-  /* Con foto propia se funde con el fondo, igual que la foto grande, y el
-     elegido se reconoce por ser el único a color: sin marcos ni anillos, que
-     es justo lo que Pedro eligió del muestrario. */
-  .fi-pintas button.confoto{
-    background-color:transparent;box-shadow:none;border-radius:0;
-    mix-blend-mode:multiply;
-  }
-  .fi-pintas button:hover{filter:none;opacity:1;transform:scale(1.06)}
-  .fi-pintas button[aria-pressed="true"]{filter:none;opacity:1}
-  /* Sin foto es un puntito de color: ahí sí hace falta marcar cuál es */
-  .fi-pintas button:not(.confoto)[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--ink)}
-  /* Color que no está en la lista de hex y sin foto propia: no inventamos el
-     tono, se marca con rayas */
-  .fi-pintas button.sinhex{
-    background-image:repeating-linear-gradient(45deg,var(--line),var(--line) 3px,transparent 3px,transparent 6px);
-    box-shadow:inset 0 0 0 1px var(--faint);
-  }
+  @media (min-width:641px){ .fi-tono{width:78px} }
+  /* En el celular, "se ven cuatro y un pedacito del quinto" (la muestra, en
+     una pantalla de 360 sin márgenes). La ficha de verdad deja aire a los
+     costados y a 390 la fila mide 318: con 74 px entraban tres y casi el
+     cuarto. Se achican hasta 60 px para que entren cuatro y asome el quinto,
+     que es lo que dice que la fila sigue. */
+  @media (max-width:640px){ .fi-tono{width:clamp(60px,calc((100% - 36px) / 4.3),74px)} }
 
   /* ---------- Elegir versión: pestañas, con el rótulo a la izquierda ----------
      Antes cada versión era un botón con su caja y su precio. Un iPhone con
@@ -1927,11 +1944,6 @@
     .fi-foto img{max-height:none}
     .fi-colores{margin-top:12px}
     .fi-datos{padding:18px}
-    /* Al costado no entra: en el celular la tira vuelve abajo de la foto, en
-       horizontal, arriba del nombre del color. */
-    .fi-pintas{position:static;top:auto;bottom:auto;flex-direction:row;flex-wrap:wrap;
-               justify-content:center}
-    .fi-pintas button{width:44px;height:44px}
     .fi-eje{grid-template-columns:1fr;gap:6px}
     .fi-envio{padding:12px 16px;align-items:flex-start}
     .fi-rel-tira{gap:8px}
@@ -5553,12 +5565,35 @@ function coloresFicha(p, m){
   unicos.forEach(c => { if(c.hex) cuantos.set(c.hex, (cuantos.get(c.hex) || 0) + 1); });
   const lista = [...unicos.values()].map(c =>
     cuantos.get(c.hex) > 1 && c.hexEntero && c.hexEntero !== c.hex ? { ...c, hex: c.hexEntero } : c);
-  // El aviso del precio sólo si de verdad cambia: dos hermanas al mismo precio
-  // existen igual (las separa el color) y ahí no hay nada que avisar.
+  /* Los colores van en el mismo orden en todas las versiones (30/09, una de
+     las reglas de la muestra de los colores que eligió Pedro). Venían en el
+     orden de las filas de cada versión: el iPhone 17 Pro decía Blue, Orange,
+     Silver en 256GB Sim y Blue, Silver, Orange en E-Sim (21 modelos ese
+     día), y al cambiar de memoria el color elegido saltaba de lugar. El
+     orden es el del modelo (ordenDeColores). */
+  const orden = ordenDeColores(m, p);
+  lista.sort((a, b) => (orden.get(norm(a.nombre)) ?? Infinity) - (orden.get(norm(b.nombre)) ?? Infinity));
+  // Los precios sólo si de verdad cambian: dos hermanas al mismo precio
+  // existen igual (las separa el color) y ahí no hay nada que mostrar.
   return { lista, precioVaria: new Set(lista.map(c => c.precio)).size > 1 };
 }
 
-/* La foto chica de ese color, para la tira. Con el índice de fotos sabemos
+/* El lugar de cada color en la vitrina, el mismo en todas las versiones del
+   modelo m: el orden en que aparece por primera vez en las filas del modelo
+   (m.variantes, en el orden en que llegan de ADVAPP, que hoy es por ID).
+   No depende de la versión abierta ni del precio o el stock del día: una
+   ficha compartida muestra los colores en el mismo orden que la del que la
+   mandó. Devuelve norm(color) -> lugar. Sin modelo (una fila suelta), el de
+   sus hermanas. */
+function ordenDeColores(m, p){
+  const orden = new Map();
+  [...((m && m.variantes) || []), ...((p && p.hermanasColor) || []), p].forEach(x => {
+    if(x) pintas(x.color || '').forEach(c => { const k = norm(c.nombre); if(!orden.has(k)) orden.set(k, orden.size); });
+  });
+  return orden;
+}
+
+/* La foto chica de ese color, para la vitrina. Con el índice de fotos sabemos
    cuáles existen, así que no se pide ninguna de más. Sin índice las
    direcciones locales son una corazonada: antes que disparar una foto rota por
    cada color de cada ficha que se abre, se muestra el tono y listo. */
@@ -5580,34 +5615,110 @@ function colorPorDefecto(p){
   return c ? c.nombre : '';
 }
 
-function htmlColorFicha(p, m){
+/* Los nombres de dos partes (30/09): "Black – Black Ocean Band" (caja y malla
+   del Watch Ultra 3), "Shiny Black · Transitions Green" (armazón y cristal de
+   los Ray-Ban). Se parten en el guion con espacios o el punto medio que YA
+   traen, sin cambiar ni agregar ninguna palabra: arriba (y en la fotito) va
+   la parte que cambia entre uno y otro, y la otra al lado del nombre del
+   elegido. En la muestra decía "Malla" y "Caja Black": esas palabras las
+   puso la muestra a mano y el catálogo no las sabe, así que acá no van.
+   Sólo si TODOS los de la fila tienen dos partes y lo de arriba no se
+   repite; si no, cada uno con su nombre entero. Con un solo color no hay
+   nada que cambie: el nombre entero. Devuelve [{ top, sub }] en el orden de
+   `nombres`. */
+const CORTE_DOS_PARTES = /\s+[–—-]\s+|\s*·\s*/;
+function partesDeColores(nombres){
+  const enteros = nombres.map(n => ({ top: n, sub: '' }));
+  if(nombres.length < 2) return enteros;
+  const cortes = nombres.map(n => String(n).split(CORTE_DOS_PARTES).map(x => x.trim()));
+  if(!cortes.every(c => c.length === 2 && c[0] && c[1])) return enteros;
+  const distintos = i => new Set(cortes.map(c => norm(c[i]))).size;
+  const arriba = distintos(0) > distintos(1) ? 0 : 1;   // empate: la segunda, como la muestra
+  if(new Set(cortes.map(c => norm(c[arriba]))).size !== cortes.length) return enteros;
+  return cortes.map(c => ({ top: c[arriba], sub: c[1 - arriba] }));
+}
+
+/* La vitrina (30/09, Pedro eligió la C de muestras/colores): el rótulo
+   "Color" con el nombre del elegido, y debajo una fila de fotos a color, una
+   por color de la versión que se está mirando (coloresFicha), con el nombre
+   abajo y el precio si no valen todos lo mismo. Agotado: la foto en gris con
+   "Sin stock" encima y el nombre tachado; se puede tocar. Con un solo color,
+   el nombre y nada más. #fi-color-hint es el "sin foto de este color" que
+   pone mostrarFotoColor. Reemplaza a htmlColorFicha (la tira al costado de
+   la foto, 21/09). */
+function htmlVitrinaFicha(p, m){
   const { lista, precioVaria } = coloresFicha(p, m);
   const aqui = clave(p);
   // El color elegido sale del pedido si el producto ya está cargado; si no,
   // del que se acaba de tocar en esta ficha; y si tampoco, el de la foto.
   const eleg = colorDe(aqui) || COLOR_FICHA || colorPorDefecto(p);
+  const hint = '<small id="fi-color-hint" hidden>· sin foto de este color</small>';
+  const rot = '<span class="fi-vit-rot">Color</span>';
 
-  // Con un solo color no hay nada que elegir: queda el nombre bajo la foto
-  if(lista.length < 2)
-    return p.color ? `<span class="fi-color-nom" id="fi-color-txt">${esc(p.color)}</span>` : '';
+  /* Sin el "sin foto de este color": con un solo color la foto de la fila ES
+     la de ese color (como la tira vieja, que acá no tenía aviso) */
+  if(lista.length < 2){
+    if(!p.color) return '';
+    return `<div class="fi-vit-cab solo">${rot}<b id="fi-color-txt" data-color="${esc(p.color)}">${esc(p.color)}</b>${
+      p.stock === false ? '<small>· sin stock</small>' : ''}</div>`;
+  }
 
-  const puntos = lista.map(c => {
-    const precio = precioVaria && c.precio !== null ? ' · USD ' + plata(c.precio) : '';
+  // Siempre hay uno marcado: el elegido o, si no está en esta versión, el de esta fila
+  const sel = lista.find(c => norm(c.nombre) === norm(eleg)) || lista.find(c => c.k === aqui) || lista[0];
+  const nombres = partesDeColores(lista.map(c => c.nombre));
+  const hay = c => !(c.fila && c.fila.stock === false);
+  const precio = c => c.precio === null || c.precio === undefined ? 'Consultar' : 'USD ' + plata(c.precio);
+
+  const tonos = lista.map((c, i) => {
     const mini = miniColorFicha(c.fila, c.nombre);
-    const fondo = [mini ? `background-image:url(${esc(mini)})` : '',
-                   c.hex ? `background-color:${c.hex}` : ''].filter(Boolean).join(';');
-    const clase = mini ? 'confoto' : (c.hex ? '' : 'sinhex');
-    return `<button type="button" data-color="${esc(c.nombre)}" data-k="${esc(c.k)}"
-             ${fondo ? `style="${fondo}"` : ''}${clase ? ` class="${clase}"` : ''}
-             aria-pressed="${eleg === c.nombre}" title="${esc(c.nombre + precio)}"
-             aria-label="Elegir ${esc(c.nombre + precio)}"></button>`;
+    const foto = mini
+      ? `<span class="ph" style="background-image:url(${esc(mini)})"></span>`
+      : `<span class="sw${c.hex ? '' : ' raya'}"${c.hex ? ` style="background:${c.hex}"` : ''}></span>`;
+    const dice = c.nombre + (hay(c) ? '' : ', sin stock') + (precioVaria ? ', ' + precio(c) : '');
+    return `<button type="button" class="fi-tono${hay(c) ? '' : ' agotada'}" data-color="${esc(c.nombre)}" data-k="${esc(c.k)}"
+             aria-pressed="${c === sel}" aria-label="${esc(dice)}" title="${esc(dice)}">
+      <span class="fi-tono-img">${foto}${hay(c) ? '' : '<span class="sin">Sin stock</span>'}</span>
+      <span class="nm">${esc(nombres[i].top)}</span>${precioVaria ? `<span class="pr">${precio(c)}</span>` : ''}</button>`;
   }).join('');
 
-  const hint = precioVaria ? 'El precio cambia según el color' : 'Tocá un color para elegirlo';
-  return `<div class="fi-pintas">${puntos}</div>
-    <span class="fi-color-nom" id="fi-color-txt">${eleg ? `<b>${esc(eleg)}</b>` : esc(p.color)}</span>
-    <span class="fi-hint" id="fi-color-hint"${precioVaria ? ' data-precio="1"' : ''}${COLOR_ELEGIDO && !precioVaria ? ' hidden' : ''}>${hint}</span>`;
+  const n = nombres[lista.indexOf(sel)];
+  return `<div class="fi-vit-cab">${rot}<b id="fi-color-txt" data-color="${esc(sel.nombre)}">${esc(n.top)}</b>${
+      n.sub ? `<small>· ${esc(n.sub)}</small>` : ''}${hay(sel) ? '' : '<small>· sin stock</small>'}${hint}</div>
+    <div class="fi-vitrina" role="group" aria-label="Color">${tonos}</div>`;
 }
+
+/* Después de dibujar la vitrina: la fila vuelve a donde estaba deslizada
+   (x), el color elegido queda a la vista y el borde derecho se esfuma sólo
+   si queda algo por ver a la derecha (.corre). Sin mover la ventana: nada
+   de scrollIntoView. */
+function acomodarVitrina(d, x){
+  const fila = d && d.querySelector('.fi-vitrina');
+  if(!fila) return;
+  if(x) fila.scrollLeft = x;
+  const queda = () => fila.scrollLeft + fila.clientWidth < fila.scrollWidth - 4;
+  /* Si el elegido quedó afuera, o en el borde que se esfuma (el 18 % de la
+     derecha), la fila se corre de a fotos enteras hasta que entre: el Watch
+     Ultra 3 abierto en la sexta malla la mostraba cortada. */
+  const tonos = [...fila.querySelectorAll('.fi-tono')];
+  const i = tonos.findIndex(b => b.getAttribute('aria-pressed') === 'true');
+  if(i >= 0 && tonos.length > 1){
+    const rf = fila.getBoundingClientRect(), re = tonos[i].getBoundingClientRect();
+    const paso = tonos[1].getBoundingClientRect().left - tonos[0].getBoundingClientRect().left;
+    const hasta = rf.right - (queda() ? rf.width * .18 : 0);
+    if(rf.width && paso > 0 && (re.left < rf.left - 1 || re.right > hasta + 1)){
+      const entran = Math.max(1, Math.floor(fila.clientWidth * .82 / paso));
+      fila.scrollLeft = Math.max(0, i - entran + 1) * paso;
+    }
+  }
+  const marcar = () => fila.classList.toggle('corre', queda());
+  marcar();
+  fila.onscroll = marcar;
+}
+// Al girar el teléfono o achicar la ventana puede sobrar o faltar lugar
+addEventListener('resize', () => {
+  const fila = document.querySelector('#ficha .fi-vitrina');
+  if(fila) fila.classList.toggle('corre', fila.scrollLeft + fila.clientWidth < fila.scrollWidth - 4);
+});
 
 /* Foto por color. La del color es la de su variante en el catalogo:
    fotos/AT-0142-01.jpg, con el numero que el mapa de fotos/indice.json le da
@@ -5792,8 +5903,8 @@ let TURNO_FOTO = 0;
 function mostrarFotoColor(p, color, d){
   const turno = ++TURNO_FOTO;
   const vigente = () => turno === TURNO_FOTO;
-  // .fi-marco y no .fi-foto: al costado de la foto ahora vive la tira de
-  // colores, y el <img> tiene que salir adentro del marco, no encima de ella.
+  // .fi-marco y no .fi-foto: debajo de la foto vive la vitrina de colores, y
+  // el <img> tiene que salir adentro del marco, no encima de ella.
   const caja = d.querySelector('.fi-marco');
   let img = caja && caja.querySelector('img');
   /* Puede no haber <img>: la fila no tiene foto de su primer color y la
@@ -5815,18 +5926,10 @@ function mostrarFotoColor(p, color, d){
   /* Cuando no hay foto del color elegido se volvia a la principal sin decir
      nada: el puntito naranja quedaba marcado, el texto decia "Orange" y la
      foto seguia siendo la plateada. Parece la foto del color y no lo es.
-     Ahora se avisa abajo del nombre del color. */
+     Ahora se avisa al lado del nombre del color, arriba de la vitrina
+     ("· sin foto de este color", 30/09). */
   const nota = d.querySelector('#fi-color-hint');
-  const avisar = falta => {
-    if(!nota) return;
-    if(nota.dataset.base === undefined) nota.dataset.base = nota.textContent;
-    const precio = nota.dataset.precio ? nota.dataset.base : '';
-    nota.textContent = falta
-      ? (precio ? precio + ' · sin foto de este color' : 'Sin foto de este color')
-      : nota.dataset.base;
-    // con precio por color el mensaje del precio tiene que seguir a la vista
-    nota.toggleAttribute('hidden', !(falta || nota.dataset.precio));
-  };
+  const avisar = falta => { if(nota) nota.hidden = !falta; };
 
   const volver = () => {
     if(!vigente()) return;      // otro color u otra version ya tomo la foto
@@ -9676,7 +9779,7 @@ function refrescarFichaAbierta(){
     if(precio) precio.style.display = 'none';      // es el de antes: mejor ninguno
     // También los renglones de "Ver las N versiones" y Compartir (29/09):
     // mandar el link de algo que ya no está lleva a "Ya no está"
-    d.querySelectorAll('.fi-pintas button, .fi-op, .fi-fila, .fi-compartir').forEach(b => { b.disabled = true; });
+    d.querySelectorAll('.fi-tono, .fi-op, .fi-fila, .fi-compartir').forEach(b => { b.disabled = true; });
     devolverFoco();       // los botones ya no están o están apagados: a la ventana
     return;
   }
@@ -10404,7 +10507,7 @@ function abrirFicha(k, historia = true){
         <div class="fi-foto">
           <div class="fi-arriba">${htmlArribaFicha(v)}</div>
           <div class="fi-marco">${htmlFoto(v, '', true)}${htmlLupa()}</div>
-          <div class="fi-colores">${htmlColorFicha(v, m)}</div>
+          <div class="fi-colores">${htmlVitrinaFicha(v, m)}</div>
         </div>
         <div class="fi-datos">${htmlDatosFicha(m, v)}</div>
       </div>
@@ -10413,6 +10516,7 @@ function abrirFicha(k, historia = true){
     </div>`;
 
   cerrarFichaDOM = montarModal(d, () => { if(FICHA) cerrarFicha(); });
+  acomodarVitrina(d);        // ya está en la página: se puede medir la fila
   d.querySelector('.fi-cerrar').onclick = () => cerrarFicha();
   d.querySelector('.fi-compartir').onclick = () => compartirFicha();
   /* La foto en grande (4.4 B): la lupa o la foto misma. El marco se queda y
@@ -10458,13 +10562,19 @@ function engancharFicha(d, m, v){
     const p = d.querySelector('#fi-pagos');
     if(p) p.hidden = abierto;
   };
-  d.querySelectorAll('.fi-pintas button').forEach(b => b.onclick = () => {
+  /* La vitrina escucha en su caja, que no se rehace (sí lo de adentro:
+     pintarColoresFicha). onclick y no addEventListener: esto corre cada vez
+     que se redibuja y así queda uno solo, atado a la versión de ahora. */
+  const vitrina = d.querySelector('.fi-colores');
+  if(vitrina) vitrina.onclick = e => {
+    const b = e.target.closest && e.target.closest('.fi-tono');
+    if(!b || !vitrina.contains(b) || b.disabled) return;
     // Si el color pertenece a otra versión (precio por color), se cambia de
     // versión y con eso cambia el precio; si no, sólo se cambia la foto.
     const otra = m.variantes.find(x => clave(x) === b.dataset.k);
     if(otra && clave(otra) !== FICHA) elegirVariante(d, m, otra, b.dataset.color);
     else elegirColorFicha(d, v, b.dataset.color);
-  });
+  };
   d.querySelectorAll('.fi-op').forEach(b => b.onclick = () => {
     // Las filas de esa version: una, o varias si son colores de la misma. Si
     // ya estas en ella no hay nada que cambiar; si venis de otra, se mantiene
@@ -10491,11 +10601,12 @@ function engancharFicha(d, m, v){
 }
 
 /* Dónde estaba el foco antes de rehacer .fi-datos y .fi-colores, y una
-   función que lo devuelve (29/09). Las pestañas y los puntitos se rehacen, y
+   función que lo devuelve (29/09). Las pestañas y los colores se rehacen, y
    el que tenía el foco se iba con ellos: caía en BODY y el Tab siguiente
    salía de la ventana hacia la página de atrás. Se vuelve a la pestaña
-   marcada del mismo eje, o al puntito elegido; si no, a la ventana. La usan
-   elegirVariante() y el refresco con la ficha abierta
+   marcada del mismo eje, o al color elegido de la vitrina; si no, a la
+   ventana. La usan elegirVariante(), elegirColorFicha() (desde el 30/09
+   rehace la vitrina) y el refresco con la ficha abierta
    (refrescarFichaAbierta), que rehace lo mismo. Los botones apagados no
    cuentan: cuando el producto sale del catálogo quedan disabled, el focus()
    no hace nada y el foco se seguía perdiendo; ahí va a la ventana. */
@@ -10503,7 +10614,7 @@ function guardarFocoFicha(d){
   const f = document.activeElement;
   const eje = f && f.classList && f.classList.contains('fi-op') && d.contains(f)
     ? (f.closest('.fi-ops')?.dataset.eje || '') : '';
-  const pinta = !!f && !!f.matches && f.matches('.fi-pintas button') && d.contains(f);
+  const pinta = !!f && !!f.matches && f.matches('.fi-tono') && d.contains(f);
   // Un renglón de "Ver las N versiones" (4.3 C) vuelve al renglón elegido
   const fila = !!f && !!f.matches && f.matches('.fi-fila') && d.contains(f);
   const otro = !!f && !eje && !pinta && !fila &&
@@ -10513,7 +10624,7 @@ function guardarFocoFicha(d){
     // Lo que no se rehizo ni se apagó (un link de más abajo) conserva el foco
     if(f.isConnected && !f.disabled && document.activeElement === f) return;
     const x = (eje && d.querySelector(`.fi-ops[data-eje="${CSS.escape(eje)}"] .fi-op[aria-pressed="true"]:not(:disabled)`)) ||
-              (pinta && d.querySelector('.fi-pintas button[aria-pressed="true"]:not(:disabled)')) ||
+              (pinta && d.querySelector('.fi-tono[aria-pressed="true"]:not(:disabled)')) ||
               (fila && d.querySelector('.fi-fila[aria-pressed="true"]:not(:disabled)')) ||
               d.querySelector('.caja');
     x?.focus({preventScroll:true});
@@ -10536,8 +10647,8 @@ function elegirVariante(d, m, v, color){
   d.querySelector('.fi-datos').innerHTML = htmlDatosFicha(m, v);
   ponerTitulo();          // el nombre de la ficha puede cambiar con la versión
   pintarFotoFicha(d, v);
-  // La tira vive al lado de la foto, fuera de .fi-datos: se redibuja aparte o
-  // se queda con los colores y los precios de la versión anterior.
+  // La vitrina vive debajo de la foto, fuera de .fi-datos: se redibuja aparte
+  // o se queda con los colores y los precios de la versión anterior.
   pintarColoresFicha(d, v, m);
   engancharFicha(d, m, v);
   devolverFoco();
@@ -10569,11 +10680,15 @@ function pintarFotoFicha(d, v){
   if(img.getAttribute('src') !== grande){ img.classList.remove('ok'); img.src = grande; }
 }
 
-// La tira de colores, el nombre del elegido y su aviso: todo lo que cuelga de
-// la foto y depende de la versión que se esté mirando.
+// La vitrina de colores con el nombre del elegido y su aviso: todo lo que
+// cuelga de la foto y depende de la versión que se esté mirando. La fila se
+// queda deslizada donde estaba.
 function pintarColoresFicha(d, v, m){
   const caja = d.querySelector('.fi-colores');
-  if(caja) caja.innerHTML = htmlColorFicha(v, m);
+  if(!caja) return;
+  const x = caja.querySelector('.fi-vitrina')?.scrollLeft || 0;
+  caja.innerHTML = htmlVitrinaFicha(v, m);
+  acomodarVitrina(d, x);
 }
 
 /* ---------- La parte viva de la ficha ----------
@@ -10769,17 +10884,16 @@ function elegirColorFicha(d, p, color){
   COLOR_ELEGIDO = true;
   if(enPedido(k)) elegirColor(k, color);          // ya está en el pedido: se le actualiza el color
 
-  d.querySelectorAll('.fi-pintas button').forEach(b =>
-    b.setAttribute('aria-pressed', String(b.dataset.color === color)));
-  const t = d.querySelector('#fi-color-txt');
-  if(t) t.innerHTML = `<b>${esc(color)}</b>`;
+  /* La vitrina se rehace entera (30/09): cambian el marcado, el nombre de
+     arriba con su segunda parte y el "sin stock". El foco vuelve al color
+     elegido (guardarFocoFicha) y la fila no se desliza. El "sin foto de este
+     color" lo pone después mostrarFotoColor. */
+  const devolverFoco = guardarFocoFicha(d);
+  pintarColoresFicha(d, p, buscarModelo(k) || FICHA_MODELO);
+  devolverFoco();
   // La frase de arriba del boton: cambia el color, no el modelo
   const eleg = d.querySelector('#fi-elegido-color');
   if(eleg) eleg.innerHTML = htmlElegidoColor(color);
-  // el aviso lo termina de acomodar mostrarFotoColor: con precio por color
-  // ese mensaje tiene que quedarse, y si falta la foto hay que decirlo
-  const nota = d.querySelector('#fi-color-hint');
-  if(nota && !nota.dataset.precio) nota.setAttribute('hidden', '');
   // El mensaje de WhatsApp de la ficha ya nombra el color
   const wa = d.querySelector('.fi-botones .cta');
   if(wa){
@@ -12589,13 +12703,13 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
     try{ if(FICHA) anotar('ficha', datos(buscarProducto(FICHA))); }catch(e){}
     return r;
   };
-  /* Elegir un color se mide en el clic del puntito, no en elegirColorFicha:
+  /* Elegir un color se mide en el clic en la vitrina, no en elegirColorFicha:
      cuando cada color es una fila con su precio, el puntito cambia de version
      (elegirVariante) y el color quedaba anotado como "version", sin decir cual.
      Mientras dura ese clic, elegirVariante no anota nada: ya se anoto el color. */
   let porPuntito = false;
   document.addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('#ficha .fi-pintas button');
+    const b = e.target.closest && e.target.closest('#ficha .fi-tono');
     porPuntito = !!b;
     if(!b) return;
     try{ anotar('color', { ...datos(buscarProducto(b.dataset.k) || buscarProducto(FICHA)),

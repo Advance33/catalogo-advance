@@ -408,7 +408,7 @@ function correrPruebas(){
                  [...d.querySelectorAll('.fi-op')].find(x => x.dataset.op === op); }
     }
     // Y si esa version es un color, el que lleva a su fila es el de la tira
-    if(!b) b = [...d.querySelectorAll('.fi-pintas button')].find(x => x.dataset.k === clave(v));
+    if(!b) b = [...d.querySelectorAll('.fi-tono')].find(x => x.dataset.k === clave(v));
     if(b) b.click();
     return !!b;
   };
@@ -476,7 +476,7 @@ function correrPruebas(){
     const antes = dd.querySelector('.fi-precio .usd').textContent;
     /* Cuando la version ES el color no hay pestañas: se elige en la tira, que
        es justamente el cambio del 21/09. Vale cualquiera de los dos caminos. */
-    const otroColor = [...dd.querySelectorAll('.fi-pintas button')].find(b => b.dataset.k && b.dataset.k !== clave(porColor.rep));
+    const otroColor = [...dd.querySelectorAll('.fi-tono')].find(b => b.dataset.k && b.dataset.k !== clave(porColor.rep));
     const otraOp = [...dd.querySelectorAll('.fi-op')].find(b => b.dataset.k !== clave(porColor.rep));
     ok(!!(otroColor || otraOp), 'hay como pasar al otro color', porColor.desc);
     (otroColor || otraOp).click();
@@ -513,7 +513,7 @@ function correrPruebas(){
   ok(d.querySelector('.fi-nombre').textContent === m0.desc, 'un link a una variante abre el modelo');
   ok([...d.querySelectorAll('.fi-op')].some(b => b.dataset.k === clave(cara) &&
         b.getAttribute('aria-pressed') === 'true') ||
-     [...d.querySelectorAll('.fi-pintas button')].some(b => b.dataset.k === clave(cara) &&
+     [...d.querySelectorAll('.fi-tono')].some(b => b.dataset.k === clave(cara) &&
         b.getAttribute('aria-pressed') === 'true'), 'con esa variante ya elegida');
   cerrarFicha();
 

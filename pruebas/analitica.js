@@ -114,7 +114,7 @@ async function correrPruebas(){
     ok(fichas.length === 1 && fichas[0].id === clave(v) && fichas[0].nombre,
        'abrir una ficha se mide, con el producto', JSON.stringify(fichas[0] || {}).slice(0, 110));
 
-    const punto = document.querySelector('#ficha .fi-pintas button');
+    const punto = document.querySelector('#ficha .fi-tono');
     if(punto){
       punto.click();
       const colores = await hubo('color');

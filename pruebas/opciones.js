@@ -89,7 +89,7 @@ function correrPruebas(){
       let llega = !!irAVersion(op);
       if(!llega){
         // Las versiones que son un color se eligen en la tira, no en pestañas
-        const ks = new Set([...d.querySelectorAll('.fi-pintas button')].map(x => x.dataset.k));
+        const ks = new Set([...d.querySelectorAll('.fi-tono')].map(x => x.dataset.k));
         llega = grupo.some(v => ks.has(clave(v)));
       }
       if(!llega) sueltas.push(m.desc + ' / ' + op);
@@ -153,11 +153,15 @@ function correrPruebas(){
 
   /* ---- 4. Los puntitos llevan a la fila de su color ---- */
   const j = conPrecios || juntas[0];
-  const a = j.grupo[0], b = j.grupo[1];
+  /* El color al que se salta, con stock si hay (30/09): el de USD 1.640 del
+     iPhone 17 Pro 1TB Sim estaba agotado, la ficha ya no ofrece "Agregar al
+     pedido" para lo agotado (2.6 B) y el clic de abajo reventaba la tanda
+     entera (EXCEPCION: null.click) */
+  const a = j.grupo[0], b = j.grupo.find(x => x !== a && x.stock) || j.grupo[1];
   abrirFicha(clave(a), null);
   const miBoton = botones().find(x => x.dataset.op === j.op);
   ok(miBoton && miBoton.getAttribute('aria-pressed') === 'true', 'la version abierta queda marcada', j.m.desc + ' / ' + j.op);
-  const punto = [...document.querySelectorAll('#ficha .fi-pintas button')].find(x => x.dataset.k === clave(b));
+  const punto = [...document.querySelectorAll('#ficha .fi-tono')].find(x => x.dataset.k === clave(b));
   ok(!!punto, 'entre los colores estan los de las otras filas de la version', colores(b).join('/'));
   if(punto){
     punto.click();
@@ -166,8 +170,13 @@ function correrPruebas(){
        'con su precio', document.querySelector('#ficha .fi-precio .usd').textContent.trim());
     const sigue = botones().find(x => x.dataset.op === j.op);
     ok(sigue && sigue.getAttribute('aria-pressed') === 'true', 'y el boton de la version sigue marcado');
-    document.querySelector('#ficha #fi-pedido').click();
-    ok(PEDIDO.length === 1 && PEDIDO[0].k === clave(b), 'el pedido guarda la fila del color elegido', JSON.stringify(PEDIDO));
+    const agregar = document.querySelector('#ficha #fi-pedido');
+    if(b.stock === false){
+      ok(!agregar, 'ese color esta agotado: no se ofrece agregarlo al pedido (2.6 B)', clave(b));
+    }else{
+      if(agregar) agregar.click();
+      ok(!!agregar && PEDIDO.length === 1 && PEDIDO[0].k === clave(b), 'el pedido guarda la fila del color elegido', JSON.stringify(PEDIDO));
+    }
     PEDIDO = []; guardarPedido(); pintarPedido();
   }
   cerrarFicha();
@@ -181,7 +190,7 @@ function correrPruebas(){
       if(!comun) continue;
       const desde = grupo.find(v => colores(v).includes(comun));
       abrirFicha(clave(desde), null);
-      const p = [...document.querySelectorAll('#ficha .fi-pintas button')].find(x => norm(x.dataset.color) === comun);
+      const p = [...document.querySelectorAll('#ficha .fi-tono')].find(x => norm(x.dataset.color) === comun);
       if(p) p.click();
       const boton = irAVersion(otraOp);
       if(!boton){ cerrarFicha(); continue; }

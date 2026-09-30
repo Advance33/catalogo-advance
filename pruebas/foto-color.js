@@ -70,7 +70,7 @@ async function tocarColor(v, color){
   abrirFicha(clave(v), false);
   await dormir(400);
   const d = document.getElementById('ficha') || document;
-  const boton = [...d.querySelectorAll('.fi-pintas button')].find(b => b.dataset.color === color);
+  const boton = [...d.querySelectorAll('.fi-tono')].find(b => b.dataset.color === color);
   if(!boton) return null;
   boton.click();
   await dormir(600);

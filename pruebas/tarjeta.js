@@ -58,14 +58,15 @@ function correrPruebas(){
   ok(conRegalo.length > 0 && !malRegalo.length, 'el regalo va como cinta sobre la foto, con el texto de la planilla',
      malRegalo.map(c => c.dataset.key).slice(0, 3).join(', ') || conRegalo.length + ' con regalo');
   /* Los colores salieron de la tarjeta el 21/09 y se ven adentro de la ficha,
-     en la tira al costado de la foto. Con ellos se fue tambien lo que colgaba:
+     en la vitrina debajo de la foto (30/09, la C de la muestra de los
+     colores: "en la grilla, igual que hoy"). Con ellos se fue tambien lo que colgaba:
      pasar el mouse por un color y ver esa foto en la grilla. */
   const conColor = cs.filter(c => { const p = buscarModelo(c.dataset.key); return p && pintas(p.color || '').some(x => x.hex); });
   ok(conColor.length > 0 && !cs.some(c => c.querySelector('.pintas')),
      'los colores no estan en la tarjeta', conColor.length + ' modelos con color');
   if(conColor.length){
     abrirFicha(conColor[0].dataset.key, null);
-    const tira = document.querySelectorAll('#ficha .fi-pintas button, #ficha #fi-color-txt');
+    const tira = document.querySelectorAll('#ficha .fi-tono, #ficha #fi-color-txt');
     ok(tira.length > 0, 'y si adentro de la ficha',
        buscarModelo(conColor[0].dataset.key).desc + ': ' + tira.length + ' elemento(s)');
     cerrarFicha();
@@ -80,7 +81,7 @@ function correrPruebas(){
      capacidad adentro ("iPhone 15 Plus 128GB (Yellow)") y un modelo que agrupa
      dos capacidades se quedaba sin ella. Ahora en la grilla va el modelo y la
      capacidad se elige adentro de la ficha. El color tampoco esta en el texto:
-     se ve y se elige en la ficha, en la tira al costado de la foto (la
+     se ve y se elige en la ficha, en la vitrina debajo de la foto (la
      tarjeta no tiene puntitos desde el 21/09). */
   const CAP = /\d+(?:[.,]\d+)?\s*(?:GB|TB)\b/i;
   const conMemoria = cs.filter(c => CAP.test(c.querySelector('.nombre').textContent || ''));

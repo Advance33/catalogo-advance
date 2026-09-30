@@ -253,7 +253,7 @@ async function probarDelPedidoALaFicha(P){
     ok(!document.getElementById('pedido') && document.querySelectorAll('.modal').length === 1,
        '[5.1] nunca dos ventanas una arriba de la otra', document.querySelectorAll('.modal').length + ' ventana(s)');
     ok(FICHA === clave(P.a), '[5.1] la ficha abre en la version de la linea', FICHA);
-    ok(!P.a.color || (COLOR_FICHA === P.a.color && document.querySelector('#ficha .fi-pintas button[aria-pressed="true"]')?.dataset.color === P.a.color) ||
+    ok(!P.a.color || (COLOR_FICHA === P.a.color && document.querySelector('#ficha .fi-tono[aria-pressed="true"]')?.dataset.color === P.a.color) ||
        (pintas(P.a.color).length < 2 && dpTxt(document.getElementById('fi-color-txt')) === P.a.color),
        '[5.1] y en el color de la linea', COLOR_FICHA);
     if(P.muestra) ok(/512GB/.test(dpTxt(document.getElementById('fi-elegido'))) && /Orange/.test(dpTxt(document.getElementById('fi-elegido'))),

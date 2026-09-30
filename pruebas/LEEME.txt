@@ -166,6 +166,16 @@ si alguna falta).
                   fuente, sin palabras comerciales), que se pida recien con
                   la primera ficha y con tope, y que sin entrada no quede
                   ningun hueco.
+  decision-cuotas.js
+                  Cuotas con tarjeta (Pedro, 30/09: 1B 2B 3C 4A de
+                  muestras/cuotas) y sin factura: la cuenta de cada plan de
+                  CUOTAS, "Hasta 12 cuotas" debajo de la etiqueta de cada
+                  tarjeta (invisible en las agotadas, para que la fila quede
+                  pareja), los planes adentro de la etiqueta del precio de
+                  la ficha, "¿Pagás con tarjeta?" en el pedido con su
+                  renglon en el mensaje y en la medicion, la pregunta
+                  "¿Puedo pagar en cuotas?" y ningun IVA ni factura a la
+                  vista. Tambien a 360 px.
 
 COMO SE CORREN
 --------------

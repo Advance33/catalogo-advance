@@ -1263,6 +1263,10 @@
   .usd .desde{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
               color:#A597C4;font-style:normal;display:block;margin-bottom:5px}
   .ars{font:500 11.5px/1 var(--mono);letter-spacing:.03em;color:#A597C4;margin:0}
+  /* "Hasta 12 cuotas", debajo de la etiqueta (1B de muestras/cuotas, 30/09) */
+  .cq{display:flex;gap:6px;align-items:flex-start;margin:-2px 0 0;font:500 12px/1.3 var(--sans);color:var(--muted)}
+  .cq svg{flex:none;width:15px;height:15px;color:var(--acento)}
+  .cq.vacio{visibility:hidden}
   /* WhatsApp en la tarjeta queda como ícono: el logo se reconoce sin leer, y
      el texto lo necesita más el otro botón, que es el que arma el pedido.
      Ninguno de los dos va lleno de morado. Con quince tarjetas en pantalla,
@@ -1765,6 +1769,23 @@
   .fi-precio .sub{flex-basis:100%;font:500 12px/1 var(--mono);color:#C4B5FD;margin-top:7px}
   /* El precio anterior tachado, pegado al de hoy (2.4 C, el lila de los pesos) */
   .fi-precio s.antes{font:500 13px/1 var(--mono);color:#A597C4;padding-bottom:4px;margin-right:auto}
+  /* Las cuotas adentro de la etiqueta (2B de muestras/cuotas, 30/09): pegadas
+     al precio para que no se lean como otra versión del producto */
+  .fi-cuotas{flex:1 1 100%;display:grid;gap:9px;margin-top:4px;padding-top:12px;border-top:1px solid rgba(196,181,253,.22)}
+  .fi-cuotas-rot{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A597C4}
+  .fi-cuotas-ops{display:grid;grid-template-columns:repeat(auto-fit,minmax(44px,1fr));gap:6px}
+  .fi-cuota{padding:8px 0;border-radius:9px;cursor:pointer;border:1px solid rgba(196,181,253,.3);background:rgba(255,255,255,.04);
+            color:#DDD3F5;font:600 13px/1 var(--mono);text-align:center}
+  .fi-cuota small{display:block;font:500 8.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#A597C4;margin-top:4px}
+  .fi-cuota:hover{border-color:#C4B5FD}
+  .fi-cuota[aria-pressed="true"]{background:var(--acento);border-color:var(--acento);color:#fff;box-shadow:0 4px 14px rgba(124,58,237,.45)}
+  .fi-cuota[aria-pressed="true"] small{color:#E9DFFF}
+  .fi-cuota:focus-visible{outline:2px solid #C4B5FD;outline-offset:2px}
+  .fi-cuotas-res{min-height:40px;display:grid;gap:3px;align-content:center}
+  .fi-cuotas-res b{font:600 16px/1.2 var(--sans);color:#fff}
+  .fi-cuotas-res span{font:500 11px/1.35 var(--mono);color:#A597C4}
+  .fi-cuotas-res .nada{font:400 12.5px/1.4 var(--sans);color:#C4B5FD}
+  .fi-cuotas-nota{margin:-4px 0 0;font:400 11.5px/1.45 var(--sans);color:var(--faint)}
 
   .fi-nota{font-size:11px;color:var(--faint);margin:0}
   /* Lo que el cliente esta eligiendo, escrito de corrido, justo arriba del
@@ -2288,7 +2309,12 @@
      y "Enviar por WhatsApp", en un recuadro lila, como la muestra. Los botones
      llevan clase propia (.pd-chip) y no .chip: esa es la de los rubros, y la
      página la busca para marcar el rubro elegido. */
-  .pd-entrega{margin-top:14px;padding:13px 14px 14px;border-radius:14px;background:var(--surface-2);display:grid;gap:10px}
+  /* "¿Pagás con tarjeta?" (3C, 30/09) usa la misma caja, pegada a la de
+     arriba. Clase propia y no .pd-entrega: las pruebas de la 5.3 miran ESE
+     recuadro (su ayuda, sus botones) y no tienen por qué ver este. */
+  .pd-entrega,.pd-cuotas{margin-top:14px;padding:13px 14px 14px;border-radius:14px;background:var(--surface-2);display:grid;gap:10px}
+  .pd-entrega + .pd-cuotas{margin-top:10px}
+  .pd-ayuda b{color:var(--ink);font-weight:600}
   .pd-rot{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
   .pd-rot i{font-style:normal;color:var(--faint);letter-spacing:.06em;text-transform:none;font-weight:500;margin-left:1px}
   .pd-chips{display:flex;flex-wrap:wrap;gap:8px}
@@ -3255,6 +3281,26 @@ const COTIZACION_TIPO = 'blue';
 const RECARGO_PCT  = 0;
 const RECARGO_FIJO = 20;
 
+// ---------- CUOTAS CON TARJETA ----------
+//
+// Por Mercado Pago, con cualquier tarjeta bancarizada vinculada a la cuenta.
+// Se pagan en pesos, con la misma cotización de arriba, y vale para todos
+// los productos. Cada plan es { cuotas, recargo }: el recargo es el % TOTAL
+// que se suma al precio en pesos. Con 12 cuotas y 83.5, un producto de
+// $ 1.000.000 queda en $ 1.835.000, o sea 12 cuotas de $ 152.917.
+// Los pasó Pedro el 30/09 (muestras/cuotas, eligió 1B · 2B · 3C · 4A). Si
+// Mercado Pago los cambia, se cambian acá y cambia todo el sitio: la
+// tarjeta ("Hasta 12 cuotas"), la ficha, el pedido y las preguntas.
+// El decimal va con punto (29.75), no con coma.
+// Sin ningún plan ([]) no se ofrecen cuotas y no aparece nada.
+const CUOTAS = [
+  { cuotas: 1,  recargo: 7 },
+  { cuotas: 3,  recargo: 29.75 },
+  { cuotas: 6,  recargo: 45.55 },
+  { cuotas: 9,  recargo: 63.5 },
+  { cuotas: 12, recargo: 83.5 },
+];
+
 // ---------- FOTOS ----------
 //
 // A) Columna "Imagen" en el Sheet con el link completo. Tiene prioridad.
@@ -3336,7 +3382,10 @@ const SERVICIO = {
 //   link  → (opcional) [texto del botón, dirección]
 // Reescritas el 17/09: primero la respuesta, después el detalle. El precio en
 // pesos subió al segundo lugar porque es lo primero que se mira al entrar.
-// Ningún dato cambió: los recargos, el 10,5% y la dirección son los de siempre.
+// Ningún dato cambió: los recargos y la dirección son los de siempre.
+// 30/09: se fue "¿El precio incluye IVA?" (Pedro: ya no se hace factura) y
+// entraron la tarjeta y "¿Puedo pagar en cuotas?" (4A de muestras/cuotas).
+// Los planes salen de CUOTAS: no se escriben acá.
 const PREGUNTAS = [
   { p: '¿Cómo puedo pagar?',
     // Sin emojis a propósito: Windows no dibuja banderas y la 🇦🇷 salía como
@@ -3346,12 +3395,11 @@ const PREGUNTAS = [
             'Efectivo en pesos',
             'Transferencia bancaria en pesos (sin recargo)',
             'Criptomonedas (+2%)',
-            'PayPal, Payoneer o Prex (+10%)'] },
+            'PayPal, Payoneer o Prex (+10%)',
+            ...renglonTarjetaPagos()] },
+  ...preguntaCuotas(),
   { p: '¿Por qué cambia el precio en pesos?',
     r: ['Todos los precios están en dólares. El valor en pesos que ves al lado es una referencia: se calcula con la cotización del día, así que se mueve con el dólar.'] },
-  { p: '¿El precio incluye IVA?',
-    r: ['No. El precio que ves es sin factura.',
-        'Si la necesitás, la emitimos sumando el 10,5% de IVA.'] },
   { p: '¿Hacen envíos?',
     r: ['Sí, a todo el país. Lo despachamos por la paquetería que elijas: el costo y la demora los pone cada empresa.',
         'Si no tenés preferencia, te recomendamos Andreani.'] },
@@ -5119,6 +5167,53 @@ const precioUSD = p => p.precio === null ? 'Consultar' : 'USD ' + plata(p.precio
 const REF_PESOS = 'Referencia con la cotización del día';
 const htmlPesos = n => `<span class="aprox" title="${REF_PESOS}">≈ $ ${plata(n)}</span>`;
 const precioARS = p => (TC && p.precio) ? htmlPesos(Math.round(p.precio * TC)) : '';
+
+/* ---------- Cuotas con tarjeta (30/09) ----------
+   Pedro eligió en muestras/cuotas: "Hasta 12 cuotas" en la tarjeta (1B), los
+   planes como botones adentro de la etiqueta del precio de la ficha (2B), el
+   plan elegible en el pedido y dicho en el mensaje (3C) y una pregunta
+   frecuente propia (4A). Los planes salen de CUOTAS (arriba, con la
+   cotización); acá sólo se hacen las cuentas, las mismas que confirmó Pedro:
+   pesos = USD × cotización (igual que el "≈ $"), total = pesos × (1 +
+   recargo), cuota = total ÷ cuotas. Todo redondeado al peso.
+   Son funciones y no constantes a propósito: PREGUNTAS las usa más arriba,
+   al cargar, y una función se puede llamar antes de su renglón. */
+function planCuotas(n){ return CUOTAS.find(c => c.cuotas === n) || null; }
+// El plan más largo, para el "Hasta 12 cuotas"; 0 si no hay más que 1 pago
+function maxCuotas(){ return Math.max(0, ...CUOTAS.filter(c => c.cuotas > 1).map(c => c.cuotas)); }
+function nombreCuotas(n){ return n === 1 ? '1 pago' : n + ' cuotas'; }
+// 7 → "7%", 29.75 → "29,75%", 63.5 → "63,50%" (como los escribió Pedro)
+function pctCuotas(r){
+  return Number(r).toLocaleString('es-AR', { minimumFractionDigits: r % 1 ? 2 : 0, maximumFractionDigits: 2 }) + '%';
+}
+// { total, cuota } en pesos de un precio en dólares; null sin cotización
+function cuentaCuotas(usd, n){
+  const c = planCuotas(n);
+  if(!c || !TC || !(usd > 0)) return null;
+  const total = Math.round(Math.round(usd * TC) * (1 + c.recargo / 100));
+  return { total, cuota: Math.round(total / c.cuotas) };
+}
+// ¿Se le ofrecen cuotas a este producto? Sólo lo que se puede comprar hoy
+const conCuotas = p => maxCuotas() > 0 && !!p && p.stock && p.precio !== null;
+const LETRA_CHICA_CUOTAS = 'Con cualquier tarjeta bancarizada vinculada a Mercado Pago. En pesos, con el dólar del día: el monto se fija cuando pagás.';
+
+// El renglón de "¿Cómo puedo pagar?" (4A): [] sin planes
+function renglonTarjetaPagos(){
+  const uno = planCuotas(1), max = maxCuotas();
+  const partes = [uno && `en 1 pago (+${pctCuotas(uno.recargo)})`,
+                  max && 'en cuotas (mirá «¿Puedo pagar en cuotas?»)'].filter(Boolean);
+  return partes.length ? ['Tarjeta por Mercado Pago: ' + partes.join(' o ')] : [];
+}
+// La pregunta nueva (4A), con los planes de CUOTAS; [] si no hay cuotas
+function preguntaCuotas(){
+  const ns = CUOTAS.filter(c => c.cuotas > 1).map(c => String(c.cuotas));
+  if(!ns.length) return [];
+  const cuantas = ns.length > 1 ? ns.slice(0, -1).join(', ') + ' o ' + ns[ns.length - 1] : ns[0];
+  return [{ p: '¿Puedo pagar en cuotas?',
+    r: [`Sí, en ${cuantas} cuotas, con cualquier tarjeta bancarizada vinculada a tu cuenta de Mercado Pago. Vale para todos los productos.`,
+        'Se paga en pesos, con el dólar del día que ves en la página, más el recargo de cada plan:'],
+    lista: CUOTAS.map(c => `${nombreCuotas(c.cuotas)}: +${pctCuotas(c.recargo)}`) }];
+}
 
 // El mensaje sale igual desde la tarjeta, la ficha y el pedido
 // El mensaje que el cliente manda al tocar Consultar. Sin código interno y sin
@@ -6913,8 +7008,21 @@ function tarjeta(p){
         </div>
         ${CON_FOTOS ? '' : acciones}
       </div>
+      ${htmlCuotasTarjeta(p)}
     </div>`;
   return el;
+}
+
+/* "Hasta 12 cuotas" (1B, 30/09): sin monto, a propósito. La cuota sola, sin
+   su total, se leía como letra chica con +83,50% en 12 cuotas. El renglón va
+   también en la agotada y en la de "Consultar", pero invisible: si no, su
+   etiqueta quedaba un renglón más abajo que la de al lado en la misma fila. */
+function htmlCuotasTarjeta(p){
+  const max = maxCuotas();
+  if(!max) return '';
+  return conCuotas(p)
+    ? `<p class="cq">${ICONOS_SERVICIO.pago}<span>Hasta ${max} cuotas</span></p>`
+    : `<p class="cq vacio" aria-hidden="true">${ICONOS_SERVICIO.pago}<span>Hasta ${max} cuotas</span></p>`;
 }
 
 /* Se dibuja de a tandas. Con 483 productos, armar las 483 tarjetas en cada
@@ -10184,7 +10292,9 @@ function htmlDatosFicha(m, v){
       ${ahorro(v) ? `<s class="antes">USD ${plata(v.antes)}</s>` : ''}
       ${ars ? `<div class="ars">${ars}</div>` : ''}
       <div class="sub" id="fi-sub" hidden></div>
+      ${htmlCuotasFicha(v)}
     </div>
+    ${conCuotas(v) ? `<p class="fi-cuotas-nota">${esc(LETRA_CHICA_CUOTAS)}</p>` : ''}
     ${ejes}
     ${htmlTodasFicha(m, v)}
     ${v.incluye ? `<div class="incluye">${esc(v.incluye)}</div>` : ''}
@@ -10201,6 +10311,37 @@ function htmlDatosFicha(m, v){
     </div>
     ${htmlServicio(v)}
     <p class="fi-nota">Precio sujeto a cambio sin previo aviso. Consultá disponibilidad antes de comprar.${coti ? ' ' + esc(coti) : ''}</p>`;
+}
+
+/* Los planes adentro de la etiqueta del precio (2B de muestras/cuotas, 30/09).
+   Arranca sin ninguno marcado; tocar uno dice la cuota y el total, tocarlo
+   otra vez lo desmarca. El elegido sigue al cambiar de versión o color
+   (CUOTA_FICHA) y vuelve a cero con cada ficha nueva (abrirFicha). Tocar no
+   rehace la ficha: sólo los botones y el resultado (elegirCuotaFicha). */
+let CUOTA_FICHA = 0;
+function htmlCuotasFicha(v){
+  if(!conCuotas(v)) return '';
+  return `<div class="fi-cuotas" role="group" aria-labelledby="fi-cuotas-rot">
+      <span class="fi-cuotas-rot" id="fi-cuotas-rot">Con tarjeta, en cuotas</span>
+      <div class="fi-cuotas-ops">${CUOTAS.map(c => `<button type="button" class="fi-cuota" data-cuotas="${c.cuotas}" aria-pressed="${c.cuotas === CUOTA_FICHA}">${c.cuotas} <small>${c.cuotas === 1 ? 'pago' : 'cuotas'}</small></button>`).join('')}</div>
+      <div class="fi-cuotas-res" aria-live="polite">${textoCuotasFicha(v)}</div>
+    </div>`;
+}
+function textoCuotasFicha(v){
+  const c = planCuotas(CUOTA_FICHA);
+  if(!c) return '<span class="nada">Tocá un plan y ves cuánto es cada cuota.</span>';
+  const x = cuentaCuotas(v.precio, c.cuotas), pct = pctCuotas(c.recargo);
+  // Sin cotización no hay pesos: el plan y su recargo, sin montos
+  if(!x) return `<b>${esc(nombreCuotas(c.cuotas))}</b><span>+${pct} sobre el precio en pesos</span>`;
+  return c.cuotas === 1
+    ? `<b>1 pago de ≈ $ ${plata(x.total)}</b><span>+${pct} sobre el precio en pesos</span>`
+    : `<b>${c.cuotas} cuotas de ≈ $ ${plata(x.cuota)}</b><span>Total ≈ $ ${plata(x.total)} · +${pct}</span>`;
+}
+function elegirCuotaFicha(d, v, n){
+  CUOTA_FICHA = CUOTA_FICHA === n ? 0 : n;
+  d.querySelectorAll('.fi-cuota').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.cuotas) === CUOTA_FICHA)));
+  const res = d.querySelector('.fi-cuotas-res');
+  if(res) res.innerHTML = textoCuotasFicha(v);
 }
 
 /* ---------- La descripción del producto (30/09) ----------
@@ -10483,7 +10624,9 @@ function htmlServicio(v){
    respuesta de "¿El precio incluye IVA?" y la respuesta de "¿Cómo puedo
    pagar?" de PREGUNTAS, buscadas por la pregunta: hay una sola versión, y
    si Pedro las cambia allá, cambian acá. Sin esas preguntas, no hay renglón
-   (o no hay botón). */
+   (o no hay botón). Desde el 30/09 no hay pregunta del IVA (Pedro: ya no se
+   hace factura), así que el renglón dice "¿Cómo puedo pagar?" y despliega su
+   respuesta, que ahora trae la tarjeta. */
 const preguntaFrecuente = p => PREGUNTAS.find(q => norm(q.p) === norm(p));
 
 function htmlPagoFicha(){
@@ -10809,6 +10952,7 @@ function abrirFicha(k, historia = true){
   COLOR_FICHA = colorDe(FICHA) || colorPorDefecto(v);
   TODAS_ABIERTA = false;     // "Ver las N versiones" arranca cerrada (4.3 C)
   DESC_ABIERTO = 'por';      // la descripción entra con "Por qué elegirlo" abierto (A2, 30/09)
+  CUOTA_FICHA = 0;           // las cuotas entran sin plan marcado (2B, 30/09)
   if(historia !== null){ fichaEmpujada = historia === true; escribirURL(historia === true); }
 
   const d = document.createElement('div');
@@ -10872,6 +11016,8 @@ function engancharFicha(d, m, v){
   engancharPedidoFicha(d, v);
   pintarSubFicha(d, v);
   engancharDescripcion(d);     // el acordeón y su lugar (celular o compu)
+  // Los planes de la etiqueta del precio (2B, 30/09)
+  d.querySelectorAll('.fi-cuota').forEach(b => b.onclick = () => elegirCuotaFicha(d, v, Number(b.dataset.cuotas)));
   // "Ver formas de pago" abre y cierra la respuesta de PREGUNTAS (2.5 B)
   const desplegar = d.querySelector('.fi-desplegar');
   if(desplegar) desplegar.onclick = () => {
@@ -10937,16 +11083,19 @@ function guardarFocoFicha(d){
   const fila = !!f && !!f.matches && f.matches('.fi-fila') && d.contains(f);
   // Un título de la descripción (A2, 30/09) vuelve al mismo título
   const acd = !!f && !!f.matches && f.matches('.fi-acd-b') && d.contains(f) ? f.dataset.desc : '';
-  const otro = !!f && !eje && !pinta && !fila && !acd &&
+  // Un plan de las cuotas (2B, 30/09) vuelve al mismo plan
+  const cuota = !!f && !!f.matches && f.matches('.fi-cuota') && d.contains(f) ? f.dataset.cuotas : '';
+  const otro = !!f && !eje && !pinta && !fila && !acd && !cuota &&
     [...d.querySelectorAll('.fi-datos, .fi-colores')].some(x => x.contains(f));
   return () => {
-    if(!eje && !pinta && !fila && !acd && !otro) return;
+    if(!eje && !pinta && !fila && !acd && !cuota && !otro) return;
     // Lo que no se rehizo ni se apagó (un link de más abajo) conserva el foco
     if(f.isConnected && !f.disabled && document.activeElement === f) return;
     const x = (eje && d.querySelector(`.fi-ops[data-eje="${CSS.escape(eje)}"] .fi-op[aria-pressed="true"]:not(:disabled)`)) ||
               (pinta && d.querySelector('.fi-tono[aria-pressed="true"]:not(:disabled)')) ||
               (fila && d.querySelector('.fi-fila[aria-pressed="true"]:not(:disabled)')) ||
               (acd && d.querySelector(`.fi-acd-b[data-desc="${CSS.escape(acd)}"]`)) ||
+              (cuota && d.querySelector(`.fi-cuota[data-cuotas="${CSS.escape(cuota)}"]`)) ||
               d.querySelector('.caja');
     x?.focus({preventScroll:true});
   };
@@ -11668,8 +11817,69 @@ function releerEntrega(){
   redibujarPedido?.();
 }
 addEventListener('storage', e => { if(e.key === ENTREGA_KEY || e.key === null) releerEntrega(); });
-addEventListener('pageshow', e => { if(e.persisted) releerEntrega(); });
-document.addEventListener('visibilitychange', () => { if(!document.hidden) releerEntrega(); });
+addEventListener('storage', e => { if(e.key === CUOTAS_KEY || e.key === null) releerCuotasPedido(); });
+addEventListener('pageshow', e => { if(e.persisted){ releerEntrega(); releerCuotasPedido(); } });
+document.addEventListener('visibilitychange', () => { if(!document.hidden){ releerEntrega(); releerCuotasPedido(); } });
+
+/* ¿Pagás con tarjeta? (Pedro eligió 3C el 30/09, muestras/cuotas): en la
+   ventana del pedido, debajo de "¿Cómo lo recibís?", los planes de CUOTAS
+   como botones, opcionales igual que aquél. Si elige uno, la ayuda dice la
+   cuota y el total y el mensaje suma un renglón: "Lo pago con tarjeta en 6
+   cuotas: aprox. $ … c/u (total aprox. $ …)." Queda guardado en ese
+   navegador aparte del pedido, como la entrega: "Vaciar" no lo borra. */
+const CUOTAS_KEY = 'advtecno.cuotas';
+// null si no se pudo leer; 0 si no eligió o el plan ya no existe
+function leerCuotasPedido(){
+  try{
+    const n = Number(localStorage.getItem(CUOTAS_KEY) || 0);
+    return planCuotas(n) ? n : 0;
+  }catch{ return null; }
+}
+let CUOTAS_PEDIDO = leerCuotasPedido() || 0;
+function guardarCuotasPedido(){
+  try{
+    if(!CUOTAS_PEDIDO) localStorage.removeItem(CUOTAS_KEY);
+    else localStorage.setItem(CUOTAS_KEY, String(CUOTAS_PEDIDO));
+  }catch{}
+}
+function releerCuotasPedido(){
+  const g = leerCuotasPedido();
+  if(g === null || g === CUOTAS_PEDIDO) return;
+  CUOTAS_PEDIDO = g;
+  pintarPedido();
+  redibujarPedido?.();
+}
+/* Los montos del pedido: los del total, si hay un total que dar. Con algo
+   "a consultar" el total no es el del pedido, y todo sin stock no tiene
+   total: ahí va el plan sin montos. */
+function cuentaCuotasPedido(){
+  if(!CUOTAS_PEDIDO || hayAConsultar() || soloSinStockPedido()) return null;
+  return cuentaCuotas(totalPedido(), CUOTAS_PEDIDO);
+}
+// El renglón que se suma al mensaje; '' si no eligió nada
+function renglonCuotas(){
+  const c = planCuotas(CUOTAS_PEDIDO);
+  if(!c || soloSinStockPedido()) return '';
+  const x = cuentaCuotasPedido();
+  if(!x) return `Lo pago con tarjeta en ${nombreCuotas(c.cuotas)}.`;
+  return c.cuotas === 1
+    ? `Lo pago con tarjeta en 1 pago: aprox. $ ${plata(x.total)}.`
+    : `Lo pago con tarjeta en ${c.cuotas} cuotas: aprox. $ ${plata(x.cuota)} c/u (total aprox. $ ${plata(x.total)}).`;
+}
+function htmlCuotasPedido(){
+  if(!CUOTAS.length) return '';
+  const c = planCuotas(CUOTAS_PEDIDO), x = cuentaCuotasPedido();
+  let ayuda = 'Por Mercado Pago, con cualquier tarjeta bancarizada. Si no marcás nada, lo hablamos por WhatsApp.';
+  if(c && x) ayuda = c.cuotas === 1
+    ? `<b>1 pago de ≈ $ ${plata(x.total)}</b> (+${pctCuotas(c.recargo)})`
+    : `<b>${c.cuotas} cuotas de ≈ $ ${plata(x.cuota)}</b> · total ≈ $ ${plata(x.total)} (+${pctCuotas(c.recargo)})`;
+  else if(c) ayuda = `<b>${esc(nombreCuotas(c.cuotas))}</b> (+${pctCuotas(c.recargo)} sobre el precio en pesos)`;
+  return `<div class="pd-cuotas" role="group" aria-labelledby="pd-rot-cuotas">
+      <span class="pd-rot" id="pd-rot-cuotas">¿Pagás con tarjeta? <i>opcional</i></span>
+      <div class="pd-chips">${CUOTAS.map(q => `<button type="button" class="pd-chip" data-cuotas="${q.cuotas}" aria-pressed="${q.cuotas === CUOTAS_PEDIDO}">${esc(nombreCuotas(q.cuotas))}</button>`).join('')}</div>
+      <p class="pd-ayuda">${ayuda}</p>
+    </div>`;
+}
 
 function togglePedido(k, color){
   const i = PEDIDO.findIndex(l => l.k === k);
@@ -11803,9 +12013,12 @@ function mensajePedido(){
   // Con la copia, el vendedor sabe de qué hora es cada precio (29/09, 1.5 A)
   const h = horaDeLaCopiaALaVista();
   if(h) cola += (cola ? '\n' : '') + `Precios de las ${hhmm(h)}, a confirmar.`;
-  // Retiro o envío, si lo eligió (5.3 A): un renglón aparte, al final
+  // El plan de la tarjeta, si lo eligió (3C, 30/09), y después retiro o
+  // envío (5.3 A): cada uno en su renglón, al final
+  const cu = renglonCuotas();
   const r = renglonEntrega();
-  return `Hola! Te paso mi pedido:\n\n${lineas.join('\n')}` + (cola ? `\n\n${cola}` : '') + (r ? `\n\n${r}` : '');
+  return `Hola! Te paso mi pedido:\n\n${lineas.join('\n')}` + (cola ? `\n\n${cola}` : '') +
+    (cu ? `\n\n${cu}` : '') + (r ? `\n\n${r}` : '');
 }
 
 /* La hora de los precios en pantalla si son los de la copia de este navegador
@@ -11966,7 +12179,7 @@ function abrirPedido(){
               : `<b>USD ${plata(total)}</b>${TC ? `<i>${htmlPesos(Math.round(total*TC))}</i>` : ''}${
               sinStockPedido() ? `<i class="pd-mas">más ${sinStockPedido()} producto${sinStockPedido() > 1 ? 's' : ''} sin stock</i>` : ''}`}</div>
           </div>` : ''}
-        ${items.length && WHATSAPP ? htmlEntrega() : ''}
+        ${items.length && WHATSAPP ? htmlEntrega() + htmlCuotasPedido() : ''}
         ${items.length ? `${WHATSAPP
             ? `<div class="botones"><a class="pri" href="${linkWA(mensajePedido())}" target="_blank" rel="noopener">Enviar por WhatsApp</a></div>`
             : ''}
@@ -12004,10 +12217,16 @@ function abrirPedido(){
        mensaje letra por letra sin redibujar la ventana (le sacaría el foco
        al campo); va como propiedad y no adentro del HTML porque viene del
        navegador (ver abrirPanel). */
-    d.querySelectorAll('.pd-chip').forEach(b => b.onclick = () => {
+    d.querySelectorAll('.pd-chip[data-entrega]').forEach(b => b.onclick = () => {
       const v = b.dataset.entrega;
       ENTREGA = { ...ENTREGA, entrega: ENTREGA.entrega === v ? '' : v };
       guardarEntrega(); pintarPedido(); dibujar();
+    });
+    // ¿Pagás con tarjeta? (3C): igual que la entrega, tocar el marcado lo desmarca
+    d.querySelectorAll('.pd-chip[data-cuotas]').forEach(b => b.onclick = () => {
+      const n = Number(b.dataset.cuotas);
+      CUOTAS_PEDIDO = CUOTAS_PEDIDO === n ? 0 : n;
+      guardarCuotasPedido(); pintarPedido(); dibujar();
     });
     const loc = d.querySelector('#pd-localidad');
     if(loc){
@@ -12030,6 +12249,7 @@ function abrirPedido(){
       // Retiro o envío (5.3 A): el foco se queda en el botón que tocó, o en
       // la localidad si otra pestaña la cambió mientras escribía
       if(!x && f.dataset.entrega) x = d.querySelector(`.pd-chip[data-entrega="${CSS.escape(f.dataset.entrega)}"]`);
+      if(!x && f.dataset.cuotas) x = d.querySelector(`.pd-chip[data-cuotas="${CSS.escape(f.dataset.cuotas)}"]`);
       if(!x && f.id === 'pd-localidad') x = d.querySelector('#pd-localidad');
       if(!x || x.disabled) x = d.querySelector('.caja');
       x?.focus({preventScroll:true});
@@ -13097,7 +13317,9 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
         ...(donde === 'pedido' ? { unidades: unidadesPedido(), total: totalPedido() } : {}),
         /* Retiro o envío, si lo eligió (5.3 A): "retiro" o "envio", nada
            más. La localidad la escribe el cliente y no se manda nunca. */
-        ...(donde === 'pedido' && ENTREGA.entrega ? { entrega: ENTREGA.entrega } : {}) });
+        ...(donde === 'pedido' && ENTREGA.entrega ? { entrega: ENTREGA.entrega } : {}),
+        // El plan de la tarjeta, si eligió uno (3C, 30/09): el número de cuotas
+        ...(donde === 'pedido' && CUOTAS_PEDIDO ? { cuotas: CUOTAS_PEDIDO } : {}) });
       ANALITICA.mandar();     // se está yendo a WhatsApp: no esperar los 5 s
     }catch(err){}
   }, true);

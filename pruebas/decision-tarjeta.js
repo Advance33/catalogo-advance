@@ -411,11 +411,13 @@ function probarPrecioAnterior(){
   }
 }
 
-/* ---- 2.5 Sin factura y formas de pago ---- */
+/* ---- 2.5 Sin factura y formas de pago ----
+   (30/09) Pedro saco la factura: ya no hay "¿El precio incluye IVA?" y el
+   renglon dice "¿Cómo puedo pagar?", sin respuesta abajo (decision-cuotas). */
 function probarFormasDePago(){
   const iva = PREGUNTAS.find(q => q.p === '¿El precio incluye IVA?');
   const pagar = PREGUNTAS.find(q => q.p === '¿Cómo puedo pagar?');
-  ok(!!iva && !!pagar, '[2.5] PREGUNTAS tiene "¿El precio incluye IVA?" y "¿Cómo puedo pagar?"');
+  ok(!iva && !!pagar, '[2.5] PREGUNTAS tiene "¿Cómo puedo pagar?" y ya no "¿El precio incluye IVA?"');
   ok(!!ICONOS_SERVICIO.pago, '[2.5] hay icono para el renglon en ICONOS_SERVICIO');
   const m = MODELOS.find(x => x.stock && x.multi);
   abrirFicha(clave(m.rep), null);
@@ -424,8 +426,8 @@ function probarFormasDePago(){
   const li = d.querySelector('.fi-servicio li[data-servicio="pago"]');
   ok(li && lis.map(x => x.dataset.servicio).join(',') === 'retiro,garantia,pago',
      '[2.5] un renglon nuevo junto a retiro y garantia', lis.map(x => x.dataset.servicio).join(','));
-  ok(li && dtTxt(li.querySelector('b')) === iva.p && dtTxt(li.querySelector('i')) === iva.r.join(' '),
-     '[2.5] con la pregunta y la respuesta del IVA, tal cual', li && dtTxt(li.querySelector('b')) + ' / ' + dtTxt(li.querySelector('i')));
+  ok(li && dtTxt(li.querySelector('b')) === pagar.p && !li.querySelector('i'),
+     '[2.5] con la pregunta «¿Cómo puedo pagar?», tal cual', li && dtTxt(li.querySelector('b')));
   const bot = li && li.querySelector('.fi-desplegar');
   const caja = li && li.querySelector('#fi-pagos');
   ok(bot && dtTxt(bot) === 'Ver formas de pago' && bot.getAttribute('aria-expanded') === 'false' && caja && caja.hidden &&
@@ -443,7 +445,7 @@ function probarFormasDePago(){
   } else info('[2.5] sin el boton no se prueba el desplegar');
   // Nada inventado: fuera de PREGUNTAS, solo el texto del boton
   let resto = dtTxt(li);
-  [iva.p, ...iva.r, ...pagar.r, ...(pagar.lista || []), 'Ver formas de pago'].forEach(t => { resto = resto.split(t).join(''); });
+  [pagar.p, ...pagar.r, ...(pagar.lista || []), 'Ver formas de pago'].forEach(t => { resto = resto.split(t).join(''); });
   ok(li && !resto.replace(/\s+/g, ''), '[2.5] ningun texto que no este en PREGUNTAS', resto.trim() || 'nada');
   // Cambiar de version no lo duplica ni lo pierde
   const otra = [...d.querySelectorAll('.fi-op')].find(b => b.getAttribute('aria-pressed') !== 'true');

@@ -1,0 +1,15 @@
+{
+ "leeme": "Correcciones de datos de ADVAPP que confirmó Pedro (o que salen de su respuesta). herramientas/pedido-advapp.py las suma a CORRECCIONES-ADVAPP.json mientras ADVAPP diga otra cosa; cuando ADVAPP ya dice lo mismo, dejan de salir solas. Se aplican en ADVAPP: LISTAS → ⚙ Configuración de LISTAS → Padrón → Correcciones de la auditoría. Campos posibles: nombre (la Descripción completa), color, categoria, codigo, codigo_var.",
+ "correcciones": [
+  {"id": "CEL-XIA-092", "cambios": {"nombre": "Redmi Note 15 Pro 4G 8/256GB (Black)"},
+   "motivo": "Pedro, 01/10: los Redmi Note 15 Pro negros sin [5G] son 4G; el nombre decía 5G", "fecha": "2026-10-01"},
+  {"id": "CEL-XIA-REDMINOTE15PRO-12G512-BLK-000", "cambios": {"nombre": "Redmi Note 15 Pro 4G 12/512GB (Black)"},
+   "motivo": "Pedro, 01/10: los Redmi Note 15 Pro negros sin [5G] son 4G; el nombre decía 5G", "fecha": "2026-10-01"},
+  {"id": "CEL-SAM-S25ULT-1TB-GRY-000", "cambios": {"nombre": "Galaxy S25 Ultra 12GB/1TB 5G (Gray)"},
+   "motivo": "Pedro, 01/10: el S25 Ultra de 1 TB que vende es de 12 GB, no de 16", "fecha": "2026-10-01"},
+  {"id": "CEL-SAM-S25ULT-1TB-SBL-000", "cambios": {"nombre": "Galaxy S25 Ultra 12GB/1TB 5G (Silverblue)"},
+   "motivo": "Pedro, 01/10: el S25 Ultra de 1 TB que vende es de 12 GB, no de 16", "fecha": "2026-10-01"},
+  {"id": "CEL-SAM-S25ULT-1TB-WSL-000", "cambios": {"nombre": "Galaxy S25 Ultra 12GB/1TB 5G (Whitesilver)"},
+   "motivo": "Pedro, 01/10: el S25 Ultra de 1 TB que vende es de 12 GB, no de 16", "fecha": "2026-10-01"}
+ ]
+}

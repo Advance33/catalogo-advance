@@ -1220,6 +1220,62 @@ def correcciones_de(hallados, filas):
     return lista
 
 
+# Lo que confirmo Pedro (01/10/2026). La auditoria encuentra lo que se puede
+# deducir de los datos; hay correcciones que sólo él sabe (un Redmi que es 4G
+# aunque el nombre diga 5G, un S25 Ultra de 12 GB que dice 16). Esas se anotan
+# en herramientas/correcciones-confirmadas.json y salen en el mismo archivo
+# que se aplica desde ADVAPP, con el valor de hoy como "antes" (ADVAPP no pisa
+# lo que alguien cambió después). Cuando ADVAPP ya dice lo mismo, dejan de
+# salir solas: no hay que borrarlas a mano.
+CONFIRMADAS = os.path.join(AQUI, 'correcciones-confirmadas.json')
+CAMPOS_ADVAPP = {'codigo': 'CODIGO', 'codigo_var': 'CODIGO_VAR', 'categoria': 'Categoría',
+                 'nombre': 'Descripción completa', 'color': 'Color'}
+
+
+def leer_confirmadas(ruta=None):
+    ruta = ruta or CONFIRMADAS
+    if not os.path.exists(ruta):
+        return []
+    try:
+        d = json.load(open(ruta, encoding='utf-8'))
+    except ValueError as e:
+        raise ArchivoDanado('%s está dañado: %s' % (os.path.relpath(ruta, RAIZ), e))
+    lista = d.get('correcciones') if isinstance(d, dict) else None
+    if not isinstance(lista, list):
+        raise ArchivoDanado('%s no trae la lista "correcciones"' % os.path.relpath(ruta, RAIZ))
+    for c in lista:
+        if not isinstance(c, dict) or not c.get('id') or not isinstance(c.get('cambios'), dict) \
+                or any(k not in CAMPOS_ADVAPP for k in c['cambios']) or not c.get('motivo'):
+            raise ArchivoDanado('%s: cada corrección lleva id, cambios (%s) y motivo: %r'
+                                % (os.path.relpath(ruta, RAIZ), ', '.join(CAMPOS_ADVAPP), c))
+    return lista
+
+
+def sumar_confirmadas(lista, filas, confirmadas):
+    """Las confirmadas que ADVAPP todavía no tiene, sumadas a las de la
+    auditoría (en la misma corrección si es el mismo producto). Devuelve la
+    lista y cuántas ya estaban aplicadas."""
+    por_id = {f['ID']: f for f in filas}
+    out = collections.OrderedDict((x['id'], x) for x in lista)
+    aplicadas = 0
+    for c in confirmadas:
+        f = por_id.get(c['id'])
+        if not f:
+            continue
+        pend = {k: v for k, v in c['cambios'].items() if (f.get(CAMPOS_ADVAPP[k]) or '').strip() != v}
+        if not pend:
+            aplicadas += 1
+            continue
+        x = out.setdefault(c['id'], {'id': c['id'], 'producto': _desc(f), 'cambios': {}, 'antes': {}, 'reglas': []})
+        for k, v in pend.items():
+            x['antes'].setdefault(k, (f.get(CAMPOS_ADVAPP[k]) or '').strip())
+            x['cambios'][k] = v
+        regla = 'Confirmado por Pedro: ' + c['motivo']
+        if regla not in x['reglas']:
+            x['reglas'].append(regla)
+    return list(out.values()), aplicadas
+
+
 def escribir_correcciones(lista, man):
     with open(SALIDA_JSON, 'w', encoding='utf-8') as fh:
         json.dump({'armado': HOY.isoformat(), 'contra': man.get('generado_en') or '',
@@ -1339,7 +1395,16 @@ def main():
             L.append('  %s   (pedido el %s)' % (k.split('|')[1], fecha(v['enviado'])))
     with open(SALIDA, 'w', encoding='utf-8') as fh:
         fh.write('\n'.join(L) + '\n')
-    escribir_correcciones(correcciones_de(hallados, filas), man)
+    try:
+        confirmadas = leer_confirmadas()
+    except ArchivoDanado as e:
+        print(e)
+        confirmadas = []
+    lista, ya = sumar_confirmadas(correcciones_de(hallados, filas), filas, confirmadas)
+    if confirmadas:
+        print('Confirmadas por Pedro: %d pendientes de aplicar, %d ya aplicadas en ADVAPP'
+              % (len(confirmadas) - ya, ya))
+    escribir_correcciones(lista, man)
 
     print('Pedido a ADVAPP: %d puntos (%d nuevos, %d ya pedidos), %d arreglados desde el ultimo envio.'
           % (len(hallados), len(nuevos), len(hallados) - len(nuevos), len(arreglados)))
@@ -1512,6 +1577,32 @@ def probar():
            'con ADVAPP caido sale con 2 y no toca el borrador, los pendientes ni el registro')
     finally:
         SALIDA, NUESTROS, REGISTRO, PREGUNTAS, validar.bajar_advapp = viejos
+    # 12b) Las confirmadas por Pedro: se suman con el "antes" de hoy, se
+    #      juntan con la corrección de la auditoría del mismo producto y,
+    #      cuando ADVAPP ya dice lo mismo, dejan de salir
+    filas_c = [fila('X-1', 'Redmi Note 15 Pro 5G 8/256GB (Black)', 'Black'),
+               fila('X-2', 'Galaxy S25 Ultra 12GB/1TB 5G (Gray)', 'Gray')]
+    conf = [{'id': 'X-1', 'cambios': {'nombre': 'Redmi Note 15 Pro 4G 8/256GB (Black)'}, 'motivo': 'prueba'},
+            {'id': 'X-2', 'cambios': {'nombre': 'Galaxy S25 Ultra 12GB/1TB 5G (Gray)'}, 'motivo': 'prueba'},
+            {'id': 'NO-EXISTE', 'cambios': {'color': 'Rojo'}, 'motivo': 'prueba'}]
+    previa = [{'id': 'X-1', 'producto': 'x', 'cambios': {'codigo': 'AT-0119'}, 'antes': {'codigo': ''}, 'reglas': ['r']}]
+    lst, ya = sumar_confirmadas(previa, filas_c, conf)
+    x1 = [x for x in lst if x['id'] == 'X-1']
+    ok(len(lst) == 1 and len(x1) == 1 and x1[0]['cambios'] == {'codigo': 'AT-0119', 'nombre': 'Redmi Note 15 Pro 4G 8/256GB (Black)'}
+       and x1[0]['antes']['nombre'] == 'Redmi Note 15 Pro 5G 8/256GB (Black)' and ya == 1,
+       'las confirmadas se suman a la misma corrección, con el "antes" de hoy; la ya aplicada y la de un ID que no está no salen')
+    with tempfile.TemporaryDirectory() as tmp:
+        mala = os.path.join(tmp, 'c.json')
+        open(mala, 'w', encoding='utf-8').write('{"correcciones": [{"id": "X", "cambios": {"precio": "1"}, "motivo": "m"}]}')
+        try:
+            leer_confirmadas(mala)
+            ok(False, 'una confirmada que cambia un campo no permitido (precio) se rechaza')
+        except ArchivoDanado:
+            ok(True, 'una confirmada que cambia un campo no permitido (precio) se rechaza')
+    try:
+        ok(isinstance(leer_confirmadas(), list), 'herramientas/correcciones-confirmadas.json se lee (%d)' % len(leer_confirmadas()))
+    except ArchivoDanado as e:
+        ok(False, str(e))
     # 13) Las preguntas del repo se leen
     try:
         qs = leer_preguntas()

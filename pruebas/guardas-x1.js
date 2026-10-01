@@ -189,7 +189,10 @@ function montura(crudo){
     if(!p || !f || !(f.SKUS || []).every(s => fin(s && s.sku) === suf)){ info('[196] ' + id + ' ya no viene con -' + suf + ': no se prueba'); continue; }
     ok(p.montura === m, '[196] ' + id + ' "' + (p.modelo || p.desc) + '" es ' + m, p.montura || 'sin montura');
     const mod = buscarModelo(clave(p));
-    ok(!!mod && mod.montura === m, '[196] y su tarjeta entra en el filtro ' + m, mod && mod.montura);
+    // 01/10/2026: la tarjeta puede juntar el mismo objetivo para varias
+    // monturas; entra en el filtro si alguna de sus versiones es de esa.
+    const delModelo = mod ? (mod.variantes || [mod]).map(v => v.montura) : [];
+    ok(delModelo.includes(m), '[196] y su tarjeta entra en el filtro ' + m, delModelo.join(' | '));
   }
   const noLentes = PRODUCTOS.filter(p => !esLente(p) && p.montura);
   ok(!noLentes.length, '[196] fuera de los objetivos nadie tiene montura',

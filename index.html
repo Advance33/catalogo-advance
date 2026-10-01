@@ -4670,6 +4670,10 @@ function armarCarga(datos){
     // lo reescribio; hoy todas son AT-#### (29/09). Sirve para buscar el
     // codigo en el mapa y para leer la Sim, el teclado y la conexion del final.
     sku:col('sku'),
+    // El SKU de la variante de ADVAPP ("CON-SON-PS5-1TB-000-STD"): sus tres
+    // primeros bloques son la madre, que decide la tarjeta (familia). Exacto:
+    // con "empieza igual", col('sku') ya agarra la de arriba.
+    skuVariante:colExacta('sku_variante', 'sku variante'),
     // El codigo propio del catalogo: la identidad que se asigna una vez y no
     // cambia nunca. Desde el contrato landing/1.3 viene en la planilla; si
     // faltara, codigoDeLaFila lo busca en el mapa de fotos/indice.json.
@@ -4712,6 +4716,7 @@ function armarCarga(datos){
         catPlanilla: val(f,C.cat),
         grupo:  val(f,C.grupo),
         sku:    val(f,C.sku),
+        skuVariante: val(f,C.skuVariante),
         marca:  val(f,C.marca),
         modelo: val(f,C.modelo),
         desc:   val(f,C.desc) || val(f,C.modelo),
@@ -4813,9 +4818,10 @@ function armarCarga(datos){
    (listaDeLaGrilla, 2.1 B). null si no hay ningún filtro de versión. */
 function versionPedida(){
   const r = filtros.rango ? RANGOS.find(x => x[0] === filtros.rango) : null;
-  if(!(filtros.soloStock || filtros.capacidad || filtros.ram || r)) return null;
+  if(!(filtros.soloStock || filtros.capacidad || filtros.ram || filtros.montura || r)) return null;
   return v =>
     (!filtros.soloStock || v.stock) &&
+    (!filtros.montura || v.montura === filtros.montura) &&
     (!filtros.capacidad || capacidadDe(v) === filtros.capacidad) &&
     (!filtros.ram || ramDe(v) === filtros.ram) &&
     (!r || enTramo(v.precio, r));
@@ -4833,7 +4839,11 @@ function filtrar(){
     if(filtros.cat   && p.cat   !== filtros.cat)   return false;
     if(filtros.marca && p.marca !== filtros.marca) return false;
     if(versionOK && !p.variantes.some(versionOK)) return false;
-    if(filtros.montura  && p.montura  !== filtros.montura)  return false;
+    /* La montura, de cualquier versión (01/10): con la tarjeta por SKU madre,
+       el mismo objetivo para Canon y para Sony es una sola tarjeta, y p.montura
+       es la de la versión que la representa. La tarjeta muestra la que pide
+       el filtro (versionPedida). */
+    if(filtros.montura  && !(p.variantes || [p]).some(v => v.montura === filtros.montura)) return false;
     if(filtros.apertura && p.apertura !== filtros.apertura) return false;
     return coincide(p, palabras);
   });
@@ -6188,9 +6198,24 @@ const RE_COLOR  = /\b(?:midnight|starlight|silver|space gray|rose gold|jet black
 
 const esReloj = p => ['apple watch','smartwatch'].includes(norm(p.cat));
 
-// Dos filas con la misma familia son el mismo modelo. La columna Grupo de la
-// planilla, si está, manda sobre todo esto.
+/* La madre del SKU: los tres primeros bloques de SKU_VARIANTE
+   ("CON-SON-PS5-1TB-000-STD" -> "CON-SON-PS5"). '' si no los tiene. */
+function madreDelSku(s){
+  const b = String(s || '').trim().split('-');
+  return b.length >= 3 && b[0] && b[1] && b[2] ? b.slice(0, 3).join('-').toUpperCase() : '';
+}
+
+// Dos filas con la misma familia son el mismo modelo.
+/* Una ficha por SKU madre (Benja, 01/10: "juntemos todo"). La madre es la
+   identidad que ADVAPP le da al modelo, y manda sobre la columna Grupo, que
+   venía de la planilla vieja y partía un mismo modelo en varias tarjetas: el
+   MacBook Pro M5 14" con teclado español en una aparte, la PS5 física y la
+   digital, los cuatro Skyler. La fila sin SKU_VARIANTE sigue como hasta hoy:
+   el Grupo y, si no hay, el nombre. Lo que separa a las versiones lo dicen
+   los botones de la ficha (armarModelo, htmlOpcionesFicha). */
 function familia(p){
+  const madre = madreDelSku(p.skuVariante);
+  if(madre) return 'M:' + madre;
   if(p.grupo) return 'G:' + norm(p.grupo);
   let t = (p.desc || '').replace(RE_PAREN,' ').replace(RE_CORCH,' ')
                         .replace(RE_DUAL,' ').replace(RE_CAP,' ').replace(RE_RAM,' ');
@@ -6259,7 +6284,30 @@ function nombreGrupo(vs){
   /* Sin comienzo comun, se prueba sin la marca. Antes se rendia y ponia el
      nombre ENTERO de la primera fila: el Galaxy S26 salia titulado "Samsung
      Galaxy S26 12/256GB (Black)" con los 512GB y los otros colores adentro. */
-  return sinLaMarca(prefijoComun(vs.map(v => sinMarca(v.desc, v.marca))) || vs[0].desc);
+  const sm = prefijoComun(vs.map(v => sinMarca(v.desc, v.marca)));
+  if(sm) return sinLaMarca(sm);
+  /* Y con una sola palabra en común, esa palabra, si no es la marca (01/10).
+     Desde que la tarjeta es la madre del SKU, una palabra sí nombra al modelo:
+     "EarPods Lightning" y "EarPods USB-C" son los EarPods, y los botones dicen
+     Lightning y USB-C. Rindiéndose, la tarjeta se llamaba "EarPods Lightning"
+     con el USB-C adentro, y la Switch 2 "Switch 2 Solo Consola" con el precio
+     del combo con el Mario Kart. "Apple" sola sigue sin nombrar nada. */
+  const una = prefijoComun(vs.map(v => sinMarca(v.desc, v.marca)), 1);
+  if(una && norm(una) !== norm(vs[0].marca)) return una;
+  /* Sin nada en común, el nombre que más se repite, sin el paréntesis de
+     colores (01/10). Era el de la primera fila con su color adentro: los
+     Skyler se llamaban "Rayban Meta GEN2 Skyler (Shiny Chalky Grey ·
+     Transitions Sapphire)" y las otras tres salían como una versión aparte.
+     Pasa cuando ADVAPP escribe el mismo modelo de dos maneras: eso se
+     arregla allá, esto es para que mientras tanto no se vea peor. */
+  const sinColores = d => String(d || '').replace(/\s*\(([^)]*)\)\s*$/, (todo, dentro) => {
+    const lista = pintas(dentro);
+    return (lista.length && lista.every(c => c.hex)) ? '' : todo;
+  }).trim();
+  const veces = new Map();
+  vs.forEach(v => { const n = sinColores(v.desc); veces.set(n, (veces.get(n) || 0) + 1); });
+  const masVeces = [...veces.entries()].sort((a, b) => b[1] - a[1])[0][0];
+  return sinLaMarca(masVeces || vs[0].desc);
 }
 
 /* El agregado que TODAS las filas dicen al final, después de lo que las
@@ -6301,7 +6349,7 @@ function sinAgregado(e, agregado){
   return t || e;
 }
 
-function prefijoComun(descs){
+function prefijoComun(descs, minimo = 2){
   const pal = descs.map(d => d.split(/\s+/));
   const out = [];
   for(let i = 0, min = Math.min(...pal.map(w => w.length)); i < min; i++){
@@ -6314,7 +6362,9 @@ function prefijoComun(descs){
   const n = out.join(' ').replace(/\s*\([^)]*$/,'').replace(/[\s\-–(]+$/,'');
   // Un prefijo de una sola palabra no nombra nada ("Apple"): antes de mostrar
   // eso, preferimos el nombre completo de la primera variante (nombreGrupo).
-  return n.split(/\s+/).filter(Boolean).length >= 2 ? n : '';
+  // Desde el 01/10 nombreGrupo pide una sola (minimo = 1) como último intento,
+  // y sólo la usa si no es la marca: "EarPods", "Airtag".
+  return n.split(/\s+/).filter(Boolean).length >= minimo ? n : '';
 }
 
 // Lo que distingue a esta variante de sus hermanas: "512gb", "16ram 1tb",
@@ -6399,6 +6449,31 @@ function emparejarVersion(e, p, coloresDelModelo){
   // El teclado, con el mismo nombre que usa la ficha (idiomaTeclado)
   s = s.replace(/\bteclado\s+(esp(?:añol)?|es|ingl[ée]s|ing|en)\b/gi,
                 (_, x) => 'Teclado ' + (/^es/i.test(x) ? 'español' : 'inglés'));
+  /* Y el idioma abreviado sin la palabra "Teclado" (01/10), sólo en una fila
+     que tiene teclado: el MacBook Pro M5 14" 16GB/1TB "Esp", que al juntarse
+     con los de "Teclado ES" ofrecía "16GB/1TB Esp" al lado de "24GB/1TB ·
+     Teclado español". */
+  if(p && p.teclado)
+    s = s.replace(/(^|\s)(esp|ing)(?=\s|$|·)/gi,
+                  (_, a, x) => a + 'Teclado ' + (/^e/i.test(x) ? 'español' : 'inglés'));
+  /* La conexión celular, escrita igual (01/10): "Cell 5G", "+Cell" y
+     "Cellular" son lo mismo, y en el iPad Pro M5 11" la de 256GB decía
+     "Cellular" y la de 512GB "Cell 5G". */
+  s = s.replace(/(^|\s)\+?cell(?:ular)?\b(?:\s+5g\b)?/gi, '$1Cellular');
+  // Los milímetros en minúscula, como los escribe el resto ("44MM", "16-50 Mm")
+  s = s.replace(/(\d)\s*mm\b/gi, '$1mm');
+  /* En los relojes la medida va primero, como la escribe ADVAPP en las filas
+     nuevas ("42mm GPS"): las viejas decían "GPS 46mm" y en la misma ficha
+     convivían los dos órdenes. Y el color de la fila se va aunque no esté al
+     final ("GPS 46mm Silver M/L"): se elige con los puntitos. */
+  if(p && esReloj(p)){
+    const mm = s.match(/\b\d{2}mm\b/i);
+    if(mm && s.indexOf(mm[0]) > 0) s = mm[0] + ' ' + s.replace(mm[0], ' ');
+    for(const c of partirColores(p.color || '')){
+      const t = (c || '').trim();
+      if(t) s = s.replace(new RegExp('(^|\\s)' + escRe(t) + '(?=\\s|$)', 'i'), ' ');
+    }
+  }
   // Siempre con el mismo separador, tenga o no punto medio en la planilla
   s = s.replace(/\s*·\s*/g, ' · ').replace(/(?:\s*·\s*|\s+)(Teclado\b)/gi, ' · $1');
   /* El color se saca sólo si es el de ESTA fila: el cliente lo elige con los
@@ -6437,7 +6512,14 @@ function etiquetaVariante(p, nombre, coloresDelModelo){
   // La planilla escribe la capacidad como se le ocurre ("128gb", "512GB") y en
   // los botones quedaban mezcladas. Acá se emparejan.
   e = e.replace(/(\d+\s*)(gb|tb)\b/gi, (_,n,u) => n.trim() + u.toUpperCase());
+  /* "Gen" suelto al principio es del nombre, no de la versión (01/10): "Watch
+     SE 3 Gen 44MM +Cell" es la tercera generación del SE 3, y el botón decía
+     "Gen 44MM +Cell" al lado de "44mm GPS". Sólo si el nombre termina en el
+     número de esa generación. */
+  if(/\d$/.test(String(nombre || '').trim())) e = e.replace(/^gen\.?\s+(?=\S)/i, '');
   e = emparejarVersion(e, p, coloresDelModelo);
+  // Si no le quedó nada, armarModelo lo sabe por acá (ver 'Base' allá)
+  p.sinVersion = !e;
   if(e) return e;
   // Sin nada que la distinga, la variante se queda con el color. Cuando la
   // columna Color está vacía suele estar al final del nombre, entre paréntesis
@@ -6496,7 +6578,17 @@ function colapsarIguales(vs){
        agotadas habiendo stock, cuando el sheet junto sus filas en un Grupo. */
     if(!ya || (!ya.stock && v.stock)) porFirma.set(f, v);
   });
-  const quedan = [...porFirma.values()];
+  let quedan = [...porFirma.values()];
+  /* La fila SIN color que repite a otra CON color (01/10): mismo nombre,
+     mismo precio, mismo regalo y teclado, y el mismo SKU de ADVAPP. Es la
+     misma cosa cargada dos veces, una de ellas sin decir el color: la Galaxy
+     Tab A11+ 6GB/128GB tenía la fila vieja TAB-SAM-035 (sin color, sin stock)
+     al lado de la Gray con stock, y la ficha ofrecía un botón para cada una.
+     Sólo si la de color tiene stock o ninguna lo tiene: si la que tiene stock
+     es la que no dice color, se muestran las dos. */
+  const sinColor = v => firmaVisible({ ...v, color: '' }) + '|' + v.precio + '|' + norm(v.sku);
+  quedan = quedan.filter(v => !(v.sku && !partirColores(v.color).length && quedan.some(x =>
+    x !== v && partirColores(x.color).length && sinColor(x) === sinColor(v) && (x.stock || !v.stock))));
   /* Las descartadas NO se tiran: se devuelven aparte para que el modelo se las
      guarde. Tirarlas rompia dos cosas: la cuenta de que ninguna fila del Sheet
      se pierde por el camino -que es la red que avisa si un bug deja productos
@@ -6617,6 +6709,45 @@ function armarModelo(vs){
     if(agregado) v.etiqueta = sinAgregado(v.etiqueta, agregado);
     v.etiquetaBase = v.etiqueta;
   });
+  /* En los objetivos el botón es la montura (01/10), la misma que usa el
+     filtro (p.montura: primero el final del SKU, MONTURAS_DEL_SKU). Con la
+     tarjeta por SKU madre, el mismo objetivo para cada montura es una versión,
+     y lo que quedaba del nombre del proveedor era desparejo: "C Canon" al
+     lado de "DC DN Contemporary Sony", "18-300mm F/3.5-6.3 III Nikon" al lado
+     de "Canon RF". Sólo si todas las filas dicen su montura y no se repite
+     ninguna: si dos filas son de la misma montura, lo que las separa es otra
+     cosa y queda el texto. */
+  if(vs.length > 1 && vs.every(v => esLente(v) && v.montura) &&
+     new Set(vs.map(v => v.montura)).size === vs.length){
+    vs.forEach(v => { v.etiqueta = v.etiquetaBase = v.montura; v.sinVersion = false; });
+  }
+  /* El talle de la malla en los relojes, sólo si TODAS las filas lo dicen
+     (01/10). Las filas nuevas del Watch Series 11 no lo dicen ("46mm GPS") y
+     las viejas sí ("GPS 46mm Silver M/L"): la misma versión salía en dos
+     botones. Si todas lo dicen, se queda, que ahí sí es algo que se elige. */
+  const dice = re => v => (String(v.desc || '').match(re) || []).length > 0;
+  if(vs.length > 1 && esReloj(vs[0]) && !vs.every(dice(RE_TALLE))){
+    vs.forEach(v => {
+      if(v.sinVersion) return;     // ésa dice su color, con el talle adentro
+      const t = v.etiqueta.replace(RE_TALLE, ' ').replace(/\s{2,}/g, ' ').replace(/^[\s·]+|[\s·]+$/g, '').trim();
+      if(t){ v.etiqueta = t; v.etiquetaBase = t; }
+    });
+  }
+  /* La versión a la que no le queda nada, cuando otras sí dicen algo (01/10):
+     "Base", la misma palabra que usan las pestañas (etiquetasDeVersion). Se
+     quedaba con su color o con "Estándar", y la Xbox Series X ofrecía sólo
+     los puntitos White y Black: el "Digital" de la blanca no se leía en
+     ningún lado. Si a ninguna le queda nada, son colores y van en la tira. */
+  /* Y "Wifi" en vez de "Base" si otra dice Cellular y el SKU de ésta dice
+     Wifi, como las pestañas: la Galaxy Tab A11+ ofrecía "Estándar" contra
+     "Cellular". */
+  if(vs.some(v => v.sinVersion) && vs.some(v => !v.sinVersion)){
+    const hayCell = vs.some(v => !v.sinVersion && /\bcell(?:ular)?\b/i.test(v.etiqueta));
+    vs.forEach(v => {
+      if(!v.sinVersion) return;
+      v.etiqueta = v.etiquetaBase = hayCell && v.conexion === 'Wifi' ? 'Wifi' : 'Base';
+    });
+  }
   /* Va antes de las hermanas de color y del agrupado por version, para que
      todo lo de abajo vea la etiqueta ya completa: las tres filas del 512GB
      eSIM (Orange, Blue, Silver) terminan en un solo boton con sus puntitos. */
@@ -6762,6 +6893,14 @@ function armarModelo(vs){
              : base;
     grupo.forEach(v => { v.opcion = et; });
   }
+  /* Si el modelo trae los dos teclados, todos los botones dicen el suyo
+     (01/10). Se nombraba sólo donde la misma memoria venía con los dos, y el
+     MacBook Pro M5 14" quedaba con "32GB/1TB" pelado al lado de "24GB/1TB ·
+     Teclado inglés": el cliente no sabía qué teclado traía. */
+  if(new Set(vs.map(v => norm(v.teclado)).filter(Boolean)).size > 1)
+    vs.forEach(v => {
+      if(v.teclado && !/teclado/i.test(v.opcion)) v.opcion = v.opcion + ' · ' + nombreTeclado(v.teclado);
+    });
 
   /* Y la tira de colores tiene que ofrecer TODOS los colores del botón. Se
      calculó más arriba con el nombre de la planilla, cuando estas filas
@@ -7509,13 +7648,19 @@ function sirveParaLoQueMira(cat){
   const lentes = cat === 'Cámara'
     ? new Set(LISTA.filter(m => m.cat === 'Cámara').flatMap(monturasDelCuerpo)) : null;
   // Desde los lentes: los cuerpos a los que les entra alguno de los de la pantalla
+  /* Las monturas de un objetivo de la pantalla (01/10): con la tarjeta por
+     SKU madre, el mismo objetivo trae varias (Canon RF, Sony E). Si la
+     tarjeta está filtrada por una (vistaFiltrada), sólo la de esa versión:
+     mirando Canon RF no se sugiere una Z30 porque el 18-300mm también viene
+     para Nikon Z. */
+  const monturasDe = m => m.filtrada ? [m.rep.montura] : (m.variantes || [m]).map(v => v.montura);
   const monturas = cat === 'Objetivo'
-    ? new Set(LISTA.filter(m => m.cat === 'Objetivo' && m.montura).map(m => m.montura)) : null;
+    ? new Set(LISTA.filter(m => m.cat === 'Objetivo').flatMap(monturasDe).filter(Boolean)) : null;
   // Desde una consola de una marca: solo los accesorios de esa consola
   const consola = cat === 'Consola' && marca ? marca : '';
   return m => {
     if(sinApple && norm(m.marca) === 'apple') return false;
-    if(lentes && m.cat === 'Objetivo') return lentes.has(m.montura);
+    if(lentes && m.cat === 'Objetivo') return monturasDe(m).some(x => lentes.has(x));
     if(monturas && m.cat === 'Cámara') return monturasDelCuerpo(m).some(x => monturas.has(x));
     if(consola && m.cat === 'Accesorio Gaming') return plataformasDe(m).includes(consola);
     return true;
@@ -7798,7 +7943,8 @@ function gruposDeFiltros(){
   if(cap.length) grupos.push({ campo: 'capacidad', titulo: 'Capacidad', opciones: cap.map(v => ({ v, t: v })) });
   if(ram.length) grupos.push({ campo: 'ram', titulo: 'Memoria', opciones: ram.map(v => ({ v, t: v })) });
   if(norm(filtros.cat) === 'objetivo'){
-    const monturas = [...new Set(MODELOS.filter(m => m.cat === filtros.cat && m.montura).map(m => m.montura))]
+    const monturas = [...new Set(MODELOS.filter(m => m.cat === filtros.cat)
+                       .flatMap(m => (m.variantes || [m]).map(v => v.montura)).filter(Boolean))]
                        .sort((a, b) => a.localeCompare(b, 'es'));
     if(monturas.length > 1) grupos.push({ campo: 'montura', titulo: 'Montura', opciones: monturas.map(v => ({ v, t: v })) });
     grupos.push({ campo: 'apertura', titulo: 'Apertura',
@@ -10174,7 +10320,9 @@ function partesElegido(m, v){
   const nombre = nombreFicha(m, v).trim();
   const op = v.opcion || v.etiqueta;
   const esColor = m.multi && opcionEsColor(m.variantes.filter(x => (x.opcion || x.etiqueta) === op), op);
-  const version = ((m.multi && !esColor && op) || '').trim();
+  /* "Base" es la palabra del botón de la versión que no agrega nada (01/10):
+     acá no suma, y "Xbox Series X Base" se leía como otro producto. */
+  const version = ((m.multi && !esColor && norm(op) !== 'base' && op) || '').trim();
   return [nombre, version && !norm(nombre).includes(norm(version)) ? ' ' + version : ''];
 }
 
@@ -10702,6 +10850,43 @@ function sinLoComun(et){
   return rec.some(t => !t) ? et : rec;
 }
 
+/* Si las versiones se parten en dos ejes, Memoria y Versión (01/10). Hace
+   falta que todas digan su memoria y que haya más de una, como siempre; y no
+   se parte cuando cada memoria tiene UNA sola versión pero lo que queda de
+   cada una es distinto: el eje Versión no aparecería nunca y eso que las
+   separa no se leería en ningún lado. Pasaba con la PS5 juntada: "Memoria:
+   825GB | 1TB", y la Digital y la Física no se nombraban. Lo que queda se
+   compara sin la RAM ("8GB" de "8GB/256GB"), que no es una versión: los
+   Galaxy siguen partidos como hasta hoy. Lo usan las pestañas
+   (htmlOpcionesFicha) y "Ver las N versiones" (gruposDeVersiones). */
+function partirEnMemoria(reales){
+  const mems = [...new Set(reales.map(([op]) => memoriaDeOpcion(op)))];
+  if(mems.length < 2 || !mems.every(Boolean)) return false;
+  const solas = mems.every(mm => reales.filter(([op]) => memoriaDeOpcion(op) === mm).length === 1);
+  /* Lo que queda tampoco cuenta lo que la ficha ya muestra como dato (specs):
+     el "5G" que una fila del Galaxy A57 dice y la otra no ("8GB/128GB 5G"
+     contra "8GB/256GB") es cómo está escrito el nombre, no una versión, y el
+     chip 5G sigue arriba del precio. El "Standard Combo" del Osmo Nano sí. */
+  const queda = (op, g) => {
+    const chips = new Set(specs(g[0]).flatMap(c => norm(c).split(/\s+/)));
+    return norm(restoDeOpcion(op).replace(RE_MEMORIA, ' ')).replace(/\bram\b/g, ' ')
+      .split(/[\s·\/+-]+/).filter(w => w && !chips.has(w)).join(' ');
+  };
+  return !(solas && new Set(reales.map(([op, g]) => queda(op, g))).size > 1);
+}
+
+/* Las versiones de cada memoria, en el mismo orden en todas (01/10). Iban
+   por stock y precio adentro de cada memoria, y el iPad Pro M5 11" ofrecía
+   "Cellular | Wifi" en 256GB y "Wifi | Cellular" en 512GB. Primero la que no
+   agrega nada (la "Base" o la "Wifi"), después en el orden en que aparecen en
+   el modelo entero, que es por stock y precio (versionesDelModelo). */
+function ordenDeVersiones(reales){
+  const rango = new Map([['', -1]]);
+  const k = op => norm(restoDeOpcion(op));
+  reales.forEach(([op], i) => { if(!rango.has(k(op))) rango.set(k(op), i); });
+  return (a, b) => rango.get(k(a[0])) - rango.get(k(b[0]));
+}
+
 /* Las versiones de un modelo tal como las ordenan las pestañas de la ficha:
    [opción, filas] por versión. Salió de htmlOpcionesFicha el 29/09 para que
    "Ver las N versiones" (4.3 C) parta la lista con la misma regla que las
@@ -10786,7 +10971,7 @@ function htmlOpcionesFicha(m, v){
   /* Dos ejes sólo si TODAS las versiones dicen su memoria y hay más de una.
      Si alguna no la dice, partirlas dejaría una pestaña sin rótulo y otra sin
      eje: en ese caso van todas juntas, como estaban hasta ayer. */
-  if(mems.length < 2 || !mems.every(Boolean))
+  if(!partirEnMemoria(reales))
     return `<div class="fi-ejes">${eje('Versión', '',
       reales.map(([op, g]) => pestana(op, g, g)).join(''))}</div>`;
 
@@ -10801,7 +10986,7 @@ function htmlOpcionesFicha(m, v){
     return pestana(mm, todas, igual ? igual[1] : todas, ` data-mem="${esc(mm)}"`);
   }).join('');
 
-  const hermanas = reales.filter(([op]) => memoriaDeOpcion(op) === memAct);
+  const hermanas = reales.filter(([op]) => memoriaDeOpcion(op) === memAct).sort(ordenDeVersiones(reales));
   let verTabs = '';
   if(hermanas.length > 1){
     const et = etiquetasDeVersion(hermanas);
@@ -11647,11 +11832,11 @@ function gruposDeVersiones(m){
   const sueltas = [...versiones.entries()].filter(([op]) => !enReales.has(op)).flatMap(([, g]) => g);
   const mems = [...new Set(reales.map(([op]) => memoriaDeOpcion(op)))];
   let grupos;
-  if(mems.length < 2 || !mems.every(Boolean)){
+  if(!partirEnMemoria(reales)){
     grupos = reales.map(([op, g]) => ({ rot: op, filas: g.map(con('')) }));
   } else {
     grupos = [...mems].sort((a, b) => enGB(a) - enGB(b)).map(mm => {
-      const hermanas = reales.filter(([op]) => memoriaDeOpcion(op) === mm);
+      const hermanas = reales.filter(([op]) => memoriaDeOpcion(op) === mm).sort(ordenDeVersiones(reales));
       const et = hermanas.length > 1 ? etiquetasDeVersion(hermanas) : [];
       return { rot: mm, filas: hermanas.flatMap(([, g], i) => g.map(con(et[i] || ''))) };
     });

@@ -282,9 +282,23 @@ function correrPruebas(){
   if(!filasLente.length && !lentes.length){
     R.push('  --  hoy no hay objetivos: nada que probar');
   }else{
-    ok(lentes.length > 0 && lentes.every(m => !m.multi), 'ningun objetivo se agrupo',
-       lentes.filter(m=>m.multi).map(m=>m.desc).join(' / ') || lentes.length + ' objetivos, ninguno agrupado');
-    ok(lentes.length === cuenta(CAT_OBJ), 'los objetivos siguen 1 a 1', lentes.length + ' de ' + cuenta(CAT_OBJ));
+    /* 01/10/2026 (Benja, "juntemos todo"): el mismo objetivo para otra montura
+       es una version de la misma tarjeta, porque ADVAPP le da la misma madre de
+       SKU (LEN-SIG-56F14DNCONT-...-CANEFM / -NIKZ / -SONYE). Hasta el 01/10 la
+       regla era no agrupar ningun objetivo. Lo que sigue sin juntarse es lo que
+       tiene otra madre: dos objetivos distintos nunca comparten tarjeta, cada
+       version es una montura distinta y el boton dice la montura. */
+    const juntos = lentes.filter(m => m.multi);
+    const otraMadre = juntos.filter(m => m.variantes.some(v => !madreDelSku(v.skuVariante)) ||
+                                         new Set(m.variantes.map(v => madreDelSku(v.skuVariante))).size !== 1);
+    ok(lentes.length > 0 && !otraMadre.length, 'un objetivo solo se junta con el mismo objetivo para otra montura (misma madre de SKU)',
+       otraMadre.map(m => m.desc).join(' / ') || juntos.length + ' objetivos juntados por montura');
+    const malBoton = juntos.filter(m => m.variantes.some(v => !v.montura || v.etiqueta !== v.montura) ||
+                                        new Set(m.variantes.map(v => v.montura)).size !== m.variantes.length);
+    ok(!malBoton.length, 'en un objetivo juntado cada version es una montura distinta y el boton la dice',
+       malBoton.slice(0, 3).map(m => m.desc + ': ' + m.variantes.map(v => v.etiqueta).join(' | ')).join(' / ') || 'todos');
+    const filasEnTarjetas = lentes.reduce((s, m) => s + (m.variantes || [m]).length, 0);
+    ok(filasEnTarjetas === cuenta(CAT_OBJ), 'ningun objetivo se pierde al juntarlos', filasEnTarjetas + ' de ' + cuenta(CAT_OBJ));
     ok(filasLente.every(p => p.cat === CAT_OBJ), 'toda fila que llega como Lente se muestra como ' + CAT_OBJ,
        filasLente.filter(p => p.cat !== CAT_OBJ).slice(0, 3).map(p => p.id + ' en ' + p.cat).join(' | ') || filasLente.length + ' filas');
   }
@@ -321,11 +335,19 @@ function correrPruebas(){
   ok(malNombre.length === 0, 'el nombre del grupo es el comienzo comun de todas sus variantes',
      malNombre.map(m=>m.desc)[0] || 'todos bien');
   // Y nunca es el nombre entero de una fila con capacidad o color: eso es rendirse
-  const enteros = multi.filter(m => m.variantes.length > 1 && m.variantes.some(v => v.desc === m.desc) &&
+  // 01/10/2026: salvo que esa fila sea la version "Base" del modelo (la que no
+  // agrega nada: "Drone DJI Mini 5 Pro" al lado de sus combos). Eso no es
+  // rendirse: es el modelo pelado.
+  const enteros = multi.filter(m => m.variantes.length > 1 && m.variantes.some(v => v.desc === m.desc && v.etiqueta !== 'Base') &&
                                     !m.variantes.every(v => v.desc === m.desc));
   ok(!enteros.length, 'ningun grupo se titula con el nombre entero de una de sus filas',
      enteros.map(m => m.desc).slice(0, 3).join(' | ') || 'ninguno');
-  ok(multi.every(m => m.desc.split(/\s+/).length >= 2), 'ningun grupo quedo con nombre de una palabra');
+  /* 01/10/2026: con la tarjeta por SKU madre, una palabra puede ser el modelo
+     ("EarPods", "Airtag", con sus versiones adentro). Lo que no puede ser es
+     solo la marca. */
+  const unaPalabra = multi.filter(m => m.desc.split(/\s+/).length < 2 && baja(m.desc) === baja(m.marca || ''));
+  ok(!unaPalabra.length, 'ningun grupo quedo con nombre de una palabra que sea solo la marca',
+     unaPalabra.map(m => m.desc).join(' | ') || 'ninguno');
 
   /* "X" y "X Pro" son dos productos; la misma maquina con otra memoria, uno.
      Hasta el 29/09 se probaba buscando los Mac Mini M4 y M4 Pro por nombre, y

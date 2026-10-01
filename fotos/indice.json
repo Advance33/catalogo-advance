@@ -646,7 +646,8 @@
 "AT-0485-01.jpg",
 "AT-0486-01.jpg",
 "AT-0487-01.jpg",
-"AT-0488.jpg",
+"AT-0488-01.jpg",
+"AT-0488-02.jpg",
 "AT-0489-01.jpg",
 "AT-0490-01.jpg",
 "AT-0491-01.jpg",
@@ -697,6 +698,7 @@
 "AT-0522-01.jpg",
 "AT-0522-02.jpg",
 "AT-0523-01.jpg",
+"AT-0523-02.jpg",
 "AT-0525-01.jpg",
 "AT-0526-01.jpg",
 "AT-0527-01.jpg",
@@ -720,7 +722,12 @@
 "AT-0536-03.jpg",
 "AT-0537-01.jpg",
 "AT-0537-02.jpg",
-"AT-0537-03.jpg"
+"AT-0537-03.jpg",
+"AT-0538-01.jpg",
+"AT-0538-02.jpg",
+"AT-0539-01.jpg",
+"AT-0539-02.jpg",
+"AT-0540-01.jpg"
 ],
 "catalogo": {
 "firmas": {
@@ -2388,6 +2395,15 @@
 ],
 "AT-0537": [
 "apple|celular|17:1,1tb:1,pro:1"
+],
+"AT-0538": [
+"apple|notebook|14:1,1tb:1,24:1,m5:1,pro:1"
+],
+"AT-0539": [
+"apple|notebook|14:1,16:1,1tb:1,m5:1,pro:1"
+],
+"AT-0540": [
+"apple|tablet|11:1,256:1,cellular:1,m5:1,pro:1"
 ]
 },
 "ids": {
@@ -2978,6 +2994,13 @@
 "NB-APP-110": "AT-0532",
 "NBK-APL-MBA13M5-16G512-SKY-EN": "AT-0522",
 "NBK-APL-MBP14M4P-24G512-SBK-EN": "AT-0436",
+"NBK-APL-MBP14M5-16G1TB-SBK-EN": "AT-0539",
+"NBK-APL-MBP14M5-16G1TB-SBK-ES": "AT-0437",
+"NBK-APL-MBP14M5-16G1TB-SLV-EN": "AT-0539",
+"NBK-APL-MBP14M5-16G1TB-SLV-ES": "AT-0437",
+"NBK-APL-MBP14M5-24G1TB-SBK-ES": "AT-0538",
+"NBK-APL-MBP14M5-24G1TB-SLV-ES": "AT-0538",
+"NBK-APL-MBP14M5P-48G1TB-SLV-EN": "AT-0523",
 "NBK-APL-MBP16M5P-24G1TB-SLV-EN": "AT-0446",
 "NBK-APL-NEO13-8G256-BLS-ES": "AT-0433",
 "NBK-APL-NEO13-8G256-IND-ES": "AT-0433",
@@ -3026,6 +3049,7 @@
 "TAB-APL-IPADAIR11M4-512-STL-WIFI": "AT-0470",
 "TAB-APL-IPADMINI7-256-PUR-WIFI": "AT-0475",
 "TAB-APL-IPADMINI7-256-STL-WIFI": "AT-0475",
+"TAB-APL-IPADPRO11M5-256-SBK-CELL": "AT-0540",
 "TAB-APL-IPADPRO13M5-512-SLV-WIFI": "AT-0484",
 "TAB-APP-001": "AT-0466",
 "TAB-APP-002": "AT-0467",
@@ -3071,6 +3095,7 @@
 "TAB-SAM-044": "AT-0497",
 "TAB-SAM-046": "AT-0496",
 "TAB-SAM-047": "AT-0493",
+"TAB-SAM-TABA11PLUS-6G128-GRY-WIFI": "AT-0488",
 "TAB-SAM-TABS10FE-8G128-LBL-CELLPENBOOK": "AT-0494",
 "TAB-SAM-TABS10FEPLUS-8G128-LBL-WIFIPEN": "AT-0492",
 "TAB-SAM-TABS10FEPLUS-8G128-SLV-WIFIPEN": "AT-0492",
@@ -3583,11 +3608,12 @@
 "notebook~apple~air-m5-macbook~15in-16gb-1tb-tecladoen": "AT-0515",
 "notebook~apple~air-m5-macbook~15in-16gb-512gb-tecladoen": "AT-0430",
 "notebook~apple~air-m5-macbook~15in-24gb-1tb-tecladoen": "AT-0431",
-"notebook~apple~esp-m5-macbook-pro~14in-16gb-1tb-tecladoen": "AT-0437",
+"notebook~apple~esp-m5-macbook-pro~14in-16gb-1tb-tecladoes": "AT-0437",
 "notebook~apple~m4pro-macbook-pro~14in-24gb-1tb-tecladoen": "AT-0435",
 "notebook~apple~m4pro-macbook-pro~14in-24gb-512gb-tecladoen": "AT-0436",
-"notebook~apple~m5-macbook-pro~14in-16gb-1tb-tecladoen": "AT-0437",
+"notebook~apple~m5-macbook-pro~14in-16gb-1tb-tecladoen": "AT-0539",
 "notebook~apple~m5-macbook-pro~14in-24gb-1tb-tecladoen": "AT-0438",
+"notebook~apple~m5-macbook-pro~14in-24gb-1tb-tecladoes": "AT-0538",
 "notebook~apple~m5-macbook-pro~14in-32gb-1tb-tecladoen": "AT-0439",
 "notebook~apple~m5max-macbook-pro~14in-36gb-2tb-tecladoen": "AT-0440",
 "notebook~apple~m5max-macbook-pro~16in-36gb-2tb-tecladoen": "AT-0441",
@@ -3595,6 +3621,7 @@
 "notebook~apple~m5pro-macbook-pro~14in-24gb-1tb-tecladoen": "AT-0444",
 "notebook~apple~m5pro-macbook-pro~14in-24gb-1tb-tecladoes": "AT-0443",
 "notebook~apple~m5pro-macbook-pro~14in-24gb-2tb-tecladoen": "AT-0445",
+"notebook~apple~m5pro-macbook-pro~14in-48gb-1tb-tecladoen": "AT-0523",
 "notebook~apple~m5pro-macbook-pro~16in-24gb-1tb-tecladoen": "AT-0446",
 "notebook~apple~m5pro-macbook-pro~16in-48gb-1tb-tecladoen": "AT-0447",
 "parlante~jbl~6-charge": "AT-0448",
@@ -3654,6 +3681,7 @@
 "tablet~apple~ipad-m4-pro~11in-512gb": "AT-0478",
 "tablet~apple~ipad-m4-pro~13in-256gb": "AT-0482",
 "tablet~apple~ipad-m5-pro~11in-256gb": "AT-0479",
+"tablet~apple~ipad-m5-pro~11in-256gb-cell": "AT-0540",
 "tablet~apple~ipad-m5-pro~11in-512gb": "AT-0480",
 "tablet~apple~ipad-m5-pro~13in-1tb": "AT-0506",
 "tablet~apple~ipad-m5-pro~13in-256gb": "AT-0483",
@@ -5774,7 +5802,8 @@
 "gris": "AT-0487-01"
 },
 "AT-0488": {
-"": "AT-0488"
+"gray": "AT-0488-02",
+"silver": "AT-0488-01"
 },
 "AT-0489": {
 "cinza": "AT-0489-01",
@@ -5928,6 +5957,7 @@
 "sky blue": "AT-0522-03"
 },
 "AT-0523": {
+"silver": "AT-0523-02",
 "space black": "AT-0523-01"
 },
 "AT-0525": {
@@ -5983,8 +6013,21 @@
 "orange": "AT-0537-02",
 "sil": "AT-0537-01",
 "silver": "AT-0537-01"
+},
+"AT-0538": {
+"sil": "AT-0538-01",
+"silver": "AT-0538-01",
+"space black": "AT-0538-02"
+},
+"AT-0539": {
+"sil": "AT-0539-01",
+"silver": "AT-0539-01",
+"space black": "AT-0539-02"
+},
+"AT-0540": {
+"space black": "AT-0540-01"
 }
 }
 },
-"generado": "2026-09-29T07:52:45"
+"generado": "2026-10-01T16:51:34"
 }

@@ -169,6 +169,13 @@ si alguna falta).
                   pasado por el agente verificador sin cambiar despues: su
                   huella tiene que estar en datos/descripciones-verificadas.json
                   (herramientas/verificar-descripciones.py).
+  guardas-pie-precio.js
+                  El precio arriba del pie pegado al abrir la ficha en el
+                  celular (Pedro, 01/10): todas las fichas con stock, con y
+                  sin "Ya tenés en el pedido", a 390x664, 390x750 y 375x553
+                  (iPhone SE con la barra de Safari). La foto se achica lo
+                  justo (ajustarFotoFicha), nunca menos del minimo, no se toca
+                  en la compu ni con la ficha bajada.
   decision-cuotas.js
                   Cuotas con tarjeta (Pedro, 30/09: 1B 2B 3C 4A de
                   muestras/cuotas) y sin factura: la cuenta de cada plan de

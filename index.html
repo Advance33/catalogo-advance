@@ -11440,6 +11440,7 @@ function engancharPedidoFicha(d, p){
   d.querySelectorAll('#fi-pedido-caja .stepper button').forEach(x =>
     x.onclick = () => cambiarCant(k, Number(x.dataset.d)));
   medirPieFicha(d);
+  ajustarFotoFicha(d);           // el precio arriba del pie pegado (01/10)
 }
 
 /* "Ya tenés en el pedido" en el celular (29/09, revisión de la 5.2 B con la
@@ -11469,7 +11470,7 @@ function acomodarAvisoPedido(d){
   }
 }
 if(FICHA_CELULAR){
-  const alCruzar = () => { const d = document.getElementById('ficha'); if(d){ acomodarAvisoPedido(d); acomodarDescripcion(d); } };
+  const alCruzar = () => { const d = document.getElementById('ficha'); if(d){ acomodarAvisoPedido(d); acomodarDescripcion(d); ajustarFotoFicha(d); } };
   if(FICHA_CELULAR.addEventListener) FICHA_CELULAR.addEventListener('change', alCruzar);
   else if(FICHA_CELULAR.addListener) FICHA_CELULAR.addListener(alCruzar);
 }
@@ -11490,6 +11491,42 @@ function medirPieFicha(d){
   if(OBS_PIE_FICHA) OBS_PIE_FICHA.disconnect();
   OBS_PIE_FICHA = new ResizeObserver(poner);
   OBS_PIE_FICHA.observe(pie);
+}
+
+/* El precio arriba del pie pegado al abrir la ficha (Pedro, 01/10). Con la
+   foto siempre en 4:3, en una pantalla baja el pie tapaba el precio: el 01/10,
+   en 53 de 182 fichas a 390x664 y en 127 en un iPhone SE con la barra de
+   Safari (375x553); con "Ya tenés en el pedido" el pie es más alto y era peor.
+   Lo que hay entre la foto y el precio cambia mucho (nombres de tres
+   renglones, tiras de colores), así que no alcanza con un alto fijo: se mide.
+   Con la ficha arriba de todo, si el precio queda debajo del borde del pie se
+   le saca a la foto justo eso (y 8 px de aire), nunca por debajo de 90 px.
+   Si el cliente ya bajó, no se toca: no se le mueve nada debajo del dedo. En
+   la compu, y en una pantalla donde entra, la foto queda como siempre. Corre
+   con cada repintado de la ficha (engancharPedidoFicha), al cruzar los 640 px
+   y al cambiar el alto de la ventana (la barra del Safari). */
+const FOTO_FICHA_MIN = 90;
+function ajustarFotoFicha(d){
+  const marco = d && d.querySelector('.fi-marco');
+  const caja = d && d.querySelector('.caja');
+  if(!marco || !caja) return;
+  if(!(FICHA_CELULAR && FICHA_CELULAR.matches)){ marco.style.maxHeight = ''; return; }
+  if(caja.scrollTop > 1) return;
+  const usd = d.querySelector('.fi-precio .usd'), pie = d.querySelector('.fi-botones');
+  marco.style.maxHeight = '';
+  if(!usd || !pie || getComputedStyle(pie).position !== 'sticky') return;
+  const techo = caja.getBoundingClientRect().bottom - pie.offsetHeight - 8;
+  const sobra = usd.getBoundingClientRect().bottom - techo;
+  if(sobra <= 0) return;
+  const alto = marco.getBoundingClientRect().height;
+  marco.style.maxHeight = Math.max(FOTO_FICHA_MIN, Math.floor(alto - sobra)) + 'px';
+}
+{
+  let pedido = 0;
+  addEventListener('resize', () => {
+    if(pedido) return;
+    pedido = requestAnimationFrame(() => { pedido = 0; const d = document.getElementById('ficha'); if(d) ajustarFotoFicha(d); });
+  });
 }
 
 // El total por varias unidades, al lado del precio: sin esto el número de la

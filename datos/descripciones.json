@@ -9119,13 +9119,16 @@
       "codigos": [
         "AT-0437",
         "AT-0438",
-        "AT-0439"
+        "AT-0439",
+        "AT-0538",
+        "AT-0539"
       ],
       "versiones": [
         {
           "nombre": "16GB/1TB",
           "codigos": [
-            "AT-0437"
+            "AT-0437",
+            "AT-0539"
           ],
           "si": {
             "memoria": "1TB",
@@ -9137,7 +9140,8 @@
         {
           "nombre": "24GB/1TB",
           "codigos": [
-            "AT-0438"
+            "AT-0438",
+            "AT-0538"
           ],
           "si": {
             "memoria": "1TB",
@@ -12054,7 +12058,8 @@
       "codigos": [
         "AT-0479",
         "AT-0480",
-        "AT-0481"
+        "AT-0481",
+        "AT-0540"
       ],
       "versiones": [
         {
@@ -12072,7 +12077,8 @@
         {
           "nombre": "Wi-Fi + Cellular",
           "codigos": [
-            "AT-0481"
+            "AT-0481",
+            "AT-0540"
           ],
           "si": {
             "texto": [

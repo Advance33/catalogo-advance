@@ -353,8 +353,12 @@ async function probarFicha(casos){
     const hayProv = c.e.importante.some(p => pdEsperado(p.titulo, ver).prov || pdEsperado(p.texto, ver).prov) ||
                     c.e.ficha.some(g => g.datos.some(r => pdEsperado(r[1], ver).prov));
     const dice = fu ? pdTxt(fu.querySelector('.prov')) : '';
+    /* Con versiones, el aviso nombra la version («4 baterías»: ...). Sin
+       versiones (01/10: el combo Switch 2 + Mario Kart, que trae el juego
+       segun el proveedor) no hay version que nombrar: el aviso va solo. */
+    const provVersion = ver ? dice.includes('«' + ver + '»') : !dice.includes('«');
     if(!fu || hrefs !== c.e.fuentes.map(f => f.url).join('|') || links.some(a => a.target !== '_blank' || !/noopener/.test(a.rel)) || !(tam <= 11) ||
-       fu !== ds.lastElementChild || (hayProv !== !!dice) || (hayProv && !(dice.includes('«' + ver + '»') && dice.includes(c.e.proveedor.aviso))))
+       fu !== ds.lastElementChild || (hayProv !== !!dice) || (hayProv && !(provVersion && dice.includes(c.e.proveedor.aviso))))
       malos.fuente.push(c.v.id + ': ' + (fu ? pdTxt(fu).slice(0, 80) + ' · ' + tam + 'px' : 'sin fuente'));
   }
   const n = casos.length + ' fichas';

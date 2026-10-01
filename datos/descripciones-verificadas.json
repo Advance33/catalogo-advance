@@ -1,0 +1,1122 @@
+{
+ "formato": "verificadas/1",
+ "leeme": "Huellas de las descripciones que pasaron el verificador. Lo escribe herramientas/verificar-descripciones.py; no se edita a mano.",
+ "verificadas": {
+  "9b3f183d0c66c6889efa391900bac02f1153530817c4b653a1f14a16781ebcad": {
+   "modelo": "AirPods 4",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-08.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/121203"
+   ]
+  },
+  "096e5cce07ac9ec85faba46dcc60d5a11925692446941788e39c18e467f202b8": {
+   "modelo": "AirPods 4 con Cancelación Activa de Ruido",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-09.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/121204"
+   ]
+  },
+  "428bb15674adbe3e50c4c0bd76dbbd050176717e2c75976ed8330126bd4e6aad": {
+   "modelo": "AirPods Max 2",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-07.json",
+   "fuentes": [
+    "https://www.apple.com/la/airpods-max/specs/",
+    "https://www.apple.com/la/airpods-max/",
+    "https://support.apple.com/es-lamr/123185"
+   ]
+  },
+  "ef2682f1055181b44f6f59fc2f61e39bf9d6d279a03d59d7b769f39101eafec6": {
+   "modelo": "AirPods Pro 3",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://www.apple.com/la/airpods-pro/specs/",
+    "https://www.apple.com/la/airpods-pro/"
+   ]
+  },
+  "857a7496171f74e0906313186e211d1bae9f3a6db8e0dbf1ff93633b40a31e75": {
+   "modelo": "Apple Watch SE (2.ª generación) GPS",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/111853",
+    "https://www.apple.com/watchos/feature-availability/"
+   ]
+  },
+  "6ab20989693fcc85dd6e5f78bfb2997578ab84085f11a504ba05cca2c61a5a25": {
+   "modelo": "Apple Watch SE 3",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://www.apple.com/la/apple-watch-se-3/specs/",
+    "https://support.apple.com/es-la/125094"
+   ]
+  },
+  "16208f8dddba58604ea63499c8010067dad10effa58a96c6534fb519b9ff1499": {
+   "modelo": "Apple Watch Series 11 (aluminio, GPS)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/125093",
+    "https://www.apple.com/la/watchos/feature-availability/"
+   ]
+  },
+  "73a38caf534b360be632c0ec278b0e6a044b2d94f7e7c672f38fa3ffa875e868": {
+   "modelo": "Apple Watch Ultra 3 49 mm",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-05.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/125095",
+    "https://www.apple.com/la/watchos/feature-availability/ (Oxígeno en Sangre según el país; la ficha 125095 remite a esta lista)"
+   ]
+  },
+  "505c05aaff5de400e489ba2212170bbdd03d0edbe0380c9b05fc40671b6ffa99": {
+   "modelo": "DJI Mini 5 Pro",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-05.json",
+   "fuentes": [
+    "https://www.dji.com/mx/mini-5-pro/specs",
+    "https://www.dji.com/mx/mini-5-pro",
+    "https://store.dji.com/es/product/dji-mini-5-pro?set_region=ES",
+    "~/catalogo-advance-trabajo/descripciones-armador/datos-de-pedro.md"
+   ]
+  },
+  "363030d353cc4e75ae7b5f0740c1348e492343af2483b635a1f4eb38c3ed76c5": {
+   "modelo": "EarPods (Lightning)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.apple.com/mx/shop/product/mwty3am/a/earpods-con-conector-lightning"
+   ]
+  },
+  "b59a6d9578ee727369b173ac81e64ed4e16373be99805d5af43644bfcf22decf": {
+   "modelo": "EarPods (USB-C)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://www.apple.com/mx/shop/product/myqy3am/a/earpods-con-conector-usb-c"
+   ]
+  },
+  "86d2ba7fb9a14ce509d00abb3b9eb836dbe6c9bd8cc12c7e08e247b7f43fae34": {
+   "modelo": "Galaxy A16 4G",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a16-black-128gb-sm-a165mzkmaro/",
+    "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a17-black-128gb-sm-a175fzkraro/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=uk&modelList=SM-A165FZKBEUB&specAnnotationYN=Y"
+   ]
+  },
+  "0b0704aa9eb512717a5a2f32cb679f753f46e06c4d00b97c3a95ef3ea82d0c08": {
+   "modelo": "Galaxy A17 (4G o 5G: sólo datos comunes)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a17-black-128gb-sm-a175fzkraro/",
+    "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a17-5g-blue-256gb-sm-a176bzbzaro/"
+   ]
+  },
+  "3b42db4c712304400f38d804e5befe1d543bb1b2a4aae6958535cdda6e3d80bb": {
+   "modelo": "Galaxy A27 5G",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a27-5g-black-256gb-sm-a276bzkfaro/",
+    "https://www.samsung.com/mx/smartphones/galaxy-a/galaxy-a27-5g-black-128gb-sm-a276bzkaltm/"
+   ]
+  },
+  "04359cd78ff2eddf693e516892b0d82afbed721c9f99b11bb559a4671e577f2c": {
+   "modelo": "Galaxy A36 5G",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-05.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a36-5g-awesome-black-256gb-sm-a366ezkflea/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-A366EZKFLEA&specAnnotationYN=Y",
+    "https://www.samsung.com/latin/smartphones/galaxy-a/galaxy-a36-5g-awesome-lime-128gb-sm-a366elgbgto/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=latin&modelList=SM-A366ELGBGTO&specAnnotationYN=Y"
+   ]
+  },
+  "e9dee9a7f541ee57bca92b0143c0698bd91b87a2cbbf92490cfd735963f16f70": {
+   "modelo": "Galaxy A37 5G",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a37-5g-awesome-charcoal-256gb-sm-a376bzafaro/"
+   ]
+  },
+  "77bea8baee507ba6d0ef3a1c1cf011fab4e83e0b6aa7fab4873b502a52ba8cb5": {
+   "modelo": "Galaxy A56 5G",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-07.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a56-5g-awesome-graphite-256gb-sm-a566ezkflea/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-A566EZKFLEA",
+    "https://www.samsung.com/in/smartphones/galaxy-a/galaxy-a56-5g-awesome-graphite-256gb-sm-a566ezkhins/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=in&modelList=SM-A566EZKHINS"
+   ]
+  },
+  "d7050b9354f20659210e23b59e1d8e7ca81e1de5fd2dda867fc5afe8b348ee48": {
+   "modelo": "Galaxy A57 5G",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-08.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a57-5g-awesome-icyblue-256gb-sm-a576blbnaro/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-A576BLBNARO&specAnnotationYN=Y",
+    "https://www.samsung.com/cl/smartphones/galaxy-a/galaxy-a57-5g-awesome-navy-128gb-sm-a576bdbeltl/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=cl&modelList=SM-A576BDBELTL&specAnnotationYN=Y"
+   ]
+  },
+  "2a855f356c92c1d8ad25ccb9c67aeee5d51e5f14a615548da76ef20c9556df62": {
+   "modelo": "Galaxy S25 FE",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-s/galaxy-s25-fe-white-256gb-sm-s731bzwmaro/",
+    "https://www.samsung.com/es/smartphones/galaxy-s/galaxy-s25-fe-navy-512gb-sm-s731bdbieub/",
+    "https://www.samsung.com/us/support/answer/ANS10004600/"
+   ]
+  },
+  "0f7563dd72b9a1ae67ee0075f5bcf4d58a3689dc6f0e11960b3a511bbd3f39c8": {
+   "modelo": "Galaxy S25 Ultra",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-05.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-s25-ultra/specs/ (tabla armada por JS: leída en https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S938BZBLARO / SM-S938BZBMARO / SM-S938BZBVARO&specAnnotationYN=Y)",
+    "https://www.samsung.com/ar/smartphones/galaxy-s25-ultra/",
+    "https://news.samsung.com/global/samsung-galaxy-s25-series-sets-the-standard-of-ai-phone-as-a-true-ai-companion",
+    "https://www.samsung.com/es/smartphones/galaxy-s25-ultra/specs/ (API: SM-S938BZBDEUB / BZBGEUB / BZBHEUB)",
+    "https://www.samsung.com/mx/smartphones/galaxy-s25-ultra/specs/ (API: SM-S938BZBLLTM / BZBMLTM / BZBVLTM, con la nota del Wi-Fi 7 según el mercado)",
+    "~/catalogo-advance-trabajo/descripciones-tanda1/respuestas-pedro-01-10.md (punto 7: 1 TB con 12 GB)"
+   ]
+  },
+  "bbe9b058db96f44e79d3541a07b56c4c1c3ff97265bdc32565063c67e7fb4ab6": {
+   "modelo": "Galaxy S26",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-s26/specs/ (la tabla se arma con JS: se leyó su API searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S942BZVVARO y SM-S942BZVMARO)",
+    "https://www.samsung.com/ar/smartphones/galaxy-s26/",
+    "https://news.samsung.com/global/samsung-unveils-galaxy-s26-series-the-most-intuitive-galaxy-ai-phone-yet",
+    "https://www.samsung.com/hk_en/smartphones/galaxy-s26/specs/ (API: siteCode=hk_en&modelList=SM-S9420ZVOTGY y SM-S9420ZVPTGY)",
+    "https://www.samsung.com/hk_en/smartphones/galaxy-s26/ (no está en fuentes; sólo para el aviso)"
+   ]
+  },
+  "f3f9d14c458efa873da294f5987a9cdebbd3cccab0335cc3ca8650b87bbea7eb": {
+   "modelo": "Galaxy S26 FE",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-09.json",
+   "fuentes": [
+    "https://www.samsung.com/latin/smartphones/galaxy-s/galaxy-s26-fe-graphite-512gb-sm-s741bzkpgto/",
+    "https://www.samsung.com/es/smartphones/galaxy-s/galaxy-s26-fe-graphite-512gb-sm-s741bzkieub/",
+    "https://www.samsung.com/us/smartphones/galaxy-s26-fe/"
+   ]
+  },
+  "8d914e45e88ce5abdd73e55c8348b5119336556314407360fbeecc25d8da2293": {
+   "modelo": "Galaxy S26 Plus",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-07.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-s26/specs/ (la tabla se arma con JavaScript; leída en la API pública de la misma página: https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S947BZVLARO&specAnnotationYN=Y y SM-S947BZVMARO)",
+    "https://www.samsung.com/ar/smartphones/galaxy-s26/",
+    "https://news.samsung.com/global/samsung-unveils-galaxy-s26-series-the-most-intuitive-galaxy-ai-phone-yet",
+    "https://www.samsung.com/hk_en/smartphones/galaxy-s26/specs/ (API: https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=hk_en&modelList=SM-S9470ZVITGY&specAnnotationYN=Y)",
+    "https://www.samsung.com/hk_en/smartphones/galaxy-s26/"
+   ]
+  },
+  "2d2ee828a2633be6929c428ae257109ec6d301bb98584a8eb21ced84a4749d32": {
+   "modelo": "Galaxy S26 Ultra",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-s26-ultra/specs/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S948BZVLARO&specAnnotationYN=Y",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S948BZVMARO&specAnnotationYN=Y",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S948BZVVARO&specAnnotationYN=Y",
+    "https://www.samsung.com/ar/smartphones/galaxy-s26-ultra/",
+    "https://news.samsung.com/global/samsung-unveils-galaxy-s26-series-the-most-intuitive-galaxy-ai-phone-yet"
+   ]
+  },
+  "68909517adb95981881b87ef9c6fffe3e3d588f73fc8311e4527f3705c8aa537": {
+   "modelo": "Galaxy Tab A11 (Wi-Fi y 4G LTE)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-09.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/tablets/galaxy-tab-a/galaxy-tab-a11-gray-64gb-sm-x133nzaal09/",
+    "https://www.samsung.com/latin/tablets/galaxy-tab-a/galaxy-tab-a11-gray-128gb-sm-x135gzazgto/",
+    "https://www.samsung.com/es/tablets/galaxy-tab-a/galaxy-tab-a11-gray-64gb-sm-x135fzaaeub/"
+   ]
+  },
+  "8cf252a46f799da0b39782560a92522168e350ab232db7ecc1ed610ca681d78a": {
+   "modelo": "Galaxy Tab A11+ 6GB/128GB (Wi-Fi y 5G)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-05.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/tablets/galaxy-tab-a/galaxy-tab-a11-plus-silver-128gb-sm-x230nzsaaro/ (y API siteCode=ar&modelList=SM-X230NZSAARO)",
+    "https://www.samsung.com/es/tablets/galaxy-tab-a/galaxy-tab-a11-plus-gray-128gb-sm-x236bzareub/ (y API siteCode=es&modelList=SM-X236BZAREUB)",
+    "Búsqueda de una versión sólo LTE del A11+ (para que «Cellular» = 5G no sea deducción): Samsung sólo tiene SM-X230 (Wi-Fi) y SM-X236B/X238U (5G)"
+   ]
+  },
+  "1a0728995eef4245d9023c7eb0f635cd15b890edee6d08bdaf860131f50fe367": {
+   "modelo": "Galaxy Tab S10 FE (Wi-Fi y 5G)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-07.json",
+   "fuentes": [
+    "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s10-fe-gray-128gb-sm-x520nzaamxo/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-X520NZAAMXO",
+    "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s10-fe-gray-256gb-sm-x520nzaemxo/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-X520NZAEMXO",
+    "https://www.samsung.com/es/tablets/galaxy-tab-s/galaxy-tab-s10-fe-gray-128gb-sm-x526bzareub/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=es&modelList=SM-X526BZAREUB",
+    "https://www.samsung.com/ie/support/mobile-devices/what-are-the-features-of-the-galaxy-tab-s10-fe-plus-and-s10-fe/"
+   ]
+  },
+  "9459161e0f92c24ecfc5612899eb94e70d6696e6caa0f57aef4937b567e944e6": {
+   "modelo": "Galaxy Tab S10 FE+ Wi-Fi",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s10-fe-plus-gray-128gb-sm-x620nzaamxo/",
+    "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s10-fe-plus-gray-256gb-sm-x620nzaemxo/",
+    "https://www.samsung.com/ie/support/mobile-devices/what-are-the-features-of-the-galaxy-tab-s10-fe-plus-and-s10-fe/"
+   ]
+  },
+  "4923e8430c95ca479c23aec22ae02c8fb2bea19dc2f94a43afb72a4f148aa539": {
+   "modelo": "Galaxy Tab S10 Lite Wi-Fi 6GB/128GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-11.json",
+   "fuentes": [
+    "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s10-lite-gray-128gb-sm-x400nzaamxo/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-X400NZAAMXO&specAnnotationYN=Y",
+    "https://news.samsung.com/es/galaxy-tab-s10-lite-una-tablet-con-una-excelente-relacion-calidad-precio-para-las-necesidades-del-dia-a-dia"
+   ]
+  },
+  "51ee0f4f7da512afc13950363fe71194c08538adf40667a3b9cd66522fc54c9c": {
+   "modelo": "Galaxy Tab S11 Ultra Wi-Fi 12GB/256GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s11-ultra-gray-256gb-sm-x930nzaamxo/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-X930NZAAMXO&specAnnotationYN=Y",
+    "https://news.samsung.com/global/meet-samsung-galaxy-tab-s11-series-packing-everything-you-expect-from-a-premium-tablet"
+   ]
+  },
+  "74f572db3ae17c49f0e049c6e660bda3859ef434e22a5ec1b7b3b7cbe3d61873": {
+   "modelo": "Galaxy Tab S11 Wi-Fi 12GB/128GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s11-gray-128gb-sm-x730nzaamxo/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-X730NZAAMXO&specAnnotationYN=Y",
+    "https://news.samsung.com/global/meet-samsung-galaxy-tab-s11-series-packing-everything-you-expect-from-a-premium-tablet"
+   ]
+  },
+  "6176a49a922116ac32d986da6bfd4e7f419e5d740c4f8b50904b3bc50f6a2e0b": {
+   "modelo": "Galaxy Z Flip8",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.samsung.com/mx/smartphones/galaxy-z-flip8/specs/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F776BLIKLTM&specAnnotationYN=Y (API pública de la misma página de specs; la tabla se arma con JavaScript)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F776BZKKLTM&specAnnotationYN=Y",
+    "https://www.samsung.com/mx/smartphones/galaxy-z-flip8/",
+    "https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living",
+    "https://www.samsung.com/hk_en/smartphones/galaxy-z-flip8/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=hk_en&modelList=SM-F7760LIPTGY&specAnnotationYN=Y (control: Octa-core 4,74 GHz = Snapdragon)"
+   ]
+  },
+  "2528194a307f2afec62d1d404e7f9846d7abd4fb49f0cb24a36012b71607f979": {
+   "modelo": "Galaxy Z Fold8",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://www.samsung.com/mx/smartphones/galaxy-z-fold8/specs/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F971BLVLLTM&specAnnotationYN=Y",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F971BLVMLTM&specAnnotationYN=Y",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F971BLVVLTM&specAnnotationYN=Y",
+    "https://www.samsung.com/mx/smartphones/galaxy-z-fold8/",
+    "https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living"
+   ]
+  },
+  "03cbab9404f927a528642bbe8ab8d58b2a36293f314ed7836b442a31a8141f13": {
+   "modelo": "Galaxy Z Fold8 Ultra",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://www.samsung.com/mx/smartphones/galaxy-z-fold8-ultra/specs/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F976BZVLLTM&specAnnotationYN=Y (API de la misma página de specs)",
+    "https://www.samsung.com/mx/smartphones/galaxy-z-fold8-ultra/",
+    "https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living"
+   ]
+  },
+  "f02760c281f477a7a83e95dda2f62796e4a8b63574648978b73ecb218d2ab4e6": {
+   "modelo": "Garmin Approach S70 42 mm",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://www.garmin.com/es-CL/p/847697/pn/010-02746-10",
+    "https://www.garmin.com/es-ES/p/847697/pn/010-02746-10"
+   ]
+  },
+  "867b09ce62c487132adbf4975c24bef82939cccfa7ec21c4d48694f7ec25f903": {
+   "modelo": "Garmin Instinct 2S Solar",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://www.garmin.com/es-ES/p/741462/pn/010-02564-00 (descripción general, notas 1 a 5, «En la caja» y especificaciones del 010-02564-00, desde el JSON de la página)",
+    "https://www.garmin.com/es-CL/p/741462/pn/010-02564-00 (ídem)"
+   ]
+  },
+  "04e2383ffb7ea4b4a44163b0a739b7c264cd12c29fd8d81f0458711ec103d8e2": {
+   "modelo": "Garmin epix Pro (Gen 2) Sapphire 42 mm",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.garmin.com/es-AR/p/894039/pn/010-02802-10",
+    "https://www.garmin.com/es-ES/p/894039/pn/010-02802-11"
+   ]
+  },
+  "80cec46a381b2cdb966ef658afe5bb48043395a45bd7f79acf0e4347baa69a75": {
+   "modelo": "Garmin epix Pro (Gen 2) Sapphire 51 mm",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.garmin.com/es-AR/p/884088/pn/010-02804-10",
+    "https://www.garmin.com/es-ES/p/884088/pn/010-02804-11"
+   ]
+  },
+  "842ffa297908cf376c2e5c668b9e286b46e43110c163e24f75090437b14280e0": {
+   "modelo": "JBL Tune Flex Wireless NC (Tune Flex o Tune Flex 2)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://www.jbl.com.ar/auriculares-tws/TUNE-FLEX.html",
+    "https://www.jbl.com.ar/auriculares-tws/TUNE-FLEX-2.html",
+    "https://www.jbl.com.ar/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw8a8d7336/pdfs/JBL_Tune%20Flex_Spec%20Sheet_ES.pdf"
+   ]
+  },
+  "46cd01237906997999e90f690910972ca28a9ba4df3f9200abf9bf458d69cd59": {
+   "modelo": "Kieslect AI Watch Elite 2",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-05.json",
+   "fuentes": [
+    "https://www.kieslect.com/product/kieslect-ai-smartwatch-elite2/",
+    "https://us.kieslect.com/products/kieslect-ai-smartwatch-elite2",
+    "https://us.kieslect.com/products/kieslect-ai-smartwatch-elite2.json",
+    "https://cdn.shopify.com/s/files/1/0953/6271/1827/files/Kieslect-AI-Smartwatch-Elite2-v2.jpg",
+    "https://cdn.shopify.com/s/files/1/0953/6271/1827/files/Kieslect-AI-Smartwatch-Elite2-v3.jpg",
+    "https://www.kieslect.ar/products/kieslect-smart-calling-watch-elite2"
+   ]
+  },
+  "5c5c89fed3dbd22dc4846603fca6b3b15b2688961fe07b217657ce4477e5e01e": {
+   "modelo": "Kieslect Adjustable Earbuds",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://us.kieslect.com/products/kieslect-adjustable-earbuds",
+    "https://us.kieslect.com/products/kieslect-adjustable-earbuds.json (descripción del producto de la misma tienda oficial)",
+    "https://cdn.shopify.com/s/files/1/0953/6271/1827/files/Adjustable-Earbuds-1.png … Adjustable-Earbuds-5.png (imágenes de la descripción: tabla con 35mAh por auricular, 320mAh, 7h, 23h, IPX4, ANC+ENC, SBC/AAC, Dual-device Pairing)"
+   ]
+  },
+  "5ff970eaea6adb26d736e3e72c5945b1061542753c786031a6e9adffd3b8499e": {
+   "modelo": "Kieslect Calling Watch KR 3",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://www.kieslect.com/product/kieslect-calling-smart-watch-kr-3/ (y sus imágenes de specs -21 y notas -23)",
+    "https://us.kieslect.com/products/kieslect-smart-calling-watch-kr-3"
+   ]
+  },
+  "baf21cb1cc58910042aa65fca22c848606419bce33aeaf0dfb6d8c2707d1266e": {
+   "modelo": "Kieslect Calling Watch KR Ultra 3",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://us.kieslect.com/products/kieslect-kr-ultra-3-smartwatch (texto, tabla «Specifications», «Notes» y las 12 imágenes de la descripción)"
+   ]
+  },
+  "e9328c95e81fb5718d1ad1f26ade9dfd29db3324cc54b9765da6f4ed9a42d525": {
+   "modelo": "Kieslect Lady Watch Elfin",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://www.kieslect.com/product/kieslect-elfin-worlds-thinnest-womens-smartwatch/",
+    "https://us.kieslect.com/products/kieslect-elfin-world-s-thinnest-women-s-smartwatch",
+    "https://us.kieslect.com/products/kieslect-elfin-world-s-thinnest-women-s-smartwatch.json",
+    "https://www.kieslect.com/wp-content/uploads/2025/12/Kieslect-Elfin-Worlds-Thinnest-Womens-Smartwatch_27-21.jpg (tabla de specs)",
+    "https://www.kieslect.com/wp-content/uploads/2025/11/Kieslect-Elfin-Worlds-Thinnest-Womens-Smartwatch_28.jpg (tabla de specs, idiomas)",
+    "https://www.kieslect.com/wp-content/uploads/2025/12/2_10.jpg (funciones)",
+    "https://www.kieslect.com/wp-content/uploads/2025/12/20251217-210650.jpg (notas)"
+   ]
+  },
+  "949acf0af2451a41eb9a4f0456907e0543b468321bf1abc9f95645ffe0b5305b": {
+   "modelo": "MacBook Air 13\" con chip M5 (13,6\")",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-07.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/126320",
+    "https://www.apple.com/la/macbook-air/specs/"
+   ]
+  },
+  "1469cd02fdccb4973640728ccf94832296c320126547a3eed5ac8dd43d058ca1": {
+   "modelo": "MacBook Air 15\" con chip M5 (15,3\")",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/126321"
+   ]
+  },
+  "2e99cf1bc75bfd018613d280dd2d4d4de3df3d0e162a924da1b6c15b7166833b": {
+   "modelo": "MacBook Neo",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://www.apple.com/la/macbook-neo/specs/",
+    "https://www.apple.com/newsroom/2026/03/say-hello-to-macbook-neo/",
+    "https://www.apple.com/es/macbook-neo/specs/",
+    "https://www.apple.com/shop/buy-mac/macbook-neo (confirma: 256GB = Magic Keyboard sin Touch ID; 512GB = con Touch ID)"
+   ]
+  },
+  "aedd6b953a0069e703fff593be1d7afe9a48927e28ec88b178ebddf6858c9b94": {
+   "modelo": "MacBook Pro 14\" con chip M4 Pro (2024)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-07.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/121553",
+    "https://support.apple.com/en-us/121553",
+    "https://support.apple.com/es-es/121553",
+    "https://support.apple.com/en-gb/121553",
+    "https://support.apple.com/fr-fr/121553",
+    "https://support.apple.com/de-de/121553"
+   ]
+  },
+  "a9adc7108fbea79fb2c3c879401871dcd2831601d1e68fac3270bdc0ca255cc1": {
+   "modelo": "MacBook Pro 14\" con chip M5 (incluye la fila «16GB/1TB Esp»)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/125405"
+   ]
+  },
+  "9ed137f1f19d5694d82f32acb7b234d574ccf1cada7d7a0d0adb98f533516a72": {
+   "modelo": "MacBook Pro 14\" con chip M5 Max (36GB/2TB)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/126318"
+   ]
+  },
+  "3f3f2ff830ccacc81e345b08b21797e7ede4b21efd2fd93140a40cbc2b1d63cc": {
+   "modelo": "MacBook Pro 14\" con chip M5 Pro",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/126318",
+    "https://www.apple.com/la/macbook-pro/specs/"
+   ]
+  },
+  "44285279cb352a2021672908d014ba473f385c13f3a8b32cb57e6160f25154c1": {
+   "modelo": "MacBook Pro 16\" con chip M4 Pro (2024), 24GB/512GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/121554",
+    "https://support.apple.com/es-es/121554 (control: adaptador de 140 W incluido)",
+    "https://support.apple.com/en-gb/121554 (control: adaptador de 140 W incluido)",
+    "https://support.apple.com/fr-fr/121554 (control: adaptador de 140 W incluido)",
+    "https://support.apple.com/de-de/121554 (control: adaptador de 140 W incluido)",
+    "https://support.apple.com/en-us/121554 (control: adaptador de 140 W incluido)"
+   ]
+  },
+  "a80d54f5701e71f5c32b0d5ddc39a6cd776906773a569932c050172612701149": {
+   "modelo": "MacBook Pro 16\" con chip M5 Max",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-05.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/126319",
+    "https://support.apple.com/es-es/126319 (adaptador que se vende aparte y carga rápida con 140 W o más)"
+   ]
+  },
+  "b64c6a867f23c5a58aed625c37b31c2406f6496c1aca4ecf35cd79e867817bde": {
+   "modelo": "MacBook Pro 16\" con chip M5 Pro",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/126319",
+    "https://support.apple.com/es-es/126319"
+   ]
+  },
+  "4f737ec4d943ce2381e6fbdd4f55259e542adf3d3bbb5fe15bc8cc616e778547": {
+   "modelo": "Meta Quest 3 512GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-05.json",
+   "fuentes": [
+    "https://www.meta.com/es/quest/quest-3/ (renderizada con Chrome headless)",
+    "https://www.meta.com/es/quest/compare/ (renderizada con Chrome headless)",
+    "https://www.meta.com/quest/quest-3/ (EE. UU., para el adaptador de 18 W incluido)"
+   ]
+  },
+  "bfd53794fbec2a65e02b3e27ce8f1eaf2425db07bbd0397bd71a566cb20b6823": {
+   "modelo": "Meta Quest 3S",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://www.meta.com/es/quest/quest-3s/ (renderizada con Chrome headless: la página llega vacía sin JS)",
+    "https://www.meta.com/es/quest/compare/ (ídem)"
+   ]
+  },
+  "ec9cc38f00f7202390fa8795efba3b4bd7786dd676dfb8cfea99241686293339": {
+   "modelo": "Meta Quest 3S + Batman",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-07.json",
+   "fuentes": [
+    "https://www.meta.com/es/quest/quest-3s/ (renderizada con Chrome; con curl da error 400)",
+    "https://www.meta.com/es/quest/compare/ (renderizada con Chrome)",
+    "https://www.meta.com/gb/quest/quest-3s/ (sólo para el criterio del adaptador: «the included 18W power adapter»)"
+   ]
+  },
+  "baf9b9541be64898dc3040d5e61a4f97b8f21f403d1bbf1dbf6dd087ed5bc961": {
+   "modelo": "Nintendo Switch 2",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.nintendo.com/es-mx/gaming-systems/switch-2/tech-specs/",
+    "https://www.nintendo.com/us/store/products/nintendo-switch-2-system-123669/",
+    "https://www.nintendo.com/us/gaming-systems/switch-2/tech-specs/ (control)",
+    "https://www.nintendo.com/es-es/Hardware/Nintendo-Switch-2/Nintendo-Switch-2-Especificaciones-tecnicas-2785627.html (control: dos revisiones, misma duración y carga de batería; VRR sólo en la pantalla)"
+   ]
+  },
+  "fc2799bdf01b78214f83af89636ce4eb41b1fd65d76d8452397d16c611264f4b": {
+   "modelo": "Nintendo Switch 2 (Choose One Game)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://www.nintendo.com/es-mx/gaming-systems/switch-2/tech-specs/",
+    "https://www.nintendo.com/us/store/products/nintendo-switch-2-system-123669/",
+    "https://www.nintendo.com/es-es/Hardware/Nintendo-Switch-2/Nintendo-Switch-2-Especificaciones-tecnicas-2785627.html",
+    "https://www.nintendo.com/us/gaming-systems/switch-2/tech-specs/",
+    "https://store.nintendo.com/es-es/nintendo-switch-2-000000000010015151"
+   ]
+  },
+  "bcc0ceb4eb2277d08f43cd77a5d94866ed523df56e12a6ff270da03ddbf064b7": {
+   "modelo": "Nintendo Switch 2 + Mario Kart World",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://www.nintendo.com/es-mx/gaming-systems/switch-2/tech-specs/",
+    "https://www.nintendo.com/us/store/products/nintendo-switch-2-mario-kart-world-digital-bundle-122179/",
+    "https://www.nintendo.com/us/store/products/nintendo-switch-2-system-123669/",
+    "https://www.nintendo.com/es-es/Hardware/Nintendo-Switch-2/Nintendo-Switch-2-Especificaciones-tecnicas-2785627.html"
+   ]
+  },
+  "30577e372791a00e64a234dcaae400d62ec97f29530c3235363dd40cc0e8c683": {
+   "modelo": "POCO C81 Pro 4/128GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-08.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/poco-c81-pro/specs/",
+    "https://www.mi.com/global/product/poco-c81-pro/specs/",
+    "https://www.mi.com/es/product/poco-c81-pro/specs/"
+   ]
+  },
+  "29c54bf3f789fe26a8cfd32f8436c84a4ffac6424c85bb535f6cdc20f643ee15": {
+   "modelo": "POCO F6 8/256GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/poco-f6/specs/"
+   ]
+  },
+  "5bac236f29f40e272467f68aedb0f517ebac57c223bde96c28b0d228f440cb73": {
+   "modelo": "POCO F6 Pro 12/256GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/poco-f6-pro/specs/",
+    "https://www.mi.com/global/product/poco-f6-pro/specs/ (sólo para comparar: el tipo de SIM, «Dual SIM (nano SIM + nano SIM)», es el mismo que en México y España)",
+    "https://www.mi.com/es/product/poco-f6-pro/specs/ (sólo para comparar el tipo de SIM)"
+   ]
+  },
+  "ca119bba3ccbe821f5bb56b01db0e39aa11010651f17e300201830809a2cfe07": {
+   "modelo": "POCO Pad X1 8GB/512GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/poco-pad-x1/specs/",
+    "https://www.mi.com/mx/product/poco-pad-x1/",
+    "https://www.po.co/global/product/poco-pad-x1/specs/"
+   ]
+  },
+  "512443f4c375bffa08ebe64e2d5d0d3f3ebb881fc4809a2b0ef5fb958845f0b4": {
+   "modelo": "POCO X8 Pro 5G",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/poco-x8-pro/specs/",
+    "https://www.mi.com/global/product/poco-x8-pro/specs/",
+    "https://www.mi.com/es/product/poco-x8-pro/specs/"
+   ]
+  },
+  "9e6c3dc786864f4cbb7c408eb8e1ae5a863833d96ac6f78225bddf77c1f12851": {
+   "modelo": "POCO X8 Pro Max 5G",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/poco-x8-pro-max/specs/"
+   ]
+  },
+  "67d5caa743ade675e9a58c0aa88df0c1c31a065489c86e54c6e0ffe0bf6765c6": {
+   "modelo": "PlayStation 5 Digital 825GB (slim)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://www.playstation.com/es-ar/ps5/",
+    "https://www.playstation.com/content/dam/global_pdc/es/corporate/support/manuals/ps5-docs/2100ab/CFI-21XX_PS5_Instruction_Manual_Web$es.pdf",
+    "https://direct.playstation.com/en-us/buy-consoles/playstation5-digital-edition-console-825-gb"
+   ]
+  },
+  "1a7585341e2d59274c4519284493b657279355597bee9fd836054cbb3d6b8da3": {
+   "modelo": "PlayStation 5 Pro 2TB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.playstation.com/es-ar/ps5/ps5-pro/",
+    "https://www.playstation.com/content/dam/global_pdc/es/corporate/support/manuals/ps5-docs/7100/CFI-71XX_PS5_Safety_Guide_Web$es.pdf",
+    "https://blog.latam.playstation.com/2024/11/07/introduccion-a-playstation-5-pro-disponible-hoy/",
+    "https://direct.playstation.com/en-us/buy-consoles/playstation5-pro-console-2-tb",
+    "https://blog.latam.playstation.com/2024/09/12/damos-la-bienvenida-a-playstation-5-pro-la-forma-mas-visualmente-impresionante-de-jugar-en-playstation/"
+   ]
+  },
+  "72976d1a4d61031f353eae2ada4b1222f7e0f795bd1f63e173fd2c12c0c14f63": {
+   "modelo": "PlayStation 5 con lectora 1TB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-05.json",
+   "fuentes": [
+    "https://www.playstation.com/es-ar/ps5/",
+    "https://www.playstation.com/content/dam/global_pdc/es/corporate/support/manuals/ps5-docs/2100ab/CFI-21XX_PS5_Instruction_Manual_Web$es.pdf",
+    "https://www.playstation.com/content/dam/global_pdc/en/corporate/support/manuals/ps5-docs/2000ab/EN_FR_ES_AMER_CFI-2015_Safety_Guide_Web.pdf",
+    "https://direct.playstation.com/en-us/buy-consoles/playstation5-console-1-tb",
+    "~/catalogo-advance-trabajo/descripciones-tanda1/respuestas-pedro-01-10.md (punto 19)"
+   ]
+  },
+  "97b58688762807cde06272cd91fafd87385fc52c092356a1501093d6ad2b6d3a": {
+   "modelo": "REDMI Note 15 (4G) 8/256GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://www.mi.com/ar/product/redmi-note-15/specs/",
+    "https://www.mi.com/global/product/redmi-note-15/specs/"
+   ]
+  },
+  "be8a23ff1bd37dcfd833cb4aa71839e5bb907c3b975b06776c61a9ba9930c8aa": {
+   "modelo": "REDMI Note 15 Pro (4G) y REDMI Note 15 Pro 5G",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-07.json",
+   "fuentes": [
+    "https://www.mi.com/ar/product/redmi-note-15-pro/specs/",
+    "https://www.mi.com/global/product/redmi-note-15-pro/specs/",
+    "https://www.mi.com/ar/product/redmi-note-15-pro-5g/specs/",
+    "https://www.mi.com/global/product/redmi-note-15-pro-5g/specs/"
+   ]
+  },
+  "4820e8506d69e58011469fc33c133bb1c87977652906b0ea771a17ad7f98234e": {
+   "modelo": "REDMI Note 15 Pro+ 5G",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/redmi-note-15-pro-plus-5g/specs/",
+    "https://www.mi.com/global/product/redmi-note-15-pro-plus-5g/specs/",
+    "https://www.mi.com/es/product/redmi-note-15-pro-plus-5g/specs/ (control: versión europea IP66 e IP68, IP68 también hasta 2 m durante 30 minutos; 8+256 y 12+512 LPDDR4X + UFS 2.2)"
+   ]
+  },
+  "2f550bb95a19a68a113a9762a54162056a29998e5d4d2c933da66837b1a3fab1": {
+   "modelo": "Redmi 15C 4/128GB (sólo lo común al 15C y al 15C 5G)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-09.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/redmi-15c/specs/",
+    "https://www.mi.com/es/product/redmi-15c-5g/specs/"
+   ]
+  },
+  "e723be27ed4250636932cf32dc911e6b6f5b97b07e9d2b6c2781479a478fbe66": {
+   "modelo": "Redmi Note 13 (4G) 6/128GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://www.mi.com/ar/product/redmi-note-13/specs/"
+   ]
+  },
+  "f8ac110b9c76f8f57e1d174569a13df1c070c66debc79f4c234f5bc2b077f78d": {
+   "modelo": "Redmi Pad 2 11\" 8GB/256GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://www.mi.com/es/product/redmi-pad-2/specs/",
+    "https://www.mi.com/es/product/redmi-pad-2/",
+    "https://www.mi.com/mx/product/redmi-pad-2/specs/",
+    "https://www.mi.com/mx/product/redmi-pad-2-4g/specs/",
+    "https://www.mi.com/mx/product/redmi-pad-2-4g/",
+    "https://www.mi.com/mx/product/redmi-pad-2/",
+    "https://www.mi.com/global/product/redmi-pad-2/",
+    "https://www.mi.com/global/product/redmi-pad-2/specs/",
+    "https://www.mi.com/global/product/redmi-pad-2-4g/specs/"
+   ]
+  },
+  "025a551ee10643ea4e9cc6815145291eca5c732b150ba8d804fb4a33037b7a96": {
+   "modelo": "Redmi Pad 2 Pro 6GB/128GB",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-07.json",
+   "fuentes": [
+    "https://www.mi.com/es/product/redmi-pad-2-pro/specs/",
+    "https://www.mi.com/es/product/redmi-pad-2-pro/",
+    "https://www.mi.com/mx/product/redmi-pad-2-pro/specs/",
+    "https://www.mi.com/es/product/redmi-pad-2-pro-5g/specs/",
+    "https://www.mi.com/es/product/redmi-pad-2-pro-5g/"
+   ]
+  },
+  "02750133563761cb96e0d6f8cdc26697d5f51bb2e1ddb13a022a9a9d052701b8": {
+   "modelo": "Samsung Galaxy Buds3",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.samsung.com/mx/audio-sound/galaxy-buds/galaxy-buds3-white-sm-r530nzwamxo/"
+   ]
+  },
+  "31455659626c730a87e6a59436fb7524426ffb140c74a29094e207d1318339cf": {
+   "modelo": "Sigma 17-40mm F1.8 DC Art",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a025_17_40_18/",
+    "https://www.sigmaphoto.com/17-40mm-f1-8-dc-a"
+   ]
+  },
+  "6641af56697195d64338d50fb1dfb881edbea1fd58026d5737f4afc3283c8c63": {
+   "modelo": "Xbox Series S",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-10.json",
+   "fuentes": [
+    "https://www.xbox.com/es-AR/consoles/xbox-series-s"
+   ]
+  },
+  "18648d728fc5f68ee6f66b19303d878af44b89fe606901a8228119bc6e2e3fcf": {
+   "modelo": "Xbox Series X 1TB (con lectora, negra)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-11.json",
+   "fuentes": [
+    "https://www.xbox.com/es-MX/consoles/xbox-series-x",
+    "https://www.xbox.com/es-AR/consoles/xbox-series-x"
+   ]
+  },
+  "85227175875ce63c43d45af196b8d971637fe259a98fd836f20505ed00210b59": {
+   "modelo": "Xbox Series X 1TB Digital (blanca)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.xbox.com/es-MX/consoles/xbox-series-x",
+    "https://www.xbox.com/es-AR/consoles/xbox-series-x"
+   ]
+  },
+  "7c66934580057f4a2d924c59aa3ee536489e63cbeedc0ab89daf044aba94f6b7": {
+   "modelo": "iPad 11\" (A16)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/122240",
+    "https://www.apple.com/la/ipad-11/specs/"
+   ]
+  },
+  "b882119e112336ef570e3e0d44bebfbc4e912980d76be93caa87c21fdb1ebbe8": {
+   "modelo": "iPad Air 11\" (M4)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/126471"
+   ]
+  },
+  "9c155722321937a6197794d27d22141638c98b5465bee311d443bc2cd48cce5a": {
+   "modelo": "iPad Air 13\" (M3)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/122242"
+   ]
+  },
+  "d704c14eab1f42612cd230fe710820a8f1a9a11f1dd707dbc2202198c389779a": {
+   "modelo": "iPad Air 13\" (M4)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-05.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/126472"
+   ]
+  },
+  "ecd939da5bc6ff9c4e1f992b21f83ecee31aa2e8d12372d10aed75f718377b73": {
+   "modelo": "iPad Pro 11\" (M4)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-07.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/119892"
+   ]
+  },
+  "e4b0193d1115cafce1c46e2bc6b3fdf7b3c412c39bb62f9ba976cdab954fd483": {
+   "modelo": "iPad Pro 11\" (M5)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/125406",
+    "https://www.apple.com/la/ipad-pro/specs/"
+   ]
+  },
+  "124e6aba172b30600ac28d5980cf3067de749cb542a41b4f440cf1fc8984cea4": {
+   "modelo": "iPad Pro 13\" (M4)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/119891"
+   ]
+  },
+  "195065083db6ac342ea51ac0e5c7b012a39c3e671ac7bd20f8ca987065315132": {
+   "modelo": "iPad Pro 13\" (M5)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/125407",
+    "https://www.apple.com/la/ipad-pro/specs/"
+   ]
+  },
+  "c26061b3933cbb93d0ff1a5b487541b8b040214701d28cdeed14418d71a62be3": {
+   "modelo": "iPad mini (A17 Pro)",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/121456"
+   ]
+  },
+  "3bec367b61b83ff0cf5a4068b66105e8be21b7fd17614fae82eea9deebb818ea": {
+   "modelo": "iPhone 14",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/111850"
+   ]
+  },
+  "47246fbfafd0b35d0d50a0fa2501fde5e6d9ab1260e7aa08826a9130344d0bf6": {
+   "modelo": "iPhone 15",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-05.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/111831"
+   ]
+  },
+  "a3ebbd68bec5059506ef0090571e405d22041ca54605cbd4d12da2f123b8993a": {
+   "modelo": "iPhone 15 Plus",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/111830"
+   ]
+  },
+  "0b28d82431f6ff53a6abbbb13492caa692e90138add5aba7e185eb0fb59e9ea2": {
+   "modelo": "iPhone 16",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-07.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/121029",
+    "https://www.apple.com/la/iphone-16/specs/",
+    "https://www.apple.com/la/newsroom/2024/09/apple-introduces-iphone-16-and-iphone-16-plus/"
+   ]
+  },
+  "50a700218cff90aa6b6ce9ba38743c2e7798bb701ac940bebfd320efae00f24a": {
+   "modelo": "iPhone 16 Pro Max",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/121032"
+   ]
+  },
+  "8a48fffdcf5f5b145dbff9ceb47d7a6c56fa53555d44cd9eaef6668045522432": {
+   "modelo": "iPhone 16e",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-10.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/122208"
+   ]
+  },
+  "ebaa9bd49b1aa7a4909b4def366a65876187c298ce198a026bc52d479ae31ab3": {
+   "modelo": "iPhone 17",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/125089"
+   ]
+  },
+  "db512ae4df7f9e9c715c2311ec3e122b228fe8fa1b15b626fcd144042193a39c": {
+   "modelo": "iPhone 17 Pro",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/125090",
+    "https://support.apple.com/es-es/125090",
+    "https://support.apple.com/zh-cn/125090 (control: versión china A3524/A3527, doble nano-SIM: 204 g, 31 h y 28 h, igual que la versión Sim)",
+    "https://support.apple.com/zh-hk/125090 (control: A3523/A3526, 204 g, 31 h)"
+   ]
+  },
+  "30115fed4e299f7e825a89bacf3a0a5a91167ab698b1849a99aabb7a854b1f03": {
+   "modelo": "iPhone 17 Pro Max",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/125091"
+   ]
+  },
+  "762c35e4b28bdabb6a0fb630e07b1b49e5db6186eed18cb0956a7239c310d940": {
+   "modelo": "iPhone 17e",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/126470"
+   ]
+  },
+  "8cb187881ec0c2cd816cf3210809c7df4cbef3c9775064f5b4e8e11c5c28d870": {
+   "modelo": "iPhone Air",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/125092"
+   ]
+  },
+  "fc84a41e18ed9b02137ae4d1e1ce78016cade004779fab44f88d950fd698bc97": {
+   "modelo": "moto g06 power",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-09.json",
+   "fuentes": [
+    "https://www.motorola.com/es/es/p/phones/moto-g/moto-g06-power/pmipmhy43m4"
+   ]
+  },
+  "26ce7cf18ab585d0da7ad0eacb73780d2d2b99ba54f61952da7ad9f107487610": {
+   "modelo": "moto g17",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-10.json",
+   "fuentes": [
+    "https://www.motorola.com.ar/moto-g17-256gb/p",
+    "https://www.motorola.com/es/es/p/phones/moto-g/17/pmipmjn44mj",
+    "https://www.motorola.com/gt/es/p/phones/moto-g/17/pmipmjn44mj (extra, para el color)",
+    "https://www.motorola.com/hn/es/p/phones/moto-g/17/pmipmjn44mj (extra, para el color)"
+   ]
+  },
+  "d168ed0592e4e26231ba772da2c4fdd5a9c14c7c0069e02a9c1d6614743befe2": {
+   "modelo": "moto g57",
+   "fecha": "2026-10-01",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://www.motorola.com/au/en/p/phones/moto-g/57-5g/pmipmjf43mj (tabla de specs y notas 1 a 22 desde el JSON de la página)"
+   ]
+  }
+ }
+}

@@ -23,6 +23,13 @@
 //   D.3   la entrada se busca por el CODIGO de la fila; la version, por lo que
 //         la ficha sabe de la fila (Sim, memoria, montura, nombre), porque la
 //         columna CODIGO de ADVAPP trae codigos de otra memoria o de la eSIM
+//   D.4   (01/10, Pedro: "una estructura con un agente para que no se filtren
+//         datos erroneos") ninguna entrada se publica sin pasar por el
+//         verificador: la huella (sha256, sin "notas") de cada entrada tiene
+//         que estar en datos/descripciones-verificadas.json, que escribe
+//         herramientas/verificar-descripciones.py con los veredictos "ok" del
+//         agente verificador-descripciones. Si una entrada cambia despues de
+//         verificarse, su huella ya no esta y la publicacion se frena.
 // Mas la convivencia con lo que ya estaba: la vitrina de colores, las
 // pestanas de version, "Ver las N versiones", el pie pegado, Compartir y el
 // visor. Los casos salen de los datos del dia y del JSON, sin nombres fijos
@@ -183,6 +190,7 @@ async function correrPruebas(){
     const maestro = new Set(filasCsv.slice(1).map(f => f[col]).filter(Boolean));
     info(j.descripciones.length + ' descripciones cargadas; el maestro tiene ' + maestro.size + ' codigos');
     probarFormato(j, maestro);
+    await probarVerificadas(j);
 
     // Las filas de hoy que tienen descripcion (por su codigo)
     const porCodigo = new Map();
@@ -212,6 +220,44 @@ async function correrPruebas(){
 }
 
 /* ---- D.1 ---- */
+/* ---- D.4 ---- La huella de una entrada: sha256 del JSON canonico (claves
+   ordenadas, sin espacios, sin "notas"). Es la misma cuenta que huella() de
+   herramientas/verificar-descripciones.py; la prueba lo comprueba con una
+   entrada fija cuya huella calculo la herramienta. */
+function pdCanon(x){
+  if(Array.isArray(x)) return '[' + x.map(pdCanon).join(',') + ']';
+  if(x && typeof x === 'object') return '{' + Object.keys(x).sort().map(k => JSON.stringify(k) + ':' + pdCanon(x[k])).join(',') + '}';
+  return JSON.stringify(x);
+}
+async function pdHuella(e){
+  const x = {}; Object.keys(e).forEach(k => { if(k !== 'notas') x[k] = e[k]; });
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pdCanon(x)));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+async function probarVerificadas(j){
+  if(!(window.crypto && crypto.subtle)){ ok(false, '[D.4] el navegador de la prueba calcula sha256 (crypto.subtle)'); return; }
+  const fija = { modelo: 'Prueba ñ "x" / 6,3\"', codigos: ['AT-0001'], venta: ['a\nb'],
+                 ficha: [{ grupo: 'G', datos: [['k', { segun: { b: '2', a: '1' } }]] }], notas: 'no cuenta' };
+  const hf = await pdHuella(fija);
+  ok(hf === '5ea600cf5bece0806d558e85aaa039416e028bae707b72be18699b0302964849',
+     '[D.4] la prueba y herramientas/verificar-descripciones.py calculan la misma huella', hf);
+  let reg = null;
+  try{ reg = await fetch('datos/descripciones-verificadas.json?prueba', { cache: 'no-store' }).then(r => r.ok ? r.json() : null); }catch(e){}
+  ok(!!reg && reg.formato === 'verificadas/1' && reg.verificadas && typeof reg.verificadas === 'object',
+     '[D.4] esta el registro de descripciones verificadas (datos/descripciones-verificadas.json)');
+  if(!reg) return;
+  const sin = [];
+  for(const e of j.descripciones){ if(!reg.verificadas[await pdHuella(e)]) sin.push(e.modelo); }
+  ok(!sin.length, '[D.4] cada descripcion paso por el verificador y no cambio despues (si no: python3 herramientas/verificar-descripciones.py)',
+     sin.length ? sin.length + ' sin verificar: ' + sin.slice(0, 4).join(' | ') : j.descripciones.length + ' verificadas');
+  // Cambiar una coma deja la huella afuera; cambiar las notas, no
+  const e0 = JSON.parse(JSON.stringify(j.descripciones[0]));
+  const h0 = await pdHuella(e0);
+  e0.notas = 'otra nota'; const h1 = await pdHuella(e0);
+  e0.venta = e0.venta.map((t, i) => i ? t : t + ','); const h2 = await pdHuella(e0);
+  ok(h0 === h1 && h1 !== h2, '[D.4] la huella cambia con cualquier cambio del texto, y no con las notas');
+}
+
 function probarFormato(j, maestro){
   const malos = pdValidar(j, maestro);
   ok(!malos.length, '[D.1] datos/descripciones.json cumple el formato (codigos del maestro, sin repetidos, versiones, fuente, sin palabras comerciales)',

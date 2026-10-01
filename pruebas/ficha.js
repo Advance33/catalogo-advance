@@ -387,8 +387,12 @@ function correrPruebas(){
     const suyos = new Set((buscarModelo(FICHA).variantes || []).map(clave));
     ok(todos('#ficha .fi-tono').every(b => suyos.has(b.dataset.k)),
        'al cambiar de version la tira sigue siendo del mismo modelo', conAmbos.desc);
-    ok(todos('#ficha .fi-vitrina').length === 1 && todos('#ficha .fi-colores').length === 1,
-       'y no se duplica');
+    /* (01/10) Como mucho una vitrina: si la version nueva tiene un solo color
+       no hay vitrina, sólo "Color: X" (decision-colores, 30/09). Con los datos
+       del 01/10 el iPhone 16 Pro Max de 512GB es de un color y la prueba
+       pedia exactamente una: el sitio estaba bien, la prueba no. */
+    ok(todos('#ficha .fi-vitrina').length <= 1 && todos('#ficha .fi-colores').length === 1,
+       'y no se duplica', todos('#ficha .fi-vitrina').length + ' vitrina(s), ' + todos('#ficha .fi-colores').length + ' bloque(s) de color');
     R.push('  --  ' + conAmbos.desc + ': ' + (antes === despues ? 'la tira no cambio' : 'la tira se redibujo'));
     cerrarFicha();
   }

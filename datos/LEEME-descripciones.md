@@ -143,13 +143,28 @@ consola del navegador: `MODELOS.find(m => /s26 ultra/i.test(m.desc)).variantes.m
    anotá la dirección.
 3. Escribí la entrada con el formato de arriba. Si un dato cambia entre
    versiones, armá `versiones` y usá `segun`.
-4. Corré las pruebas: `python3 pruebas/correr.py` (la tanda
+4. **Pasala por el verificador** (obligatorio desde el 01/10/2026: Pedro pidió
+   "una estructura con un agente para que no se filtren datos erróneos"):
+   - `python3 herramientas/verificar-descripciones.py --lotes 1 --carpeta DIR`
+     arma el lote con lo que falta verificar y las filas de hoy del sitio.
+   - Se lo das al agente **verificador-descripciones**
+     (`~/.claude/agents/verificador-descripciones.md`), que NO es el que la
+     escribió: lee cada fuente oficial entera y revisa dato por dato, que sea
+     ese producto (sin deducir 4G/5G, Wi-Fi/celular, Sim/eSIM, región) y las
+     reglas de arriba. Devuelve `ok`, `corregir` o `sacar` por entrada.
+   - Lo que vuelve `corregir` se arregla y se vuelve a verificar.
+   - `python3 herramientas/verificar-descripciones.py --registrar DIR/informe-*.json`
+     anota la huella de las `ok` en `datos/descripciones-verificadas.json`.
+   Una entrada sin su huella (nueva, o cambiada después de verificarse, aunque
+   sea una coma) hace fallar la prueba y frena la publicación. Las `notas` no
+   cuentan: se pueden cambiar sin volver a verificar.
+5. Corré las pruebas: `python3 pruebas/correr.py` (la tanda
    `decision-descripciones` revisa el formato: códigos que existen en el
    maestro, ninguno repetido entre entradas, versiones que cubren sus
    códigos, cada dato cubriendo todas las versiones, fuente `https://`,
-   proveedor con su fuente y ninguna palabra comercial; y que cada fila de
-   hoy calce en una sola versión).
-5. Mirá la ficha en el celular y en la compu.
+   proveedor con su fuente y ninguna palabra comercial; que cada fila de
+   hoy calce en una sola versión; y que todas estén verificadas).
+6. Mirá la ficha en el celular y en la compu.
 
 ## De dónde salieron las primeras cinco (30/09/2026)
 

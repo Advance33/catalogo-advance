@@ -165,7 +165,10 @@ si alguna falta).
                   cumpla el formato (codigos del maestro, sin repetidos,
                   fuente, sin palabras comerciales), que se pida recien con
                   la primera ficha y con tope, y que sin entrada no quede
-                  ningun hueco.
+                  ningun hueco. Desde el 01/10 (D.4), que cada entrada haya
+                  pasado por el agente verificador sin cambiar despues: su
+                  huella tiene que estar en datos/descripciones-verificadas.json
+                  (herramientas/verificar-descripciones.py).
   decision-cuotas.js
                   Cuotas con tarjeta (Pedro, 30/09: 1B 2B 3C 4A de
                   muestras/cuotas) y sin factura: la cuenta de cada plan de

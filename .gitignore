@@ -74,6 +74,7 @@ CATALOGO-A-CORREGIR.txt
 # herramientas/pedidos-advapp.json, que si va al repo.
 PEDIDO-ADVAPP.txt
 PENDIENTES-NUESTROS.txt
+CORRECCIONES-ADVAPP.json
 
 # Notas y pedidos con fecha en el nombre (29/09). Se commitearon uno por
 # uno como registro, pero el repo es PUBLICO y GitHub Pages los servia:

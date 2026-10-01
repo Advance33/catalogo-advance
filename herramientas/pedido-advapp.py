@@ -1139,6 +1139,95 @@ def correr_reglas(filas, ctx):
     return hallados, omitidas
 
 
+# ---------------------------------------------------------------- correcciones
+#
+# Desde el 01/10/2026 ADVAPP lo manejamos nosotros (Benja: "VOS MANEJAS
+# ADVAPP"): el pedido ya no es un texto para que lo cargue otro equipo. Lo que
+# tiene una respuesta cierta sale ademas como datos, en CORRECCIONES-ADVAPP.json,
+# y se aplica desde ADVAPP (Padron -> Correcciones de la auditoria) con la
+# sesion de quien lo revisa: primero muestra cada cambio, despues lo aplica.
+#
+# Solo entra lo que no es una pregunta: codigos del maestro, la categoria del
+# prefijo del SKU, erratas con su forma correcta, siglas y colores escritos
+# distinto. Lo que lleva "?" sigue siendo una pregunta y queda en el texto.
+# Cada cambio lleva el valor de hoy ("antes"): si alguien lo toco despues de la
+# auditoria, ADVAPP no lo pisa.
+SALIDA_JSON = os.path.join(RAIZ, 'CORRECCIONES-ADVAPP.json')
+RE_AT = re.compile(r'AT-\d{4}(?:-\d{2})?')
+
+
+def _arreglar_nombre(desc, punto, regla):
+    if regla == 'r_siglas':
+        malas = [x.strip() for x in punto['hoy'].split(',') if x.strip()]
+        out = desc
+        for m in malas:
+            out = re.sub(r'(?<![A-Za-z])%s(?![A-Za-z])' % re.escape(m), m.upper(), out)
+        return out
+    patron = punto['clave'].split('|', 1)[1]
+    bien = punto['poner'].split(' (', 1)[0]
+    if bien.startswith('sin "') or bien == 'sacarlo del nombre':
+        return re.sub(r'\s{2,}', ' ', re.sub(patron, ' ', desc)).strip()
+    if '<' in bien:
+        return None                           # "F/<numero>": no se sabe cual
+    return re.sub(patron, bien, desc)
+
+
+def correcciones_de(hallados, filas):
+    por_id = {f['ID']: f for f in filas}
+    out = collections.OrderedDict()
+    for r, p, k in hallados:
+        f = por_id.get(p['id'])
+        if not f or str(p.get('poner', '')).startswith('?'):
+            continue
+        nombre = r['nombre']
+        cambios = {}
+        if nombre in ('r_codigo', 'r_variante', 'r_var_de_otro'):
+            ats = RE_AT.findall(p['poner'])
+            if not ats:
+                continue
+            cambios['codigo'] = ats[0].split('-')[0] + '-' + ats[0].split('-')[1]
+            if len(ats) > 1:
+                cambios['codigo_var'] = ats[1]
+        elif nombre == 'r_categoria':
+            m = re.match(r'Categoria (.+?) \(como', p['poner'])
+            if m:
+                cambios['categoria'] = m.group(1)
+        elif nombre in ('r_erratas', 'r_siglas'):
+            actual = (out.get(p['id'], {}).get('cambios', {}).get('nombre')) or _desc(f)
+            nuevo = _arreglar_nombre(actual, p, nombre)
+            if nuevo and nuevo != actual:
+                cambios['nombre'] = nuevo
+        elif nombre == 'r_color_escrito':
+            viejo = p['hoy'][len('Color "'):-1]
+            bien = p['poner'].split(' (', 1)[0]
+            color = (f.get('Color') or '').strip()
+            if bien and bien != viejo and color:
+                cambios['color'] = color.replace(viejo, bien)
+                d = (out.get(p['id'], {}).get('cambios', {}).get('nombre')) or _desc(f)
+                if '(%s)' % viejo in d:
+                    cambios['nombre'] = d.replace('(%s)' % viejo, '(%s)' % bien)
+        if not cambios:
+            continue
+        x = out.setdefault(p['id'], {'id': p['id'], 'producto': _desc(f), 'cambios': {}, 'antes': {}, 'reglas': []})
+        campos = {'codigo': 'CODIGO', 'codigo_var': 'CODIGO_VAR', 'categoria': 'Categoría',
+                  'nombre': 'Descripción completa', 'color': 'Color'}
+        for c, v in cambios.items():
+            x['antes'].setdefault(c, (f.get(campos[c]) or '').strip())
+            x['cambios'][c] = v
+        if r['titulo'] not in x['reglas']:
+            x['reglas'].append(r['titulo'])
+    lista = [x for x in out.values() if any(x['cambios'][c] != x['antes'][c] for c in x['cambios'])]
+    return lista
+
+
+def escribir_correcciones(lista, man):
+    with open(SALIDA_JSON, 'w', encoding='utf-8') as fh:
+        json.dump({'armado': HOY.isoformat(), 'contra': man.get('generado_en') or '',
+                   'correcciones': lista}, fh, ensure_ascii=False, indent=1)
+    print('Correcciones aplicables desde ADVAPP: %d productos (en %s)'
+          % (len(lista), os.path.relpath(SALIDA_JSON, RAIZ)))
+
+
 def main():
     sys.stdout.reconfigure(encoding='utf-8')
     if '--probar' in sys.argv:
@@ -1250,6 +1339,7 @@ def main():
             L.append('  %s   (pedido el %s)' % (k.split('|')[1], fecha(v['enviado'])))
     with open(SALIDA, 'w', encoding='utf-8') as fh:
         fh.write('\n'.join(L) + '\n')
+    escribir_correcciones(correcciones_de(hallados, filas), man)
 
     print('Pedido a ADVAPP: %d puntos (%d nuevos, %d ya pedidos), %d arreglados desde el ultimo envio.'
           % (len(hallados), len(nuevos), len(hallados) - len(nuevos), len(arreglados)))

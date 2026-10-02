@@ -41,6 +41,17 @@
     "https://www.apple.com/la/airpods-pro/"
    ]
   },
+  "bc4e5337c5395ffe18c90ef7eb1b46cfad5457fe67c41ce4be9c063607802e52": {
+   "modelo": "Antigravity A1 (Paquete Explorador)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r4-T13-1.json",
+   "fuentes": [
+    "https://www.antigravity.tech/mx/drone/antigravity-a1/specs",
+    "https://www.antigravity.tech/mx/drone/antigravity-a1",
+    "https://www.antigravity.tech/mx/drone/antigravity-a1/buy (Paquete Explorador: «1× dron A1, 1× Las Gafas Vision, 1× controlador Grip, 3× baterías de vuelo, 1× hub de carga, 1× estuche de transporte para dron A1, 1× bandolera, 8× hélices de repuesto»; rotulado «249g Nivel Avanzado», baterías estándar)"
+   ]
+  },
   "857a7496171f74e0906313186e211d1bae9f3a6db8e0dbf1ff93633b40a31e75": {
    "modelo": "Apple Watch SE (2.ª generación) GPS",
    "fecha": "2026-10-01",
@@ -81,6 +92,721 @@
     "https://www.apple.com/la/watchos/feature-availability/ (Oxígeno en Sangre según el país; la ficha 125095 remite a esta lista)"
    ]
   },
+  "5b6bdb98eee8da1f84bf6e843e30cb252865fc86054b043dba4fcb207a14c388": {
+   "modelo": "Canon EF 16-35mm f/4L IS USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T01-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/ef-16-35mm-f-4l-is-usm-lens/",
+    "https://www.canon.es/lenses/ef-16-35mm-f-4l-is-usm-lens/specification.html",
+    "https://global.canon/en/c-museum/product/ef432.html"
+   ]
+  },
+  "8ea1e36452f7525b8a8d0162bd792a1bab82abed713bc131306a25993e3fbd53": {
+   "modelo": "Canon EF 24-70mm f/2.8L II USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r5-T01-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T01-2 (bajada hoy 13:06-13:24, canonical comprobado): https://www.canon.es/lenses/ef-24-70mm-f-2-8l-ii-usm-lens/",
+    "copia de trabajo-a-T01-2 (bajada hoy 13:06-13:24, canonical comprobado): https://www.canon.es/lenses/ef-24-70mm-f-2-8l-ii-usm-lens/specification.html",
+    "copia de trabajo-a-T01-2 (bajada hoy 13:06-13:24, canonical comprobado): https://global.canon/en/c-museum/product/ef424.html"
+   ]
+  },
+  "555cbb782f0d96428d8d40590eb1c891517d50afcf45ea4d26ac53c4999f202a": {
+   "modelo": "Canon EF 50mm f/1.4 USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r5-T01-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://www.canon.es/lenses/ef-50mm-f-1-4-usm-lens/",
+    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://www.canon.es/lenses/ef-50mm-f-1-4-usm-lens/specification.html",
+    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://global.canon/en/c-museum/product/ef318.html"
+   ]
+  },
+  "1b248368700b61dee4b3248983512726d3b727646f282608ecbb431f7cc4f71b": {
+   "modelo": "Canon EF-S 10-18mm f/4.5-5.6 IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T01-2.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/ef-s-10-18mm-f-4-5-5-6-is-stm-lens/",
+    "https://www.canon.es/lenses/ef-s-10-18mm-f-4-5-5-6-is-stm-lens/specification.html",
+    "https://global.canon/en/c-museum/product/ef431.html"
+   ]
+  },
+  "73a75bace83b1321921957f3b2ffa15fd4992430ffe81386a0fef06020a094db": {
+   "modelo": "Canon EF-S 18-135mm f/3.5-5.6 IS USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T01-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/ef-s-18-135mm-f3-5-5-6-is-usm/specification.html",
+    "https://www.canon.es/lenses/ef-s-18-135mm-f3-5-5-6-is-usm/",
+    "https://global.canon/en/c-museum/product/ef454.html"
+   ]
+  },
+  "7e0ec490e907f2939860efbc92bec9839ee91893e820759567dd2eefbd66cf0d": {
+   "modelo": "Canon EF-S 24mm f/2.8 STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T01-2.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/ef-s-24mm-f-2-8-stm-lens/",
+    "https://www.canon.es/lenses/ef-s-24mm-f-2-8-stm-lens/specification.html",
+    "https://global.canon/en/c-museum/product/ef434.html"
+   ]
+  },
+  "e221b6ac5659386b8ba0984f3f377d44429f6de7b70a312e3a27308a35748ef9": {
+   "modelo": "Canon EOS 2000D (EOS Rebel T7) con lente 18-55 III",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r5-T10-1.json",
+   "fuentes": [
+    "copia de trabajo-r1-T10-1 (bajada hoy 13:32-13:33, canonical comprobado): https://www.canon.es/cameras/eos-2000d/specifications/",
+    "copia de trabajo-r1-T10-1 (bajada hoy 13:32-13:33, canonical comprobado): https://www.cla.canon.com/es/p/eos-rebel-t7",
+    "copia de trabajo-r1-T10-1 (bajada hoy 13:32-13:33, canonical comprobado): https://global.canon/en/c-museum/product/dslr873.html"
+   ]
+  },
+  "b5eb9f996f1ee352bbd88fea2f1e922d7fdd60ea2117a9ada41c7997f7c6ceea": {
+   "modelo": "Canon EOS 4000D (EOS Rebel T100) con lente 18-55 III",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-2.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/eos-4000d/specifications/",
+    "https://www.cla.canon.com/es/p/eos-rebel-t100"
+   ]
+  },
+  "9999a276b3a7f5cd00887a4a8ade0f6cfa65698718a9c45d0ebad8eb7f3dfda9": {
+   "modelo": "Canon EOS 5D Mark IV (cuerpo)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T10-2.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/eos-5d-mark-iv/specifications/"
+   ]
+  },
+  "7f2a31d63c1a58d8703c435425fe6137ed1630a8d9f2b8f1f6a7822d154bba17": {
+   "modelo": "Canon EOS R1 (cuerpo)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r1/specifications/",
+    "bajada de nuevo hoy 13:33: https://www.canon.es/cameras/eos-r1/"
+   ]
+  },
+  "ee71231041d805a0c72ab250153279abf6d9209e966879b90f534e3cf8c26f96": {
+   "modelo": "Canon EOS R10 (cuerpo y kit RF-S 18-150mm F3.5-6.3 IS STM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r10/specifications/",
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r10/",
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/store/canon-camara-mirrorless-eos-r10-objetivo-rf-s-18-150mm-f3-5-6-3-is-stm-de-canon/5331C017/"
+   ]
+  },
+  "7aaef3202ed0917e0430f21524c685001016ed462ed9b8cbbb0358293de4a727": {
+   "modelo": "Canon EOS R100 + RF-S 18-45mm F4.5-6.3 IS STM + RF-S 55-210mm F5-7.1 IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-2.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/eos-r100/specifications/",
+    "https://www.canon.co.uk/store/canon-eos-r100-mirrorless-camera-rf-s-18-45mm-is-stm-lens-rf-s-55-210mm-is-stm-lens/6052C035/"
+   ]
+  },
+  "35089acc38569173cc1ef55aa332823596c9b97b6666602e36f144a405b4f31d": {
+   "modelo": "Canon EOS R3 (cuerpo)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-2.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/eos-r3/specifications/",
+    "https://www.canon.es/cameras/eos-r3/"
+   ]
+  },
+  "96b2c04778b1c8a24434ce8ad9f61fc1b99b1b68e9ee14c2b0f2a08bdda5ed10": {
+   "modelo": "Canon EOS R5 (cuerpo)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-2.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/eos-r5/specifications/",
+    "https://www.canon.es/cameras/eos-r5/"
+   ]
+  },
+  "3bacfbc96191c6261aa510c21b4e300b4543d6faa7396517775d3c8d4d25d5c9": {
+   "modelo": "Canon EOS R5 C",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r5c/specifications/",
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r5c/"
+   ]
+  },
+  "e48ecd5abfc5acdb43de9b0c3a1ada8dcc96f77ebe14f3af926a240f4cb2a8a6": {
+   "modelo": "Canon EOS R5 Mark II (cuerpo)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r5-mark-ii/specifications/",
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r5-mark-ii/"
+   ]
+  },
+  "e72c1939398a08a73f6fadf0532de17c75bb0e3ad626e886e3555b98ac1fe070": {
+   "modelo": "Canon EOS R6 Mark III (cuerpo, kit RF 24-105mm F4-7.1 IS STM y kit RF 24-105mm F4L IS USM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-2.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/eos-r6-mark-iii/specifications/",
+    "https://www.canon.es/store/canon-camara-mirrorless-canon-eos-r6-mark-iii-objetivo-rf-24-105mm-f4-7-1-is-stm/7084C020/",
+    "https://www.canon.es/store/canon-camara-mirrorless-canon-eos-r6-mark-iii-objetivo-rf-24-105mm-f4l-is-usm/7084C012/"
+   ]
+  },
+  "38cc8d4ecad8f4cc6968f435822df874364c7fd556d545296333a8fdfdff2596": {
+   "modelo": "Canon EOS R6 V (cuerpo y kit RF 20-50mm F4L IS USM PZ)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r6v/specifications/",
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r6v/",
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/store/canon-camara-mirrorless-canon-eos-r6-v-objetivo-rf-20-50mm-f4l-is-usm-pz/7250C012/"
+   ]
+  },
+  "893f9974cfc0fe373905e219641f2c8b8c2fdc75dc27608cd411d4f07d661cf3": {
+   "modelo": "Canon EOS R7 + RF-S 18-150mm F3.5-6.3 IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-2.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/eos-r7/specifications/",
+    "https://www.canon.es/cameras/eos-r7/",
+    "https://www.canon.es/store/canon-camara-mirrorless-eos-r7-objetivo-rf-s-18-150mm-f3-5-6-3-is-stm-de-canon/5137C010/"
+   ]
+  },
+  "9d813617cae90249f83c3653b0417b5abea3125d257a93a9b48de2381a9cf0ac": {
+   "modelo": "Canon EOS RP (cuerpo y kit RF 24-105mm F4-7.1 IS STM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T10-1.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/eos-rp/specifications/",
+    "https://www.canon.es/cameras/eos-rp/",
+    "https://www.canon.es/store/canon-camara-canon-eos-rp-objetivo-rf-24-105mm-f4-7-1-is-stm/3380C133/"
+   ]
+  },
+  "cd7c4306acc4bd27cded76d0ca347ae0441b604b865e246f216638809ffe56f6": {
+   "modelo": "Canon Extender RF1.4x",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T01-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/extender-rf-1-4x/",
+    "https://www.canon.es/lenses/extender-rf-1-4x/specifications/",
+    "https://global.canon/en/c-museum/product/rf494.html",
+    "https://www.canon.es/lenses/rf-100-400-f5-6-8-is-usm/specifications/",
+    "https://www.canon.es/lenses/rf-200-800mm-f6-3-9-is-usm/specifications/"
+   ]
+  },
+  "269033af05a1a0bf2240ccb858265d0548606d42dc32439bc892dbfa8ad328ef": {
+   "modelo": "Canon Extender RF2x",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r5-T01-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://www.canon.es/lenses/extender-rf-2x/",
+    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://www.canon.es/lenses/extender-rf-2x/specifications/",
+    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://global.canon/en/c-museum/product/rf495.html",
+    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://www.canon.es/lenses/rf-100-400-f5-6-8-is-usm/specifications/",
+    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://www.canon.es/lenses/rf-200-800mm-f6-3-9-is-usm/specifications/"
+   ]
+  },
+  "25053447cf41e9e7f87cb15afa1956294d719d541b59dd809a871070d96f05cb": {
+   "modelo": "Canon PowerShot G7 X Mark III",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/powershot-g7-x-mark-iii/specifications/",
+    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.cla.canon.com/es/p/powershot-g7-x-mark-iii"
+   ]
+  },
+  "522b429d9fc1a1d60abc89c7802f83117dc06d9408868f0a39760f80631a0891": {
+   "modelo": "Canon PowerShot SX740 HS",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T10-2.json",
+   "fuentes": [
+    "https://www.cla.canon.com/es/p/powershot-sx740-hs",
+    "https://www.canon.es/cameras/powershot-sx740-hs-lite-edition/",
+    "https://www.canon.es/cameras/powershot-sx740-hs-lite-edition/specifications/",
+    "https://www.canon.co.uk/cameras/powershot-sx740-hs-lite-edition/"
+   ]
+  },
+  "3e1f513824a21e22b1bddb1abd221f14a0e3c131fb0fb5480d4ff9646d6741d3": {
+   "modelo": "Canon RF 10-20mm F4 L IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T01-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T01-2 (bajada hoy 13:12, canonical comprobado): https://www.canon.es/lenses/rf-10-20mm-f4l-is-stm/specifications/",
+    "copia de trabajo-a-T01-2 (bajada hoy 13:23, canonical comprobado): https://global.canon/en/c-museum/product/rf528.html"
+   ]
+  },
+  "7005d30b2e735714cf175c9c1a732501ba16362baa6c7b8de7b3ea2f3cc0b267": {
+   "modelo": "Canon RF 100-400mm F5.6-8 IS USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T01-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-100-400-f5-6-8-is-usm/specifications/",
+    "https://global.canon/en/c-museum/product/rf511.html"
+   ]
+  },
+  "64fa13bfc2f727fc28e6e2d4452df50d75c46b30e4dd7f02a50e93a82bd08eaf": {
+   "modelo": "Canon RF 100mm F2.8 L Macro IS USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T01-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T01-2 (bajada hoy 13:29, canonical comprobado): https://www.canon.es/lenses/rf-100mm-f2-8l-macro-is-usm/specifications/",
+    "copia de trabajo-a-T01-2 (bajada hoy 13:24, canonical comprobado): https://global.canon/en/c-museum/product/rf508.html",
+    "copia de trabajo-a-T01-2 (bajada hoy 13:27, canonical comprobado; no está en fuentes, sólo para contrastar): https://www.canon.es/lenses/rf-100mm-f2-8l-macro-is-usm/"
+   ]
+  },
+  "86999576859484ac08496481359253d1b69d8c7f6d22304fb65490e797a255c1": {
+   "modelo": "Canon RF 135mm F1.8 L IS USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T01-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-135mm-1-8-l-is-usm-lens/specifications/",
+    "https://global.canon/en/c-museum/product/rf521.html"
+   ]
+  },
+  "3784fc334b012da813bcb428a343613793b3cb2397c56195ac7ea37f8e4f24c1": {
+   "modelo": "Canon RF 14-35mm F4 L IS USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T01-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T01-2 (bajada hoy 13:14, canonical comprobado): https://www.canon.es/lenses/rf-14-35mm-f4-4l-is-usm-lens/specifications/",
+    "copia de trabajo-a-T01-2 (bajada hoy 13:24, canonical comprobado): https://global.canon/en/c-museum/product/rf509.html"
+   ]
+  },
+  "7d2afc3a4ddb13474dca41cdaac9c537d5a95c8bfb4f72076c3ed944553961a6": {
+   "modelo": "Canon RF 15-30mm F4.5-6.3 IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T01-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-15-30mm-f4-5-6-3-is-stm/specifications/ (dos intentos dieron 'Site down'; el tercero bajó la página completa)",
+    "https://global.canon/en/c-museum/product/rf518.html"
+   ]
+  },
+  "56b8c67f2e281b4fe805954fa52b0a5754e82ce735f090285484a4eee8ba3900": {
+   "modelo": "Canon RF 15-35mm F2.8 L IS USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T01-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T01-2 (bajada hoy 13:15, canonical comprobado): https://www.canon.es/lenses/rf-15-35mm-f2-8l-is-usm-lens/specifications/",
+    "copia de trabajo-a-T01-2 (bajada hoy 13:16, canonical comprobado): https://www.canon.es/lenses/rf-15-35mm-f2-8l-is-usm-lens/",
+    "copia de trabajo-a-T01-2 (bajada hoy 13:24, canonical comprobado): https://global.canon/en/c-museum/product/rf484.html"
+   ]
+  },
+  "0ad155bee6127e827b053c5d9a30dd6aead8a143ea1c32bba3844eafadc83e24": {
+   "modelo": "Canon RF 16-28mm F2.8 IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T01-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-16-28mm-f2-8-is-stm/specifications/",
+    "https://global.canon/en/c-museum/product/rf547.html"
+   ]
+  },
+  "64ce5f71f43a411031aa30893b4c30d41c56494df23aed0bb3b087dc542a5aa5": {
+   "modelo": "Canon RF 16mm F2.8 STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T01-2.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-16mm-f2-8-stm/specifications/",
+    "https://global.canon/en/c-museum/product/rf510.html"
+   ]
+  },
+  "47d49c517079dae51bef343bcdecc0cd255c34e5c910778ab22e29a2297863a3": {
+   "modelo": "Canon RF 200-800mm F6.3-9 IS USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T01-2.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-200-800mm-f6-3-9-is-usm/specifications/",
+    "copia del redactor: https://www.usa.canon.com/shop/p/rf200-800mm-f6-3-9-is-usm (usa.canon.com da 403 con curl y con Chrome headless; se leyó el HTML crudo trabajo-T01/us-rf200800.html, canonical correcto)",
+    "https://global.canon/en/c-museum/product/rf530.html"
+   ]
+  },
+  "b5d24f88ce35b49e9b5111c368dc12ebf93a747e3b5f26f563cd3c41f1414b06": {
+   "modelo": "Canon RF 20mm F1.4 L VCM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T01-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-20mm-f1-4l-vcm/specifications/",
+    "https://global.canon/en/c-museum/product/rf548.html"
+   ]
+  },
+  "d51886700447cfc24d8047def314cbf821547494e2eaa6e13769215fa57e240a": {
+   "modelo": "Canon RF 24-105mm F4 L IS USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T01-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T01-2 (bajada hoy 13:19, canonical comprobado): https://www.canon.es/lenses/canon-rf-24-105mm-f-4l-is-usm-lens/",
+    "copia de trabajo-a-T01-2 (bajada hoy 13:20, canonical comprobado): https://www.canon.es/lenses/canon-rf-24-105mm-f-4l-is-usm-lens/specifications/",
+    "copia de trabajo-a-T01-2 (bajada hoy 13:24, canonical comprobado): https://global.canon/en/c-museum/product/rf471.html"
+   ]
+  },
+  "059ee63acae4b58f27e6eb913a804d46f1a59b4a3ae6b13a462ec3a668a2fffa": {
+   "modelo": "Canon RF 24-105mm F4-7.1 IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r5-T01-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://www.canon.es/lenses/rf-24-105mm-f4-7-1-is-stm-lens/specifications/",
+    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://global.canon/en/c-museum/product/rf490.html"
+   ]
+  },
+  "3dddbd3c6e155818a2147c8ca98844bfaafd875ed941ac3dc99c658cc0f6142c": {
+   "modelo": "Canon RF 24-240mm F4-6.3 IS USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r5-T01-1.json",
+   "fuentes": [
+    "copia de trabajo-a-T01-2 (bajada hoy 13:06-13:24, canonical comprobado): https://www.canon.es/lenses/rf-24-240mm-f4-6-3-is-usm/specifications/",
+    "copia de trabajo-a-T01-2 (bajada hoy 13:06-13:24, canonical comprobado): https://global.canon/en/c-museum/product/rf483.html"
+   ]
+  },
+  "be07b4adf2f0cdc0808940f33a508eaa0a1311af9cdd55fc864a3f3043ec85c3": {
+   "modelo": "Canon RF 24-70mm F2.8 L IS USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T02-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-24-70mm-f2-8l-usm-lens/",
+    "https://www.canon.es/lenses/rf-24-70mm-f2-8l-usm-lens/specifications/",
+    "https://asia.canon/en/consumer/rf24-70mm-f-2-8l-is-usm/specification",
+    "https://www.canon.com.au/camera-lenses/rf-24-70mm-f2-8l-is-usm",
+    "https://asia.canon/en/consumer/sitemap-product.xml (copia del verificador c-T02-1)",
+    "https://www.canon.com.au/sitemap.xml (copia del redactor)",
+    "https://www.canon.es/ sitemap de productos (copia del redactor)"
+   ]
+  },
+  "7288fc01f93157ce759c0bf9510453957e4313761372bad501c559fd81f3a597": {
+   "modelo": "Canon RF 24mm F1.4 L VCM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-c-T02-2.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-24mm-f1-4l-vcm/",
+    "https://www.canon.es/lenses/rf-24mm-f1-4l-vcm/specifications/"
+   ]
+  },
+  "e79cf24e704f80b30595ce99b382969bea79612947b6bd78f988fcd8ff46ed9d": {
+   "modelo": "Canon RF 24mm F1.8 Macro IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-c-T02-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-24mm-f1-8-macro-is-stm/",
+    "https://www.canon.es/lenses/rf-24mm-f1-8-macro-is-stm/specifications/",
+    "https://asia.canon/en/consumer/rf24mm-f-1-8-macro-is-stm/specification",
+    "https://asia.canon/en/consumer/sitemap-product.xml"
+   ]
+  },
+  "4e2b8ca03719a044aa3ef8083fad01b37ff00ddf0d2997c44e6658bc9678b27b": {
+   "modelo": "Canon RF 28-70mm F2 L USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T02-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-28-70mm-f-2l-usm-lens/",
+    "https://www.canon.es/lenses/rf-28-70mm-f-2l-usm-lens/specifications/ (la tabla no carga)",
+    "https://asia.canon/en/consumer/rf28-70mm-f-2l-usm/specification",
+    "https://www.canon.com.au/camera-lenses/rf-28-70mm-f2l-usm",
+    "https://asia.canon/en/consumer/sitemap-product.xml (copia del verificador c-T02-1)",
+    "https://www.canon.com.au/sitemap.xml (copia del redactor)",
+    "https://www.canon.es/ sitemap de productos (copia del redactor)"
+   ]
+  },
+  "6dd98310b0edb7ddc2dfeae7442a53b4ef843b070e589a9a84dfc393647e792f": {
+   "modelo": "Canon RF 28-70mm F2.8 IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T02-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-28-70mm-f2-8-is-stm/",
+    "https://www.canon.es/lenses/rf-28-70mm-f2-8-is-stm/specifications/",
+    "https://asia.canon/en/consumer/rf28-70mm-f-2-8-is-stm/specification",
+    "https://www.canon.com.au/camera-lenses/rf-28-70mm-f2-8-is-stm",
+    "https://asia.canon/en/consumer/sitemap-product.xml (copia del verificador c-T02-1)",
+    "https://www.canon.com.au/sitemap.xml (copia del redactor)",
+    "https://www.canon.es/ sitemap de productos (copia del redactor)"
+   ]
+  },
+  "7b0a81794d4cc8d72d4567e4b8447700939f9d7556df0c2915afb46df6f90153": {
+   "modelo": "Canon RF 28mm F2.8 STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-c-T02-2.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-28mm-f2-8-stm/",
+    "https://www.canon.es/lenses/rf-28mm-f2-8-stm/specifications/"
+   ]
+  },
+  "37b803d3a4d687de44c92383667797fc483c9e335c516ec2abccb84fb3e696b2": {
+   "modelo": "Canon RF 35mm F1.4 L VCM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T02-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-35mm-f1-4l-vcm/",
+    "https://www.canon.es/lenses/rf-35mm-f1-4l-vcm/specifications/",
+    "https://asia.canon/en/consumer/rf35mm-f-1-4l-vcm/specification",
+    "https://www.canon.com.au/camera-lenses/rf-35mm-f1-4-l-vcm",
+    "https://asia.canon/en/consumer/sitemap-product.xml (copia del verificador c-T02-1)",
+    "https://www.canon.com.au/sitemap.xml (copia del redactor)",
+    "https://www.canon.es/ sitemap de productos (copia del redactor)"
+   ]
+  },
+  "0078ce712003a480b0e0a6045bcb0693b786fa6e587ba5555819d546e1652d60": {
+   "modelo": "Canon RF 45mm F1.2 STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-c-T02-2.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-45mm-f1.2/",
+    "https://www.canon.es/lenses/rf-45mm-f1.2/specifications/"
+   ]
+  },
+  "2f34a5ff897a5917e2020e7d964ed0e8b8d91fd89292c7fe0037f5b55b4f9669": {
+   "modelo": "Canon RF 50mm F1.2 L USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T02-1.json",
+   "fuentes": [
+    "https://asia.canon/en/consumer/rf50mm-f-1-2l-usm/specification",
+    "https://www.canon.com.au/camera-lenses/rf-50mm-f1-2l-usm",
+    "https://www.canon.es/lenses/rf-50mm-f1-8-stm/ (tabla comparativa con el RF 50mm F1.2L USM)",
+    "https://asia.canon/en/consumer/sitemap-product.xml (copia del verificador c-T02-1)",
+    "https://www.canon.com.au/sitemap.xml (copia del redactor)",
+    "https://www.canon.es/ sitemap de productos (copia del redactor)"
+   ]
+  },
+  "bbb9deee906fa718bf86e635aa0f204b43d79977ddbd1f2ca080b912679b0f15": {
+   "modelo": "Canon RF 50mm F1.8 STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-c-T02-2.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-50mm-f1-8-stm/",
+    "https://www.canon.es/lenses/rf-50mm-f1-8-stm/specifications/"
+   ]
+  },
+  "adee4a65f96457c4c1c6a9720827267374afd0c1754bc352a5d3c9983f5acc42": {
+   "modelo": "Canon RF 600mm F11 IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T02-1.json",
+   "fuentes": [
+    "https://asia.canon/en/consumer/rf600mm-f-11-is-stm/specification",
+    "https://www.canon.com.au/camera-lenses/rf-600mm-f11-is-stm",
+    "https://asia.canon/en/consumer/sitemap-product.xml (copia del verificador c-T02-1)",
+    "https://www.canon.com.au/sitemap.xml (copia del redactor)",
+    "https://www.canon.es/ sitemap de productos (copia del redactor)"
+   ]
+  },
+  "2941b39f103efdc6ccb6c99a948b97aace2dc7ba6d8125d6de2b5d8049cfc4b0": {
+   "modelo": "Canon RF 7-14mm F2.8-3.5 L Fisheye STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r12-T02-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-7-14mm-f2-8-3-5l-fisheye-stm/",
+    "https://www.canon.es/lenses/rf-7-14mm-f2-8-3-5l-fisheye-stm/specifications/",
+    "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://asia.canon/en/consumer/rf7-14mm-f-2-8-3-5l-fisheye-stm/specification",
+    "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://www.canon.com.au/camera-lenses/rf-7-14mm-f-2-8-3-5l-fisheye-stm",
+    "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://faq.canon.jp/app/answers/detail/a_id/105610/"
+   ]
+  },
+  "418e5c9e735f093b1b51b78c21bfb20fa9332b02f6467f77c5a52a20c4dd6002": {
+   "modelo": "Canon RF 70-200mm F2.8 L IS USM Z (negro)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-c-T02-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-70-200mm-f2-8l-is-usm-z/",
+    "https://www.canon.es/lenses/rf-70-200mm-f2-8l-is-usm-z/specifications/",
+    "https://asia.canon/en/consumer/rf70-200mm-f-2-8l-is-usm-z/black/specification",
+    "https://asia.canon/en/consumer/sitemap-product.xml"
+   ]
+  },
+  "b6c91b92266eb81ac04a3d377ecdf19be03901659afe944392f2752356ade761": {
+   "modelo": "Canon RF 70-200mm F4 L IS USM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-c-T02-2.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-70-200mm-f4-is-usm-lens/",
+    "https://www.canon.es/lenses/rf-70-200mm-f4-is-usm-lens/specifications/"
+   ]
+  },
+  "b78148bff877eba4d0ed2930c18c8a15d0c35f14e440cc111a2fab9c1ee06aea": {
+   "modelo": "Canon RF 75-300mm F4-5.6",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-c-T02-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-75-300mm-f4-5-6/",
+    "https://www.canon.es/lenses/rf-75-300mm-f4-5-6/specifications/",
+    "https://asia.canon/en/consumer/rf75-300mm-f-4-5-6/specification",
+    "https://asia.canon/en/consumer/sitemap-product.xml"
+   ]
+  },
+  "e2ea29cf148c7c45802d092745e09efe8a411f4032b6893fcd417d44cc1def30": {
+   "modelo": "Canon RF 800mm F11 IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-c-T02-2.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-800mm-f11-is-stm/",
+    "https://www.canon.es/lenses/rf-800mm-f11-is-stm/specifications/"
+   ]
+  },
+  "373962474605ab7ad142d9fbed284788fd779c9184b0b1ba7929a0dae6d0f749": {
+   "modelo": "Canon RF 85mm F2 Macro IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-c-T02-1.json",
+   "fuentes": [
+    "https://asia.canon/en/consumer/rf85mm-f-2-macro-is-stm/specification",
+    "https://www.canon.com.au/camera-lenses/rf-85mm-f-2-macro-is-stm",
+    "https://asia.canon/en/consumer/sitemap-product.xml"
+   ]
+  },
+  "d0d495b881a6b21efc4badedd52aca12402124950486328ab509b34ffac98545": {
+   "modelo": "Canon RF-S 10-18mm F4.5-6.3 IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-c-T02-2.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-s-10-18mm-f4-5-6-3-is-stm/",
+    "https://www.canon.es/lenses/rf-s-10-18mm-f4-5-6-3-is-stm/specifications/"
+   ]
+  },
+  "42b9a5338daf2e8b50549e1b0f52cadcef98dad10960352ab44568076b66455c": {
+   "modelo": "Canon RF-S 18-150mm F3.5-6.3 IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r12-T02-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-s-18-150mm-f3-5-6-3-is-stm/",
+    "https://www.canon.es/lenses/rf-s-18-150mm-f3-5-6-3-is-stm/specifications/",
+    "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://asia.canon/en/consumer/rf-s18-150mm-f-3-5-6-3-is-stm/specification",
+    "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://www.canon.com.au/camera-lenses/rf-s-18-150mm-f3-5-6-3-is-stm",
+    "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://faq.canon.jp/app/answers/detail/a_id/103434/"
+   ]
+  },
+  "44441ebe5671fabe914cf018a7b87e0866e251ece5595f599931904a8ca502d8": {
+   "modelo": "Canon RF-S 3.9mm F3.5 STM Dual Fisheye",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-c-T02-2.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-s-3-9mm-f3-5-stm-dual-fisheye-lens/",
+    "https://www.canon.es/lenses/rf-s-3-9mm-f3-5-stm-dual-fisheye-lens/specifications/"
+   ]
+  },
+  "4ad3472544d188f807dc036d210875ebd344db87302795429d8d8ecc8361d821": {
+   "modelo": "Canon RF-S 55-210mm F5-7.1 IS STM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T02-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-s-55-210mm-f5-7-1-is-stm/",
+    "https://www.canon.es/lenses/rf-s-55-210mm-f5-7-1-is-stm/specifications/",
+    "https://asia.canon/en/consumer/rf-s55-210mm-f-5-7-1-is-stm/specification",
+    "https://www.canon.com.au/camera-lenses/rf-s-55-210mm-f5-7-1-is-stm",
+    "https://asia.canon/en/consumer/sitemap-product.xml (copia del verificador c-T02-1)",
+    "https://www.canon.com.au/sitemap.xml (copia del redactor)",
+    "https://www.canon.es/ sitemap de productos (copia del redactor)"
+   ]
+  },
+  "200583af7f3aba504b4c13e0bba8a4afa19e7b995dbaa93f63c4ca9291bf8c6e": {
+   "modelo": "Canon RF-S 7.8mm F4 STM Dual",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r12-T02-1.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-s-7-8mm-f4-stm/",
+    "https://www.canon.es/lenses/rf-s-7-8mm-f4-stm/specifications/",
+    "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://asia.canon/en/consumer/rf-s7-8mm-f-4-stm-dual/specification",
+    "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://www.canon.com.au/camera-lenses/rf-s-7-8mm-f4-stm-dual",
+    "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://faq.canon.jp/app/answers/detail/a_id/104930/"
+   ]
+  },
+  "50e6a3938118d046507a6435dfabc87589b8a723398f3409fd62cc4ea192cd52": {
+   "modelo": "Canon VIXIA HF G70",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T12-1.json",
+   "fuentes": [
+    "https://gdlp01.c-wss.com/gds/1/0300044581/03/hfg70-im4-n-en.pdf (págs. 3-4, 29, 35, 43, 58-60, 73-77, 131-134)"
+   ]
+  },
+  "d9a664692eb8b3798375da71de9db861e1552fff1b8a9a063216e77fe2480c6e": {
+   "modelo": "DJI Air 3S Pack Vuela Más (DJI RC 2)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T13-2.json",
+   "fuentes": [
+    "https://www.dji.com/mx/air-3s/specs",
+    "https://www.dji.com/mx/air-3s (textos en español del JSON de la página)",
+    "https://store.dji.com/es/product/dji-air-3s?set_region=ES (inTheBoxes de dji-air-3s-fly-more-combo-rc-2)",
+    "https://store.dji.com/product/dji-air-3s?set_region=US (misma caja del pack RC 2, para ver que no cambia por país)"
+   ]
+  },
+  "40d787545338e5cadf1c4cba3c956489145ed272a71f17f93c19fe527d23e47c": {
+   "modelo": "DJI Lito X1 Pack Vuela Más (DJI RC-N3)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r4-T13-1.json",
+   "fuentes": [
+    "https://www.dji.com/mx/lito-x1/specs (RC-N3: «Sin cargar ningún dispositivo móvil: 3.5 horas / Al cargar un dispositivo móvil: 1.5 horas»: el aviso de la primera pasada quedó bien aplicado)",
+    "https://www.dji.com/mx/lito-x1 (textos en español del JSON de la página: HDR 4K/60, nota 7 de los 14 pasos, MasterShots, QuickShots, Hyperlapse, Panorámica, inclinación de 40°)",
+    "https://store.dji.com/es/product/dji-lito-x1?set_region=ES (inTheBoxes de dji-lito-x1-fly-more-combo-dji-rc-n3: coincide con «En la caja», 3 baterías estándar)"
+   ]
+  },
+  "50ce7e4bf84b9dab8a504b1d6aba9badf1f55de33afccc07aa2d4da891bb0cc6": {
+   "modelo": "DJI Mavic 4 Pro 512 GB Pack para Creadores (DJI RC Pro 2)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T13-2.json",
+   "fuentes": [
+    "https://www.dji.com/mx/mavic-4-pro/specs",
+    "https://www.dji.com/mx/mavic-4-pro (textos en español del JSON de la página)",
+    "https://store.dji.com/es/product/dji-mavic-4-pro?set_region=ES (inTheBoxes de dji-mavic-4-pro-512gb-creator-combo-dji-rc-pro-2)",
+    "https://store.dji.com/uk/product/dji-mavic-4-pro?set_region=GB (misma caja del Pack para Creadores)"
+   ]
+  },
   "505c05aaff5de400e489ba2212170bbdd03d0edbe0380c9b05fc40671b6ffa99": {
    "modelo": "DJI Mini 5 Pro",
    "fecha": "2026-10-01",
@@ -91,6 +817,76 @@
     "https://www.dji.com/mx/mini-5-pro",
     "https://store.dji.com/es/product/dji-mini-5-pro?set_region=ES",
     "~/catalogo-advance-trabajo/descripciones-armador/datos-de-pedro.md"
+   ]
+  },
+  "9873643aab4ee0d7059a92d5337b83c20c3fbc1acc17ba91361696f5e96a3070": {
+   "modelo": "DJI Neo 2 Motion Pack Vuela Más",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r4-T13-1.json",
+   "fuentes": [
+    "https://www.dji.com/mx/neo-2/specs",
+    "https://www.dji.com/mx/neo-2 (textos en español del JSON: «Cuando se combina con el control de movimientos y las gafas, Neo 2 permite el control de movimientos e Easy ACRO, para ofrecer una experiencia inmersiva en FPV», notas 8, 12, 13 y 17)",
+    "https://store.dji.com/es/product/dji-neo-2?set_region=ES (inTheBoxes de dji-neo-2-motion-fly-more-combo: coincide con «En la caja»)"
+   ]
+  },
+  "c0444c8401d5bc8e8242d75a811fb012df8836bf904feaff4a353a27255e07ae": {
+   "modelo": "DJI Neo 2 Pack Vuela Más",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r11-T13-1.json",
+   "fuentes": [
+    "https://www.dji.com/mx/neo-2/specs (curl -b 'region=MX; lang=es': 151 g / 160 g, 147 × 171 × 41 mm con protectores y sin transceptor, 12 m/s en Sport y siguiendo, aprox. 19 min (17 min con protectores), 10.7 m/s, 49 GB, C0 (UE), 1/2 pulgada, 16.5 mm, f/2.2, 119.8°, enfoque 0.7 m a ∞, 12 MP 4000 × 3000, JPEG, 4K 100/60/50/30 fps con la nota «100 fps solo con control de movimientos o control remoto», vertical 2.7K 60/50/30, RockSteady, estabilizador mecánico de 2 ejes, visión monocular omnidireccional + infrarrojo abajo + LiDAR adelante, transceptor O4 opcional, RC-N3 hasta 1080p/60 fps, FCC 10 km / CE 6 km, Wi-Fi 500 m (FCC), sin microSD, 1606 mAh, 11.5 Wh, 46 g, centro de carga 65 W en aprox. 68 min las tres y «superior a 45 W permite cargar tres baterías al mismo tiempo»)",
+    "https://www.dji.com/mx/neo-2 (textos en español del JSON de la página: palma, control gestual, Regreso a la palma, ActiveTrack y SelfieShot «encuadran automáticamente», Dolly Zoom, QuickShots, MasterShots, 12 m/s de seguimiento, «detectar y evitar obstáculos», protectores de hélices integrales, control desde la app por Wi-Fi, notas 6, 12, 13, 15 y 17, los tres packs Vuela Más)",
+    "https://store.dji.com/es/product/dji-neo-2?set_region=ES (inTheBoxes de dji-neo-2-fly-more-combo-drone-only, -fly-more-combo, -fly-more-140w-gan-charging-combo y -motion-fly-more-combo)",
+    "https://store.dji.com/uk/product/dji-neo-2?set_region=GB (control: mismos packs y mismo contenido, sin el de 140 W)"
+   ]
+  },
+  "ab0ceda3b73d2e26be76a4ed2e09808a36e995610069db927b127c82a6b47390": {
+   "modelo": "DJI Osmo Action 6 Pack Estándar",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T13-2.json",
+   "fuentes": [
+    "https://www.dji.com/mx/osmo-action-6/specs",
+    "https://www.dji.com/mx/osmo-action-6 (textos en español del JSON de la página)",
+    "https://store.dji.com/es/product/osmo-action-6?set_region=ES (inTheBoxes de osmo-action-6 = Pack Estándar)",
+    "https://store.dji.com/uk/product/osmo-action-6?set_region=GB (misma caja del Standard Combo)"
+   ]
+  },
+  "9a16f5dbe0803edbd237dc5aa6d468c6351df01e3b471022cc054dcc3bf581c2": {
+   "modelo": "DJI Osmo Nano (64 GB y Standard Combo de 128 GB)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r4-T13-1.json",
+   "fuentes": [
+    "https://www.dji.com/mx/nano/specs",
+    "https://www.dji.com/mx/nano (textos en español del JSON: 13.5 pasos, OLED, ±30°, Supernoche, 80 % en 20 min, notas 3, 8 y 9, hasta dos transmisores)",
+    "https://store.dji.com/es/product/osmo-nano?set_region=ES (los 7 ítems de «En la caja» están en todos los packs de 64 GB y en el Pack Estándar de 128 GB)",
+    "https://store.dji.com/product/osmo-nano?set_region=US (ídem)"
+   ]
+  },
+  "f814bef601cbf1f741717ea2fef6a50723cbdc01d26ce9240d3e02d23e205a3e": {
+   "modelo": "DJI Osmo Pocket 3",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r4-T13-1.json",
+   "fuentes": [
+    "https://www.dji.com/mx/osmo-pocket-3/specs («Tamaño máx. de imagen: 16:9, 3840×2160; 1:1, 3072×3072», «Disparo único: Aprox. 9.4 MP», carga «con el cargador PD de 65 W DJI (se vende por separado)»: los dos arreglos de la primera pasada quedaron bien)",
+    "https://www.dji.com/mx/osmo-pocket-3 (textos en español del JSON: OLED, 116 min en 4K/60, D-Log M y HLG de 10 bits, Mic 2/Mic Mini, webcam, directo y código de tiempo)",
+    "https://store.dji.com/es/product/osmo-pocket-3?set_region=ES (los 5 ítems de «En la caja» están en todos los packs)"
+   ]
+  },
+  "64e14627d2096fda45c4469f95bd70bd986f78ad980a23c8b6e79f82b07ac183": {
+   "modelo": "DJI Osmo Pocket 4P Pack Estándar",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T13-1.json",
+   "fuentes": [
+    "https://www.dji.com/mx/osmo-pocket-4p/specs",
+    "https://www.dji.com/mx/osmo-pocket-4p",
+    "https://store.dji.com/es/product/osmo-pocket-4p?set_region=ES",
+    "https://store.dji.com/hk/product/osmo-pocket-4p?set_region=HK (el Pack Estándar también trae la luz de relleno)"
    ]
   },
   "363030d353cc4e75ae7b5f0740c1348e492343af2483b635a1f4eb38c3ed76c5": {
@@ -109,6 +905,16 @@
    "informe": "informe-02.json",
    "fuentes": [
     "https://www.apple.com/mx/shop/product/myqy3am/a/earpods-con-conector-usb-c"
+   ]
+  },
+  "207a39860ca036810c96921775d3e0b97014fd074d44a2168feed1ae756d0d06": {
+   "modelo": "Fujifilm INSTAX mini 12",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T10-2.json",
+   "fuentes": [
+    "https://www.fujifilm.com/ar/es/consumer/instax/cameras/mini12/specifications",
+    "https://www.fujifilm.com/ar/es/consumer/instax/cameras/mini12"
    ]
   },
   "86d2ba7fb9a14ce509d00abb3b9eb836dbe6c9bd8cc12c7e08e247b7f43fae34": {
@@ -425,6 +1231,37 @@
     "https://www.garmin.com/es-ES/p/884088/pn/010-02804-11"
    ]
   },
+  "69f95023d21bc38c9a3f919d755f29aafbdaa5ac3e7770ec5a6add9152904b7b": {
+   "modelo": "GoPro HERO12 Black (Special Bundle)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T13-1.json",
+   "fuentes": [
+    "https://gopro.com/es/es/shop/cameras/hero12-black/CHDHX-121-master.html",
+    "https://gopro.com/es/es/compare (JSON __NEXT_DATA__, producto CHDHX-121-master)"
+   ]
+  },
+  "08669e06d805f448d71fe6e2e2d6a08c85c4be61b72ca7c13f692c11e0bb408e": {
+   "modelo": "GoPro HERO13 Black",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T13-2.json",
+   "fuentes": [
+    "https://gopro.com/es/es/shop/cameras/buy/hero13black/CHDHX-131-master.html (JSON __NEXT_DATA__: textos y «Qué incluye la HERO13 Black (independiente)» y los kits)",
+    "https://gopro.com/es/es/compare (JSON __NEXT_DATA__, producto CHDHX-131-master)",
+    "https://gopro.com/en/us/shop/cameras/buy/hero13black/CHDHX-131-master.html (caja de la cámara sola, para ver que no cambia por país)"
+   ]
+  },
+  "9cab8d1e2dcd14bad41bb84f314cd3253f776f7b0617ff2fa215c2f758112a63": {
+   "modelo": "Insta360 X5 (pack del proveedor: palo selfie, 2 baterías y tapa de lente)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r4-T13-1.json",
+   "fuentes": [
+    "https://www.insta360.com/es/product/insta360-x5 (Chrome headless; tabla de especificaciones completa y «Efecto selfie stick invisible»: el aviso de venta 2 quedó bien aplicado)",
+    "https://store.insta360.com/es/product/x5 (Chrome headless; ningún paquete se llama como la fila: queda bien como dato del proveedor)"
+   ]
+  },
   "842ffa297908cf376c2e5c668b9e286b46e43110c163e24f75090437b14280e0": {
    "modelo": "JBL Tune Flex Wireless NC (Tune Flex o Tune Flex 2)",
    "fecha": "2026-10-01",
@@ -634,6 +1471,462 @@
     "https://www.meta.com/gb/quest/quest-3s/ (sólo para el criterio del adaptador: «the included 18W power adapter»)"
    ]
   },
+  "906d47f6dd7ac72a6bf4b04646effc29ed85c3b1aaa4de5ef1c790a8ba15b775": {
+   "modelo": "Nikon AF-S DX Zoom-Nikkor 12-24mm f/4G IF-ED",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T03-1.json",
+   "fuentes": [
+    "https://www.nikonusa.com/p/af-s-dx-zoom-nikkor-12-24mm-f4g-if-ed/2144/overview",
+    "https://www.nikon.com.ar/lentes/reflex/af-s-dx-zoom-nikkor-12-24mm-f4g-if-ed",
+    "https://imaging.nikon.com/imaging/lineup/lens/f-mount/ (lista: no hay otro 12-24 f/4 Nikon)"
+   ]
+  },
+  "1056c7a4cb91fb1d7d6d56fa830fe8054bcdc81ba1b6d63832da1a2c65c52ba8": {
+   "modelo": "Nikon AF-S NIKKOR 50mm f/1.8G",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T03-1.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/f-mount/singlefocal/normal/af-s_50mmf_18g/",
+    "https://www.nikon.com.ar/lentes/reflex/af-s-nikkor-50mm-f18g",
+    "https://www.nikon.com.ar/lentes/reflex/af-s-nikkor-50mm-f18g-edicion-especial",
+    "https://www.nikon.es/es_ES/product/lenses/dslr/af-s-nikkor-50mm-f1.8g (cruce)",
+    "https://www.nikonusa.com/p/af-s-nikkor-50mm-f18g/2199/overview (cruce)",
+    "https://www.nikonusa.com/p/af-s-nikkor-50mm-f18g-special-edition/2214/overview (cruce)",
+    "https://imaging.nikon.com/imaging/lineup/lens/f-mount/ (lista: AF-S 50mm f/1.8G y f/1.4G)"
+   ]
+  },
+  "0d3edbe0365f1e2bf9d6312b2e27864f25424c870b83a868503512583b613997": {
+   "modelo": "Nikon D7500 Kit 18-140 (con AF-S DX NIKKOR 18-140mm f/3.5-5.6G ED VR)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T12-1.json",
+   "fuentes": [
+    "https://www.nikon.com.mx/p/d7500/1581/overview (JSON __NEXT_DATA__: tabla completa de specs, textos de presentación y variante 1582 «Kit de lente 18-140mm VR» con el AF-S DX NIKKOR 18-140mm f/3.5-5.6G ED VR)",
+    "https://imaging.nikon.com/imaging/lineup/dslr/d7500/"
+   ]
+  },
+  "ba4e56847c78c2195e2f0827d14749c0111227e9483b13867729f775ba929213": {
+   "modelo": "Nikon NIKKOR Z 135mm f/1.8 S Plena",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T03-2.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_135mmf18s/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-135mm-f1.8-s-plena",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-135mm-f18-s-plena",
+    "https://www.nikonusa.com/p/nikkor-z-135mm-f18-s-plena/20123/overview"
+   ]
+  },
+  "606cdf54928b36c00bbe9969e0d1f779d74dfc8b8724a371a0be3e489a8df53c": {
+   "modelo": "Nikon NIKKOR Z 14-24mm f/2.8 S",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T03-1.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_14-24mmf28s/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-14-24mm-f2.8-s (texto y JSON embebido con la ficha completa)",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-14-24mm-f28-s (cruce; no está en fuentes)",
+    "https://www.nikonusa.com/p/nikkor-z-14-24mm-f28-s/20097/overview (cruce)",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/ (lista de lentes Z: un solo 14-24)"
+   ]
+  },
+  "3eb46ea3908b154f5d3c2d4de833b99b464bd95c800521380f9eb20ab447875d": {
+   "modelo": "Nikon NIKKOR Z 14-30mm f/4 S",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T03-1.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_14-30mmf4s/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-14-30mm-f4-s (texto y JSON embebido con la ficha completa)",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-14-30mm-f4-s (cruce; no está en fuentes)",
+    "https://www.nikonusa.com/p/nikkor-z-14-30mm-f4-s/20070/overview (cruce)"
+   ]
+  },
+  "87597ad8499ff0860750a1a2e2386704645e118041f038ca763aaf74823cbc23": {
+   "modelo": "Nikon NIKKOR Z 17-28mm f/2.8",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T03-1.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_17-28mmf28/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-17-28mm-f2.8 (sin tabla de especificaciones; texto, accesorios incluidos y nota del sellado)",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-17-28mm-f28 (cruce; no está en fuentes)",
+    "https://www.nikonusa.com/p/nikkor-z-17-28mm-f28/20115/overview (cruce)"
+   ]
+  },
+  "bb6e6deb4d762d10ae540a231791879416a5562348a7e43dd4d0533bfab83f78": {
+   "modelo": "Nikon NIKKOR Z 180-600mm f/5.6-6.3 VR",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T03-1.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_180-600mmf56-63_vr/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-180-600mm-f5.6-6.3-vr (JSON embebido con la ficha completa)",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-180-600mm-f56-63-vr",
+    "https://www.nikonusa.com/p/nikkor-z-180-600mm-f56-63-vr/20117/overview (cruce)"
+   ]
+  },
+  "dc14d17ce347a0e7d98f493a2241ad6c468f26421b3b5625f01b6fd7df01f858": {
+   "modelo": "Nikon NIKKOR Z 24-105mm f/4-7.1",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T03-2.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_24-105mmf4-71/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-24-105mm-f4-7.1",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-24-105mm-f4-71",
+    "https://www.nikonusa.com/p/nikkor-z-24-105mm-f4-71/20132/overview"
+   ]
+  },
+  "423b927754b86f8133417658865c8a45c750bf2879fc238ab0487b073105929a": {
+   "modelo": "Nikon NIKKOR Z 24-200mm f/4-6.3 VR",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T03-1.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_24-200mmf4-63_vr/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-24-200mm-f4-6.3-vr (texto y JSON embebido con la ficha completa)",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-24-200mm-f4-63-vr (cruce; no está en fuentes)",
+    "https://www.nikonusa.com/p/nikkor-z-24-200mm-f4-63-vr/20092/overview (cruce)"
+   ]
+  },
+  "132f5f79ad0243ba03498e3d2bdc54bbc357b41157010f12f14be5e7a0ec1a10": {
+   "modelo": "Nikon NIKKOR Z 24-70mm f/2.8 S II",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T03-1.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_24-70mmf28s2/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-24-70mm-f2.8-s-ii (texto y JSON embebido con la ficha completa)",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-24-70mm-f28-s-ii (cruce; no está en fuentes)",
+    "https://www.nikonusa.com/p/nikkor-z-24-70mm-f28-s-ii/20129/overview (cruce)",
+    "https://www.nikon.com/company/news/2025/0822_imaging_01/ (comunicado de Nikon, cruce)",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/ (lista de lentes Z)"
+   ]
+  },
+  "70a63a9548116e66fa0c91d18c08dd5e76ce386abe90a58f0de4e8e26a168c11": {
+   "modelo": "Nikon NIKKOR Z 24-70mm f/4 S",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T03-1.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_24-70mmf4s/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-24-70mm-f4-s (JSON embebido con la ficha completa)",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-24-70mm-f4-s (cruce; no está en fuentes)",
+    "https://www.nikonusa.com/p/nikkor-z-24-70mm-f4-s/20072/overview (cruce)"
+   ]
+  },
+  "5a2b8e58a4e0b92dcbc29cb287b3ebc2f9ddfeaa9b3c1936c4efe14ebd4b8526": {
+   "modelo": "Nikon NIKKOR Z 24mm f/1.8 S",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r4-T03-1.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_24mmf18s/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-24mm-f1.8-s (tabla completa en el JSON embebido)",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-24mm-f18-s (para cruzar: AF casi silencioso, diafragma electromagnético)",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/ (identidad: un solo Z 24mm f/1.8)",
+    "https://dle.rae.es/coma (coma, acepción 5: f. Ópt.)"
+   ]
+  },
+  "4236eb716851479ade0b15c32d89e402964d8de297b85b3713bd351165da6c67": {
+   "modelo": "Nikon NIKKOR Z 26mm f/2.8",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T03-1.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_26mmf28/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-26mm-f2.8 (JSON embebido con la ficha completa)",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-26mm-f28 (cruce; coincide)",
+    "https://www.nikonusa.com/p/nikkor-z-26mm-f28/20116/overview (cruce; coincide)"
+   ]
+  },
+  "fba10f0fcb1c995496296a22a3b87c28fce35d0fa809a66716e5eefdfd13c7e9": {
+   "modelo": "Nikon NIKKOR Z 28-135mm f/4 PZ",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T03-1.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_28-135mmf4/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-28-135mm-f4-pz (texto, JSON embebido con la ficha completa y notas al pie)",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-28-135mm-f4-pz",
+    "https://www.nikonusa.com/p/nikkor-z-28-135mm-f4-pz/20127/overview (cruce)"
+   ]
+  },
+  "583db4839122054247c39d1b9513a6497a0d43dec0bab39a5910bc43435860ea": {
+   "modelo": "Nikon NIKKOR Z 28-400mm f/4-8 VR",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T04-1.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-28-400mm-f4-8-vr",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_28-400mmf4-8_vr/"
+   ]
+  },
+  "b16d025cd21f4a7744c335375fa280c05fcdfe911f9d133c445f3aba2732cef6": {
+   "modelo": "Nikon NIKKOR Z 28mm f/2.8",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T04-2.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-28mm-f2.8",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_28mmf28/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-28mm-f2.8-se",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_28mmf28_se/",
+    "https://imaging.nikon.com/imaging/lineup/lens/glossary/",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
+   ]
+  },
+  "b07a63348c07a2e4dacdba5c63db5e919177b318635a4af5ddecf7b5f8fa527b": {
+   "modelo": "Nikon NIKKOR Z 35mm f/1.2 S",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T04-1.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-35mm-f1.2-s",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_35mmf12s/"
+   ]
+  },
+  "a0747b3ef9e50c44c35caad074c259b4130ff8b4c65b3628fb53e7c3ab20fdd7": {
+   "modelo": "Nikon NIKKOR Z 35mm f/1.8 S",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T04-2.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-35mm-f1.8-s",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_35mmf18s/",
+    "https://imaging.nikon.com/imaging/lineup/lens/glossary/",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
+   ]
+  },
+  "64f25fd469568202de38b874323ffb1073275941b32d1ce564896c6726d7f9a2": {
+   "modelo": "Nikon NIKKOR Z 400mm f/4.5 VR S",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T04-1.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-400mm-f4.5-vr-s",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_400mmf45_vr_s/"
+   ]
+  },
+  "618de4407d6ff7dd709ddea37b7ee7d848630bac3467c5ed52c449c5b9a61f31": {
+   "modelo": "Nikon NIKKOR Z 40mm f/2",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T04-2.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-40mm-f2",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_40mmf2/",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_40mmf2_se/",
+    "https://imaging.nikon.com/imaging/lineup/lens/glossary/",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
+   ]
+  },
+  "259e440f348b1a668049beeaae991d8a34e33402ba752a529cc082966b27bf08": {
+   "modelo": "Nikon NIKKOR Z 50mm f/1.2 S",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T04-1.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-50mm-f1.2-s",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_50mmf12s/",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
+   ]
+  },
+  "e0a02a6cf76f96ee7599c15b8e47aa44ab05061102462c2ba3e89cca2cf2392e": {
+   "modelo": "Nikon NIKKOR Z 50mm f/1.4",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T04-2.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-50mm-f1.4",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_50mmf14/",
+    "https://imaging.nikon.com/imaging/lineup/lens/glossary/",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
+   ]
+  },
+  "f61f6634f2ac7680a74be5e2b31e4110baa65ce4ea3f8e3176b8f0fedaac7e7d": {
+   "modelo": "Nikon NIKKOR Z 50mm f/1.8 S",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T04-1.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-50mm-f1.8-s",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_50mmf18s/"
+   ]
+  },
+  "5099f736dfd153a0b0e18d54fbb89ce36c87d6a720da70f1b5fd5235054a443b": {
+   "modelo": "Nikon NIKKOR Z 70-180mm f/2.8",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T04-1.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-70-180mm-f2.8",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_70-180mmf28/",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/",
+    "https://www.nikon.co.uk/en_GB/product/lenses/mirrorless/nikkor-z-70-180mm-f2.8"
+   ]
+  },
+  "ac5379cbb9b44d1b2ef04c6bb4317f2bbbc69b651d348e99d9657498ca540966": {
+   "modelo": "Nikon NIKKOR Z 70-200mm f/2.8 VR S II",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T04-1.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-70-200mm-f2.8-vr-s-ii",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_70-200mmf28_vr_s2/",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/",
+    "https://imaging.nikon.com/imaging/lineup/lens/glossary/"
+   ]
+  },
+  "4df78cb73b4be2948439c75dc7e2192b59a2d13e6e24d58c217a79d2b431b9f0": {
+   "modelo": "Nikon NIKKOR Z 85mm f/1.2 S",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T04-1.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-85mm-f1.2-s",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_85mmf12s/",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
+   ]
+  },
+  "5d089a4dde00f896af0e112d897d663e9b1ef32a06c3df75cb1c334383711e1b": {
+   "modelo": "Nikon NIKKOR Z DX 12-28mm f/3.5-5.6 PZ VR",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T03-1.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_dx_12-28mmf35-56_pz_vr/",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-dx-12-28mm-f35-56-pz-vr",
+    "https://www.nikonusa.com/p/nikkor-z-dx-12-28mm-f35-56-pz-vr/20118/overview (cruce)",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/ (lista de lentes Z)"
+   ]
+  },
+  "2922af35b7d0e66a86bd45d5dbcd582d722b7620874a9a2c636c8f658f614d79": {
+   "modelo": "Nikon NIKKOR Z DX 18-140mm f/3.5-6.3 VR",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T03-2.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_dx_18-140mmf35-63_vr/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-dx-18-140mm-f3.5-6.3-vr",
+    "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-dx-18-140mm-f35-63-vr",
+    "https://www.nikonusa.com/p/nikkor-z-dx-18-140mm-f35-63-vr/20104/overview"
+   ]
+  },
+  "4b2f0f4a0ee743ae79fc68b6e6c7272316b85f1b24d14e20c383bc3e91f192b6": {
+   "modelo": "Nikon NIKKOR Z DX 24mm f/1.7",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T04-1.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-dx-24mm-f1.7",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_dx_24mmf17/"
+   ]
+  },
+  "0b83f875ef32d43569d6d9075b2491a1cd11df198e3622aea199ea3a083c8c51": {
+   "modelo": "Nikon NIKKOR Z MC 105mm f/2.8 VR S",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T04-2.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-mc-105mm-f2.8-vr-s",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_mc105mmf28_vr_s/",
+    "https://imaging.nikon.com/imaging/lineup/lens/glossary/",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
+   ]
+  },
+  "e5a195c6d7c68349a925598c48eca6bc076579370b221aab70c23754dc05a85e": {
+   "modelo": "Nikon NIKKOR Z MC 50mm f/2.8",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T04-1.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-mc-50mm-f2.8",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_mc50mmf28/",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
+   ]
+  },
+  "b68fb83da2bbc968ea9a3ad179e3f8b0289427c7b2bdbf853172411cda5f538b": {
+   "modelo": "Nikon Z TELECONVERTER TC-2.0x",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T04-2.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/z-teleconverter-tc-2.0x",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_tc_2x/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-400mm-f4.5-vr-s",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-70-200mm-f2.8-vr-s-ii",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-600mm-f6.3-vr-s",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_600mmf63_vr_s/",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
+   ]
+  },
+  "0a00c480507e6983d6fef21f6b8ac0f386d1b9b4681142a91ee0a4c3d92385d0": {
+   "modelo": "Nikon Z30 en kit (16-50, 18-140 o 16-50 + 50-250)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T12-1.json",
+   "fuentes": [
+    "https://www.nikon.com.mx/p/z-30/1737/overview (JSON __NEXT_DATA__: tabla completa, texto de presentación y variantes 1737/1743/1749)",
+    "https://imaging.nikon.com/imaging/lineup/mirrorless/z_30/",
+    "https://www.nikon.co.uk/en_GB/product/cameras/mirrorless/z-30-18-140-kit-VOA110K003",
+    "https://www.nikonusa.com/p/z-30/1737/overview (no está en fuentes; sólo para ver qué lente traen los kits con 16-50)"
+   ]
+  },
+  "b6e4ee59a1aea70a0c4926eb4cdbbf1087e16df7dcbb8da7a9814d93969aa827": {
+   "modelo": "Nikon Z6II (sólo cuerpo)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T12-1.json",
+   "fuentes": [
+    "https://www.nikon.com.mx/p/z-6ii/1659/overview (texto de presentación y JSON __NEXT_DATA__ con la tabla de specs)",
+    "https://imaging.nikon.com/imaging/lineup/mirrorless/z_6_2/"
+   ]
+  },
+  "b7c7cd57bf73e9f176007b911d39cbc4ddecfcca1ff11d337e1ffb534c2c58c4": {
+   "modelo": "Nikon Z6III (cuerpo o kit 24-120)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T12-2.json",
+   "fuentes": [
+    "https://www.nikon.com.mx/p/z6iii/1890/overview (JSON __NEXT_DATA__: tabla completa, textos y nota CIPA de los 8 pasos)",
+    "https://imaging.nikon.com/imaging/lineup/mirrorless/z6_3/",
+    "https://www.nikonusa.com/p/z6iii/1890/overview (variante 1896 «24-120mm Kit» con NIKKOR Z 24-120mm f/4 S)"
+   ]
+  },
+  "616fb26b5bc8c02fc3d1e9697e38ab818296bb938321b024fc16d56f33ed896d": {
+   "modelo": "Nikon Z7II (sólo cuerpo)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T12-1.json",
+   "fuentes": [
+    "https://www.nikon.com.mx/p/z-7ii/1653/overview (texto de presentación y JSON __NEXT_DATA__ con la tabla de specs)",
+    "https://imaging.nikon.com/imaging/lineup/mirrorless/z_7_2/"
+   ]
+  },
+  "76283cec434cf672230b1d994ed3ee99b43ae69aacc2cfae2c6ddbff60a4a9d4": {
+   "modelo": "Nikon Z8 (cuerpo o kit 24-120)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T12-1.json",
+   "fuentes": [
+    "https://www.nikon.com.mx/p/z-8/1695/overview (JSON __NEXT_DATA__: tabla completa, textos de presentación, cuadro comparativo y variante 1698 «Kit de un lente Z 8» con el NIKKOR Z 24-120 mm f/4 S)",
+    "https://imaging.nikon.com/imaging/lineup/mirrorless/z_8/"
+   ]
+  },
+  "557087511164d8e8f7b7e9b89004c9a06627071be891c79025d275a33ae2ce81": {
+   "modelo": "Nikon ZR (cámara de cine 6K, sólo cuerpo)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T12-1.json",
+   "fuentes": [
+    "https://www.nikon.com.mx/p/zr/2006/overview (JSON __NEXT_DATA__: tabla «Cinema Tech Specs», textos de presentación, notas 1 y 7, cuadro comparativo; única variante 2006, sin kits)",
+    "https://imaging.nikon.com/imaging/lineup/z_cinema/z_r/"
+   ]
+  },
   "baf9b9541be64898dc3040d5e61a4f97b8f21f403d1bbf1dbf6dd087ed5bc961": {
    "modelo": "Nintendo Switch 2",
    "fecha": "2026-10-01",
@@ -731,6 +2024,64 @@
    "informe": "informe-03.json",
    "fuentes": [
     "https://www.mi.com/mx/product/poco-x8-pro-max/specs/"
+   ]
+  },
+  "7106eadea61baaf34ef0d72d88844d01eaa9e7a1bdbe21a31189206a33a2f5f2": {
+   "modelo": "Panasonic AG-CX20",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r9-T12-1.json",
+   "fuentes": [
+    "https://pro-av.panasonic.net/en/products/ag-cx20/ (bajada hoy con curl; idéntica a la copia de trabajo-r7-T12-1)",
+    "https://pro-av.panasonic.net/en/products/ag-cx20/spec.html (bajada hoy con curl; idéntica a la copia de trabajo-r7-T12-1)",
+    "https://pro-av.panasonic.net/en/products/ag-cx20/features.html (bajada hoy con curl; idéntica a la copia de trabajo-r7-T12-1)",
+    "https://eww.pass.panasonic.co.jp/pro-av/support/content/guide/EN/cx20_handbook_e.pdf (bajado hoy con curl, idéntico a la copia de r7; leídas págs. 1-11, 41, 62-66, 85-86 y 93-101, y búsqueda de NDI, Wi-Fi, SDI, dimensiones y Europa en todo el texto)"
+   ]
+  },
+  "9982a389effc98eb1b066ab3ef2702503fadf548fd776a39d46f1bd89b0fb16b": {
+   "modelo": "Panasonic HC-V900",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T12-1.json",
+   "fuentes": [
+    "https://help.na.panasonic.com/answers/features-and-specifications-camcorder-hc-v900/ (redirige a …-hc-v900k/)",
+    "https://latam.connect.panasonic.com/br/es/productos/lumix/hc-v900",
+    "https://shop.panasonic.com/products/full-hd-camcorder-v900"
+   ]
+  },
+  "2537f230b2c606ef4cf03aa53f256662bc5b8151f8f781c396a4ee80f9e8b0a8": {
+   "modelo": "Panasonic HC-VX3",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T12-1.json",
+   "fuentes": [
+    "https://help.na.panasonic.com/answers/features-and-specifications-camcorder-hc-vx3/ (redirige a …-hc-vx3k/)",
+    "https://latam.connect.panasonic.com/br/es/productos/lumix/hc-vx3",
+    "https://shop.panasonic.com/products/4k-camcorder-vx3",
+    "https://na.panasonic.com/news/panasonic-announces-4k-camcorder-hc-vx3-and-full-hd-2k-camcorder-hc-v900"
+   ]
+  },
+  "82d0021f9b1fe53cfbf30b7b969585010315c15e2bf745582a0ea1385d9fef74": {
+   "modelo": "Panasonic HC-X1200",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T12-1.json",
+   "fuentes": [
+    "https://shop.panasonic.com/products/4k-camcorder-24x-optical-zoom-hc-x1200",
+    "https://help.na.panasonic.com/answers/features-and-specifications-camcorder-hc-x1200/",
+    "https://help.na.panasonic.com/wp-content/uploads/2025/06/HCX1200_X1600_X2100_OperatingInstructions_ESP.pdf (págs. 19, 25, 33-35 y 298-306)"
+   ]
+  },
+  "cdd091176e5358519cfdaddfa19adaf39c98a72c99d69589619a5cbc6395ab5a": {
+   "modelo": "Panasonic HC-X2100",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r7-T12-1.json",
+   "fuentes": [
+    "https://shop.panasonic.com/products/4k-professional-camcorder-24x-optical-zoom-live-streaming-hc-x2100 (más su .js público de Shopify, que no agrega datos)",
+    "https://help.na.panasonic.com/answers/features-and-specifications-camcorder-hc-x2100/",
+    "https://help.na.panasonic.com/wp-content/uploads/2025/06/HCX1200_X1600_X2100_OperatingInstructions_ESP.pdf (págs. 1, 26, 33, 35, 139-141 y 296-308)",
+    "https://news.panasonic.com/global/press/en250122-2 (no está en fuentes; para el nombre del modelo en Europa)"
    ]
   },
   "67d5caa743ade675e9a58c0aa88df0c1c31a065489c86e54c6e0ffe0bf6765c6": {
@@ -861,6 +2212,103 @@
     "https://www.samsung.com/mx/audio-sound/galaxy-buds/galaxy-buds3-white-sm-r530nzwamxo/"
    ]
   },
+  "dfa2d094ec654cd9f61268e94f3c21c5b68ab9146eba4252ebcf59b617528a1a": {
+   "modelo": "Sigma 10-18mm F2.8 DC DN | Contemporary",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r2-T05-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/c023_10_18_28/",
+    "https://www.sigma-global.com/en/lenses/ (catálogo, para confirmar la identidad: hay un solo 10-18)"
+   ]
+  },
+  "f68e88f943bb06c1f87ba9ebea84aa2ecb6dbfbe6f135f175570ea09579a8061": {
+   "modelo": "Sigma 105mm F2.8 DG DN MACRO | Art (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T05-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a020_105_28/"
+   ]
+  },
+  "ccc5f8e61c0f4908d4e4358c3e90d9b15a66b8c11ac633edd956ee9a08a5cfe5": {
+   "modelo": "Sigma 12-24mm F4 DG HSM | Art (Canon EF y Nikon F)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r3-T05-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a016_12_24_4/",
+    "https://www.sigmaphoto.com/12-24mm-f4-dg-hsm-a",
+    "https://www.sigma-global.com/lenses/a016_12_24_4_specification_01.jpg (diagrama de construcción: FLD amarillo, SLD azul, asféricos en rojo)",
+    "https://www.sigma-global.com/jp/lenses/a016_12_24_4/ (para buscar «ultra gran angular»; no lo dice)"
+   ]
+  },
+  "071e8b7762089d4789b4f6ec1560a6f512f9530ac03e426b7080180edbe2c1fa": {
+   "modelo": "Sigma 12mm F1.4 DC | Contemporary",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T05-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/c025_12_14/"
+   ]
+  },
+  "a70feb05d03805c97a842dac172f8cead1760b80d003495b66ee0d9f617c1078": {
+   "modelo": "Sigma 14-24mm F2.8 DG DN | Art (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T05-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a019_14_24_28/"
+   ]
+  },
+  "d742ee522471452ed9159200b26947333d174fd4c61068bd451c882cd3f24b66": {
+   "modelo": "Sigma 14-24mm F2.8 DG HSM | Art (Canon EF)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T05-2.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a018_14_24_28/",
+    "https://www.sigmaphoto.com/14-24mm-f2-8-dg-hsm-a"
+   ]
+  },
+  "f850c3b25bfea9b8ad3813f0a45f071b0bf80cafc35892158417a4f5ed49f8ba": {
+   "modelo": "Sigma 150-600mm F5-6.3 DG DN OS | Sports (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T05-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/s021_150_600_5_63/",
+    "https://www.sigma-global.com/en/support/firmware/s021_150_600_5_63/?mount=sony-e-566-before"
+   ]
+  },
+  "28124293bb46375cb2691bde857c9b20159ca056160152fc3638dd580c2a88eb": {
+   "modelo": "Sigma 16-28mm F2.8 DG DN | Contemporary (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T05-2.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/c022_16_28_28/"
+   ]
+  },
+  "acc4cf568e3bb70f8669f9c0ece136ea8382e445c000ff10b758f56e73a4bc49": {
+   "modelo": "Sigma 16-300mm F3.5-6.7 DC OS | Contemporary (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r2-T05-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/c025_16_300_35_67/",
+    "https://www.sigma-global.com/en/lenses/ (catálogo, para confirmar la identidad: hay un solo 16-300)"
+   ]
+  },
+  "ed5f017f416f67b5391fbda2cb2c308011bd9f33594469e217a8ba07cb69bc5f": {
+   "modelo": "Sigma 16mm F1.4 DC DN | Contemporary",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T05-2.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/c017_16_14/"
+   ]
+  },
   "31455659626c730a87e6a59436fb7524426ffb140c74a29094e207d1318339cf": {
    "modelo": "Sigma 17-40mm F1.8 DC Art",
    "fecha": "2026-10-01",
@@ -869,6 +2317,1044 @@
    "fuentes": [
     "https://www.sigma-global.com/en/lenses/a025_17_40_18/",
     "https://www.sigmaphoto.com/17-40mm-f1-8-dc-a"
+   ]
+  },
+  "1186bb76bbc056416f91430e2f7765641f810ac33d02f5570c165eab098e76af": {
+   "modelo": "Sigma 17mm F4 DG DN | Contemporary (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T05-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/c023_17_4/",
+    "https://www.sigma-global.com/en/lenses/c023_17_4_re/"
+   ]
+  },
+  "b387d2635d4d529724908135cbd97d02f7bcc7cc38686f4c4bce2ed28cc9d6fc": {
+   "modelo": "Sigma 18-35mm F1.8 DC HSM | Art (Canon EF y Nikon F)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r3-T05-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a013_18_35_18/",
+    "https://www.sigmaphoto.com/18-35mm-f1-8-dc-hsm-a (403 a curl dos veces; no es fuente de la entrada, sólo la busqué para contrastar)"
+   ]
+  },
+  "9c93efe8bba0123170c9e8700e79a834cf9582b19c0665217e40c3a9e0fffac8": {
+   "modelo": "Sigma 20-200mm F3.5-6.3 DG | Contemporary (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T05-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/c025_20_200_35_63/"
+   ]
+  },
+  "f2249f71df0c844fcdca144dad79390542bf08499435778f75e13373fcce1bf5": {
+   "modelo": "Sigma 24mm F1.4 DG HSM | Art (Nikon F)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r4-T05-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a015_24_14/",
+    "https://www.sigma-global.com/jp/lenses/a015_24_14/ (para cruzar cifras: SA φ85.4mm × 90.2mm)",
+    "https://www.sigma-global.com/en/lenses/a022_24_14/ (identidad: el DG DN sale sólo en L y Sony E)",
+    "https://www.sigma-global.com/en/discontinued/ (identidad: un solo 24mm F1.4 DG HSM)"
+   ]
+  },
+  "39b504da559cbddf7dad64554b7daf49965d27cb5f572a505a3aa1ad8c36bae3": {
+   "modelo": "Sigma 28-105mm F2.8 DG DN Art",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T06-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a024_28_105_28/",
+    "https://www.sigma-global.com/jp/lenses/a024_28_105_28/",
+    "https://www.sigmaphoto.com/28-105mm-f2-8-dg-dn-a"
+   ]
+  },
+  "5473c3f42b2540776c65027e39613dd9381b7379eff6a26bcd61bd98cfa845da": {
+   "modelo": "Sigma 28-45mm F1.8 DG DN Art (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r3-T06-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a024_28_45_18/",
+    "https://www.sigma-global.com/jp/lenses/a024_28_45_18/",
+    "https://www.sigmaphoto.com/28-45mm-f1-8-dg-dn-a"
+   ]
+  },
+  "723d163cd16366969a033fd5deb8b53bfaa76977e814aa22a27eeb4f270d5a17": {
+   "modelo": "Sigma 28mm F1.4 DG HSM Art (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r4-T06-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a019_28_14/",
+    "https://www.sigma-global.com/jp/lenses/a019_28_14/ (para cruzar cifras: coinciden)",
+    "https://www.sigma-global.com/en/discontinued/ (identidad: un solo 28mm F1.4, el DG HSM; no sale en Sony A)",
+    "https://dle.rae.es/coma"
+   ]
+  },
+  "07740a70fa795dab400b53c8bb35c2b1b1b845ad742e799013c98927c23ba1ec": {
+   "modelo": "Sigma 30mm F1.4 DC DN Contemporary (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r3-T06-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/c016_30_14/",
+    "https://www.sigma-global.com/jp/lenses/c016_30_14/",
+    "https://www.sigmaphoto.com/30mm-f1-4-dc-dn-c"
+   ]
+  },
+  "462860c7ee5480c49634e5257993c406e2d211b755c416df56e9c08d24190b0a": {
+   "modelo": "Sigma 30mm F1.4 DC HSM Art (Canon EF)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r3-T06-2.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a013_30_14/",
+    "https://www.sigma-global.com/jp/lenses/a013_30_14/",
+    "https://www.sigma-global.com/lenses/a013_30_14_specification_01_01.jpg (esquema óptico: una sola asférica #B42F68)",
+    "https://www.sigmaphoto.com/30mm-f1-4-dc-hsm-a (copia del verificador a-T06-1, sólo para cruzar datos: dice 9 elementos en 9 grupos; la entrada no da los grupos)"
+   ]
+  },
+  "1b0405ce692b7fde90b4dfa33e33ed1e1c94a3d93788391be11efaaaac3ecc3d": {
+   "modelo": "Sigma 35mm F1.4 DG HSM Art",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r4-T06-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a012_35_14/",
+    "https://www.sigma-global.com/jp/lenses/a012_35_14/ (para cruzar cifras)",
+    "https://www.sigma-global.com/en/lenses/ y https://www.sigma-global.com/en/discontinued/ (identidad: el único 35mm F1.4 HSM es el DG HSM)",
+    "https://dle.rae.es/coma"
+   ]
+  },
+  "18c9c4e13d0038afde980b5fcada60bddac9edd0cb3808b10ea32e589b6d0e17": {
+   "modelo": "Sigma 50-100mm F1.8 DC HSM Art (Canon EF)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r3-T06-2.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a016_50_100_18/",
+    "https://www.sigma-global.com/lenses/a016_50_100_18_specification_01_01.jpg",
+    "https://www.sigmaphoto.com/50-100mm-f1-8-dc-hsm-a (copia del verificador a-T06-1, sólo para cruzar datos: coincide)"
+   ]
+  },
+  "3e869bed584d940cd75c1cbf096a18d6bc7a28610412ae0ba5e0e18e4cd86bfb": {
+   "modelo": "Sigma 50mm F1.4 DG DN Art (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r4-T06-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a023_50_14/",
+    "https://www.sigma-global.com/jp/lenses/a023_50_14/ (para cruzar cifras y la frase del AFL)",
+    "https://www.sigma-global.com/en/lenses/ (identidad: un solo 50mm F1.4 DG DN, sólo L y Sony E)",
+    "https://dle.rae.es/coma"
+   ]
+  },
+  "eea6e835f22cc5d30dce577aed5baa9d50909fe4802108f57438f38fcdffcbf7": {
+   "modelo": "Sigma 50mm F1.4 DG HSM Art",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r3-T06-2.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a014_50_14/",
+    "https://www.sigma-global.com/lenses/a014_50_14_specification_01.jpg (esquema óptico: 3 SLD #41A8D3 y una sola asférica #B42F68)",
+    "https://www.sigmaphoto.com/50mm-f1-4-dg-hsm-a"
+   ]
+  },
+  "01610e31b89d27dfc27d95667ca33c5e4f3c978e206980f8d7a4b8acbba64044": {
+   "modelo": "Sigma 56mm F1.4 DC DN Contemporary",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r3-T06-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/c018_56_14/",
+    "https://www.sigma-global.com/lenses/c018_56_14_specification_01_01.png",
+    "https://www.sigma-global.com/jp/lenses/c018_56_14/",
+    "https://www.sigmaphoto.com/56mm-f1-4-dc-dn-c"
+   ]
+  },
+  "16a97972bcc10a01eca5430179c31820ee1faa38b6bffa60ba364870111786e6": {
+   "modelo": "Sigma 60-600mm F4.5-6.3 DG DN OS Sports (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r3-T06-2.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/s023_60_600_45_63/",
+    "https://www.sigma-global.com/lenses/s023_60_600_45_63_specification_01.png",
+    "https://www.sigma-global.com/en/lenses/s018_60_600_45_63/",
+    "https://www.sigma-global.com/jp/lenses/s023_60_600_45_63/ (copia del verificador a-T06-1, sólo para cruzar peso, medidas y estabilizador: coincide)"
+   ]
+  },
+  "4082b9b01afc36923adb3f067aafdb3fb669e52fa1e1d0f089d237a4069139a0": {
+   "modelo": "Sigma 85mm F1.4 DG DN Art (Sony E)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r3-T06-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a020_85_14/",
+    "https://www.sigma-global.com/jp/lenses/a020_85_14/",
+    "https://www.sigmaphoto.com/85mm-f1-4-dg-dn-a"
+   ]
+  },
+  "5a0b441476f1e46fdb47af6c74dda04626edbb090a176e4d025728653575d968": {
+   "modelo": "Sigma 85mm F1.4 DG HSM Art",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r3-T06-2.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a016_85_14/",
+    "https://www.sigma-global.com/lenses/a016_85_14_specification_01.jpg (esquema óptico: 2 SLD #41A8D3 y una sola asférica #B42F68)",
+    "https://www.sigmaphoto.com/85mm-f1-4-dg-hsm-a (copia del verificador a-T06-1, sólo para cruzar datos: coincide)"
+   ]
+  },
+  "a5d0dd6212613abb08408c842707b936afdd0c7e1ee1e12342a22dfa71f52f34": {
+   "modelo": "Sigma 85mm F1.4 EX DG HSM",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T06-1.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/85_14/",
+    "https://www.sigma-global.com/jp/lenses/85_14/ («数値はシグマ SAマウント用です»; «ニコンF6、キヤノンEOS-1V 以外のフィルムカメラではご使用になれません»)",
+    "https://www.sigma-global.com/lenses/85_14_specification_01.jpg (esquema: 1 SLD y 1 asférica)",
+    "https://www.sigma-global.com/en/discontinued/"
+   ]
+  },
+  "72a7db88576a7980294109a2571ff727c6d7ac8028bf894af9b43b1b976b74f0": {
+   "modelo": "Sony Distagon T* FE 35 mm F1.4 ZA (SEL35F14Z)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel35f14z",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel35f14z/specifications"
+   ]
+  },
+  "4cfd049e72bb13d1a0a98ad061f180e937d1ae0aeb54d095de7715dada832db0": {
+   "modelo": "Sony E 70-350 mm F4.5-6.3 G OSS (SEL70350G)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r11-T07-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel70350g/specifications (hoy dio «Page Not Found» o vacía; leí la misma ficha por su dirección canónica https://www.sony.com.ar/electronics/lentes-camara/sel70350g/specifications y la comparé con la copia de la dirección citada que bajó el verificador anterior, trabajo-a-T07-1/sel70350g-spec.html: texto idéntico)"
+   ]
+  },
+  "3e8e715c505adb3200187c11943506fdb6bf4c40741449d85d537dc58122b147": {
+   "modelo": "Sony FE 100-400 mm F4.5-5.6 GM OSS (SEL100400GM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T07-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel100400gm/specifications"
+   ]
+  },
+  "27b6c72d3429c83f7eebde66ca5f7e08a2e0127d9bbad78362e197780321291d": {
+   "modelo": "Sony FE 12-24 mm F2.8 GM (SEL1224GM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T07-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/lenses/products/sel1224gm/spec",
+    "https://www.sony.com.ar/lenses/products/sel1224gm/feature3"
+   ]
+  },
+  "7c2dc2de48ff165cdc1258134f8eaa203aa670fd0cddbdfdb78c55e0a6f7aaf6": {
+   "modelo": "Sony FE 135 mm F1.8 GM (SEL135F18GM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r11-T07-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel135f18gm/specifications"
+   ]
+  },
+  "9230c257eba1e520b262d29f882a01e57ab779d712f684777541a4055a1319da": {
+   "modelo": "Sony FE 14 mm F1.8 GM (SEL14F18GM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r11-T07-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/lenses/products/sel14f18gm/spec",
+    "https://www.sony.com.ar/lenses/products/sel14f18gm/feature3"
+   ]
+  },
+  "b9fdda59a64edeeaa183d41013beee311e13c731962646369cac8fc5814d54e1": {
+   "modelo": "Sony FE 16-25 mm F2.8 G (SEL1625G)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r11-T07-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel1625g/specifications",
+    "https://www.sony.es/electronics/camaras-objetivos/sel1625g/specifications"
+   ]
+  },
+  "10a90ad53005c5e78ec774d7b90417e0a48f4a0872f89b96e185ee07a21fcfb1": {
+   "modelo": "Sony FE 16-35 mm F2.8 GM II (SEL1635GM2)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T07-2.json",
+   "fuentes": [
+    "https://www.sony.com.ar/lenses/products/sel1635gm2/spec",
+    "https://www.sony.es/lenses/products/sel1635gm2/feature3",
+    "https://www.sony.es/lenses/products/sel1635gm2/spec"
+   ]
+  },
+  "aa973dac494c14402f73530b5a3f82fe2d441d8efb3005f9830e53ec61d076a3": {
+   "modelo": "Sony FE 2.0x Teleconverter (SEL20TC)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-2.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel20tc",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel20tc/specifications",
+    "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=SEL20TC&area=gwt&lang=es_AR",
+    "https://www.sony.es/electronics/objetivos-camara/sel20tc (control: en la caja también dice estuche/funda)",
+    "https://www.sony.com.ar/lenses/e-mount (lista de objetivos montura E: no hay versiones II ni otras del mismo nombre)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
+   ]
+  },
+  "42c8c733d6c52cd00e754fae56983ce3374b185f66b520f2892873625f07dcca": {
+   "modelo": "Sony FE 20 mm F1.8 G (SEL20F18G)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T07-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/lenses/products/sel20f18g/spec",
+    "https://www.sony.com.ar/lenses/products/sel20f18g/feature3"
+   ]
+  },
+  "2326b20c656414307b1cd33fe31330608fad3d49c52985a7011848e4778d52cc": {
+   "modelo": "Sony FE 20-70 mm F4 G (SEL2070G) (la fila dice «GM»)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T07-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/lenses/products/sel2070g/spec",
+    "https://www.sony.com.ar/lenses/products/sel2070g/feature3"
+   ]
+  },
+  "c335d48d66cda79f60340025e93551f60f77cd81bc4f0c7cdc32f9df458c4ed2": {
+   "modelo": "Sony FE 200-600 mm F5.6-6.3 G OSS (SEL200600G)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T07-2.json",
+   "fuentes": [
+    "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel200600g/specifications",
+    "https://www.sony.es/electronics/camaras-objetivos/sel200600g/specifications"
+   ]
+  },
+  "79e323c636a486e5d654521a852671769c173234b431b11a0acf49efd9d01e60": {
+   "modelo": "Sony FE 24 mm F1.4 GM (SEL24F14GM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T07-2.json",
+   "fuentes": [
+    "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel24f14gm/specifications (me dio 403 / quedó colgada; leí la misma página por su dirección canónica: https://www.sony.com.ar/electronics/lentes-camara/sel24f14gm/specifications)",
+    "https://www.sony.es/electronics/camaras-objetivos/sel24f14gm/specifications"
+   ]
+  },
+  "4968eeec96d757b36568fda3c2e61fda7d957de70562b3dc6dc9ed922087154f": {
+   "modelo": "Sony FE 24-105 mm F4 G OSS (SEL24105G)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T07-2.json",
+   "fuentes": [
+    "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel24105g/specifications (me dio 403 / quedó colgada; leí la misma página por su dirección canónica: https://www.sony.com.ar/electronics/lentes-camara/sel24105g/specifications)",
+    "https://www.sony.es/electronics/camaras-objetivos/sel24105g/specifications"
+   ]
+  },
+  "033f333ccf5fa9ec617894e2e8e83bf8321739638cb49c8447e9cf47d17f6584": {
+   "modelo": "Sony FE 24-50 mm F2.8 G (SEL2450G)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T07-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/lenses/products/sel2450g/spec",
+    "https://www.sony.com.ar/lenses/products/sel2450g/feature3"
+   ]
+  },
+  "158dc15e3534136651407d8a911da675d724aad2e946f0758d68481b098f5856": {
+   "modelo": "Sony FE 28 mm F2 (SEL28F20)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel28f20",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel28f20/specifications"
+   ]
+  },
+  "c1146e93e43093807530ac4cb8795f97bc53982126d1229577ce6a8b4cf11784": {
+   "modelo": "Sony FE 28-70 mm F2 GM (SEL2870GM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T07-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel2870gm/specifications"
+   ]
+  },
+  "8324b9bb9cae596f3849db26101ba426aca3428fea8d72abe20768a1f9775170": {
+   "modelo": "Sony FE 35 mm F1.4 GM (SEL35F14GM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-2.json",
+   "fuentes": [
+    "https://www.sony.com.ar/lenses/products/sel35f14gm/spec",
+    "https://www.sony.com.ar/lenses/products/sel35f14gm/feature1",
+    "https://www.sony.com.ar/lenses/products/sel35f14gm/feature2",
+    "https://www.sony.com.ar/lenses/products/sel35f14gm/feature3",
+    "https://www.sony.com.ar/lenses/e-mount (lista de objetivos montura E: no hay versiones II ni otras del mismo nombre)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
+   ]
+  },
+  "31f88a0b279fa54529994768245c782d093a0971ce958baaec0e8c90e79094c0": {
+   "modelo": "Sony FE 400-800 mm F6.3-8 G OSS (SEL400800G)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel400800g",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel400800g/specifications"
+   ]
+  },
+  "6a001ec0c489c49570586adf98d181100bd440eeb681d5cd2cd14d7c211e1bfa": {
+   "modelo": "Sony FE 50 mm F1.2 GM (SEL50F12GM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r8-T08-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/lenses/products/sel50f12gm/spec (bajada de nuevo con Chrome headless: 50 mm, full frame, 75 mm en APS-C, 10-14, 47°/32°, F1,2/F16, 11 láminas circular, 0,4 m, 0,17x, 72 mm, estabilización integrada en el cuerpo, 87 x 108 mm, 778 g; caja: bolsa blanda, funda con correa, parasol ALC-SH163, tapas ALC-R1EM y ALC-F72S)",
+    "https://www.sony.com.ar/lenses/products/sel50f12gm/feature1 («AF y seguimiento rápidos, precisos y silenciosos», 4 motores lineales XD, 2 botones de fijación de enfoque, conmutador de modo de enfoque, Linear Response MF, resistencia al polvo y la humedad con nota «no está 100 % garantizada», revestimiento de flúor, enfoque flotante, nanorrevestimiento II)",
+    "https://www.sony.com.ar/lenses/products/sel50f12gm/feature2 (diagrama: lente XA; controles: anillo de enfoque, botón de fijación de enfoque, anillo de apertura, conmutador de modo de enfoque, conmutador de clic de apertura)",
+    "https://www.sony.com.ar/lenses/products/sel50f12gm/feature3 («Nitidez en toda la imagen desde F1,2», tres elementos XA, 11 láminas, 0,4 m y 0,17x con enfoque flotante, cuatro motores XD «tanto para fotos como para películas», botones arriba y al costado asignables, anillo de apertura con interruptor de clic, flúor)",
+    "https://www.sony.com.ar/lenses (copia del verificador anterior, trabajo-b-T08-2/emount.html: hay un solo FE 50 mm F1.2 GM, SEL50F12GM)"
+   ]
+  },
+  "04263dc56a39ac64b8b364263a77b1605a8ab0f1e619a5717031f36ae6fe8533": {
+   "modelo": "Sony FE 50 mm F1.4 GM (SEL50F14GM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-2.json",
+   "fuentes": [
+    "https://www.sony.com.ar/lenses/products/sel50f14gm/spec",
+    "https://www.sony.com.ar/lenses/products/sel50f14gm/feature1",
+    "https://www.sony.com.ar/lenses/products/sel50f14gm/feature3",
+    "https://www.sony.com.ar/lenses/e-mount (lista de objetivos montura E: no hay versiones II ni otras del mismo nombre)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
+   ]
+  },
+  "c222fb1058146620c3e6422c24a525c0af6a8d4a8482e359ea4c1d8626b5d754": {
+   "modelo": "Sony FE 50 mm F1.8 (SEL50F18F)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r8-T08-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel50f18f (bajada de nuevo con Chrome headless: 186 g, F1,8 de noche o en interiores, 7 hojas circular, 75 mm en APS-C, doble gauss con un elemento asférico que «minimiza la distorsión esférica y el coma», montura de metal, 0,45 m, 0,14x, 49 mm; caja: cubierta ALC-SH146, tapas ALC-F49S y ALC-R1EM)",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel50f18f/specifications (5/6, 47°/32°, F1,8 máxima, F22 mínima y 7 láminas —en el HTML, el texto plano las pierde—, apertura circular, capucha redonda tipo bayoneta, 68,6 x 59,5 mm, 186 g; «Enfoque con motor de CC … funcionamiento silencioso … El sonido del motor de enfoque se puede grabar al filmar películas»)",
+    "https://www.sony.com.ar/lenses (copia del verificador anterior, trabajo-b-T08-2/emount.html: un solo FE 50 mm F1.8, SEL50F18F; el nombre de la fila dice «FE», así que no es el E 50 mm F1.8 OSS de APS-C)"
+   ]
+  },
+  "0dc76610c50193378d482fa44358f9deff14c4c3b203096b1ed590e2ee1bc2e7": {
+   "modelo": "Sony FE 50-150 mm F2 GM (SEL50150GM)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-2.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel50150gm",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel50150gm/specifications",
+    "https://www.sony.com.ar/lenses/e-mount (lista de objetivos montura E: no hay versiones II ni otras del mismo nombre)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
+   ]
+  },
+  "18d26f30f836d0932a0fd0918478a192b25c11026a8394c5415e3779bd2f57be": {
+   "modelo": "Sony FE 70-200 mm F2.8 GM OSS II (SEL70200GM2)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-2.json",
+   "fuentes": [
+    "https://www.sony.com.ar/lenses/products/sel70200gm2/spec",
+    "https://www.sony.com.ar/lenses/products/sel70200gm2/feature1",
+    "https://www.sony.com.ar/lenses/products/sel70200gm2/feature2 (control, no está en fuentes)",
+    "https://www.sony.com.ar/lenses/products/sel70200gm2/feature3",
+    "https://www.sony.com.ar/lenses/e-mount (lista de objetivos montura E: no hay versiones II ni otras del mismo nombre)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
+   ]
+  },
+  "bcea777a2ba53c59ddabe38cc30d9f35f15a02ca3e0ee6ff30e1969d123e82c2": {
+   "modelo": "Sony FE 70-200 mm F4 Macro G OSS II (SEL70200G2)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r8-T08-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/lenses/products/sel70200g2/spec (bajada de nuevo con Chrome headless: 70 a 200, 105 a 300 en APS-C, 13-19, F4,0/F22, 9 láminas circular, 0,26-0,42 m, 0,5x, 72 mm, Optical SteadyShot, zoom manual, SEL14TC y SEL20TC, capucha de pétalo, 82,2 × 149,0 mm, 794 g con nota 2 «sin montaje en trípode»; caja: montaje en trípode, parasol ALC-SH176, tapas ALC-R1EM y ALC-F72S, funda «-»)",
+    "https://www.sony.com.ar/lenses/products/sel70200g2/feature1 (AA y asféricos, 3 ED y 1 Super ED, 9 hojas; semimacro en todo el zoom, 0,26 m y 0,42 m, 0,5x; 4 motores XD con grupos de enfoque flotantes y seguimiento al hacer zoom; MF de respuesta lineal; teleconversores 2x macro 1:1 y 1,4x hasta 0,7x; diseño extensible con interruptor de bloqueo de zoom)",
+    "https://www.sony.com.ar/lenses/products/sel70200g2/feature2 (controles: 3. Botón de fijación de enfoque, 7. switch de enfoque manual directo de tiempo completo, 8. limitador, 10. switch del modo SteadyShot, 11. Anillo para trípode, 12. Conmutador de bloqueo de zoom)",
+    "https://www.sony.com.ar/lenses/products/sel70200g2/feature3 (F4 constante «mantiene la exposición uniforme durante el uso del zoom cuando grabas»; 400 mm y 280 mm con 2,0x y 1,4x; interruptores de 3 posiciones del limitador y del modo de estabilización; interruptor de DMF constante; bloqueo de zoom «durante el transporte»; flúor)",
+    "https://www.sony.jp/ichigan/products/SEL70200G2/spec.html (para el ángulo de visión: «34°-12°30'»; además 794 g «三脚座別» = sin el pie de trípode, y el pie de trípode como accesorio incluido)"
+   ]
+  },
+  "0c10bd4f3bd47f41361fef17b69111b3e6e79a5d340e3aeb9000ae7a67af58f0": {
+   "modelo": "Sony FE 85 mm F1.4 GM II (SEL85F14GM2)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-2.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel85f14gm2",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel85f14gm2/specifications",
+    "https://www.sony.com.ar/lenses/e-mount (lista de objetivos montura E: no hay versiones II ni otras del mismo nombre)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
+   ]
+  },
+  "6398dede3423a6f3ba36887c7019c9deaea2a93b33438d9a53fe2de67c9e3fd1": {
+   "modelo": "Sony FE 85 mm F1.8 (SEL85F18)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel85f18",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel85f18/specifications"
+   ]
+  },
+  "168e645639cf0b7e4838862273c17e15568b6e11cd071a1dd6b8e24a868593ee": {
+   "modelo": "Sony FE 90 mm F2.8 Macro G OSS (SEL90M28G)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-2.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel90m28g",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel90m28g/specifications",
+    "https://www.sony.com.ar/lenses/e-mount (lista de objetivos montura E: no hay versiones II ni otras del mismo nombre)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
+   ]
+  },
+  "63e71fd605a2c93a2e0faa03b17e65a52bff6bb8eff0d78c246814bca75b8d1a": {
+   "modelo": "Sony FE PZ 16-35 mm F4 G (SELP1635G)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/lenses/products/selp1635g/spec",
+    "https://www.sony.com.ar/lenses/products/selp1635g/feature2",
+    "https://www.sony.com.ar/lenses/products/selp1635g/feature3"
+   ]
+  },
+  "84504bddffee975c9eed0940dd92fa29b6b918ffcaf0ca872449ba56a71e89c9": {
+   "modelo": "Sony FE PZ 28-135 mm F4 G OSS (SELP28135G) (la fila dice «E PZ»)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r11-T07-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/selp28135g/specifications"
+   ]
+  },
+  "928777ea353ac19ae1bea1ab4d74f12596063b5208a297ab5831344bab534439": {
+   "modelo": "Sony FX2, cuerpo",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r6-T11-2.json",
+   "fuentes": [
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilme-fx2/specifications (las dos columnas, ILME-FX2B e ILME-FX2)",
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilme-fx2"
+   ]
+  },
+  "8b37ed089677ed4c7ee03d27408d768310ef2996609b84c801076faa8c520ec9": {
+   "modelo": "Sony FX3, cuerpo (sólo lo común a ILME-FX3 e ILME-FX3A)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r6-T11-1.json",
+   "fuentes": [
+    "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx3/spec",
+    "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx3/feature4",
+    "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilme-fx3a/specifications"
+   ]
+  },
+  "d6e2f1f28df36b8f2e452a7434430cf3a7e216067d6928b5c465e5793b5a7103": {
+   "modelo": "Sony FX30, cuerpo",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r10-T11-1.json",
+   "fuentes": [
+    "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx30/spec (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
+    "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx30/feature5 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
+    "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx30 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
+   ]
+  },
+  "e3310ce6077f79774d288045947279541131f0993da4ad98645939cfc955c0da": {
+   "modelo": "Sony FX6 (ILME-FX6V), cuerpo",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r6-T11-1.json",
+   "fuentes": [
+    "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx6/spec",
+    "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx6/feature4"
+   ]
+  },
+  "65ca14e17d43ecf698d293e8c091194e9c984fa972804a16ccdceae7b3aad89b": {
+   "modelo": "Sony HXR-NX800",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T12-2.json",
+   "fuentes": [
+    "https://helpguide.sony.net/pro/z200nx800/v1/es/contents/spec.html",
+    "https://helpguide.sony.net/pro/z200nx800/v1/es/contents/shooting.html",
+    "https://helpguide.sony.net/pro/z200nx800/v1/es/contents/network.html"
+   ]
+  },
+  "94fade62a32973e280596f6b0dc88278a51339b4ff6c5b768d413f207d821e13": {
+   "modelo": "Sony PXW-Z200",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T12-1.json",
+   "fuentes": [
+    "https://helpguide.sony.net/pro/z200nx800/v1/es/contents/spec.html",
+    "https://helpguide.sony.net/pro/z200nx800/v1/es/contents/shooting.html",
+    "https://helpguide.sony.net/pro/z200nx800/v1/es/contents/network.html"
+   ]
+  },
+  "d9470dcdaf2a7e2ebab65d9f34d76819ccbd56ef6362a0de686692199dc5b910": {
+   "modelo": "Sony Planar T* FE 50 mm F1.4 ZA (SEL50F14Z)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel50f14z",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel50f14z/specifications"
+   ]
+  },
+  "027582a2b5a7b8a7b3fd4c3812e4e845f80a45b5a419a0a6bb9e1ba5a76f7970": {
+   "modelo": "Sony RX100 VII (DSC-RX100M7)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r10-T11-1.json",
+   "fuentes": [
+    "https://www.sony.es/electronics/camaras-compactas-cyber-shot/dsc-rx100m7/specifications (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
+   ]
+  },
+  "bfe6a6ba21612f03fce1fe4ccbda30fe90a7a79a3247518ba9b6a45ff0f824b2": {
+   "modelo": "Sony Sonnar T* FE 55 mm F1.8 ZA (SEL55F18Z)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-b-T08-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel55f18z",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel55f18z/specifications"
+   ]
+  },
+  "f18305a4c766d2289b4d75f73d50bba505fe0f3c556dbf41a401fc2f9f9bc769": {
+   "modelo": "Sony Vario-Tessar T* FE 24-70 mm F4 ZA OSS (SEL2470Z)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T07-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel2470z/specifications",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel2470z/specifications"
+   ]
+  },
+  "c755b48df27a98f084a5ff1a426d8c7cbc75b43c4f97e3ea8fece57725e8f8ce": {
+   "modelo": "Sony ZV-E10 II (ZV-E10M2), cuerpo",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r6-T11-2.json",
+   "fuentes": [
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/zv-e10m2/specifications",
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/zv-e10m2"
+   ]
+  },
+  "899128286bc4c91b7a8598621f701da765ac6b474fbc5842ef7c6ff73f43610b": {
+   "modelo": "Sony α1 II (ILCE-1M2), cuerpo",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r6-T11-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-1m2/specifications",
+    "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-1m2"
+   ]
+  },
+  "a581033440d8303833c93349f2fb8f75db51cdb9cbe9098d8874360dc329bfa7": {
+   "modelo": "Sony α6400 con lente E PZ 16-50 mm II (kit ILCE-6400K)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r6-T11-2.json",
+   "fuentes": [
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-6400/spec?sku=ilce-6400k-e38",
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-6400/feature6",
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/lentes-camara/selp16502"
+   ]
+  },
+  "5e7b604f49ab2273c0ef83e9622ea540052507348152b86bac31fa8f7224fc74": {
+   "modelo": "Sony α7 III (ILCE-7M3): cuerpo y kit 28-70",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r10-T11-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m3-body-kit/spec (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m3-body-kit/feature6 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m3-body-kit/feature4 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m3-body-kit/feature1 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
+   ]
+  },
+  "bb0b5e96ed797329ed984c7883acda4e4fc5d0eec38090112dc8eff43295dc41": {
+   "modelo": "Sony α7 IV (ILCE-7M4) kit 28-70",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r10-T11-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m4/spec (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m4/feature61 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
+   ]
+  },
+  "a37ffb71afa9fbe62456f252c1857b5b1eaff629e11e968d4f6e20f1b3847637": {
+   "modelo": "Sony α7 V (ILCE-7M5) kit 28-70",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r6-T11-2.json",
+   "fuentes": [
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-7m5/specifications",
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-7m5"
+   ]
+  },
+  "035916620fb46b83c22b0a72e1cb669f70c0b9e6a9e0d2f919fac7311cde18bf": {
+   "modelo": "Sony α7C (ILCE-7C), cuerpo",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r10-T11-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7c/spec (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7c/feature6 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
+   ]
+  },
+  "1dbd1eb29f35bd6a4d6fdaf143642cfb799d0daa9a98e9667c742feaf90131be": {
+   "modelo": "Sony α7C II (ILCE-7CM2), cuerpo",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r10-T11-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7cm2/spec (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7cm2/feature-list (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7cm2 (no está en fuentes; sólo para buscar «compacta») (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
+   ]
+  },
+  "a7e84d9d2717afe36c38957d2d6386850df98958d25858b7737f5674e2312cf5": {
+   "modelo": "Sony α7CR (ILCE-7CR), cuerpo",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r6-T11-2.json",
+   "fuentes": [
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.es/interchangeable-lens-cameras/products/ilce-7cr/spec",
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.es/interchangeable-lens-cameras/products/ilce-7cr/feature7",
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-7cr",
+    "bajada por mí (trabajo-r6-T11-2/): https://www.sony.es/electronics/camaras-lentes-intercambiables/ilce-7cr/specifications (redirige a la página de producto, sin tabla)"
+   ]
+  },
+  "edb8e2c167eb8dec5ca5eef048e2ca208e46f54f2f13d5e1c642bb56cd1394ae": {
+   "modelo": "Sony α7R III, cuerpo (sólo lo común a ILCE-7RM3 e ILCE-7RM3A)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-d-T11-1.json",
+   "fuentes": [
+    "https://www.sony.es/electronics/camaras-lentes-intercambiables/ilce-7rm3/specifications",
+    "https://www.sony.es/electronics/camaras-lentes-intercambiables/ilce-7rm3a/specifications"
+   ]
+  },
+  "e4e8c5cd8994878097ede017bb9e651f043ed8ae558f5f2f8f9f6a4d331551dc": {
+   "modelo": "Sony α7R IV, cuerpo (sólo lo común a ILCE-7RM4 e ILCE-7RM4A)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r6-T11-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-7rm4a/specifications",
+    "https://www.sony.es/electronics/camaras-lentes-intercambiables/ilce-7rm4/specifications"
+   ]
+  },
+  "2aac96da11a0ca7b77dae2600b6e51b966cbcbd81c8965947270ecd7448cbe86": {
+   "modelo": "Sony α7R V (ILCE-7RM5), cuerpo",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r6-T11-2.json",
+   "fuentes": [
+    "copia bajada hoy por el verificador d-T11-1 (trabajo-d-T11-1/): https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7rm5/spec",
+    "copia bajada hoy por el verificador d-T11-1 (trabajo-d-T11-1/): https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7rm5/feature7"
+   ]
+  },
+  "b4900783e6189a4a156a125c855f1089cdfa80e755ef03b45d4019c7e0ea776c": {
+   "modelo": "Sony α7R VI (ILCE-7RM6), cuerpo",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-d-T11-2.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-7rm6/specifications",
+    "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-7rm6"
+   ]
+  },
+  "16f1979d78d24a46b8a2a197367055952623bd18953c74263b969319bf0534d8": {
+   "modelo": "Sony α7S III (ILCE-7SM3), cuerpo",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r6-T11-1.json",
+   "fuentes": [
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7sm3/spec",
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7sm3/feature6"
+   ]
+  },
+  "d187daa0e78789bf305e93d1e4f9a92e2581ff3ad5aab7aecfbcef00ed04d2fa": {
+   "modelo": "Sony α9 III (ILCE-9M3)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r6-T11-2.json",
+   "fuentes": [
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-9m3/spec",
+    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-9m3"
+   ]
+  },
+  "217df8e4cee59cc575a030967038cdd3a87f693d1fae0f6426827ec98c7bbdaa": {
+   "modelo": "Tamron 11-20mm F2.8 Di III-A RXD (B060)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r2-T09-1.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/b060/",
+    "https://www.tamron.com/global/consumer/lenses/b060/spec.html",
+    "https://www.tamron.com/global/consumer/lenses/sony_e/ · /canon_rf/ · /discontinued/ (identidad: un solo 11-20)"
+   ]
+  },
+  "d9377bcc81f6569c82d0f129bf98244aa8fd2e7232925d706f3e24a24aa4ec19": {
+   "modelo": "Tamron 150-500mm F5-6.7 Di III VC VXD (A057) Sony E",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-2.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a057/",
+    "https://www.tamron.com/global/consumer/lenses/a057/spec.html",
+    "https://tamron-americas.com/product/150-500mm-f-5-6-7-di-iii-vc-vxd/",
+    "https://www.tamron.com/global/consumer/lenses/sony_e/",
+    "https://www.tamron.com/global/consumer/lenses/nikon_z/",
+    "https://www.tamron.com/global/consumer/lenses/discontinued/"
+   ]
+  },
+  "cb49472977dbba47bc047fd6e766b50f95e650d13cc8b4605fa4b2c23856b134": {
+   "modelo": "Tamron 16-30mm F2.8 Di III VXD G2 (A064)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-1.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a064/",
+    "https://www.tamron.com/global/consumer/lenses/a064/spec.html",
+    "https://www.tamron.com/global/consumer/lenses/ (lineup Sony E / Nikon Z / Canon RF / discontinued, para confirmar que el producto es uno solo)",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js (compatibilidad por montura, para confirmar) — A064Z también tiene Select AF/MF y Astro FC-L, o sea botón Focus Set y conexión en Nikon Z"
+   ]
+  },
+  "45b8303e52389ed02ae806abd8191e4b7546f0c2ec3d8d4197a6c25c82956909": {
+   "modelo": "Tamron 17-28mm F2.8 Di III RXD (A046) Sony E",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r2-T09-1.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a046/",
+    "https://www.tamron.com/global/consumer/lenses/a046/spec.html",
+    "https://www.tamron.com/global/consumer/lenses/sony_e/ · /discontinued/ (identidad: un solo 17-28)",
+    "https://tamron-americas.com/product/17-28mm-f-2-8-di-iii-rxd/ (redirige a /wide-angle-zooms/; sólo para descartar un 17-28 G2)"
+   ]
+  },
+  "5aabc9cf271d80f9e3679b41fc04cb834cc74418af600f95ca77385bc9fa94bd": {
+   "modelo": "Tamron 17-50mm F4 Di III VXD (A068) Sony E",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-1.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a068/",
+    "https://www.tamron.com/global/consumer/lenses/a068/spec.html",
+    "https://www.tamron.com/global/consumer/lenses/ (lineup Sony E / Nikon Z / Canon RF / discontinued, para confirmar que el producto es uno solo)",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js (compatibilidad por montura, para confirmar)"
+   ]
+  },
+  "00db98f6a7cc76400b600d2fc1c86ccacc5c99a50286f37f4b4112a116a64b6b": {
+   "modelo": "Tamron 17-70mm F2.8 Di III-A VC RXD (B070)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-2.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/b070/",
+    "https://www.tamron.com/global/consumer/lenses/b070/spec.html",
+    "https://tamron-americas.com/product/17-70mm-f-2-8-di-iii-a-vc-rxd/",
+    "https://www.tamron.com/global/consumer/soft/lensutility/",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js",
+    "https://www.tamron.com/global/consumer/lenses/sony_e/",
+    "https://www.tamron.com/global/consumer/lenses/nikon_z/",
+    "https://www.tamron.com/global/consumer/lenses/discontinued/"
+   ]
+  },
+  "b47bec25a356e68cdacad560772d89538ed339e237591746b66230828fc928d9": {
+   "modelo": "Tamron 18-300mm F3.5-6.3 Di III-A VC VXD (B061)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-1.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/b061/",
+    "https://www.tamron.com/global/consumer/lenses/b061/spec.html",
+    "https://www.tamron.com/global/consumer/lenses/ (lineup Sony E / Nikon Z / Canon RF / discontinued, para confirmar que el producto es uno solo)",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js (compatibilidad por montura, para confirmar)"
+   ]
+  },
+  "efca8ace34d53d12c33b3417fc2e3a7afcce28e7fd663e8dec65947936276605": {
+   "modelo": "Tamron 20-40mm F2.8 Di III VXD (A062) Sony E",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-2.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a062/",
+    "https://www.tamron.com/global/consumer/lenses/a062/spec.html",
+    "https://tamron-americas.com/product/20-40mm-f-2-8-di-iii-vxd/",
+    "https://www.tamron.com/global/consumer/soft/lensutility/",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js",
+    "https://www.tamron.com/global/consumer/lenses/sony_e/",
+    "https://www.tamron.com/global/consumer/lenses/nikon_z/",
+    "https://www.tamron.com/global/consumer/lenses/discontinued/"
+   ]
+  },
+  "541220f10c22e71d1f58b2e56408b51fc739be6ef6b3a7f184268bcbcf881794": {
+   "modelo": "Tamron 28-200mm F2.8-5.6 Di III RXD (A071) Sony E",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-2.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a071/",
+    "https://www.tamron.com/global/consumer/lenses/a071/spec.html",
+    "https://tamron-americas.com/product/28-200mm-f-2-8-5-6-di-iii-rxd/",
+    "https://www.tamron.com/global/consumer/lenses/sony_e/",
+    "https://www.tamron.com/global/consumer/lenses/nikon_z/",
+    "https://www.tamron.com/global/consumer/lenses/discontinued/"
+   ]
+  },
+  "40f7529de2b8bed372a2c3709d417cd29eb9deef678b962a09b87903ed4d9f24": {
+   "modelo": "Tamron 28-300mm F4-7.1 Di III VC VXD (A074) Sony E",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-1.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a074/",
+    "https://www.tamron.com/global/consumer/lenses/a074/spec.html",
+    "https://www.tamron.com/global/consumer/lenses/ (lineup Sony E / Nikon Z / Canon RF / discontinued, para confirmar que el producto es uno solo)",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js (compatibilidad por montura, para confirmar)"
+   ]
+  },
+  "0253f1dca4c166aef070441d6439fafaa1d50c69cd6c58b6a7843e0bf17abfaf": {
+   "modelo": "Tamron 28-75mm F2.8 Di III VXD G2 (A063) Nikon Z",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-2.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a063/",
+    "https://www.tamron.com/global/consumer/lenses/a063/spec.html",
+    "https://tamron-americas.com/product/28-75mm-f-2-8-di-iii-vxd-g2/",
+    "https://www.tamron.com/global/consumer/soft/lensutility/",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js",
+    "https://www.tamron.com/global/consumer/lenses/sony_e/",
+    "https://www.tamron.com/global/consumer/lenses/nikon_z/",
+    "https://www.tamron.com/global/consumer/lenses/discontinued/"
+   ]
+  },
+  "c158f42a640606a22c9860a881a447d81b7cd33a322d88c62fe0c4a79f43cd0a": {
+   "modelo": "Tamron 35-100mm F2.8 Di III VXD (A078)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-1.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a078/",
+    "https://www.tamron.com/global/consumer/lenses/a078/spec.html",
+    "https://www.tamron.com/global/consumer/lenses/ (lineup Sony E / Nikon Z / Canon RF / discontinued, para confirmar que el producto es uno solo)",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js (compatibilidad por montura, para confirmar)"
+   ]
+  },
+  "d2b0a2624e3dd6bec5070918a5ae0acb8666cc502416ae25f1f7999b71811be7": {
+   "modelo": "Tamron 35-150mm F2-2.8 Di III VXD (A058)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-2.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a058/",
+    "https://www.tamron.com/global/consumer/lenses/a058/spec.html",
+    "https://tamron-americas.com/product/35-150mm-f-2-2-8-di-iii-vxd/",
+    "https://www.tamron.com/jp/consumer/lenses/a058/spec.html",
+    "https://www.tamron.com/global/consumer/soft/lensutility/",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js",
+    "https://www.tamron.com/global/consumer/lenses/sony_e/",
+    "https://www.tamron.com/global/consumer/lenses/nikon_z/",
+    "https://www.tamron.com/global/consumer/lenses/discontinued/"
+   ]
+  },
+  "a5295294098f683b4c1ea0612c7ebd360b14ce827e400fc87f2e2295565ad211": {
+   "modelo": "Tamron 50-300mm F4.5-6.3 Di III VC VXD (A069) Sony E",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-1.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a069/",
+    "https://www.tamron.com/global/consumer/lenses/a069/spec.html",
+    "https://www.tamron.com/global/consumer/lenses/ (lineup Sony E / Nikon Z / Canon RF / discontinued, para confirmar que el producto es uno solo)",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js (compatibilidad por montura, para confirmar)"
+   ]
+  },
+  "09f3db117192688011bb5bcff0452309fe2d1a319b8b2e38bd2f52ed08ec47b9": {
+   "modelo": "Tamron 50-400mm F4.5-6.3 Di III VC VXD (A067)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-2.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a067/",
+    "https://www.tamron.com/global/consumer/lenses/a067/spec.html",
+    "https://tamron-americas.com/product/50-400mm-f-4-5-6-3-di-iii-vc-vxd/",
+    "https://www.tamron.com/global/consumer/soft/lensutility/",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js",
+    "https://www.tamron.com/global/consumer/lenses/sony_e/",
+    "https://www.tamron.com/global/consumer/lenses/nikon_z/",
+    "https://www.tamron.com/global/consumer/lenses/discontinued/"
+   ]
+  },
+  "7370aecc07e95017059ddcc5e72de3e2a5ccaadffe28c3fd5821515e12450756": {
+   "modelo": "Tamron 70-180mm F2.8 Di III VC VXD G2 (A065)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T09-1.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a065/",
+    "https://www.tamron.com/global/consumer/lenses/a065/spec.html",
+    "https://tamron-americas.com/product/tamron-70-180mm-f-2-8-di-iii-vc-vxd-g2/ (contraste: 20/15, 1 XLD 3 LD 2 GM 1 híbrido, MOD 0,3/0,85 m, 1:2.6, VC 100 mm video, traba de zoom, accesorios; sin contradicciones)",
+    "https://www.tamron.com/global/consumer/lenses/sony_e/ · /nikon_z/ · /discontinued/ (identidad)",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js (A065S y A065Z compatibles con TAMRON Lens Utility, con tamronLink)"
+   ]
+  },
+  "48358826fed768d610f39a411d574d52ebb8fba94cce7f0177b5325a0e4dca0d": {
+   "modelo": "Tamron 70-300mm F4.5-6.3 Di III RXD (A047)",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-r1-T09-1.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a047/",
+    "https://www.tamron.com/global/consumer/lenses/a047/spec.html",
+    "copia del verificador a-T09-2: https://tamron-americas.com/product/70-300mm-f-4-5-6-3-di-iii-rxd/ (contraste: 15/10 con LD, 105-450 mm en APS-C, 7 hojas, hood + front/rear cap; sin contradicciones)",
+    "https://www.tamron.com/global/consumer/lenses/sony_e/ · /nikon_z/ · /discontinued/ (identidad: un solo 70-300 F4.5-6.3 Di III RXD; los 70-300 viejos son F4-5.6 para réflex)"
+   ]
+  },
+  "5117ff174edea8bfcd770838ef2b73a9ea47515e1f3c25e9c1d1f19f78073438": {
+   "modelo": "Tamron 90mm F2.8 Di III MACRO VXD (F072) Sony E",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-1.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/f072/",
+    "https://www.tamron.com/global/consumer/lenses/f072/spec.html",
+    "https://www.tamron.com/global/consumer/lenses/ (lineup Sony E / Nikon Z / Canon RF / discontinued, para confirmar que el producto es uno solo) — los 90 mm macro para Sony A (272E, F004) son Di sin III; la fila dice III y montura sony e",
+    "https://www.tamron.com/global/consumer/soft/lensutility/data.js (compatibilidad por montura, para confirmar)"
+   ]
+  },
+  "3745315d6d2961bbe013e42b23365a101546833336eb86371bb9d38f61069501": {
+   "modelo": "Tamron SP 24-70mm F2.8 Di VC USD G2 (A032) Nikon F",
+   "fecha": "2026-10-02",
+   "por": "verificador-descripciones",
+   "informe": "informe-a-T09-1.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a032/",
+    "https://www.tamron.com/global/consumer/lenses/a032/spec.html",
+    "https://www.tamron.com/global/consumer/lenses/ (lineup Sony E / Nikon Z / Canon RF / discontinued, para confirmar que el producto es uno solo)"
    ]
   },
   "6641af56697195d64338d50fb1dfb881edbea1fd58026d5737f4afc3283c8c63": {

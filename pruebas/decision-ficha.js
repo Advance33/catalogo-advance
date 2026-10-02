@@ -392,7 +392,14 @@ async function probarTodasLasVersiones(){
   const muL = dfMuestra();
   if(muL && buscarModelo(clave(muL)) === m){
     const r068 = t.querySelector(`.fi-fila[data-k="${CSS.escape(clave(muL))}"] .t`);
-    ok(dfTxt(r068) === 'E-Sim · Orange', '[4.3] el renglon de la muestra: "E-Sim · Orange" en 256GB', dfTxt(r068));
+    // La versión ("E-Sim") va sólo si en esa memoria hay más de una. Desde el
+    // 02/10 ADVAPP separó el 17 Pro Sim (otro SKU madre): en 256GB quedan sólo
+    // E-Sim y el renglón dice "Orange" a secas, que también está bien
+    const memMu = memoriaDeOpcion(muL.opcion || muL.etiqueta || '');
+    const hermanas = new Set(m.variantes.filter(x => memoriaDeOpcion(x.opcion || x.etiqueta || '') === memMu)
+      .map(x => x.opcion || x.etiqueta || ''));
+    const espera = hermanas.size > 1 ? 'E-Sim · Orange' : 'Orange';
+    ok(dfTxt(r068) === espera, '[4.3] el renglon de la muestra: "' + espera + '" en 256GB', dfTxt(r068));
   } else info('[4.3] hoy la lista no es la del iPhone 17 Pro de la muestra: no se mira su renglon');
   ok(t.querySelector('.fi-fila[aria-pressed="true"]')?.dataset.k === FICHA, '[4.3] el renglon de la fila que se mira va marcado');
 

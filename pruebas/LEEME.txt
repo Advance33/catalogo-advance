@@ -186,6 +186,15 @@ si alguna falta).
                   renglon en el mensaje y en la medicion, la pregunta
                   "¿Puedo pagar en cuotas?" y ningun IVA ni factura a la
                   vista. Tambien a 360 px.
+  decision-orden-lista.js
+                  El orden de la lista y la marca 🔥 (Pedro, 03/10/2026):
+                  adentro de cada marca la grilla va en el orden de la
+                  lista de WhatsApp (columna Orden de ADVAPP, contrato
+                  landing/1.4) y no por el nombre; lo que no trae Orden va
+                  al final de su marca; «menor precio» sigue mandando el
+                  precio. Promo = destacado pone «🔥 Destacado» en la
+                  tarjeta (sin precio ni porcentaje, y nunca sin stock) y
+                  entra a la vidriera despues de las bajas reales.
 
 COMO SE CORREN
 --------------

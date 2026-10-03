@@ -1226,6 +1226,12 @@
     display:flex;align-items:center;gap:8px;
   }
   .marca .badge{margin-left:auto}
+  /* La marca 🔥 de los que tienen promo en ADVAPP (03/10): ámbar, el mismo
+     que avisa sin gritar en el resto del sitio; sin mayúsculas, se lee */
+  .marca .destacado{margin-left:auto;font:700 10px/1 var(--sans);letter-spacing:.01em;text-transform:none;
+    color:var(--ambar-ink);background:var(--ambar-soft);border:1px solid var(--ambar-line);
+    padding:3px 7px;border-radius:999px;white-space:nowrap;margin-block:-4px}
+  .marca .badge + .destacado{margin-left:0}
   /* El nombre vuelve a las mayúsculas de display el 21/09, y esta vez sí.
      Había salido de ahí porque con nombres como "iPhone 17 Pro Max 512GB" dos
      renglones en mayúsculas se leían peor que en la letra de texto. Lo que
@@ -4690,6 +4696,11 @@ function armarCarga(datos){
     // El precio de antes, para los que están en promoción. Si la columna no
     // existe, el catálogo anda igual y el carrusel usa los que tienen regalo.
     antes:col('oferta','precio anterior','antes','precio lista'),
+    // Contrato landing/1.4 (ADVAPP, 03/10/2026): el lugar del modelo en la
+    // lista de WhatsApp ("que el orden sea correlativo, con las leyes de las
+    // listas", Pedro) y la marca 🔥 de los que tienen promo, sin precio.
+    orden:col('orden'),
+    promo:col('promo'),
     // Solo en ADVAPP: un SKU por color con sus fotos. La planilla no la trae.
     skus:col('skus')
   };
@@ -4735,6 +4746,8 @@ function armarCarga(datos){
         // El precio de antes, sólo en los que están en promoción. Cuenta como
         // oferta únicamente si es mayor que el de hoy.
         antes:  (() => { const a = num(val(f,C.antes)); return a > 0 ? a : null; })(),
+        orden:  (() => { const o = num(val(f,C.orden)); return o > 0 ? o : null; })(),
+        destacado: norm(val(f,C.promo)) === 'destacado',
         busq:   val(f,C.busq),
         fecha:  val(f,C.fecha),
         incluye:val(f,C.incluye),
@@ -4874,6 +4887,10 @@ function filtrar(){
          dice nada) y después la que más modelos tiene, igual que los botones
          de marca de arriba (marcasDisponibles), así grilla y botones van en
          el mismo orden.
+     Adentro de cada marca, desde el 03/10/2026, el orden de la lista de
+     WhatsApp (columna Orden de ADVAPP, con las mismas reglas: iPhone 14, 15,
+     15 Plus, 16, 16e…; Pedro: "que el orden sea correlativo, con las leyes de
+     como se envian las listas"). Lo que no trae Orden va despues, por nombre.
      Lo único alfabético es el modelo dentro de su marca, y se compara sin
      espacios ni acentos porque la misma consola está escrita de las dos formas
      ("PlayStation 5 Pro" y "Play Station 5 Física"): con los espacios en el
@@ -4888,6 +4905,7 @@ function filtrar(){
     (esDestacadaDe(a) - esDestacadaDe(b)) ||
     (cuantosMarca.get(kMarca(b)) - cuantosMarca.get(kMarca(a))) ||
     norm(a.marca).localeCompare(norm(b.marca),'es') ||
+    ((a.orden || Infinity) - (b.orden || Infinity) || 0) ||
     claveModelo(a).localeCompare(claveModelo(b),'es') ||
     (a.idx - b.idx);
 
@@ -6932,6 +6950,9 @@ function armarModelo(vs){
     precio: precioMin,                         // el "desde"
     precioMax: conPrecio.length ? Math.max(...conPrecio.map(v => v.precio)) : null,
     stock: vs.some(v => v.stock),              // con que una esté disponible, alcanza
+    // El lugar en la lista de WhatsApp: el del primero de sus modelos
+    orden: vs.some(v => v.orden) ? Math.min(...vs.filter(v => v.orden).map(v => v.orden)) : null,
+    destacado: vs.some(v => v.destacado),
     color: colores.join('/'),
     variantes: vs,
     gemelas,                                   // filas iguales que no se muestran
@@ -7136,7 +7157,7 @@ function tarjeta(p){
       ${acciones}
     </div>` : ''}
     <div class="cuerpo">
-      <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}</span>
+      <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}${htmlDestacado(p)}</span>
       <h3 class="nombre">${esc(p.titulo || p.desc)}</h3>
       ${p.tecnica ? `<p class="tecnica" title="${esc(p.tecnica)}">${esc(p.tecnica)}</p>` : ''}
       <div class="pie">
@@ -7243,6 +7264,12 @@ const ahorro = m => (m.antes !== null && m.precio !== null && m.antes > m.precio
   ? Math.round(m.antes - m.precio) : 0;
 const htmlAhorro = m => ahorro(m)
   ? `<span class="badge ahorro">Ahorrás USD ${plata(ahorro(m))}</span>` : '';
+/* La marca 🔥 de los que tienen promo en ADVAPP (Promo = destacado, 03/10/2026).
+   Sólo la marca: el precio inflado de la "ficticia" de las listas no se
+   publica, porque sería anunciar un descuento que no existió. Sin stock, no. */
+function htmlDestacado(m){
+  return m && m.destacado && m.stock ? '<span class="destacado">🔥 Destacado</span>' : '';
+}
 // El regalo es el respaldo: "Sin cargador" también vive en esa columna y no es
 // ningún beneficio, así que sólo cuentan los que suman algo.
 /* Tampoco "+ Solo el S-Pen" ni "+ Solo el lápiz" (29/09): son contenido de
@@ -7291,6 +7318,12 @@ function ofertas(){
                      .sort((a, b) => descuento(b) - descuento(a));
 
   let out = variados(enBaja, OFERTAS_MAX, fijos);
+
+  // Después, los que tienen la marca 🔥 en ADVAPP (03/10/2026)
+  if(out.length < OFERTAS_MAX){
+    const dest = base.filter(m => m.destacado && !out.includes(m));
+    out = variados(dest, OFERTAS_MAX, out);
+  }
 
   // Recién si falta para llenar se recurre a los que tienen regalo
   if(out.length < OFERTAS_MAX){

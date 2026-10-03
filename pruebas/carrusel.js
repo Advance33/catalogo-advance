@@ -41,7 +41,10 @@ function pruebasDelCarrusel(){
   const slides = () => [...document.querySelectorAll('.of-slide')];
 
   /* ---- 1. Sin columna Oferta: el respaldo ---- */
-  MODELOS.forEach(m => { m.antes = null; if(m.rep) m.rep.antes = null; });
+  /* Los destacados (Promo de ADVAPP, 03/10) se apagan para esta parte: se
+     prueba el respaldo de los regalos. Vuelven antes de la parte 2. */
+  const destGuardado = MODELOS.map(m => m.destacado);
+  MODELOS.forEach(m => { m.antes = null; if(m.rep) m.rep.antes = null; m.destacado = false; });
   pintarOfertas();
   ok(!caja.hidden, 'sin precios anteriores igual se muestra algo');
   ok($('of-rotulo').textContent === 'Destacados',
@@ -54,6 +57,7 @@ function pruebasDelCarrusel(){
   // "Sin cargador" vive en la misma columna y NO es un beneficio
   ok(conRegaloVisible.every(m => !/^sin /i.test((m.incluye||'').trim())),
      'no entra ningun "Sin cargador" como si fuera un regalo');
+  MODELOS.forEach((m, i) => { m.destacado = destGuardado[i]; });
   /* El 🎁 en todos los regalos (Pedro, 03/10/2026): uno solo y al final, venga
      o no escrito desde ADVAPP; lo que no es regalo, sin el ícono */
   const ti = [textoIncluye('+ Cargador 20W'), textoIncluye('+ Cargador 20W + Funda + Templado 🎁'),
@@ -202,11 +206,11 @@ function pruebasDelCarrusel(){
 
   /* ---- 8. Sin nada para mostrar, no queda un hueco ---- */
   MODELOS.forEach(m => { m.antes = null; if(m.rep) m.rep.antes = null; });
-  const incGuardado = MODELOS.map(m => m.incluye);
-  MODELOS.forEach(m => { m.incluye = ''; });
+  const incGuardado = MODELOS.map(m => m.incluye), destGuardado8 = MODELOS.map(m => m.destacado);
+  MODELOS.forEach(m => { m.incluye = ''; m.destacado = false; });
   pintarOfertas();
   ok(caja.hidden, 'sin ofertas ni destacados, el carrusel no aparece');
-  MODELOS.forEach((m,i) => { m.incluye = incGuardado[i]; });
+  MODELOS.forEach((m,i) => { m.incluye = incGuardado[i]; m.destacado = destGuardado8[i]; });
   pintarOfertas();
 
   /* Se apaga antes de terminar. Si queda girando, con el reloj virtual del

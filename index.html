@@ -3400,8 +3400,8 @@ const PREGUNTAS = [
     lista: ['Efectivo en dólares',
             'Efectivo en pesos',
             'Transferencia bancaria en pesos (sin recargo)',
-            'Criptomonedas (con recargo)',
-            'PayPal, Payoneer o Prex (con recargo)',
+            'Criptomonedas (+2%)',
+            'PayPal, Payoneer o Prex (+10%)',
             ...renglonTarjetaPagos()] },
   ...preguntaCuotas(),
   { p: '¿Por qué cambia el precio en pesos?',
@@ -3658,13 +3658,12 @@ function aplicarRecargo(base, etiqueta){
   const final = base * (1 + pct/100) + fijo;
   // Un recargo que deja la cotización en cero o menos no es un precio: solo dólares
   if(!(final > 0)) return null;
-  // Sin porcentajes a la vista (03/10): con recargo en %, sólo el resultado
-  const extra = pct ? '' : (fijo ? ` +$${plata(fijo)}` : '');
+  const extra = (pct ? ` +${pct}%` : '') + (fijo ? ` +$${plata(fijo)}` : '');
   // En el dispositivo que pisó la cotización del código, que se note
   const cual = etiqueta + (CFG.propia ? ' (solo en este dispositivo)' : '');
   return { valor: final,
            pie: extra ? `${cual}: $${plata(base)}${extra} = $${plata(Math.round(final))} · `
-                      : `${cual}: $${plata(pct ? Math.round(final) : base)} · ` };
+                      : `${cual}: $${plata(base)} · ` };
 }
 
 /* ¿Es creíble lo que mandó dolarapi? Devuelve el motivo si no (29/09). Solo
@@ -5211,10 +5210,11 @@ function planCuotas(n){ return CUOTAS.find(c => c.cuotas === n) || null; }
 // El plan más largo, para el "Hasta 12 cuotas"; 0 si no hay más que 1 pago
 function maxCuotas(){ return Math.max(0, ...CUOTAS.filter(c => c.cuotas > 1).map(c => c.cuotas)); }
 function nombreCuotas(n){ return n === 1 ? '1 pago' : n + ' cuotas'; }
-/* Ningún porcentaje a la vista (Pedro, 03/10/2026: "en ningún lado puede
-   figurar eso"). El recargo se aplica igual en la cuenta (cuentaCuotas), y el
-   cliente ve el monto en pesos de cada cuota; donde antes iba el número, dice
-   "con recargo", para que no se sorprenda. */
+/* El interés de las cuotas NO se muestra en ningún lado (Pedro, 03/10/2026:
+   "lo que no quiero bajo ningún concepto es que figuren los intereses en las
+   cuotas"): ni el porcentaje ni una mención. Se aplica igual en la cuenta
+   (cuentaCuotas) y el cliente ve el monto en pesos de cada cuota. Los
+   recargos de otras formas de pago (cripto, PayPal) sí se muestran. */
 // { total, cuota } en pesos de un precio en dólares; null sin cotización
 function cuentaCuotas(usd, n){
   const c = planCuotas(n);
@@ -5230,7 +5230,7 @@ const LETRA_CHICA_CUOTAS = 'Con cualquier tarjeta bancarizada vinculada a Mercad
 function renglonTarjetaPagos(){
   const uno = planCuotas(1), max = maxCuotas();
   const partes = [uno && 'en 1 pago', max && 'en cuotas'].filter(Boolean);
-  return partes.length ? ['Tarjeta por Mercado Pago: ' + partes.join(' o ') + ', con recargo' +
+  return partes.length ? ['Tarjeta por Mercado Pago: ' + partes.join(' o ') +
     (max ? ' (mirá «¿Puedo pagar en cuotas?»)' : '')] : [];
 }
 // La pregunta nueva (4A), con los planes de CUOTAS; [] si no hay cuotas
@@ -5240,7 +5240,7 @@ function preguntaCuotas(){
   const cuantas = ns.length > 1 ? ns.slice(0, -1).join(', ') + ' o ' + ns[ns.length - 1] : ns[0];
   return [{ p: '¿Puedo pagar en cuotas?',
     r: [`Sí, en ${cuantas} cuotas, con cualquier tarjeta bancarizada vinculada a tu cuenta de Mercado Pago. Vale para todos los productos.`,
-        'Se paga en pesos, con el dólar del día que ves en la página, más un recargo que depende del plan. En la ficha de cada producto, tocando el plan, ves cuánto es cada cuota.'] }];
+        'Se paga en pesos, con el dólar del día que ves en la página. En la ficha de cada producto, tocando el plan, ves cuánto es cada cuota.'] }];
 }
 
 // El mensaje sale igual desde la tarjeta, la ficha y el pedido
@@ -10521,7 +10521,7 @@ function textoCuotasFicha(v){
   if(!c) return '<span class="nada">Tocá un plan y ves cuánto es cada cuota.</span>';
   const x = cuentaCuotas(v.precio, c.cuotas);
   // Sin cotización no hay pesos: el plan, sin montos
-  if(!x) return `<b>${esc(nombreCuotas(c.cuotas))}</b><span>con recargo sobre el precio en pesos</span>`;
+  if(!x) return `<b>${esc(nombreCuotas(c.cuotas))}</b><span>el monto sale con el dólar del día</span>`;
   return c.cuotas === 1
     ? `<b>1 pago de $ ${plata(x.total)}</b>`
     : `<b>${c.cuotas} cuotas de $ ${plata(x.cuota)}</b>`;
@@ -12138,7 +12138,7 @@ function htmlCuotasPedido(){
   if(c && x) ayuda = c.cuotas === 1
     ? `<b>1 pago de $ ${plata(x.total)}</b>`
     : `<b>${c.cuotas} cuotas de $ ${plata(x.cuota)}</b> · total $ ${plata(x.total)}`;
-  else if(c) ayuda = `<b>${esc(nombreCuotas(c.cuotas))}</b> (con recargo sobre el precio en pesos)`;
+  else if(c) ayuda = `<b>${esc(nombreCuotas(c.cuotas))}</b> (el monto te lo pasamos por WhatsApp)`;
   return `<div class="pd-cuotas" role="group" aria-labelledby="pd-rot-cuotas">
       <span class="pd-rot" id="pd-rot-cuotas">¿Pagás con tarjeta? <i>opcional</i></span>
       <div class="pd-chips">${CUOTAS.map(q => `<button type="button" class="pd-chip" data-cuotas="${q.cuotas}" aria-pressed="${q.cuotas === CUOTAS_PEDIDO}">${esc(nombreCuotas(q.cuotas))}</button>`).join('')}</div>

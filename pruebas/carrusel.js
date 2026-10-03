@@ -54,6 +54,15 @@ function pruebasDelCarrusel(){
   // "Sin cargador" vive en la misma columna y NO es un beneficio
   ok(conRegaloVisible.every(m => !/^sin /i.test((m.incluye||'').trim())),
      'no entra ningun "Sin cargador" como si fuera un regalo');
+  /* El 🎁 en todos los regalos (Pedro, 03/10/2026): uno solo y al final, venga
+     o no escrito desde ADVAPP; lo que no es regalo, sin el ícono */
+  const ti = [textoIncluye('+ Cargador 20W'), textoIncluye('+ Cargador 20W + Funda + Templado 🎁'),
+              textoIncluye('+ Cargador 20W🎁'), textoIncluye('Sin cargador'), textoIncluye('+ Solo el lápiz')];
+  ok(ti[0] === '+ Cargador 20W 🎁' && ti[1] === '+ Cargador 20W + Funda + Templado 🎁' && ti[2] === '+ Cargador 20W 🎁' &&
+     ti[3] === 'Sin cargador' && ti[4] === '+ Solo el lápiz',
+     'cada regalo lleva un 🎁, uno solo y al final; "Sin cargador" y "+ Solo el lapiz" no', ti.join(' | '));
+  ok(slides().every(s => { const r = s.querySelector('.of-regalo'); return !r || (r.textContent.match(/🎁/gu) || []).length === 1; }),
+     'en la vidriera, cada regalo con su 🎁');
 
   /* ---- 2. Con la columna cargada ---- */
   /* Cuatro modelos de rubros DISTINTOS: la vidriera no deja mas de

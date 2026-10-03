@@ -7,8 +7,9 @@
 //   A2.3  el dato que cambia con la version: resaltado el de la version
 //         elegida, con los de las otras en chiquito; en los puntos, la marca
 //         "segun version"
-//   A2.4  abajo, siempre, la fuente oficial en chiquito; lo que no sale del
-//         fabricante lleva "proveedor" y la fuente lo dice
+//   A2.4  lo que no sale del fabricante lleva "proveedor" y abajo, en
+//         chiquito, el aviso lo dice. Las fuentes oficiales NO se muestran
+//         (Pedro, 03/10/2026: "sacá las fuentes"); siguen en el archivo
 //   A2.5  donde: en el celular antes de "Estas eligiendo" y del pie pegado; en
 //         la compu abajo de los botones, antes de retiro y garantia
 //   A2.6  un producto sin descripcion se ve como antes: ningun hueco
@@ -391,7 +392,7 @@ async function probarFicha(casos){
       if(varia !== (t.varia || x.varia) || prov !== (t.prov || x.prov) || (x.txt && pdTxt(li.querySelector('div > span')) !== x.txt))
         malos.puntos.push(c.v.id + ' "' + t.txt + '": varia ' + varia + ', proveedor ' + prov);
     });
-    // La fuente: todos los links oficiales, chiquita; y la marca del proveedor si hay
+    // Abajo: sin links de fuentes (03/10); el aviso del proveedor, chiquito, si hay
     const fu = ds.querySelector('.fi-desc-fuente');
     const links = fu ? [...fu.querySelectorAll('a')] : [];
     const tam = parseFloat(pdCss(fu, 'font-size'));
@@ -403,9 +404,9 @@ async function probarFicha(casos){
        versiones (01/10: el combo Switch 2 + Mario Kart, que trae el juego
        segun el proveedor) no hay version que nombrar: el aviso va solo. */
     const provVersion = ver ? dice.includes('«' + ver + '»') : !dice.includes('«');
-    if(!fu || hrefs !== c.e.fuentes.map(f => f.url).join('|') || links.some(a => a.target !== '_blank' || !/noopener/.test(a.rel)) || !(tam <= 11) ||
-       fu !== ds.lastElementChild || (hayProv !== !!dice) || (hayProv && !(provVersion && dice.includes(c.e.proveedor.aviso))))
-      malos.fuente.push(c.v.id + ': ' + (fu ? pdTxt(fu).slice(0, 80) + ' · ' + tam + 'px' : 'sin fuente'));
+    if(links.length || /Fuente:/.test(pdTxt(ds)) || hrefs || (hayProv !== !!fu) ||
+       (fu && (!(tam <= 11) || fu !== ds.lastElementChild || !(provVersion && dice.includes(c.e.proveedor.aviso)))))
+      malos.fuente.push(c.v.id + ': ' + (fu ? pdTxt(fu).slice(0, 80) + ' · ' + tam + 'px' : 'sin aviso del proveedor'));
   }
   const n = casos.length + ' fichas';
   ok(!malos.tit.length, '[A2.1] los tres renglones, en orden: Por que elegirlo / Lo mas importante / Ficha tecnica', malos.tit.slice(0, 4).join(' | ') || n);
@@ -415,7 +416,7 @@ async function probarFicha(casos){
   ok(!malos.var.length, '[A2.3] la ficha tecnica: el dato de la version elegida resaltado, con los otros en chiquito', malos.var.slice(0, 4).join(' | ') || n);
   ok(!malos.puntos.length, '[A2.3] los puntos: "segun version" y "proveedor" donde corresponde', malos.puntos.slice(0, 4).join(' | ') || n);
   ok(!malos.prov.length, '[A2.4] un dato del proveedor en la tabla lleva su marca', malos.prov.slice(0, 4).join(' | ') || n);
-  ok(!malos.fuente.length, '[A2.4] abajo, la fuente oficial chiquita con sus links (y "dato del proveedor" cuando corresponde)', malos.fuente.slice(0, 4).join(' | ') || n);
+  ok(!malos.fuente.length, '[A2.4] sin las fuentes a la vista; abajo, chiquito, el aviso del proveedor solo cuando hay datos suyos', malos.fuente.slice(0, 4).join(' | ') || n);
   const conProv = casos.filter(c => c.e.proveedor && versionDescripcion(c.e, c.v) &&
     c.e.ficha.some(g => g.datos.some(r => pdEsperado(r[1], versionDescripcion(c.e, c.v)).prov)));
   info(conProv.length + ' fichas con datos del proveedor: ' + conProv.map(c => c.v.id).join(', '));

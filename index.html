@@ -3394,8 +3394,8 @@ const PREGUNTAS = [
     lista: ['Efectivo en dólares',
             'Efectivo en pesos',
             'Transferencia bancaria en pesos (sin recargo)',
-            'Criptomonedas (+2%)',
-            'PayPal, Payoneer o Prex (+10%)',
+            'Criptomonedas (con recargo)',
+            'PayPal, Payoneer o Prex (con recargo)',
             ...renglonTarjetaPagos()] },
   ...preguntaCuotas(),
   { p: '¿Por qué cambia el precio en pesos?',
@@ -3652,12 +3652,13 @@ function aplicarRecargo(base, etiqueta){
   const final = base * (1 + pct/100) + fijo;
   // Un recargo que deja la cotización en cero o menos no es un precio: solo dólares
   if(!(final > 0)) return null;
-  const extra = (pct ? ` +${pct}%` : '') + (fijo ? ` +$${plata(fijo)}` : '');
+  // Sin porcentajes a la vista (03/10): con recargo en %, sólo el resultado
+  const extra = pct ? '' : (fijo ? ` +$${plata(fijo)}` : '');
   // En el dispositivo que pisó la cotización del código, que se note
   const cual = etiqueta + (CFG.propia ? ' (solo en este dispositivo)' : '');
   return { valor: final,
            pie: extra ? `${cual}: $${plata(base)}${extra} = $${plata(Math.round(final))} · `
-                      : `${cual}: $${plata(base)} · ` };
+                      : `${cual}: $${plata(pct ? Math.round(final) : base)} · ` };
 }
 
 /* ¿Es creíble lo que mandó dolarapi? Devuelve el motivo si no (29/09). Solo
@@ -4472,11 +4473,11 @@ async function bajarDatos(){
             guardarPendiente({ n, generado_en: hecho });
             if(!planilla){
               corta = a;
-              throw new Error(`trajo ${n} filas, menos del ${Math.round(ADVAPP_MINIMO * 100)} % ` +
+              throw new Error(`trajo ${n} filas, menos de ${Math.ceil(ADVAPP_MINIMO * antes)} ` +
                               `de las ${antes} de la ultima vez, y la hoja Meta no contesto`);
             }
             throw new Error(`trajo ${n} filas y la planilla tiene ${planilla} ` +
-                            `(menos del ${Math.round(ADVAPP_MINIMO * 100)} %)`);
+                            `(menos de ${Math.ceil(ADVAPP_MINIMO * planilla)})`);
           }
         }
       }
@@ -5192,10 +5193,10 @@ function planCuotas(n){ return CUOTAS.find(c => c.cuotas === n) || null; }
 // El plan más largo, para el "Hasta 12 cuotas"; 0 si no hay más que 1 pago
 function maxCuotas(){ return Math.max(0, ...CUOTAS.filter(c => c.cuotas > 1).map(c => c.cuotas)); }
 function nombreCuotas(n){ return n === 1 ? '1 pago' : n + ' cuotas'; }
-// 7 → "7%", 29.75 → "29,75%", 63.5 → "63,50%" (como los escribió Pedro)
-function pctCuotas(r){
-  return Number(r).toLocaleString('es-AR', { minimumFractionDigits: r % 1 ? 2 : 0, maximumFractionDigits: 2 }) + '%';
-}
+/* Ningún porcentaje a la vista (Pedro, 03/10/2026: "en ningún lado puede
+   figurar eso"). El recargo se aplica igual en la cuenta (cuentaCuotas), y el
+   cliente ve el monto en pesos de cada cuota; donde antes iba el número, dice
+   "con recargo", para que no se sorprenda. */
 // { total, cuota } en pesos de un precio en dólares; null sin cotización
 function cuentaCuotas(usd, n){
   const c = planCuotas(n);
@@ -5210,9 +5211,9 @@ const LETRA_CHICA_CUOTAS = 'Con cualquier tarjeta bancarizada vinculada a Mercad
 // El renglón de "¿Cómo puedo pagar?" (4A): [] sin planes
 function renglonTarjetaPagos(){
   const uno = planCuotas(1), max = maxCuotas();
-  const partes = [uno && `en 1 pago (+${pctCuotas(uno.recargo)})`,
-                  max && 'en cuotas (mirá «¿Puedo pagar en cuotas?»)'].filter(Boolean);
-  return partes.length ? ['Tarjeta por Mercado Pago: ' + partes.join(' o ')] : [];
+  const partes = [uno && 'en 1 pago', max && 'en cuotas'].filter(Boolean);
+  return partes.length ? ['Tarjeta por Mercado Pago: ' + partes.join(' o ') + ', con recargo' +
+    (max ? ' (mirá «¿Puedo pagar en cuotas?»)' : '')] : [];
 }
 // La pregunta nueva (4A), con los planes de CUOTAS; [] si no hay cuotas
 function preguntaCuotas(){
@@ -5221,8 +5222,7 @@ function preguntaCuotas(){
   const cuantas = ns.length > 1 ? ns.slice(0, -1).join(', ') + ' o ' + ns[ns.length - 1] : ns[0];
   return [{ p: '¿Puedo pagar en cuotas?',
     r: [`Sí, en ${cuantas} cuotas, con cualquier tarjeta bancarizada vinculada a tu cuenta de Mercado Pago. Vale para todos los productos.`,
-        'Se paga en pesos, con el dólar del día que ves en la página, más el recargo de cada plan:'],
-    lista: CUOTAS.map(c => `${nombreCuotas(c.cuotas)}: +${pctCuotas(c.recargo)}`) }];
+        'Se paga en pesos, con el dólar del día que ves en la página, más un recargo que depende del plan. En la ficha de cada producto, tocando el plan, ves cuánto es cada cuota.'] }];
 }
 
 // El mensaje sale igual desde la tarjeta, la ficha y el pedido
@@ -7132,7 +7132,7 @@ function tarjeta(p){
   el.innerHTML = `
     ${CON_FOTOS ? `<div class="foto${p.imagen ? '' : ' vacia'}">
       ${badge}${htmlAhorro(p)}${htmlFoto(p,'loading="lazy"')}
-      ${p.incluye ? `<span class="cinta" title="${esc(p.incluye)}">${esc(p.incluye)}</span>` : ''}
+      ${p.incluye ? `<span class="cinta" title="${esc(textoIncluye(p.incluye))}">${esc(textoIncluye(p.incluye))}</span>` : ''}
       ${acciones}
     </div>` : ''}
     <div class="cuerpo">
@@ -7252,8 +7252,13 @@ const htmlAhorro = m => ahorro(m)
    de otra manera, lo decide él. Con "+ Funda + Solo el lápiz" sigue contando,
    porque la funda es un regalo de verdad. s[oó] porque la nota puede venir
    con tilde: con "solo" a secas, "+ Sólo el lápiz" se colaba. */
-const conRegalo = m => /^\s*\+|🎁/.test(m.incluye || '')
-  && !/^\s*\+\s*s[oó]lo\b/i.test(m.incluye || '');
+function esRegalo(t){ return /^\s*\+|🎁/.test(t || '') && !/^\s*\+\s*s[oó]lo\b/i.test(t || ''); }
+const conRegalo = m => esRegalo(m.incluye);
+/* El 🎁 en todos los regalos (Pedro, 03/10/2026: "faltan logos de regalos").
+   ADVAPP lo escribe en algunos ("+ Cargador 20W + Funda + Templado 🎁") y en
+   otros no ("+ Cargador 20W"): acá va uno solo, al final, en todos los que son
+   regalo. Lo que no es regalo ("Sin cargador", "+ Solo el lápiz") queda igual. */
+function textoIncluye(t){ return esRegalo(t) ? String(t).replace(/\s*🎁\s*/gu, ' ').trim() + ' 🎁' : (t || ''); }
 
 /* Como mucho dos del mismo rubro mientras haya de otros: la vidriera tiene que
    mostrar que hay de todo. Lo que se saltea vuelve al final, por si no alcanza
@@ -7321,7 +7326,7 @@ function htmlOferta(m){
         <h3>${esc(m.titulo || m.desc)}</h3>
         ${m.tecnica ? `<p class="of-tec">${esc(m.tecnica)}</p>` : ''}
         ${hay ? `<div class="of-tags"><span class="of-off">Ahorrás USD ${plata(ahorro(m))}</span></div>` : ''}
-        ${!hay && m.incluye ? `<div class="of-tags"><span class="of-regalo">${esc(m.incluye)}</span></div>` : ''}
+        ${!hay && m.incluye ? `<div class="of-tags"><span class="of-regalo">${esc(textoIncluye(m.incluye))}</span></div>` : ''}
         <div class="of-precio">
           ${hay ? `<s>USD ${plata(m.antes)}</s>` : ''}
           <b>${m.multi && m.precio !== m.precioMax ? 'desde ' : ''}USD ${plata(m.precio)}</b>
@@ -8522,7 +8527,7 @@ function htmlNuevoGrande(m){
       <span class="nv-rubro">${esc(plural(m.cat))}</span>
       <h3 class="nv-nom">${esc(nombreCorto(m))}</h3>
       ${chips.length ? `<div class="nv-chips">${chips.map(s => `<span>${esc(s)}</span>`).join('')}</div>` : ''}
-      ${conRegalo(m) ? `<div class="incluye">${esc(m.incluye)}</div>` : ''}
+      ${conRegalo(m) ? `<div class="incluye">${esc(textoIncluye(m.incluye))}</div>` : ''}
       ${m.multi ? `<span class="nv-opciones">${m.variantes.length} opciones</span>` : ''}
       ${htmlPrecioNuevo(m)}
       <div class="nv-botones">${htmlAgregarNuevo(m, 'Agregar al pedido')}${link
@@ -8538,7 +8543,7 @@ function htmlNuevoChico(m){
       <span class="nv-nuevo">Nuevo</span>
       <span class="nv-rubro">${esc(plural(m.cat))}</span>
       <h3 class="nv-nom">${esc(nombreCorto(m))}</h3>
-      ${conRegalo(m) ? `<div class="incluye">${esc(m.incluye)}</div>` : ''}
+      ${conRegalo(m) ? `<div class="incluye">${esc(textoIncluye(m.incluye))}</div>` : ''}
       ${htmlPrecioNuevo(m)}
       <div class="nv-botones">${htmlAgregarNuevo(m, 'Agregar')}</div>
     </div>
@@ -10445,7 +10450,7 @@ function htmlDatosFicha(m, v){
     ${conCuotas(v) ? `<p class="fi-cuotas-nota">${esc(LETRA_CHICA_CUOTAS)}</p>` : ''}
     ${ejes}
     ${htmlTodasFicha(m, v)}
-    ${v.incluye ? `<div class="incluye">${esc(v.incluye)}</div>` : ''}
+    ${v.incluye ? `<div class="incluye">${esc(textoIncluye(v.incluye))}</div>` : ''}
     ${v.detalle ? `<p class="fi-detalle">${esc(v.detalle)}</p>` : ''}
     ${filas.length ? `<dl class="fi-tabla">${filas.map(([t,x]) =>
       `<dt>${esc(t)}</dt><dd>${esc(x)}</dd>`).join('')}</dl>` : ''}
@@ -10481,9 +10486,9 @@ function htmlCuotasFicha(v){
 function textoCuotasFicha(v){
   const c = planCuotas(CUOTA_FICHA);
   if(!c) return '<span class="nada">Tocá un plan y ves cuánto es cada cuota.</span>';
-  const x = cuentaCuotas(v.precio, c.cuotas), pct = pctCuotas(c.recargo);
-  // Sin cotización no hay pesos: el plan y su recargo, sin montos
-  if(!x) return `<b>${esc(nombreCuotas(c.cuotas))}</b><span>+${pct} sobre el precio en pesos</span>`;
+  const x = cuentaCuotas(v.precio, c.cuotas);
+  // Sin cotización no hay pesos: el plan, sin montos
+  if(!x) return `<b>${esc(nombreCuotas(c.cuotas))}</b><span>con recargo sobre el precio en pesos</span>`;
   return c.cuotas === 1
     ? `<b>1 pago de $ ${plata(x.total)}</b>`
     : `<b>${c.cuotas} cuotas de $ ${plata(x.cuota)}</b>`;
@@ -10654,8 +10659,10 @@ function htmlDescripcion(v){
   ].filter(s => s[3]);
   if(!secs.length) return '';
 
-  const links = e.fuentes.filter(f => f && urlFoto(f.url)).map(f =>
-    `<a href="${esc(urlFoto(f.url))}" target="_blank" rel="noopener">${esc(f.texto || f.url)}</a>`).join(' · ');
+  /* Las fuentes oficiales no se muestran (Pedro, 03/10/2026: "sacá las
+     fuentes"): siguen en datos/descripciones.json, que es lo que revisa el
+     verificador. Lo que sí queda abajo es el aviso de "dato del proveedor",
+     cuando hay: es lo que explica la marca "proveedor" de los puntos. */
   const aviso = (e.proveedor && typeof e.proveedor.aviso === 'string' && e.proveedor.aviso) || 'dato del proveedor';
 
   return `<section class="fi-desc" aria-label="Descripción">
@@ -10667,7 +10674,7 @@ function htmlDescripcion(v){
         <div class="fi-plg${abierto ? ' abierto' : ''}" id="fi-desc-${k}" role="region" aria-labelledby="fi-desc-b-${k}"><div class="fi-plg-in"><div class="fi-acd-c">${html}</div></div></div>
       </div>`;
     }).join('')}</div>
-    <p class="fi-desc-fuente">Fuente: ${links}${hayProv ? ` · <span class="prov">${ver ? `«${esc(ver)}»: ` : ''}${esc(aviso)}</span>` : ''}</p>
+    ${hayProv ? `<p class="fi-desc-fuente"><span class="prov">${ver ? `«${esc(ver)}»: ` : ''}${esc(aviso)}</span></p>` : ''}
   </section>`;
 }
 
@@ -12096,9 +12103,9 @@ function htmlCuotasPedido(){
   const c = planCuotas(CUOTAS_PEDIDO), x = cuentaCuotasPedido();
   let ayuda = 'Por Mercado Pago, con cualquier tarjeta bancarizada. Si no marcás nada, lo hablamos por WhatsApp.';
   if(c && x) ayuda = c.cuotas === 1
-    ? `<b>1 pago de $ ${plata(x.total)}</b> (+${pctCuotas(c.recargo)})`
-    : `<b>${c.cuotas} cuotas de $ ${plata(x.cuota)}</b> · total $ ${plata(x.total)} (+${pctCuotas(c.recargo)})`;
-  else if(c) ayuda = `<b>${esc(nombreCuotas(c.cuotas))}</b> (+${pctCuotas(c.recargo)} sobre el precio en pesos)`;
+    ? `<b>1 pago de $ ${plata(x.total)}</b>`
+    : `<b>${c.cuotas} cuotas de $ ${plata(x.cuota)}</b> · total $ ${plata(x.total)}`;
+  else if(c) ayuda = `<b>${esc(nombreCuotas(c.cuotas))}</b> (con recargo sobre el precio en pesos)`;
   return `<div class="pd-cuotas" role="group" aria-labelledby="pd-rot-cuotas">
       <span class="pd-rot" id="pd-rot-cuotas">¿Pagás con tarjeta? <i>opcional</i></span>
       <div class="pd-chips">${CUOTAS.map(q => `<button type="button" class="pd-chip" data-cuotas="${q.cuotas}" aria-pressed="${q.cuotas === CUOTAS_PEDIDO}">${esc(nombreCuotas(q.cuotas))}</button>`).join('')}</div>

@@ -53,9 +53,9 @@ function correrPruebas(){
   const conRegalo = cs.filter(c => buscarModelo(c.dataset.key)?.incluye);
   const malRegalo = cs.filter(c => {
     const p = buscarModelo(c.dataset.key), cinta = c.querySelector('.foto .cinta');
-    return !!(p && p.incluye) !== !!cinta || (cinta && cinta.textContent !== p.incluye);
+    return !!(p && p.incluye) !== !!cinta || (cinta && cinta.textContent !== textoIncluye(p.incluye));
   });
-  ok(conRegalo.length > 0 && !malRegalo.length, 'el regalo va como cinta sobre la foto, con el texto de la planilla',
+  ok(conRegalo.length > 0 && !malRegalo.length, 'el regalo va como cinta sobre la foto, con el texto de la planilla (y su 🎁 si es regalo)',
      malRegalo.map(c => c.dataset.key).slice(0, 3).join(', ') || conRegalo.length + ' con regalo');
   /* Los colores salieron de la tarjeta el 21/09 y se ven adentro de la ficha,
      en la vitrina debajo de la foto (30/09, la C de la muestra de los

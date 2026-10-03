@@ -15,7 +15,8 @@
 //       recibís?"; el plan elegido va al mensaje con los montos y a la
 //       medicion (cuotas: N). Queda guardado aparte del pedido.
 //   4A  "¿Cómo puedo pagar?" suma la tarjeta y hay una pregunta nueva
-//       "¿Puedo pagar en cuotas?" con los recargos.
+//       "¿Puedo pagar en cuotas?". Desde el 03/10 sin ningún porcentaje a la
+//       vista (Pedro): donde iba el número dice "con recargo".
 //   Sin factura: ni la pregunta del IVA ni ningun "IVA" o "factura" a la vista.
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
@@ -72,13 +73,15 @@ async function correrPruebas(){
 
 /* ---- Los planes y la cuenta ---- */
 function probarLosPlanes(){
-  info('planes: ' + CUOTAS.map(c => nombreCuotas(c.cuotas) + ' +' + pctCuotas(c.recargo)).join(' · ') + ' · cotizacion ' + TC);
+  info('planes: ' + CUOTAS.map(c => nombreCuotas(c.cuotas) + ' (recargo ' + c.recargo + ')').join(' · ') + ' · cotizacion ' + TC);
   const ns = CUOTAS.map(c => c.cuotas);
   ok(CUOTAS.length > 0 && CUOTAS.every(c => Number.isInteger(c.cuotas) && c.cuotas > 0 && typeof c.recargo === 'number' && c.recargo >= 0 && c.recargo < 1000) &&
      ns.every((n, i) => !i || n > ns[i - 1]),
      'CUOTAS: planes con cuotas enteras, de menor a mayor, y un recargo en numero (decimal con punto)', ns.join(','));
-  ok(pctCuotas(7) === '7%' && pctCuotas(29.75) === '29,75%' && pctCuotas(63.5) === '63,50%',
-     'los porcentajes se escriben como los paso Pedro: 7%, 29,75%, 63,50%', [pctCuotas(7), pctCuotas(29.75), pctCuotas(63.5)].join(' '));
+  // Pedro, 03/10: "en ningún lado puede figurar" un porcentaje
+  const conPct = [JSON.stringify(PREGUNTAS), renglonTarjetaPagos().join(' '), document.body.innerText || '']
+    .filter(t => /\d\s?%/.test(t)).map(t => (t.match(/[^\n]{0,40}\d\s?%[^\n]{0,20}/) || [''])[0]);
+  ok(!conPct.length && typeof pctCuotas === 'undefined', 'ningun porcentaje a la vista: ni en las preguntas, ni en «¿Como puedo pagar?», ni en la pagina', conPct.join(' | '));
   ok(nombreCuotas(1) === '1 pago' && nombreCuotas(6) === '6 cuotas', 'un plan de 1 es «1 pago»; los demas, «N cuotas»');
   ok(maxCuotas() === Math.max(...CUOTAS.filter(c => c.cuotas > 1).map(c => c.cuotas)), '«Hasta N cuotas» es el plan mas largo', maxCuotas());
   if(!TC){ info('sin cotizacion: la cuenta en pesos no se prueba'); return; }
@@ -103,14 +106,14 @@ function probarLasPreguntas(){
   const i = PREGUNTAS.findIndex(q => q.p === '¿Cómo puedo pagar?');
   const pagar = PREGUNTAS[i], cuotas = PREGUNTAS[i + 1];
   const ult = pagar && pagar.lista[pagar.lista.length - 1];
-  ok(ult === renglonTarjetaPagos()[0] && /^Tarjeta por Mercado Pago: en 1 pago \(\+[\d,]+%\) o en cuotas \(mirá «¿Puedo pagar en cuotas\?»\)$/.test(ult),
+  ok(ult === renglonTarjetaPagos()[0] && /^Tarjeta por Mercado Pago: en 1 pago o en cuotas, con recargo \(mirá «¿Puedo pagar en cuotas\?»\)$/.test(ult),
      '[4A] «¿Cómo puedo pagar?» suma la tarjeta al final de su lista', ult);
-  ok(pagar && pagar.lista.slice(0, 5).join('|') === 'Efectivo en dólares|Efectivo en pesos|Transferencia bancaria en pesos (sin recargo)|Criptomonedas (+2%)|PayPal, Payoneer o Prex (+10%)',
-     '[4A] las otras formas de pago quedan como estaban');
+  ok(pagar && pagar.lista.slice(0, 5).join('|') === 'Efectivo en dólares|Efectivo en pesos|Transferencia bancaria en pesos (sin recargo)|Criptomonedas (con recargo)|PayPal, Payoneer o Prex (con recargo)',
+     '[4A] las otras formas de pago, con «con recargo» en vez del porcentaje');
   ok(cuotas && cuotas.p === '¿Puedo pagar en cuotas?', '[4A] justo despues, la pregunta nueva «¿Puedo pagar en cuotas?»', cuotas && cuotas.p);
   if(cuotas){
-    ok(cuotas.lista.length === CUOTAS.length && cuotas.lista.every((t, k) => t === `${nombreCuotas(CUOTAS[k].cuotas)}: +${pctCuotas(CUOTAS[k].recargo)}`),
-       '[4A] con un renglon por plan, sacado de CUOTAS', cuotas.lista.join(' · '));
+    ok(!cuotas.lista && /más un recargo que depende del plan\./.test(cuotas.r[1]) && /ves cuánto es cada cuota\.$/.test(cuotas.r[1]),
+       '[4A] dice que hay un recargo segun el plan, sin la lista de porcentajes', cuotas.r[1]);
     const ns = CUOTAS.filter(c => c.cuotas > 1).map(c => c.cuotas);
     ok(cuotas.r[0].startsWith(`Sí, en ${ns.slice(0, -1).join(', ')} o ${ns[ns.length - 1]} cuotas, con cualquier tarjeta bancarizada vinculada a tu cuenta de Mercado Pago.`) &&
        /Vale para todos los productos\.$/.test(cuotas.r[0]) && /en pesos, con el dólar del día/.test(cuotas.r[1]),
@@ -292,7 +295,7 @@ async function probarElPedido(){
     const e = TC ? cuEsperado(totalPedido(), c) : null;
     const renglon = e ? `Lo pago con tarjeta en ${c.cuotas} cuotas: aprox. $ ${cuPlata(e.cuota)} c/u (total aprox. $ ${cuPlata(e.total)}).`
                       : `Lo pago con tarjeta en ${c.cuotas} cuotas.`;
-    if(e) ok(cuTxt(b2.querySelector('.pd-ayuda')) === `${c.cuotas} cuotas de $ ${cuPlata(e.cuota)} · total $ ${cuPlata(e.total)} (+${pctCuotas(c.recargo)})`,
+    if(e) ok(cuTxt(b2.querySelector('.pd-ayuda')) === `${c.cuotas} cuotas de $ ${cuPlata(e.cuota)} · total $ ${cuPlata(e.total)}`,
              '[3C] la ayuda dice la cuota y el total del pedido', cuTxt(b2.querySelector('.pd-ayuda')));
     const partes = mensajePedido().split('\n\n');
     ok(partes[partes.length - 1] === renglon, '[3C] el mensaje suma el plan, con los montos, al final', partes[partes.length - 1]);

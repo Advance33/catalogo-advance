@@ -138,13 +138,13 @@ async function correrPruebas(){
   const correrPy = await paLeer('pruebas/correr.py');
   const fc = await paLeer('herramientas/fallas-conocidas.py');
   const pub = await paLeer('PUBLICAR.command');
-  const bat = await paLeer('PUBLICAR.bat');
   const probar = await paLeer('PROBAR.command');
   const rev = await paLeer('revision-diaria.py');
   const gi = await paLeer('.gitignore');
-  ok(!!correrPy && !!fc && !!pub && !!bat && !!probar && !!rev && gi !== null,
+  // Sin PUBLICAR.bat desde el 04/10/2026: la PC se retiro el 25/09
+  ok(!!correrPy && !!fc && !!pub && !!probar && !!rev && gi !== null,
      'se leen correr.py, fallas-conocidas.py, PUBLICAR, PROBAR, la revision y el .gitignore');
-  if(!correrPy || !fc || !pub || !bat || !probar || !rev || gi === null) return;
+  if(!correrPy || !fc || !pub || !probar || !rev || gi === null) return;
 
   /* ---- 7.1 C: el resumen en tres grupos ---- */
   ok(/spec_from_file_location\('fallas_conocidas'/.test(correrPy) && /fc\.clasificar\(/.test(correrPy)
@@ -191,9 +191,6 @@ async function correrPruebas(){
      'con nuevas dice cuantas y pregunta "Publicar igual?"');
   ok(!!rama3 && rama3.includes('Las pruebas no frenan: lo que falla ya esta pedido.') && !rama3.includes('preguntar'),
      'con solo conocidas lo recuerda y NO pregunta: sigue a "Publicar estos cambios?"');
-  const bat3 = paTramo(bat, '\n:pruebas_conocidas', ['\n:fallan_pruebas']);
-  ok(bat.includes('if "%PRUEBAS%"=="3" goto :pruebas_conocidas') && !!bat3 && !/choice/.test(bat3),
-     'PUBLICAR.bat hace lo mismo (sin el numero: Windows no tiene tee)');
   ok(/"\$RESULTADO" = "3"/.test(probar) && probar.includes('NADA NUEVO') && probar.includes('HAY FALLAS NUEVAS'),
      'PROBAR.command distingue NADA NUEVO de HAY FALLAS NUEVAS');
 

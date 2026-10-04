@@ -133,9 +133,9 @@ async function correrPruebas(){
   }
 
   /* ---- 3. PUBLICAR: lo que quedo sin subir se sube (159) ---- */
+  // Sin los .bat desde el 04/10/2026: la PC se retiro el 25/09
   const pub = await leer('PUBLICAR.command');
-  const bat = await leer('PUBLICAR.bat');
-  ok(pub !== null && bat !== null, 'se pueden leer PUBLICAR.command y PUBLICAR.bat');
+  ok(pub !== null, 'se puede leer PUBLICAR.command');
   if(pub){
     ok(/rev-list --count origin\/main\.\.main/.test(pub) &&
        /\[ "\$CANT" = "0" \] && \[ "\$PEND" = "0" \]/.test(pub),
@@ -145,16 +145,11 @@ async function correrPruebas(){
     ok(/--ignore-cr-at-eol/.test(pub),
        'y avisa cuando un archivo cambio todos sus finales de linea (170)');
   }
-  if(bat){
-    ok(/rev-list --count origin\/main\.\.main/.test(bat) && /:rechazado/.test(bat),
-       'PUBLICAR.bat hace lo mismo');
-  }
 
   /* ---- 4. Los textos ya no mandan a la planilla (172) ---- */
   const revisar = await leer('REVISAR CATALOGO.command');
   const viejos = [];
-  for(const [nombre, txt] of [['PUBLICAR.command', pub], ['PUBLICAR.bat', bat],
-                              ['REVISAR CATALOGO.command', revisar]]){
+  for(const [nombre, txt] of [['PUBLICAR.command', pub], ['REVISAR CATALOGO.command', revisar]]){
     if(txt === null) continue;
     const sinComentarios = txt.split('\n').filter(l => !/^\s*(#|rem\b)/i.test(l)).join('\n');
     for(const frase of ['equipo del sheet', 'Revisando la planilla', 'hoja Landing', 'lee la planilla en vivo'])

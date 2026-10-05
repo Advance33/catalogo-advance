@@ -72,7 +72,9 @@ function cargarScriptVP(src){
 const vpPalabras = t => String(t || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
 const vpDiceElColor = (texto, color) => { const hay = new Set(vpPalabras(texto)); const c = vpPalabras(color); return c.length > 0 && c.every(w => hay.has(w)); };
 const ejemplos = (lista, n = 3) => lista.length ? lista.slice(0, n).join(' | ') + (lista.length > n ? ' ...' : '') : undefined;
-const conPrecio = t => /\bUSD\b|\$\s?\d|\d\s?(?:dólares|dolares)\b/i.test(t || '');
+// Un precio es "USD" o "$" con un numero (05/10/2026): el "USD" suelto de los
+// Tamron ("SP 24-70mm F/2.8 Di VC USD G2") es el motor del lente, no un precio.
+const conPrecio = t => /\bUSD\s?\d|\$\s?\d|\d\s?(?:dólares|dolares)\b/i.test(t || '');
 
 async function correrPruebas(){
   await cargarScriptVP('herramientas/vista-previa.js');

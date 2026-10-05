@@ -46,9 +46,11 @@ es algo de como Safari arma las capas de la pagina entera, y no se pudo aislar
 desde la Mac. Con el fondo ya transparente en el archivo no hay nada que
 mezclar, y se ve igual en cualquier navegador.
 
-Como se saca el fondo: "de color a transparencia" desde el blanco. Lo que esta
-a UMBRAL_FONDO o menos del blanco puro (de 245 para arriba) queda
-transparente del todo; lo demas, tanto mas opaco cuanto mas lejos del blanco.
+Como se saca el fondo: "de color a transparencia" desde el color del fondo,
+que se mira en el borde de cada foto (color_del_fondo: el blanco, o un gris
+claro parejo como el de las Ray-Ban). Lo que esta a UMBRAL_FONDO o menos de
+ese color queda transparente del todo; lo demas, tanto mas opaco cuanto mas
+lejos.
 Es lo mismo que hacia multiply: un producto blanco (AirPods, Pencil, la Xbox
 Series S) conserva sus sombras y contornos y deja ver el lila en lo blanco.
 Los .jpg siguen siendo los originales: los usan WhatsApp (p/), Pancho y
@@ -113,22 +115,44 @@ def una(origen, destino):
     im.save(destino, 'JPEG', quality=CALIDAD, optimize=True, progressive=True)
 
 
+def color_del_fondo(im):
+    """El color del fondo de la toma, mirando el borde. Casi todas (657 de 728
+    el 05/10) son blanco puro, pero algunas vienen sobre un gris claro parejo
+    (las Ray-Ban Meta, 242): con el blanco fijo les quedaba un recuadro gris.
+    Si el borde es de un color CLARO y parejo (6 de cada 10 puntos a 12 o menos
+    de la mediana) se borra ese color; si no (fondo oscuro, una escena, el
+    producto tocando el borde), el blanco, como siempre. Un fondo oscuro no se
+    toca: sacarlo se comeria las partes negras del producto."""
+    w, h = im.size
+    puntos = [im.getpixel((x, y)) for x in range(2, w - 2, 3) for y in (2, h - 3)]
+    puntos += [im.getpixel((x, y)) for y in range(2, h - 2, 3) for x in (2, w - 3)]
+    mediana = tuple(sorted(p[i] for p in puntos)[len(puntos) // 2] for i in range(3))
+    parejos = sum(1 for p in puntos if max(abs(p[i] - mediana[i]) for i in range(3)) <= 12)
+    if parejos < len(puntos) * 0.6 or min(mediana) < 200 or min(mediana) >= 250:
+        return (255, 255, 255)
+    return mediana
+
+
 def sin_fondo(im):
-    """La foto con el blanco del fondo hecho transparencia (RGBA). Todo con
+    """La foto con el color del fondo hecho transparencia (RGBA). Todo con
     operaciones de Pillow, sin recorrer pixel por pixel: 0,1 s por foto."""
     from PIL import Image, ImageChops, ImageMath
     if im.mode != 'RGB':
         im = im.convert('RGB')
+    fondo = color_del_fondo(im)
     r, g, b = im.split()
-    # Que tan lejos del blanco esta cada pixel: lo dice su canal mas oscuro
-    minimo = ImageChops.darker(ImageChops.darker(r, g), b)
-    alfa = minimo.point(lambda v: 0 if 255 - v <= UMBRAL_FONDO
-                        else min(255, round((255 - v - UMBRAL_FONDO) * 255 / (255 - UMBRAL_FONDO))))
-    # El color que, puesto con ese alfa sobre blanco, da el pixel original
+    # Que tan lejos del fondo esta cada pixel, hacia lo oscuro, de 0 a 255: lo
+    # dice el canal que mas se aleja. Con el fondo blanco es 255 menos el
+    # canal mas oscuro. Lo mas claro que el fondo (un brillo) cuenta como fondo.
+    lejos = [c.point(lambda v, f=f: round(max(0, f - v) * 255 / f)) for c, f in zip((r, g, b), fondo)]
+    maximo = ImageChops.lighter(ImageChops.lighter(lejos[0], lejos[1]), lejos[2])
+    alfa = maximo.point(lambda v: 0 if v <= UMBRAL_FONDO
+                        else min(255, round((v - UMBRAL_FONDO) * 255 / (255 - UMBRAL_FONDO))))
+    # El color que, puesto con ese alfa sobre el fondo, da el pixel original
     canales = [ImageMath.lambda_eval(
-        lambda e: e['convert'](e['max'](e['min'](
-            255 - (255 - e['float'](e['c'])) * 255 / e['max'](e['float'](e['a']), 1), 255), 0), 'L'),
-        c=c, a=alfa) for c in (r, g, b)]
+        lambda e, f=f: e['convert'](e['max'](e['min'](
+            f - (f - e['float'](e['c'])) * 255 / e['max'](e['float'](e['a']), 1), 255), 0), 'L'),
+        c=c, a=alfa) for c, f in zip((r, g, b), fondo)]
     return Image.merge('RGBA', canales + [alfa])
 
 

@@ -768,7 +768,10 @@
     .nv-barra{left:20px;right:20px;bottom:18px}
     .nv-siguen{grid-template-columns:minmax(0,1fr)}
     .nv-chico{grid-template-columns:minmax(0,1fr) 110px;min-height:0;padding:18px}
-    .nv-chico .nv-foto{min-height:120px}
+    /* La columna de la foto, del alto de la foto y arriba (05/10/2026, Benja):
+       estirada hasta el pie de la tarjeta, la sombra del piso quedaba abajo
+       de todo, lejos del producto, y se veía como una mancha gris. */
+    .nv-chico .nv-foto{min-height:0;height:130px;align-self:start}
   }
 
   /* ---------- Marcas: se turnan solas ----------

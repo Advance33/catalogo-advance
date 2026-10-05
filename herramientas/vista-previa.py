@@ -760,7 +760,7 @@ def probar():
         ok(imagen_para('https://lh3.googleusercontent.com/d/x', tmp)[3] is False,
            'la foto de ADVAPP no cuenta como propia')
 
-        pub = 'https://advance33.github.io/catalogo-advance/'
+        pub = 'https://catalogo.advancetecno.com.ar/'
         caso = {'id': 'CEL-APP-068', 'destino': 'CEL-APP-068', 'titulo': 'Apple iPhone 17 Pro',
                 'linea': '256GB · E-Sim · Orange', 'foto': 'fotos/AT-0072-03.jpg'}
         h = armar_pagina(caso, pub, tmp)

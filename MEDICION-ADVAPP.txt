@@ -18,7 +18,7 @@ no hay cookies ni cartel de consentimiento.
    POST https://advapp-blond.vercel.app/api/eventos      (nombre a confirmar)
 
    Cabeceras de respuesta:
-     Access-Control-Allow-Origin: https://advance33.github.io
+     Access-Control-Allow-Origin: https://catalogo.advancetecno.com.ar
      (para probar en local, también http://localhost:8765)
 
    Respuesta: 204 sin cuerpo. La web no la lee ni reintenta: si falla, se

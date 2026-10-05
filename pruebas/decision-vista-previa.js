@@ -274,7 +274,10 @@ async function correrPruebas(){
     const casos = [['/catalogo-advance/p/CEL-APP-068.html', '/catalogo-advance/#p=CEL-APP-068'],
                    ['/catalogo-advance/p/CEL-APP-068', '/catalogo-advance/#p=CEL-APP-068'],
                    ['/catalogo-advance/p/indice.json', ''], ['/catalogo-advance/otra.html', ''],
-                   ['/catalogo-advance/', ''], ['/catalogo-advance/p/../index.html', '']];
+                   ['/catalogo-advance/', ''], ['/catalogo-advance/p/../index.html', ''],
+                   // Con el dominio propio (05/10) el catalogo esta en la raiz
+                   ['/p/CEL-APP-068.html', '/#p=CEL-APP-068'], ['/p/CEL-APP-068', '/#p=CEL-APP-068'],
+                   ['/p/indice.json', ''], ['/', ''], ['//otro-sitio.com/p/X.html', '']];
     const malos = casos.filter(([r, esperado]) => destinoDe(r) !== esperado).map(([r]) => r + ' -> ' + destinoDe(r));
     ok(!malos.length, '404.html manda un p/<ID>.html borrado a su #p= y no toca otras direcciones', ejemplos(malos) || casos.length + ' casos');
     ok(/noindex/.test(n404), 'y pide noindex');

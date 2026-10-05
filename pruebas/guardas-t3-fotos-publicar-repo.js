@@ -192,17 +192,22 @@ async function correrPruebas(){
      !/ThreadingTCPServer\(\('', PUERTO\)/.test(srv),
      'servidor.py escucha en 127.0.0.1 y no en toda la red');
 
-  /* ---- 7. El noindex es el que manda, y el robots.txt no lo tapa (143) ----
-     Desde el 05/10 el catalogo esta en la raiz de su dominio
-     (catalogo.advancetecno.com.ar) y los buscadores SI leen este robots.txt:
-     un "Disallow: /" les impediria bajar el HTML y ver el noindex. Cuando el
-     catalogo salga al publico se borra el meta, y con el esta comprobacion. */
+  /* ---- 7. El catalogo sale a Google (Benja, 05/10/2026) ----
+     Hasta el 05/10 pedia noindex (uso interno). Ahora la portada se puede
+     indexar, el robots.txt no bloquea nada y dice donde esta la lista de
+     paginas (sitemap.xml, con las de cada modelo). Un "Disallow: /" dejaria
+     al catalogo afuera de Google entero. */
   const meta = document.querySelector('meta[name="robots"]');
-  ok(meta && /noindex/.test(meta.content),
-     'el catalogo sigue pidiendo noindex (uso interno por ahora)', meta ? meta.content : 'sin meta');
+  ok(!meta || !/noindex/.test(meta.content),
+     'el catalogo ya no pide noindex: sale a Google', meta ? meta.content : 'sin meta');
   const robots = await leer('robots.txt');
-  ok(robots === null || !/^\s*Disallow:\s*\/\s*$/mi.test(robots),
-     'robots.txt no bloquea todo: si se leyera, taparia el noindex');
+  ok(robots !== null && !/^\s*Disallow:\s*\/\s*$/mi.test(robots),
+     'robots.txt no bloquea nada');
+  ok(robots !== null && /^Sitemap:\s*https:\/\/\S+\/sitemap\.xml\s*$/mi.test(robots),
+     'y dice donde esta la lista de paginas (sitemap.xml)');
+  const sitemap = await leer('sitemap.xml');
+  ok(sitemap !== null && (sitemap.match(/<loc>[^<]*\/producto\/[^<]+<\/loc>/g) || []).length > 50,
+     'el sitemap lista las paginas de producto', sitemap === null ? 'no esta' : (sitemap.match(/\/producto\//g) || []).length + ' paginas');
 
   /* ---- 8. El LEEME de pruebas nombra todas las tandas (188) ----
      Describia 9 de 29 tandas y mandaba a PROBAR.bat. La lista de archivos

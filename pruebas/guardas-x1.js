@@ -278,7 +278,10 @@ function comentarios(src){
   ok(/hallazgo 145/.test(src) && /P-04/.test(src), '[145] y dice por que casi nunca llega y que se le pidio a ADVAPP');
   ok(!/y tambi[eé]n el robots\.txt que est[aá] al lado del index/.test(src),
      '[143] el comentario del noindex ya no manda a borrar tambien el robots.txt');
-  ok(/lo [ÚU]NICO que lo evita/.test(src), '[143] y dice que el meta noindex es lo unico que sirve');
+  // Desde el 05/10/2026 el catalogo sale a Google: el comentario dice eso, y
+  // que las vistas previas de WhatsApp siguen con su noindex
+  ok(/sale a los buscadores/.test(src) && /p\/\) y\s+la página de error siguen con noindex/.test(src),
+     '[143] y dice que el catalogo sale a Google y que p/ sigue con noindex');
 }
 
 /* ---- [188] Textos de las pruebas ---- */

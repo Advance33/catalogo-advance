@@ -30,15 +30,12 @@
      parpadea al bajar, la opción B es dejar fijo el lila #F4EFFD. -->
 <meta name="theme-color" content="#151220">
 
-<!-- Mientras el catálogo sea de uso interno: le pide a Google y demás buscadores
-     que NO lo indexen. El link sigue andando para cualquiera que lo tenga, pero
-     no aparece en las búsquedas. Esta línea es lo ÚNICO que lo evita (29/09).
-     Desde el 05/10 el catálogo está en la raíz de su dominio
-     (catalogo.advancetecno.com.ar) y el robots.txt ahora sí se lee, pero no
-     bloquea nada a propósito. Y no hay que sumarle un "Disallow": el buscador bloqueado no baja esta página,
-     no llega a ver esta línea y puede listar la dirección igual si alguien la
-     enlaza. Cuando salga al público, alcanza con borrar esta línea. -->
-<meta name="robots" content="noindex, nofollow">
+<!-- Para Google (Benja, 05/10/2026): el catálogo sale a los buscadores. Hasta
+     ese día pedía noindex, por ser de uso interno; ya no. Lo que encuentra Google
+     son las páginas de cada modelo (producto/<nombre>/, las arma
+     herramientas/paginas-producto.py) y esta portada; la lista está en
+     sitemap.xml, que dice el robots.txt. Las vistas previas de WhatsApp (p/) y
+     la página de error siguen con noindex: son copias, no páginas para buscar. -->
 
 <!-- Cómo se ve el link cuando lo mandás por WhatsApp, Instagram o Facebook.
      ⚠️ Esto solo funciona con el catálogo publicado en una dirección de internet:

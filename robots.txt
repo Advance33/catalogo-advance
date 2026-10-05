@@ -1,16 +1,14 @@
 # catalogo.advancetecno.com.ar/robots.txt
 #
-# Desde el 05/10 el catálogo vive en su propio dominio y este archivo está en
-# la raíz: ahora los buscadores SÍ lo leen. Por eso no bloquea nada. Un
-# buscador bloqueado no baja el HTML, no llega a ver el
-# <meta name="robots" content="noindex, nofollow"> de index.html (lo único que
-# evita la indexación mientras el catálogo sea de uso interno) y puede listar
-# la dirección igual si alguien la enlaza.
+# Desde el 05/10/2026 el catálogo sale a Google (Benja). No se bloquea nada:
+# la portada, las páginas de cada modelo (producto/<nombre>/) y las fotos se
+# pueden leer. Las vistas previas de WhatsApp (p/) y la página de error piden
+# noindex en su propio HTML: un buscador tiene que poder bajarlas para verlo,
+# por eso no van con Disallow.
 #
-# Para que las fotos y los .txt no aparezcan, hay que sacarlos de lo que se
-# publica, no bloquearlos acá.
-#
-# Cuando el catálogo salga al público: se borra ese meta noindex y acá se suma
-# la línea "Sitemap:".
+# La lista de páginas para Google es sitemap.xml (la arma
+# herramientas/paginas-producto.py en cada PUBLICAR).
 User-agent: *
 Disallow:
+
+Sitemap: https://catalogo.advancetecno.com.ar/sitemap.xml

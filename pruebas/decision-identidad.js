@@ -184,7 +184,7 @@ async function probarIcono(){
     const quiere = ['icon 32x32 ' + base + 'icono-32.png', 'icon 16x16 ' + base + 'icono-16.png', 'icon 192x192 ' + base + 'icono-192.png', 'apple-touch-icon  ' + base + 'icono-180.png'];
     return { t, bien: !!t && quiere.every(q => hs.includes(q)) && !/logo-mark/.test(hs.join(' ')), hs };
   };
-  const e404 = await iconosDe('404.html', 'https://advance33.github.io/catalogo-advance/assets/');
+  const e404 = await iconosDe('404.html', 'https://catalogo.advancetecno.com.ar/assets/');
   ok(e404.bien, '[6.1] 404.html lleva los cuatro iconos nuevos (con la direccion entera)', e404.hs.join(' | ') || 'sin iconos');
   let idsP = [];
   try{ idsP = (await (await fetch('p/indice.json', { cache: 'no-store' })).json()).ids || []; }catch(e){}

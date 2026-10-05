@@ -270,7 +270,7 @@ PEND=$(git rev-list --count origin/main..main 2>/dev/null || echo 0)
 if [ "$CANT" = "0" ] && [ "$PEND" = "0" ]; then
   echo "   El sitio ya esta al dia. No hay nada nuevo para publicar."
   echo
-  echo "   https://advance33.github.io/catalogo-advance/"
+  echo "   https://catalogo.advancetecno.com.ar/"
   pausa; exit 0
 fi
 
@@ -342,7 +342,7 @@ if [ "$CANT" = "0" ]; then
   echo "     pendientes."
   echo
   echo "     En 1 o 2 minutos se ve en:"
-  echo "     https://advance33.github.io/catalogo-advance/"
+  echo "     https://catalogo.advancetecno.com.ar/"
   echo "   ============================================================"
   pausa
   exit 0
@@ -393,7 +393,7 @@ if [ "$PEND" != "0" ]; then
 fi
 echo
 echo "     En 1 o 2 minutos se ve en:"
-echo "     https://advance33.github.io/catalogo-advance/"
+echo "     https://catalogo.advancetecno.com.ar/"
 echo
 echo "     Si lo abris y no ves el cambio, recarga con Cmd+Shift+R:"
 echo "     el navegador guarda las fotos viejas."

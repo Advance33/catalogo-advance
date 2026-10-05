@@ -32,10 +32,10 @@
 
 <!-- Mientras el catálogo sea de uso interno: le pide a Google y demás buscadores
      que NO lo indexen. El link sigue andando para cualquiera que lo tenga, pero
-     no aparece en las búsquedas. Esta línea es lo ÚNICO que lo evita (29/09):
-     el robots.txt que está al lado del index no hace nada, porque los
-     buscadores solo leen el de la raíz del dominio. Y no hay que sumarle un
-     "Disallow" en ningún robots.txt: el buscador bloqueado no baja esta página,
+     no aparece en las búsquedas. Esta línea es lo ÚNICO que lo evita (29/09).
+     Desde el 05/10 el catálogo está en la raíz de su dominio
+     (catalogo.advancetecno.com.ar) y el robots.txt ahora sí se lee, pero no
+     bloquea nada a propósito. Y no hay que sumarle un "Disallow": el buscador bloqueado no baja esta página,
      no llega a ver esta línea y puede listar la dirección igual si alguien la
      enlaza. Cuando salga al público, alcanza con borrar esta línea. -->
 <meta name="robots" content="noindex, nofollow">
@@ -49,15 +49,15 @@
 <meta property="og:locale" content="es_AR">
 <meta property="og:title" content="Catálogo Advance Tecno — Los precios de hoy">
 <meta property="og:description" content="Sin listas viejas: se rehace todos los días con la planilla. Tocá un producto y el WhatsApp se abre con el modelo y el color ya escritos.">
-<meta property="og:image" content="https://advance33.github.io/catalogo-advance/assets/preview.png">          <!-- ← direccion publica del catalogo en GitHub Pages -->
-<meta property="og:url" content="https://advance33.github.io/catalogo-advance/">                            <!-- ← direccion publica del catalogo en GitHub Pages -->
+<meta property="og:image" content="https://catalogo.advancetecno.com.ar/assets/preview.png">          <!-- ← direccion publica del catalogo (dominio propio desde el 05/10) -->
+<meta property="og:url" content="https://catalogo.advancetecno.com.ar/">                            <!-- ← direccion publica del catalogo (dominio propio desde el 05/10) -->
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Catálogo Advance Tecno: stock y precios en tiempo real">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Catálogo Advance Tecno — Los precios de hoy">
 <meta name="twitter:description" content="Sin listas viejas: se rehace todos los días con la planilla.">
-<meta name="twitter:image" content="https://advance33.github.io/catalogo-advance/assets/preview.png">         <!-- ← direccion publica del catalogo en GitHub Pages -->
+<meta name="twitter:image" content="https://catalogo.advancetecno.com.ar/assets/preview.png">         <!-- ← direccion publica del catalogo (dominio propio desde el 05/10) -->
 
 <!-- Los dos pedidos que frenan la primera pantalla salen recién al final del
      script, cuando ya se leyó todo el HTML. Con esto la conexión (DNS, TLS) se
@@ -3262,7 +3262,7 @@ const WHATSAPP = '5491122620770';   // +54 9 11 2262-0770
 // Compartir de la ficha manda SIEMPRE esta, aunque se abra el catálogo desde
 // la compu local (29/09, muestra 4.1). Es la misma de las etiquetas og: de
 // arriba.
-const URL_PUBLICA = 'https://advance33.github.io/catalogo-advance/';   // ← direccion publica del catalogo en GitHub Pages
+const URL_PUBLICA = 'https://catalogo.advancetecno.com.ar/';   // ← direccion publica del catalogo (dominio propio desde el 05/10)
 
 // ---------- PRECIOS EN PESOS ----------
 //
@@ -3575,7 +3575,7 @@ const CFG_KEY = 'advtecno.cotizacion';
    algo se quedaba con otra cotización en su navegador y en el mensaje del
    pedido. Ahora está escondido y se prende en el dispositivo de Pedro
    abriendo UNA vez el catálogo con ?config al final de la dirección
-   (…/catalogo-advance/?config): queda anotado en ese navegador. Con ?config=0
+   (…/?config): queda anotado en ese navegador. Con ?config=0
    se vuelve a apagar. No se usan los 7 clics del logo: ya son el easter egg.
    Sin el modo encendido la cotización guardada no se aplica: el cliente que
    la tocó cuando el botón estaba a la vista no tendría cómo volver atrás. */

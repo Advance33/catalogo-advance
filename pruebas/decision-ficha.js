@@ -8,7 +8,7 @@
 //          copia y avisa "Link copiado". En el celular va pegado arriba con
 //          la X (2.8 B)
 //   4.2 B  (la parte de la web) el link es la pagina de vista previa de la
-//          fila, https://advance33.github.io/catalogo-advance/p/<ID>.html, si
+//          fila, https://catalogo.advancetecno.com.ar/p/<ID>.html, si
 //          p/indice.json la nombra (se lee una vez, con tope de tiempo); si
 //          no, el #p=<ID> de siempre
 //   4.3 C  "Ver las N versiones": la lista de todas las filas, partida por
@@ -241,7 +241,7 @@ async function probarCompartirEnLaCompu(){
      && rb.width > 0 && rb.bottom <= innerHeight && Number(getComputedStyle(b).zIndex) > Number(getComputedStyle(d).zIndex),
      '[4.1] y avisa "Link copiado" a la vista, encima de la ficha', b && (dfTxt(b) + ' z' + getComputedStyle(b).zIndex));
   const [nombre = '', link = ''] = String(dfCopiado || '').split('\n');
-  ok(link.startsWith('https://advance33.github.io/catalogo-advance/') && !/localhost|127\.0\.0\.1|file:/.test(dfCopiado || ''),
+  ok(link.startsWith('https://catalogo.advancetecno.com.ar/') && !/localhost|127\.0\.0\.1|file:/.test(dfCopiado || ''),
      '[4.1] el link es siempre el publico, aunque se abra desde la compu local', link);
   ok(!/USD|\$|\d\.\d{3}/.test(nombre), '[4.1] sin precio', nombre);
   const partes = partesMensaje(p, COLOR_FICHA);

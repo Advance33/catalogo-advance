@@ -193,9 +193,9 @@ async function correrPruebas(){
      'servidor.py escucha en 127.0.0.1 y no en toda la red');
 
   /* ---- 7. El noindex es el que manda, y el robots.txt no lo tapa (143) ----
-     Los buscadores solo leen el robots.txt de la raiz del dominio, asi que el
-     de /catalogo-advance/ no hace nada. Y si algun dia hiciera algo, un
-     "Disallow: /" les impediria bajar el HTML y ver el noindex. Cuando el
+     Desde el 05/10 el catalogo esta en la raiz de su dominio
+     (catalogo.advancetecno.com.ar) y los buscadores SI leen este robots.txt:
+     un "Disallow: /" les impediria bajar el HTML y ver el noindex. Cuando el
      catalogo salga al publico se borra el meta, y con el esta comprobacion. */
   const meta = document.querySelector('meta[name="robots"]');
   ok(meta && /noindex/.test(meta.content),

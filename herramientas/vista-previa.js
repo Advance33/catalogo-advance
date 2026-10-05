@@ -100,10 +100,12 @@ function vpLinea(m, v, titulo){
   if(v.sim && !diceSim(titulo + ' ' + partes.join(' '))) partes.push(v.sim);
   const color = colorPorDefecto(v) || String(v.color || '').trim();
   if(color) partes.push(color);
-  // Sin repetir lo que dice el titulo ni lo que ya se dijo, sin precio y sin ID
+  // Sin repetir lo que dice el titulo ni lo que ya se dijo, sin precio y sin ID.
+  // Un precio es "USD" con un numero al lado (05/10/2026): el "USD" suelto de
+  // los Tamron ("SP 24-70mm F/2.8 Di VC USD G2") es el motor del lente.
   const out = [];
   for(const p of partes.map(x => String(x || '').replace(/\s{2,}/g, ' ').trim())){
-    if(!p || /\bUSD\b|\$/.test(p) || (v.id && norm(p).includes(norm(v.id)))) continue;
+    if(!p || /\bUSD\s?\d|\$/.test(p) || (v.id && norm(p).includes(norm(v.id)))) continue;
     if(vpYaDicho([titulo, ...out].join(' · '), p)) continue;
     out.push(p);
   }

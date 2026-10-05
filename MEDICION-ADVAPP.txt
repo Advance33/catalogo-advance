@@ -97,8 +97,9 @@ no hay cookies ni cartel de consentimiento.
                     (05/10): con el producto si se abrió desde una ficha.
                     Con desde="usado" o "pedido" puede venir usado: el
                     modelo cotizado tal como está en datos/usados.json
-                    ("iphone-13", "ps4-pro"); nunca el valor ni lo que
-                    marcó del estado.
+                    ("iphone-13", "ps4-pro"), u "otro" si eligió "Otro
+                    equipo" (05/10); nunca el valor ni lo que marcó del
+                    estado.
    pedilo          TOCÓ WHATSAPP desde "¿Buscás algo que no está?". q: lo que
                     escribió en ese casillero (hasta 60 caracteres, desde 3).
                     También es conversión, y es la lista de lo que vinieron a

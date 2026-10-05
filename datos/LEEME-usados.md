@@ -24,6 +24,11 @@ nada (Pedro eligió la G, 05/10).
    revisamos en persona").
 4. Si el usado vale más que lo que compra, la web dice **"Te queda a favor
    USD X"** y se coordina por WhatsApp.
+5. **Lo que Pedro toma pero todavía no tiene lista** (05/10: "lo de Apple,
+   Samsung o MacBook") va en `USADOS_OTROS` de `index.html`: el cotizador
+   ofrece **"Otro equipo"**, sin valor, que lleva a mandar los detalles por
+   WhatsApp, y la pregunta frecuente lo nombra. Cuando llegue la lista de
+   alguno, se carga acá como un equipo más y se saca de `USADOS_OTROS`.
 
 ## Cómo lo usa la web
 

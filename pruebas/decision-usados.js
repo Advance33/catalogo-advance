@@ -147,7 +147,9 @@ async function probarLaPregunta(){
   if(!r){ info('[FAQ] la ayuda no esta a la vista: no se probo el boton'); return; }
   const n = USADOS.map(e => e.nombre);
   const lista = n.length > 1 ? n.slice(0, -1).join(', ') + ' y ' + n[n.length - 1] : n[0];
-  ok(uzTxt(r).includes('Hoy tomamos ' + lista + '.'), '[FAQ] dice los equipos que se toman, de la lista', uzTxt(r.querySelector('.ay-usados p')));
+  ok(uzTxt(r).includes('Hoy el cotizador tiene ' + lista + '.'), '[FAQ] dice los equipos del cotizador, de la lista', uzTxt(r.querySelector('.ay-usados p')));
+  ok(!USADOS_OTROS || uzTxt(r).includes('También tomamos ' + USADOS_OTROS + ': elegí «Otro equipo»'),
+     '[FAQ] y los que se toman sin lista todavia (Apple, Samsung, MacBook: Pedro, 05/10), por «Otro equipo»', USADOS_OTROS);
   const b = r.querySelector('.ay-cotizar');
   ok(b && uzTxt(b) === 'Cotizar mi usado' && b.tagName === 'BUTTON', '[FAQ] con el boton «Cotizar mi usado»');
   if(!b) return;
@@ -155,6 +157,24 @@ async function probarLaPregunta(){
   b.click();
   await uzDormir(40);
   ok(!!uzCot() && !FICHA && uzPreg() === '¿Qué equipo entregás?', '[FAQ] abre el cotizador sin producto, en el primer paso');
+  // "Otro equipo": sin valor, los detalles por WhatsApp, y no se guarda nada
+  const fuera = uzCot().querySelector('.us-op[data-fuera]');
+  ok(!USADOS_OTROS || (fuera && uzTxt(fuera.querySelector('b')) === 'Otro equipo' && uzTxt(fuera.querySelector('small')) === USADOS_OTROS),
+     '[otro] el primer paso ofrece «Otro equipo» con lo que se toma sin lista');
+  if(fuera){
+    fuera.click();
+    await uzDormir(30);
+    const af = uzCot().querySelector('.botones a.pri'), mf = af ? uzWA(af) : '';
+    ok(uzPreg() === 'Otro equipo' && /Mandanos los detalles/.test(uzTxt(uzCot().querySelector('.us-res'))) && !/USD/.test(uzTxt(uzCot().querySelector('.caja'))) &&
+       af && uzTxt(af) === 'Enviar los detalles por WhatsApp',
+       '[otro] «Mandanos los detalles», sin numero, con «Enviar los detalles por WhatsApp»');
+    ok(mf === 'Hola! Quiero entregar mi usado como parte de pago.\n\nEs un equipo que no está en el cotizador. Te paso los detalles:',
+       '[otro] el mensaje dice que no esta en el cotizador y termina en «Te paso los detalles:»', mf.replace(/\n/g, ' / '));
+    ok(USADO === null && !localStorage.getItem(USADO_KEY), '[otro] no se guarda como cotizacion');
+    uzTocar('.us-atras');
+    await uzDormir(20);
+    ok(uzPreg() === '¿Qué equipo entregás?', '[otro] «Atrás» vuelve al primer paso');
+  }
   await uzCotizar('iphone', 'iphone-13', '128GB', 'si', uzTodoSi('iphone'));
   const a = uzCot().querySelector('.botones a.pri'), m = a ? uzWA(a) : '';
   ok(a && uzTxt(a) === 'Coordinar por WhatsApp' && m.startsWith('Hola! Quiero entregar mi usado como parte de pago.') && !uzCot().querySelector('.us-cuenta'),

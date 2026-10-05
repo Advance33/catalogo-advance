@@ -485,6 +485,14 @@
     .mundo::before{display:none}
     .mundo,.mundo.sigue,.mundo-foto img,.mundo.sigue .mundo-foto img{transition:none}
   }
+  /* En el celular la foto que se ve flota apenas, todo el tiempo (05/10/2026,
+     Benja: "no tiene movimiento"). Va en el translate de la foto y no en su
+     caja, como la inclinación de la compu, que acá no corre. Cada tarjeta
+     arranca en otro momento del vaivén. */
+  @media (max-width:760px) and (prefers-reduced-motion: no-preference){
+    @keyframes mundoFlota{0%,100%{translate:0 0}50%{translate:0 -6px}}
+    .mundo-foto img.ve{animation:mundoFlota 4.2s ease-in-out infinite;animation-delay:calc(var(--i,0) * -.7s)}
+  }
 
   /* En el celular, una tarjeta debajo de la otra. Con menos de 760px las seis
      columnas dejan los botones de rubro sin lugar. */
@@ -940,13 +948,20 @@
     .pv-fila.entra > :nth-child(3){animation-delay:.12s}
     .pv-fila.entra > :nth-child(4){animation-delay:.18s}
   }
-  /* En el celular: pestañas arriba a lo ancho, vitrinas que se deslizan y el
-     botón de ver todo debajo, con el tramo escrito */
+  /* En el celular: los tramos arriba, vitrinas que se deslizan y el botón de
+     ver todo debajo, con el tramo escrito.
+     Los tramos van TODOS a la vista, en dos columnas, cada uno con su borde
+     (05/10/2026, Benja): en una sola fila que se deslizaba se veían tres y el
+     cuarto cortado, y no se entendía que había más presupuestos. */
   @media (max-width:640px){
     .pv{padding:16px 0 12px;gap:12px;border-radius:24px}
     .pv-cab{padding:0 16px;gap:10px}
     .pv-cab .pv-lab{flex-basis:100%}
-    .pv-tabs{flex-basis:calc(100% + 32px);margin:0 -16px;padding:2px 16px}
+    .pv-tabs{flex-basis:100%;margin:0;padding:0;overflow:visible;
+             display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+    .pv-tab{padding:11px 8px;text-align:center;
+            background:rgba(244,239,253,.05);box-shadow:inset 0 0 0 1px rgba(196,181,253,.18)}
+    .pv-tab[aria-pressed="true"]{box-shadow:inset 0 0 0 1px rgba(196,181,253,.55)}
     .pv-cab .pv-ver{display:none}
     .pv-fila{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:16px;scrollbar-width:none;gap:10px;padding:0 16px}
     .pv-fila::-webkit-scrollbar{display:none}
@@ -1039,6 +1054,20 @@
        de arriba, así que acá sobra. */
     .ay-lista .ay-r{padding:2px 12px 14px}
     .ay-lista .ay-r h3{display:none}
+    /* Cada pregunta con su respuesta, separadas (05/10/2026, Benja: "no
+       están claras o bien seccionadas"). Una línea entre preguntas, una
+       flechita que gira al abrir, y la abierta con su respuesta en un mismo
+       bloque: la respuesta arranca donde arranca el texto de la pregunta. */
+    .ay-p{border-radius:0;padding-right:36px;border-top:1px solid rgba(244,239,253,.08)}
+    .ay-p:first-child{border-top:0}
+    .ay-p::after{content:"";position:absolute;right:15px;top:50%;width:7px;height:7px;
+                 border:1.6px solid currentColor;border-left:0;border-top:0;opacity:.55;
+                 transform:translateY(-70%) rotate(45deg);transition:transform .2s ease}
+    .ay-p[aria-expanded="true"]{border-radius:12px 12px 0 0;border-top-color:transparent}
+    .ay-p[aria-expanded="true"]::after{transform:translateY(-25%) rotate(-135deg);opacity:.9}
+    .ay-lista .ay-r.ve{background:rgba(244,239,253,.08);border-radius:0 0 12px 12px;
+                       padding:2px 14px 16px 38px;margin-bottom:6px}
+    .ay-lista .ay-r.ve + .ay-p{border-top-color:transparent}
     .ay-pedilo{grid-template-columns:minmax(0,1fr)}
   }
 
@@ -2129,6 +2158,18 @@
   .acciones .mas[aria-pressed="true"]{background:var(--ok);color:#fff}
   /* Sin fotos cargadas no hay dónde apoyarlos: vuelven a la etiqueta */
   .pie .acciones{position:static;opacity:1;transform:none}
+  /* En el celular, debajo del precio (05/10/2026, ver sinMouse): "Agregar"
+     ancho y con su texto, como el de la ficha, y el WhatsApp redondo al lado.
+     Los 40 px de alto son para el dedo. */
+  .acciones.abajo{gap:8px}
+  .acciones.abajo .mas{flex:1;width:auto;height:40px;border-radius:999px;gap:7px;box-shadow:none;
+                       display:flex;align-items:center;justify-content:center;
+                       background:rgba(124,58,237,.13);color:var(--acento);border:1px solid rgba(124,58,237,.42)}
+  .acciones.abajo .mas .txt-add{display:inline}
+  .acciones.abajo .mas[aria-pressed="true"]{background:var(--ok-soft);color:var(--ok);border-color:var(--ok-borde)}
+  .acciones.abajo .mas[aria-pressed="true"] .txt-add{display:none}
+  .acciones.abajo .mas[aria-pressed="true"] .txt-ok{display:inline}
+  .acciones.abajo .wa{width:40px;height:40px}
   /* El que arma el pedido es el ancho y el único con texto: es la acción que
      deja vender varios productos en un solo mensaje, y como ícono suelto nadie
      entendía qué hacía. Los 44px son el mínimo para el dedo. */
@@ -3004,6 +3045,15 @@
     .of-dots button[aria-current="true"]{width:32px;background:none;border-radius:99px}
     .of-dots button[aria-current="true"]::before{width:24px;border-radius:99px;background:#F0D98C}
   }
+
+  /* Las fotos chicas vienen SIN FONDO desde el 05/10/2026 (ver fotoChica):
+     no hay blanco que borrar y la mezcla sobra. Sin ella, la foto se ve igual
+     en la compu que en el iPhone, que era donde la mezcla fallaba y quedaba
+     el cuadrado blanco. Las de respaldo de ADVAPP siguen con su multiply.
+     Con !important porque cada pieza pone su multiply con un selector
+     distinto (.fi-rel .pc-foto img pesa más que este) y acá tiene que ganar
+     siempre: una foto sin fondo nunca necesita la mezcla. */
+  img[src*="/mini/sinfondo/"]{mix-blend-mode:normal !important}
 </style>
 </head>
 <body>
@@ -3328,6 +3378,21 @@ const CARPETA_FOTOS = 'fotos/';
    chicas pesan 12 KB contra 64 KB. La grande queda para la ficha, que es
    donde el cliente mira el producto de cerca. */
 const CARPETA_MINIS = CARPETA_FOTOS + 'mini/';
+/* Y la chica va SIN FONDO (05/10/2026, Benja con su iPhone): la copia de
+   fotos/mini/sinfondo/AT-0065-02.webp, con el blanco del proveedor hecho
+   transparencia. Lo chico va sobre el lila (la grilla, los rubros, las
+   vitrinas, las novedades, lo mirado) y el fondo blanco se borraba con
+   mix-blend-mode:multiply: en la compu andaba, pero en el iPhone (Chrome de
+   iPhone es Safari por dentro) cada producto quedaba en un cuadrado blanco.
+   La mezcla sola en una página aparte andaba en su iPhone: es algo de cómo
+   Safari arma las capas de esta página, que desde la Mac no se pudo aislar.
+   Con el fondo ya transparente en el archivo no hay nada que mezclar y se ve
+   igual en todos lados (el multiply queda: sobre transparencia no cambia
+   nada). La arma herramientas/miniaturas.py junto con la chica, al publicar.
+   La grande sigue en .jpg: se ve en la ficha, de fondo casi blanco, y es la
+   que usan WhatsApp (p/), Pancho y fotos/indice.json. */
+const CARPETA_SIN_FONDO = CARPETA_MINIS + 'sinfondo/';
+const EXT_SIN_FONDO = '.webp';
 function fotoChica(u){
   if(!u) return u;
   // Las de Google (las de respaldo que manda ADVAPP) se piden chicas por
@@ -3335,7 +3400,11 @@ function fotoChica(u){
   if(/googleusercontent\.com/.test(u)) return u.replace(/=[-\w]+$/, '') + '=w400';
   const i = u.lastIndexOf(CARPETA_FOTOS);
   if(i === -1 || u.includes(CARPETA_MINIS)) return u;
-  return u.slice(0, i) + CARPETA_MINIS + u.slice(i + CARPETA_FOTOS.length);
+  const nombre = u.slice(i + CARPETA_FOTOS.length);
+  // Sólo una foto propia (fotos/AT-XXXX.jpg) tiene su copia sin fondo
+  if(nombre.includes('/') || !nombre.toLowerCase().endsWith(EXT_FOTOS))
+    return u.slice(0, i) + CARPETA_MINIS + nombre;
+  return u.slice(0, i) + CARPETA_SIN_FONDO + nombre.slice(0, -EXT_FOTOS.length) + EXT_SIN_FONDO;
 }
 const EXT_FOTOS = '.jpg';
 
@@ -7094,6 +7163,13 @@ const precioTarjeta = m => {
 
 /* ---------- Render ---------- */
 
+/* Sin mouse (el celular), los dos botones de la tarjeta van en su propio
+   renglón, debajo del precio (05/10/2026, Benja): sobre la foto están siempre
+   a la vista, y en la grilla de dos columnas tapaban el "Ahorrás USD …" y la
+   parte de arriba del producto. Con mouse siguen sobre la foto y aparecen al
+   pasar por encima, que es donde no molestan. */
+const sinMouse = () => !!window.matchMedia && matchMedia('(hover: none)').matches;
+
 function tarjeta(p){
   const el = document.createElement('article');
   el.className = 'card' + (p.stock ? '' : ' agotado') + (CON_FOTOS ? '' : ' compacta');
@@ -7130,8 +7206,9 @@ function tarjeta(p){
      al pedido (muestra 2.6 B). Se agregaba sin aviso y sumaba al total: el
      pedido de ejemplo daba USD 1.590 con 260 de algo que no hay. Queda sólo
      el WhatsApp, que en la agotada ya es "Avisame cuando entre". */
+  const abajo = CON_FOTOS && sinMouse();
   const acciones = `
-    <div class="acciones">
+    <div class="acciones${abajo ? ' abajo' : ''}">
       ${p.stock ? `<button class="mas" type="button" aria-pressed="${enPedidoModelo(p)}"
               aria-label="Agregar ${quien} al pedido" title="Agregar al pedido">
         <span class="ico">${ICONO_MAS}</span>
@@ -7154,7 +7231,7 @@ function tarjeta(p){
     ${CON_FOTOS ? `<div class="foto${p.imagen ? '' : ' vacia'}">
       ${badge}${htmlAhorro(p)}${htmlFoto(p,'loading="lazy"')}
       ${p.incluye ? `<span class="cinta" title="${esc(textoIncluye(p.incluye))}">${esc(textoIncluye(p.incluye))}</span>` : ''}
-      ${acciones}
+      ${abajo ? '' : acciones}
     </div>` : ''}
     <div class="cuerpo">
       <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}${htmlDestacado(p)}</span>
@@ -7169,6 +7246,7 @@ function tarjeta(p){
         ${CON_FOTOS ? '' : acciones}
       </div>
       ${htmlCuotasTarjeta(p)}
+      ${abajo ? acciones : ''}
     </div>`;
   return el;
 }
@@ -8359,12 +8437,24 @@ function inclinarMundo(t, e){
 }
 
 // Le toca a la siguiente tarjeta que nadie esté mirando
+/* En el celular las tarjetas van una debajo de la otra y se ven dos o tres:
+   turnando también las de fuera de la pantalla, cada una cambiaba cada quince
+   segundos y casi todos los cambios pasaban donde nadie miraba ("no tiene
+   movimiento", Benja, 05/10/2026). Ahí se turnan sólo las que están a la
+   vista. En la compu el mosaico entra entero y sigue como estaba. */
+const MUNDOS_APILADOS = matchMedia('(max-width:760px)');
+function mundoALaVista(t){
+  if(!MUNDOS_APILADOS.matches) return true;
+  const r = t.getBoundingClientRect();
+  return r.bottom > 0 && r.top < (window.innerHeight || document.documentElement.clientHeight);
+}
+
 function girarMundos(){
   const tarjetas = [...document.querySelectorAll('#mosaico .mundo')];
   for(let intento = 0; intento < tarjetas.length; intento++){
     const t = tarjetas[mundosTurno++ % tarjetas.length];
     const n = t.querySelectorAll('.mundo-foto img').length;
-    if(t._frenada || n < 2) continue;
+    if(t._frenada || n < 2 || !mundoALaVista(t)) continue;
     t._k = (t._k + 1) % n;
     mostrarCapa(t, t._k, false);
     t.classList.remove('cambia'); void t.offsetWidth; t.classList.add('cambia');

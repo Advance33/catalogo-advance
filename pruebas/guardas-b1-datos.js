@@ -495,7 +495,7 @@ async function correrPruebas(){
        'un indice.json que no llega no borra el indice que ya estaba');
     INDICE_FOTOS = indice0; CATALOGO = mapa0;      // para que lo que sigue pruebe con el indice
     const fantasma = c.productos.filter(p => p.imagen && p.imagen.includes(CARPETA_FOTOS)
-      && !indice0.has(decodeURIComponent(p.imagen.split('/').pop().split('?')[0])));
+      && !indice0.has(decodeURIComponent(p.imagen.split('/').pop().split('?')[0]).replace(new RegExp('\\' + EXT_SIN_FONDO + '$'), EXT_FOTOS)));
     ok(!fantasma.length, 'y ningun producto pasa a pedir un archivo que no existe',
        fantasma.slice(0, 3).map(p => p.id).join(', ') || c.productos.length + ' productos');
   }

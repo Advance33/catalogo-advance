@@ -124,7 +124,7 @@ function correrPruebas(){
     }
     /* Ninguna portada puede apuntar a un archivo que no existe */
     const fantasma = PRODUCTOS.filter(p => p.imagen && p.imagen.includes(CARPETA_FOTOS))
-      .filter(p => !INDICE_FOTOS.has(decodeURIComponent(p.imagen.split('/').pop().split('?')[0])));
+      .filter(p => !INDICE_FOTOS.has(decodeURIComponent(p.imagen.split('/').pop().split('?')[0]).replace(new RegExp('\\' + EXT_SIN_FONDO + '$'), EXT_FOTOS)));
     ok(fantasma.length === 0, 'ninguna portada apunta a un archivo que no esta',
        fantasma.slice(0, 3).map(p => p.id).join(', '));
   }

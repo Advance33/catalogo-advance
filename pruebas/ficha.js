@@ -431,8 +431,10 @@ function correrPruebas(){
   ok(pcPrecio && cerca(rgb(estilo(pcPrecio, 'color')), variable('--glow'), 12),
      'y con el color de los links', pcPrecio && estilo(pcPrecio, 'color'));
   const pcImg = pc && pc.querySelector('.pc-foto img');
-  ok(!pcImg || estilo(pcImg, 'mix-blend-mode') === 'multiply',
-     'y la foto fundida con el fondo');
+  // La chica sin fondo (05/10/2026) ya no necesita la mezcla: no tiene blanco
+  ok(!pcImg || estilo(pcImg, 'mix-blend-mode') ===
+       ((pcImg.getAttribute('src') || '').includes(CARPETA_SIN_FONDO) ? 'normal' : 'multiply'),
+     'y la foto fundida con el fondo', pcImg ? pcImg.getAttribute('src').split('/').slice(-2).join('/') : 'sin foto');
   ok(todos('#ficha .fi-rel .pc').every((b, i) => b.style.getPropertyValue('--i') === String(i)),
      'cada una sabe su lugar en la fila, que es lo que escalona la entrada');
   cerrarFicha();

@@ -225,7 +225,12 @@ function correrPruebas(){
      opacity o filter, la foto quedaría aislada y volvería el rectángulo blanco
      del proveedor: por eso se mira la tarjeta ya revelada. */
   const img = cs.map(c => c.querySelector('.foto img')).find(Boolean);
-  ok(img && estilo(img, 'mix-blend-mode') === 'multiply', 'la foto se funde con el fondo de la página');
+  // Desde el 05/10/2026 la chica viene SIN FONDO (fotos/mini/sinfondo/): no
+  // hay blanco que fundir y no usa la mezcla, que en el iPhone fallaba. La de
+  // respaldo de ADVAPP, con su fondo blanco, sigue fundiéndose.
+  const sinFondo = !!img && (img.getAttribute('src') || '').includes(CARPETA_SIN_FONDO);
+  ok(img && estilo(img, 'mix-blend-mode') === (sinFondo ? 'normal' : 'multiply'), 'la foto se funde con el fondo de la página',
+     img ? (sinFondo ? 'sin fondo desde el archivo' : 'con multiply') : 'sin foto');
   const c0 = cs[0];
   ok(estilo(c0, 'transform') === 'none' && estilo(c0, 'opacity') === '1' && estilo(c0, 'filter') === 'none',
      'la tarjeta no tiene nada que aísle la foto', [estilo(c0, 'transform'), estilo(c0, 'opacity'), estilo(c0, 'filter')].join(' | '));

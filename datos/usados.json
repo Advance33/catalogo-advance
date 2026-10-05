@@ -1,0 +1,103 @@
+{
+  "formato": "usados/1",
+  "actualizado": "2026-10-05",
+  "equipos": [
+    {
+      "id": "iphone",
+      "nombre": "iPhone",
+      "pregunta_opcion": "¿Cuánta memoria tiene?",
+      "bateria": { "umbral": 80, "resta": 20 },
+      "condiciones": [
+        { "id": "pantalla", "texto": "Pantalla y vidrios sin roturas" },
+        { "id": "faceid", "texto": "Face ID / Touch ID andando" },
+        { "id": "piezas", "texto": "Sin piezas cambiadas" },
+        { "id": "icloud", "texto": "Libre de cuentas de iCloud" }
+      ],
+      "grupos": [
+        { "nombre": "iPhone 17", "modelos": [
+          { "id": "iphone-17e", "nombre": "iPhone 17e", "opciones": [
+            { "nombre": "256GB", "usd": 400 }, { "nombre": "512GB", "usd": 420 } ] },
+          { "id": "iphone-17", "nombre": "iPhone 17", "opciones": [
+            { "nombre": "256GB", "usd": 650 }, { "nombre": "512GB", "usd": 690 } ] },
+          { "id": "iphone-17-pro", "nombre": "iPhone 17 Pro", "opciones": [
+            { "nombre": "256GB", "usd": 900 }, { "nombre": "512GB", "usd": 950 }, { "nombre": "1TB", "usd": 1000 } ] },
+          { "id": "iphone-17-pro-max", "nombre": "iPhone 17 Pro Max", "opciones": [
+            { "nombre": "256GB", "usd": 980 }, { "nombre": "512GB", "usd": 1060 }, { "nombre": "1TB", "usd": 1150 }, { "nombre": "2TB", "usd": 1220 } ] }
+        ] },
+        { "nombre": "iPhone 16", "modelos": [
+          { "id": "iphone-16e", "nombre": "iPhone 16e", "opciones": [
+            { "nombre": "128GB", "usd": 340 }, { "nombre": "256GB", "usd": 360 }, { "nombre": "512GB", "usd": 380 } ] },
+          { "id": "iphone-16", "nombre": "iPhone 16", "opciones": [
+            { "nombre": "128GB", "usd": 500 }, { "nombre": "256GB", "usd": 530 }, { "nombre": "512GB", "usd": 550 } ] },
+          { "id": "iphone-16-plus", "nombre": "iPhone 16 Plus", "opciones": [
+            { "nombre": "128GB", "usd": 500 }, { "nombre": "256GB", "usd": 530 }, { "nombre": "512GB", "usd": 550 } ] },
+          { "id": "iphone-16-pro", "nombre": "iPhone 16 Pro", "opciones": [
+            { "nombre": "128GB", "usd": 580 }, { "nombre": "256GB", "usd": 610 }, { "nombre": "512GB", "usd": 630 }, { "nombre": "1TB", "usd": 650 } ] },
+          { "id": "iphone-16-pro-max", "nombre": "iPhone 16 Pro Max", "opciones": [
+            { "nombre": "256GB", "usd": 750 }, { "nombre": "512GB", "usd": 780 }, { "nombre": "1TB", "usd": 810 } ] }
+        ] },
+        { "nombre": "iPhone 15", "modelos": [
+          { "id": "iphone-15", "nombre": "iPhone 15", "opciones": [
+            { "nombre": "128GB", "usd": 350 }, { "nombre": "256GB", "usd": 370 }, { "nombre": "512GB", "usd": 390 } ] },
+          { "id": "iphone-15-plus", "nombre": "iPhone 15 Plus", "opciones": [
+            { "nombre": "128GB", "usd": 350 }, { "nombre": "256GB", "usd": 370 }, { "nombre": "512GB", "usd": 390 } ] },
+          { "id": "iphone-15-pro", "nombre": "iPhone 15 Pro", "opciones": [
+            { "nombre": "128GB", "usd": 420 }, { "nombre": "256GB", "usd": 450 }, { "nombre": "512GB", "usd": 480 }, { "nombre": "1TB", "usd": 480 } ] },
+          { "id": "iphone-15-pro-max", "nombre": "iPhone 15 Pro Max", "opciones": [
+            { "nombre": "256GB", "usd": 500 }, { "nombre": "512GB", "usd": 530 }, { "nombre": "1TB", "usd": 550 } ] }
+        ] },
+        { "nombre": "iPhone 14", "modelos": [
+          { "id": "iphone-14", "nombre": "iPhone 14", "opciones": [
+            { "nombre": "128GB", "usd": 250 }, { "nombre": "256GB", "usd": 270 }, { "nombre": "512GB", "usd": 300 } ] },
+          { "id": "iphone-14-plus", "nombre": "iPhone 14 Plus", "opciones": [
+            { "nombre": "128GB", "usd": 260 }, { "nombre": "256GB", "usd": 280 }, { "nombre": "512GB", "usd": 310 } ] },
+          { "id": "iphone-14-pro", "nombre": "iPhone 14 Pro", "opciones": [
+            { "nombre": "128GB", "usd": 380 }, { "nombre": "256GB", "usd": 400 }, { "nombre": "512GB", "usd": 430 }, { "nombre": "1TB", "usd": 430 } ] },
+          { "id": "iphone-14-pro-max", "nombre": "iPhone 14 Pro Max", "opciones": [
+            { "nombre": "128GB", "usd": 420 }, { "nombre": "256GB", "usd": 440 }, { "nombre": "512GB", "usd": 460 }, { "nombre": "1TB", "usd": 460 } ] }
+        ] },
+        { "nombre": "iPhone 13", "modelos": [
+          { "id": "iphone-13-mini", "nombre": "iPhone 13 mini", "opciones": [
+            { "nombre": "128GB", "usd": 160 }, { "nombre": "256GB", "usd": 180 }, { "nombre": "512GB", "usd": 190 } ] },
+          { "id": "iphone-13", "nombre": "iPhone 13", "opciones": [
+            { "nombre": "128GB", "usd": 220 }, { "nombre": "256GB", "usd": 240 }, { "nombre": "512GB", "usd": 250 } ] },
+          { "id": "iphone-13-pro", "nombre": "iPhone 13 Pro", "opciones": [
+            { "nombre": "128GB", "usd": 290 }, { "nombre": "256GB", "usd": 310 }, { "nombre": "512GB", "usd": 330 }, { "nombre": "1TB", "usd": 330 } ] },
+          { "id": "iphone-13-pro-max", "nombre": "iPhone 13 Pro Max", "opciones": [
+            { "nombre": "128GB", "usd": 320 }, { "nombre": "256GB", "usd": 340 }, { "nombre": "512GB", "usd": 370 }, { "nombre": "1TB", "usd": 370 } ] }
+        ] },
+        { "nombre": "iPhone 12", "modelos": [
+          { "id": "iphone-12-pro", "nombre": "iPhone 12 Pro", "opciones": [
+            { "nombre": "128GB", "usd": 180 }, { "nombre": "256GB", "usd": 200 }, { "nombre": "512GB", "usd": 215 } ] },
+          { "id": "iphone-12-pro-max", "nombre": "iPhone 12 Pro Max", "opciones": [
+            { "nombre": "128GB", "usd": 200 }, { "nombre": "256GB", "usd": 220 }, { "nombre": "512GB", "usd": 230 } ] }
+        ] },
+        { "nombre": "iPhone 11", "modelos": [
+          { "id": "iphone-11", "nombre": "iPhone 11", "opciones": [
+            { "nombre": "64GB", "usd": 90 }, { "nombre": "128GB", "usd": 110 }, { "nombre": "256GB", "usd": 120 } ] },
+          { "id": "iphone-11-pro", "nombre": "iPhone 11 Pro", "opciones": [
+            { "nombre": "64GB", "usd": 130 }, { "nombre": "256GB", "usd": 160 }, { "nombre": "512GB", "usd": 180 } ] },
+          { "id": "iphone-11-pro-max", "nombre": "iPhone 11 Pro Max", "opciones": [
+            { "nombre": "64GB", "usd": 150 }, { "nombre": "256GB", "usd": 170 }, { "nombre": "512GB", "usd": 180 } ] }
+        ] }
+      ]
+    },
+    {
+      "id": "playstation",
+      "nombre": "PlayStation",
+      "pregunta_opcion": "¿Tiene la caja?",
+      "condiciones": [
+        { "id": "joystick", "texto": "Con un joystick" },
+        { "id": "cables", "texto": "Con todos los cables" }
+      ],
+      "grupos": [
+        { "nombre": "PlayStation 4", "modelos": [
+          { "id": "ps4", "nombre": "PS4", "opciones": [
+            { "nombre": "Con caja", "usd": 120 }, { "nombre": "Sin caja", "usd": 120 } ] },
+          { "id": "ps4-pro", "nombre": "PS4 Pro", "opciones": [
+            { "nombre": "Con caja", "usd": 150 }, { "nombre": "Sin caja", "usd": 130 } ] }
+        ] }
+      ]
+    }
+  ]
+}

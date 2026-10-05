@@ -195,6 +195,19 @@ si alguna falta).
                   precio. Promo = destacado pone «🔥 Destacado» en la
                   tarjeta (sin precio ni porcentaje, y nunca sin stock) y
                   entra a la vidriera despues de las bajas reales.
+  decision-usados.js
+                  Cotizá tu usado (Pedro, 05/10/2026: 1B 2A 3A 5A del
+                  muestrario de usados): el archivo datos/usados.json (que
+                  cumpla usados/1 y que la pagina lo lea entero, con los
+                  valores de Pedro), "🔁 Entregar mi usado" al lado de
+                  "Agregar al pedido" en la ficha con stock, el cotizador
+                  paso a paso (equipo, modelo, memoria o caja, bateria y
+                  estado) que se cierra solo con Escape, la X o el Atras,
+                  el resultado con la bateria que resta, "Lo revisamos en
+                  persona" sin numero, la cuenta ("Te queda" / "Te queda a
+                  favor") y su mensaje, y en el pedido "¿Entregás un
+                  usado?" con el usado restando en el total, la barra, las
+                  cuotas y el mensaje. Tambien a 360 y 390 px.
 
 COMO SE CORREN
 --------------

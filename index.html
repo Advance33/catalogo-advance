@@ -1331,7 +1331,13 @@
   .fi-botones .sec{padding:11px 14px;font-size:10px;opacity:.85}
   .fi-botones .sec:hover{opacity:1}
   /* El contador de unidades y el "quitar" son una sola pieza dentro de la columna */
-  #fi-pedido-caja{display:flex;flex-direction:column;gap:9px}
+  /* Con "Entregar mi usado" (1B, 05/10) los botones van de a dos por
+     renglón: "Agregar al pedido" (o "Quitar del pedido") y el del usado, lado
+     a lado; el contador y el aviso de "Ya tenés", en su renglón entero. Así
+     el pie pegado del celular no crece. */
+  #fi-pedido-caja{display:flex;flex-wrap:wrap;gap:9px}
+  #fi-pedido-caja > *{flex:1 1 100%}
+  #fi-pedido-caja > #fi-pedido,#fi-pedido-caja > #fi-usado{flex:1 1 0;min-width:0}
   /* Sin stock queda vacía (2.6 B): que no deje el hueco del gap */
   #fi-pedido-caja:empty{display:none}
   /* Lo que ya está en el pedido: Pedro eligió B el 29/09 (muestra 5.2). Si la versión que se
@@ -2383,6 +2389,94 @@
   /* En el celular, 16 px: con menos, el iPhone agranda la página al tocar el
      campo y el cliente queda con la ventana corrida (igual que el buscador) */
   @media (max-width:520px), (hover:none){ .pd-campo input{font-size:16px} }
+
+  /* ---------- Cotizá tu usado (Pedro, 05/10/2026) ----------
+     El cotizador paso a paso (2A): una pregunta por pantalla con botones
+     grandes, la barra de avance y "Paso N de M". El resultado (3A) en la
+     etiqueta oscura del precio, como la ficha, y la cuenta renglón por
+     renglón. En el pedido (5A), la pregunta va en la misma caja lila que
+     "¿Cómo lo recibís?". */
+  #usado .caja{width:min(440px,100%);max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow:auto;position:relative}
+  #usado h3{margin-bottom:14px;padding-right:40px}
+  .us-cerrar{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;cursor:pointer;
+             border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:20px;line-height:1}
+  .us-cerrar:hover{color:var(--ink);border-color:var(--faint)}
+  .us-cerrar:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  .us-barra{height:5px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin:0 0 9px}
+  .us-barra i{display:block;height:100%;border-radius:inherit;background:var(--acento)}
+  .us-paso{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .us-preg{margin:10px 0 14px;font:600 17px/1.3 var(--sans);color:var(--ink)}
+  .us-preg:focus{outline:none}
+  .us-preg-res{margin-top:0;font:400 18px/1.15 var(--display);text-transform:uppercase;letter-spacing:.01em}
+  .us-ops{display:grid;gap:8px}
+  .us-ops-2{grid-template-columns:1fr 1fr}
+  .us-op{min-height:46px;padding:11px 13px;border-radius:12px;cursor:pointer;text-align:left;
+         border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 14px/1.25 var(--sans)}
+  .us-op:hover{border-color:var(--acento);color:var(--glow)}
+  .us-op[aria-pressed="true"]{border-color:var(--acento);background:rgba(124,58,237,.08);color:var(--glow);box-shadow:inset 0 0 0 1px var(--acento)}
+  .us-op:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  .us-grupos{display:grid;gap:12px}
+  .us-grupo{display:grid;gap:6px}
+  .us-grupo-rot{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .us-ayuda{margin:12px 0 0;font-size:12px;line-height:1.45;color:var(--muted)}
+  .us-ayuda b{color:var(--ink);font-weight:600}
+  .us-conds{display:grid}
+  .us-cond{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+  .us-cond:first-child{border-top:0;padding-top:2px}
+  .us-cond > span{font:500 13.5px/1.35 var(--sans);color:var(--ink)}
+  .us-sino{display:flex;gap:6px;flex:none}
+  .us-sino .pd-chip{padding:7px 13px}
+  .us-falta{text-align:center;margin-top:9px}
+  #usado .botones .pri:disabled{opacity:.45;cursor:default}
+  .us-res{display:grid;gap:5px;padding:15px 17px;border-radius:15px;background:var(--ink);color:#fff}
+  .us-res small{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A597C4}
+  .us-res b{font:400 32px/1 var(--display);font-weight:400}
+  .us-res span{font:400 12.5px/1.4 var(--sans);color:#DDD3F5}
+  .us-res.rev b{font-size:22px;line-height:1.1}
+  .us-cuenta{display:grid;gap:7px;margin-top:14px}
+  .us-cuenta > div{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font:500 13px/1.3 var(--sans);color:var(--ink)}
+  .us-cuenta > div > span:last-child{font:500 13px/1.3 var(--mono);white-space:nowrap;text-align:right}
+  .us-cuenta .menos{color:var(--ok)}
+  .us-cuenta .tot{border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
+  .us-cuenta .tot > span:first-child{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .us-cuenta .tot > span:last-child{font:400 22px/1 var(--display)}
+  .us-cuenta .tot i{display:block;font:500 11.5px/1 var(--mono);font-style:normal;color:var(--muted);margin-top:5px}
+  .us-cuenta .tot i .aprox{font:inherit}
+  .us-cuenta .us-ayuda{margin-top:0}
+  .us-guardado{text-align:center;margin-top:10px}
+  .us-atras{display:block;margin:16px 0 0;padding:4px 2px;background:none;border:0;cursor:pointer;
+            font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .us-atras:hover{color:var(--ink)}
+  .us-atras:focus-visible{outline:2px solid var(--acento);outline-offset:2px;border-radius:6px}
+  /* En el pedido: la pregunta (5A) y, con un usado que vale, los renglones
+     de arriba del total (los productos y el usado restando) */
+  .pd-usado{margin-top:14px;padding:13px 14px 14px;border-radius:14px;background:var(--surface-2);display:grid;gap:10px}
+  .pd-usado + .pd-entrega{margin-top:10px}
+  .pd-cambiar-usado{background:none;border:0;padding:0 2px;cursor:pointer;font:600 12px/1.4 var(--sans);color:var(--glow);
+                    text-decoration:underline;text-underline-offset:2px}
+  .pd-cambiar-usado:focus-visible{outline:2px solid var(--acento);outline-offset:2px;border-radius:4px}
+  .pd-subs{display:grid;gap:6px;border-top:1px solid var(--line);margin-top:6px;padding-top:12px}
+  .pd-subs > div{display:flex;justify-content:space-between;gap:12px;font:500 12.5px/1.3 var(--sans);color:var(--muted)}
+  .pd-subs > div > span:last-child{font-family:var(--mono);white-space:nowrap}
+  .pd-subs .menos{color:var(--ok)}
+  .pd-subs + .pd-total{margin-top:10px}
+  .pd-total.favor > span{white-space:nowrap}
+  /* "Entregar mi usado" en la ficha (1B), al lado de "Agregar al pedido". En
+     el celular cada uno tiene la mitad del pie (132 px a 360, 147 a 390): con
+     la letra un poco más chica y junta entran en un renglón, y por debajo de
+     390 el del usado dice "Entregar usado" (medido el 05/10). */
+  #fi-pedido-caja > #fi-pedido,#fi-pedido-caja > #fi-usado{padding-inline:8px;letter-spacing:.06em}
+  @media (max-width:520px){
+    #fi-pedido-caja > #fi-pedido,#fi-pedido-caja > #fi-usado{padding-inline:6px;font-size:10px;letter-spacing:.04em}
+  }
+  @media (max-width:389px){ #fi-pedido-caja .fi-usado-mi{display:none} }
+  /* Con "Ya tenés en el pedido", en el celular va debajo del pie, después de
+     los botones del aviso (ver acomodarAvisoPedido): con la letra y la forma
+     de esos, que fuera de .botones no la toman solos */
+  .fi-usado-abajo{display:flex;flex-direction:column;margin-top:8px}
+  .fi-usado-abajo .sec{padding:11px 10px;border-radius:999px;cursor:pointer;text-align:center;
+                       font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+  .fi-usado-abajo .sec:hover{opacity:1}
 
   /* Cargando la tanda siguiente */
   .centinela{grid-column:1/-1;height:1px}
@@ -8197,9 +8291,10 @@ function irAlMenu(){
 function urlDelInicio(){ return location.pathname; }
 function irAlInicio(){
   const st = history.state;
-  const ventana = !!(st && (st.pedido || st.visor));
+  const ventana = !!(st && (st.pedido || st.visor || st.usado));
   // Las ventanas se sacan sin tocar el historial (cada una tenía su history.back)
   if(cerrarVisorDOM){ visorEmpujado = false; const c = cerrarVisorDOM; cerrarVisorDOM = null; c(); }
+  if(cerrarUsadoDOM){ usadoEmpujado = false; const c = cerrarUsadoDOM; cerrarUsadoDOM = null; c(); }
   if(FICHA) quitarFicha();
   if(cerrarPedidoDOM){ pedidoEmpujado = false; const c = cerrarPedidoDOM; cerrarPedidoDOM = null; c(); }
   if(cerrarYaNoEstaDOM){ const c = cerrarYaNoEstaDOM; cerrarYaNoEstaDOM = null; c(); }
@@ -10349,6 +10444,17 @@ addEventListener('popstate', () => {
   }else if(delVisor && !cerrarVisorDOM){
     try{ history.replaceState(null, '', location.href); }catch{}
   }
+  /* El cotizador de usados (05/10), como el visor: el Atrás lo cierra y deja
+     abajo la ficha o el pedido. Si con Adelante se cae en una entrada de un
+     cotizador que ya se cerró, se la neutraliza. */
+  const delUsado = !!(history.state && history.state.usado);
+  if(cerrarUsadoDOM && !delUsado){
+    usadoEmpujado = false;
+    const c = cerrarUsadoDOM; cerrarUsadoDOM = null;
+    c();
+  }else if(delUsado && !cerrarUsadoDOM){
+    try{ history.replaceState(null, '', location.href); }catch{}
+  }
   /* El pedido (ver abrirPedido, 29/09): si se volvió de su entrada, la lista
      se saca sin tocar el historial. Y si con Adelante se cae en una entrada
      del pedido que ya se cerró, se la neutraliza: si no, el próximo Atrás
@@ -10414,6 +10520,8 @@ function quitarFicha(){
   FICHA = null; FICHA_MODELO = null; fichaEmpujada = false;
   // El visor de la foto (4.4 B) es de esta ficha: se va con ella
   if(cerrarVisorDOM){ visorEmpujado = false; const v = cerrarVisorDOM; cerrarVisorDOM = null; v(); }
+  // El cotizador de usados abierto desde esta ficha también (05/10)
+  if(cerrarUsadoDOM && !document.getElementById('pedido')){ usadoEmpujado = false; const u = cerrarUsadoDOM; cerrarUsadoDOM = null; u(); }
   const c = cerrarFichaDOM; cerrarFichaDOM = null;
   c?.();
   ponerTitulo();
@@ -11492,8 +11600,17 @@ function pintarColoresFicha(d, v, m){
    entre". Decía eso y, abajo, "Agregar al pedido". Si ya estaba en el pedido,
    ahí se ve marcado y se saca con la cruz. La caja vacía no ocupa lugar
    (#fi-pedido-caja:empty). */
+/* Los botones del pedido en la ficha y, al lado, "Entregar mi usado" (1B,
+   05/10). Sin stock no va ninguno (2.6 B): queda "Avisame cuando entre". El
+   del usado, sólo con la lista de valores cargada y con WhatsApp. */
 function htmlPedidoFicha(k){
   if(buscarProducto(k)?.stock === false) return '';
+  return htmlPedidoFichaSolo(k) + htmlBotonUsado();
+}
+function htmlBotonUsado(){
+  return USADOS && WHATSAPP ? '<button type="button" class="sec" id="fi-usado">🔁 Entregar <span class="fi-usado-mi">mi </span>usado</button>' : '';
+}
+function htmlPedidoFichaSolo(k){
   const n = cantDe(k);
   if(!n){
     /* La ficha sabe lo que ya cargaste: Pedro eligió B el 29/09 (muestra 5.2). Con el iPhone
@@ -11570,6 +11687,9 @@ function engancharPedidoFicha(d, p){
   if(b) b.onclick = () => togglePedido(k, COLOR_FICHA);
   const cambiar = d.querySelector('#fi-cambiar');
   if(cambiar) cambiar.onclick = () => cambiarPorEsta(k, COLOR_FICHA);
+  // "Entregar mi usado" (1B): el cotizador encima de la ficha, con lo que se mira
+  const usado = d.querySelector('#fi-usado');
+  if(usado) usado.onclick = () => abrirCotizador({ k: FICHA || k, color: COLOR_FICHA });
   d.querySelectorAll('#fi-pedido-caja .stepper button').forEach(x =>
     x.onclick = () => cambiarCant(k, Number(x.dataset.d)));
   medirPieFicha(d);
@@ -11600,6 +11720,22 @@ function acomodarAvisoPedido(d){
   }else{
     if(aviso && fila && fila.parentNode !== aviso) aviso.appendChild(fila);
     if(abajo) abajo.remove();
+  }
+  /* "Entregar mi usado" (1B, 05/10) con el aviso: en el celular también va
+     debajo del pie, en su renglón, después de los botones del aviso y aparte
+     de ellos. Solo en el pie ocupaba un renglón más y tapaba el precio (lo
+     vieron las pruebas de la 5.2 y del pie). Corre después de cada repintado:
+     uno recién pintado en el pie reemplaza al de abajo. */
+  const usado = d.querySelector('#fi-usado');
+  const pedidoCaja = d.querySelector('#fi-pedido-caja');
+  let usadoAbajo = d.querySelector('.fi-usado-abajo');
+  if(usado && aviso && FICHA_CELULAR && FICHA_CELULAR.matches){
+    if(!usadoAbajo){ usadoAbajo = document.createElement('div'); usadoAbajo.className = 'fi-usado-abajo'; }
+    (d.querySelector('.fi-ya-abajo') || botones).after(usadoAbajo);
+    if(usado.parentNode !== usadoAbajo){ usadoAbajo.replaceChildren(); usadoAbajo.appendChild(usado); }
+  }else if(usadoAbajo){
+    if(usado && pedidoCaja && usado.parentNode === usadoAbajo) pedidoCaja.appendChild(usado);
+    usadoAbajo.remove();
   }
 }
 if(FICHA_CELULAR){
@@ -11695,9 +11831,11 @@ function refrescarFicha(){
     const abajo = d.querySelector('.fi-ya-abajo');
     const tenia = !!f && (caja.contains(f) || (!!abajo && abajo.contains(f)));
     const dFoco = tenia ? (f.dataset.d || '1') : '';
+    const enUsado = tenia && f.id === 'fi-usado';     // "Entregar mi usado" se queda en él
     caja.innerHTML = htmlPedidoFicha(FICHA); engancharPedidoFicha(d, p);
     if(tenia){
-      let x = cantDe(FICHA) ? caja.querySelector(`.stepper button[data-d="${CSS.escape(dFoco)}"]`)
+      let x = enUsado ? caja.querySelector('#fi-usado')
+            : cantDe(FICHA) ? caja.querySelector(`.stepper button[data-d="${CSS.escape(dFoco)}"]`)
                             : d.querySelector('#fi-pedido');
       if(!x || x.disabled) x = d.querySelector('.caja');
       x?.focus({preventScroll:true});
@@ -12211,13 +12349,15 @@ function releerCuotasPedido(){
    "a consultar" el total no es el del pedido, y todo sin stock no tiene
    total: ahí va el plan sin montos. */
 function cuentaCuotasPedido(){
-  if(!CUOTAS_PEDIDO || hayAConsultar() || soloSinStockPedido()) return null;
-  return cuentaCuotas(totalPedido(), CUOTAS_PEDIDO);
+  /* Con un usado (5A, 05/10), sobre lo que queda por pagar; si se revisa en
+     persona, todavía no hay un total que dar */
+  if(!CUOTAS_PEDIDO || hayAConsultar() || soloSinStockPedido() || usadoEnRevision() || pagaTodoConUsado()) return null;
+  return cuentaCuotas(aPagarPedido(), CUOTAS_PEDIDO);
 }
 // El renglón que se suma al mensaje; '' si no eligió nada
 function renglonCuotas(){
   const c = planCuotas(CUOTAS_PEDIDO);
-  if(!c || soloSinStockPedido()) return '';
+  if(!c || soloSinStockPedido() || pagaTodoConUsado()) return '';
   const x = cuentaCuotasPedido();
   if(!x) return `Lo pago con tarjeta en ${nombreCuotas(c.cuotas)}.`;
   return c.cuotas === 1
@@ -12225,7 +12365,8 @@ function renglonCuotas(){
     : `Lo pago con tarjeta en ${c.cuotas} cuotas: aprox. $ ${plata(x.cuota)} c/u (total aprox. $ ${plata(x.total)}).`;
 }
 function htmlCuotasPedido(){
-  if(!CUOTAS.length) return '';
+  // Si el usado paga todo (5A), con la tarjeta no hay nada que pagar
+  if(!CUOTAS.length || pagaTodoConUsado()) return '';
   const c = planCuotas(CUOTAS_PEDIDO), x = cuentaCuotasPedido();
   let ayuda = 'Por Mercado Pago, con cualquier tarjeta bancarizada. Si no marcás nada, lo hablamos por WhatsApp.';
   if(c && x) ayuda = c.cuotas === 1
@@ -12236,6 +12377,213 @@ function htmlCuotasPedido(){
       <span class="pd-rot" id="pd-rot-cuotas">¿Pagás con tarjeta? <i>opcional</i></span>
       <div class="pd-chips">${CUOTAS.map(q => `<button type="button" class="pd-chip" data-cuotas="${q.cuotas}" aria-pressed="${q.cuotas === CUOTAS_PEDIDO}">${esc(nombreCuotas(q.cuotas))}</button>`).join('')}</div>
       <p class="pd-ayuda">${ayuda}</p>
+    </div>`;
+}
+
+/* ---------- Cotizá tu usado (Pedro, 05/10/2026) ----------
+   El cliente entrega un usado como parte de pago y sabe en el momento cuánto
+   vale. Pedro eligió en el muestrario de usados: 1B un botón propio en la
+   ficha, al lado de "Agregar al pedido" (al lado y no debajo: en el celular
+   el pie pegado no crece); 2A el cotizador paso a paso, una pregunta por
+   pantalla; 3A la cuenta en el cotizador (el producto, menos el usado, lo
+   que le queda); 5A en el pedido "¿Entregás un usado?" con botones, y el
+   usado resta en el total. La sección propia de la portada todavía no está:
+   Pedro pidió otros diseños, más discretos.
+   Los valores son los de la lista de Pedro, tal cual (datos/usados.json, ver
+   datos/LEEME-usados.md): los manda él y se suben a mano. El valor es "si
+   cumple todas las condiciones"; la batería por debajo del umbral resta lo
+   que dice el archivo, y si otra condición no se cumple no hay número: "lo
+   revisamos en persona". Lo que no está en la lista no se toma. Si el usado
+   vale más que lo que compra: "Te queda a favor USD X", y se coordina por
+   WhatsApp. La cotización queda guardada en ese navegador aparte del pedido,
+   como la entrega y las cuotas: "Vaciar el pedido" no la borra. */
+const USADOS_URL = 'datos/usados.json';
+const USADOS_ESPERA_MS = 6000;
+const USADO_KEY = 'advtecno.usado';
+let USADOS = null;         // los equipos del archivo, ya validados; null si no llegó
+let USADOS_P = null;       // la promesa del archivo (se pide una vez, salvo que falle)
+let USADO = null;          // la cotización del cliente, completa: { e, m, o, bat, cond } o null
+let USADO_DIJO_NO = false; // tocó "No" en el pedido: sólo para marcar el botón
+
+function cargarUsados(){
+  if(USADOS) return Promise.resolve(USADOS);
+  if(!USADOS_P) USADOS_P = conTope(USADOS_ESPERA_MS, async senal => {
+      const r = await fetch(USADOS_URL, { cache:'no-cache', signal: senal });
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(j => {
+      USADOS = indiceUsados(j);
+      if(!USADOS) throw new Error('formato');
+      USADO = leerUsado();
+      // Llegó con la ficha o el pedido abiertos: aparecen el botón y la pregunta
+      refrescarFicha();
+      pintarPedido();
+      redibujarPedido?.();
+      return USADOS;
+    })
+    .catch(e => { console.warn('No se pudo leer ' + USADOS_URL + ':', e); USADOS_P = null; return null; });
+  return USADOS_P;
+}
+
+/* Los equipos del archivo, con lo que no sirve afuera. Un modelo sin
+   ninguna opción válida se saltea; una opción sin valor también (la prueba
+   decision-usados.js no deja publicar ninguna de las dos cosas). */
+function indiceUsados(j){
+  if(!j || j.formato !== 'usados/1' || !Array.isArray(j.equipos)) return null;
+  const valor = n => typeof n === 'number' && Number.isFinite(n) && n > 0 && n < 100000;
+  const texto = x => typeof x === 'string' && x.trim() ? x.trim() : '';
+  const equipos = j.equipos.map(e => {
+    if(!e || !texto(e.id) || !texto(e.nombre) || !Array.isArray(e.grupos)) return null;
+    const b = e.bateria;
+    const bateria = b && valor(b.umbral) && b.umbral <= 100 && typeof b.resta === 'number' && b.resta >= 0
+      ? { umbral: b.umbral, resta: b.resta } : null;
+    const condiciones = (Array.isArray(e.condiciones) ? e.condiciones : [])
+      .filter(c => c && texto(c.id) && texto(c.texto)).map(c => ({ id: texto(c.id), texto: texto(c.texto) }));
+    const grupos = e.grupos.map(g => ({
+      nombre: texto(g && g.nombre),
+      modelos: (g && Array.isArray(g.modelos) ? g.modelos : [])
+        .filter(m => m && texto(m.id) && texto(m.nombre) && Array.isArray(m.opciones))
+        .map(m => ({ id: texto(m.id), nombre: texto(m.nombre),
+          opciones: m.opciones.filter(o => o && texto(o.nombre) && valor(o.usd)).map(o => ({ nombre: texto(o.nombre), usd: o.usd })) }))
+        .filter(m => m.opciones.length)
+    })).filter(g => g.modelos.length);
+    if(!grupos.length) return null;
+    return { id: texto(e.id), nombre: texto(e.nombre), pregunta: texto(e.pregunta_opcion) || '¿Cuál es?',
+             bateria, condiciones, grupos };
+  }).filter(Boolean);
+  return equipos.length ? equipos : null;
+}
+
+const equipoUsado = id => (USADOS && USADOS.find(e => e.id === id)) || null;
+function modeloUsado(e, id){
+  for(const g of (e ? e.grupos : [])){ const m = g.modelos.find(x => x.id === id); if(m) return m; }
+  return null;
+}
+// "iPhone 13 128GB"; si la opción no es la memoria, "PS4 Pro con caja"
+const esMemoria = t => /^\d+\s?(GB|TB)$/i.test(t);
+const nombreUsado = (m, o) => m.nombre + ' ' + (esMemoria(o.nombre) ? o.nombre : o.nombre.toLowerCase());
+
+/* La cotización lista para mostrar, o null si le falta algo o ya no está en
+   la lista (Pedro sacó el modelo o la memoria: no se cotiza con un valor
+   que ya no es el suyo). valor es null si alguna condición no se cumple. */
+function cotizacionUsado(u = USADO){
+  const e = u && equipoUsado(u.e); if(!e) return null;
+  const m = modeloUsado(e, u.m); if(!m) return null;
+  const o = m.opciones.find(x => x.nombre === u.o); if(!o) return null;
+  if(e.bateria && !['si', 'no', 'nose'].includes(u.bat)) return null;
+  const cond = u.cond || {};
+  if(e.condiciones.some(c => typeof cond[c.id] !== 'boolean')) return null;
+  const fallan = e.condiciones.filter(c => cond[c.id] === false);
+  const resta = e.bateria && u.bat === 'no' ? e.bateria.resta : 0;
+  return { e, m, o, nombre: nombreUsado(m, o), bat: e.bateria ? u.bat : '', fallan,
+           valor: fallan.length ? null : Math.max(0, o.usd - resta) };
+}
+
+function leerUsado(){
+  try{
+    const g = JSON.parse(localStorage.getItem(USADO_KEY) || 'null');
+    if(!g || typeof g !== 'object') return null;
+    const cond = {};
+    if(g.cond && typeof g.cond === 'object') Object.keys(g.cond).forEach(k => { if(typeof g.cond[k] === 'boolean') cond[k] = g.cond[k]; });
+    const u = { e: String(g.e || ''), m: String(g.m || ''), o: String(g.o || ''), bat: String(g.bat || ''), cond };
+    return cotizacionUsado(u) ? u : null;
+  }catch{ return null; }
+}
+function guardarUsado(){
+  try{
+    if(USADO) localStorage.setItem(USADO_KEY, JSON.stringify(USADO));
+    else localStorage.removeItem(USADO_KEY);
+  }catch{}
+}
+// Otra pestaña la cambió: el pedido y "Enviar pedido" dicen lo mismo
+function releerUsado(){
+  if(!USADOS) return;
+  const g = leerUsado();
+  if(JSON.stringify(g) === JSON.stringify(USADO)) return;
+  USADO = g;
+  pintarPedido();
+  redibujarPedido?.();
+}
+addEventListener('storage', e => { if(e.key === USADO_KEY || e.key === null) releerUsado(); });
+addEventListener('pageshow', e => { if(e.persisted) releerUsado(); });
+document.addEventListener('visibilitychange', () => { if(!document.hidden) releerUsado(); });
+
+/* La batería, como se dice en el mensaje y en el resultado */
+function textoBateria(c){
+  const b = c.e.bateria;
+  if(!b) return '';
+  if(c.bat === 'si') return `batería ${b.umbral} % o más`;
+  if(c.bat === 'no') return `batería por debajo del ${b.umbral} %`;
+  return 'no sé cómo está la batería';
+}
+/* El usado en una línea, para el mensaje: "iPhone 13 128GB, batería 80 % o
+   más, cumple todas las condiciones". Si algo no cumple, lo que marcó. */
+function textoUsado(c){
+  const partes = [c.nombre];
+  const bat = textoBateria(c);
+  if(bat) partes.push(bat);
+  if(!c.fallan.length) partes.push('cumple todas las condiciones');
+  let t = partes.join(', ');
+  if(c.fallan.length) t += '. Marqué que no cumple: ' + c.fallan.map(x => x.texto.toLowerCase()).join(', ') + '. ¿Me lo revisan?';
+  return t;
+}
+// "USD 350", y con la batería sin saber, lo que vale si está por debajo
+function textoValorUsado(c){
+  let t = 'USD ' + plata(c.valor);
+  if(c.bat === 'nose' && c.e.bateria && c.e.bateria.resta)
+    t += ` (USD ${plata(Math.max(0, c.valor - c.e.bateria.resta))} si la batería está por debajo del ${c.e.bateria.umbral} %)`;
+  return t;
+}
+
+/* Lo que el usado resta en el pedido: su valor, o 0 si no hay, si se revisa
+   en persona o si todo el pedido está sin stock (no hay nada que pagar). */
+function valorUsadoPedido(){
+  const c = USADOS && cotizacionUsado();
+  return c && c.valor !== null && !soloSinStockPedido() ? c.valor : 0;
+}
+// El total menos el usado. Negativo es saldo a favor del cliente.
+const netoPedido = () => totalPedido() - valorUsadoPedido();
+// "Te queda a favor": sólo con un total completo (sin productos a consultar)
+const aFavorPedido = () => valorUsadoPedido() > 0 && netoPedido() < 0 && !hayAConsultar();
+// Lo que se paga: nunca menos de cero
+const aPagarPedido = () => Math.max(0, netoPedido());
+// El usado paga todo: con la tarjeta no queda nada que pagar
+const pagaTodoConUsado = () => valorUsadoPedido() > 0 && netoPedido() <= 0 && !hayAConsultar();
+// Un usado que se revisa en persona: el total todavía no es el final
+function usadoEnRevision(){
+  const c = USADOS && cotizacionUsado();
+  return !!c && c.valor === null && !soloSinStockPedido();
+}
+// El párrafo del mensaje para ese usado, sin valor y con lo que marcó
+const renglonUsadoRevision = () => usadoEnRevision() ? 'Mi usado: ' + textoUsado(cotizacionUsado()) : '';
+// Los renglones de arriba del total: los productos y el usado restando
+function htmlCuentaUsadoPedido(){
+  const v = valorUsadoPedido();
+  if(!v) return '';
+  return `<div class="pd-subs">
+      <div><span>Productos</span><span>USD ${plata(totalPedido())}</span></div>
+      <div class="menos"><span>Tu ${esc(cotizacionUsado().nombre)}</span><span>− USD ${plata(v)}</span></div>
+    </div>`;
+}
+
+/* La pregunta del pedido (5A). Sin cotización: "No" y "Sí, cotizarlo", que
+   abre el cotizador encima del pedido. Con cotización: "Sí" marcado, el
+   usado con su valor y "Cambiar". "No" la borra. */
+function htmlUsadoPedido(){
+  if(!USADOS) return '';
+  const c = cotizacionUsado();
+  let ayuda = 'Lo tomamos como parte de pago: ' + USADOS.map(e => e.nombre).join(' y ') + '.';
+  if(c) ayuda = c.valor !== null
+    ? `<b>${esc(c.nombre)}</b>: ${esc(textoValorUsado(c))} si cumple todas las condiciones.`
+    : `<b>${esc(c.nombre)}</b>: lo revisamos en persona.`;
+  return `<div class="pd-usado" role="group" aria-labelledby="pd-rot-usado">
+      <span class="pd-rot" id="pd-rot-usado">¿Entregás un usado? <i>opcional</i></span>
+      <div class="pd-chips">
+        <button type="button" class="pd-chip" data-usado="no" aria-pressed="${!c && USADO_DIJO_NO}">No</button>
+        <button type="button" class="pd-chip" data-usado="si" aria-pressed="${!!c}">${c ? 'Sí' : 'Sí, cotizarlo'}</button>
+      </div>
+      <p class="pd-ayuda">${ayuda}${c ? ' <button type="button" class="pd-cambiar-usado" data-usado="cambiar">Cambiar</button>' : ''}</p>
     </div>`;
 }
 
@@ -12359,14 +12707,23 @@ function mensajePedido(){
     return l + ' — ' + (p.precio === null ? 'a consultar'
       : 'USD ' + plata(p.precio * it.n) + (it.n > 1 ? ` (USD ${plata(p.precio)} c/u)` : ''));
   });
-  const total = totalPedido();
+  const total = aPagarPedido();
   let cola = '';
   // Todo sin stock: sin "Total: USD 0"; cada renglón ya dice "sin stock"
   if(!soloSinStockPedido()){
-    cola = `Total: USD ${plata(total)}`;
-    if(TC) cola += ` (aprox. $ ${plata(Math.round(total * TC))})`;
-    if(hayAConsultar()) cola += ', más los productos a consultar';
-    if(sinStockPedido()) cola += ', más los productos sin stock';
+    /* Con un usado que vale (5A, 05/10): el subtotal, el usado restando y lo
+       que queda; si sobra, "Me queda a favor". Sin usado, como siempre. */
+    if(valorUsadoPedido()){
+      const c = cotizacionUsado();
+      cola = `Subtotal: USD ${plata(totalPedido())}\nMi usado (${textoUsado(c)}): − ${textoValorUsado(c)}\n`;
+    }
+    if(aFavorPedido()) cola += `Me queda a favor: USD ${plata(-netoPedido())}`;
+    else{
+      cola += `Total: USD ${plata(total)}`;
+      if(TC) cola += ` (aprox. $ ${plata(Math.round(total * TC))})`;
+      if(hayAConsultar()) cola += ', más los productos a consultar';
+      if(sinStockPedido()) cola += ', más los productos sin stock';
+    }
   }
   // Con la copia, el vendedor sabe de qué hora es cada precio (29/09, 1.5 A)
   const h = horaDeLaCopiaALaVista();
@@ -12375,8 +12732,10 @@ function mensajePedido(){
   // envío (5.3 A): cada uno en su renglón, al final
   const cu = renglonCuotas();
   const r = renglonEntrega();
+  // El usado que se revisa en persona (5A): sin valor, con lo que marcó
+  const us = renglonUsadoRevision();
   return `Hola! Te paso mi pedido:\n\n${lineas.join('\n')}` + (cola ? `\n\n${cola}` : '') +
-    (cu ? `\n\n${cu}` : '') + (r ? `\n\n${r}` : '');
+    (us ? `\n\n${us}` : '') + (cu ? `\n\n${cu}` : '') + (r ? `\n\n${r}` : '');
 }
 
 /* La hora de los precios en pantalla si son los de la copia de este navegador
@@ -12391,15 +12750,18 @@ function pintarPedido(){
   document.body.classList.toggle('con-pedido', items.length > 0);
   $('barra-pedido').hidden = !items.length;
   if(!items.length) return;
-  const total = totalPedido(), u = unidadesPedido();
+  const total = aPagarPedido(), u = unidadesPedido();      // con el usado restando (5A)
   // Cuenta unidades, no líneas: si el cliente cargó tres iPhone iguales, el
   // botón tiene que decir tres.
   $('bp-ver').textContent = `Ver pedido (${u})`;
   const nada = soloSinStockPedido();      // sin monto: ver soloSinStockPedido
-  $('bp-usd').textContent = nada ? 'Sin stock' : 'USD ' + plata(total) + (hayAConsultar() ? ' +' : '');
-  $('bp-ars').textContent = TC && !nada ? '$ ' + plata(Math.round(total * TC)) : '';
+  // Si el usado vale más que el pedido (5A), lo que le queda a favor
+  const favor = !nada && aFavorPedido();
+  $('bp-usd').textContent = nada ? 'Sin stock' : favor ? 'A favor USD ' + plata(-netoPedido())
+    : 'USD ' + plata(total) + (hayAConsultar() ? ' +' : '');
+  $('bp-ars').textContent = TC && !nada && !favor ? '$ ' + plata(Math.round(total * TC)) : '';
   // El "≈ " lo pone el CSS (#bp-ars::before) y se va en el celular (2.2 B)
-  $('bp-ars').title = TC && !nada ? REF_PESOS : '';
+  $('bp-ars').title = TC && !nada && !favor ? REF_PESOS : '';
   // Con la copia a la vista, abajo del total: "Precios de las 01:52 · a confirmar" (1.5 A)
   const h = horaDeLaCopiaALaVista();
   $('barra-pedido').classList.toggle('con-aviso', !!h);
@@ -12485,7 +12847,7 @@ function abrirPedido(){
     const tenia = !!f && f !== d && d.contains(f);
     const kFoco = tenia ? (f.closest('.pd-item')?.dataset.key || '') : '';
     const dFoco = tenia ? (f.dataset.d || '') : '';
-    const items = itemsPedido(), total = totalPedido();
+    const items = itemsPedido(), total = aPagarPedido();   // con el usado restando (5A)
     // Si otra pestaña cargó algo mientras tanto, ya no hay nada que deshacer
     if(vaciado && items.length) vaciado = null;
     // tabindex en el HTML: la caja se rehace en cada dibujo y pierde el que le
@@ -12529,15 +12891,17 @@ function abrirPedido(){
           ? `<div class="pd-deshecho" aria-live="polite"><p id="pd-deshecho-txt">Vaciaste el pedido.</p>
               <button type="button" id="pd-deshacer" aria-describedby="pd-deshecho-txt">Deshacer</button></div>`
           : '<p class="pd-vacio">Todavía no agregaste nada. Tocá el + en cualquier producto.</p>'}
-        ${items.length ? `
-          <div class="pd-total">
-            <span>Total</span>
+        ${items.length ? `${htmlCuentaUsadoPedido()}
+          <div class="pd-total${aFavorPedido() ? ' favor' : ''}">
+            <span>${aFavorPedido() ? 'Te queda a favor' : 'Total'}</span>
             <div>${soloSinStockPedido()
               ? `<i class="pd-mas">${sinStockPedido()} producto${sinStockPedido() > 1 ? 's' : ''} sin stock</i>`
+              : aFavorPedido() ? `<b>USD ${plata(-netoPedido())}</b><i class="pd-mas">lo coordinamos por WhatsApp</i>`
               : `<b>USD ${plata(total)}</b>${TC ? `<i>${htmlPesos(Math.round(total*TC))}</i>` : ''}${
-              sinStockPedido() ? `<i class="pd-mas">más ${sinStockPedido()} producto${sinStockPedido() > 1 ? 's' : ''} sin stock</i>` : ''}`}</div>
+              sinStockPedido() ? `<i class="pd-mas">más ${sinStockPedido()} producto${sinStockPedido() > 1 ? 's' : ''} sin stock</i>` : ''}${
+              usadoEnRevision() ? '<i class="pd-mas">menos tu usado, que lo revisamos en persona</i>' : ''}`}</div>
           </div>` : ''}
-        ${items.length && WHATSAPP ? htmlEntrega() + htmlCuotasPedido() : ''}
+        ${items.length && WHATSAPP ? htmlUsadoPedido() + htmlEntrega() + htmlCuotasPedido() : ''}
         ${items.length ? `${WHATSAPP
             ? `<div class="botones"><a class="pri" href="${linkWA(mensajePedido())}" target="_blank" rel="noopener">Enviar por WhatsApp</a></div>`
             : ''}
@@ -12586,6 +12950,16 @@ function abrirPedido(){
       CUOTAS_PEDIDO = CUOTAS_PEDIDO === n ? 0 : n;
       guardarCuotasPedido(); pintarPedido(); dibujar();
     });
+    /* ¿Entregás un usado? (5A, 05/10). "Sí" abre el cotizador encima del
+       pedido (con una cotización hecha, en su resultado); "Cambiar", desde el
+       primer paso con lo de antes marcado; "No" la borra. */
+    d.querySelectorAll('[data-usado]').forEach(b => b.onclick = () => {
+      const v = b.dataset.usado;
+      if(v !== 'no') return abrirCotizador({ pedido: true, empezar: v === 'cambiar' });
+      USADO_DIJO_NO = USADO ? true : !USADO_DIJO_NO;
+      USADO = null;
+      guardarUsado(); pintarPedido(); dibujar();
+    });
     const loc = d.querySelector('#pd-localidad');
     if(loc){
       loc.value = ENTREGA.localidad;
@@ -12608,6 +12982,7 @@ function abrirPedido(){
       // la localidad si otra pestaña la cambió mientras escribía
       if(!x && f.dataset.entrega) x = d.querySelector(`.pd-chip[data-entrega="${CSS.escape(f.dataset.entrega)}"]`);
       if(!x && f.dataset.cuotas) x = d.querySelector(`.pd-chip[data-cuotas="${CSS.escape(f.dataset.cuotas)}"]`);
+      if(!x && f.dataset.usado) x = d.querySelector(`[data-usado="${CSS.escape(f.dataset.usado)}"]`) || d.querySelector('.pd-chip[data-usado="si"]');
       if(!x && f.id === 'pd-localidad') x = d.querySelector('#pd-localidad');
       if(!x || x.disabled) x = d.querySelector('.caja');
       x?.focus({preventScroll:true});
@@ -12632,6 +13007,255 @@ function abrirPedido(){
   cerrarPedidoDOM = montarModal(d, () => {
     redibujarPedido = null; cerrarPedidoDOM = null;
     if(pedidoEmpujado){ pedidoEmpujado = false; history.back(); }
+  });
+}
+
+/* ---------- El cotizador de usados (2A y 3A, Pedro 05/10) ----------
+   Una pregunta por pantalla: el equipo (si hay más de uno en la lista), el
+   modelo, la memoria (o la caja, en la PlayStation), la batería y el estado.
+   Las de una sola respuesta avanzan solas al tocar; "Atrás" vuelve un paso.
+   Al final, la cuenta: lo que vale, lo que cuesta lo que mira (o el pedido)
+   y lo que le queda. Se abre encima de la ficha o del pedido, que quedan
+   abiertos debajo: Escape, la X, tocar afuera y el Atrás del celular
+   cierran sólo el cotizador (como el visor de la foto). Lo elegido es un
+   borrador hasta llegar al resultado: recién ahí pasa a ser la cotización
+   guardada. Así cerrar a mitad de camino no cambia nada. */
+let cerrarUsadoDOM = null;    // saca el cotizador de la pantalla, sin tocar el historial
+let usadoEmpujado = false;    // ¿abrirlo sumó una entrada al historial?
+
+function pasosUsado(b){
+  const e = equipoUsado(b.e);
+  const m = e && modeloUsado(e, b.m);
+  const l = [];
+  if(USADOS.length > 1) l.push('equipo');
+  l.push('modelo');
+  if(!m || m.opciones.length > 1) l.push('opcion');
+  if(!e || e.bateria) l.push('bateria');
+  if(!e || e.condiciones.length) l.push('estado');
+  return l;
+}
+
+/* El mensaje del cotizador. Desde una ficha nombra el producto como la
+   consulta de siempre (mensajeWA) y suma la cuenta; sin producto, sólo el
+   usado. */
+function mensajeUsado(c, prod, color){
+  const x = prod ? partesMensaje(prod, color) : null;
+  let t = x
+    ? `Hola! Me interesa el ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''} y quiero entregar mi usado como parte de pago.`
+    : 'Hola! Quiero entregar mi usado como parte de pago.';
+  t += '\n\nMi usado: ' + textoUsado(c) + (c.valor !== null ? ': ' + textoValorUsado(c) : '');
+  if(c.valor !== null && x && typeof prod.precio === 'number'){
+    const n = prod.precio - c.valor;
+    t += `\n${textoMensaje(x)}: USD ${plata(prod.precio)}`;
+    t += n >= 0
+      ? `\nMe queda: USD ${plata(n)}${TC ? ` (aprox. $ ${plata(Math.round(n * TC))})` : ''}`
+      : `\nMe queda a favor: USD ${plata(-n)}`;
+  }
+  return t;
+}
+
+/* desde: { k, color } desde una ficha; { pedido: true } desde el pedido;
+   empezar: true arranca del primer paso con lo de antes marcado ("Cambiar") */
+function abrirCotizador(desde = {}){
+  if(!USADOS || document.getElementById('usado')) return;
+  const d = document.createElement('div');
+  d.id = 'usado'; d.className = 'modal';
+  const delPedido = !!desde.pedido;
+  const prod = desde.k ? buscarProducto(desde.k) : null;
+  const color = desde.color || '';
+  let b = USADO ? JSON.parse(JSON.stringify(USADO)) : { e: '', m: '', o: '', bat: '', cond: {} };
+  if(!b.e && USADOS.length === 1) b.e = USADOS[0].id;
+  let paso = cotizacionUsado(b) && !desde.empezar ? 'resultado' : pasosUsado(b)[0];
+
+  const op = (dato, valor, texto, marcado, extra = '') =>
+    `<button type="button" class="us-op" data-${dato}="${esc(valor)}" aria-pressed="${!!marcado}"${extra}>${esc(texto)}</button>`;
+
+  const cuerpo = () => {
+    const e = equipoUsado(b.e), m = e && modeloUsado(e, b.m);
+    if(paso === 'equipo') return { preg: '¿Qué equipo entregás?',
+      html: `<div class="us-ops us-ops-2">${USADOS.map(x => op('e', x.id, x.nombre, b.e === x.id)).join('')}</div>` };
+    if(paso === 'modelo') return { preg: '¿Qué modelo es?',
+      html: `<div class="us-grupos">${e.grupos.map(g => `<div class="us-grupo">${g.nombre ? `<span class="us-grupo-rot">${esc(g.nombre)}</span>` : ''}
+          <div class="us-ops us-ops-2">${g.modelos.map(x => {
+            // "17 Pro" adentro del grupo "iPhone 17"; el nombre entero, para el lector
+            const corto = x.nombre.startsWith(e.nombre + ' ') ? x.nombre.slice(e.nombre.length + 1) : x.nombre;
+            return op('m', x.id, corto, b.m === x.id, corto !== x.nombre ? ` aria-label="${esc(x.nombre)}"` : '');
+          }).join('')}</div></div>`).join('')}</div>
+        <p class="us-ayuda">¿No está el tuyo? Por ahora tomamos sólo estos modelos.</p>` };
+    if(paso === 'opcion') return { preg: e.pregunta,
+      html: `<div class="us-ops us-ops-2">${m.opciones.map(o => op('o', o.nombre, o.nombre, b.o === o.nombre)).join('')}</div>` };
+    if(paso === 'bateria'){
+      const u = e.bateria.umbral;
+      return { preg: '¿Cuánto marca la salud de la batería?',
+        html: `<div class="us-ops">${op('bat', 'si', `${u} % o más`, b.bat === 'si')}${op('bat', 'no', `Menos de ${u} %`, b.bat === 'no')}${op('bat', 'nose', 'No sé', b.bat === 'nose')}</div>
+          <p class="us-ayuda">La ves en Ajustes › Batería.</p>` };
+    }
+    if(paso === 'estado'){
+      const faltan = e.condiciones.filter(c => typeof b.cond[c.id] !== 'boolean').length;
+      return { preg: '¿Cumple todo esto?',
+        html: `<div class="us-conds">${e.condiciones.map(c => `<div class="us-cond" role="group" aria-label="${esc(c.texto)}">
+            <span>${esc(c.texto)}</span>
+            <div class="us-sino">
+              <button type="button" class="pd-chip" data-cond="${esc(c.id)}" data-v="1" aria-pressed="${b.cond[c.id] === true}">Sí</button>
+              <button type="button" class="pd-chip" data-cond="${esc(c.id)}" data-v="0" aria-pressed="${b.cond[c.id] === false}">No</button>
+            </div></div>`).join('')}</div>
+          <div class="botones"><button type="button" class="pri" id="us-ver"${faltan ? ' disabled' : ''}>Ver cuánto vale</button></div>
+          ${faltan ? `<p class="us-ayuda us-falta">Respondé ${faltan === 1 ? 'la que falta' : `las ${faltan} que faltan`} para ver el valor.</p>` : ''}` };
+    }
+    return resultado();
+  };
+
+  // 3A: el valor y la cuenta. Sin valor (algo no cumple), "lo revisamos en persona".
+  const resultado = () => {
+    const c = cotizacionUsado(b);
+    const bat = c.e.bateria;
+    let html;
+    if(c.valor !== null){
+      let nota = '';
+      if(bat && c.bat === 'no' && bat.resta) nota = `Ya le restamos USD ${plata(bat.resta)} por la batería.`;
+      if(bat && c.bat === 'nose' && bat.resta) nota = `Si la batería está por debajo del ${bat.umbral} %, son USD ${plata(bat.resta)} menos.`;
+      html = `<div class="us-res"><small>Te lo tomamos a</small><b>USD ${plata(c.valor)}</b>
+          <span>si cumple todas las condiciones. Lo confirmamos al verlo.</span>${nota ? `<span>${esc(nota)}</span>` : ''}</div>`;
+      // La cuenta: lo que mira (o el pedido), menos el usado
+      let base = null, rot = '', masRot = '';
+      if(delPedido && itemsPedido().length && !soloSinStockPedido()){
+        base = totalPedido(); rot = 'Tu pedido';
+        if(hayAConsultar()) masRot = 'más los productos a consultar';
+      }else if(prod && typeof prod.precio === 'number'){
+        base = prod.precio; rot = textoMensaje(partesMensaje(prod, color));
+      }
+      if(base !== null){
+        const n = base - c.valor;
+        const favor = n < 0 && !masRot;
+        html += `<div class="us-cuenta">
+            <div><span>${esc(rot)}</span><span>USD ${plata(base)}</span></div>
+            <div class="menos"><span>Tu ${esc(c.nombre)}</span><span>− USD ${plata(c.valor)}</span></div>
+            <div class="tot"><span>${favor ? 'Te queda a favor' : 'Te queda'}</span><span>USD ${plata(favor ? -n : Math.max(0, n))}${
+              TC && !favor ? `<i>${htmlPesos(Math.round(Math.max(0, n) * TC))}</i>` : ''}</span></div>
+            ${masRot ? `<p class="us-ayuda">${esc(masRot)}</p>` : ''}
+            ${favor ? '<p class="us-ayuda">Lo que sobra lo coordinamos por WhatsApp.</p>' : ''}
+          </div>`;
+      }else if(prod) html += '<p class="us-ayuda">El precio de este producto te lo pasamos por WhatsApp.</p>';
+    }else{
+      html = `<div class="us-res rev"><small>El valor</small><b>Lo revisamos en persona</b>
+          <span>Marcaste que no: ${esc(c.fallan.map(x => x.texto.toLowerCase()).join(', '))}. Con eso el valor cambia: te decimos cuánto al verlo.</span></div>`;
+    }
+    const wa = c.valor !== null && prod ? 'Lo quiero: seguir por WhatsApp' : 'Coordinar por WhatsApp';
+    html += `<div class="botones">${delPedido
+        ? '<button type="button" class="pri" id="us-listo">Listo: volver al pedido</button>'
+        : (WHATSAPP ? `<a class="pri" href="${linkWA(mensajeUsado(c, prod, color))}" target="_blank" rel="noopener">${wa}</a>` : '')}</div>
+      ${delPedido ? '' : '<p class="us-ayuda us-guardado">Queda guardado: si armás un pedido, lo restamos ahí.</p>'}
+      <button type="button" class="pd-link" id="us-otro">Cotizar otro equipo</button>`;
+    return { preg: 'Tu ' + c.nombre, html };
+  };
+
+  const dibujar = enfocar => {
+    const pasos = pasosUsado(b);
+    const i = pasos.indexOf(paso);
+    const x = cuerpo();
+    const res = paso === 'resultado';
+    d.innerHTML = `
+      <div class="caja" role="dialog" aria-modal="true" aria-labelledby="us-tit" tabindex="-1">
+        <button type="button" class="us-cerrar" aria-label="Cerrar el cotizador">&times;</button>
+        <h3 id="us-tit">Cotizá tu usado</h3>
+        ${res ? '' : `<div class="us-barra" aria-hidden="true"><i style="width:${Math.round((i + 1) / (pasos.length + 1) * 100)}%"></i></div>
+          <span class="us-paso">Paso ${i + 1} de ${pasos.length}</span>`}
+        <p class="us-preg${res ? ' us-preg-res' : ''}" id="us-preg" tabindex="-1">${esc(x.preg)}</p>
+        ${x.html}
+        ${i > 0 || res ? '<button type="button" class="us-atras">‹ Atrás</button>' : ''}
+      </div>`;
+    enganchar();
+    // Cada paso nuevo se anuncia desde su pregunta; arriba de todo, sin saltos
+    if(enfocar){
+      const caja = d.querySelector('.caja');
+      if(caja) caja.scrollTop = 0;
+      d.querySelector('#us-preg')?.focus({preventScroll:true});
+    }
+  };
+
+  const ir = p => { paso = p; dibujar(true); };
+  const siguiente = () => {
+    const pasos = pasosUsado(b);
+    const i = pasos.indexOf(paso);
+    if(i === -1 || i === pasos.length - 1) return llegar();
+    ir(pasos[i + 1]);
+  };
+  // Llegar al resultado: el borrador pasa a ser la cotización del cliente
+  const llegar = () => {
+    if(!cotizacionUsado(b)) return;
+    USADO = JSON.parse(JSON.stringify(b));
+    USADO_DIJO_NO = false;
+    guardarUsado();
+    pintarPedido();
+    ir('resultado');
+  };
+
+  const enganchar = () => {
+    d.querySelector('.us-cerrar').onclick = () => cerrar();
+    const atras = d.querySelector('.us-atras');
+    if(atras) atras.onclick = () => {
+      const pasos = pasosUsado(b);
+      ir(paso === 'resultado' ? pasos[pasos.length - 1] : pasos[Math.max(0, pasos.indexOf(paso) - 1)]);
+    };
+    d.querySelectorAll('.us-op[data-e]').forEach(x => x.onclick = () => {
+      // Otro equipo: lo demás era del anterior
+      if(b.e !== x.dataset.e) b = { e: x.dataset.e, m: '', o: '', bat: '', cond: {} };
+      siguiente();
+    });
+    d.querySelectorAll('.us-op[data-m]').forEach(x => x.onclick = () => {
+      const e = equipoUsado(b.e), m = modeloUsado(e, x.dataset.m);
+      b.m = m.id;
+      // La memoria de antes sirve si este modelo la tiene; con una sola opción, esa
+      if(!m.opciones.some(o => o.nombre === b.o)) b.o = m.opciones.length === 1 ? m.opciones[0].nombre : '';
+      siguiente();
+    });
+    d.querySelectorAll('.us-op[data-o]').forEach(x => x.onclick = () => { b.o = x.dataset.o; siguiente(); });
+    d.querySelectorAll('.us-op[data-bat]').forEach(x => x.onclick = () => { b.bat = x.dataset.bat; siguiente(); });
+    d.querySelectorAll('.pd-chip[data-cond]').forEach(x => x.onclick = () => {
+      b.cond[x.dataset.cond] = x.dataset.v === '1';
+      const id = x.dataset.cond, v = x.dataset.v;
+      dibujar(false);
+      // El foco se queda en el botón que tocó (la ventana se redibujó)
+      d.querySelector(`.pd-chip[data-cond="${CSS.escape(id)}"][data-v="${v}"]`)?.focus({preventScroll:true});
+    });
+    const ver = d.querySelector('#us-ver');
+    if(ver) ver.onclick = () => llegar();
+    const listo = d.querySelector('#us-listo');
+    if(listo) listo.onclick = () => cerrar();
+    const otro = d.querySelector('#us-otro');
+    if(otro) otro.onclick = () => {
+      b = { e: USADOS.length === 1 ? USADOS[0].id : '', m: '', o: '', bat: '', cond: {} };
+      ir(pasosUsado(b)[0]);
+    };
+  };
+
+  /* Escape lo atiende el cotizador antes que nadie (en la captura de
+     window), como el visor: el Escape de la ficha o del pedido de abajo los
+     cerraba enteros. */
+  const porTecla = e => {
+    if(e.key !== 'Escape') return;
+    e.preventDefault(); e.stopPropagation();
+    cerrar();
+  };
+  const cerrar = () => {
+    if(usadoEmpujado){ usadoEmpujado = false; history.back(); }   // el popstate lo saca
+    else cerrarUsadoDOM?.();
+  };
+
+  dibujar(false);
+  addEventListener('keydown', porTecla, true);
+  try{ history.pushState({ usado: true }, '', location.href); usadoEmpujado = true; }
+  catch{ usadoEmpujado = false; }
+  cerrarUsadoDOM = montarModal(d, () => {
+    removeEventListener('keydown', porTecla, true);
+    cerrarUsadoDOM = null;
+    if(usadoEmpujado){ usadoEmpujado = false; history.back(); }
+    if(delPedido){
+      // El pedido de abajo, con el usado restando; el foco, a su pregunta
+      pintarPedido();
+      redibujarPedido?.();
+      document.querySelector(`#pedido .pd-chip[data-usado="${USADO ? 'si' : 'no'}"]`)?.focus({preventScroll:true});
+    }
   });
 }
 
@@ -13664,12 +14288,13 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
       const donde = a.id === 'wa-flotante' ? 'flotante'
         : (a.id === 'bp-enviar' || a.closest('#barra-pedido, #pedido')) ? 'pedido'
         : a.closest('#ficha') ? 'ficha'
+        : a.closest('#usado') ? 'usado'          // el cotizador de usados (05/10)
         : a.closest('.card') ? 'tarjeta'
         : a.closest('.nv-tarj') ? 'nuevos'
         : a.closest('#ayuda') ? 'preguntas'
         : a.closest('#pie-id') ? 'pie' : 'otro';    // el pie (6.7 B, 29/09)
       const card = a.closest('.card, .nv-tarj');
-      const p = donde === 'ficha' ? buscarProducto(FICHA)
+      const p = (donde === 'ficha' || (donde === 'usado' && FICHA)) ? buscarProducto(FICHA)
               : card ? buscarModelo(card.dataset.key) : null;
       anotar('whatsapp', { desde: donde, ...datos(p),
         ...(donde === 'pedido' ? { unidades: unidadesPedido(), total: totalPedido() } : {}),
@@ -13677,7 +14302,9 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
            más. La localidad la escribe el cliente y no se manda nunca. */
         ...(donde === 'pedido' && ENTREGA.entrega ? { entrega: ENTREGA.entrega } : {}),
         // El plan de la tarjeta, si eligió uno (3C, 30/09): el número de cuotas
-        ...(donde === 'pedido' && CUOTAS_PEDIDO ? { cuotas: CUOTAS_PEDIDO } : {}) });
+        ...(donde === 'pedido' && CUOTAS_PEDIDO ? { cuotas: CUOTAS_PEDIDO } : {}),
+        // El usado cotizado (5A, 05/10): el modelo de la lista, nada más
+        ...((donde === 'pedido' || donde === 'usado') && USADOS && cotizacionUsado() ? { usado: cotizacionUsado().m.id } : {}) });
       ANALITICA.mandar();     // se está yendo a WhatsApp: no esperar los 5 s
     }catch(err){}
   }, true);
@@ -13766,6 +14393,8 @@ leerURL();               // por si entraste con un link ya filtrado
 sincronizarControles();
 pintarPedido();          // el pedido guardado de la visita anterior
 actualizar(true);
+cargarUsados();          // los valores de toma de usados (datos/usados.json, 05/10)
+addEventListener('online', () => { if(!USADOS) cargarUsados(); });
 
 /* Con la pestaña de fondo no se baja nada (29/09): eran unos 105 KB y cuatro
    pedidos cada 5 minutos mientras nadie miraba, igual que los carruseles que

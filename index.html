@@ -2442,6 +2442,21 @@
   .us-fuera{display:grid;gap:3px;width:100%;margin-top:8px}
   .us-fuera b{font:600 14px/1.25 var(--sans)}
   .us-fuera small{font:500 12px/1.35 var(--sans);color:var(--muted)}
+  /* El formulario de "Otro equipo" y "¿Qué tiene?" (05/10), con los campos del
+     pedido (.pd-campo) */
+  .us-ayuda.us-intro{margin:0 0 16px}
+  .us-form{display:grid;gap:14px}
+  .us-campo{display:grid;gap:7px}
+  .us-rot{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  #usado .pd-campo > span i{font-style:normal;text-transform:none;letter-spacing:.04em;font-weight:500}
+  #usado .pd-campo textarea{width:100%;min-height:72px;resize:vertical;background:#fff;color:var(--ink);border:1px solid var(--line);
+                            border-radius:10px;padding:9px 11px;font:14px/1.4 var(--sans)}
+  #usado .pd-campo textarea::placeholder{color:var(--faint)}
+  #usado .pd-campo textarea:focus{outline:2px solid var(--acento);outline-offset:0;border-color:transparent}
+  @media (max-width:520px), (hover:none){ #usado .pd-campo textarea{font-size:16px} }
+  .us-det{margin-top:14px}
+  #usado .botones a.pri:not([href]){opacity:.45;cursor:default}
+  .us-falta:empty{display:none}
   .us-grupo{display:grid;gap:6px}
   .us-grupo-rot{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
   .us-ayuda{margin:12px 0 0;font-size:12px;line-height:1.45;color:var(--muted)}
@@ -12479,6 +12494,13 @@ const USADO_KEY = 'advtecno.usado';
    lista de alguno, pasa a datos/usados.json y se saca de acá; vacío, no hay
    "Otro equipo". */
 const USADOS_OTROS = 'MacBook, Samsung y otros equipos de Apple';
+/* Los botones de "¿Qué es?" en "Otro equipo" y el ejemplo del modelo de cada
+   uno (05/10). Lo demás lo escribe el cliente: modelo, memoria y cómo está. */
+const USADOS_OTROS_TIPOS = [['MacBook', 'MacBook Air M2 13"'], ['iPad', 'iPad Air M2 11"'],
+  ['Apple Watch', 'Apple Watch Series 9 45 mm'], ['Samsung', 'Galaxy S24 Ultra'], ['Otro', 'marca y modelo']];
+const USADO_TXT_MAX = { modelo: 80, memoria: 40, estado: 300, det: 300 };
+// Lo que escribe el cliente, de un renglón y con su tope
+const limpiarTxtUsado = (s, max) => String(s || '').replace(/\s+/g, ' ').trim().slice(0, max);
 let USADOS = null;         // los equipos del archivo, ya validados; null si no llegó
 let USADOS_P = null;       // la promesa del archivo (se pide una vez, salvo que falle)
 let USADO = null;          // la cotización del cliente, completa: { e, m, o, bat, cond } o null
@@ -12548,6 +12570,7 @@ const nombreUsado = (m, o) => m.nombre + ' ' + (esMemoria(o.nombre) ? o.nombre :
    la lista (Pedro sacó el modelo o la memoria: no se cotiza con un valor
    que ya no es el suyo). valor es null si alguna condición no se cumple. */
 function cotizacionUsado(u = USADO){
+  if(u && u.e === 'otro') return cotizacionOtro(u);
   const e = u && equipoUsado(u.e); if(!e) return null;
   const m = modeloUsado(e, u.m); if(!m) return null;
   const o = m.opciones.find(x => x.nombre === u.o); if(!o) return null;
@@ -12557,7 +12580,20 @@ function cotizacionUsado(u = USADO){
   const fallan = e.condiciones.filter(c => cond[c.id] === false);
   const resta = e.bateria && u.bat === 'no' ? e.bateria.resta : 0;
   return { e, m, o, nombre: nombreUsado(m, o), bat: e.bateria ? u.bat : '', fallan,
+           det: limpiarTxtUsado(u.det, USADO_TXT_MAX.det),
            valor: fallan.length ? null : Math.max(0, o.usd - resta) };
+}
+/* "Otro equipo" completo (05/10): qué es, el modelo y cómo está; la memoria
+   es opcional. Sin valor: se cotiza por WhatsApp con lo que escribió. */
+function cotizacionOtro(u){
+  if(!USADOS_OTROS) return null;
+  const tipo = USADOS_OTROS_TIPOS.some(([t]) => t === u.tipo) ? u.tipo : '';
+  const modelo = limpiarTxtUsado(u.modelo, USADO_TXT_MAX.modelo);
+  const memoria = limpiarTxtUsado(u.memoria, USADO_TXT_MAX.memoria);
+  const estado = limpiarTxtUsado(u.estado, USADO_TXT_MAX.estado);
+  if(!tipo || !modelo || !estado) return null;
+  return { otro: true, e: null, m: { id: 'otro', nombre: modelo }, o: null, tipo, memoria, estado,
+           nombre: modelo + (memoria ? ' ' + memoria : ''), bat: '', fallan: [], det: '', valor: null };
 }
 
 function leerUsado(){
@@ -12566,7 +12602,12 @@ function leerUsado(){
     if(!g || typeof g !== 'object') return null;
     const cond = {};
     if(g.cond && typeof g.cond === 'object') Object.keys(g.cond).forEach(k => { if(typeof g.cond[k] === 'boolean') cond[k] = g.cond[k]; });
-    const u = { e: String(g.e || ''), m: String(g.m || ''), o: String(g.o || ''), bat: String(g.bat || ''), cond };
+    const txt = (k, max) => typeof g[k] === 'string' ? g[k].slice(0, max) : '';
+    const u = g.e === 'otro'
+      ? { e: 'otro', tipo: String(g.tipo || ''), modelo: txt('modelo', USADO_TXT_MAX.modelo),
+          memoria: txt('memoria', USADO_TXT_MAX.memoria), estado: txt('estado', USADO_TXT_MAX.estado) }
+      : { e: String(g.e || ''), m: String(g.m || ''), o: String(g.o || ''), bat: String(g.bat || ''), cond,
+          det: txt('det', USADO_TXT_MAX.det) };
     return cotizacionUsado(u) ? u : null;
   }catch{ return null; }
 }
@@ -12591,7 +12632,7 @@ document.addEventListener('visibilitychange', () => { if(!document.hidden) relee
 
 /* La batería, como se dice en el mensaje y en el resultado */
 function textoBateria(c){
-  const b = c.e.bateria;
+  const b = c.e && c.e.bateria;
   if(!b) return '';
   if(c.bat === 'si') return `batería ${b.umbral} % o más`;
   if(c.bat === 'no') return `batería por debajo del ${b.umbral} %`;
@@ -12601,12 +12642,16 @@ function textoBateria(c){
    más, cumple todas las condiciones". Si algo no cumple, lo que marcó y
    "Te paso los detalles:", para que los escriba ahí mismo (Pedro, 05/10). */
 function textoUsado(c){
+  // "Otro equipo": lo que escribió, y la pregunta (05/10)
+  if(c.otro) return `${c.nombre} (${c.tipo}, no está en el cotizador). Cómo está: ${c.estado}. ¿Cuánto me lo toman?`;
   const partes = [c.nombre];
   const bat = textoBateria(c);
   if(bat) partes.push(bat);
   if(!c.fallan.length) partes.push('cumple todas las condiciones');
   let t = partes.join(', ');
-  if(c.fallan.length) t += '. Marqué que no cumple: ' + c.fallan.map(x => x.texto.toLowerCase()).join(', ') + '. Te paso los detalles:';
+  // Con "¿Qué tiene?" escrito en la web van los detalles; si no, los escribe en el chat
+  if(c.fallan.length) t += '. Marqué que no cumple: ' + c.fallan.map(x => x.texto.toLowerCase()).join(', ') +
+    (c.det ? '. Detalles: ' + c.det : '. Te paso los detalles:');
   return t;
 }
 // "USD 350", y con la batería sin saber, lo que vale si está por debajo
@@ -12654,10 +12699,11 @@ function htmlCuentaUsadoPedido(){
 function htmlUsadoPedido(){
   if(!USADOS) return '';
   const c = cotizacionUsado();
-  let ayuda = 'Lo tomamos como parte de pago: ' + USADOS.map(e => e.nombre).join(' y ') + '.';
+  const tomamos = USADOS.map(e => e.nombre).concat(USADOS_OTROS ? [USADOS_OTROS] : []);
+  let ayuda = 'Lo tomamos como parte de pago: ' + (tomamos.length > 1 ? tomamos.slice(0, -1).join(', ') + ' y ' + tomamos[tomamos.length - 1] : tomamos[0]) + '.';
   if(c) ayuda = c.valor !== null
     ? `<b>${esc(c.nombre)}</b>: ${esc(textoValorUsado(c))} si cumple todas las condiciones.`
-    : `<b>${esc(c.nombre)}</b>: el valor lo vemos por WhatsApp. Mandanos los detalles con el pedido.`;
+    : `<b>${esc(c.nombre)}</b>: el valor lo vemos por WhatsApp. ${c.otro || c.det ? 'Lo que escribiste va en el mensaje.' : 'Mandanos los detalles con el pedido.'}`;
   return `<div class="pd-usado" role="group" aria-labelledby="pd-rot-usado">
       <span class="pd-rot" id="pd-rot-usado">¿Entregás un usado? <i>opcional</i></span>
       <div class="pd-chips">
@@ -13137,13 +13183,15 @@ function mensajeUsado(c, prod, color){
   return t;
 }
 
-// "Otro equipo" (05/10): sin modelo ni valor; el cliente escribe los detalles
-function mensajeFuera(prod, color){
+// "Otro equipo" (05/10): lo que el cliente completó en la web, renglón por renglón
+function mensajeFuera(prod, color, c){
   const x = prod ? partesMensaje(prod, color) : null;
   return (x
     ? `Hola! Me interesa el ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''} y quiero entregar mi usado como parte de pago.`
     : 'Hola! Quiero entregar mi usado como parte de pago.') +
-    '\n\nEs un equipo que no está en el cotizador. Te paso los detalles:';
+    '\n\nMi usado (no está en el cotizador):' +
+    `\nQué es: ${c.tipo}\nModelo: ${c.m.nombre}` + (c.memoria ? `\nMemoria: ${c.memoria}` : '') +
+    `\nCómo está: ${c.estado}\n\n¿Cuánto me lo toman?`;
 }
 
 /* desde: { k, color } desde una ficha; { pedido: true } desde el pedido;
@@ -13157,7 +13205,11 @@ function abrirCotizador(desde = {}){
   const color = desde.color || '';
   let b = USADO ? JSON.parse(JSON.stringify(USADO)) : { e: '', m: '', o: '', bat: '', cond: {} };
   if(!b.e && USADOS.length === 1) b.e = USADOS[0].id;
-  let paso = cotizacionUsado(b) && !desde.empezar ? 'resultado' : pasosUsado(b)[0];
+  // "Otro equipo" (05/10): su formulario, aparte del borrador de la lista
+  let f = b.e === 'otro' ? { ...b } : { e: 'otro', tipo: '', modelo: '', memoria: '', estado: '' };
+  if(b.e === 'otro') b = { e: '', m: '', o: '', bat: '', cond: {} };
+  let paso = desde.empezar ? pasosUsado(b)[0] : USADO && USADO.e === 'otro' ? 'fuera'
+    : cotizacionUsado(b) ? 'resultado' : pasosUsado(b)[0];
 
   const op = (dato, valor, texto, marcado, extra = '') =>
     `<button type="button" class="us-op" data-${dato}="${esc(valor)}" aria-pressed="${!!marcado}"${extra}>${esc(texto)}</button>`;
@@ -13166,14 +13218,32 @@ function abrirCotizador(desde = {}){
     const e = equipoUsado(b.e), m = e && modeloUsado(e, b.m);
     if(paso === 'equipo') return { preg: '¿Qué equipo entregás?',
       html: `<div class="us-ops us-ops-2">${USADOS.map(x => op('e', x.id, x.nombre, b.e === x.id)).join('')}</div>
-        ${USADOS_OTROS ? `<button type="button" class="us-op us-fuera" data-fuera="1"><b>Otro equipo</b><small>${esc(USADOS_OTROS)}</small></button>` : ''}` };
-    /* "Otro equipo" (05/10): sin valor en el momento, los detalles por
-       WhatsApp, como lo que no cumple. No se guarda como cotización. */
-    if(paso === 'fuera') return { preg: 'Otro equipo',
-      html: `<div class="us-res rev"><small>${esc(USADOS_OTROS)}</small><b>Mandanos los detalles</b>
-          <span>Todavía no están en el cotizador. Contanos por WhatsApp qué equipo es, la memoria y cómo está, y te decimos cuánto vale.</span></div>
-        ${WHATSAPP ? `<div class="botones"><a class="pri" data-fuera="1" href="${linkWA(mensajeFuera(prod, color))}" target="_blank" rel="noopener">Enviar los detalles por WhatsApp</a></div>` : ''}
-        ${delPedido ? '<button type="button" class="pd-link" id="us-listo">Volver al pedido</button>' : ''}` };
+        ${USADOS_OTROS ? `<button type="button" class="us-op us-fuera" data-fuera="1" aria-pressed="${!!(USADO && USADO.e === 'otro')}"><b>Otro equipo</b><small>${esc(USADOS_OTROS)}</small></button>` : ''}` };
+    /* "Otro equipo" (05/10): sin valor en el momento. El cliente completa qué
+       es, el modelo, la memoria y cómo está, y eso arma el WhatsApp (Pedro:
+       "que puedan poner los detalles en la landing y de ahí que envíen el
+       msj con la info"). Desde el pedido se suma al pedido y va en su
+       mensaje. Los textos van como propiedad, no en el HTML (ver enganchar). */
+    if(paso === 'fuera'){
+      const ej = (USADOS_OTROS_TIPOS.find(([t]) => t === f.tipo) || [, 'marca y modelo'])[1];
+      return { preg: 'Otro equipo',
+        html: `<p class="us-ayuda us-intro">Todavía no están en el cotizador: completá esto y te decimos cuánto vale por WhatsApp.</p>
+          <div class="us-form">
+            <div class="us-campo" role="group" aria-labelledby="us-rot-tipo"><span class="us-rot" id="us-rot-tipo">¿Qué es?</span>
+              <div class="pd-chips">${USADOS_OTROS_TIPOS.map(([t]) => `<button type="button" class="pd-chip" data-tipo="${esc(t)}" aria-pressed="${f.tipo === t}">${esc(t)}</button>`).join('')}</div></div>
+            <label class="pd-campo"><span>Modelo</span>
+              <input type="text" id="us-modelo" maxlength="${USADO_TXT_MAX.modelo}" autocomplete="off" placeholder="Por ejemplo: ${esc(ej)}"></label>
+            <label class="pd-campo"><span>Memoria <i>opcional</i></span>
+              <input type="text" id="us-memoria" maxlength="${USADO_TXT_MAX.memoria}" autocomplete="off" placeholder="Por ejemplo: 256GB"></label>
+            <label class="pd-campo"><span>¿Cómo está?</span>
+              <textarea id="us-estado" maxlength="${USADO_TXT_MAX.estado}" rows="3" placeholder="Por ejemplo: batería al 85 %, sin golpes, con caja y cargador"></textarea></label>
+          </div>
+          <div class="botones">${delPedido
+            ? '<button type="button" class="pri" id="us-sumar">Sumarlo al pedido</button>'
+            : WHATSAPP ? '<a class="pri" id="us-enviar" data-fuera="1" target="_blank" rel="noopener">Enviar por WhatsApp</a>' : ''}</div>
+          <p class="us-ayuda us-falta" id="us-falta" aria-live="polite"></p>
+          ${delPedido ? '<button type="button" class="pd-link" id="us-listo">Volver al pedido</button>' : ''}` };
+    }
     if(paso === 'modelo') return { preg: '¿Qué modelo es?',
       html: `<div class="us-grupos">${e.grupos.map(g => `<div class="us-grupo">${g.nombre ? `<span class="us-grupo-rot">${esc(g.nombre)}</span>` : ''}
           <div class="us-ops us-ops-2">${g.modelos.map(x => {
@@ -13243,13 +13313,15 @@ function abrirCotizador(desde = {}){
       html = `<div class="us-res rev"><small>El valor</small><b>Mandanos los detalles</b>
           <span>Marcaste que no: ${esc(c.fallan.map(x => x.texto.toLowerCase()).join(', '))}. Con eso el valor cambia: ${delPedido
             ? 'mandanos los detalles junto con el pedido, en el mismo WhatsApp, y te decimos cuánto vale.'
-            : 'mandanos los detalles por WhatsApp y te decimos cuánto vale.'}</span></div>`;
+            : 'mandanos los detalles por WhatsApp y te decimos cuánto vale.'}</span></div>
+        <label class="pd-campo us-det"><span>¿Qué tiene? <i>opcional</i></span>
+          <textarea id="us-det" maxlength="${USADO_TXT_MAX.det}" rows="3" placeholder="Por ejemplo: la pantalla tiene una rayita en una esquina"></textarea></label>`;
     }
     const wa = c.valor === null ? 'Enviar los detalles por WhatsApp'
       : prod ? 'Lo quiero: seguir por WhatsApp' : 'Coordinar por WhatsApp';
     html += `<div class="botones">${delPedido
         ? '<button type="button" class="pri" id="us-listo">Listo: volver al pedido</button>'
-        : (WHATSAPP ? `<a class="pri" href="${linkWA(mensajeUsado(c, prod, color))}" target="_blank" rel="noopener">${wa}</a>` : '')}</div>
+        : (WHATSAPP ? `<a class="pri" id="us-wa" href="${linkWA(mensajeUsado(c, prod, color))}" target="_blank" rel="noopener">${wa}</a>` : '')}</div>
       ${delPedido || c.valor === null ? '' : '<p class="us-ayuda us-guardado">Queda guardado: si armás un pedido, lo restamos ahí.</p>'}
       <button type="button" class="pd-link" id="us-otro">Cotizar otro equipo</button>`;
     return { preg: 'Tu ' + c.nombre, html };
@@ -13296,6 +13368,50 @@ function abrirCotizador(desde = {}){
     ir('resultado');
   };
 
+  /* "Otro equipo" (05/10). Los textos van como propiedad: vienen del
+     navegador (ver abrirPanel). Escribir no redibuja (le sacaría el foco al
+     campo): sólo actualiza el link, el botón y lo que falta. El link de
+     WhatsApp no tiene href hasta que está completo: así no se puede tocar ni
+     se mide como un clic a WhatsApp. */
+  const engancharFuera = () => {
+    if(paso !== 'fuera') return;
+    const campos = { modelo: d.querySelector('#us-modelo'), memoria: d.querySelector('#us-memoria'), estado: d.querySelector('#us-estado') };
+    Object.entries(campos).forEach(([k, el]) => { if(!el) return; el.value = f[k] || ''; el.oninput = () => { f[k] = el.value.slice(0, USADO_TXT_MAX[k]); listoFuera(); }; });
+    d.querySelectorAll('.pd-chip[data-tipo]').forEach(x => x.onclick = () => {
+      f.tipo = x.dataset.tipo;
+      dibujar(false);
+      d.querySelector(`.pd-chip[data-tipo="${CSS.escape(f.tipo)}"]`)?.focus({preventScroll:true});
+    });
+    const guardar = () => { const c = cotizacionOtro(f); if(!c) return false;
+      USADO = { e: 'otro', tipo: c.tipo, modelo: c.m.nombre, memoria: c.memoria, estado: c.estado };
+      USADO_DIJO_NO = false; guardarUsado(); pintarPedido(); return true; };
+    const env = d.querySelector('#us-enviar');
+    if(env) env.onclick = () => { guardar(); };     // el link sigue: abre el WhatsApp
+    const sumar = d.querySelector('#us-sumar');
+    if(sumar) sumar.onclick = () => { if(guardar()) cerrar(); };
+    listoFuera();
+  };
+  const listoFuera = () => {
+    const c = cotizacionOtro(f);
+    const env = d.querySelector('#us-enviar'), sumar = d.querySelector('#us-sumar'), falta = d.querySelector('#us-falta');
+    if(env){ if(c) env.href = linkWA(mensajeFuera(prod, color, c)); else env.removeAttribute('href'); }
+    if(sumar) sumar.disabled = !c;
+    const que = [!f.tipo && 'qué es', !limpiarTxtUsado(f.modelo, 99) && 'el modelo', !limpiarTxtUsado(f.estado, 99) && 'cómo está'].filter(Boolean);
+    if(falta) falta.textContent = que.length ? 'Falta ' + (que.length > 1 ? que.slice(0, -1).join(', ') + ' y ' + que[que.length - 1] : que[0]) + '.' : '';
+  };
+  // "¿Qué tiene?" en lo que no cumple (05/10): va en el mensaje y queda guardado
+  const engancharDetalle = () => {
+    const t = d.querySelector('#us-det');
+    if(!t) return;
+    t.value = b.det || '';
+    t.oninput = () => {
+      b.det = t.value.slice(0, USADO_TXT_MAX.det);
+      if(USADO && USADO.e === b.e && USADO.m === b.m){ USADO.det = b.det; guardarUsado(); pintarPedido(); }
+      const a = d.querySelector('#us-wa'), c = cotizacionUsado(b);
+      if(a && c) a.href = linkWA(mensajeUsado(c, prod, color));
+    };
+  };
+
   const enganchar = () => {
     d.querySelector('.us-cerrar').onclick = () => cerrar();
     const atras = d.querySelector('.us-atras');
@@ -13304,6 +13420,8 @@ function abrirCotizador(desde = {}){
       ir(paso === 'resultado' ? pasos[pasos.length - 1] : paso === 'fuera' ? 'equipo' : pasos[Math.max(0, pasos.indexOf(paso) - 1)]);
     };
     d.querySelectorAll('.us-op[data-fuera]').forEach(x => x.onclick = () => ir('fuera'));
+    engancharFuera();
+    engancharDetalle();
     d.querySelectorAll('.us-op[data-e]').forEach(x => x.onclick = () => {
       // Otro equipo: lo demás era del anterior
       if(b.e !== x.dataset.e) b = { e: x.dataset.e, m: '', o: '', bat: '', cond: {} };

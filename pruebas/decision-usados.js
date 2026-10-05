@@ -16,6 +16,11 @@
 //          queda" / "Te queda a favor") y el mensaje de WhatsApp.
 //   FAQ    "¿Toman mi usado como parte de pago?" con los equipos de la lista y
 //          "Cotizar mi usado", que abre el cotizador sin producto.
+//   otro   "Otro equipo" (MacBook, Samsung, otros de Apple): un formulario
+//          (que es, modelo, memoria, como esta) que arma el WhatsApp; desde
+//          el pedido se suma y va al final de su mensaje (Pedro, 05/10: "que
+//          puedan poner los detalles en la landing").
+//   det    lo que no cumple trae "¿Qué tiene?", que va en el mensaje.
 //   anim.  tocar una opcion no repite la entrada de la ventana (el
 //          "pestañazo negro" que vio Pedro el 05/10).
 //   5A     "¿Entregás un usado?" en el pedido: el usado resta en el total, la
@@ -85,6 +90,24 @@ async function uzCotizar(e, m, o, bat, conds){
   await uzDormir(30);
 }
 const uzTodoSi = e => Object.fromEntries(equipoUsado(e).condiciones.map(c => [c.id, true]));
+// Escribir en un campo como lo haria el cliente
+function uzEscribir(sel, v){
+  const el = uzCot() && uzCot().querySelector(sel);
+  if(!el) return false;
+  el.value = v; el.dispatchEvent(new Event('input', { bubbles: true }));
+  return true;
+}
+// Tocar un link de WhatsApp sin que abra nada (su onclick corre igual)
+function uzTocarSinIr(a){
+  const frenar = e => e.preventDefault();
+  document.addEventListener('click', frenar, true);
+  try{ a.click(); } finally { document.removeEventListener('click', frenar, true); }
+}
+// Completa "Otro equipo" (ya abierto)
+function uzCompletarOtro(tipo, modelo, memoria, estado){
+  uzTocar(`.pd-chip[data-tipo="${tipo}"]`);
+  uzEscribir('#us-modelo', modelo); uzEscribir('#us-memoria', memoria); uzEscribir('#us-estado', estado);
+}
 // Los valores salen del archivo: si Pedro cambia uno, la prueba lo sigue
 const uzVale = (e, m, o) => { const x = modeloUsado(equipoUsado(e), m); const op = x && x.opciones.find(y => y.nombre === o); return op ? op.usd : null; };
 let V13, MAX, PSP, BAT;      // iPhone 13 128GB, 17 Pro Max 2TB, PS4 Pro sin caja, la bateria del iPhone
@@ -164,16 +187,39 @@ async function probarLaPregunta(){
   if(fuera){
     fuera.click();
     await uzDormir(30);
-    const af = uzCot().querySelector('.botones a.pri'), mf = af ? uzWA(af) : '';
-    ok(uzPreg() === 'Otro equipo' && /Mandanos los detalles/.test(uzTxt(uzCot().querySelector('.us-res'))) && !/USD/.test(uzTxt(uzCot().querySelector('.caja'))) &&
-       af && uzTxt(af) === 'Enviar los detalles por WhatsApp',
-       '[otro] «Mandanos los detalles», sin numero, con «Enviar los detalles por WhatsApp»');
-    ok(mf === 'Hola! Quiero entregar mi usado como parte de pago.\n\nEs un equipo que no está en el cotizador. Te paso los detalles:',
-       '[otro] el mensaje dice que no esta en el cotizador y termina en «Te paso los detalles:»', mf.replace(/\n/g, ' / '));
-    ok(USADO === null && !localStorage.getItem(USADO_KEY), '[otro] no se guarda como cotizacion');
+    const env = () => uzCot().querySelector('#us-enviar');
+    ok(uzPreg() === 'Otro equipo' && env() && uzTxt(env()) === 'Enviar por WhatsApp' && !env().hasAttribute('href') && !/USD/.test(uzTxt(uzCot().querySelector('.caja'))) &&
+       uzTxt(uzCot().querySelector('#us-falta')) === 'Falta qué es, el modelo y cómo está.',
+       '[otro] un formulario sin valor: hasta completarlo el WhatsApp no se puede tocar y dice qué falta', uzTxt(uzCot().querySelector('#us-falta')));
+    ok([...uzCot().querySelectorAll('.pd-chip[data-tipo]')].map(uzTxt).join(',') === USADOS_OTROS_TIPOS.map(t => t[0]).join(','),
+       '[otro] «¿Qué es?» con los botones de la lista', USADOS_OTROS_TIPOS.map(t => t[0]).join(','));
+    uzTocar('.pd-chip[data-tipo="MacBook"]');
+    ok(uzCot().querySelector('#us-modelo').placeholder === 'Por ejemplo: MacBook Air M2 13"' &&
+       document.activeElement === uzCot().querySelector('.pd-chip[data-tipo="MacBook"]'),
+       '[otro] elegir qué es cambia el ejemplo del modelo y deja el foco en el botón', uzCot().querySelector('#us-modelo').placeholder);
+    uzEscribir('#us-modelo', 'MacBook Air M2 13"');
+    uzEscribir('#us-memoria', '8/256GB');
+    ok(!env().hasAttribute('href') && uzTxt(uzCot().querySelector('#us-falta')) === 'Falta cómo está.', '[otro] sin «¿Cómo está?» todavía no sale');
+    uzEscribir('#us-estado', 'batería al 85 %,   sin golpes,\ncon cargador');
+    const mf = env().hasAttribute('href') ? uzWA(env()) : '';
+    ok(mf === 'Hola! Quiero entregar mi usado como parte de pago.\n\nMi usado (no está en el cotizador):\nQué es: MacBook\nModelo: MacBook Air M2 13"\nMemoria: 8/256GB\nCómo está: batería al 85 %, sin golpes, con cargador\n\n¿Cuánto me lo toman?',
+       '[otro] completo: el WhatsApp sale con todo lo que escribió', mf.replace(/\n/g, ' / '));
+    ok(!uzTxt(uzCot().querySelector('#us-falta')), '[otro] y ya no dice que falta nada');
+    ok(USADO === null, '[otro] escribir no guarda nada todavia');
+    uzTocarSinIr(env());
+    ok(USADO && USADO.e === 'otro' && USADO.tipo === 'MacBook' && USADO.modelo === 'MacBook Air M2 13"' &&
+       (JSON.parse(localStorage.getItem(USADO_KEY) || '{}').estado || '') === 'batería al 85 %, sin golpes, con cargador',
+       '[otro] al tocar «Enviar por WhatsApp» queda guardado (el pedido lo sabe)', JSON.stringify(USADO).slice(0, 90));
     uzTocar('.us-atras');
     await uzDormir(20);
-    ok(uzPreg() === '¿Qué equipo entregás?', '[otro] «Atrás» vuelve al primer paso');
+    ok(uzPreg() === '¿Qué equipo entregás?' && uzCot().querySelector('.us-op[data-fuera]').getAttribute('aria-pressed') === 'true',
+       '[otro] «Atrás» vuelve al primer paso, con «Otro equipo» marcado');
+    uzTocar('.us-op[data-fuera]');
+    await uzDormir(20);
+    ok(uzCot().querySelector('#us-modelo').value === 'MacBook Air M2 13"' && uzCot().querySelector('#us-estado').value.startsWith('batería al 85 %'),
+       '[otro] y al volver, lo escrito sigue ahí');
+    uzTocar('.us-atras');
+    await uzDormir(20);
   }
   await uzCotizar('iphone', 'iphone-13', '128GB', 'si', uzTodoSi('iphone'));
   const a = uzCot().querySelector('.botones a.pri'), m = a ? uzWA(a) : '';
@@ -290,6 +336,14 @@ async function probarLaFicha(){
   ok(msjRev.includes('Marqué que no cumple: pantalla y vidrios sin roturas. Te paso los detalles:') && msjRev.endsWith('Te paso los detalles:') &&
      !/USD \d/.test(msjRev.split('\n\n')[1] || ''),
      '[3A] y el mensaje dice lo que no cumple y termina en «Te paso los detalles:», sin valor', (msjRev.split('\n\n')[1] || '').slice(0, 120));
+  // "¿Qué tiene?" (05/10): lo que escribe va en el mensaje y queda guardado
+  ok(!!uzCot().querySelector('#us-det') && uzCot().querySelector('#us-det').tagName === 'TEXTAREA',
+     '[det] lo que no cumple trae «¿Qué tiene?» para escribir los detalles');
+  uzEscribir('#us-det', 'la pantalla tiene una rayita');
+  const msjDet = uzWA(uzCot().querySelector('.botones a.pri'));
+  ok(msjDet.endsWith('Marqué que no cumple: pantalla y vidrios sin roturas. Detalles: la pantalla tiene una rayita') &&
+     USADO && USADO.det === 'la pantalla tiene una rayita' && JSON.parse(localStorage.getItem(USADO_KEY) || '{}').det === 'la pantalla tiene una rayita',
+     '[det] lo que escribe va en el mensaje y queda guardado', (msjDet.split('\n\n')[1] || '').slice(-80));
 
   // "Cotizar otro equipo": PS4 Pro sin caja, sin el paso de la bateria
   uzTocar('#us-otro');
@@ -417,6 +471,33 @@ async function probarElPedido(){
     ok(msjR.includes('Total: USD ' + uzPlata(p1.precio)) &&
        msjR.endsWith(`\n\nMi usado: iPhone 13 128GB, batería ${BAT.umbral} % o más. Marqué que no cumple: ${equipoUsado('iphone').condiciones.find(c => c.id === 'faceid').texto.toLowerCase()}. Te paso los detalles:`),
        '[5A] y el mensaje lo dice al final, sin valor, terminando en «Te paso los detalles:»', msjR.split('\n\n').pop().slice(0, 110));
+    // "Otro equipo" en el pedido (05/10): no resta y va al final del mensaje
+    USADO = { e: 'otro', tipo: 'Samsung', modelo: 'Galaxy S23', memoria: '', estado: 'anda perfecto, con un rayón atrás' };
+    guardarUsado(); pintarPedido(); redibujarPedido();
+    d = document.getElementById('pedido');
+    const msjO = mensajePedido();
+    ok(msjO.endsWith('\n\nMi usado: Galaxy S23 (Samsung, no está en el cotizador). Cómo está: anda perfecto, con un rayón atrás. ¿Cuánto me lo toman?') &&
+       uzTxt(d.querySelector('.pd-total')).includes('menos tu usado, que vemos por WhatsApp') &&
+       /Galaxy S23: el valor lo vemos por WhatsApp\. Lo que escribiste va en el mensaje\./.test(uzTxt(d.querySelector('.pd-usado'))),
+       '[otro] en el pedido: no resta y va al final del mensaje con lo que escribió', msjO.split('\n\n').pop().slice(0, 100));
+    // Desde el pedido: "Sumarlo al pedido"
+    USADO = null; guardarUsado(); redibujarPedido();
+    document.querySelector('#pedido [data-usado="si"]').click();
+    await uzDormir(30);
+    uzTocar('.us-op[data-fuera]');
+    await uzDormir(20);
+    const sumar = uzCot().querySelector('#us-sumar');
+    ok(sumar && sumar.disabled && !uzCot().querySelector('a[href*="wa.me"]') && uzTxt(uzCot().querySelector('#us-listo')) === 'Volver al pedido',
+       '[otro] desde el pedido: «Sumarlo al pedido» (apagado hasta completarlo) y «Volver al pedido»');
+    uzCompletarOtro('iPad', 'iPad Air M2 11"', '128GB', 'como nuevo');
+    ok(!uzCot().querySelector('#us-sumar').disabled, '[otro] completo se puede sumar');
+    uzTocar('#us-sumar');
+    await uzEsperarA(() => !uzCot(), 3000);
+    d = document.getElementById('pedido');
+    ok(!uzCot() && !!d && USADO && USADO.e === 'otro' && USADO.modelo === 'iPad Air M2 11"' &&
+       mensajePedido().endsWith('Mi usado: iPad Air M2 11" 128GB (iPad, no está en el cotizador). Cómo está: como nuevo. ¿Cuánto me lo toman?') &&
+       d.querySelector('[data-usado="si"]').getAttribute('aria-pressed') === 'true',
+       '[otro] «Sumarlo al pedido» cierra el cotizador y el usado va en el mensaje del pedido');
     // A favor: el usado paga todo, sin cuotas
     const barato = PRODUCTOS.filter(p => p.stock && typeof p.precio === 'number' && p.precio > 0 && p.precio < MAX && buscarModelo(clave(p))).sort((x, y) => x.precio - y.precio)[0];
     if(barato){

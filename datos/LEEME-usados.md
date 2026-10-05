@@ -19,15 +19,19 @@ nada (Pedro eligió la G, 05/10).
 3. **El valor es "si cumple todas las condiciones".** La batería por debajo
    del umbral resta lo que dice `bateria.resta`. Si cualquier otra
    condición no se cumple, no se muestra ningún número: "Mandanos los
-   detalles" y el botón "Enviar los detalles por WhatsApp", con un mensaje
-   que termina en "Te paso los detalles:" (Pedro, 05/10; antes decía "Lo
-   revisamos en persona").
+   detalles", el campo "¿Qué tiene?" y el botón "Enviar los detalles por
+   WhatsApp". El mensaje lleva lo que escribió ("Detalles: …") o, si no
+   escribió nada, termina en "Te paso los detalles:" (Pedro, 05/10; antes
+   decía "Lo revisamos en persona").
 4. Si el usado vale más que lo que compra, la web dice **"Te queda a favor
    USD X"** y se coordina por WhatsApp.
 5. **Lo que Pedro toma pero todavía no tiene lista** (05/10: "lo de Apple,
    Samsung o MacBook") va en `USADOS_OTROS` de `index.html`: el cotizador
-   ofrece **"Otro equipo"**, sin valor, que lleva a mandar los detalles por
-   WhatsApp, y la pregunta frecuente lo nombra. Cuando llegue la lista de
+   ofrece **"Otro equipo"**, sin valor: el cliente completa qué es
+   (`USADOS_OTROS_TIPOS`), el modelo, la memoria y cómo está, y eso arma el
+   WhatsApp (desde el pedido, "Sumarlo al pedido" y va en su mensaje). La
+   pregunta frecuente lo nombra. Pedro, 05/10: esos "los arreglan sí o sí
+   con nosotros", así que pueden no tener lista nunca. Cuando llegue la lista de
    alguno, se carga acá como un equipo más y se saca de `USADOS_OTROS`.
 
 ## Cómo lo usa la web

@@ -45,7 +45,8 @@ const esperaB2 = setInterval(() => {
 }, 120);
 
 const dormirB2 = ms => new Promise(r => setTimeout(r, ms));
-const archivoB2 = u => decodeURIComponent(String(u || '').split('/').pop().split('?')[0]).replace(/\.jpg$/i, '');
+// El nombre sin extension: la web muestra la copia sin fondo (.webp, 05/10/2026)
+const archivoB2 = u => decodeURIComponent(String(u || '').split('/').pop().split('?')[0]).replace(/\.(jpg|webp)$/i, '');
 const enIndiceB2 = n => !!INDICE_FOTOS && INDICE_FOTOS.has(n + EXT_FOTOS);
 const hermanasB2 = (m, v) => (m ? m.variantes : []).filter(x => x !== v &&
   norm(x.sim) === norm(v.sim) && norm(x.teclado) === norm(v.teclado));
@@ -285,7 +286,7 @@ function fotoDeLaHermana(){
   const otraSim = { ...x, ...sinNada, id: 'PRUEBA-B2-F2', sku: 'PRUEBA-B2-F2', precio: x.precio + 2,
                     sim: norm(x.sim) === 'sim' ? 'E-Sim' : 'Sim' };
   armarModelo([conFoto, otraMemoria, otraSim]);
-  ok(otraMemoria.imagenGrande === urlFoto(CARPETA_FOTOS + encodeURIComponent(n) + EXT_FOTOS) && !otraSim.imagen,
+  ok(otraMemoria.imagenGrande === urlFotoPropia(n) && !otraSim.imagen,
      '[40] la fila sin foto toma la de la hermana del mismo color, y la de otra Sim no',
      x.id + ' ' + c + ': otra memoria -> ' + (archivoB2(otraMemoria.imagenGrande) || 'nada')
        + ', otra Sim -> ' + (archivoB2(otraSim.imagenGrande) || 'nada'));

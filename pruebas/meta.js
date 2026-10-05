@@ -110,7 +110,8 @@ function correrPruebas(){
       for(const c of partirColores(p.color)){
         for(const u of fotosDeColor(p, c)){
           pedidas++;
-          const n = decodeURIComponent(u.split('/').pop().split('?')[0]);
+          // La sin fondo (AT-XXXX.webp, 05/10/2026) es de la foto AT-XXXX.jpg
+          const n = decodeURIComponent(u.split('/').pop().split('?')[0]).replace(new RegExp('\\' + EXT_SIN_FONDO + '$'), EXT_FOTOS);
           if(!INDICE_FOTOS.has(n)) fantasmas.push(n);
         }
       }

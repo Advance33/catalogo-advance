@@ -86,9 +86,13 @@ function correrPruebas(){
   const marco = d.querySelector('.fi-marco');
   const img = marco && marco.querySelector('img');
   ok(!!marco && !!img, 'la foto vive adentro de .fi-marco', conFoto.desc);
-  ok(img && estilo(img, 'mix-blend-mode') === 'multiply',
+  // Desde el 05/10/2026 la grande viene SIN FONDO (fotos/sinfondo/): no hay
+  // recuadro que fundir y no usa la mezcla, que en el iPhone dejaba el blanco
+  // y hacía desaparecer la foto. La de respaldo de ADVAPP sigue con multiply.
+  const grandeSinFondo = !!img && (img.getAttribute('src') || '').includes(CARPETA_FOTOS + SUB_SIN_FONDO);
+  ok(img && estilo(img, 'mix-blend-mode') === (grandeSinFondo ? 'normal' : 'multiply'),
      'y se funde con la página en vez de vivir en un recuadro',
-     img && estilo(img, 'mix-blend-mode'));
+     img && (grandeSinFondo ? 'sin fondo desde el archivo' : estilo(img, 'mix-blend-mode')));
 
   /* multiply mezcla contra lo que este pintado DEBAJO dentro de su grupo, y la
      ventana entra con una animacion de opacity+transform que arma uno propio.

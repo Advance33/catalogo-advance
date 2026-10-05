@@ -119,7 +119,12 @@ function vpFotoPropia(u){
     const x = new URL(u, document.baseURI);
     const raiz = new URL('./', document.baseURI);
     if(x.origin !== raiz.origin || !x.pathname.startsWith(raiz.pathname)) return '';
-    const ruta = decodeURIComponent(x.pathname.slice(raiz.pathname.length));
+    let ruta = decodeURIComponent(x.pathname.slice(raiz.pathname.length));
+    // La ficha muestra la grande sin fondo (fotos/sinfondo/X.webp, 05/10/2026):
+    // la vista previa de WhatsApp va con su original, fotos/X.jpg
+    const sf = CARPETA_FOTOS + SUB_SIN_FONDO;
+    if(ruta.startsWith(sf) && ruta.endsWith(EXT_SIN_FONDO))
+      ruta = CARPETA_FOTOS + ruta.slice(sf.length, -EXT_SIN_FONDO.length) + EXT_FOTOS;
     return new RegExp('^' + escRe(CARPETA_FOTOS) + '[^/]+\\' + EXT_FOTOS + '$').test(ruta) ? ruta : '';
   }catch(e){ return ''; }
 }

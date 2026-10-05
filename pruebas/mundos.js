@@ -121,8 +121,12 @@ function correrPruebas(){
   // Con el mouse en la esquina es lo mas que se inclina. La completa llegaba a 5 grados y competia con todo.
   ok(Math.abs(ry) <= 2.5 && Math.abs(rx) <= 2.5, 'y apenas: la version suave, menos de 2,5 grados en la esquina', 'rx ' + rx + ' / ry ' + ry);
   const img = fotos(grande)[visible(grande)];
-  ok(getComputedStyle(img).mixBlendMode === 'multiply' && getComputedStyle(img.parentElement).transform === 'none',
-     'la foto se corre sola, sin transformar su caja (si no, vuelve el fondo blanco de la toma)');
+  // Desde el 05/10/2026 la chica viene sin fondo (fotos/mini/sinfondo/) y ya
+  // no usa la mezcla; la de respaldo de ADVAPP, que trae su blanco, sí.
+  const sinFondo = (img.getAttribute('src') || '').includes(CARPETA_SIN_FONDO);
+  ok(getComputedStyle(img).mixBlendMode === (sinFondo ? 'normal' : 'multiply') && getComputedStyle(img.parentElement).transform === 'none',
+     'la foto se corre sola, sin transformar su caja (si no, vuelve el fondo blanco de la toma)',
+     (sinFondo ? 'sin fondo, ' : 'con su fondo, ') + getComputedStyle(img).mixBlendMode);
   grande.dispatchEvent(new PointerEvent('pointerleave', { pointerType: 'mouse' }));
   ok(!grande.classList.contains('sigue') && !grande.style.getPropertyValue('--ry'), 'al irse el mouse vuelve derecha');
   const tocadaMover = tarjetas()[0];

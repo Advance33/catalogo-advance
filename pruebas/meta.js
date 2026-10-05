@@ -83,7 +83,7 @@ function correrPruebas(){
     const conFoto = PRODUCTOS.filter(p => p.imagen && p.imagen.includes(CARPETA_FOTOS));
     ok(conFoto.length > 0, 'hay productos con portada', conFoto.length);
     const fantasma = conFoto.filter(p =>
-      !INDICE_FOTOS.has(decodeURIComponent(p.imagen.split('/').pop().split('?')[0])));
+      !INDICE_FOTOS.has(decodeURIComponent(p.imagen.split('/').pop().split('?')[0]).replace(new RegExp('\\' + EXT_SIN_FONDO + '$'), EXT_FOTOS)));
     ok(fantasma.length === 0, 'y ninguna apunta a un archivo que no esta',
        fantasma.slice(0, 3).map(p => p.id).join(', ') || conFoto.length + ' portadas');
     /* Un producto sin ningun archivo no manda a pedir nada: placeholder.

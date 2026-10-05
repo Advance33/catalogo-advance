@@ -6,6 +6,11 @@
 // Lo que se prueba: que la grilla y la portada pidan la chica, que la ficha
 // muestre la grande, que la chica exista de verdad para todo lo que se vende
 // hoy, y que la de respaldo de ADVAPP también se pida chica.
+//
+// Desde el 05/10/2026 la chica es la copia SIN FONDO (fotos/mini/sinfondo/
+// AT-XXXX.webp): en el iPhone el fondo blanco no se borraba con la mezcla y
+// cada producto quedaba en un cuadrado blanco. Se prueba también que de
+// verdad sea transparente.
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const dormir = ms => new Promise(r => setTimeout(r, ms));
@@ -36,8 +41,13 @@ const existe = u => new Promise(r => {
 
 async function correrPruebas(){
   /* ---- 1. La dirección de la chica sale de la de la grande ---- */
-  ok(fotoChica(CARPETA_FOTOS + 'AT-0065-02.jpg') === CARPETA_MINIS + 'AT-0065-02.jpg',
-     'la chica es la misma foto en fotos/mini/', fotoChica(CARPETA_FOTOS + 'AT-0065-02.jpg'));
+  ok(fotoChica(CARPETA_FOTOS + 'AT-0065-02.jpg') === CARPETA_SIN_FONDO + 'AT-0065-02.webp',
+     'la chica es la misma foto, sin fondo, en fotos/mini/sinfondo/', fotoChica(CARPETA_FOTOS + 'AT-0065-02.jpg'));
+  ok(fotoChica('https://catalogo.advancetecno.com.ar/' + CARPETA_FOTOS + 'AT-0065-02.jpg')
+       === 'https://catalogo.advancetecno.com.ar/' + CARPETA_SIN_FONDO + 'AT-0065-02.webp',
+     'también con la dirección completa');
+  ok(fotoChica(CARPETA_SIN_FONDO + 'AT-0065-02.webp') === CARPETA_SIN_FONDO + 'AT-0065-02.webp',
+     'y la sin fondo pedida otra vez queda igual');
   ok(fotoChica('https://lh3.googleusercontent.com/d/abc') === 'https://lh3.googleusercontent.com/d/abc=w400',
      'a las de Google se les pide el ancho chico', fotoChica('https://lh3.googleusercontent.com/d/abc'));
   ok(fotoChica(CARPETA_MINIS + 'AT-0065-02.jpg') === CARPETA_MINIS + 'AT-0065-02.jpg',
@@ -84,12 +94,33 @@ async function correrPruebas(){
      faltan.slice(0, 3).join(' | ') || muestra.length + ' probadas');
 
   /* ---- 6. Y pesan menos que las grandes ---- */
+  // La grande de una chica sin fondo: fotos/mini/sinfondo/X.webp -> fotos/X.jpg
+  const grandeDe = u => u.replace(CARPETA_SIN_FONDO, CARPETA_FOTOS).replace(CARPETA_MINIS, CARPETA_FOTOS)
+                         .replace(new RegExp('\\' + EXT_SIN_FONDO + '$'), EXT_FOTOS);
   const dos = muestra.slice(0, 5);
   let chica = 0, original = 0;
   for(const u of dos){
     const a = await fetch(u); chica += (await a.blob()).size;
-    const b = await fetch(u.replace(CARPETA_MINIS, CARPETA_FOTOS)); original += (await b.blob()).size;
+    const b = await fetch(grandeDe(u)); original += b.ok ? (await b.blob()).size : 0;
   }
   ok(chica > 0 && chica < original / 2, 'y pesan menos de la mitad',
      Math.round(chica / 1024) + ' KB contra ' + Math.round(original / 1024) + ' KB, en ' + dos.length + ' fotos');
+
+  /* ---- 7. Y la chica no tiene fondo (05/10/2026) ----
+     Las cuatro esquinas transparentes: es el fondo del proveedor, y si queda
+     blanco el iPhone lo muestra como un cuadrado sobre el lila. */
+  const conFondo = [];
+  for(const u of muestra.filter(x => x.includes(CARPETA_SIN_FONDO)).slice(0, 8)){
+    const im = new Image();
+    const cargo = await new Promise(r => { im.onload = () => r(true); im.onerror = () => r(false); im.src = u; });
+    if(!cargo){ conFondo.push(u + ' (no carga)'); continue; }
+    const c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight;
+    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0);
+    const w = c.width - 1, h = c.height - 1;
+    const alfas = [[0, 0], [w, 0], [0, h], [w, h]].map(([a, b]) => x.getImageData(a, b, 1, 1).data[3]);
+    if(alfas.some(a => a > 8)) conFondo.push(u.split('/').pop() + ' esquinas ' + alfas.join(','));
+  }
+  ok(muestra.some(x => x.includes(CARPETA_SIN_FONDO)), 'las chicas que se muestran son las sin fondo',
+     muestra.slice(0, 2).join(' | '));
+  ok(!conFondo.length, 'y no tienen fondo: las esquinas son transparentes', conFondo.slice(0, 3).join(' | ') || 'ok');
 }

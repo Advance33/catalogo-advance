@@ -1,5 +1,5 @@
 // Cotizá tu usado (Pedro, 05/10/2026). Muestrario de usados: eligio 1B 2A 3A
-// 5A; la seccion propia (4) queda para otro muestrario, mas discreto. Los
+// 5A; en la portada no va nada (la G del muestrario de la seccion). Los
 // valores los pasa el y se suben tal cual a datos/usados.json ("pasamelo a
 // mi siempre").
 //   datos  el archivo cumple usados/1, nada se saltea al leerlo, los valores

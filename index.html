@@ -2893,12 +2893,22 @@
      las hubiera corrido. */
   .barra-cats .wrap{display:flex;align-items:center;gap:14px}
   .barra-cats .chips-wrap{flex:1;min-width:0}
-  .cats-logo{flex:none;display:grid;place-items:center;align-self:stretch;
+  .cats-logo{position:relative;flex:none;display:grid;place-items:center;align-self:stretch;
              padding-right:14px;border-right:1px solid var(--line)}
-  .cats-logo img{height:20px;width:auto;display:block;opacity:.7}
+  /* El botón de volver al inicio que se ve siempre (05/10/2026, Benja): la
+     barra negra de arriba no acompaña al bajar, y este, gris y chiquito, no
+     se notaba. Va como el de arriba: el triángulo blanco sobre el negro de
+     la barra, en un cuadrado redondeado que se pone violeta al tocarlo. El
+     cuadrado es el ::before del link (un filtro en la foto lo teñiría). */
+  .cats-logo::before{content:"";position:absolute;left:0;top:50%;width:38px;height:38px;margin-top:-19px;
+                     border-radius:11px;background:#151220;transition:background .16s ease}
+  .cats-logo:hover::before{background:var(--acento)}
+  .cats-logo img{position:relative;z-index:1;display:block;width:38px;height:38px;padding:10px;
+                 box-sizing:border-box;object-fit:contain;filter:brightness(0) invert(1)}
   @media (max-width:520px){
     .cats-logo{padding-right:10px}
-    .cats-logo img{height:17px}
+    .cats-logo::before{width:34px;height:34px;margin-top:-17px;border-radius:10px}
+    .cats-logo img{width:34px;height:34px;padding:9px}
   }
   @media (max-width:1179px){
     /* 22 y 4 (eran 20 y 2) con el título en Lilita, como la muestra 6.3 B */

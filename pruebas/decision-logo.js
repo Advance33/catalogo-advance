@@ -134,8 +134,15 @@ function probarMarcado(){
      '[logo] "Advance Tecno" como siempre: blanco y lila, sin subrayar',
      b && getComputedStyle(b).color + ' / ' + (bs && getComputedStyle(bs).color) + ' / ' + getComputedStyle(b).textDecorationLine);
   const cc = getComputedStyle(c);
-  ok(cc.display === 'grid' && cc.borderRightStyle === 'solid' && Math.abs(c.querySelector('img').getBoundingClientRect().height - (innerWidth <= 520 ? 17 : 20)) < 0.6,
-     '[logo] el de la cinta con su raya a la derecha y el mismo alto', cc.display + ' ' + cc.borderRightStyle);
+  // Desde el 05/10/2026 (Benja) el de la cinta se ve como boton: el cuadrado
+  // negro de la barra de arriba con el triangulo blanco, de 38 px (34 en el
+  // celular). Gris y de 20 px no se notaba que llevaba al inicio.
+  const cuadro = getComputedStyle(c, '::before');
+  ok(cc.display === 'grid' && cc.borderRightStyle === 'solid' &&
+     Math.abs(c.querySelector('img').getBoundingClientRect().height - (innerWidth <= 520 ? 34 : 38)) < 0.6 &&
+     cuadro.backgroundColor === 'rgb(21, 18, 32)',
+     '[logo] el de la cinta con su raya a la derecha, y como boton: cuadrado negro con el triangulo',
+     cc.display + ' ' + cc.borderRightStyle + ' ' + cuadro.backgroundColor + ' ' + Math.round(c.querySelector('img').getBoundingClientRect().height) + 'px');
   const ra = a.getBoundingClientRect(), rt = tri.getBoundingClientRect();
   ok(Math.abs(rt.height - 24) < 0.6 && Math.abs(ra.height - 24) < 0.6,
      '[logo] el de arriba mide lo mismo que antes (24 px de alto)', Math.round(ra.height) + ' / ' + Math.round(rt.height));

@@ -208,6 +208,23 @@ elif [ "$VISTAS" = "1" ]; then
   echo
 fi
 
+# ---- Las paginas de producto para Google -------------------------------
+#  Benja, 05/10/2026: el catalogo sale a Google. Cada modelo tiene su pagina
+#  producto/<nombre>/ con su precio del dia (opcion A, "con precio") y la
+#  lista para Google es sitemap.xml. Se rehacen aca, con los mismos datos que
+#  las vistas previas. No frena: si no se pudieron armar, quedan como estaban.
+echo
+echo "   Armando las paginas de producto para Google..."
+echo
+$PY herramientas/paginas-producto.py
+if [ "$?" != "0" ]; then
+  echo
+  echo "   AVISO: no se pudieron armar las paginas de producto (el motivo esta"
+  echo "   arriba). Quedaron como estaban, con el precio de la ultima vez."
+  echo "   Se puede publicar igual."
+  echo
+fi
+
 # ---- Las pruebas --------------------------------------------------------
 echo
 echo "   Probando el catalogo..."

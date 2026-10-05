@@ -44,9 +44,11 @@ async function x1Leer(ruta){
   }catch(e){ return null; }
 }
 
-/* El archivo de fotos/ al que apunta una direccion, o '' si no es de fotos/ */
+/* El archivo de fotos/ al que apunta una direccion, o '' si no es de fotos/.
+   Desde el 05/10/2026 la web muestra la copia sin fondo (AT-XXXX.webp): el
+   archivo es el original, AT-XXXX.jpg. */
 const x1Archivo = u => (u && u.includes(CARPETA_FOTOS))
-  ? decodeURIComponent(u.split('/').pop().split('?')[0]) : '';
+  ? decodeURIComponent(u.split('/').pop().split('?')[0]).replace(new RegExp('\\' + EXT_SIN_FONDO + '$'), EXT_FOTOS) : '';
 const X1_NOMBRE_AT = /^AT-\d{4}(-\d{2})?\.jpg$/;
 
 async function correrPruebas(){

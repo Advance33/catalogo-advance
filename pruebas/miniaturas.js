@@ -48,6 +48,11 @@ async function correrPruebas(){
      'también con la dirección completa');
   ok(fotoChica(CARPETA_SIN_FONDO + 'AT-0065-02.webp') === CARPETA_SIN_FONDO + 'AT-0065-02.webp',
      'y la sin fondo pedida otra vez queda igual');
+  // La grande también sin fondo (05/10/2026): fotos/sinfondo/X.webp
+  ok(urlFotoPropia('AT-0065-02').endsWith(CARPETA_FOTOS + SUB_SIN_FONDO + 'AT-0065-02.webp'),
+     'la grande de una foto propia es la sin fondo', urlFotoPropia('AT-0065-02'));
+  ok(fotoChica(CARPETA_FOTOS + SUB_SIN_FONDO + 'AT-0065-02.webp') === CARPETA_SIN_FONDO + 'AT-0065-02.webp',
+     'y su chica, la chica sin fondo', fotoChica(CARPETA_FOTOS + SUB_SIN_FONDO + 'AT-0065-02.webp'));
   ok(fotoChica('https://lh3.googleusercontent.com/d/abc') === 'https://lh3.googleusercontent.com/d/abc=w400',
      'a las de Google se les pide el ancho chico', fotoChica('https://lh3.googleusercontent.com/d/abc'));
   ok(fotoChica(CARPETA_MINIS + 'AT-0065-02.jpg') === CARPETA_MINIS + 'AT-0065-02.jpg',

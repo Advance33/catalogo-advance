@@ -30,13 +30,17 @@ repo (un worktree) no las rehace todas. Si se pierde, la primera corrida lo
 vuelve a sembrar con la regla de la fecha, que para lo que ya estaba alcanza
 (el 29/09 las 721 chicas coincidian con su grande, comparadas pixel a pixel).
 
-LAS CHICAS SIN FONDO (05/10/2026)
-Cada chica tiene ademas una copia SIN FONDO, con transparencia:
-fotos/mini/sinfondo/AT-XXXX.webp. Es la que muestra la web en todo lo que va
-sobre el lila (la grilla, los rubros, las vitrinas, las novedades, lo mirado).
-La grande queda como esta: se ve en la ficha, cuyo fondo es casi blanco
-(--ficha-bg), y ahi un fondo blanco no se nota. Hacerla sin fondo pesaba el
-doble que el jpg (99 KB contra 58) para nada.
+LAS COPIAS SIN FONDO (05/10/2026)
+Cada foto tiene ademas dos copias SIN FONDO, con transparencia, que son las que
+muestra la web:
+  fotos/mini/sinfondo/AT-XXXX.webp   la chica: la grilla, los rubros, las
+                                     vitrinas, las novedades, lo mirado
+  fotos/sinfondo/AT-XXXX.webp        la grande, de 800 px: la ficha y la lupa
+Primero se hizo solo la chica, con la idea de que en la ficha (fondo casi
+blanco, --ficha-bg) el blanco de la toma no se notaba. Si se notaba: en el
+iPhone de Benja la ficha mostraba el recuadro blanco, y la mezcla que lo
+borraba ademas hacia desaparecer la foto al bajar dentro de la ficha. La
+grande sin fondo pesa 80 KB contra los 58 del jpg, y se baja de a una.
 
 Hasta el 05/10 el fondo blanco del proveedor se borraba en el navegador, con
 mix-blend-mode:multiply contra el lila. En la compu andaba; en el iPhone de
@@ -76,6 +80,8 @@ LADO = 400
 CALIDAD = 78
 # Las chicas sin fondo (ver arriba)
 SIN_FONDO_MINI = os.path.join(MINIS, 'sinfondo')
+SIN_FONDO_GRANDE = os.path.join(FOTOS, 'sinfondo')
+LADO_SIN_FONDO_GRANDE = 800
 EXT_SIN_FONDO = '.webp'
 UMBRAL_FONDO = 10
 CALIDAD_SIN_FONDO = 65
@@ -156,9 +162,13 @@ def sin_fondo(im):
     return Image.merge('RGBA', canales + [alfa])
 
 
-def una_sin_fondo(origen, destino):
+def una_sin_fondo(origen, destino, lado=None):
     from PIL import Image
-    sin_fondo(Image.open(origen)).save(destino, 'WEBP', quality=CALIDAD_SIN_FONDO,
+    im = Image.open(origen)
+    if lado:
+        im = im.convert('RGB')
+        im.thumbnail((lado, lado), Image.LANCZOS)
+    sin_fondo(im).save(destino, 'WEBP', quality=CALIDAD_SIN_FONDO,
                                        alpha_quality=CALIDAD_ALFA, method=6)
 
 
@@ -173,6 +183,7 @@ def actualizar(rehacer=False, avisar=None):
     copia sin fondo."""
     os.makedirs(MINIS, exist_ok=True)
     os.makedirs(SIN_FONDO_MINI, exist_ok=True)
+    os.makedirs(SIN_FONDO_GRANDE, exist_ok=True)
     grandes = [f for f in os.listdir(FOTOS) if f.lower().endswith('.jpg')]
     antes = leer_huellas()
     sembrar = antes is None
@@ -181,6 +192,7 @@ def actualizar(rehacer=False, avisar=None):
     for f in sorted(grandes):
         g, m = os.path.join(FOTOS, f), os.path.join(MINIS, f)
         sm = os.path.join(SIN_FONDO_MINI, nombre_sin_fondo(f))
+        sg = os.path.join(SIN_FONDO_GRANDE, nombre_sin_fondo(f))
         h = huella(g)
         # Si la grande cambio desde que se hizo la chica, la chica quedo
         # vieja: es justo el caso de una foto corregida, y mostrar la vieja
@@ -194,13 +206,16 @@ def actualizar(rehacer=False, avisar=None):
             elif sembrar and os.path.getmtime(m) >= os.path.getmtime(g):
                 huellas[f] = h
                 al_dia = True
-        if al_dia and os.path.exists(sm):
+        if al_dia and os.path.exists(sm) and os.path.exists(sg):
             continue
         try:
             if not al_dia:
                 una(g, m)
                 huellas[f] = h
-            una_sin_fondo(m, sm)
+            if not al_dia or not os.path.exists(sm):
+                una_sin_fondo(m, sm)
+            if not al_dia or not os.path.exists(sg):
+                una_sin_fondo(g, sg, LADO_SIN_FONDO_GRANDE)
             hechas += 1
             if avisar:
                 avisar(f)
@@ -213,9 +228,10 @@ def actualizar(rehacer=False, avisar=None):
             os.remove(os.path.join(MINIS, f))
             borradas += 1
     validas = {nombre_sin_fondo(f) for f in grandes}
-    for f in os.listdir(SIN_FONDO_MINI):
-        if f.lower().endswith(EXT_SIN_FONDO) and f not in validas:
-            os.remove(os.path.join(SIN_FONDO_MINI, f))
+    for carpeta in (SIN_FONDO_MINI, SIN_FONDO_GRANDE):
+        for f in os.listdir(carpeta):
+            if f.lower().endswith(EXT_SIN_FONDO) and f not in validas:
+                os.remove(os.path.join(carpeta, f))
     huellas = {k: v for k, v in huellas.items() if k in set(grandes)}
     if huellas != antes:
         guardar_huellas(huellas)
@@ -236,6 +252,9 @@ def main():
         print('   sin fondo %6.1f MB   (%d KB cada una)'
               % (peso(SIN_FONDO_MINI, EXT_SIN_FONDO) / 1048576,
                  peso(SIN_FONDO_MINI, EXT_SIN_FONDO) // 1024 // total))
+        print('   sin fondo grandes %6.1f MB   (%d KB cada una)'
+              % (peso(SIN_FONDO_GRANDE, EXT_SIN_FONDO) / 1048576,
+                 peso(SIN_FONDO_GRANDE, EXT_SIN_FONDO) // 1024 // total))
     return 0
 
 

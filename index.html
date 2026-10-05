@@ -3151,14 +3151,15 @@
     .of-dots button[aria-current="true"]::before{width:24px;border-radius:99px;background:#F0D98C}
   }
 
-  /* Las fotos chicas vienen SIN FONDO desde el 05/10/2026 (ver fotoChica):
+  /* Las fotos propias vienen SIN FONDO desde el 05/10/2026, la chica y la
+     grande (ver fotoChica y urlFotoPropia):
      no hay blanco que borrar y la mezcla sobra. Sin ella, la foto se ve igual
      en la compu que en el iPhone, que era donde la mezcla fallaba y quedaba
      el cuadrado blanco. Las de respaldo de ADVAPP siguen con su multiply.
      Con !important porque cada pieza pone su multiply con un selector
      distinto (.fi-rel .pc-foto img pesa más que este) y acá tiene que ganar
      siempre: una foto sin fondo nunca necesita la mezcla. */
-  img[src*="/mini/sinfondo/"]{mix-blend-mode:normal !important}
+  img[src*="/sinfondo/"]{mix-blend-mode:normal !important}
 </style>
 </head>
 <body>
@@ -3506,12 +3507,23 @@ function fotoChica(u){
   const i = u.lastIndexOf(CARPETA_FOTOS);
   if(i === -1 || u.includes(CARPETA_MINIS)) return u;
   const nombre = u.slice(i + CARPETA_FOTOS.length);
+  // La grande sin fondo (fotos/sinfondo/X.webp) tiene su chica sin fondo
+  if(nombre.startsWith(SUB_SIN_FONDO)) return u.slice(0, i) + CARPETA_SIN_FONDO + nombre.slice(SUB_SIN_FONDO.length);
   // Sólo una foto propia (fotos/AT-XXXX.jpg) tiene su copia sin fondo
   if(nombre.includes('/') || !nombre.toLowerCase().endsWith(EXT_FOTOS))
     return u.slice(0, i) + CARPETA_MINIS + nombre;
   return u.slice(0, i) + CARPETA_SIN_FONDO + nombre.slice(0, -EXT_FOTOS.length) + EXT_SIN_FONDO;
 }
 const EXT_FOTOS = '.jpg';
+/* La GRANDE también va sin fondo (05/10/2026, Benja): fotos/sinfondo/X.webp,
+   de 800 px. Al principio quedó en .jpg porque la ficha tiene un fondo casi
+   blanco, pero en el iPhone se veía el recuadro blanco de la toma y la mezcla
+   que lo borraba hacía desaparecer la foto al bajar dentro de la ficha. Toda
+   foto propia sale de urlFotoPropia(), que ya da la sin fondo; fotoChica() la
+   pasa a su chica. El .jpg sigue siendo el original: fotos/indice.json lo
+   lista, WhatsApp (p/) y Pancho lo usan, y vpFotoPropia() vuelve a él. */
+const SUB_SIN_FONDO = 'sinfondo/';
+const urlFotoPropia = n => urlFoto(CARPETA_FOTOS + SUB_SIN_FONDO + encodeURIComponent(n) + EXT_SIN_FONDO);
 
 // ⚠️ Solo aplica si la planilla trae "Costo USD" en vez de "Precio USD".
 // Con null la web NO muestra ningún número (pone "Consultar"), para que no se
@@ -4344,7 +4356,7 @@ function nombresDeFoto(f, colores, soloDeColor){
 
 function fotoDeCarpeta(f, color){
   if(!CARPETA_FOTOS) return '';
-  const arma = n => urlFoto(CARPETA_FOTOS + encodeURIComponent(n) + EXT_FOTOS);
+  const arma = urlFotoPropia;
   const colores = partirColores(color);
   const nombres = nombresDeFoto(f, colores);
   if(!nombres.length) return '';
@@ -6125,7 +6137,7 @@ function fotosDeColor(p, color){
   // Con indice no se pide lo que no existe: cada URL que falla es un pedido
   // de mas y un onerror que esperar.
   if(INDICE_FOTOS) nombres = nombres.filter(n => INDICE_FOTOS.has(n + EXT_FOTOS));
-  const locales = nombres.map(n => urlFoto(CARPETA_FOTOS + encodeURIComponent(n) + EXT_FOTOS));
+  const locales = nombres.map(urlFotoPropia);
   if(locales.length && INDICE_FOTOS) return locales;
   /* Sin archivo propio de ese color, la foto de ADVAPP: primero la de esta
      fila y despues la de sus hermanas, en el mismo orden que las locales.
@@ -6813,7 +6825,7 @@ function fotoDeHermana(v, vs){
   if(INDICE_FOTOS){
     for(const x of hermanas){
       const n = nombresDeFoto(x, [c], true).find(n => INDICE_FOTOS.has(n + EXT_FOTOS));
-      if(n) return urlFoto(CARPETA_FOTOS + encodeURIComponent(n) + EXT_FOTOS);
+      if(n) return urlFotoPropia(n);
     }
   }
   // La hermana sin color no: fotoDeAdvapp() le daria la foto general

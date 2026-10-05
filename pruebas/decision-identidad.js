@@ -20,7 +20,7 @@
 //          puntitos de 24, + y WhatsApp de 43x44, X de 44, contadores de 42 y
 //          40, "Ver pedido" de 44 de alto, sin pisarse. En la compu, nada
 //   6.7 B  el pie con "Advance Tecno · Av. De los Incas 5150, 1A, CABA · Ver
-//          en mapa · WhatsApp +54 9 11 2262-0770 · Atencion con cita previa",
+//          en mapa · WhatsApp +54 9 11 2475-1166 · Atencion con cita previa",
 //          como la muestra B, todo de la configuracion (DIRECCION, MAPA,
 //          WHATSAPP, SERVICIO.retiro); sin horario, redes ni razon social; lo
 //          vacio no se muestra
@@ -539,7 +539,7 @@ function probarPie(){
   ok(!!pie && !pie.hidden && footer.contains(pie) && footer.firstElementChild === pie, '[6.7] la linea de contacto, arriba en el pie');
   if(!pie) return;
   const numero = WHATSAPP ? telefonoLegible(WHATSAPP) : '';
-  ok(WHATSAPP !== '5491122620770' || numero === '+54 9 11 2262-0770', '[6.7] el numero se escribe como en la muestra', numero);
+  ok(WHATSAPP !== '5491124751166' || numero === '+54 9 11 2475-1166', '[6.7] el numero se escribe como en la muestra (el de Tecno desde el 05/10)', numero);
   /* (29/09) Como la muestra B elegida: con la direccion y "Ver en mapa",
      que salen de DIRECCION y MAPA (las de la pregunta "¿Puedo ir a verlos?") */
   const partes = [...pie.children].filter(x => !x.classList.contains('sep')).map(diTxt);

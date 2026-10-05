@@ -3,8 +3,10 @@
 Este archivo es lo que usa **Cotizá tu usado**: el cliente entrega un equipo
 usado como parte de pago y la web le dice en el momento cuánto vale (Pedro,
 05/10/2026; eligió 1B 2A 3A 5A del muestrario de usados). Aparece en la
-ficha de cada producto con stock (**🔁 Entregar mi usado**) y en el pedido
-(**¿Entregás un usado?**).
+ficha de cada producto con stock (**🔁 Entregar mi usado**), en el pedido
+(**¿Entregás un usado?**) y en Preguntas frecuentes (**¿Toman mi usado como
+parte de pago?**, con "Cotizar mi usado"). En el resto de la portada no va
+nada (Pedro eligió la G, 05/10).
 
 ## Reglas que no se discuten
 
@@ -16,8 +18,10 @@ ficha de cada producto con stock (**🔁 Entregar mi usado**) y en el pedido
    ahora tomamos sólo estos modelos") y no ofrece nada más.
 3. **El valor es "si cumple todas las condiciones".** La batería por debajo
    del umbral resta lo que dice `bateria.resta`. Si cualquier otra
-   condición no se cumple, no se muestra ningún número: "Lo revisamos en
-   persona".
+   condición no se cumple, no se muestra ningún número: "Mandanos los
+   detalles" y el botón "Enviar los detalles por WhatsApp", con un mensaje
+   que termina en "Te paso los detalles:" (Pedro, 05/10; antes decía "Lo
+   revisamos en persona").
 4. Si el usado vale más que lo que compra, la web dice **"Te queda a favor
    USD X"** y se coordina por WhatsApp.
 

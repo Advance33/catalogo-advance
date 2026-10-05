@@ -10,9 +10,14 @@
 //   2A     paso a paso: equipo, modelo, memoria (la caja en la PS4),
 //          bateria y estado, con "Paso N de M"; Atras vuelve un paso; Escape,
 //          la X y el Atras del navegador cierran solo el cotizador.
-//   3A     el valor si cumple todo, la bateria que resta, "Lo revisamos en
-//          persona" sin numero si algo no cumple, la cuenta con el producto
-//          ("Te queda" / "Te queda a favor") y el mensaje de WhatsApp.
+//   3A     el valor si cumple todo, la bateria que resta, "Mandanos los
+//          detalles" por WhatsApp sin numero si algo no cumple (Pedro, 05/10;
+//          antes "Lo revisamos en persona"), la cuenta con el producto ("Te
+//          queda" / "Te queda a favor") y el mensaje de WhatsApp.
+//   FAQ    "¿Toman mi usado como parte de pago?" con los equipos de la lista y
+//          "Cotizar mi usado", que abre el cotizador sin producto.
+//   anim.  tocar una opcion no repite la entrada de la ventana (el
+//          "pestañazo negro" que vio Pedro el 05/10).
 //   5A     "¿Entregás un usado?" en el pedido: el usado resta en el total, la
 //          barra y el mensaje; "No" lo borra; sin usado el mensaje es el de
 //          siempre. Si el usado paga todo, no se ofrecen cuotas.
@@ -90,6 +95,7 @@ async function correrPruebas(){
   if(!V13 || !MAX || !PSP || !BAT){ ok(false, 'la lista tiene el iPhone 13 128GB, el 17 Pro Max 2TB, la PS4 Pro sin caja y la bateria del iPhone (los casos de esta tanda)'); return; }
   const crudo = await (await fetch('datos/usados.json', { cache: 'no-store' })).json();
   probarLosDatos(crudo);
+  await probarLaPregunta();
   await probarLaFicha();
   await probarElPedido();
   await probarCelular();
@@ -132,6 +138,31 @@ function probarLosDatos(j){
   ok(indiceUsados({ formato: 'usados/2', equipos: [] }) === null && indiceUsados(null) === null, 'otro formato o nada: no hay cotizador');
 }
 
+/* ---- La pregunta frecuente (05/10) ---- */
+async function probarLaPregunta(){
+  const i = PREGUNTAS.findIndex(q => q.usados);
+  ok(i !== -1 && PREGUNTAS[i].p === '¿Toman mi usado como parte de pago?' && (PREGUNTAS[i].r || []).length > 0,
+     '[FAQ] «¿Toman mi usado como parte de pago?» esta en Preguntas frecuentes', i);
+  const r = i === -1 ? null : document.querySelector(`#ayuda .ay-r[data-ay="${i}"]`);
+  if(!r){ info('[FAQ] la ayuda no esta a la vista: no se probo el boton'); return; }
+  const n = USADOS.map(e => e.nombre);
+  const lista = n.length > 1 ? n.slice(0, -1).join(', ') + ' y ' + n[n.length - 1] : n[0];
+  ok(uzTxt(r).includes('Hoy tomamos ' + lista + '.'), '[FAQ] dice los equipos que se toman, de la lista', uzTxt(r.querySelector('.ay-usados p')));
+  const b = r.querySelector('.ay-cotizar');
+  ok(b && uzTxt(b) === 'Cotizar mi usado' && b.tagName === 'BUTTON', '[FAQ] con el boton «Cotizar mi usado»');
+  if(!b) return;
+  USADO = null; guardarUsado();
+  b.click();
+  await uzDormir(40);
+  ok(!!uzCot() && !FICHA && uzPreg() === '¿Qué equipo entregás?', '[FAQ] abre el cotizador sin producto, en el primer paso');
+  await uzCotizar('iphone', 'iphone-13', '128GB', 'si', uzTodoSi('iphone'));
+  const a = uzCot().querySelector('.botones a.pri'), m = a ? uzWA(a) : '';
+  ok(a && uzTxt(a) === 'Coordinar por WhatsApp' && m.startsWith('Hola! Quiero entregar mi usado como parte de pago.') && !uzCot().querySelector('.us-cuenta'),
+     '[FAQ] sin producto: el valor y «Coordinar por WhatsApp», sin cuenta', m.split('\n')[0]);
+  uzCerrarTodo();
+  USADO = null; guardarUsado();
+}
+
 /* ---- La ficha y el cotizador ---- */
 async function probarLaFicha(){
   const conStock = PRODUCTOS.filter(p => p.stock && typeof p.precio === 'number' && p.precio > 0 && buscarModelo(clave(p)));
@@ -165,7 +196,12 @@ async function probarLaFicha(){
   ok(history.state && history.state.usado === true, '[2A] suma una entrada al historial (el Atras del celular lo cierra)');
   ok(uzPreg() === '¿Qué equipo entregás?' && uzPaso() === 'Paso 1 de 5', '[2A] primero el equipo: «Paso 1 de 5»', uzPreg() + ' · ' + uzPaso());
   ok([...uzCot().querySelectorAll('.us-op[data-e]')].map(uzTxt).join(',') === 'iPhone,PlayStation', '[2A] los equipos de la lista: iPhone y PlayStation');
+  // Ya entro: tocar una opcion rehace la ventana sin repetir la entrada (05/10)
+  await uzDormir(500);
   uzTocar('.us-op[data-e="iphone"]');
+  const anim = c => { try{ return c.getAnimations().length; }catch(e){ return 0; } };
+  ok(uzCot().classList.contains('montada') && anim(uzCot().querySelector('.caja')) === 0,
+     '[anim.] tocar una opcion no repite la entrada de la ventana (sin «pestañazo negro»)', anim(uzCot().querySelector('.caja')));
   ok(uzPreg() === '¿Qué modelo es?' && uzPaso() === 'Paso 2 de 5', '[2A] tocar avanza solo: el modelo', uzPaso());
   const grupos = [...uzCot().querySelectorAll('.us-grupo-rot')].map(uzTxt);
   ok(grupos[0] === 'iPhone 17' && grupos[grupos.length - 1] === 'iPhone 11', '[2A] los modelos por generacion, del 17 al 11', grupos.join(','));
@@ -227,10 +263,13 @@ async function probarLaFicha(){
   uzTocar('.pd-chip[data-cond="pantalla"][data-v="0"]'); uzTocar('#us-ver'); await uzDormir(20);
   const rev = uzCot().querySelector('.us-res');
   const msjRev = uzWA(uzCot().querySelector('.botones a.pri'));
-  ok(rev && rev.classList.contains('rev') && /Lo revisamos en persona/.test(uzTxt(rev)) && !/USD/.test(uzTxt(uzCot().querySelector('.caja'))),
-     '[3A] si algo no cumple: «Lo revisamos en persona», sin ningun numero', uzTxt(rev).slice(0, 90));
-  ok(msjRev.includes('Marqué que no cumple: pantalla y vidrios sin roturas. ¿Me lo revisan?') && !/USD \d/.test(msjRev.split('\n\n')[1] || ''),
-     '[3A] y el mensaje dice lo que no cumple, sin valor', (msjRev.split('\n\n')[1] || '').slice(0, 120));
+  ok(rev && rev.classList.contains('rev') && /Mandanos los detalles/.test(uzTxt(rev)) && /mandanos los detalles por WhatsApp/.test(uzTxt(rev)) &&
+     !/USD/.test(uzTxt(uzCot().querySelector('.caja'))) && !/en persona/.test(uzTxt(rev)),
+     '[3A] si algo no cumple: «Mandanos los detalles» por WhatsApp, sin ningun numero (Pedro, 05/10)', uzTxt(rev).slice(0, 90));
+  ok(uzTxt(uzCot().querySelector('.botones a.pri')) === 'Enviar los detalles por WhatsApp', '[3A] con el boton «Enviar los detalles por WhatsApp»');
+  ok(msjRev.includes('Marqué que no cumple: pantalla y vidrios sin roturas. Te paso los detalles:') && msjRev.endsWith('Te paso los detalles:') &&
+     !/USD \d/.test(msjRev.split('\n\n')[1] || ''),
+     '[3A] y el mensaje dice lo que no cumple y termina en «Te paso los detalles:», sin valor', (msjRev.split('\n\n')[1] || '').slice(0, 120));
 
   // "Cotizar otro equipo": PS4 Pro sin caja, sin el paso de la bateria
   uzTocar('#us-otro');
@@ -302,7 +341,15 @@ async function probarElPedido(){
        [...bloque.querySelectorAll('.pd-chip')].map(uzTxt).join(',') === 'No,Sí, cotizarlo' && bloque.nextElementSibling === d.querySelector('.pd-entrega'),
        '[5A] el pedido pregunta «¿Entregás un usado?» con No / Sí, cotizarlo, antes de «¿Cómo lo recibís?»');
     // "Sí, cotizarlo" abre el cotizador encima del pedido
-    bloque.querySelector('[data-usado="si"]').click();
+    // Tocar un boton del pedido tampoco repite la entrada de la ventana (05/10)
+    await uzDormir(500);
+    d.querySelector('[data-usado="no"]').click();
+    await uzDormir(30);
+    d = document.getElementById('pedido');
+    ok(d.classList.contains('montada') && (() => { try{ return d.querySelector('.caja').getAnimations().length; }catch(e){ return 0; } })() === 0,
+       '[anim.] en el pedido, tocar un boton no repite la entrada de la ventana');
+    USADO_DIJO_NO = false;
+    d.querySelector('[data-usado="si"]').click();
     await uzDormir(30);
     ok(!!uzCot() && !!document.getElementById('pedido'), '[5A] «Sí, cotizarlo» abre el cotizador encima del pedido');
     await uzCotizar('iphone', 'iphone-13', '128GB', 'si', uzTodoSi('iphone'));
@@ -343,11 +390,13 @@ async function probarElPedido(){
     USADO = { e: 'iphone', m: 'iphone-13', o: '128GB', bat: 'si', cond: { pantalla: true, faceid: false, piezas: true, icloud: true } };
     guardarUsado(); pintarPedido(); redibujarPedido();
     d = document.getElementById('pedido');
-    ok(uzTxt(d.querySelector('.pd-total')).includes('menos tu usado, que lo revisamos en persona') && !d.querySelector('.pd-subs'),
-       '[5A] un usado que se revisa en persona no resta: el total lo aclara');
+    ok(uzTxt(d.querySelector('.pd-total')).includes('menos tu usado, que vemos por WhatsApp') && !d.querySelector('.pd-subs') &&
+       /el valor lo vemos por WhatsApp/.test(uzTxt(d.querySelector('.pd-usado'))),
+       '[5A] un usado que no cumple todo no resta: el total lo aclara y el valor sale por WhatsApp');
     const msjR = mensajePedido();
-    ok(msjR.includes('Total: USD ' + uzPlata(p1.precio)) && msjR.includes(`Mi usado: iPhone 13 128GB, batería ${BAT.umbral} % o más. Marqué que no cumple: ${equipoUsado('iphone').condiciones.find(c => c.id === 'faceid').texto.toLowerCase()}. ¿Me lo revisan?`),
-       '[5A] y el mensaje lo dice aparte, sin valor', (msjR.split('\n\n')[3] || '').slice(0, 110));
+    ok(msjR.includes('Total: USD ' + uzPlata(p1.precio)) &&
+       msjR.endsWith(`\n\nMi usado: iPhone 13 128GB, batería ${BAT.umbral} % o más. Marqué que no cumple: ${equipoUsado('iphone').condiciones.find(c => c.id === 'faceid').texto.toLowerCase()}. Te paso los detalles:`),
+       '[5A] y el mensaje lo dice al final, sin valor, terminando en «Te paso los detalles:»', msjR.split('\n\n').pop().slice(0, 110));
     // A favor: el usado paga todo, sin cuotas
     const barato = PRODUCTOS.filter(p => p.stock && typeof p.precio === 'number' && p.precio > 0 && p.precio < MAX && buscarModelo(clave(p))).sort((x, y) => x.precio - y.precio)[0];
     if(barato){

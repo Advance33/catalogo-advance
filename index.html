@@ -1023,6 +1023,15 @@
   .ay-r a{justify-self:start;color:#C4B5FD;text-decoration:none;padding:4px 0;
           font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
   .ay-r a::after{content:" →"}
+  /* "Cotizar mi usado" en la respuesta de usados (05/10), como el botón de
+     "¿Buscás algo que no está?" */
+  .ay-usados{display:grid;gap:10px}
+  .ay-usados:empty{display:none}
+  .ay-cotizar{justify-self:start;height:40px;padding:0 18px;border:0;border-radius:999px;cursor:pointer;
+              background:var(--acento);color:#fff;font:600 11px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+              transition:background .16s ease}
+  .ay-cotizar:hover{background:var(--glow)}
+  .ay-cotizar:focus-visible{outline:2px solid #C4B5FD;outline-offset:2px}
   .ay-otra{margin:auto 0 0;padding-top:12px;border-top:1px solid rgba(244,239,253,.1);
            font-size:13.5px;color:#A597C4}
   .ay-otra a{color:#fff;font-weight:600;text-decoration:none}
@@ -1498,6 +1507,11 @@
     @keyframes cajaIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
     .modal{animation:modalIn .2s ease-out}
     .modal .caja{animation:cajaIn .3s cubic-bezier(.22,.7,.3,1) both}
+    /* Una sola vez (05/10): el pedido y el cotizador de usados rehacen su
+       .caja con cada toque y la entrada volvía a arrancar desde transparente;
+       por un instante se veía el fondo oscuro, un "pestañazo negro" (Pedro,
+       también en el celular). montarModal pone .montada cuando ya entró. */
+    .modal.montada .caja{animation:none}
   }
   /* Con una ventana abierta, el fondo no se mueve */
   body.modal-abierto{overflow:hidden}
@@ -3412,7 +3426,7 @@ const SHEET_ID  = '18xxslIKTBnVMrLixCGlQBJGje3vKBYQHXy0qvVp8tpQ';
 const SHEET_GID = '482985525';
 
 // Tu WhatsApp con código de país, solo números
-const WHATSAPP = '5491122620770';   // +54 9 11 2262-0770
+const WHATSAPP = '5491124751166';   // +54 9 11 2475-1166 (Pedro, 05/10; antes 2262-0770)
 
 // La dirección pública del catálogo, la que ven los clientes. El botón
 // Compartir de la ficha manda SIEMPRE esta, aunque se abra el catálogo desde
@@ -3590,6 +3604,12 @@ const PREGUNTAS = [
             'PayPal, Payoneer o Prex (+10%)',
             ...renglonTarjetaPagos()] },
   ...preguntaCuotas(),
+  /* Cotizá tu usado (Pedro, 05/10): en la portada va sólo esta pregunta (para
+     la portada eligió la G, nada, y después pidió sumarla acá). Los equipos
+     que se toman y el botón del cotizador salen de datos/usados.json
+     (htmlAyudaUsados); sin el archivo, la respuesta queda sin botón. */
+  { p: '¿Toman mi usado como parte de pago?', usados: true,
+    r: ['Sí, en cualquier producto. Lo cotizás acá: elegís tu equipo, contestás unas preguntas y en el momento sabés cuánto vale.'] },
   { p: '¿Por qué cambia el precio en pesos?',
     r: ['Todos los precios están en dólares. El valor en pesos que ves al lado es una referencia: se calcula con la cotización del día, así que se mueve con el dólar.'] },
   { p: '¿Hacen envíos?',
@@ -3940,6 +3960,10 @@ function montarModal(d, alCerrar){
   const previo = document.activeElement;
   document.body.appendChild(d);
   document.body.classList.add('modal-abierto');
+  // Ya entró: lo que se redibuje adentro no vuelve a animarse (ver .montada)
+  const montada = () => d.classList.add('montada');
+  d.addEventListener('animationend', e => { if(e.target.classList && e.target.classList.contains('caja')) montada(); });
+  setTimeout(montada, 450);
 
   const cerrar = () => {
     if(!d.isConnected) return;
@@ -9302,6 +9326,7 @@ function htmlAyuda(){
       ${(q.r || []).map(t => `<p>${esc(t)}</p>`).join('')}
       ${q.lista ? `<ul>${q.lista.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
       ${q.link ? `<a href="${esc(q.link[1])}" target="_blank" rel="noopener">${esc(q.link[0])}</a>` : ''}
+      ${q.usados ? `<div class="ay-usados">${htmlAyudaUsados()}</div>` : ''}
     </div>`).join('');
   return `<section class="ayuda" id="ayuda" aria-labelledby="ay-titulo">
     <h2 id="ay-titulo">Preguntas frecuentes</h2>
@@ -9360,9 +9385,20 @@ function elegirPregunta(i){
   acomodarAyuda();
 }
 
+/* La respuesta de usados (05/10): qué equipos se toman, de la lista, y el
+   botón que abre el cotizador sin un producto al lado */
+function htmlAyudaUsados(){
+  if(!USADOS) return '';
+  const n = USADOS.map(e => e.nombre);
+  const lista = n.length > 1 ? n.slice(0, -1).join(', ') + ' y ' + n[n.length - 1] : n[0];
+  return `<p>Hoy tomamos ${esc(lista)}.</p>
+    <button type="button" class="ay-cotizar">Cotizar mi usado</button>`;
+}
+
 function montarAyuda(sec){
   acomodarAyuda();
   sec.addEventListener('click', e => {
+    if(e.target.closest('.ay-cotizar')){ abrirCotizador(); return; }
     const b = e.target.closest('.ay-p');
     if(b) elegirPregunta(Number(b.dataset.ay));
   });
@@ -12413,8 +12449,9 @@ function htmlCuotasPedido(){
    Los valores son los de la lista de Pedro, tal cual (datos/usados.json, ver
    datos/LEEME-usados.md): los manda él y se suben a mano. El valor es "si
    cumple todas las condiciones"; la batería por debajo del umbral resta lo
-   que dice el archivo, y si otra condición no se cumple no hay número: "lo
-   revisamos en persona". Lo que no está en la lista no se toma. Si el usado
+   que dice el archivo, y si otra condición no se cumple no hay número: que
+   mande los detalles por WhatsApp (Pedro, 05/10; antes decía "lo revisamos
+   en persona"). Lo que no está en la lista no se toma. Si el usado
    vale más que lo que compra: "Te queda a favor USD X", y se coordina por
    WhatsApp. La cotización queda guardada en ese navegador aparte del pedido,
    como la entrega y las cuotas: "Vaciar el pedido" no la borra. */
@@ -12439,6 +12476,7 @@ function cargarUsados(){
       USADO = leerUsado();
       // Llegó con la ficha o el pedido abiertos: aparecen el botón y la pregunta
       refrescarFicha();
+      document.querySelectorAll('#ayuda .ay-usados').forEach(x => { x.innerHTML = htmlAyudaUsados(); });
       pintarPedido();
       redibujarPedido?.();
       return USADOS;
@@ -12539,14 +12577,15 @@ function textoBateria(c){
   return 'no sé cómo está la batería';
 }
 /* El usado en una línea, para el mensaje: "iPhone 13 128GB, batería 80 % o
-   más, cumple todas las condiciones". Si algo no cumple, lo que marcó. */
+   más, cumple todas las condiciones". Si algo no cumple, lo que marcó y
+   "Te paso los detalles:", para que los escriba ahí mismo (Pedro, 05/10). */
 function textoUsado(c){
   const partes = [c.nombre];
   const bat = textoBateria(c);
   if(bat) partes.push(bat);
   if(!c.fallan.length) partes.push('cumple todas las condiciones');
   let t = partes.join(', ');
-  if(c.fallan.length) t += '. Marqué que no cumple: ' + c.fallan.map(x => x.texto.toLowerCase()).join(', ') + '. ¿Me lo revisan?';
+  if(c.fallan.length) t += '. Marqué que no cumple: ' + c.fallan.map(x => x.texto.toLowerCase()).join(', ') + '. Te paso los detalles:';
   return t;
 }
 // "USD 350", y con la batería sin saber, lo que vale si está por debajo
@@ -12557,8 +12596,8 @@ function textoValorUsado(c){
   return t;
 }
 
-/* Lo que el usado resta en el pedido: su valor, o 0 si no hay, si se revisa
-   en persona o si todo el pedido está sin stock (no hay nada que pagar). */
+/* Lo que el usado resta en el pedido: su valor, o 0 si no hay, si no cumple
+   todo (el valor sale por WhatsApp) o si todo el pedido está sin stock. */
 function valorUsadoPedido(){
   const c = USADOS && cotizacionUsado();
   return c && c.valor !== null && !soloSinStockPedido() ? c.valor : 0;
@@ -12571,7 +12610,7 @@ const aFavorPedido = () => valorUsadoPedido() > 0 && netoPedido() < 0 && !hayACo
 const aPagarPedido = () => Math.max(0, netoPedido());
 // El usado paga todo: con la tarjeta no queda nada que pagar
 const pagaTodoConUsado = () => valorUsadoPedido() > 0 && netoPedido() <= 0 && !hayAConsultar();
-// Un usado que se revisa en persona: el total todavía no es el final
+// Un usado que no cumple todo: el valor sale por WhatsApp y el total todavía no es el final
 function usadoEnRevision(){
   const c = USADOS && cotizacionUsado();
   return !!c && c.valor === null && !soloSinStockPedido();
@@ -12597,7 +12636,7 @@ function htmlUsadoPedido(){
   let ayuda = 'Lo tomamos como parte de pago: ' + USADOS.map(e => e.nombre).join(' y ') + '.';
   if(c) ayuda = c.valor !== null
     ? `<b>${esc(c.nombre)}</b>: ${esc(textoValorUsado(c))} si cumple todas las condiciones.`
-    : `<b>${esc(c.nombre)}</b>: lo revisamos en persona.`;
+    : `<b>${esc(c.nombre)}</b>: el valor lo vemos por WhatsApp. Mandanos los detalles con el pedido.`;
   return `<div class="pd-usado" role="group" aria-labelledby="pd-rot-usado">
       <span class="pd-rot" id="pd-rot-usado">¿Entregás un usado? <i>opcional</i></span>
       <div class="pd-chips">
@@ -12753,10 +12792,11 @@ function mensajePedido(){
   // envío (5.3 A): cada uno en su renglón, al final
   const cu = renglonCuotas();
   const r = renglonEntrega();
-  // El usado que se revisa en persona (5A): sin valor, con lo que marcó
+  /* El usado que no cumple todo (5A): sin valor, con lo que marcó. Va al
+     final porque termina en "Te paso los detalles:" y ahí escribe el cliente */
   const us = renglonUsadoRevision();
   return `Hola! Te paso mi pedido:\n\n${lineas.join('\n')}` + (cola ? `\n\n${cola}` : '') +
-    (us ? `\n\n${us}` : '') + (cu ? `\n\n${cu}` : '') + (r ? `\n\n${r}` : '');
+    (cu ? `\n\n${cu}` : '') + (r ? `\n\n${r}` : '') + (us ? `\n\n${us}` : '');
 }
 
 /* La hora de los precios en pantalla si son los de la copia de este navegador
@@ -12920,7 +12960,7 @@ function abrirPedido(){
               : aFavorPedido() ? `<b>USD ${plata(-netoPedido())}</b><i class="pd-mas">lo coordinamos por WhatsApp</i>`
               : `<b>USD ${plata(total)}</b>${TC ? `<i>${htmlPesos(Math.round(total*TC))}</i>` : ''}${
               sinStockPedido() ? `<i class="pd-mas">más ${sinStockPedido()} producto${sinStockPedido() > 1 ? 's' : ''} sin stock</i>` : ''}${
-              usadoEnRevision() ? '<i class="pd-mas">menos tu usado, que lo revisamos en persona</i>' : ''}`}</div>
+              usadoEnRevision() ? '<i class="pd-mas">menos tu usado, que vemos por WhatsApp</i>' : ''}`}</div>
           </div>` : ''}
         ${items.length && WHATSAPP ? htmlUsadoPedido() + htmlEntrega() + htmlCuotasPedido() : ''}
         ${items.length ? `${WHATSAPP
@@ -13126,7 +13166,7 @@ function abrirCotizador(desde = {}){
     return resultado();
   };
 
-  // 3A: el valor y la cuenta. Sin valor (algo no cumple), "lo revisamos en persona".
+  // 3A: el valor y la cuenta. Sin valor (algo no cumple), que mande los detalles por WhatsApp.
   const resultado = () => {
     const c = cotizacionUsado(b);
     const bat = c.e.bateria;
@@ -13158,14 +13198,20 @@ function abrirCotizador(desde = {}){
           </div>`;
       }else if(prod) html += '<p class="us-ayuda">El precio de este producto te lo pasamos por WhatsApp.</p>';
     }else{
-      html = `<div class="us-res rev"><small>El valor</small><b>Lo revisamos en persona</b>
-          <span>Marcaste que no: ${esc(c.fallan.map(x => x.texto.toLowerCase()).join(', '))}. Con eso el valor cambia: te decimos cuánto al verlo.</span></div>`;
+      /* Pedro, 05/10: en vez de "lo revisamos en persona", que mande los
+         detalles por WhatsApp. El mensaje termina en "Te paso los detalles:".
+         Desde el pedido van en el mensaje del pedido. */
+      html = `<div class="us-res rev"><small>El valor</small><b>Mandanos los detalles</b>
+          <span>Marcaste que no: ${esc(c.fallan.map(x => x.texto.toLowerCase()).join(', '))}. Con eso el valor cambia: ${delPedido
+            ? 'mandanos los detalles junto con el pedido, en el mismo WhatsApp, y te decimos cuánto vale.'
+            : 'mandanos los detalles por WhatsApp y te decimos cuánto vale.'}</span></div>`;
     }
-    const wa = c.valor !== null && prod ? 'Lo quiero: seguir por WhatsApp' : 'Coordinar por WhatsApp';
+    const wa = c.valor === null ? 'Enviar los detalles por WhatsApp'
+      : prod ? 'Lo quiero: seguir por WhatsApp' : 'Coordinar por WhatsApp';
     html += `<div class="botones">${delPedido
         ? '<button type="button" class="pri" id="us-listo">Listo: volver al pedido</button>'
         : (WHATSAPP ? `<a class="pri" href="${linkWA(mensajeUsado(c, prod, color))}" target="_blank" rel="noopener">${wa}</a>` : '')}</div>
-      ${delPedido ? '' : '<p class="us-ayuda us-guardado">Queda guardado: si armás un pedido, lo restamos ahí.</p>'}
+      ${delPedido || c.valor === null ? '' : '<p class="us-ayuda us-guardado">Queda guardado: si armás un pedido, lo restamos ahí.</p>'}
       <button type="button" class="pd-link" id="us-otro">Cotizar otro equipo</button>`;
     return { preg: 'Tu ' + c.nombre, html };
   };
@@ -13971,7 +14017,7 @@ if(WHATSAPP){
 
 /* ---------- El pie con el contacto (29/09, muestra 6.7 B) ----------
    "Advance Tecno · Av. De los Incas 5150, 1A, CABA · Ver en mapa · WhatsApp
-   +54 9 11 2262-0770 · Atención con cita previa", arriba de la cotización,
+   +54 9 11 2475-1166 · Atención con cita previa", arriba de la cotización,
    como la muestra B que eligió Pedro. Todo sale de la configuración: la
    dirección es DIRECCION y el mapa es MAPA (las mismas de la pregunta
    "¿Puedo ir a verlos o retirar en persona?"), el número es WHATSAPP y el
@@ -13979,7 +14025,7 @@ if(WHATSAPP){
    cita previa" va solo si el retiro de SERVICIO lo dice. Lo que quede vacío
    no se muestra, y sin nada la línea no aparece. Horario, redes y razón
    social los tiene que pasar Pedro (esa es la opción C). */
-// 5491122620770 → "+54 9 11 2262-0770". Un número con otra forma va con el + y nada más.
+// 5491124751166 → "+54 9 11 2475-1166". Un número con otra forma va con el + y nada más.
 const telefonoLegible = n => {
   const r = /^549(11)(\d{4})(\d{4})$/.exec(String(n || ''));
   return r ? `+54 9 ${r[1]} ${r[2]}-${r[3]}` : '+' + n;

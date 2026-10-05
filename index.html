@@ -1593,6 +1593,14 @@
      tira de colores. Con inset:0 el marco manda siempre. */
   .fi-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;
                mix-blend-mode:multiply;filter:brightness(1.04) contrast(1.04)}
+  /* En el celular la foto de la ficha va SIN mezcla (05/10/2026, Benja: la
+     foto desaparecía después de tocar la ficha técnica). La ficha scrollea por
+     dentro y abrir un renglón de la ficha técnica la mueve con scrollIntoView;
+     en Safari de iPhone una foto con mix-blend-mode dentro de una caja que
+     scrollea puede dejar de pintarse. El fondo de la toma es blanco y el de la
+     ficha casi blanco (--ficha-bg): sin la mezcla se ve igual. Con mouse (la
+     compu) queda como estaba. */
+  @media (hover:none){ .fi-foto img{mix-blend-mode:normal} }
   .fi-arriba{position:absolute;z-index:3;top:16px;left:18px;right:18px;
              display:flex;gap:7px;flex-wrap:wrap;align-items:flex-start}
   .fi-foto .badge{position:static}

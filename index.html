@@ -5175,7 +5175,29 @@ function filtrar(){
 // Lo que dibuja la grilla: filtrar(), con cada modelo en la versión que pide el filtro
 function listaDeLaGrilla(){
   const versionOK = versionPedida();
-  return filtrar().map(p => versionOK ? vistaFiltrada(p, versionOK) : p);
+  const deLaBusqueda = versionDeLaBusqueda();
+  return filtrar().map(p => {
+    if(deLaBusqueda){
+      const ambas = versionOK ? (v => versionOK(v) && deLaBusqueda(v)) : deLaBusqueda;
+      if((p.variantes || []).some(ambas)) return vistaFiltrada(p, ambas);
+    }
+    return versionOK ? vistaFiltrada(p, versionOK) : p;
+  });
+}
+
+/* La búsqueda también elige la versión (06/10/2026). "playstation fisica"
+   encontraba la tarjeta de la PlayStation 5, pero mostraba y abría la Digital
+   (la más barata), y "earpods usb-c" cargaba los Lightning: la búsqueda miraba
+   el modelo entero y la tarjeta seguía en su versión de siempre. Ahora, si
+   alguna versión tiene TODAS las palabras por sí sola, la tarjeta muestra
+   ésas (precio, foto, la ficha abre ahí y el + carga esa), igual que con un
+   filtro de capacidad (vistaFiltrada). Si las palabras están repartidas entre
+   versiones ("playstation 5" lo dicen todas), queda como estaba. No saca
+   tarjetas: eso lo sigue decidiendo coincide() sobre el modelo. */
+function versionDeLaBusqueda(){
+  const palabras = prepararBusqueda(filtros.q);
+  if(!palabras.length) return null;
+  return v => coincide(v, palabras);
 }
 
 /* La tarjeta con un filtro de versión puesto (29/09). Pedro eligió que muestre

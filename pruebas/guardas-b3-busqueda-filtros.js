@@ -31,6 +31,8 @@
 //  [134] El lector de pantalla no se enteraba de cuantos resultados hubo.
 //  [128] En el celular, el buscador cerrado recibia el foco sin verse.
 //  [198] Un link filtrado abria sin una sola tarjeta en la primera pantalla.
+//  [busqueda-version] "playstation fisica" mostraba y abria la Digital, y
+//       "earpods usb-c" cargaba los Lightning (06/10/2026).
 //
 // Sin numeros fijos: los casos se buscan en los datos del dia, y donde hoy no
 // hay ninguno se dice y se sigue. Lo que se toca (filtros, URL) se deja como
@@ -94,13 +96,49 @@ async function correrPruebas(){
   const bloques = [plurales, aliasDeRubro, formasDeEscribir, codigoAT, filtrosJuntos, memoriaEnTB,
                    apertura, montura, tramos, ordenTodo, rubroSueltaBusqueda, marcaAjena, linkConCapacidad,
                    linkEnMinusculas, chipTodo, barraConStock, rubroSinStockPorOtroCamino, relevancia, desdeEnDesplegable,
-                   barraConFicha, escape, aria, foco, anuncio, iframes];
+                   barraConFicha, escape, aria, foco, anuncio, iframes, busquedaEligeVersion];
   for(const b of bloques){
     try{ await b(); }
     catch(e){ R.push('EXCEPCION en ' + b.name + ': ' + (e && e.stack || e)); fallas++; }
     try{ limpiarB3(); }catch(e){}
   }
 }
+
+/* ---- [busqueda-version] La búsqueda elige la versión (06/10/2026) ----
+   Si alguna versión tiene todas las palabras por sí sola, la tarjeta (y lo
+   que abre y carga) es esa. Si están repartidas, la tarjeta queda como
+   estaba. Y no se pierde ni se suma ninguna tarjeta. */
+function busquedaEligeVersion(){
+  const qs = ['playstation fisica', 'play station 5 fisica', 'ps5 digital', 'earpods usb-c', 'earpods lightning',
+              'iphone 17 pro max 1tb', 'iphone 17 pro 512 sim', 'macbook neo teclado espanol', 'airpods 4 anc'];
+  const mal = [], cambia = [], cantidades = [];
+  let miradas = 0;
+  qs.forEach(q => {
+    const palabras = prepararBusqueda(q);
+    const lista = conB3({ q }, () => listaDeLaGrilla());
+    const modelos = conB3({ q }, () => filtrar());
+    if(lista.length !== modelos.length) cantidades.push(q + ': ' + modelos.length + ' modelos, ' + lista.length + ' tarjetas');
+    lista.forEach(c => {
+      const vs = c.variantes || [];
+      if(vs.length < 2) return;
+      miradas++;
+      const alguna = vs.some(v => coincide(v, palabras));
+      if(alguna && !coincide(c.rep, palabras)) mal.push(q + ' → ' + c.desc + ' abre ' + (c.rep.desc || c.rep.id));
+      if(alguna && !vs.every(v => coincide(v, palabras))) cambia.push(q + ' → ' + (c.rep.desc || c.rep.id));
+    });
+  });
+  ok(!mal.length, '[busqueda-version] si una version tiene todas las palabras, la tarjeta es esa', mal.slice(0, 3).join(' | ') || miradas + ' tarjetas miradas');
+  ok(!cantidades.length, '[busqueda-version] y no se pierde ni se suma ninguna tarjeta', cantidades.slice(0, 3).join(' | '));
+  nota('[busqueda-version] hoy eligen version: ' + (cambia.slice(0, 6).join(' | ') || 'ninguna'));
+  // El caso de la PlayStation, si hoy está: "fisica" abre la Física
+  const ps = conB3({ q: 'playstation fisica' }, () => listaDeLaGrilla())
+    .find(c => (c.variantes || []).some(v => /fisica/.test(norm(v.desc))) && (c.variantes || []).some(v => /digital/.test(norm(v.desc))));
+  if(ps) ok(/fisica/.test(norm(ps.rep.desc)) && FICHA_DE(ps) === clave(ps.rep),
+            '[busqueda-version] "playstation fisica" muestra y abre la Fisica', ps.rep.desc);
+  else nota('[busqueda-version] hoy no hay PlayStation con Fisica y Digital en la misma tarjeta');
+}
+// La clave con la que la tarjeta abre la ficha (data-key de la tarjeta)
+const FICHA_DE = c => clave(c);
 
 /* ---- [54] El plural trae lo mismo que el singular ---- */
 function plurales(){
@@ -219,7 +257,10 @@ function codigoAT(){
     ok(buscarB3(cv).includes(conVar), '[26] tambien el codigo de variante AT-####-NN', cv);
   }
   const conStock = con.find(m => m.stock);
-  if(conStock) ok(candidatosSug(conStock.codigo).prods.includes(conStock), '[26] y el desplegable lo sugiere', conStock.codigo);
+  // El mismo modelo, aunque venga en la version que tiene ese codigo (desde el
+  // 06/10 la busqueda elige la version: es una copia, con las mismas variantes)
+  if(conStock) ok(candidatosSug(conStock.codigo).prods.some(p => p === conStock || p.variantes === conStock.variantes),
+                  '[26] y el desplegable lo sugiere', conStock.codigo);
   // Los numeros cortos no se llenan de codigos: "50" y "35" son focales
   const ruido = ['50', '35', '15', '17', '85'].filter(n => buscarB3(n).some(m => !henoDe(m).includes(n)));
   ok(!ruido.length, '[26] buscar "50", "35", "15" no trae productos por el numero de su codigo', ruido.join(', ') || 'bien');

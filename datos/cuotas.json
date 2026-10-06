@@ -1,0 +1,33 @@
+{
+  "formato": "cuotas/1",
+  "nota": "Los planes de cuotas y el dolar de la web (index.html: CUOTAS, COTIZACION, COTIZACION_TIPO, RECARGO_PCT, RECARGO_FIJO, LETRA_CHICA_CUOTAS). Lo lee el bot de WhatsApp e Instagram para decir la cuota igual que la web. La prueba decision-cuotas.js avisa si no coinciden.",
+  "planes": [
+    {
+      "cuotas": 1,
+      "recargo": 7
+    },
+    {
+      "cuotas": 3,
+      "recargo": 29.75
+    },
+    {
+      "cuotas": 6,
+      "recargo": 45.55
+    },
+    {
+      "cuotas": 9,
+      "recargo": 63.5
+    },
+    {
+      "cuotas": 12,
+      "recargo": 83.5
+    }
+  ],
+  "dolar": {
+    "cotizacion": null,
+    "tipo": "blue",
+    "recargo": 0,
+    "recargo_fijo": 20
+  },
+  "letra_chica": "Con cualquier tarjeta bancarizada vinculada a Mercado Pago. En pesos, con el dólar del día: el monto se fija cuando pagás."
+}

@@ -64,12 +64,31 @@ const cuEsperado = (usd, c) => {
 const cuPlata = n => Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 });
 
 async function correrPruebas(){
+  await probarElArchivoDelBot();
   probarLosPlanes();
   probarLasPreguntas();
   probarLaTarjeta();
   await probarLaFicha();
   await probarElPedido();
   await probarCelular();
+}
+
+/* ---- datos/cuotas.json: lo que lee el bot (06/10/2026) ----
+   Pedro eligio que Pancho diga la cuota igual que la web. El bot no puede
+   leer index.html, asi que los planes y el dolar estan tambien en
+   datos/cuotas.json: si alguien cambia uno y no el otro, esto falla. */
+async function probarElArchivoDelBot(){
+  let j = null;
+  try{ j = await (await fetch('datos/cuotas.json?_=' + Date.now(), { cache: 'no-store' })).json(); }catch(e){}
+  ok(!!j && j.formato === 'cuotas/1', 'datos/cuotas.json esta y tiene formato cuotas/1');
+  if(!j) return;
+  ok(JSON.stringify((j.planes || []).map(c => [c.cuotas, c.recargo])) === JSON.stringify(CUOTAS.map(c => [c.cuotas, c.recargo])),
+     'los planes de datos/cuotas.json son los de CUOTAS (el bot dice la misma cuota)', JSON.stringify(j.planes));
+  const d = j.dolar || {};
+  ok(d.tipo === COTIZACION_TIPO && Number(d.recargo) === RECARGO_PCT && Number(d.recargo_fijo) === RECARGO_FIJO &&
+     (typeof COTIZACION === 'number' ? d.cotizacion === COTIZACION : d.cotizacion === null),
+     'y el dolar tambien: la misma casa, el mismo recargo y los mismos pesos fijos', JSON.stringify(d));
+  ok(j.letra_chica === LETRA_CHICA_CUOTAS, 'y la letra chica', j.letra_chica);
 }
 
 /* ---- Los planes y la cuenta ---- */

@@ -108,15 +108,30 @@ function uzTocarSinIr(a){
   try{ a.click(); } finally { document.removeEventListener('click', frenar, true); }
 }
 // Toca "Enviar por Instagram" sin abrir nada y devuelve lo que copio
-async function uzTocarIG(a){
+// (06/10) Copia primero de forma sincronica (execCommand) y, si no puede, con
+// el portapapeles asincronico: los dos de mentira, y se anota cual uso
+async function uzTocarIG(a, sinExec){
   const copiado = [];
   const antes = Object.getOwnPropertyDescriptor(navigator, 'clipboard');
+  const exec = document.execCommand;
+  document.execCommand = function(cmd){
+    if(cmd !== 'copy') return exec.apply(document, arguments);
+    if(sinExec) return false;
+    const t = document.querySelector('#usado textarea[readonly]');
+    copiado.push(t ? t.value : '');
+    return true;
+  };
   Object.defineProperty(navigator, 'clipboard', { configurable: true,
-    value: { writeText: t => { copiado.push(t); return Promise.resolve(); } } });
+    value: { writeText: t => { copiado.push('ASYNC:' + t); return Promise.resolve(); } } });
   try{ uzTocarSinIr(a); await uzDormir(30); }
-  finally{ if(antes) Object.defineProperty(navigator, 'clipboard', antes); else delete navigator.clipboard; }
+  finally{
+    document.execCommand = exec;
+    if(antes) Object.defineProperty(navigator, 'clipboard', antes); else delete navigator.clipboard;
+  }
   return copiado;
 }
+// "‹ Atrás" ahora tambien vuelve en el historial (06/10), que es asincronico
+async function uzAtras(){ uzTocar('.us-atras'); await uzDormir(80); }
 // Completa "Otro equipo" (ya abierto)
 function uzCompletarOtro(tipo, modelo, memoria, estado){
   uzTocar(`.pd-chip[data-tipo="${tipo}"]`);
@@ -135,6 +150,7 @@ async function correrPruebas(){
   await probarLaPregunta();
   await probarLaFicha();
   await probarElPedido();
+  await probarArreglos();
   await probarCelular();
 }
 
@@ -232,7 +248,7 @@ async function probarLaPregunta(){
     ok(USADO && USADO.e === 'otro' && USADO.tipo === 'MacBook' && USADO.modelo === 'MacBook Air M2 13"' &&
        (JSON.parse(localStorage.getItem(USADO_KEY) || '{}').estado || '') === 'batería al 85 %, sin golpes, con cargador',
        '[otro] al tocar «Enviar por WhatsApp» queda guardado (el pedido lo sabe)', JSON.stringify(USADO).slice(0, 90));
-    uzTocar('.us-atras');
+    await uzAtras();
     await uzDormir(20);
     ok(uzPreg() === '¿Qué equipo entregás?' && uzCot().querySelector('.us-op[data-fuera]').getAttribute('aria-pressed') === 'true',
        '[otro] «Atrás» vuelve al primer paso, con «Otro equipo» marcado');
@@ -240,7 +256,7 @@ async function probarLaPregunta(){
     await uzDormir(20);
     ok(uzCot().querySelector('#us-modelo').value === 'MacBook Air M2 13"' && uzCot().querySelector('#us-estado').value.startsWith('batería al 85 %'),
        '[otro] y al volver, lo escrito sigue ahí');
-    uzTocar('.us-atras');
+    await uzAtras();
     await uzDormir(20);
   }
   await uzCotizar('iphone', 'iphone-13', '128GB', 'si', uzTodoSi('iphone'));
@@ -304,7 +320,7 @@ async function probarLaFicha(){
   ok(uzPreg() === '¿Cuánto marca la salud de la batería?' && [...uzCot().querySelectorAll('.us-op[data-bat]')].map(uzTxt).join(',') === `${BAT.umbral} % o más,Menos de ${BAT.umbral} %,No sé`,
      '[2A] la bateria: 80 % o mas, menos de 80 %, no se');
   // Atras vuelve un paso, con lo elegido marcado
-  uzTocar('.us-atras');
+  await uzAtras();
   ok(uzPreg() === '¿Cuánta memoria tiene?' && uzCot().querySelector('.us-op[data-o="128GB"]').getAttribute('aria-pressed') === 'true',
      '[2A] «Atrás» vuelve un paso con lo elegido marcado');
   uzTocar('.us-op[data-o="128GB"]');
@@ -343,24 +359,27 @@ async function probarLaFicha(){
   const copiado = await uzTocarIG(ig);
   ok(copiado.length === 1 && copiado[0] === msj && /Copiamos el mensaje: pegalo en el chat de Instagram/.test(uzTxt(uzCot().querySelector('.us-ig-nota'))),
      '[ig] tocarlo copia el mismo mensaje que WhatsApp y avisa que lo pegue', uzTxt(uzCot().querySelector('.us-ig-nota')));
+  const copiado2 = await uzTocarIG(ig, true);
+  ok(copiado2.length === 1 && copiado2[0] === 'ASYNC:' + msj && /Copiamos el mensaje/.test(uzTxt(uzCot().querySelector('.us-ig-nota'))),
+     '[ig] si no se puede copiar de una, usa el portapapeles (06/10)', (copiado2[0] || '').slice(0, 30));
   ok(a && uzTxt(a) === 'Enviar por WhatsApp' && msj.includes('quiero entregar mi usado como parte de pago') &&
      msj.includes(`Mi usado: iPhone 13 128GB, batería ${BAT.umbral} % o más, cumple todas las condiciones: USD ${uzPlata(V13)}`) &&
      msj.includes('Me queda: USD ' + uzPlata(n)), '[3A] el mensaje de WhatsApp con el usado y la cuenta', msj.replace(/\n/g, ' / ').slice(0, 160));
   ok(USADO && USADO.m === 'iphone-13' && JSON.parse(localStorage.getItem(USADO_KEY) || 'null')?.o === '128GB', '[3A] al llegar al resultado queda guardada');
 
   // Bateria por debajo: resta 20; "no se": el valor y lo que seria con la bateria baja
-  uzTocar('.us-atras'); uzTocar('.us-atras');
+  await uzAtras(); await uzAtras();
   uzTocar('.us-op[data-bat="no"]'); uzTocar('#us-ver'); await uzDormir(20);
   ok(uzTxt(uzCot().querySelector('.us-res')).includes('USD ' + uzPlata(V13 - BAT.resta) + ' ') && uzTxt(uzCot()).includes(`Ya le restamos USD ${uzPlata(BAT.resta)} por la batería`),
      '[3A] bateria por debajo del umbral: el valor menos lo que resta, y lo dice', uzTxt(uzCot().querySelector('.us-res')).slice(0, 80));
-  uzTocar('.us-atras'); uzTocar('.us-atras');
+  await uzAtras(); await uzAtras();
   uzTocar('.us-op[data-bat="nose"]'); uzTocar('#us-ver'); await uzDormir(20);
   const msjNs = uzWA(uzCot().querySelector('.botones a.pri'));
   ok(uzTxt(uzCot().querySelector('.us-res')).includes('USD ' + uzPlata(V13) + ' ') && msjNs.includes('no sé cómo está la batería') &&
      msjNs.includes(`USD ${uzPlata(V13)} (USD ${uzPlata(V13 - BAT.resta)} si la batería está por debajo del ${BAT.umbral} %)`), '[3A] bateria sin saber: el valor, y cuanto si esta baja', msjNs.split('\n')[2]);
 
   // Algo no cumple: sin numero
-  uzTocar('.us-atras');
+  await uzAtras();
   uzTocar('.pd-chip[data-cond="pantalla"][data-v="0"]'); uzTocar('#us-ver'); await uzDormir(20);
   const rev = uzCot().querySelector('.us-res');
   const msjRev = uzWA(uzCot().querySelector('.botones a.pri'));
@@ -564,6 +583,76 @@ async function probarElPedido(){
     PEDIDO = antes.pedido; guardarPedido();
     USADO = antes.usado; guardarUsado(); CUOTAS_PEDIDO = antes.cuotas;
     pintarPedido();
+  }
+}
+
+/* ---- Los arreglos de la auditoria (06/10) ---- */
+async function probarArreglos(){
+  const antes = { pedido: PEDIDO.map(l => ({ ...l })), usado: USADO };
+  try{
+    let roto = null;
+    try{ roto = linkWA('Hola \uD83D'); }catch(e){ roto = 'EXCEPCION ' + e.name; }
+    ok(typeof roto === 'string' && roto.startsWith('https://wa.me/'), '[arreglos] un emoji cortado no rompe el link de WhatsApp', String(roto).slice(-24));
+    // Productos "a consultar" + un usado que vale mas: lo que sobra queda a favor
+    const conPrecio = PRODUCTOS.filter(p => p.stock && typeof p.precio === 'number' && p.precio > 0 && p.precio < V13 && buscarModelo(clave(p))).sort((x, y) => x.precio - y.precio)[0];
+    // Si hoy no hay ninguno "a consultar", uno con stock pasa a serlo un momento
+    let aConsultar = PRODUCTOS.find(p => p.stock && p.precio === null && buscarModelo(clave(p)));
+    let precioOriginal;
+    if(!aConsultar){
+      aConsultar = PRODUCTOS.find(p => p.stock && typeof p.precio === 'number' && p !== conPrecio && buscarModelo(clave(p)));
+      if(aConsultar){ precioOriginal = aConsultar.precio; aConsultar.precio = null; }
+    }
+    try{ if(conPrecio && aConsultar){
+      PEDIDO = [{ k: clave(conPrecio), n: 1, color: '' }, { k: clave(aConsultar), n: 1, color: '' }]; guardarPedido();
+      USADO = { e: 'iphone', m: 'iphone-13', o: '128GB', bat: 'si', cond: uzTodoSi('iphone') }; guardarUsado(); pintarPedido();
+      const fav = V13 - conPrecio.precio, m = mensajePedido();
+      ok(aFavorPedido() && m.includes(`Me queda a favor: USD ${uzPlata(fav)}, más los productos a consultar`) && $('bp-usd').textContent === `A favor USD ${uzPlata(fav)} +`,
+         '[arreglos] con productos a consultar, lo que sobra del usado queda a favor (antes daba USD 0)', $('bp-usd').textContent);
+    } else info('[arreglos] no hay productos para armar el caso "a consultar": no se probo'); }
+    finally{ if(precioOriginal !== undefined) aConsultar.precio = precioOriginal; }
+    // Todo sin stock + usado: va en el mensaje
+    const sinStock = PRODUCTOS.find(p => !p.stock && buscarModelo(clave(p)));
+    if(sinStock){
+      PEDIDO = [{ k: clave(sinStock), n: 1, color: '' }]; guardarPedido();
+      USADO = { e: 'otro', tipo: 'Samsung', modelo: 'Galaxy S23', memoria: '', estado: 'impecable' }; guardarUsado(); pintarPedido();
+      ok(mensajePedido().includes('Mi usado: Galaxy S23 (Samsung, no está en el cotizador). Cómo está: impecable.'),
+         '[arreglos] con todo sin stock, el usado igual va en el mensaje', mensajePedido().split('\n\n').pop().slice(0, 80));
+    }
+    // La pregunta frecuente sin la lista
+    const u0 = USADOS; USADOS = null; const faq = htmlAyudaUsados(); USADOS = u0;
+    ok(/Escribinos por WhatsApp/.test(faq) && !/ay-cotizar/.test(faq), '[arreglos] sin la lista, la pregunta no promete el boton');
+    // Corregir una respuesta y cerrar: no sigue la vieja
+    PEDIDO = antes.pedido.slice(); guardarPedido();
+    USADO = { e: 'iphone', m: 'iphone-13', o: '128GB', bat: 'si', cond: uzTodoSi('iphone') }; guardarUsado(); pintarPedido();
+    abrirCotizador(); await uzDormir(40);
+    ok(uzPreg() === 'Tu iPhone 13 128GB', '[arreglos] con una cotizacion guardada abre en el resultado', uzPreg());
+    await uzAtras();
+    ok(uzPreg() === '¿Cumple todo esto?', '[arreglos] «Atrás» al estado', uzPreg());
+    uzTocar('.pd-chip[data-cond="pantalla"][data-v="0"]');
+    ok(USADO === null && !localStorage.getItem(USADO_KEY), '[arreglos] corregir una respuesta suelta la cotizacion vieja: el pedido no sigue restando');
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    await uzEsperarA(() => !uzCot(), 3000);
+    ok(!uzCot() && USADO === null, '[arreglos] y al cerrar sin terminar no vuelve la vieja');
+    // El Atras del navegador vuelve un paso
+    await uzEsperarA(() => !(history.state && history.state.usado), 3000);
+    abrirCotizador(); await uzDormir(40);
+    uzTocar('.us-op[data-e="iphone"]'); uzTocar('.us-op[data-m="iphone-13"]');
+    ok(uzPreg() === '¿Cuánta memoria tiene?', '[arreglos] paso 3', uzPreg());
+    history.back(); await uzEsperarA(() => uzPreg() === '¿Qué modelo es?', 3000);
+    ok(!!uzCot() && uzPreg() === '¿Qué modelo es?', '[arreglos] el Atras del navegador vuelve un paso y no cierra el cotizador (antes cerraba todo)', uzPreg());
+    history.back(); await uzEsperarA(() => uzPreg() === '¿Qué equipo entregás?', 3000);
+    ok(!!uzCot() && uzPreg() === '¿Qué equipo entregás?', '[arreglos] otro Atras, otro paso', uzPreg());
+    history.back(); await uzEsperarA(() => !uzCot(), 3000);
+    ok(!uzCot(), '[arreglos] y desde el primer paso, el Atras lo cierra');
+    // Cerrar desde un paso avanzado no deja entradas del cotizador
+    abrirCotizador(); await uzDormir(40);
+    uzTocar('.us-op[data-e="iphone"]'); uzTocar('.us-op[data-m="iphone-13"]');
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    await uzEsperarA(() => !uzCot() && !(history.state && history.state.usado), 3000);
+    ok(!uzCot() && !(history.state && history.state.usado), '[arreglos] cerrar desde un paso avanzado vuelve todas sus entradas del historial');
+  } finally {
+    uzCerrarTodo();
+    PEDIDO = antes.pedido; guardarPedido(); USADO = antes.usado; guardarUsado(); pintarPedido();
   }
 }
 

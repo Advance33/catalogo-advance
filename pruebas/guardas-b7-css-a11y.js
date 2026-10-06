@@ -358,7 +358,7 @@ async function saltarAlCatalogo(){
 async function tituloDeLaPestana(){
   aLaPortadaB7();
   const og = document.querySelector('meta[property="og:title"]').content;
-  ok(document.title === 'Catálogo Advance — Los precios de hoy', '[204] en la portada, el titulo de siempre', document.title);
+  ok(document.title === 'Catálogo Advance Tecno — Los precios de hoy', '[204] en la portada, el titulo de siempre', document.title);
   const cat = document.querySelector('#mosaico .rubro')?.dataset.cat;
   if(!cat){ nota('[204] no hay rubros en el mosaico'); return; }
   entrarAlRubro(cat);
@@ -387,6 +387,6 @@ async function tituloDeLaPestana(){
   filtros.q = 'iphone'; pintar();
   ok(/“iphone”/.test(document.title), '[204] con una busqueda, lo buscado', document.title);
   filtros.q = ''; aLaPortadaB7();
-  ok(document.title === 'Catálogo Advance — Los precios de hoy', '[204] y de vuelta en la portada, el de siempre', document.title);
+  ok(document.title === 'Catálogo Advance Tecno — Los precios de hoy', '[204] y de vuelta en la portada, el de siempre', document.title);
   ok(document.querySelector('meta[property="og:title"]').content === og, '[204] lo que se ve al compartir el link (og:title) no se toca', og);
 }

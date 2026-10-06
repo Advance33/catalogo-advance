@@ -19,10 +19,15 @@ nada (Pedro eligió la G, 05/10).
 3. **El valor es "si cumple todas las condiciones".** La batería por debajo
    del umbral resta lo que dice `bateria.resta`. Si cualquier otra
    condición no se cumple, no se muestra ningún número: "Mandanos los
-   detalles", el campo "¿Qué tiene?" y el botón "Enviar los detalles por
-   WhatsApp". El mensaje lleva lo que escribió ("Detalles: …") o, si no
-   escribió nada, termina en "Te paso los detalles:" (Pedro, 05/10; antes
-   decía "Lo revisamos en persona").
+   detalles", el campo "¿Qué tiene?" y los botones "Enviar por WhatsApp" y
+   "Enviar por Instagram". El mensaje lleva lo que escribió ("Detalles: …")
+   o, si no escribió nada, termina en "Te paso los detalles:" (Pedro, 05/10;
+   antes decía "Lo revisamos en persona").
+6. **Para confirmar el valor, fotos y detalles** (Pedro, 06/10): debajo del
+   valor, "Para confirmarlo, mandanos fotos y los detalles por WhatsApp o
+   Instagram", y el mensaje termina en "Te paso fotos y los detalles:".
+   Instagram no deja escribir un mensaje por link: su botón copia el mensaje
+   y abre el chat de @advancetecno (`INSTAGRAM_TECNO` en `index.html`).
 4. Si el usado vale más que lo que compra, la web dice **"Te queda a favor
    USD X"** y se coordina por WhatsApp.
 5. **Lo que Pedro toma pero todavía no tiene lista** (05/10: "lo de Apple,

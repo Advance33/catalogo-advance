@@ -21,6 +21,10 @@
 //          el pedido se suma y va al final de su mensaje (Pedro, 05/10: "que
 //          puedan poner los detalles en la landing").
 //   det    lo que no cumple trae "¿Qué tiene?", que va en el mensaje.
+//   ig     para confirmar, "mandanos fotos y los detalles por WhatsApp o
+//          Instagram" y los dos botones: WhatsApp con el mensaje escrito e
+//          Instagram, que copia el mensaje y abre el chat de @advancetecno
+//          (Pedro, 06/10; antes decia "Lo confirmamos al verlo").
 //   anim.  tocar una opcion no repite la entrada de la ventana (el
 //          "pestañazo negro" que vio Pedro el 05/10).
 //   5A     "¿Entregás un usado?" en el pedido: el usado resta en el total, la
@@ -102,6 +106,16 @@ function uzTocarSinIr(a){
   const frenar = e => e.preventDefault();
   document.addEventListener('click', frenar, true);
   try{ a.click(); } finally { document.removeEventListener('click', frenar, true); }
+}
+// Toca "Enviar por Instagram" sin abrir nada y devuelve lo que copio
+async function uzTocarIG(a){
+  const copiado = [];
+  const antes = Object.getOwnPropertyDescriptor(navigator, 'clipboard');
+  Object.defineProperty(navigator, 'clipboard', { configurable: true,
+    value: { writeText: t => { copiado.push(t); return Promise.resolve(); } } });
+  try{ uzTocarSinIr(a); await uzDormir(30); }
+  finally{ if(antes) Object.defineProperty(navigator, 'clipboard', antes); else delete navigator.clipboard; }
+  return copiado;
 }
 // Completa "Otro equipo" (ya abierto)
 function uzCompletarOtro(tipo, modelo, memoria, estado){
@@ -188,6 +202,7 @@ async function probarLaPregunta(){
     fuera.click();
     await uzDormir(30);
     const env = () => uzCot().querySelector('#us-enviar');
+    ok(!uzCot().querySelector('#us-enviar-ig').hasAttribute('href'), '[ig] incompleto, Instagram tampoco se puede tocar');
     ok(uzPreg() === 'Otro equipo' && env() && uzTxt(env()) === 'Enviar por WhatsApp' && !env().hasAttribute('href') && !/USD/.test(uzTxt(uzCot().querySelector('.caja'))) &&
        uzTxt(uzCot().querySelector('#us-falta')) === 'Falta qué es, el modelo y cómo está.',
        '[otro] un formulario sin valor: hasta completarlo el WhatsApp no se puede tocar y dice qué falta', uzTxt(uzCot().querySelector('#us-falta')));
@@ -205,6 +220,13 @@ async function probarLaPregunta(){
     ok(mf === 'Hola! Quiero entregar mi usado como parte de pago.\n\nMi usado (no está en el cotizador):\nQué es: MacBook\nModelo: MacBook Air M2 13"\nMemoria: 8/256GB\nCómo está: batería al 85 %, sin golpes, con cargador\n\n¿Cuánto me lo toman?',
        '[otro] completo: el WhatsApp sale con todo lo que escribió', mf.replace(/\n/g, ' / '));
     ok(!uzTxt(uzCot().querySelector('#us-falta')), '[otro] y ya no dice que falta nada');
+    const envIg = uzCot().querySelector('#us-enviar-ig');
+    ok(envIg && uzTxt(envIg) === 'Enviar por Instagram' && envIg.getAttribute('href') === 'https://ig.me/m/advancetecno',
+       '[ig] «Otro equipo» completo: «Enviar por Instagram» abre el chat de @advancetecno', envIg && envIg.getAttribute('href'));
+    const copiaOtro = await uzTocarIG(envIg);
+    ok(copiaOtro.length === 1 && copiaOtro[0] === mf && /Copiamos el mensaje/.test(uzTxt(uzCot().querySelector('.us-ig-nota'))),
+       '[ig] y copia el mismo mensaje que WhatsApp, y avisa que lo pegue', (copiaOtro[0] || '').slice(0, 60));
+    USADO = null; guardarUsado();
     ok(USADO === null, '[otro] escribir no guarda nada todavia');
     uzTocarSinIr(env());
     ok(USADO && USADO.e === 'otro' && USADO.tipo === 'MacBook' && USADO.modelo === 'MacBook Air M2 13"' &&
@@ -223,8 +245,9 @@ async function probarLaPregunta(){
   }
   await uzCotizar('iphone', 'iphone-13', '128GB', 'si', uzTodoSi('iphone'));
   const a = uzCot().querySelector('.botones a.pri'), m = a ? uzWA(a) : '';
-  ok(a && uzTxt(a) === 'Coordinar por WhatsApp' && m.startsWith('Hola! Quiero entregar mi usado como parte de pago.') && !uzCot().querySelector('.us-cuenta'),
-     '[FAQ] sin producto: el valor y «Coordinar por WhatsApp», sin cuenta', m.split('\n')[0]);
+  ok(a && uzTxt(a) === 'Enviar por WhatsApp' && m.startsWith('Hola! Quiero entregar mi usado como parte de pago.') && !uzCot().querySelector('.us-cuenta') &&
+     m.endsWith('\n\nTe paso fotos y los detalles:'),
+     '[FAQ] sin producto: el valor y «Enviar por WhatsApp», sin cuenta, pidiendo las fotos', m.split('\n')[0]);
   uzCerrarTodo();
   USADO = null; guardarUsado();
 }
@@ -308,7 +331,19 @@ async function probarLaFicha(){
      '[3A] la cuenta: el producto, menos el usado, lo que queda', cuenta.slice(0, 120));
   const a = uzCot().querySelector('.botones a.pri');
   const msj = a ? uzWA(a) : '';
-  ok(a && uzTxt(a) === 'Lo quiero: seguir por WhatsApp' && msj.includes('quiero entregar mi usado como parte de pago') &&
+  ok(!/Lo confirmamos al verlo/.test(uzTxt(uzCot().querySelector('.caja'))) &&
+     uzTxt(uzCot().querySelector('.us-confirmar')) === 'Para confirmarlo, mandanos fotos y los detalles por WhatsApp o Instagram.',
+     '[ig] debajo del valor: «Para confirmarlo, mandanos fotos y los detalles por WhatsApp o Instagram» (Pedro, 06/10)',
+     uzTxt(uzCot().querySelector('.us-confirmar')));
+  ok(msj.endsWith('\n\nTe paso fotos y los detalles:'), '[ig] y el mensaje de WhatsApp termina pidiéndolas', msj.split('\n').pop());
+  const ig = uzCot().querySelector('#us-ig');
+  ok(ig && uzTxt(ig) === 'Enviar por Instagram' && ig.getAttribute('href') === 'https://ig.me/m/advancetecno' && ig.target === '_blank' &&
+     ig.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_PRECEDING,
+     '[ig] «Enviar por Instagram», debajo de WhatsApp, abre el chat de @advancetecno', ig && ig.getAttribute('href'));
+  const copiado = await uzTocarIG(ig);
+  ok(copiado.length === 1 && copiado[0] === msj && /Copiamos el mensaje: pegalo en el chat de Instagram/.test(uzTxt(uzCot().querySelector('.us-ig-nota'))),
+     '[ig] tocarlo copia el mismo mensaje que WhatsApp y avisa que lo pegue', uzTxt(uzCot().querySelector('.us-ig-nota')));
+  ok(a && uzTxt(a) === 'Enviar por WhatsApp' && msj.includes('quiero entregar mi usado como parte de pago') &&
      msj.includes(`Mi usado: iPhone 13 128GB, batería ${BAT.umbral} % o más, cumple todas las condiciones: USD ${uzPlata(V13)}`) &&
      msj.includes('Me queda: USD ' + uzPlata(n)), '[3A] el mensaje de WhatsApp con el usado y la cuenta', msj.replace(/\n/g, ' / ').slice(0, 160));
   ok(USADO && USADO.m === 'iphone-13' && JSON.parse(localStorage.getItem(USADO_KEY) || 'null')?.o === '128GB', '[3A] al llegar al resultado queda guardada');
@@ -332,7 +367,9 @@ async function probarLaFicha(){
   ok(rev && rev.classList.contains('rev') && /Mandanos los detalles/.test(uzTxt(rev)) && /mandanos los detalles por WhatsApp/.test(uzTxt(rev)) &&
      !/USD/.test(uzTxt(uzCot().querySelector('.caja'))) && !/en persona/.test(uzTxt(rev)),
      '[3A] si algo no cumple: «Mandanos los detalles» por WhatsApp, sin ningun numero (Pedro, 05/10)', uzTxt(rev).slice(0, 90));
-  ok(uzTxt(uzCot().querySelector('.botones a.pri')) === 'Enviar los detalles por WhatsApp', '[3A] con el boton «Enviar los detalles por WhatsApp»');
+  ok(uzTxt(uzCot().querySelector('.botones a.pri')) === 'Enviar por WhatsApp' && uzTxt(uzCot().querySelector('#us-ig')) === 'Enviar por Instagram' &&
+     /mandanos los detalles por WhatsApp o Instagram/.test(uzTxt(rev)),
+     '[3A] con «Enviar por WhatsApp» y «Enviar por Instagram»');
   ok(msjRev.includes('Marqué que no cumple: pantalla y vidrios sin roturas. Te paso los detalles:') && msjRev.endsWith('Te paso los detalles:') &&
      !/USD \d/.test(msjRev.split('\n\n')[1] || ''),
      '[3A] y el mensaje dice lo que no cumple y termina en «Te paso los detalles:», sin valor', (msjRev.split('\n\n')[1] || '').slice(0, 120));

@@ -208,7 +208,9 @@ si alguna falta).
                   cuenta ("Te queda" / "Te queda a favor") y su mensaje, en
                   el pedido "¿Entregás un usado?" con el usado restando en
                   el total, la barra, las cuotas y el mensaje, la pregunta
-                  frecuente con "Cotizar mi usado", y que tocar una opcion no
+                  frecuente con "Cotizar mi usado", el pedido de fotos con
+                  "Enviar por WhatsApp" y "Enviar por Instagram" (copia el
+                  mensaje y abre @advancetecno), y que tocar una opcion no
                   repita la entrada de la ventana. Tambien a 360 y 390 px.
 
 COMO SE CORREN

@@ -2452,7 +2452,11 @@
   #usado .pd-campo textarea:focus{outline:2px solid var(--acento);outline-offset:0;border-color:transparent}
   @media (max-width:520px), (hover:none){ #usado .pd-campo textarea{font-size:16px} }
   .us-det{margin-top:14px}
-  #usado .botones a.pri:not([href]){opacity:.45;cursor:default}
+  #usado .botones a.pri:not([href]),#usado .botones a.sec:not([href]){opacity:.45;cursor:default}
+  /* WhatsApp e Instagram, uno debajo del otro (06/10): lado a lado no entran a 360 */
+  #usado .botones.us-dos{flex-direction:column}
+  .us-ig-nota{text-align:center;margin-top:8px}
+  .us-confirmar{margin-top:12px;color:var(--ink)}
   .us-falta:empty{display:none}
   .us-grupo{display:grid;gap:6px}
   .us-grupo-rot{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
@@ -9418,7 +9422,7 @@ function htmlAyudaUsados(){
   const n = USADOS.map(e => e.nombre);
   const lista = n.length > 1 ? n.slice(0, -1).join(', ') + ' y ' + n[n.length - 1] : n[0];
   return `<p>Hoy el cotizador tiene ${esc(lista)}.${USADOS_OTROS
-      ? ` También tomamos ${esc(USADOS_OTROS)}: elegí «Otro equipo» y te lo cotizamos por WhatsApp.` : ''}</p>
+      ? ` También tomamos ${esc(USADOS_OTROS)}: elegí «Otro equipo» y te lo cotizamos por WhatsApp o Instagram.` : ''}</p>
     <button type="button" class="ay-cotizar">Cotizar mi usado</button>`;
 }
 
@@ -13177,7 +13181,24 @@ function mensajeUsado(c, prod, color){
       ? `\nMe queda: USD ${plata(n)}${TC ? ` (aprox. $ ${plata(Math.round(n * TC))})` : ''}`
       : `\nMe queda a favor: USD ${plata(-n)}`;
   }
+  // Para confirmarlo, las fotos y los detalles (Pedro, 06/10): los manda ahí mismo
+  if(c.valor !== null) t += '\n\nTe paso fotos y los detalles:';
   return t;
+}
+
+/* Los dos botones para mandar los detalles (Pedro, 06/10): WhatsApp con el
+   mensaje escrito e Instagram. Instagram no deja escribir un mensaje por link
+   como WhatsApp, así que su botón copia el mensaje y abre el chat de la
+   cuenta (la que atiende Pancho), y el cliente lo pega. Sin href no se pueden
+   tocar: así quedan apagados mientras al formulario le falta algo. */
+const INSTAGRAM_TECNO = 'advancetecno';     // @advancetecno
+const linkIG = () => INSTAGRAM_TECNO ? 'https://ig.me/m/' + INSTAGRAM_TECNO : '';
+function htmlEnviarUsado(msg, ids = ['us-wa', 'us-ig']){
+  const wa = WHATSAPP ? `<a class="pri" id="${ids[0]}"${msg !== null ? ` href="${linkWA(msg)}"` : ''} target="_blank" rel="noopener">Enviar por WhatsApp</a>` : '';
+  const ig = linkIG() ? `<a class="sec us-ig" id="${ids[1]}"${msg !== null ? ` href="${linkIG()}"` : ''} target="_blank" rel="noopener">Enviar por Instagram</a>` : '';
+  if(!wa && !ig) return '';
+  return `<div class="botones us-dos">${wa}${ig}</div>
+    ${ig ? '<p class="us-ayuda us-ig-nota" aria-live="polite">Por Instagram copiamos el mensaje y lo pegás en el chat.</p>' : ''}`;
 }
 
 // "Otro equipo" (05/10): lo que el cliente completó en la web, renglón por renglón
@@ -13224,7 +13245,7 @@ function abrirCotizador(desde = {}){
     if(paso === 'fuera'){
       const ej = (USADOS_OTROS_TIPOS.find(([t]) => t === f.tipo) || [, 'marca y modelo'])[1];
       return { preg: 'Otro equipo',
-        html: `<p class="us-ayuda us-intro">Todavía no están en el cotizador: completá esto y te decimos cuánto vale por WhatsApp.</p>
+        html: `<p class="us-ayuda us-intro">Todavía no están en el cotizador: completá esto y te decimos cuánto vale por WhatsApp o Instagram.</p>
           <div class="us-form">
             <div class="us-campo" role="group" aria-labelledby="us-rot-tipo"><span class="us-rot" id="us-rot-tipo">¿Qué es?</span>
               <div class="pd-chips">${USADOS_OTROS_TIPOS.map(([t]) => `<button type="button" class="pd-chip" data-tipo="${esc(t)}" aria-pressed="${f.tipo === t}">${esc(t)}</button>`).join('')}</div></div>
@@ -13235,9 +13256,9 @@ function abrirCotizador(desde = {}){
             <label class="pd-campo"><span>¿Cómo está?</span>
               <textarea id="us-estado" maxlength="${USADO_TXT_MAX.estado}" rows="3" placeholder="Por ejemplo: batería al 85 %, sin golpes, con caja y cargador"></textarea></label>
           </div>
-          <div class="botones">${delPedido
-            ? '<button type="button" class="pri" id="us-sumar">Sumarlo al pedido</button>'
-            : WHATSAPP ? '<a class="pri" id="us-enviar" data-fuera="1" target="_blank" rel="noopener">Enviar por WhatsApp</a>' : ''}</div>
+          ${delPedido
+            ? '<div class="botones"><button type="button" class="pri" id="us-sumar">Sumarlo al pedido</button></div>'
+            : htmlEnviarUsado(null, ['us-enviar', 'us-enviar-ig']).replace('id="us-enviar"', 'id="us-enviar" data-fuera="1"')}
           <p class="us-ayuda us-falta" id="us-falta" aria-live="polite"></p>
           ${delPedido ? '<button type="button" class="pd-link" id="us-listo">Volver al pedido</button>' : ''}` };
     }
@@ -13282,7 +13303,7 @@ function abrirCotizador(desde = {}){
       if(bat && c.bat === 'no' && bat.resta) nota = `Ya le restamos USD ${plata(bat.resta)} por la batería.`;
       if(bat && c.bat === 'nose' && bat.resta) nota = `Si la batería está por debajo del ${bat.umbral} %, son USD ${plata(bat.resta)} menos.`;
       html = `<div class="us-res"><small>Te lo tomamos a</small><b>USD ${plata(c.valor)}</b>
-          <span>si cumple todas las condiciones. Lo confirmamos al verlo.</span>${nota ? `<span>${esc(nota)}</span>` : ''}</div>`;
+          <span>si cumple todas las condiciones.</span>${nota ? `<span>${esc(nota)}</span>` : ''}</div>`;
       // La cuenta: lo que mira (o el pedido), menos el usado
       let base = null, rot = '', masRot = '';
       if(delPedido && itemsPedido().length && !soloSinStockPedido()){
@@ -13310,15 +13331,18 @@ function abrirCotizador(desde = {}){
       html = `<div class="us-res rev"><small>El valor</small><b>Mandanos los detalles</b>
           <span>Marcaste que no: ${esc(c.fallan.map(x => x.texto.toLowerCase()).join(', '))}. Con eso el valor cambia: ${delPedido
             ? 'mandanos los detalles junto con el pedido, en el mismo WhatsApp, y te decimos cuánto vale.'
-            : 'mandanos los detalles por WhatsApp y te decimos cuánto vale.'}</span></div>
+            : 'mandanos los detalles por WhatsApp o Instagram y te decimos cuánto vale.'}</span></div>
         <label class="pd-campo us-det"><span>¿Qué tiene? <i>opcional</i></span>
           <textarea id="us-det" maxlength="${USADO_TXT_MAX.det}" rows="3" placeholder="Por ejemplo: la pantalla tiene una rayita en una esquina"></textarea></label>`;
     }
-    const wa = c.valor === null ? 'Enviar los detalles por WhatsApp'
-      : prod ? 'Lo quiero: seguir por WhatsApp' : 'Coordinar por WhatsApp';
-    html += `<div class="botones">${delPedido
-        ? '<button type="button" class="pri" id="us-listo">Listo: volver al pedido</button>'
-        : (WHATSAPP ? `<a class="pri" id="us-wa" href="${linkWA(mensajeUsado(c, prod, color))}" target="_blank" rel="noopener">${wa}</a>` : '')}</div>
+    // Para confirmar el valor, las fotos y los detalles (Pedro, 06/10)
+    if(c.valor !== null) html += `<p class="us-ayuda us-confirmar">${delPedido
+      ? 'Para confirmarlo, mandanos fotos y los detalles cuando envíes el pedido.'
+      : 'Para confirmarlo, mandanos fotos y los detalles por WhatsApp o Instagram.'}</p>`;
+    html += delPedido
+      ? '<div class="botones"><button type="button" class="pri" id="us-listo">Listo: volver al pedido</button></div>'
+      : htmlEnviarUsado(mensajeUsado(c, prod, color));
+    html += `
       ${delPedido || c.valor === null ? '' : '<p class="us-ayuda us-guardado">Queda guardado: si armás un pedido, lo restamos ahí.</p>'}
       <button type="button" class="pd-link" id="us-otro">Cotizar otro equipo</button>`;
     return { preg: 'Tu ' + c.nombre, html };
@@ -13384,6 +13408,8 @@ function abrirCotizador(desde = {}){
       USADO_DIJO_NO = false; guardarUsado(); pintarPedido(); return true; };
     const env = d.querySelector('#us-enviar');
     if(env) env.onclick = () => { guardar(); };     // el link sigue: abre el WhatsApp
+    const envIg = d.querySelector('#us-enviar-ig');
+    if(envIg) envIg.onclick = () => { const c = cotizacionOtro(f); if(!c) return; guardar(); copiarParaIG(mensajeFuera(prod, color, c)); };
     const sumar = d.querySelector('#us-sumar');
     if(sumar) sumar.onclick = () => { if(guardar()) cerrar(); };
     listoFuera();
@@ -13392,9 +13418,27 @@ function abrirCotizador(desde = {}){
     const c = cotizacionOtro(f);
     const env = d.querySelector('#us-enviar'), sumar = d.querySelector('#us-sumar'), falta = d.querySelector('#us-falta');
     if(env){ if(c) env.href = linkWA(mensajeFuera(prod, color, c)); else env.removeAttribute('href'); }
+    const envIg = d.querySelector('#us-enviar-ig');
+    if(envIg){ if(c) envIg.href = linkIG(); else envIg.removeAttribute('href'); }
     if(sumar) sumar.disabled = !c;
     const que = [!f.tipo && 'qué es', !limpiarTxtUsado(f.modelo, 99) && 'el modelo', !limpiarTxtUsado(f.estado, 99) && 'cómo está'].filter(Boolean);
     if(falta) falta.textContent = que.length ? 'Falta ' + (que.length > 1 ? que.slice(0, -1).join(', ') + ' y ' + que[que.length - 1] : que[0]) + '.' : '';
+  };
+  /* "Enviar por Instagram" (06/10): copia el mensaje y el link abre el chat.
+     El copiado va adentro del clic (si no, el navegador no lo deja); si no se
+     puede, la nota le dice que cuente su usado en el chat. */
+  const copiarParaIG = texto => {
+    const nota = d.querySelector('.us-ig-nota');
+    const decir = t => { if(nota) nota.textContent = t; };
+    try{
+      navigator.clipboard.writeText(texto)
+        .then(() => decir('Copiamos el mensaje: pegalo en el chat de Instagram.'))
+        .catch(() => decir('No pudimos copiar el mensaje: contanos tu usado en el chat de Instagram.'));
+    }catch{ decir('No pudimos copiar el mensaje: contanos tu usado en el chat de Instagram.'); }
+  };
+  const engancharIG = () => {
+    const ig = d.querySelector('#us-ig');
+    if(ig) ig.onclick = () => { const c = cotizacionUsado(b); if(c) copiarParaIG(mensajeUsado(c, prod, color)); };
   };
   // "¿Qué tiene?" en lo que no cumple (05/10): va en el mensaje y queda guardado
   const engancharDetalle = () => {
@@ -13419,6 +13463,7 @@ function abrirCotizador(desde = {}){
     d.querySelectorAll('.us-op[data-fuera]').forEach(x => x.onclick = () => ir('fuera'));
     engancharFuera();
     engancharDetalle();
+    engancharIG();
     d.querySelectorAll('.us-op[data-e]').forEach(x => x.onclick = () => {
       // Otro equipo: lo demás era del anterior
       if(b.e !== x.dataset.e) b = { e: x.dataset.e, m: '', o: '', bat: '', cond: {} };

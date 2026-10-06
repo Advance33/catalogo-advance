@@ -46,6 +46,7 @@ import json
 import os
 import re
 import sys
+import urllib.parse
 
 sys.dont_write_bytecode = True
 AQUI = os.path.dirname(os.path.abspath(__file__))
@@ -183,6 +184,14 @@ def asignar_slugs(modelos, indice):
 # La pagina
 # --------------------------------------------------------------------------
 
+def numero_wa(d):
+    """5491124751466 -> +54 9 11 2475-1466 (como el pie del catalogo)."""
+    d = re.sub(r'\D', '', str(d or ''))
+    if len(d) == 13 and d.startswith('549'):
+        return '+54 9 %s %s-%s' % (d[3:5], d[5:9], d[9:])
+    return '+' + d if d else ''
+
+
 def e(s):
     return html.escape(str(s if s is not None else ''), quote=True)
 
@@ -191,15 +200,26 @@ def plata(n):
     return '{:,}'.format(int(round(n))).replace(',', '.')
 
 
+def recortar(t, largo=160):
+    """Lo que Google muestra entra en ~160 caracteres: se corta en una palabra."""
+    t = re.sub(r'\s+', ' ', t).strip()
+    if len(t) <= largo:
+        return t
+    corte = t[:largo - 1].rsplit(' ', 1)[0].rstrip(',;:.')
+    return corte + '…'
+
+
 def descripcion_corta(m, cuotas):
-    partes = ['Desde u$%s' % plata(m['desde'])] if m['stock'] else ['Hoy sin stock: consultá cuándo entra']
-    if cuotas and m['stock']:
+    # Las sin stock, con el nombre: 32 decian exactamente lo mismo (06/10)
+    if not m['stock']:
+        return recortar('%s: hoy sin stock, consultá cuándo entra. Envíos a todo el país.' % m['titulo'])
+    partes = ['Desde u$%s' % plata(m['desde'])]
+    if cuotas:
         partes.append('hasta %d cuotas' % cuotas)
     if m.get('regalo') and m.get('incluye'):
         partes.append('de regalo ' + re.sub(r'^\s*\+\s*', '', m['incluye']).replace('🎁', '').strip())
-    texto = ', '.join(partes) + '. '
     venta = ((m.get('descripcion') or {}).get('venta') or [''])[0]
-    return (texto + venta + ' Envíos a todo el país.').strip()[:300]
+    return recortar(' '.join(x for x in (', '.join(partes) + '.', 'Envíos a todo el país.', venta) if x))
 
 
 def datos_para_google(m, url, publica):
@@ -208,6 +228,8 @@ def datos_para_google(m, url, publica):
         'lowPrice': m['desde'], 'highPrice': m['hasta'], 'offerCount': len(m['versiones']),
         'availability': 'https://schema.org/InStock' if m['stock'] else 'https://schema.org/OutOfStock',
         'url': url, 'seller': {'@type': 'Organization', 'name': 'Advance Tecno'},
+        # Todo lo publicado es nuevo (la "Caja blanca" tambien): 06/10
+        'itemCondition': 'https://schema.org/NewCondition',
     }
     producto = {
         '@context': 'https://schema.org', '@type': 'Product', 'name': m['titulo'],
@@ -222,7 +244,7 @@ def datos_para_google(m, url, publica):
         '@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
             {'@type': 'ListItem', 'position': 1, 'name': 'Catálogo', 'item': publica},
             {'@type': 'ListItem', 'position': 2, 'name': m.get('rubro') or 'Productos',
-             'item': publica + '?cat=' + (m.get('categoria') or '')},
+             'item': publica + '?cat=' + urllib.parse.quote(m.get('categoria') or '')},
             {'@type': 'ListItem', 'position': 3, 'name': m['titulo'], 'item': url},
         ]}
     # </ adentro de un <script> cerraria el script: se escapa la barra
@@ -294,6 +316,7 @@ SCRIPT = r'''
   const D = JSON.parse(document.getElementById('datos').textContent);
   const $ = (id) => document.getElementById(id);
   const plata = (n) => Math.round(n).toLocaleString('es-AR');
+  const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   let tc = null, version = null, color = null;
   // Arranca en la versión del "desde": la primera con stock (vienen ordenadas)
   const primera = D.versiones.find((x) => x.stock) || D.versiones[0];
@@ -312,6 +335,9 @@ SCRIPT = r'''
     $('fila-colores').innerHTML = colores.map((y) => `<button type="button" class="chip" data-c="${y.color}" aria-pressed="${y.color === color}">${y.color}</button>`).join('');
     if(x.foto) $('foto').src = (/^https?:/.test(x.foto) ? '' : '../../') + x.foto;
     $('ver').href = '../../#p=' + encodeURIComponent(x.clave);
+    // El WhatsApp de la versión y el color elegidos (06/10)
+    const wa = document.querySelector('a.wa');
+    if(wa && x.wa){ wa.href = x.wa; wa.textContent = x.stock ? 'Consultar por WhatsApp' : 'Avisame cuando entre'; }
     const caja = $('precio');
     if(x.stock && x.precio){
       caja.className = 'precio';
@@ -321,6 +347,7 @@ SCRIPT = r'''
       caja.innerHTML = '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entra</i>';
     }
     document.querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { version = b.dataset.v; color = null; pintar(); });
+    // (los data-v y data-c llevan el texto tal cual: se compara con el de la versión)
     document.querySelectorAll('[data-c]').forEach((b) => b.onclick = () => { color = b.dataset.c; pintar(); });
   }
   pintar();
@@ -338,6 +365,19 @@ SCRIPT = r'''
       x.stock = String(f.Stock || '').toLowerCase().startsWith('s') && p > 0;
     }
     pintar();
+    /* La tabla y los datos para Google, con lo de ahora (06/10): antes solo
+       cambiaba el recuadro y la misma página mostraba dos precios */
+    const tb = $('filas');
+    if(tb) tb.innerHTML = [...D.versiones].sort((a, b) => (a.precio - b.precio) || String(a.version).localeCompare(b.version) || String(a.color).localeCompare(b.color))
+      .map((x) => `<tr><td>${esc(x.version || '—')}</td><td>${esc(x.color || '—')}</td><td class="num">${x.stock ? 'u$' + plata(x.precio) : '—'}</td><td>${x.stock ? 'Sí' : 'Sin stock'}</td></tr>`).join('');
+    const ld = document.querySelector('script[type="application/ld+json"]');
+    try{
+      const j = JSON.parse(ld.textContent);
+      const con = D.versiones.filter((x) => x.stock), ps = (con.length ? con : D.versiones).map((x) => x.precio);
+      j.offers.lowPrice = Math.min(...ps); j.offers.highPrice = Math.max(...ps);
+      j.offers.availability = 'https://schema.org/' + (con.length ? 'InStock' : 'OutOfStock');
+      ld.textContent = JSON.stringify(j).replace(/<\//g, '<\\/');
+    }catch(e){}
   }).catch(() => {});
   // Los pesos, con el dólar del catálogo (la misma casa y el mismo recargo)
   if(D.cotizacion && D.cotizacion.tipo){
@@ -425,14 +465,15 @@ def armar_pagina(m, s, publica, general):
   {sec_venta}
   {sec_puntos}
   <section class="bloque" aria-labelledby="t-precios"><h2 id="t-precios">Versiones y precios</h2>
-    <div class="tabla"><table><thead><tr><th>Versión</th><th>Color</th><th>Precio</th><th>Stock</th></tr></thead><tbody>{filas}</tbody></table></div>
+    <div class="tabla"><table><thead><tr><th>Versión</th><th>Color</th><th>Precio</th><th>Stock</th></tr></thead><tbody id="filas">{filas}</tbody></table></div>
     <p>Precios en dólares, del día. Se pueden pagar en pesos con el dólar del día y con tarjeta en cuotas.</p>
   </section>
   {sec_ficha}
 </main>
 <footer>
   <b>Advance Tecno</b>
-  <span>Av. De los Incas 5150, 1A, CABA · Envíos a todo el país · Atención con cita previa</span>
+  <span>{direccion} · Envíos a todo el país · Atención con cita previa</span>
+  {contacto}
   <span>Precios sujetos a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</span>
 </footer>
 <script id="datos" type="application/json">{datos}</script>
@@ -440,9 +481,13 @@ def armar_pagina(m, s, publica, general):
 </body>
 </html>
 '''.format(
+        direccion=e(general.get('direccion') or 'Av. De los Incas 5150, 1A, CABA'),
+        contacto=' · '.join(x for x in (
+            ('<a href="https://wa.me/%s" target="_blank" rel="noopener">WhatsApp %s</a>' % (e(general['whatsapp']), e(numero_wa(general['whatsapp'])))) if general.get('whatsapp') else '',
+            ('<a href="%s" target="_blank" rel="noopener">Ver en el mapa</a>' % e(general['mapa'])) if general.get('mapa') else '') if x).join(['<span>', '</span>']) if (general.get('whatsapp') or general.get('mapa')) else '',
         titulo_pag=e(titulo_pag), meta_desc=e(meta_desc), url=e(url), titulo=e(m['titulo']), og=e(og),
         nombre=e(m.get('nombre') or m['titulo']),
-        ld0=ld[0], ld1=ld[1], css=CSS, cat_q=e(m.get('categoria') or ''), rubro=e(m.get('rubro') or 'Productos'),
+        ld0=ld[0], ld1=ld[1], css=CSS, cat_q=e(urllib.parse.quote(m.get('categoria') or '')), rubro=e(m.get('rubro') or 'Productos'),
         src_foto=e(src_foto), marca=e(m.get('marca') or ''), regalo=regalo, sin='' if m['stock'] else ' sin',
         precio_txt=precio_txt,
         wa=('<a class="wa" href="%s" target="_blank" rel="noopener">Consultar por WhatsApp</a>' % e(m['wa'])) if m.get('wa') else '',
@@ -588,6 +633,18 @@ def probar():
     ok('fotos/AT-0072-03.jpg' in h and 'og:image' in h, 'la foto para compartir es el jpg')
     ok(h.count('</script>') == 4, 'un texto con </script> no rompe la pagina (ld+json, datos y script)')
     ok('<td>256GB · E-Sim</td><td>Orange</td><td class="num">u$1.200</td>' in h, 'la tabla de versiones y precios')
+    # Auditoria del 06/10
+    ok('"itemCondition": "https://schema.org/NewCondition"' in h, 'los datos para Google dicen que es nuevo')
+    h3 = armar_pagina(dict(m, categoria='Accesorio Apple'), 'x', 'https://catalogo.advancetecno.com.ar/',
+                      {'cuotas': 12, 'whatsapp': '5491124751466', 'mapa': 'https://maps.app.goo.gl/x', 'direccion': 'Av. De los Incas 5150, 1A, CABA'})
+    ok('?cat=Accesorio%20Apple' in h3 and '?cat=Accesorio Apple' not in h3, 'la direccion del rubro va codificada (migas y datos para Google)')
+    ok('<tbody id="filas">' in h3 and 'tb.innerHTML' in h3 and 'j.offers.lowPrice' in h3, 'al abrir se rehacen la tabla y los datos para Google')
+    ok('wa.href = x.wa' in h3, 'el WhatsApp sigue a la version elegida')
+    ok('WhatsApp +54 9 11 2475-1466' in h3 and 'Ver en el mapa' in h3, 'el pie con el WhatsApp y el mapa')
+    d0 = descripcion_corta(dict(m, stock=False), 12)
+    ok(d0.startswith('Apple iPhone 17 Pro: hoy sin stock') and '  ' not in d0, 'la descripcion sin stock dice el nombre y no tiene doble espacio')
+    d1 = descripcion_corta(dict(m, descripcion={'venta': ['x' * 400]}), 12)
+    ok(len(d1) <= 160, 'la descripcion no pasa los 160 caracteres')
     sm = texto_sitemap('https://catalogo.advancetecno.com.ar/', {'slugs': {'a': 'apple-iphone-17-pro'}, 'lastmod': {'apple-iphone-17-pro': '2026-10-05'}})
     ok('<loc>https://catalogo.advancetecno.com.ar/producto/apple-iphone-17-pro/</loc><lastmod>2026-10-05</lastmod>' in sm, 'el sitemap lista la pagina')
     print('\n%d falla(s)' % len(fallas) if fallas else '\nTODO OK')

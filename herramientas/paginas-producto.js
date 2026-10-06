@@ -71,12 +71,22 @@ async function paginasDeProducto(){
       const colores = partirColores(v.color || '');
       // La versión sin el color: el color va en su propia fila de botones, como
       // en la ficha ("256GB · E-Sim", y aparte Orange, Blue, Silver)
-      const version = String(v.etiqueta || '').split(/\s+·\s+/)
+      let version = String(v.etiqueta || '').split(/\s+·\s+/)
         .filter(p => p.trim() && !colores.some(c => norm(c) === norm(p))).join(' · ');
+      /* El teclado y la condición ("Caja blanca") también, si la versión no
+         los dice: antes solo aparecían adentro del mensaje (auditoría 06/10) */
+      const tec = v.teclado ? nombreTeclado(v.teclado) : '';
+      const cond = String(v.condicion || '').trim();
+      for(const extra of [tec, cond]){
+        if(extra && !norm(version).includes(norm(extra.replace(/^Teclado\s+/i, '')))) version = [version, extra].filter(Boolean).join(' · ');
+      }
       for(const c of (colores.length ? colores : [''])){
         const foto = (c && fotosDeColor(v, c)[0]) || v.imagenGrande || v.imagen || '';
+        // El WhatsApp de cada versión y color, el mismo de la ficha (06/10:
+        // la página mandaba siempre el de la versión del "desde")
         versiones.push({ version, color: c, precio: Math.round(Number(v.precio)),
-                         stock: !!v.stock, clave: clave(v), foto: ppRuta(foto) });
+                         stock: !!v.stock, clave: clave(v), foto: ppRuta(foto),
+                         wa: linkWA(v.stock ? mensajeWA(v, c) : mensajeAviso(v, c)) });
       }
     }
     const conStock = versiones.filter(x => x.stock);
@@ -107,6 +117,8 @@ async function paginasDeProducto(){
     generado_en: (FUENTE && FUENTE.manifiesto && FUENTE.manifiesto.generado_en) || '',
     cotizacion: { tipo: CFG.tipo, recargo: Number(CFG.recargo) || 0, recargoFijo: Number(CFG.recargoFijo) || 0, valor: TC || null },
     whatsapp: WHATSAPP || '',
+    direccion: DIRECCION || '',
+    mapa: MAPA || '',
     cuotas: maxCuotas(),
     advapp: ADVAPP_URL,
     modelos,

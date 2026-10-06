@@ -7317,10 +7317,16 @@ const enPedidoModelo = m =>
   (m.variantes || [m]).some(v => enPedido(clave(v)));
 
 // Cuando las variantes no valen lo mismo, el precio de la tarjeta es un "desde"
+const conDesde = m => !!m.multi && m.precio !== null && m.precio !== m.precioMax;
 const precioTarjeta = m => {
-  if(!m.multi || m.precio === null || m.precio === m.precioMax) return precioUSD(m);
+  if(!conDesde(m)) return precioUSD(m);
   return `<i class="desde">desde</i> ${precioUSD(m)}`;
 };
+/* Con "desde" Y precio de antes, el tachado va al lado del precio y no abajo
+   (06/10/2026): la etiqueta tiene lugar para uno de los dos renglones de más,
+   no para los dos. El Magic Keyboard 13" en promo ("desde USD 455", antes 475)
+   quedaba 15px más alto que sus vecinos de fila y la prueba 1B de cuotas
+   frenaba PUBLICAR. */
 
 /* Las opciones ("128gb · 256gb · 512gb") salieron de la tarjeta el 17/09: eran
    un renglón de texto chico que competía con el nombre, y la ficha ya tiene un
@@ -7404,8 +7410,8 @@ function tarjeta(p){
       ${p.tecnica ? `<p class="tecnica" title="${esc(p.tecnica)}">${esc(p.tecnica)}</p>` : ''}
       <div class="pie">
         <div class="plata">
-          <span class="usd">${precioTarjeta(p)}</span>
-          ${ahorro(p) ? `<s class="antes">USD ${plata(p.antes)}</s>` : ''}
+          <span class="usd">${precioTarjeta(p)}${ahorro(p) && conDesde(p) ? ` <s class="antes">USD ${plata(p.antes)}</s>` : ''}</span>
+          ${ahorro(p) && !conDesde(p) ? `<s class="antes">USD ${plata(p.antes)}</s>` : ''}
           ${ars ? `<div class="ars">${ars}</div>` : ''}
         </div>
         ${CON_FOTOS ? '' : acciones}

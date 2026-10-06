@@ -219,7 +219,9 @@ async function simEnLaFirma(){
   ok(m.variantes.length === 3 && !m.gemelas.length,
      '[25] armado: una Sim y una eSIM con el mismo nombre, color y precio no se colapsan',
      m.variantes.length + ' variantes, ' + m.gemelas.length + ' gemelas');
-  ok(a.etiqueta === '256GB Sim' && b.etiqueta === '256GB E-Sim' && c.etiqueta === '512GB',
+  // Desde el 06/10 el 512GB también dice su Sim, aunque no tenga hermana eSIM
+  // (Benja: el rótulo va siempre que el SKU lo diga)
+  ok(a.etiqueta === '256GB Sim' && b.etiqueta === '256GB E-Sim' && c.etiqueta === '512GB Sim',
      '[25] armado: y cada boton dice la suya, sin el ID interno', [a, b, c].map(v => v.etiqueta).join(' / '));
   const d = filaB4('Zzz Prueba 256GB (Black)', { color: 'Black', precio: 500, sim: 'Sim' });
   const e = filaB4('Zzz Prueba 256GB (Black)', { color: 'Black', precio: 500, sim: 'Sim' });

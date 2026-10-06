@@ -6645,22 +6645,16 @@ const nombreTeclado = t => {
    cliente no puede diferenciar: el iPhone 17 Pro mostraba "512GB" a USD 1.440
    al lado de "512GB Sim" desde USD 1.440, y el primero era el eSIM.
 
-   Se completa SOLO cuando hace falta, o sea cuando una hermana declara lo
-   contrario y, sacandole la palabra, se llama igual. Los modelos que son
-   todos eSIM -el 17e, el Air- no repiten la palabra en cada boton, que no
-   aclararia nada. Y sin SKU que lo diga no se toca: no se adivina. */
+   Desde el 06/10/2026 se completa SIEMPRE que el SKU lo diga, aunque todas
+   las versiones sean eSIM (Benja: "no sería distinto a lo que dice en la
+   ficha técnica"). Antes sólo se completaba cuando una hermana declaraba lo
+   contrario, y el 17 Pro -hoy todo eSIM-, el 17e y el Air no decían "E-Sim"
+   en ningún lado salvo en la descripción. Sin SKU que lo diga no se toca: no
+   se adivina. La fila sin versión (sinVersion: el modelo de una sola memoria,
+   como el iPhone 17) tampoco: su etiqueta es el color y quedaba "Blue E-Sim". */
 function completarSim(vs){
-  const sinDecir = vs.filter(v => !diceSim(v.etiqueta) && v.sim);
-  if(!sinDecir.length) return;
-  const pelada = e => norm(e.replace(/\b(e-?\s?)?sim\b/ig, ' ').replace(/\s+/g, ' '));
-  /* Y cuando NINGUNA lo dice pero el SKU de una es Sim y el de la otra E-Sim
-     (29/09): desde que la Sim entra en firmaVisible las dos filas quedan a la
-     vista, y sin esto el desempate les pegaba el ID interno como botón. Se
-     rotulan las dos, cada una con lo que dice su SKU. */
-  const mudas = new Set(sinDecir.filter(v => sinDecir.some(x =>
-    x !== v && norm(x.sim) !== norm(v.sim) && norm(x.etiqueta) === norm(v.etiqueta))));
-  for(const v of sinDecir){
-    if(!mudas.has(v) && !vs.some(x => diceSim(x.etiqueta) && pelada(x.etiqueta) === norm(v.etiqueta))) continue;
+  for(const v of vs){
+    if(v.sinVersion || !v.sim || diceSim(v.etiqueta)) continue;
     v.etiqueta = (v.etiqueta + ' ' + v.sim).trim();
     v.etiquetaBase = v.etiqueta;
   }
@@ -10740,11 +10734,16 @@ function htmlDatosFicha(m, v){
 
   /* Los chips de specs repetían lo que ya dicen las pestañas: el iPhone 17 Pro
      mostraba "256GB" y "ESIM" arriba del precio, y otra vez abajo como pestaña
-     de memoria y de versión. Se sacan los que están en la versión elegida; si
-     no hay pestañas, quedan todos, que ahí son el único lugar que lo dice. */
+     de memoria y de versión. Se sacan los que ya dicen las pestañas; si no
+     hay pestañas, quedan todos, que ahí son el único lugar que lo dice.
+     Lo que dicen las pestañas QUE SE VEN, no la versión elegida (06/10/2026):
+     el 17 Pro 256GB es "256GB E-Sim", pero como en esa memoria no hay Sim la
+     pestaña dice sólo "256GB", y el chip "eSIM" se sacaba igual. La ficha no
+     decía E-Sim en ningún lado (Benja: tiene que decirlo, como la ficha
+     técnica). Se comparan los rótulos de las pestañas, sin los precios. */
   const ejes  = htmlOpcionesFicha(m, v);
   const plano = t => norm(t).replace(/[^a-z0-9]/g, '');
-  const dice  = ejes ? plano(v.opcion || v.etiqueta || '') : '';
+  const dice  = ejes ? plano([...ejes.matchAll(/<b>([\s\S]*?)<\/b>/g)].map(x => x[1]).join(' ')) : '';
   const lista = specs(v).filter(s => !dice || !dice.includes(plano(s)));
   const ars   = precioARS(v);
   const coti  = TC ? `Cotización: $ ${plata(Math.round(TC))} por dólar.` : '';

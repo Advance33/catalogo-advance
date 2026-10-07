@@ -3565,6 +3565,27 @@
     "https://support.apple.com/es-la/126470"
    ]
   },
+  "e4ab54392fa6e40baf2effdf15d5fcb3f5cf1bb055ab3b0fdea446033658f200": {
+   "modelo": "iPhone 18 Pro",
+   "fecha": "2026-10-07",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.apple.com/iphone-18-pro/specs/ (HTML entero con curl; la tabla está completa en el HTML. Revisado dato por dato: colores, materiales, capacidades, medidas 150.0 x 71.9 x 8.75 mm, 211 g, 6.3\" 2622x1206 a 460 ppi, brillo 1000/1600/3000 nits, A20 Pro 6 núcleos con 2 super cores y 4 de eficiencia, GPU 7 núcleos con Neural Accelerators, Dual 16-core Neural Engine, cámaras y aperturas, zoom 8x/2x/40x, frontal 18 MP f/1.9, video 36 h y streaming 33 h, carga 50% en around 15 minutes con 60W y Adjustable Voltage Supply, MagSafe y Qi2 25W, IP68 6 m 30 min, Dual eSIM y not compatible with physical SIM cards, Wi-Fi 7 con nota de país, Bluetooth 6, UWB 2.ª gen con nota de región, USB 3 10Gb/s, iOS 27)",
+    "https://www.apple.com/la/iphone-18-pro/specs/ (control, no fuente: nombres de los colores en español «Negro, color plata, color glaciar, color borgoña», traducción de Apple «fuente de voltaje ajustable», y confirma que es otro modelo: «Doble SIM (nano-SIM y eSIM)», 34 h de video y 31 h en streaming; mismo peso 211 g)"
+   ]
+  },
+  "91bdd03ecf869d5e0d9a4c0531ff050f3554d2df64058f580fabf10165bd22e9": {
+   "modelo": "iPhone 18 Pro Max",
+   "fecha": "2026-10-07",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.apple.com/iphone-18-pro/specs/ (HTML entero con curl; la tabla está completa en el HTML. Revisado dato por dato en la columna del Pro Max: colores, materiales, capacidades 256 GB a 2 TB, medidas 163.4 x 78.0 x 8.75 mm, 249 g, 6.9\" 2868x1320 a 460 ppi, brillo 1000/1600/3000 nits, A20 Pro, cámaras (comunes a los dos), video 45 h y streaming 40 h, carga 50% en around 15 minutes con 60W y Adjustable Voltage Supply, MagSafe y Qi2 25W, IP68, Dual eSIM y not compatible with physical SIM cards, Wi-Fi 7 con nota de país, Bluetooth 6, UWB 2.ª gen con nota de región, USB 3 10Gb/s, iOS 27)",
+    "https://www.apple.com/la/iphone-18-pro/specs/ (control, no fuente: nombres de los colores en español, traducción «fuente de voltaje ajustable», y confirma que es otro modelo: «Doble SIM (nano-SIM y eSIM)», 43 h de video y 38 h en streaming; mismo peso 249 g)",
+    "control de códigos (no es fuente): ~/catalogo-advance-trabajo/wt-iphone18/herramientas/catalogo-maestro.csv — AT-0544 = 512GB, AT-0545 = 1TB y AT-0546 = 2TB, todos iPhone 18 Pro Max E-Sim, con los SKU de las filas de hoy (-512-BLK-ESIM, -1TB-BLK-ESIM, -2TB-BLK-ESIM). La huella 91bdd03e… se recalculó: es la entrada del lote con sólo codigos y versiones[0].codigos cambiados a AT-0543..AT-0546. Ningún dato de la ficha depende de la capacidad (Apple da peso y autonomía por modelo, no por capacidad)."
+   ]
+  },
   "8cb187881ec0c2cd816cf3210809c7df4cbef3c9775064f5b4e8e11c5c28d870": {
    "modelo": "iPhone Air",
    "fecha": "2026-10-01",

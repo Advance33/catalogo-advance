@@ -2990,6 +2990,484 @@
       "notas": "Todas las filas de hoy son E-Sim; la página es-la es el modelo sólo eSIM (A3522/A3525): 233 g, 39 h de video y 35 h en streaming. La versión con nano-SIM (A3523/A3526, Apple España) pesa 231 g y da 37 h y 33 h: por eso peso, batería y SIM van por versión. No hay códigos de una versión Sim del 17 Pro Max en el maestro. El AT-0531 (2TB) no dice E-Sim en el maestro, pero las tres filas de 2TB dicen E-Sim.\nVerificación 1 (01/10): Wi-Fi 7 y banda ultraancha pasaron a \"(según el país)\": Apple aclara que dependen del país o la región."
     },
     {
+      "modelo": "iPhone 18 Pro",
+      "codigos": [
+        "AT-0541",
+        "AT-0542"
+      ],
+      "versiones": [
+        {
+          "nombre": "E-Sim",
+          "codigos": [
+            "AT-0541",
+            "AT-0542"
+          ],
+          "si": {
+            "sim": "E-Sim"
+          }
+        }
+      ],
+      "venta": [
+        "Tres cámaras de 48 MP atrás: la principal con apertura variable y un teleobjetivo 4x que llega a 8x con calidad óptica.",
+        "Pantalla de 6,3\" con ProMotion hasta 120 Hz y hasta 3.000 nits al sol. Cuerpo de aluminio y resistencia al agua IP68."
+      ],
+      "importante": [
+        {
+          "titulo": "Tres cámaras de 48 MP",
+          "texto": "Principal con apertura variable, ultra gran angular y teleobjetivo 4x. Zoom de hasta 8x con calidad óptica."
+        },
+        {
+          "titulo": "Chip A20 Pro",
+          "texto": "CPU de 6 núcleos, GPU de 7 núcleos y dos Neural Engine de 16 núcleos."
+        },
+        {
+          "titulo": "Pantalla de 6,3\"",
+          "texto": "Super Retina XDR con ProMotion hasta 120 Hz. Hasta 3.000 nits en exteriores."
+        },
+        {
+          "titulo": {
+            "segun": {
+              "E-Sim": "Hasta 36 h de video"
+            }
+          },
+          "texto": "De reproducción. Carga rápida: hasta 50% en unos 15 minutos con un adaptador de 60 W o más con fuente de voltaje ajustable."
+        },
+        {
+          "titulo": {
+            "segun": {
+              "E-Sim": "Sólo eSIM"
+            }
+          },
+          "texto": {
+            "segun": {
+              "E-Sim": "No tiene bandeja para chip físico: usa dos eSIM activas."
+            }
+          }
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Pantalla",
+          "datos": [
+            [
+              "Tamaño",
+              "6,3\" (diagonal), OLED sin marco"
+            ],
+            [
+              "Tecnología",
+              "Super Retina XDR, ProMotion hasta 120 Hz, siempre activa, Dynamic Island"
+            ],
+            [
+              "Resolución",
+              "2622 x 1206 a 460 ppi"
+            ],
+            [
+              "Brillo",
+              "1.000 nits normal · 1.600 nits HDR · 3.000 nits en exteriores"
+            ]
+          ]
+        },
+        {
+          "grupo": "Chip",
+          "datos": [
+            [
+              "Chip",
+              "A20 Pro"
+            ],
+            [
+              "CPU",
+              "6 núcleos (2 supernúcleos y 4 de eficiencia)"
+            ],
+            [
+              "GPU",
+              "7 núcleos con aceleradores neurales"
+            ],
+            [
+              "Neural Engine",
+              "Dos de 16 núcleos"
+            ]
+          ]
+        },
+        {
+          "grupo": "Cámaras",
+          "datos": [
+            [
+              "Principal",
+              "Fusion de 48 MP, 24 mm, apertura variable (ƒ/1.48, ƒ/1.8, ƒ/2.8 y ƒ/4.0), estabilización por desplazamiento del sensor de 2.ª generación"
+            ],
+            [
+              "Ultra gran angular",
+              "Fusion de 48 MP, 13 mm, ƒ/2.2, 120°"
+            ],
+            [
+              "Teleobjetivo",
+              "Fusion de 48 MP, 100 mm (4x), ƒ/2.8"
+            ],
+            [
+              "Zoom",
+              "8x de calidad óptica para acercar, 2x óptico para alejar, digital hasta 40x"
+            ],
+            [
+              "Frontal",
+              "Center Stage de 18 MP, ƒ/1.9"
+            ],
+            [
+              "Video",
+              "4K Dolby Vision hasta 120 fps; ProRes RAW y Apple Log 2"
+            ]
+          ]
+        },
+        {
+          "grupo": "Batería y carga",
+          "datos": [
+            [
+              "Video",
+              {
+                "segun": {
+                  "E-Sim": "Hasta 36 horas"
+                }
+              }
+            ],
+            [
+              "Video en streaming",
+              {
+                "segun": {
+                  "E-Sim": "Hasta 33 horas"
+                }
+              }
+            ],
+            [
+              "Carga con cable",
+              "Hasta 50% en unos 15 minutos con un adaptador de 60 W o más con fuente de voltaje ajustable"
+            ],
+            [
+              "Inalámbrica",
+              "Hasta 25 W con cargadores MagSafe o Qi2"
+            ]
+          ]
+        },
+        {
+          "grupo": "Diseño",
+          "datos": [
+            [
+              "Materiales",
+              "Aluminio unibody; frente de Ceramic Shield 2; parte posterior de Ceramic Shield"
+            ],
+            [
+              "Agua y polvo",
+              "IP68: hasta 6 m de profundidad durante 30 minutos"
+            ],
+            [
+              "Medidas",
+              "150 x 71,9 x 8,75 mm"
+            ],
+            [
+              "Peso",
+              {
+                "segun": {
+                  "E-Sim": "211 g"
+                }
+              }
+            ],
+            [
+              "Botones",
+              "Botón de Acción y Control de la Cámara"
+            ],
+            [
+              "Colores de Apple",
+              "Negro, plata, glaciar y borgoña"
+            ]
+          ]
+        },
+        {
+          "grupo": "Conectividad",
+          "datos": [
+            [
+              "SIM",
+              {
+                "segun": {
+                  "E-Sim": "Doble eSIM, sin SIM física"
+                }
+              }
+            ],
+            [
+              "Red",
+              "5G"
+            ],
+            [
+              "Wi-Fi y Bluetooth",
+              "Wi-Fi 7 (según el país) · Bluetooth 6"
+            ],
+            [
+              "USB-C",
+              "USB 3, hasta 10 Gb/s"
+            ],
+            [
+              "Otros",
+              "NFC · banda ultraancha de 2.ª generación (según el país)"
+            ],
+            [
+              "Capacidades",
+              "256 GB, 512 GB, 1 TB y 2 TB"
+            ],
+            [
+              "Sistema",
+              "iOS (se lanzó con iOS 27)"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "apple.com/iphone-18-pro/specs",
+          "url": "https://www.apple.com/iphone-18-pro/specs/"
+        }
+      ],
+      "verificado": "2026-10-07",
+      "notas": "Borrador del 07/10, sin pasar por el verificador. Fuente: la página de EE.UU. (apple.com/iphone-18-pro/specs), que es el modelo sólo eSIM: «Dual eSIM (two active eSIMs; stores eight or more eSIMs)» y «not compatible with physical SIM cards». La de Latinoamérica (apple.com/la/iphone-18-pro/specs) es otro modelo, «Doble SIM (nano‑SIM y eSIM)», con otra autonomía (34 h de video y 31 h en streaming): no usarla para batería ni SIM. Los nombres de los colores en español son los de apple.com/la («Negro, color plata, color glaciar, color borgoña»). Cambios contra el 17: carga rápida ahora es «around 15 minutes» con 60 W y «Adjustable Voltage Supply» (el 17 decía 20 minutos con 40 W); CPU con «2 super cores»; GPU de 7 núcleos; «Dual 16‑core Neural Engine»; principal con apertura variable. Apple también da «Typical use» (hasta 24 horas): no se agregó porque el 17 no lo tiene. En el maestro, AT-0541-01 (Black 256GB) tiene SKU CEL-APL-IPHONE18PRO-256-BLK-000, sin -ESIM: si ADVAPP lo manda así, esa fila no calza en la versión E-Sim (simDelSku devuelve vacío)."
+    },
+    {
+      "modelo": "iPhone 18 Pro Max",
+      "codigos": [
+        "AT-0543",
+        "AT-0544",
+        "AT-0545",
+        "AT-0546"
+      ],
+      "versiones": [
+        {
+          "nombre": "E-Sim",
+          "codigos": [
+            "AT-0543",
+            "AT-0544",
+            "AT-0545",
+            "AT-0546"
+          ],
+          "si": {
+            "sim": "E-Sim"
+          }
+        }
+      ],
+      "venta": [
+        "Tres cámaras de 48 MP atrás: la principal con apertura variable y un teleobjetivo que llega a 8x con calidad óptica.",
+        "Pantalla de 6,9\" con ProMotion hasta 120 Hz y hasta 3.000 nits al sol. Cuerpo de aluminio unibody, resistencia al agua IP68 y hasta 2 TB de almacenamiento."
+      ],
+      "importante": [
+        {
+          "titulo": "Tres cámaras de 48 MP",
+          "texto": "Principal con apertura variable, ultra gran angular y teleobjetivo 4x. Zoom de hasta 8x con calidad óptica."
+        },
+        {
+          "titulo": "Chip A20 Pro",
+          "texto": "CPU de 6 núcleos, GPU de 7 núcleos y dos Neural Engine de 16 núcleos."
+        },
+        {
+          "titulo": "Pantalla de 6,9\"",
+          "texto": "Super Retina XDR con ProMotion hasta 120 Hz. Hasta 3.000 nits en exteriores."
+        },
+        {
+          "titulo": {
+            "segun": {
+              "E-Sim": "Hasta 45 h de video"
+            }
+          },
+          "texto": "De reproducción. Carga rápida: hasta 50% en unos 15 minutos con un adaptador de 60 W o más con fuente de voltaje ajustable."
+        },
+        {
+          "titulo": {
+            "segun": {
+              "E-Sim": "Sólo eSIM"
+            }
+          },
+          "texto": {
+            "segun": {
+              "E-Sim": "No tiene bandeja para chip físico: usa dos eSIM activas."
+            }
+          }
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Pantalla",
+          "datos": [
+            [
+              "Tamaño",
+              "6,9\" (diagonal), OLED sin marco"
+            ],
+            [
+              "Tecnología",
+              "Super Retina XDR, ProMotion hasta 120 Hz, siempre activa, Dynamic Island"
+            ],
+            [
+              "Resolución",
+              "2868 x 1320 a 460 ppi"
+            ],
+            [
+              "Brillo",
+              "1.000 nits normal · 1.600 nits HDR · 3.000 nits en exteriores"
+            ]
+          ]
+        },
+        {
+          "grupo": "Chip",
+          "datos": [
+            [
+              "Chip",
+              "A20 Pro"
+            ],
+            [
+              "CPU",
+              "6 núcleos (2 supernúcleos y 4 de eficiencia)"
+            ],
+            [
+              "GPU",
+              "7 núcleos con aceleradores neurales"
+            ],
+            [
+              "Neural Engine",
+              "Dos de 16 núcleos"
+            ]
+          ]
+        },
+        {
+          "grupo": "Cámaras",
+          "datos": [
+            [
+              "Principal",
+              "Fusion de 48 MP, 24 mm, apertura variable (ƒ/1.48, ƒ/1.8, ƒ/2.8 y ƒ/4.0), estabilización por desplazamiento del sensor de 2.ª generación"
+            ],
+            [
+              "Ultra gran angular",
+              "Fusion de 48 MP, 13 mm, ƒ/2.2, 120°"
+            ],
+            [
+              "Teleobjetivo",
+              "Fusion de 48 MP, 100 mm (4x), ƒ/2.8"
+            ],
+            [
+              "Zoom",
+              "8x de calidad óptica para acercar, 2x óptico para alejar, digital hasta 40x"
+            ],
+            [
+              "Frontal",
+              "Center Stage de 18 MP, ƒ/1.9"
+            ],
+            [
+              "Video",
+              "4K Dolby Vision hasta 120 fps; ProRes RAW y Apple Log 2"
+            ]
+          ]
+        },
+        {
+          "grupo": "Batería y carga",
+          "datos": [
+            [
+              "Video",
+              {
+                "segun": {
+                  "E-Sim": "Hasta 45 horas"
+                }
+              }
+            ],
+            [
+              "Video en streaming",
+              {
+                "segun": {
+                  "E-Sim": "Hasta 40 horas"
+                }
+              }
+            ],
+            [
+              "Carga con cable",
+              "Hasta 50% en unos 15 minutos con un adaptador de 60 W o más con fuente de voltaje ajustable"
+            ],
+            [
+              "Inalámbrica",
+              "Hasta 25 W con cargadores MagSafe o Qi2"
+            ]
+          ]
+        },
+        {
+          "grupo": "Diseño",
+          "datos": [
+            [
+              "Materiales",
+              "Aluminio unibody; frente de Ceramic Shield 2; parte posterior de Ceramic Shield"
+            ],
+            [
+              "Agua y polvo",
+              "IP68: hasta 6 m de profundidad durante 30 minutos"
+            ],
+            [
+              "Medidas",
+              "163,4 x 78 x 8,75 mm"
+            ],
+            [
+              "Peso",
+              {
+                "segun": {
+                  "E-Sim": "249 g"
+                }
+              }
+            ],
+            [
+              "Botones",
+              "Botón de Acción y Control de la Cámara"
+            ],
+            [
+              "Colores de Apple",
+              "Negro, plata, glaciar y borgoña"
+            ]
+          ]
+        },
+        {
+          "grupo": "Conectividad",
+          "datos": [
+            [
+              "SIM",
+              {
+                "segun": {
+                  "E-Sim": "Doble eSIM, sin SIM física"
+                }
+              }
+            ],
+            [
+              "Red",
+              "5G"
+            ],
+            [
+              "Wi-Fi y Bluetooth",
+              "Wi-Fi 7 (según el país) · Bluetooth 6"
+            ],
+            [
+              "USB-C",
+              "USB 3, hasta 10 Gb/s"
+            ],
+            [
+              "Otros",
+              "NFC · banda ultraancha de 2.ª generación (según el país)"
+            ],
+            [
+              "Capacidades",
+              "256 GB, 512 GB, 1 TB y 2 TB"
+            ],
+            [
+              "Sistema",
+              "iOS (se lanzó con iOS 27)"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "apple.com/iphone-18-pro/specs",
+          "url": "https://www.apple.com/iphone-18-pro/specs/"
+        }
+      ],
+      "verificado": "2026-10-07",
+      "notas": "Borrador del 07/10, sin pasar por el verificador. Fuente: la página de EE.UU. (apple.com/iphone-18-pro/specs), que es el modelo sólo eSIM: «Dual eSIM (two active eSIMs; stores eight or more eSIMs)» y «not compatible with physical SIM cards». La de Latinoamérica (apple.com/la/iphone-18-pro/specs) es otro modelo, «Doble SIM (nano‑SIM y eSIM)», con otra autonomía (43 h de video y 38 h en streaming): no usarla para batería ni SIM. Los nombres de los colores en español son los de apple.com/la («Negro, color plata, color glaciar, color borgoña»). Cambios contra el 17: carga rápida ahora es «around 15 minutes» con 60 W y «Adjustable Voltage Supply» (el 17 decía 20 minutos con 40 W); CPU con «2 super cores»; GPU de 7 núcleos; «Dual 16‑core Neural Engine»; principal con apertura variable. Apple también da «Typical use» (hasta 30 horas): no se agregó porque el 17 no lo tiene. El 17 Pro Max no tenía «Colores de Apple»; acá va, como en el 17 Pro."
+    },
+    {
       "modelo": "iPhone Air",
       "codigos": [
         "AT-0077",

@@ -3705,6 +3705,10 @@ const MUNDOS = [
     rubros: ['Consola', 'Accesorio Gaming', 'Auriculares', 'Parlante'] },
   { nombre: 'Relojes y accesorios', foto: 'Apple Watch', tamano: '',
     rubros: ['Apple Watch', 'Smartwatch', 'Accesorio Apple', 'Gafas Inteligentes'] },
+  /* Dyson es su propia categoría desde el 07/10/2026 (Benja): secadores,
+     Airwrap, planchitas, aspiradoras. Mundo propio: no es gaming ni relojes. */
+  { nombre: 'Dyson',                foto: 'Dyson',       tamano: '',
+    rubros: ['Dyson'] },
 ];
 
 /* ========================================================================== */
@@ -5289,6 +5293,9 @@ const ALIAS_CAT = {
   'iPad':               'tablet',
   'Apple Watch':        'smartwatch reloj',
   'Smartwatch':         'reloj',
+  // El proveedor escribe "Dyson HD16 Nural": el que busca "secador" o
+  // "aspiradora" también tiene que llegar (07/10/2026).
+  'Dyson':              'secador secadores aspiradora aspiradoras airwrap planchita purificador',
 };
 
 function categoriaReal(cat, marca, desc){
@@ -5320,7 +5327,9 @@ const ORDEN_CATS = [
   'Objetivo', 'Gafas Inteligentes',
   'Drone', 'Accesorio Drone',
   // Lectura: entro en septiembre de 2026 y caia al final de la barra
-  'E-Reader'
+  'E-Reader',
+  // Dyson, desde el 07/10/2026 (Benja)
+  'Dyson'
 ];
 
 /* La marca que se pone adelante en cada categoría. NO filtra: aparece primera
@@ -5366,6 +5375,7 @@ const RUBROS_POR_MARCA = {
   'DJI':       ['Cámara de Acción', 'Drone', 'Accesorio Drone'],
   'Ray-Ban':   ['Gafas Inteligentes'],
   'Kieslect':  ['Smartwatch', 'Auriculares'],
+  'Dyson':     ['Dyson'],
 };
 
 function ordenCat(a, b){
@@ -5390,7 +5400,7 @@ const CATS_PLURAL = {
   'Monitor':'Monitores', 'E-Reader':'E-Readers',
   // Estas ya funcionan como plural: "Apple Watchs" y "Auricularess" no existen
   'Apple Watch':'Apple Watch', 'Auriculares':'Auriculares',
-  'Gafas Inteligentes':'Gafas Inteligentes'
+  'Gafas Inteligentes':'Gafas Inteligentes', 'Dyson':'Dyson'
 };
 
 function plural(cat){

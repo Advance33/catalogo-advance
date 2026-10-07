@@ -145,4 +145,13 @@ function correrPruebas(){
   ok(!mundosTimer, 'al entrar a un rubro deja de girar', filtros.cat);
   [...$$('#cats .chip')].find(c => c.dataset.cat === '').click();
   ok(!!mundosTimer || quieto, 'y al volver a la portada gira de nuevo');
+
+  /* ---- 10. Dyson tiene dónde caer (Benja, 07/10/2026) ----
+     Entra como categoría nueva desde ADVAPP: el día que llegue el primero,
+     tiene que tener su mundo, su lugar en la barra y un plural que no sea
+     "Dysones". Y "secador" lo tiene que encontrar. */
+  ok(MUNDOS.some(m => m.rubros.includes('Dyson')), 'Dyson tiene su mundo en la portada');
+  ok(ORDEN_CATS.includes('Dyson'), 'y su lugar en la barra');
+  ok(plural('Dyson') === 'Dyson', 'el plural de Dyson es Dyson', plural('Dyson'));
+  ok(/secador/.test(ALIAS_CAT['Dyson'] || '') && /aspiradora/.test(ALIAS_CAT['Dyson'] || ''), '"secador" y "aspiradora" llegan a Dyson');
 }

@@ -61,6 +61,17 @@ Los .jpg siguen siendo los originales: los usan WhatsApp (p/), Pancho y
 fotos/indice.json, y estas copias se rehacen con su chica cuando cambia la
 grande (misma huella).
 
+LOS COLORES PASTEL QUEDAN OPACOS (07/10/2026)
+"De color a transparencia" volvia medio transparente todo lo claro, tambien
+ADENTRO del producto: un iPhone celeste (Glacier, Mist Blue, Sky Blue) dejaba
+ver el lila de la pagina y se veia lavanda, y un rosa se veia lila. El cliente
+elegia un color que no era (examen de la linea iPhone, Benja). Ahora el alfa
+nunca baja de lo que pide el COLOR del pixel (croma: el canal mas alto menos el
+mas bajo): un gris o un blanco (croma ~0) sigue igual que antes, con sus
+sombras y el lila en lo blanco; un pixel con color (croma de CROMA_DESDE a
+CROMA_HASTA) va de transparente a opaco. Los productos de color fuerte ya eran
+opacos y no cambian.
+
 Calidad 65 con el alfa a 80 (medido el 05/10 en 30 fotos): 26 KB cada una
 contra 12 KB del jpg chico. El alfa a 75 ya dejaba escalones en las sombras
 de los productos blancos (AirPods); a 80 no se distingue del alfa sin perdida.
@@ -84,6 +95,8 @@ SIN_FONDO_GRANDE = os.path.join(FOTOS, 'sinfondo')
 LADO_SIN_FONDO_GRANDE = 800
 EXT_SIN_FONDO = '.webp'
 UMBRAL_FONDO = 10
+# Desde que croma un pixel cuenta como color y desde cual es opaco (07/10)
+CROMA_DESDE, CROMA_HASTA = 6, 28
 CALIDAD_SIN_FONDO = 65
 CALIDAD_ALFA = 80
 
@@ -154,6 +167,14 @@ def sin_fondo(im):
     maximo = ImageChops.lighter(ImageChops.lighter(lejos[0], lejos[1]), lejos[2])
     alfa = maximo.point(lambda v: 0 if v <= UMBRAL_FONDO
                         else min(255, round((v - UMBRAL_FONDO) * 255 / (255 - UMBRAL_FONDO))))
+    # Lo que tiene color no se transparenta (07/10, ver arriba): un celeste
+    # claro dejaba ver el lila de la pagina y se veia lavanda.
+    alto = ImageChops.lighter(ImageChops.lighter(r, g), b)
+    bajo = ImageChops.darker(ImageChops.darker(r, g), b)
+    piso = ImageChops.subtract(alto, bajo).point(
+        lambda v: 0 if v <= CROMA_DESDE
+        else min(255, round((v - CROMA_DESDE) * 255 / (CROMA_HASTA - CROMA_DESDE))))
+    alfa = ImageChops.lighter(alfa, piso)
     # El color que, puesto con ese alfa sobre el fondo, da el pixel original
     canales = [ImageMath.lambda_eval(
         lambda e, f=f: e['convert'](e['max'](e['min'](

@@ -1,6 +1,7 @@
 {
  "slugs": {
   "G:accesorio-gaming~sony~consultar-estandar-joystick-ps5": "sony-joystick-ps5",
+  "G:celular~apple~17-iphone-pro": "apple-iphone-17-pro-2",
   "M:ACA-APL-AIRTAG": "apple-airtag",
   "M:ACA-APL-MAGICMOUSE2": "apple-magic-mouse-2",
   "M:ACA-APL-MAGICTRACKPAD2": "apple-magic-trackpad-2",
@@ -121,6 +122,7 @@
   "M:CEL-APL-17P": "apple-iphone-17-pro",
   "M:CEL-APL-17PM": "apple-iphone-17-pro-max",
   "M:CEL-APL-AIR": "apple-iphone-air",
+  "M:CEL-APL-IPHONE16PLUS": "apple-iphone-16-plus",
   "M:CEL-APL-IPHONE18PRO": "apple-iphone-18-pro",
   "M:CEL-APL-IPHONE18PROMAX": "apple-iphone-18-pro-max",
   "M:CEL-MOT-G06POWER": "motorola-g06-power",
@@ -424,10 +426,12 @@
   "apple-iphone-15": "2026-10-07",
   "apple-iphone-15-plus": "2026-10-07",
   "apple-iphone-16": "2026-10-07",
+  "apple-iphone-16-plus": "2026-10-07",
   "apple-iphone-16-pro-max": "2026-10-07",
   "apple-iphone-16e": "2026-10-07",
   "apple-iphone-17": "2026-10-07",
   "apple-iphone-17-pro": "2026-10-07",
+  "apple-iphone-17-pro-2": "2026-10-07",
   "apple-iphone-17-pro-max": "2026-10-07",
   "apple-iphone-17e": "2026-10-07",
   "apple-iphone-18-pro": "2026-10-07",

@@ -1270,7 +1270,7 @@ def sumar_confirmadas(lista, filas, confirmadas):
         for k, v in pend.items():
             x['antes'].setdefault(k, (f.get(CAMPOS_ADVAPP[k]) or '').strip())
             x['cambios'][k] = v
-        regla = 'Confirmado por Pedro: ' + c['motivo']
+        regla = 'Confirmado: ' + c['motivo']
         if regla not in x['reglas']:
             x['reglas'].append(regla)
     return list(out.values()), aplicadas

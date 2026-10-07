@@ -1,7 +1,7 @@
 # Fotos miradas contra el producto que dice la planilla.
 # Si una cambia, deja de coincidir y no se publica hasta mirarla.
-# Anotar las miradas:  python verificar-fotos.py --revisadas
-# Arrancar el registro: python verificar-fotos.py --sembrar
+# Anotar las miradas:  python3 verificar-fotos.py --revisadas
+# Arrancar el registro: python3 verificar-fotos.py --sembrar
 22016c9ac96c95533fbb1e75883e8da3  AT-0001.jpg                        # mirada
 424bc38b522c72f64ebd09faa52603fd  AT-0002.jpg                        # mirada
 7b8d59b6869d1cf4923b95dee921c5db  AT-0003-01.jpg                     # mirada
@@ -730,3 +730,15 @@ a14ae7ae2fa701e4cabd95995e503034  AT-0538-01.jpg                     # mirada
 a14ae7ae2fa701e4cabd95995e503034  AT-0539-01.jpg                     # mirada
 0b30ee9450d530be456d63a5b6cbb1b8  AT-0539-02.jpg                     # mirada
 56acf9f2a14130b4d7457ae94e948c46  AT-0540-01.jpg                     # mirada
+6561c120968be92488dde45982874f91  AT-0541-01.jpg                     # mirada
+f5334c153728cd3620459f4e8e20a0cb  AT-0541-02.jpg                     # mirada
+ba705301f7dc03cfb39c0f912128ce4d  AT-0541-03.jpg                     # mirada
+d537712e76847f66275ff4dc8c38001e  AT-0541-04.jpg                     # mirada
+6561c120968be92488dde45982874f91  AT-0542-01.jpg                     # mirada
+f5334c153728cd3620459f4e8e20a0cb  AT-0542-02.jpg                     # mirada
+ba705301f7dc03cfb39c0f912128ce4d  AT-0542-03.jpg                     # mirada
+d537712e76847f66275ff4dc8c38001e  AT-0542-04.jpg                     # mirada
+e36c68135fe8fb53b10a85dffee159ce  AT-0543-01.jpg                     # mirada
+d28c97d284dbe0f4c061d359dfbe513a  AT-0543-02.jpg                     # mirada
+5cb94c8d037f494a9ace5fc4a0f18f3e  AT-0543-03.jpg                     # mirada
+81d3f4bd4a56968993883b729216f4eb  AT-0543-04.jpg                     # mirada

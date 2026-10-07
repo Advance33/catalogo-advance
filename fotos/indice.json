@@ -727,7 +727,19 @@
 "AT-0538-02.jpg",
 "AT-0539-01.jpg",
 "AT-0539-02.jpg",
-"AT-0540-01.jpg"
+"AT-0540-01.jpg",
+"AT-0541-01.jpg",
+"AT-0541-02.jpg",
+"AT-0541-03.jpg",
+"AT-0541-04.jpg",
+"AT-0542-01.jpg",
+"AT-0542-02.jpg",
+"AT-0542-03.jpg",
+"AT-0542-04.jpg",
+"AT-0543-01.jpg",
+"AT-0543-02.jpg",
+"AT-0543-03.jpg",
+"AT-0543-04.jpg"
 ],
 "catalogo": {
 "firmas": {
@@ -2404,6 +2416,15 @@
 ],
 "AT-0540": [
 "apple|tablet|11:1,256:1,cellular:1,m5:1,pro:1"
+],
+"AT-0541": [
+"apple|celular|18:1,256:1,pro:1"
+],
+"AT-0542": [
+"apple|celular|18:1,512:1,pro:1"
+],
+"AT-0543": [
+"apple|celular|18:1,256:1,max:1,pro:1"
 ]
 },
 "ids": {
@@ -2585,6 +2606,14 @@
 "CEL-APL-17P-512-SLV-ESIM": "AT-0073",
 "CEL-APL-17P-512-SLV-SIM": "AT-0536",
 "CEL-APL-AIR-1TB-SKY-ESIM": "AT-0077",
+"CEL-APL-IPHONE18PRO-256-BLK-000": "AT-0541",
+"CEL-APL-IPHONE18PRO-256-GLC-ESIM": "AT-0541",
+"CEL-APL-IPHONE18PRO-256-SLV-ESIM": "AT-0541",
+"CEL-APL-IPHONE18PRO-512-BLK-ESIM": "AT-0542",
+"CEL-APL-IPHONE18PROMAX-256-BLK-ESIM": "AT-0543",
+"CEL-APL-IPHONE18PROMAX-256-BRG-ESIM": "AT-0543",
+"CEL-APL-IPHONE18PROMAX-256-GLC-ESIM": "AT-0543",
+"CEL-APL-IPHONE18PROMAX-256-SLV-ESIM": "AT-0543",
 "CEL-APP-003": "AT-0064",
 "CEL-APP-004": "AT-0065",
 "CEL-APP-005": "AT-0067",
@@ -3276,6 +3305,9 @@
 "celular~apple~17-iphone~256gb": "AT-0070",
 "celular~apple~17e-iphone~256gb": "AT-0076",
 "celular~apple~17e-iphone~512gb": "AT-0530",
+"celular~apple~18-apple-iphone-max-pro~256-esim": "AT-0543",
+"celular~apple~18-apple-iphone-pro~256-esim": "AT-0541",
+"celular~apple~18-apple-iphone-pro~512-esim": "AT-0542",
 "celular~apple~air-iphone~1tb": "AT-0077",
 "celular~motorola~60-edge-fusion~5g": "AT-0513",
 "celular~motorola~g06-power~4gb-256gb-concargador": "AT-0078",
@@ -5640,7 +5672,8 @@
 "AT-0457": {
 "black ceramic": "AT-0457-01",
 "black ceramic · black peach": "AT-0457-01",
-"black peach": "AT-0457-01"
+"black peach": "AT-0457-01",
+"black/peach ceramic bezel · white silicone band": "AT-0457-01"
 },
 "AT-0458": {
 "blanco": "AT-0458-01",
@@ -5664,7 +5697,9 @@
 },
 "AT-0462": {
 "denim · denim + milky white silicone": "AT-0462-01",
-"denim · denim+milky white silicone": "AT-0462-01"
+"denim · denim+milky white silicone": "AT-0462-01",
+"gold · denim + milky white silicone": "AT-0462-01",
+"gold · denim+milky white silicone": "AT-0462-01"
 },
 "AT-0463": {
 "ice white · white leather + white silicone": "AT-0463-01",
@@ -5974,6 +6009,8 @@
 },
 "AT-0529": {
 "matte black": "AT-0529-03",
+"shiny transparent black": "AT-0529-02",
+"shiny transparent dark olive": "AT-0529-01",
 "transparent black": "AT-0529-02",
 "trap dark love": "AT-0529-01"
 },
@@ -6026,8 +6063,26 @@
 },
 "AT-0540": {
 "space black": "AT-0540-01"
+},
+"AT-0541": {
+"black": "AT-0541-01",
+"burgundy": "AT-0541-04",
+"glacier": "AT-0541-03",
+"silver": "AT-0541-02"
+},
+"AT-0542": {
+"black": "AT-0542-01",
+"burgundy": "AT-0542-04",
+"glacier": "AT-0542-03",
+"silver": "AT-0542-02"
+},
+"AT-0543": {
+"black": "AT-0543-01",
+"burgundy": "AT-0543-04",
+"glacier": "AT-0543-03",
+"silver": "AT-0543-02"
 }
 }
 },
-"generado": "2026-10-01T16:51:34"
+"generado": "2026-10-07T10:52:52"
 }

@@ -3565,14 +3565,15 @@
     "https://support.apple.com/es-la/126470"
    ]
   },
-  "e4ab54392fa6e40baf2effdf15d5fcb3f5cf1bb055ab3b0fdea446033658f200": {
+  "74dc744b05920ce4506e6d83e1b7859c953e00741d65da671554e91aefed325b": {
    "modelo": "iPhone 18 Pro",
    "fecha": "2026-10-07",
    "por": "verificador-descripciones",
    "informe": "informe-01.json",
    "fuentes": [
-    "https://www.apple.com/iphone-18-pro/specs/ (HTML entero con curl; la tabla está completa en el HTML. Revisado dato por dato: colores, materiales, capacidades, medidas 150.0 x 71.9 x 8.75 mm, 211 g, 6.3\" 2622x1206 a 460 ppi, brillo 1000/1600/3000 nits, A20 Pro 6 núcleos con 2 super cores y 4 de eficiencia, GPU 7 núcleos con Neural Accelerators, Dual 16-core Neural Engine, cámaras y aperturas, zoom 8x/2x/40x, frontal 18 MP f/1.9, video 36 h y streaming 33 h, carga 50% en around 15 minutes con 60W y Adjustable Voltage Supply, MagSafe y Qi2 25W, IP68 6 m 30 min, Dual eSIM y not compatible with physical SIM cards, Wi-Fi 7 con nota de país, Bluetooth 6, UWB 2.ª gen con nota de región, USB 3 10Gb/s, iOS 27)",
-    "https://www.apple.com/la/iphone-18-pro/specs/ (control, no fuente: nombres de los colores en español «Negro, color plata, color glaciar, color borgoña», traducción de Apple «fuente de voltaje ajustable», y confirma que es otro modelo: «Doble SIM (nano-SIM y eSIM)», 34 h de video y 31 h en streaming; mismo peso 211 g)"
+    "https://www.apple.com/iphone-18-pro/specs/ (HTML entero con curl, 07/10/2026, HTTP 200). «Capacity: iPhone 18 Pro 256GB 512GB 1TB 2TB»: el 1TB existe. Ningún dato de la ficha depende de la capacidad: peso (211 g), medidas, batería (36 h de video, 33 h en streaming), chip, cámaras, SIM (Dual eSIM, not compatible with physical SIM cards) y conectividad se dan por modelo, no por capacidad (la única mención es la nota genérica «Size and weight vary by configuration and manufacturing process»). Revisé de nuevo dato por dato: colores, materiales, 150,0 x 71,9 x 8,75 mm, 6,3\" 2622x1206 a 460 ppi, 1000/1600/3000 nits, ProMotion 120 Hz, Always-On, Dynamic Island, A20 Pro (6 núcleos: 2 super cores + 4 de eficiencia), GPU de 7 núcleos con Neural Accelerators, Dual 16-core Neural Engine, cámaras 48 MP (24 mm con ƒ/1.48–ƒ/4.0, 13 mm ƒ/2.2 120°, 100 mm 4x ƒ/2.8), zoom 8x/2x/40x, frontal 18 MP ƒ/1.9, carga 50% en around 15 minutes con 60 W y AVS, MagSafe y Qi2 de 25 W, IP68 a 6 m durante 30 min, Wi-Fi 7 (nota de país), Bluetooth 6, UWB de 2.ª generación (nota de región), NFC, USB 3 hasta 10 Gb/s, iOS 27. Todo coincide.",
+    "control (no fuente): diferencia contra la entrada ya verificada (verificar/lote-01.json, huella e4ab5439…): sólo cambian codigos y versiones[0].codigos (se suma AT-0547). Huella 74dc744b… recalculada con herramientas/verificar-descripciones.py: coincide con el lote y con datos/descripciones.json del worktree.",
+    "control (no fuente): herramientas/catalogo-maestro.csv: AT-0547 = «iPhone 18 Pro 1TB E-Sim», SKU CEL-APL-IPHONE18PRO-1TB-SLV-000, nota «eSIM por la regla de Benja (si el proveedor no dice SIM, es eSIM)»; CORRECCIONES-07-10-B.json lo pasa a «Apple iPhone 18 Pro 1TB E-Sim (Silver)» con SKU -ESIM."
    ]
   },
   "91bdd03ecf869d5e0d9a4c0531ff050f3554d2df64058f580fabf10165bd22e9": {

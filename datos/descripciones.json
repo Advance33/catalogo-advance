@@ -2993,14 +2993,16 @@
       "modelo": "iPhone 18 Pro",
       "codigos": [
         "AT-0541",
-        "AT-0542"
+        "AT-0542",
+        "AT-0547"
       ],
       "versiones": [
         {
           "nombre": "E-Sim",
           "codigos": [
             "AT-0541",
-            "AT-0542"
+            "AT-0542",
+            "AT-0547"
           ],
           "si": {
             "sim": "E-Sim"

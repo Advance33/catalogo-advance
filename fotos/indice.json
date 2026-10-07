@@ -751,7 +751,11 @@
 "AT-0546-01.jpg",
 "AT-0546-02.jpg",
 "AT-0546-03.jpg",
-"AT-0546-04.jpg"
+"AT-0546-04.jpg",
+"AT-0547-01.jpg",
+"AT-0547-02.jpg",
+"AT-0547-03.jpg",
+"AT-0547-04.jpg"
 ],
 "catalogo": {
 "firmas": {
@@ -2446,6 +2450,9 @@
 ],
 "AT-0546": [
 "apple|celular|18:1,2tb:1,max:1,pro:1"
+],
+"AT-0547": [
+"apple|celular|18:1,1tb:1,pro:1"
 ]
 },
 "ids": {
@@ -2627,6 +2634,7 @@
 "CEL-APL-17P-512-SLV-ESIM": "AT-0073",
 "CEL-APL-17P-512-SLV-SIM": "AT-0536",
 "CEL-APL-AIR-1TB-SKY-ESIM": "AT-0077",
+"CEL-APL-IPHONE18PRO-1TB-SLV-000": "AT-0547",
 "CEL-APL-IPHONE18PRO-256-BLK-000": "AT-0541",
 "CEL-APL-IPHONE18PRO-256-GLC-ESIM": "AT-0541",
 "CEL-APL-IPHONE18PRO-256-SLV-ESIM": "AT-0541",
@@ -3333,6 +3341,7 @@
 "celular~apple~18-apple-iphone-max-pro~256-esim": "AT-0543",
 "celular~apple~18-apple-iphone-max-pro~2tb-esim": "AT-0546",
 "celular~apple~18-apple-iphone-max-pro~512-esim": "AT-0544",
+"celular~apple~18-apple-iphone-pro~1tb-esim": "AT-0547",
 "celular~apple~18-apple-iphone-pro~256-esim": "AT-0541",
 "celular~apple~18-apple-iphone-pro~512-esim": "AT-0542",
 "celular~apple~air-iphone~1tb": "AT-0077",
@@ -6126,8 +6135,14 @@
 "burgundy": "AT-0546-04",
 "glacier": "AT-0546-03",
 "silver": "AT-0546-02"
+},
+"AT-0547": {
+"black": "AT-0547-01",
+"burgundy": "AT-0547-04",
+"glacier": "AT-0547-03",
+"silver": "AT-0547-02"
 }
 }
 },
-"generado": "2026-10-07T10:59:21"
+"generado": "2026-10-07T12:25:54"
 }

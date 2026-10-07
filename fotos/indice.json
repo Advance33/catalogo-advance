@@ -81,6 +81,7 @@
 "AT-0064-05.jpg",
 "AT-0065-01.jpg",
 "AT-0065-02.jpg",
+"AT-0065-03.jpg",
 "AT-0066-01.jpg",
 "AT-0066-02.jpg",
 "AT-0067-01.jpg",
@@ -755,7 +756,14 @@
 "AT-0547-01.jpg",
 "AT-0547-02.jpg",
 "AT-0547-03.jpg",
-"AT-0547-04.jpg"
+"AT-0547-04.jpg",
+"AT-0548-01.jpg",
+"AT-0548-02.jpg",
+"AT-0549-01.jpg",
+"AT-0549-02.jpg",
+"AT-0549-03.jpg",
+"AT-0549-04.jpg",
+"AT-0549-05.jpg"
 ],
 "catalogo": {
 "firmas": {
@@ -2453,6 +2461,12 @@
 ],
 "AT-0547": [
 "apple|celular|18:1,1tb:1,pro:1"
+],
+"AT-0548": [
+"apple|celular|16e:1,256:1"
+],
+"AT-0549": [
+"apple|celular|128:1,16:1,plus:1"
 ]
 },
 "ids": {
@@ -2619,6 +2633,8 @@
 "CAM-SON-024": "AT-0187",
 "CAM-SON-027": "AT-0175",
 "CAM-SON-032": "AT-0172",
+"CEL-APL-15-128-PNK-SIM": "AT-0065",
+"CEL-APL-16E-256-WHT-000": "AT-0548",
 "CEL-APL-17E-512-PNK-ESIM": "AT-0530",
 "CEL-APL-17P-1TB-BLU-ESIM": "AT-0071",
 "CEL-APL-17P-1TB-BLU-SIM": "AT-0537",
@@ -2634,6 +2650,7 @@
 "CEL-APL-17P-512-SLV-ESIM": "AT-0073",
 "CEL-APL-17P-512-SLV-SIM": "AT-0536",
 "CEL-APL-AIR-1TB-SKY-ESIM": "AT-0077",
+"CEL-APL-IPHONE16PLUS-128-BLK-000": "AT-0549",
 "CEL-APL-IPHONE18PRO-1TB-SLV-000": "AT-0547",
 "CEL-APL-IPHONE18PRO-256-BLK-000": "AT-0541",
 "CEL-APL-IPHONE18PRO-256-GLC-ESIM": "AT-0541",
@@ -3319,8 +3336,10 @@
 "celular~apple~15-iphone~128gb": "AT-0065",
 "celular~apple~16-iphone-max-pro~256gb": "AT-0068",
 "celular~apple~16-iphone-max-pro~512gb": "AT-0069",
+"celular~apple~16-iphone-plus~128gb": "AT-0549",
 "celular~apple~16-iphone~128gb": "AT-0067",
 "celular~apple~16e-iphone~128gb": "AT-0510",
+"celular~apple~16e-iphone~256gb": "AT-0548",
 "celular~apple~17-iphone-max-pro~1tb-esim": "AT-0074",
 "celular~apple~17-iphone-max-pro~256gb-esim": "AT-0075",
 "celular~apple~17-iphone-max-pro~512gb-esim": "AT-0501",
@@ -4100,6 +4119,7 @@
 "black keys": "AT-0065-01",
 "blue": "AT-0065-02",
 "negro": "AT-0065-01",
+"pink": "AT-0065-03",
 "teclas negras": "AT-0065-01"
 },
 "AT-0066": {
@@ -6141,8 +6161,19 @@
 "burgundy": "AT-0547-04",
 "glacier": "AT-0547-03",
 "silver": "AT-0547-02"
+},
+"AT-0548": {
+"black": "AT-0548-01",
+"white": "AT-0548-02"
+},
+"AT-0549": {
+"black": "AT-0549-01",
+"pink": "AT-0549-05",
+"teal": "AT-0549-03",
+"ultramarine": "AT-0549-02",
+"white": "AT-0549-04"
 }
 }
 },
-"generado": "2026-10-07T12:25:54"
+"generado": "2026-10-07T13:48:46"
 }

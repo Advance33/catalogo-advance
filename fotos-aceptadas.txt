@@ -22,3 +22,9 @@ d7de8ade0ae668ebbbaa8133623ae60e  2   # MACBOOK NEO 256GB | MACBOOK NEO 512GB Si
 71237030b1c9d21762ff21c855a709cc  2   # IPHONE 17 E | IPHONE 17E White (el 17e de 256 y de 512: la memoria no se ve)
 97a3aff5163edf20642b58e9212a3b1a  2   # APPLE WATCH ULTRA 3 | APPLE WATCH ULTRA 3 49MM: caja Natural con Anchor Blue Ocean Band, la -04 y la -05 ("Blue") son el mismo reloj
 4fb1cb5819af1d40bc279166cdb6e08a  2   # MACBOOK NEO 256GB Indigo, teclado EN y ES (la misma maquina: el teclado no se distingue en la foto)
+8c109c490edf3bead747e81010c483a8  2   # IPHONE 16E 128GB | IPHONE 16E 256GB: la misma foto, otra memoria (no se ve). 07/10/2026
+46552168ebae2a8a6b02ebf87ee7f6e3  2   # IPHONE 16 | IPHONE 16 PLUS (Black): el mismo equipo, más grande; en la foto no se ve. 07/10/2026
+c30b7227156f6b8ca67f569275d67565  2   # IPHONE 16 | IPHONE 16 PLUS (Ultramarine): el mismo equipo, más grande; en la foto no se ve. 07/10/2026
+a1ff01a9cb7ca9545b023c95d2e91d6d  2   # IPHONE 16 | IPHONE 16 PLUS (Teal): el mismo equipo, más grande; en la foto no se ve. 07/10/2026
+68e75c36082ecd2f6911c50a7732a2b5  2   # IPHONE 16 | IPHONE 16 PLUS (White): el mismo equipo, más grande; en la foto no se ve. 07/10/2026
+5d38bf86b4e2048ff12154fa00d7777a  2   # IPHONE 16 | IPHONE 16 PLUS (Pink): el mismo equipo, más grande; en la foto no se ve. 07/10/2026

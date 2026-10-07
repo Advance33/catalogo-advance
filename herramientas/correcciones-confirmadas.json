@@ -78,6 +78,9 @@
   {"id": "CEL-APL-IPHONE18PROMAX-2TB-BLK-ESIM", "cambios": {"color": "Black", "nombre": "Apple iPhone 18 Pro Max 2TB E-Sim (Black)", "codigo": "AT-0546", "codigo_var": "AT-0546-01"}, "motivo": "iPhone 18 a la web (07/10): la fila se dio de alta sin color; el SKU dice BLK (Black, color oficial de Apple)", "fecha": "2026-10-07"},
   {"id": "CEL-APP-093", "cambios": {"nombre": "iPhone 16e 128GB (Black)"}, "motivo": "examen de la línea iPhone (07/10): Apple lo escribe 16e, con minúscula (como el 17e); la web mostraba \"iPhone 16E\"", "fecha": "2026-10-07"},
   {"id": "CEL-APL-IPHONE18PRO-1TB-SLV-000", "cambios": {"color": "Silver", "nombre": "Apple iPhone 18 Pro 1TB E-Sim (Silver)", "codigo": "AT-0547", "codigo_var": "AT-0547-02"}, "motivo": "Benja 07/10: si el proveedor no aclara SIM, es eSIM; el SKU dice SLV (Silver, color oficial de Apple)", "fecha": "2026-10-07"},
-  {"id": "CEL-APL-IPHONE18PRO-256-BLU-ESIM", "cambios": {"color": "Glacier", "nombre": "Apple iPhone 18 Pro 256GB E-Sim (Glacier)", "codigo": "AT-0541", "codigo_var": "AT-0541-03"}, "motivo": "Benja 07/10: el \"Blue\" del proveedor es el Glacier (Apple no tiene Blue en el 18 Pro)", "fecha": "2026-10-07"}
+  {"id": "CEL-APL-IPHONE18PRO-256-BLU-ESIM", "cambios": {"color": "Glacier", "nombre": "Apple iPhone 18 Pro 256GB E-Sim (Glacier)", "codigo": "AT-0541", "codigo_var": "AT-0541-03"}, "motivo": "Benja 07/10: el \"Blue\" del proveedor es el Glacier (Apple no tiene Blue en el 18 Pro)", "fecha": "2026-10-07"},
+  {"id": "CEL-APL-15-128-PNK-SIM", "cambios": {"codigo": "AT-0065", "codigo_var": "AT-0065-03"}, "motivo": "Benja 07/10: el iPhone 15 128GB Sim Pink a la web; es el color -03 del AT-0065", "fecha": "2026-10-07"},
+  {"id": "CEL-APL-16E-256-WHT-000", "cambios": {"codigo": "AT-0548", "codigo_var": "AT-0548-02", "nombre": "Apple iPhone 16e 256GB (White)"}, "motivo": "Benja 07/10: el iPhone 16e 256GB a la web (AT-0548, la -02 es White)", "fecha": "2026-10-07"},
+  {"id": "CEL-APL-IPHONE16PLUS-128-BLK-000", "cambios": {"codigo": "AT-0549", "codigo_var": "AT-0549-01"}, "motivo": "Benja 07/10: el iPhone 16 Plus 128GB a la web (AT-0549, la -01 es Black)", "fecha": "2026-10-07"}
  ]
 }

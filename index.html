@@ -2004,10 +2004,11 @@ window.ADVAPP_TEMPRANO = (() => {
   /* El segundo eje va más chico: la memoria es la decisión grande */
   .fi-ops.chicas .fi-op b{font:500 13px/1.2 var(--sans);color:var(--muted)}
   .fi-ops.chicas .fi-op[aria-pressed="true"] b{color:var(--ink)}
-  /* Sin stock se puede elegir igual (el cliente quiere ver el precio), pero se
-     nota de una que no está disponible. Desde el 29/09 (muestra 6.4 B) sin
-     transparencia: sigue tachada, pero el precio se lee (con la mitad de
-     opacidad daba 1,8 de contraste). */
+  /* Sin stock se puede elegir igual, pero se nota de una que no está
+     disponible. Desde el 29/09 (muestra 6.4 B) sin transparencia: sigue
+     tachada, y lo de abajo se lee (con la mitad de opacidad daba 1,8 de
+     contraste). Desde el 13/10/2026 (D15 B de Benja) abajo dice "Sin stock"
+     y no el precio: lo agotado no muestra precio. */
   .fi-op.agotada{opacity:1}
   .fi-op.agotada b{text-decoration:line-through}
 

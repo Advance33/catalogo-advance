@@ -232,10 +232,51 @@
   .topbar .stamp{margin-left:18px;color:rgba(255,255,255,.62)}
   .topbar #cfg-btn{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)}
   .topbar #cfg-btn:hover{border-color:#A78BFA;color:#C4A6FF}
+  /* ---------- Los links de la barra (Benja, 13/10/2026) ----------
+     Eligió en el muestrario "links simples": texto en la monoespaciada de los
+     rótulos, sin caja, entre el nombre y el buscador. Con links en la barra
+     (.con-nav) el buscador deja de estirarse hasta 520 px y les cede el
+     lugar; los que igual no entran se esconden (.fuera) y aparecen en el
+     desplegable de "Más" (acomodarNav). El desplegable cuelga de la fila de
+     links, no de la barra, así queda debajo de su botón. */
+  .tb-nav{position:relative;display:flex;align-items:center;gap:6px 18px;flex:1 1 0;min-width:0;white-space:nowrap}
+  .tb-nav[hidden]{display:none}
+  .tb-nav a,.tb-mas{flex:none;padding:9px 0;border:0;border-radius:6px;background:none;cursor:pointer;text-decoration:none;
+                    font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+                    color:rgba(255,255,255,.72);transition:color .16s}
+  .tb-nav a:hover,.tb-mas:hover,.tb-mas[aria-expanded="true"]{color:#fff}
+  .tb-nav a:focus-visible,.tb-mas:focus-visible,.tb-sello:focus-visible{outline:2px solid #A78BFA;outline-offset:3px}
+  .tb-nav .fuera,.tb-mas[hidden],.tb-menu[hidden]{display:none}
+  .tb-mas{color:#C4A6FF}
+  .tb-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:40;display:flex;flex-direction:column;min-width:200px;
+           padding:8px;border-radius:14px;background:#fff;border:1px solid var(--line);box-shadow:0 14px 34px rgba(24,18,38,.18)}
+  .tb-menu a{padding:11px 12px;border-radius:9px;color:var(--ink);font:600 13.5px/1.2 var(--sans);letter-spacing:0;text-transform:none}
+  .tb-menu a:hover{background:var(--surface-2);color:var(--ink)}
+  .tb-sello{flex:none;display:inline-flex;align-items:center;gap:5px;text-decoration:none;border-radius:6px;
+            font:600 11px/1 var(--mono);letter-spacing:.04em;color:rgba(255,255,255,.82)}
+  .tb-sello[hidden]{display:none}
+  .tb-sello i{font-style:normal;color:#E0A106}
+  .tb-sello:hover{color:#fff}
+  /* Solo en la compu: en el celular el buscador se pliega (más abajo) y estas
+     dos reglas, que pesan más, le dejarían 220 px fijos. */
+  @media (min-width:721px){
+    .topbar.con-nav .search{flex:0 1 320px;min-width:220px}
+    .topbar.con-nav .stamp{margin-left:0}
+  }
   /* En el celular si se pliega: aparece la lupa y el buscador se abre con ella,
      llevandose un renglon entero, que es lo que mas se usa cuando se abre. */
   @media (max-width:720px){
     .topbar .wrap{flex-wrap:wrap;gap:10px 14px}
+    /* Los links, en el celular: una fila propia al final de la barra, que se
+       desliza con el dedo y llega a los bordes de la pantalla (Benja eligió
+       "una fila que se desliza"). Sin "Más": ahí están todos. El puntaje de
+       Google no va en la barra: el sello del encabezado queda justo abajo. */
+    .tb-nav{order:9;flex:0 0 auto;width:calc(100% + 40px);margin:0 -20px -2px;padding:0 20px;gap:0 20px;
+            overflow-x:auto;scrollbar-width:none}
+    .tb-nav::-webkit-scrollbar{display:none}
+    .tb-nav a{padding:8px 0 10px}
+    .tb-nav .fuera{display:block}
+    .tb-mas,.tb-menu,.tb-sello{display:none}
     .lupa{display:grid}
     .topbar .search{
       flex:0 1 0;max-width:0;opacity:0;pointer-events:none;margin-left:0;
@@ -1042,7 +1083,7 @@
     /* Arriba de la bajada, alineado con su texto (20 px de aire + 2 de la
        raya) y en el renglón de "Catálogo": sin margen propio, así no le suma
        alto al encabezado ni baja el título. */
-    .sello-google{grid-column:2;grid-row:1;justify-self:start;align-self:center;margin:0 0 0 22px}
+    .sello-google{grid-column:2;grid-row:1;justify-self:start;align-self:center;margin:0 0 6px 22px}
   }
   .resenas{display:flex;flex-direction:column;gap:14px;scroll-margin-top:calc(var(--alto-cinta,0px) + 18px)}
   .rs-cab{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
@@ -1054,6 +1095,52 @@
           font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;transition:background .2s ease}
   .rs-ver:hover{background:#2C2048}
   .rs-ver:focus-visible{outline:2px solid var(--acento);outline-offset:3px}
+  /* "Dejá tu reseña" (Benja, 13/10): el segundo botón, en contorno */
+  .rs-dejar{margin-left:0;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+  .rs-dejar:hover{background:var(--surface-2)}
+
+  /* ---------- Quiénes somos (Benja, 13/10/2026) ----------
+     El diseño D del muestrario: la foto del local a la izquierda y, a la
+     derecha, el texto, la dirección, los botones y el equipo. Sin la foto del
+     local (.sin-local) el texto pasa a la izquierda y el equipo ocupa el otro
+     lado, con las caras más grandes. La inicial va siempre debajo de la foto
+     de cada cara: si la foto falta o no carga, queda la inicial. */
+  .nosotros{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:auto 1fr;grid-template-areas:"local txt" "local caras";
+            gap:18px 30px;align-items:start;padding:24px;border-radius:28px;background:var(--surface);border:1px solid var(--line);
+            scroll-margin-top:calc(var(--alto-cinta,0px) + 18px)}
+  .nosotros.sin-local{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"txt caras";align-items:center}
+  /* La foto del local, apaisada y recortada a su caja: una foto cuadrada o
+     vertical no estira el bloque */
+  .ns-local{grid-area:local;margin:0;aspect-ratio:16/11;border-radius:20px;overflow:hidden;background:var(--surface-2)}
+  .ns-local img{width:100%;height:100%;display:block;object-fit:cover}
+  .ns-txt{grid-area:txt;display:flex;flex-direction:column;gap:12px;min-width:0}
+  .nosotros h2{margin:0;font:400 22px/1.1 var(--display);text-transform:uppercase}
+  .ns-txt p{margin:0;max-width:62ch;font:400 14.5px/1.55 var(--sans);color:var(--muted)}
+  .ns-txt .ns-dir b{color:var(--ink);font-weight:600}
+  .ns-botones{display:flex;flex-wrap:wrap;gap:8px;padding-top:4px}
+  .ns-b{padding:11px 16px;border-radius:999px;background:var(--ink);color:#fff;text-decoration:none;
+        font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;transition:background .2s ease}
+  .ns-b:hover{background:#2C2048}
+  .ns-b.sec{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+  .ns-b.sec:hover{background:var(--surface-2)}
+  .ns-b:focus-visible{outline:2px solid var(--acento);outline-offset:3px}
+  .ns-caras{grid-area:caras;display:flex;flex-wrap:wrap;gap:16px 22px;margin:0;padding:0;list-style:none}
+  .nosotros.sin-local .ns-caras{justify-content:center}
+  .ns-cara{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;min-width:84px}
+  .ns-foto{position:relative;display:grid;place-items:center;width:64px;height:64px;border-radius:50%;overflow:hidden;
+           background:linear-gradient(160deg,#D9C8FA,#B79BF2);color:#fff;font:400 26px/1 var(--display)}
+  .nosotros.sin-local .ns-foto{width:92px;height:92px;font-size:36px}
+  .ns-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .ns-nom{font:600 14px/1.2 var(--sans);color:var(--ink)}
+  .ns-rol{font:500 10.5px/1.3 var(--mono);letter-spacing:.03em;color:var(--faint)}
+  @media (max-width:760px){
+    .nosotros,.nosotros.sin-local{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"local" "txt" "caras";
+                                  padding:18px 16px;border-radius:22px;align-items:start}
+    .nosotros.sin-local{grid-template-areas:"txt" "caras"}
+    .ns-local{aspect-ratio:16/10}
+    .nosotros.sin-local .ns-caras{justify-content:flex-start}
+    .nosotros.sin-local .ns-foto{width:64px;height:64px;font-size:26px}
+  }
   .rs-pista{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 36px) / 4);gap:12px;
             overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:2px;padding:2px 2px 8px;scrollbar-width:thin}
   .rs-pista:focus-visible{outline:2px solid var(--acento);outline-offset:3px;border-radius:22px}
@@ -1095,6 +1182,9 @@
                linear-gradient(155deg,#232030 0%,#14111E 100%);
   }
   .ayuda h2{margin:0;font:400 22px/1.1 var(--display);text-transform:uppercase}
+  /* Adonde llevan los links de la barra de arriba (13/10): que el bloque, o la
+     pregunta en el celular, no quede tapado por la cinta de rubros pegada */
+  .ayuda,.ay-p{scroll-margin-top:calc(var(--alto-cinta,0px) + 18px)}
   .ay-caja{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:0 22px;
            border-top:1px solid rgba(244,239,253,.1)}
   .ay-lista{display:flex;flex-direction:column;padding:6px 0}
@@ -3355,6 +3445,11 @@
       </span>
       <b>Advance <span>Tecno</span></b>
     </a>
+    <!-- Los links de la barra (Benja, 13/10/2026): ocupan el espacio que
+         quedaba vacío entre el nombre y el buscador. Los arma pintarNav() con
+         la lista NAV de la configuración; los que no entran pasan solos a
+         "Más" (acomodarNav). En el celular son una fila que se desliza. -->
+    <nav class="tb-nav" id="tb-nav" aria-label="Sobre Advance Tecno" hidden></nav>
     <!-- La barra de busqueda ocupaba el centro de la cabecera todo el tiempo.
          Ahora vive detras de la lupa: se abre cuando el cliente la pide y la
          marca se queda sola, que es lo primero que tiene que verse. -->
@@ -3370,12 +3465,16 @@
       <!-- Combobox (29/09): el desplegable decia ser un listbox sin opciones y
            las flechas marcaban solo con una clase; el lector no se enteraba de
            nada. Lo manejan pintarSug, moverSug y cerrarSug. -->
-      <input id="q" type="search" placeholder="Buscar: iphone 17, macbook, canon r6…" autocomplete="off"
+      <input id="q" type="search" placeholder="Buscar: iPhone 17, MacBook, Canon R6…" autocomplete="off"
              role="combobox" aria-autocomplete="list" aria-controls="q-sug" aria-expanded="false" aria-label="Buscar productos">
       <button class="clear" id="clear" hidden aria-label="Limpiar búsqueda">&times;</button>
       <!-- Lo que va apareciendo mientras escribis -->
       <div class="q-sug" id="q-sug" role="listbox" aria-label="Sugerencias" hidden></div>
     </div>
+    <!-- El puntaje de Google, también en la barra (Benja, 13/10/2026). Solo en
+         la compu: en el celular ya está el sello del encabezado, justo abajo.
+         Lo llena pintarSelloGoogle(). -->
+    <a class="tb-sello" id="tb-sello" href="#resenas" hidden></a>
     <div class="stamp">
       <span class="dot live"></span><span id="stamp">Cargando…</span>
       <!-- Escondido para el cliente: el panel es del equipo (ver MODO_CONFIG) -->
@@ -3747,8 +3846,9 @@ const SERVICIO = {
 // 30/09: se fue "¿El precio incluye IVA?" (Pedro: ya no se hace factura) y
 // entraron la tarjeta y "¿Puedo pagar en cuotas?" (4A de muestras/cuotas).
 // Los planes salen de CUOTAS: no se escriben acá.
+// `nav` (13/10) es el link de la barra de arriba que abre esa pregunta: ver NAV.
 const PREGUNTAS = [
-  { p: '¿Cómo puedo pagar?',
+  { p: '¿Cómo puedo pagar?', nav: 'pagos',
     // Sin emojis a propósito: Windows no dibuja banderas y la 🇦🇷 salía como
     // las letras "AR", y el ₿ quedaba corrido respecto del resto.
     r: ['Elegís la que te quede más cómoda. Las que tienen porcentaje llevan ese recargo sobre el precio:'],
@@ -3770,7 +3870,7 @@ const PREGUNTAS = [
   { p: '¿Hacen envíos?',
     r: ['Sí, a todo el país. Lo despachamos por la paquetería que elijas: el costo y la demora los pone cada empresa.',
         'Si no tenés preferencia, te recomendamos Andreani.'] },
-  { p: '¿Puedo ir a verlos o retirar en persona?',
+  { p: '¿Puedo ir a verlos o retirar en persona?', nav: 'donde',
     r: [`Sí. Estamos en ${DIRECCION}.`,
         'Atendemos solo con cita previa: escribinos por WhatsApp y coordinamos día y hora.'],
     link: ['Ver en Google Maps', MAPA] },
@@ -3779,9 +3879,53 @@ const PREGUNTAS = [
   { p: '¿Los productos tienen garantía?',
     r: ['Sí, todos. La garantía cambia según el producto, así que preguntanos por la del que te interesa y te la confirmamos antes de que compres.'] },
   { p: '¿Cómo hago el pedido?',
-    r: ['En cualquier producto tocá “Consultar por WhatsApp”: el mensaje te sale ya escrito con el modelo.',
+    r: ['En cualquier producto tocá «Consultar por WhatsApp»: el mensaje te sale ya escrito con el modelo.',
         'Si querés llevar varios, sumalos con el + y mandanos todo en un solo mensaje.'] },
 ];
+
+// ---------- LOS LINKS DE LA BARRA DE ARRIBA ----------
+//
+// Lo que Benja eligió en el muestrario del 13/10 para el espacio que quedaba
+// vacío entre el nombre y el buscador: links simples, en este orden. Cada uno
+// es [a dónde lleva, texto]:
+//   nosotros  → el bloque "Quiénes somos" de la portada
+//   resenas   → el bloque "Reseñas en Google"
+//   preguntas → las Preguntas frecuentes
+//   pagos, donde → abren SU pregunta dentro de las Preguntas frecuentes (la
+//               que tiene ese mismo `nav` en PREGUNTAS)
+//   usado     → abre el cotizador "Cotizá tu usado". El 05/10 Pedro había
+//               pedido que no apareciera en la portada (eligió la G); el
+//               13/10 Benja lo marcó acá a propósito.
+// Un link cuyo destino hoy no existe (las reseñas sin su archivo, el cotizador
+// sin su lista) no se muestra. Los que no entran en la barra pasan solos a
+// "Más"; en el celular van todos, en una fila que se desliza. Vacía, la barra
+// queda como antes.
+const NAV = [
+  ['nosotros', 'Quiénes somos'], ['resenas', 'Reseñas'], ['preguntas', 'Preguntas'],
+  ['pagos', 'Pagos y cuotas'], ['donde', 'Dónde estamos'], ['usado', 'Cotizá tu usado'],
+];
+
+// ---------- QUIÉNES SOMOS ----------
+//
+// El bloque de la portada, arriba de las reseñas (Benja, 13/10: eligió el
+// diseño D del muestrario, "El local y la historia", con las caras redondas).
+//   texto  → los párrafos. Salen de lo que el negocio escribió en su ficha de
+//            Google (venta a clientes finales, comercios y empresas, importación
+//            a pedido, WhatsApp e Instagram, envíos a todo el país). No se
+//            agrega ningún dato que no esté ahí o en las preguntas frecuentes.
+//   local  → la foto del local o del equipo (assets/nosotros/…). Vacía, el
+//            bloque va sin foto y las caras ocupan ese lado.
+//   equipo → nombre, qué hace y su foto. Sin foto va la inicial.
+// La dirección, el mapa y el WhatsApp son los de arriba: no se repiten acá.
+const NOSOTROS = {
+  texto: ['Somos Advance Tecno. Vendemos tecnología de última generación a clientes finales, comercios y empresas: celulares, computadoras, cámaras, consolas y accesorios, con asesoramiento personalizado y respuesta rápida.',
+          'Si buscás algo que no está en el catálogo, lo importamos a pedido, con respaldo local. Atendemos por WhatsApp e Instagram y enviamos a todo el país.'],
+  local: '',
+  equipo: [
+    { nombre: 'Benja',     rol: 'Encargado de Tecno', foto: '' },
+    { nombre: 'Francisco', rol: 'Vendedor',           foto: '' },
+  ],
+};
 
 // ---------- MUNDOS DE LA PORTADA ----------
 //
@@ -3929,7 +4073,7 @@ function conTope(ms, hacer){
   const corte = new AbortController();
   let reloj;
   const tope = new Promise((_, no) => {
-    reloj = setTimeout(() => { corte.abort(); no(new Error(`no contesto en ${ms / 1000} s`)); }, ms);
+    reloj = setTimeout(() => { corte.abort(); no(new Error(`no contestó en ${ms / 1000} s`)); }, ms);
   });
   return Promise.race([Promise.resolve().then(() => hacer(corte.signal)), tope])
     .finally(() => clearTimeout(reloj));
@@ -4716,7 +4860,7 @@ async function bajarAdvapp(){
     d = await r.json();
   }catch(e){
     throw new Error(e && e.name === 'AbortError'
-      ? `tardo mas de ${ADVAPP_ESPERA_MS / 1000} s` : (e && e.message) || String(e));
+      ? `tardó más de ${ADVAPP_ESPERA_MS / 1000} s` : (e && e.message) || String(e));
   }finally{
     clearTimeout(reloj);
   }
@@ -4882,7 +5026,7 @@ async function bajarDatos(){
             if(!planilla){
               corta = a;
               throw new Error(`trajo ${n} filas, menos de ${Math.ceil(ADVAPP_MINIMO * antes)} ` +
-                              `de las ${antes} de la ultima vez, y la hoja Meta no contesto`);
+                              `de las ${antes} de la última vez, y la hoja Meta no contestó`);
             }
             throw new Error(`trajo ${n} filas y la planilla tiene ${planilla} ` +
                             `(menos de ${Math.ceil(ADVAPP_MINIMO * planilla)})`);
@@ -9610,6 +9754,11 @@ function pintarExtras(){
      casillero para decirlo: el catálogo no tiene todo, pero se consigue, y es
      mejor que lo escriba a que se vaya sin decir nada. Si lo resuelve acá,
      llega al WhatsApp con la decisión más tomada. */
+  /* 4. Quiénes somos (13/10), arriba de las reseñas: primero quiénes son y
+     después lo que dicen de ellos. */
+  const nosotros = htmlNosotros();
+  if(nosotros) partes.push(nosotros);
+
   /* 5. Las reseñas de Google (13/10), justo antes de la ayuda. Sin el
      archivo no hay bloque. */
   const resenas = htmlResenas();
@@ -9672,15 +9821,21 @@ function validarResenas(j){
   if(!j || j.formato !== 'resenas/1') return null;
   const puntaje = Number(j.puntaje), cantidad = Number(j.cantidad);
   if(!(puntaje >= 1 && puntaje <= 5) || !Number.isInteger(cantidad) || cantidad < 1) return null;
-  let ver = '';
-  try{ const u = new URL(String(j.ver || '')); if(u.protocol === 'https:' && /(^|\.)google\.com$/.test(u.hostname)) ver = u.href; }catch{}
+  // Un link de Google bien formado, o nada
+  const deGoogle = s => {
+    try{ const u = new URL(String(s || '')); return u.protocol === 'https:' && /(^|\.)google\.com$/.test(u.hostname) ? u.href : ''; }
+    catch{ return ''; }
+  };
+  const ver = deGoogle(j.ver);
   if(!ver) return null;
+  // "Dejá tu reseña" (Benja, 13/10): opcional. Sin el link, el botón no aparece.
+  const escribir = deGoogle(j.escribir);
   const resenas = (Array.isArray(j.resenas) ? j.resenas : [])
     .map(r => ({ autor: String((r && r.autor) || '').trim(), texto: String((r && r.texto) || '').trim(),
                  estrellas: Number(r && r.estrellas) }))
     .filter(r => r.autor && r.texto && Number.isInteger(r.estrellas) && r.estrellas >= 1 && r.estrellas <= 5)
     .slice(0, RESENAS_MAX);
-  return { puntaje, cantidad, ver, resenas };
+  return { puntaje, cantidad, ver, escribir, resenas };
 }
 
 const notaGoogle = n => n.toLocaleString('es-AR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -9695,6 +9850,8 @@ function cargarResenas(){
       RESENAS = validarResenas(j);
       if(!RESENAS) throw new Error('formato');
       pintarSelloGoogle();
+      pintarSelloBarra();
+      pintarNav();          // ahora "Reseñas" tiene a dónde llevar
       // Si la portada ya estaba dibujada, suma el bloque (la firma cambió)
       if(MODELOS.length && enPortada()) pintarExtras();
       return RESENAS;
@@ -9712,13 +9869,150 @@ function pintarSelloGoogle(){
     <span><b>${nota}</b> · ${plata(RESENAS.cantidad)} reseñas en Google</span>`;
   a.setAttribute('aria-label', `${nota} de 5 en Google, ${plata(RESENAS.cantidad)} reseñas: ver las reseñas`);
 }
+/* El mismo puntaje, corto, en la barra de arriba (Benja, 13/10: "sí, también
+   en la barra"). Va aparte porque el del encabezado se llama igual que antes
+   y las pruebas lo miran solo. */
+function pintarSelloBarra(){
+  const a = $('tb-sello');
+  if(!a) return;
+  a.hidden = !RESENAS;
+  if(!RESENAS) return;
+  const nota = notaGoogle(RESENAS.puntaje);
+  a.innerHTML = `<i aria-hidden="true">★</i>${nota}`;
+  a.setAttribute('aria-label', `${nota} de 5 en Google: ver las reseñas`);
+  a.title = `${nota} de 5 en Google · ${plata(RESENAS.cantidad)} reseñas`;
+}
 
-/* El sello lleva al bloque. Desde un rubro, primero al inicio: el bloque vive
-   solo en la portada. */
-function irAResenas(){
+// El sello lleva al bloque (ver irDesdeNav)
+function irAResenas(){ irDesdeNav('resenas'); }
+
+/* ---------- Los links de la barra de arriba (Benja, 13/10/2026) ----------
+   La lista es NAV, en la configuración. Cada link es un <a> de verdad a su
+   bloque (#nosotros, #resenas, #ayuda); el clic común lo hace irDesdeNav. */
+const ANCLA_NAV = { nosotros: 'nosotros', resenas: 'resenas' };   // los demás, a las preguntas
+const anclaNav = id => ANCLA_NAV[id] || 'ayuda';
+const NAV_CEL = matchMedia('(max-width:720px)');
+
+// ¿Existe hoy el destino de ese link? Sin destino, el link no se muestra.
+function hayDestinoNav(id){
+  if(id === 'nosotros')  return !!htmlNosotros();
+  if(id === 'resenas')   return !!RESENAS;
+  if(id === 'preguntas') return PREGUNTAS.length > 0;
+  if(id === 'usado')     return !!USADOS;
+  return PREGUNTAS.some(q => q.nav === id);
+}
+
+function pintarNav(){
+  const nav = $('tb-nav');
+  if(!nav) return;
+  const links = NAV.filter(([id]) => hayDestinoNav(id));
+  nav.hidden = !links.length;
+  document.querySelector('.topbar').classList.toggle('con-nav', links.length > 0);
+  nav.innerHTML = !links.length ? ''
+    : links.map(([id, t]) => `<a href="#${anclaNav(id)}" data-nav="${esc(id)}">${esc(t)}</a>`).join('')
+      + `<button type="button" class="tb-mas" id="tb-mas" aria-expanded="false" aria-controls="tb-menu" hidden>Más <span aria-hidden="true">▾</span></button>
+         <div class="tb-menu" id="tb-menu" hidden></div>`;
+  acomodarNav();
+}
+
+/* Los que no entran pasan a "Más", de atrás para adelante: el orden de NAV es
+   el de importancia. Se mide con la fila ya dibujada (su ancho es el que le
+   dejan el nombre, el buscador y el sello de la hora), así que se rehace cada
+   vez que ese ancho cambia (ver el ResizeObserver del arranque). En el
+   celular no se esconde ninguno: la fila se desliza. */
+function acomodarNav(){
+  const nav = $('tb-nav'), mas = $('tb-mas'), menu = $('tb-menu');
+  if(!nav || nav.hidden || !mas || !menu) return;
+  const links = [...nav.querySelectorAll(':scope > a')];
+  links.forEach(a => a.classList.remove('fuera'));
+  mas.hidden = true;
+  cerrarMenuNav();
+  if(NAV_CEL.matches){ menu.replaceChildren(); return; }
+  const sobra = () => nav.scrollWidth > nav.clientWidth + 1;
+  if(sobra()){
+    mas.hidden = false;
+    for(let i = links.length - 1; i >= 0 && sobra(); i--) links[i].classList.add('fuera');
+  }
+  const fuera = links.filter(a => a.classList.contains('fuera'));
+  mas.hidden = !fuera.length;
+  menu.innerHTML = fuera.map(a => `<a href="${esc(a.getAttribute('href'))}" data-nav="${esc(a.dataset.nav)}">${esc(a.textContent)}</a>`).join('');
+}
+
+function cerrarMenuNav(){
+  const mas = $('tb-mas'), menu = $('tb-menu');
+  if(!mas || !menu || menu.hidden) return false;
+  menu.hidden = true;
+  mas.setAttribute('aria-expanded', 'false');
+  return true;
+}
+
+function clicNav(e){
+  const mas = e.target.closest('#tb-mas');
+  if(mas){
+    const menu = $('tb-menu'), abrir = menu.hidden;
+    menu.hidden = !abrir;
+    mas.setAttribute('aria-expanded', String(abrir));
+    if(abrir) menu.querySelector('a')?.focus();
+    return;
+  }
+  const a = e.target.closest('a[data-nav]');
+  // Con Cmd, Ctrl, Shift o Alt, o con otro botón, lo hace el navegador (como el logo)
+  if(!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  cerrarMenuNav();
+  irDesdeNav(a.dataset.nav);
+}
+
+/* A dónde lleva cada link. Los bloques viven solo en la portada: desde un
+   rubro o una búsqueda, primero al inicio (y ahí el salto es de una, sin
+   deslizar). "Pagos y cuotas" y "Dónde estamos" abren su pregunta; en el
+   celular, donde las preguntas son un acordeón, se baja hasta esa pregunta y
+   no hasta el título del bloque. */
+function irDesdeNav(id){
+  if(id === 'usado'){ abrirCotizador(); return; }
   const lejos = !enPortada();
   if(lejos) irAlInicio();
-  $('resenas')?.scrollIntoView({ behavior: quieto || lejos ? 'auto' : 'smooth', block: 'start' });
+  const i = PREGUNTAS.findIndex(q => q.nav === id);
+  if(i >= 0) elegirPregunta(i);
+  const bloque = $(anclaNav(id));
+  const destino = (i >= 0 && ayEnCelular() && bloque?.querySelector(`.ay-p[data-ay="${i}"]`)) || bloque;
+  destino?.scrollIntoView({ behavior: quieto || lejos ? 'auto' : 'smooth', block: 'start' });
+}
+
+/* ---------- Quiénes somos (Benja, 13/10/2026) ----------
+   El diseño D del muestrario: la foto del local a un lado, y al otro el
+   texto, la dirección, el equipo y los dos botones. Los textos y las fotos
+   salen de NOSOTROS, en la configuración. Lo que falta no deja hueco: sin la
+   foto del local el equipo ocupa ese lado, y una cara sin foto (o con una
+   foto que no carga) muestra la inicial. */
+function htmlNosotros(){
+  const n = typeof NOSOTROS === 'object' && NOSOTROS ? NOSOTROS : null;
+  const texto = n ? (n.texto || []).filter(Boolean) : [];
+  if(!texto.length) return '';
+  const local = String(n.local || '').trim();
+  const dir = typeof DIRECCION === 'string' ? DIRECCION.trim() : '';
+  const cita = /cita previa/i.test((SERVICIO.retiro || []).join(' '));
+  const mapa = typeof MAPA === 'string' && /^https:\/\//i.test(MAPA) ? MAPA : '';
+  const caras = (n.equipo || []).filter(p => p && String(p.nombre || '').trim()).map(p => {
+    const nombre = String(p.nombre).trim();
+    return `<li class="ns-cara"><span class="ns-foto" aria-hidden="true"><b>${esc(nombre[0].toUpperCase())}</b>${
+        p.foto ? `<img src="${esc(p.foto)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">` : ''}</span>
+      <span class="ns-nom">${esc(nombre)}</span>${p.rol ? `<span class="ns-rol">${esc(p.rol)}</span>` : ''}</li>`;
+  }).join('');
+  return `<section class="nosotros${local ? '' : ' sin-local'}" id="nosotros" aria-labelledby="ns-titulo">
+    ${local ? `<figure class="ns-local"><img src="${esc(local)}" alt="El local de Advance Tecno" loading="lazy" decoding="async"
+        onerror="this.closest('.nosotros').classList.add('sin-local');this.parentElement.remove()"></figure>` : ''}
+    <div class="ns-txt">
+      <h2 id="ns-titulo">Quiénes somos</h2>
+      ${texto.map(t => `<p>${esc(t)}</p>`).join('')}
+      ${dir ? `<p class="ns-dir"><b>${esc(dir)}.</b>${cita ? ' Atendemos con cita previa.' : ''}</p>` : ''}
+      <div class="ns-botones">
+        ${mapa ? `<a class="ns-b" href="${esc(mapa)}" target="_blank" rel="noopener">Ver en Google Maps</a>` : ''}
+        ${WHATSAPP ? `<a class="ns-b sec" href="${esc(linkWA('Hola! Tengo una consulta'))}" target="_blank" rel="noopener">Escribinos por WhatsApp</a>` : ''}
+      </div>
+    </div>
+    ${caras ? `<ul class="ns-caras" aria-label="El equipo">${caras}</ul>` : ''}
+  </section>`;
 }
 
 function htmlResenas(){
@@ -9740,6 +10034,7 @@ function htmlResenas(){
         <span><span class="rs-estrellas" style="--v:${d.puntaje}" role="img" aria-label="${nota} de 5 estrellas"></span>
               ${plata(d.cantidad)} reseñas</span>
         <a class="rs-ver" href="${esc(d.ver)}" target="_blank" rel="noopener">Ver todas en Google</a>
+        ${d.escribir ? `<a class="rs-ver rs-dejar" href="${esc(d.escribir)}" target="_blank" rel="noopener">Dejá tu reseña</a>` : ''}
       </div>
     </div>
     ${tarjetas ? `<div class="rs-pista" tabindex="0" role="group" aria-label="Reseñas de clientes en Google">${tarjetas}</div>` : ''}
@@ -12974,6 +13269,7 @@ function cargarUsados(){
       USADOS = indiceUsados(j);
       if(!USADOS) throw new Error('formato');
       USADO = leerUsado();
+      pintarNav();        // "Cotizá tu usado" en la barra, ahora que hay lista (13/10)
       // Llegó con la ficha o el pedido abiertos: aparecen el botón y la pregunta
       refrescarFicha();
       document.querySelectorAll('#ayuda .ay-usados').forEach(x => { x.innerHTML = htmlAyudaUsados(); });
@@ -13745,7 +14041,7 @@ function abrirCotizador(desde = {}){
             const corto = x.nombre.startsWith(e.nombre + ' ') ? x.nombre.slice(e.nombre.length + 1) : x.nombre;
             return op('m', x.id, corto, b.m === x.id, corto !== x.nombre ? ` aria-label="${esc(x.nombre)}"` : '');
           }).join('')}</div></div>`).join('')}</div>
-        <p class="us-ayuda">¿No está el tuyo? Por ahora tomamos sólo estos modelos.</p>` };
+        <p class="us-ayuda">¿No está el tuyo? Por ahora tomamos solo estos modelos.</p>` };
     if(paso === 'opcion') return { preg: e.pregunta,
       html: `<div class="us-ops us-ops-2">${m.opciones.map(o => op('o', o.nombre, o.nombre, b.o === o.nombre)).join('')}</div>` };
     if(paso === 'bateria'){
@@ -14755,7 +15051,7 @@ if(WHATSAPP){
 }
 
 /* ---------- El pie con el contacto (29/09, muestra 6.7 B) ----------
-   "Advance Tecno · Av. de los Incas 5150, 1A, CABA · Ver en mapa · WhatsApp
+   "Advance Tecno · Av. de los Incas 5150, 1A, CABA · Ver en el mapa · WhatsApp
    +54 9 11 2475-1466 · Atención con cita previa", arriba de la cotización,
    como la muestra B que eligió Pedro. Todo sale de la configuración: la
    dirección es DIRECCION y el mapa es MAPA (las mismas de la pregunta
@@ -14781,7 +15077,7 @@ function pintarPie(datos = {}){
   const mapa = String(('mapa' in datos ? datos.mapa : (typeof MAPA === 'string' ? MAPA : '')) || '').trim();
   const partes = [];
   if(dir) partes.push(`<span>${esc(dir)}</span>`);
-  if(/^https:\/\//i.test(mapa)) partes.push(`<a href="${esc(mapa)}" target="_blank" rel="noopener">Ver en mapa</a>`);
+  if(/^https:\/\//i.test(mapa)) partes.push(`<a href="${esc(mapa)}" target="_blank" rel="noopener">Ver en el mapa</a>`);
   if(wa) partes.push(`<a href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp ${esc(telefonoLegible(WHATSAPP))}</a>`);
   if(cita) partes.push('<span>Atención con cita previa</span>');
   pie.hidden = !partes.length;
@@ -15170,7 +15466,7 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
   actualizar = async function(primera){
     const r = await laCarga.apply(this, arguments);
     try{
-      /* `motivo` dice por qué no se usó ADVAPP, si no se usó ('tardo mas de
+      /* `motivo` dice por qué no se usó ADVAPP, si no se usó ('tardó más de
          8 s', 'HTTP 500'...): con la planilla congelada desde el 22/09, saber
          cuántas veces se cae al respaldo y por qué sirve para ajustar
          ADVAPP_ESPERA_MS o para reclamarle a ADVAPP (29/09). */
@@ -15203,11 +15499,22 @@ pintarPedido();          // el pedido guardado de la visita anterior
 actualizar(true);
 cargarUsados();          // los valores de toma de usados (datos/usados.json, 05/10)
 cargarResenas();         // el puntaje y las reseñas de Google (datos/resenas.json, 13/10)
-$('sello-google').addEventListener('click', e => {
+document.querySelectorAll('#sello-google, #tb-sello').forEach(a => a.addEventListener('click', e => {
   if(e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   e.preventDefault();
   irAResenas();
-});
+}));
+/* Los links de la barra (13/10). Se dibujan ya con lo que hay y se rehacen
+   cuando llegan las reseñas o la lista de usados. La fila se vuelve a medir
+   cada vez que cambia su ancho: al agrandar o achicar la ventana y cuando el
+   sello de la hora cambia de texto ("Cargando…" → "Actualizado hoy"). */
+pintarNav();
+$('tb-nav').addEventListener('click', clicNav);
+if(window.ResizeObserver) new ResizeObserver(() => acomodarNav()).observe($('tb-nav'));
+else addEventListener('resize', acomodarNav);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(acomodarNav);
+document.addEventListener('click', e => { if(!e.target.closest('#tb-mas, #tb-menu')) cerrarMenuNav(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && cerrarMenuNav()) $('tb-mas')?.focus(); });
 addEventListener('online', () => { if(!USADOS) cargarUsados(); });
 
 /* Con la pestaña de fondo no se baja nada (29/09): eran unos 105 KB y cuatro

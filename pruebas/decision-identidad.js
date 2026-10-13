@@ -540,11 +540,11 @@ function probarPie(){
   if(!pie) return;
   const numero = WHATSAPP ? telefonoLegible(WHATSAPP) : '';
   ok(WHATSAPP !== '5491124751466' || numero === '+54 9 11 2475-1466', '[6.7] el numero se escribe como en la muestra (el de Tecno desde el 05/10)', numero);
-  /* (29/09) Como la muestra B elegida: con la direccion y "Ver en mapa",
+  /* (29/09) Como la muestra B elegida: con la direccion y "Ver en el mapa",
      que salen de DIRECCION y MAPA (las de la pregunta "¿Puedo ir a verlos?") */
   const partes = [...pie.children].filter(x => !x.classList.contains('sep')).map(diTxt);
   const cita = /cita previa/i.test((SERVICIO.retiro || []).join(' '));
-  const esperado = ['Advance Tecno', ...(DIRECCION ? [DIRECCION] : []), ...(MAPA ? ['Ver en mapa'] : []),
+  const esperado = ['Advance Tecno', ...(DIRECCION ? [DIRECCION] : []), ...(MAPA ? ['Ver en el mapa'] : []),
                     ...(WHATSAPP ? ['WhatsApp ' + numero] : []), ...(cita ? ['Atención con cita previa'] : [])];
   ok(JSON.stringify(partes) === JSON.stringify(esperado), '[6.7] dice ' + esperado.join(' · '), partes.join(' · '));
   ok(DIRECCION !== 'Av. de los Incas 5150, 1A, CABA' || partes[1] === 'Av. de los Incas 5150, 1A, CABA',
@@ -553,10 +553,10 @@ function probarPie(){
   const a = [...pie.querySelectorAll('a')].find(x => /wa\.me\//.test(x.getAttribute('href') || ''));
   if(WHATSAPP) ok(!!a && a.getAttribute('href') === flot.getAttribute('href') && a.target === '_blank' && /noopener/.test(a.rel),
                   '[6.7] el WhatsApp abre el mismo chat y saludo que el boton flotante', a && a.getAttribute('href'));
-  const mapa = [...pie.querySelectorAll('a')].find(x => diTxt(x) === 'Ver en mapa');
+  const mapa = [...pie.querySelectorAll('a')].find(x => diTxt(x) === 'Ver en el mapa');
   if(MAPA) ok(!!mapa && mapa.getAttribute('href') === MAPA && mapa.target === '_blank' && /noopener/.test(mapa.rel),
-              '[6.7] "Ver en mapa" abre MAPA, el mismo link de la pregunta frecuente', mapa && mapa.getAttribute('href'));
-  else info('[6.7] MAPA esta vacia: sin "Ver en mapa"');
+              '[6.7] "Ver en el mapa" abre MAPA, el mismo link de la pregunta frecuente', mapa && mapa.getAttribute('href'));
+  else info('[6.7] MAPA esta vacia: sin "Ver en el mapa"');
   ok(pie.querySelectorAll('.sep').length === esperado.length - 1 && [...pie.querySelectorAll('.sep')].every(s => s.getAttribute('aria-hidden') === 'true'),
      '[6.7] separados por "·" que el lector no lee');
   const todo = diTxt(footer);
@@ -569,18 +569,18 @@ function probarPie(){
      '[6.7] "Advance Tecno" en Lilita y el resto en letra comun de 13 px, como la muestra', csb && csb.fontFamily.split(',')[0]);
   const links = [...pie.querySelectorAll('a')];
   ok(links.length > 0 && links.every(x => diMismo(getComputedStyle(x).color, '#7C3AED') && /underline/.test(getComputedStyle(x).textDecorationLine)),
-     '[6.7] "Ver en mapa" y el WhatsApp como links morados subrayados', links.map(diTxt).join(' · '));
+     '[6.7] "Ver en el mapa" y el WhatsApp como links morados subrayados', links.map(diTxt).join(' · '));
   // Lo que queda vacio no se muestra
   const retiro = SERVICIO.retiro, href = flot.getAttribute('href');
   try{
     pintarPie({ direccion: '' });
-    ok(!diTxt(pie).includes(DIRECCION) && (!MAPA || /Ver en mapa/.test(diTxt(pie))) && !pie.hidden,
+    ok(!diTxt(pie).includes(DIRECCION) && (!MAPA || /Ver en el mapa/.test(diTxt(pie))) && !pie.hidden,
        '[6.7] sin direccion, esa parte no va (el resto queda)', diTxt(pie));
     pintarPie({ mapa: '' });
-    ok(!pie.querySelector('a[href="' + CSS.escape(MAPA) + '"]') && !/Ver en mapa/.test(diTxt(pie)) && diTxt(pie).includes(DIRECCION),
-       '[6.7] sin mapa, no hay "Ver en mapa"', diTxt(pie));
+    ok(!pie.querySelector('a[href="' + CSS.escape(MAPA) + '"]') && !/Ver en el mapa/.test(diTxt(pie)) && diTxt(pie).includes(DIRECCION),
+       '[6.7] sin mapa, no hay "Ver en el mapa"', diTxt(pie));
     pintarPie({ mapa: 'javascript:alert(1)' });
-    ok(!/Ver en mapa/.test(diTxt(pie)), '[6.7] y un mapa que no es https tampoco se pone');
+    ok(!/Ver en el mapa/.test(diTxt(pie)), '[6.7] y un mapa que no es https tampoco se pone');
     SERVICIO.retiro = ['Retiro en CABA', 'Lo coordinamos por WhatsApp.'];
     pintarPie();
     ok(!/cita previa/i.test(diTxt(pie)) && !pie.hidden, '[6.7] si el retiro no dice "cita previa", esa parte no va', diTxt(pie));

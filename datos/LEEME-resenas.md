@@ -30,6 +30,7 @@ Sale de la ficha del negocio en Google Maps (Advance Tecno, Av. de los Incas
   "puntaje": 4.9,
   "cantidad": 469,
   "ver": "https://search.google.com/local/reviews?placeid=…",
+  "escribir": "https://search.google.com/local/writereview?placeid=…",
   "resenas": [
     { "autor": "Nombre como figura en Google", "estrellas": 5, "texto": "La reseña entera" }
   ]
@@ -41,6 +42,9 @@ Sale de la ficha del negocio en Google Maps (Advance Tecno, Av. de los Incas
   `validarResenas` en `index.html`).
 - Una reseña sin autor, sin texto o con estrellas que no sean un entero de 1 a
   5 se saltea sola. Se muestran hasta 12.
+- `escribir` es opcional: el link de Google para dejar una reseña. Con él
+  aparece el botón **Dejá tu reseña** (Benja, 13/10); sin él, o si no es de
+  google.com, no aparece.
 
 ## Cómo se actualiza
 

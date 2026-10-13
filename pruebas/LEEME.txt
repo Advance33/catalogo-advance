@@ -147,8 +147,12 @@ si alguna falta).
                   Tecno" responde igual que el triangulo; la vuelta al inicio
                   se nota (y si ya se estaba ahi, se mueve solo el logo); los
                   filtros propios de Camaras, Objetivos y Drones
-                  (FILTROS_RUBRO), contados aca por el SKU y el nombre; y
-                  "Desde" con mayuscula delante de cada precio.
+                  (FILTROS_RUBRO), contados aca por el SKU y el nombre; las
+                  reseñas de Google tal cual estan en datos/resenas.json; y
+                  "Desde" con mayuscula delante de cada precio. Y lo que
+                  eligio en el muestrario ese dia: los links de la barra de
+                  arriba (NAV) y su "Más", el bloque "Quiénes somos"
+                  (NOSOTROS) y el boton "Dejá tu reseña".
   decision-colores.js
                   Como se elige el color en la ficha (Pedro, 30/09: la C,
                   "Vitrina de fotos", de muestras/colores): debajo de la

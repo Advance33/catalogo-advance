@@ -15,6 +15,14 @@
 //       encabezado dicen lo que dice datos/resenas.json, tal cual, y sin el
 //       archivo (o con uno mal formado) no aparece nada
 //   [8] "Desde" va con mayuscula en todos los lugares donde antecede un precio
+// Y lo que eligio despues en el muestrario (mismo dia):
+//   [4] el bloque "Quiénes somos" (diseño D): el texto, la direccion y el
+//       equipo de NOSOTROS, la inicial donde no hay foto, y sin texto nada
+//   [6] el boton "Dejá tu reseña", solo con un link de Google
+//   [9] los links de la barra de arriba (NAV): que cada uno lleve a lo suyo
+//       tambien desde un rubro, y que los que no entran pasen a "Más" sin
+//       perderse ninguno
+//   [8] el ejemplo del buscador con mayusculas y "Ver en el mapa" en el pie
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const info = t => R.push('  --  ' + t);
@@ -281,6 +289,98 @@ function correrPruebas(){
   RESENAS = null; FIRMA_EXTRAS = ''; pintarExtras(); pintarSelloGoogle();
   ok(!$('resenas') && $('sello-google').hidden && !!$('ayuda'), '[6] sin el archivo no hay bloque ni sello, y la portada sigue entera');
   RESENAS = guardada; FIRMA_EXTRAS = ''; pintarExtras(); pintarSelloGoogle();
+
+  /* ---- [6b] "Dejá tu reseña" (lo eligio en el muestrario) ---- */
+  irAlInicio(); FIRMA_EXTRAS = ''; pintarExtras();
+  const dejar = document.querySelector('#resenas .rs-dejar');
+  if(archivo && archivo.escribir)
+    ok(!!dejar && dejar.href === archivo.escribir && /(^|\.)google\.com$/.test(new URL(dejar.href).hostname) && dejar.target === '_blank',
+       '[6] "Dejá tu reseña" lleva al link de Google del archivo, en otra pestaña', dejar && dejar.href);
+  ok(validarResenas({ ...base, escribir: 'https://otro-sitio.com/x' }).escribir === '' && validarResenas(base).escribir === '',
+     '[6] sin ese link, o con uno que no es de Google, el boton no aparece');
+
+  /* ---- [4] Quienes somos (diseño D del muestrario) ---- */
+  const ns = $('nosotros');
+  ok(!!ns && !ns.closest('[hidden]') && !!$('resenas') && (ns.compareDocumentPosition($('resenas')) & Node.DOCUMENT_POSITION_FOLLOWING),
+     '[4] la portada tiene el bloque "Quiénes somos", arriba de las reseñas');
+  if(ns){
+    const parrafos = [...ns.querySelectorAll('.ns-txt p:not(.ns-dir)')].map(p => p.textContent);
+    ok(parrafos.length === NOSOTROS.texto.length && parrafos.every((t, i) => t === NOSOTROS.texto[i]),
+       '[4] con el texto de NOSOTROS, tal cual', parrafos.length + ' parrafos');
+    ok(ns.querySelector('.ns-dir').textContent.includes(DIRECCION) && ns.querySelector('.ns-b[href="' + CSS.escape(MAPA) + '"]'),
+       '[4] la direccion y el link al mapa son los de la configuracion', ns.querySelector('.ns-dir').textContent);
+    const caras = [...ns.querySelectorAll('.ns-cara')];
+    ok(caras.length === NOSOTROS.equipo.length && caras.every((c, i) =>
+         c.querySelector('.ns-nom').textContent === NOSOTROS.equipo[i].nombre && c.querySelector('.ns-rol').textContent === NOSOTROS.equipo[i].rol),
+       '[4] una cara por persona del equipo, con su nombre y lo que hace', caras.map(c => c.querySelector('.ns-nom').textContent).join(', '));
+    const sinFoto = NOSOTROS.equipo.map((p, i) => [p, caras[i]]).filter(([p]) => !p.foto);
+    ok(sinFoto.every(([p, c]) => !c.querySelector('img') && c.querySelector('.ns-foto b').textContent === p.nombre[0].toUpperCase()),
+       '[4] sin foto cargada va la inicial, sin pedir ninguna imagen', sinFoto.length + ' sin foto');
+    ok(!!NOSOTROS.local === !!ns.querySelector('.ns-local') && ns.classList.contains('sin-local') === !NOSOTROS.local,
+       '[4] sin la foto del local el bloque va sin ese hueco');
+  }
+  const textoNs = NOSOTROS.texto;
+  NOSOTROS.texto = []; FIRMA_EXTRAS = ''; pintarExtras(); pintarNav();
+  ok(!$('nosotros') && !document.querySelector('#tb-nav [data-nav="nosotros"]') && !!$('ayuda'),
+     '[4] sin texto no hay bloque ni link en la barra, y la portada sigue entera');
+  NOSOTROS.texto = textoNs; FIRMA_EXTRAS = ''; pintarExtras(); pintarNav();
+
+  /* ---- [9] Los links de la barra de arriba ---- */
+  const nav = $('tb-nav');
+  const enBarra = () => [...nav.querySelectorAll(':scope > a')];
+  const esperados = NAV.filter(([id]) => hayDestinoNav(id));
+  ok(!nav.hidden && enBarra().map(a => a.dataset.nav).join() === esperados.map(x => x[0]).join() &&
+     enBarra().map(a => a.textContent).join('|') === esperados.map(x => x[1]).join('|'),
+     '[9] la barra trae los links de NAV, en su orden', enBarra().map(a => a.textContent).join(' · '));
+  ok(esperados.length === NAV.length, '[9] hoy todos tienen a donde llevar', NAV.filter(([id]) => !hayDestinoNav(id)).map(x => x[1]).join(', ') || NAV.length + ' links');
+  ok(document.querySelector('.topbar').classList.contains('con-nav') && nav.closest('.topbar .wrap') &&
+     (nav.compareDocumentPosition($('q')) & Node.DOCUMENT_POSITION_FOLLOWING) && ($('logo-inicio').compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING),
+     '[9] van entre el nombre y el buscador');
+  const tocar = id => p13Clic(nav.querySelector('[data-nav="' + id + '"]'));
+  entrarAlRubro('Celular'); tocar('resenas');
+  ok(enPortada() && !!$('resenas'), '[9] "Reseñas" desde un rubro lleva al inicio, donde esta el bloque');
+  entrarAlRubro('Celular'); tocar('nosotros');
+  ok(enPortada() && !!$('nosotros'), '[9] "Quiénes somos", igual');
+  for(const id of ['pagos', 'donde']){
+    const i = PREGUNTAS.findIndex(q => q.nav === id);
+    elegirPregunta(i === 0 ? 1 : 0);
+    tocar(id);
+    const abierta = document.querySelector('#ayuda .ay-p[aria-expanded="true"]');
+    ok(i >= 0 && ayIndice === i && abierta && Number(abierta.dataset.ay) === i,
+       '[9] "' + NAV.find(x => x[0] === id)[1] + '" abre su pregunta', i >= 0 ? PREGUNTAS[i].p : 'sin pregunta');
+  }
+  tocar('preguntas');
+  ok(enPortada() && !!$('ayuda'), '[9] "Preguntas" lleva a las preguntas frecuentes');
+  tocar('usado');
+  ok(!!$('usado'), '[9] "Cotizá tu usado" abre el cotizador');
+  if(cerrarUsadoDOM){ usadoEmpujado = false; const c = cerrarUsadoDOM; cerrarUsadoDOM = null; c(); }
+  document.querySelectorAll('.modal').forEach(d => d.remove()); document.body.classList.remove('modal-abierto');
+  // Con poco lugar, los que no entran pasan a "Más" y no se pierde ninguno
+  if(NAV_CEL.matches) info('[9] esta ventana es de celular: ahi no hay "Más" que mirar');
+  else{
+    nav.style.flex = '0 0 250px'; acomodarNav();
+    const visibles = enBarra().filter(a => !a.classList.contains('fuera')), menu = [...$('tb-menu').querySelectorAll('a')];
+    ok(!$('tb-mas').hidden && menu.length > 0 && visibles.length + menu.length === esperados.length &&
+       [...visibles, ...menu].map(a => a.dataset.nav).join() === esperados.map(x => x[0]).join(),
+       '[9] con poco lugar, los ultimos pasan a "Más" y entre la barra y el menu estan todos', visibles.length + ' a la vista + ' + menu.length + ' en Más');
+    ok(nav.scrollWidth <= nav.clientWidth + 1, '[9] y lo que queda a la vista entra', nav.scrollWidth + ' / ' + nav.clientWidth);
+    $('tb-mas').click();
+    ok(!$('tb-menu').hidden && $('tb-mas').getAttribute('aria-expanded') === 'true', '[9] "Más" abre su menu');
+    entrarAlRubro('Celular');
+    p13Clic(menu[menu.length - 1]);
+    ok($('tb-menu').hidden && (menu[menu.length - 1].dataset.nav === 'usado' ? !!$('usado') : enPortada()), '[9] un link del menu hace lo mismo que en la barra, y el menu se cierra');
+    if(cerrarUsadoDOM){ usadoEmpujado = false; const c = cerrarUsadoDOM; cerrarUsadoDOM = null; c(); }
+    document.querySelectorAll('.modal').forEach(d => d.remove()); document.body.classList.remove('modal-abierto');
+    nav.style.flex = ''; acomodarNav();
+    ok(enBarra().every(a => !a.classList.contains('fuera')) === (nav.scrollWidth <= nav.clientWidth + 1), '[9] al volver el lugar, vuelven a la barra los que entran');
+  }
+  const selloBarra = $('tb-sello');
+  ok(!selloBarra.hidden && selloBarra.textContent.includes(notaGoogle(RESENAS.puntaje)), '[9] el puntaje de Google tambien esta en la barra', selloBarra.textContent);
+  irAlInicio();
+
+  /* ---- [8] Lo elegido de ortografia que es de la web ---- */
+  ok($('q').placeholder === 'Buscar: iPhone 17, MacBook, Canon R6…', '[8] el ejemplo del buscador va con mayusculas', $('q').placeholder);
+  ok(!/Ver en mapa/.test($('pie-id').textContent) && (!MAPA || /Ver en el mapa/.test($('pie-id').textContent)), '[8] el pie dice "Ver en el mapa"', $('pie-id').textContent.slice(0, 90));
 
   /* ---- [8] "Desde" con mayuscula ---- */
   const minuscula = /(^|[\s·>(])desde\s+USD/;

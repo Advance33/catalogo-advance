@@ -53,3 +53,4 @@ eef2f653e3d39e386d3d414b02578b6d  2   # IPHONE AIR 1TB | 256GB (Black): la misma
 247c69455e0302e5f19b898d73b52861  2   # GALAXY Z FOLD 8 256GB | GALAXY Z FOLD 8 512GB (Cream): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
 960e9c55c59d4a3b5c8f93f8719ca59f  2   # GALAXY Z FOLD 8 ULTRA 256GB | GALAXY Z FOLD 8 ULTRA 512GB (Cream): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
 22e059924730004030958838f10000c2  3   # GALAXY Z FOLD 8 ULTRA 16/1TB | GALAXY Z FOLD 8 ULTRA 256GB | GALAXY Z FOLD 8 ULTRA 512GB (Graphite): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+e1492d0242c08404aae96697f8a5d6e1  2   # MAC MINI M6 16GB/256GB | 16GB/512GB: la misma maquina, la memoria no se ve. 13/10/2026 (D5)

@@ -148,6 +148,11 @@
   {"id": "CEL-SAM-ZFLIP8-12G256-GPH-000", "cambios": {"codigo": "AT-0580", "codigo_var": "AT-0580-02"}, "motivo": "D5 (Benja 08/10): aprobado con stock que no salia en la web por falta de foto; alta AT-0580-02", "fecha": "2026-10-13"},
   {"id": "CEL-SAM-S26ULT-12G512-BLU-000", "cambios": {"codigo": "AT-0581", "codigo_var": "AT-0581-01"}, "motivo": "D5 (Benja 08/10): aprobado con stock que no salia en la web por falta de foto; alta AT-0581-01", "fecha": "2026-10-13"},
   {"id": "TAB-SAM-TABS12PLUSWIFI-12G256-GRY-000", "cambios": {"codigo": "AT-0582", "codigo_var": "AT-0582-01"}, "motivo": "D5 (Benja 08/10): aprobado con stock que no salia en la web por falta de foto; alta AT-0582-01", "fecha": "2026-10-13"},
-  {"id": "CEL-SAM-A37-12G256-CHR-000", "cambios": {"codigo": "AT-0583", "codigo_var": "AT-0583-01"}, "motivo": "D5 (Benja 08/10): aprobado con stock que no salia en la web por falta de foto; alta AT-0583-01", "fecha": "2026-10-13"}
+  {"id": "CEL-SAM-A37-12G256-CHR-000", "cambios": {"codigo": "AT-0583", "codigo_var": "AT-0583-01"}, "motivo": "D5 (Benja 08/10): aprobado con stock que no salia en la web por falta de foto; alta AT-0583-01", "fecha": "2026-10-13"},
+  {"id": "CEL-APL-IPHONE18PROMAX-512-GLC-ESIM", "cambios": {"codigo": "AT-0544", "codigo_var": "AT-0544-03", "color": "Glacier", "nombre": "Apple iPhone 18 Pro Max 512GB (Glacier)"}, "motivo": "D5 (Benja 08/10): aprobado con stock que no salia en la web por falta de foto; ya tenia codigo y foto (AT-0544-03); la fila decia \"Blue\" y Apple no tiene Blue en el 18 Pro: es Glacier (07/10)", "fecha": "2026-10-13"},
+  {"id": "CEL-APL-IPHONE18PROMAX-1TB-SLV-ESIM", "cambios": {"codigo": "AT-0545", "codigo_var": "AT-0545-02"}, "motivo": "D5 (Benja 08/10): aprobado con stock que no salia en la web por falta de foto; ya tenia codigo y foto (AT-0545-02)", "fecha": "2026-10-13"},
+  {"id": "CEL-APL-IPHONE18PROMAX-1TB-GLC-ESIM", "cambios": {"codigo": "AT-0545", "codigo_var": "AT-0545-03"}, "motivo": "D5 (Benja 08/10): aprobado con stock que no salia en la web por falta de foto; ya tenia codigo y foto (AT-0545-03)", "fecha": "2026-10-13"},
+  {"id": "DSK-APL-MACMINIM6-16G256-000-000", "cambios": {"codigo": "AT-0584"}, "motivo": "D5 (Benja 08/10): aprobado con stock que no salia en la web por falta de foto; alta AT-0584", "fecha": "2026-10-13"},
+  {"id": "DSK-APL-MACMINIM6-16G512-000-000", "cambios": {"codigo": "AT-0585"}, "motivo": "D5 (Benja 08/10): aprobado con stock que no salia en la web por falta de foto; alta AT-0585", "fecha": "2026-10-13"}
  ]
 }

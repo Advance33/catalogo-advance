@@ -17416,7 +17416,7 @@
       ],
       "venta": [
         "Reloj de mujer de 6,7 mm de espesor y 28,1 g sin malla, con cuerpo de aleación de zinc y aluminio y pantalla AMOLED de 1,32\".",
-        "Atendés llamadas por Bluetooth, seguís tu ciclo, el sueño y la frecuencia cardíaca, y la batería dura hasta 10,4 días en uso típico."
+        "Atendés llamadas por Bluetooth, seguís tu ciclo, el sueño y la frecuencia cardíaca, y la batería dura hasta 10 días en uso típico."
       ],
       "importante": [
         {
@@ -17436,8 +17436,8 @@
           "texto": "Seguimiento del ciclo con avisos. Además, frecuencia cardíaca, oxígeno en sangre, sueño y estrés."
         },
         {
-          "titulo": "Hasta 10,4 días de batería",
-          "texto": "En uso típico; hasta 44,9 días en ahorro de energía. Carga magnética en menos de 2,5 h."
+          "titulo": "Hasta 10 días de batería",
+          "texto": "En uso típico; hasta 40 días en ahorro de energía. Carga magnética en menos de 2,5 h."
         }
       ],
       "ficha": [
@@ -17475,11 +17475,11 @@
             ],
             [
               "Uso típico",
-              "Hasta 10,4 días"
+              "Hasta 10 días"
             ],
             [
               "Ahorro de energía",
-              "Hasta 44,9 días"
+              "Hasta 40 días"
             ],
             [
               "Carga",
@@ -17578,7 +17578,7 @@
         }
       ],
       "verificado": "2026-10-01",
-      "notas": "Kieslect lo presenta como «el smartwatch de mujer más fino del mundo»: no se puso (es una afirmación de la marca). El texto dice 10 días de uso típico y la tabla 10,4: se usó la tabla. El texto dice que con 2 ATM se puede nadar; se dejó sólo lluvia, sudor y lavado de manos. Sin GPS ni NFC según la tabla. Los tres colores de ADVAPP (Graphite Black, Moonlit Silver, Rose Gold) son los oficiales."
+      "notas": "Kieslect lo presenta como «el smartwatch de mujer más fino del mundo»: no se puso (es una afirmación de la marca). Kieslect da la batería distinta según el lugar: uso típico 10 (texto), 10,4 (tabla), 10,5 (panel) y 11 días (galería de us.kieslect.com); ahorro 44,9 (texto y tabla), 45 (panel), 44 (notas) y 40 días (galería de EE. UU.). Se puso el valor más prudente: 10 y 40 (verificador, 13/10/2026). El texto dice que con 2 ATM se puede nadar; se dejó sólo lluvia, sudor y lavado de manos. Sin GPS ni NFC según la tabla. Los tres colores de ADVAPP (Graphite Black, Moonlit Silver, Rose Gold) son los oficiales."
     },
     {
       "modelo": "Meta Quest 3 512GB",

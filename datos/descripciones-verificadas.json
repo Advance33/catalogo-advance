@@ -303,11 +303,11 @@
     "https://www.canon.es/store/canon-camara-canon-eos-rp-objetivo-rf-24-105mm-f4-7-1-is-stm/3380C133/"
    ]
   },
-  "cd7c4306acc4bd27cded76d0ca347ae0441b604b865e246f216638809ffe56f6": {
+  "cd60b1dab05429bb7ed3f6cc0bbe1b6a53c7c8d0c009c7ea55f9039d7c2fa0f7": {
    "modelo": "Canon Extender RF1.4x",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-a-T01-1.json",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://www.canon.es/lenses/extender-rf-1-4x/",
     "https://www.canon.es/lenses/extender-rf-1-4x/specifications/",
@@ -316,17 +316,17 @@
     "https://www.canon.es/lenses/rf-200-800mm-f6-3-9-is-usm/specifications/"
    ]
   },
-  "269033af05a1a0bf2240ccb858265d0548606d42dc32439bc892dbfa8ad328ef": {
+  "35f8a900554dea0a424b8dfd0728cda584829aa0951246184785758e870305db": {
    "modelo": "Canon Extender RF2x",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-r5-T01-1.json",
+   "informe": "informe-01.json",
    "fuentes": [
-    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://www.canon.es/lenses/extender-rf-2x/",
-    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://www.canon.es/lenses/extender-rf-2x/specifications/",
-    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://global.canon/en/c-museum/product/rf495.html",
-    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://www.canon.es/lenses/rf-100-400-f5-6-8-is-usm/specifications/",
-    "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://www.canon.es/lenses/rf-200-800mm-f6-3-9-is-usm/specifications/"
+    "https://www.canon.es/lenses/extender-rf-2x/",
+    "https://www.canon.es/lenses/extender-rf-2x/specifications/",
+    "https://global.canon/en/c-museum/product/rf495.html",
+    "https://www.canon.es/lenses/rf-100-400-f5-6-8-is-usm/specifications/",
+    "https://www.canon.es/lenses/rf-200-800mm-f6-3-9-is-usm/specifications/"
    ]
   },
   "25053447cf41e9e7f87cb15afa1956294d719d541b59dd809a871070d96f05cb": {
@@ -889,20 +889,20 @@
     "https://store.dji.com/hk/product/osmo-pocket-4p?set_region=HK (el Pack Estándar también trae la luz de relleno)"
    ]
   },
-  "363030d353cc4e75ae7b5f0740c1348e492343af2483b635a1f4eb38c3ed76c5": {
+  "47c395680fdf9648e1662d4b737e513c0c3c1c847d9e87a51c37f05ed65744bc": {
    "modelo": "EarPods (Lightning)",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
    "informe": "informe-01.json",
    "fuentes": [
     "https://www.apple.com/mx/shop/product/mwty3am/a/earpods-con-conector-lightning"
    ]
   },
-  "b59a6d9578ee727369b173ac81e64ed4e16373be99805d5af43644bfcf22decf": {
+  "e6cd8a31de86ebe11d906816fc72d66900aecd4b5e9f594d5dd4534fd24b65a5": {
    "modelo": "EarPods (USB-C)",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-02.json",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://www.apple.com/mx/shop/product/myqy3am/a/earpods-con-conector-usb-c"
    ]
@@ -1317,19 +1317,19 @@
     "https://us.kieslect.com/products/kieslect-kr-ultra-3-smartwatch (texto, tabla «Specifications», «Notes» y las 12 imágenes de la descripción)"
    ]
   },
-  "e9328c95e81fb5718d1ad1f26ade9dfd29db3324cc54b9765da6f4ed9a42d525": {
+  "b1d6f65c392973c711f69fbdc7b33d2e48b23830df7c626d1fab2d1d7e3ae48b": {
    "modelo": "Kieslect Lady Watch Elfin",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-06.json",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://www.kieslect.com/product/kieslect-elfin-worlds-thinnest-womens-smartwatch/",
     "https://us.kieslect.com/products/kieslect-elfin-world-s-thinnest-women-s-smartwatch",
-    "https://us.kieslect.com/products/kieslect-elfin-world-s-thinnest-women-s-smartwatch.json",
-    "https://www.kieslect.com/wp-content/uploads/2025/12/Kieslect-Elfin-Worlds-Thinnest-Womens-Smartwatch_27-21.jpg (tabla de specs)",
-    "https://www.kieslect.com/wp-content/uploads/2025/11/Kieslect-Elfin-Worlds-Thinnest-Womens-Smartwatch_28.jpg (tabla de specs, idiomas)",
-    "https://www.kieslect.com/wp-content/uploads/2025/12/2_10.jpg (funciones)",
-    "https://www.kieslect.com/wp-content/uploads/2025/12/20251217-210650.jpg (notas)"
+    "https://us.kieslect.com/cdn/shop/files/kieslect-Elfin-woman-smartwatch_2.jpg",
+    "https://www.kieslect.com/wp-content/uploads/2025/11/Kieslect-Elfin-Worlds-Thinnest-Womens-Smartwatch_22.jpg",
+    "https://www.kieslect.com/wp-content/uploads/2025/12/Kieslect-Elfin-Worlds-Thinnest-Womens-Smartwatch_27-21.jpg",
+    "https://www.kieslect.com/wp-content/uploads/2025/11/Kieslect-Elfin-Worlds-Thinnest-Womens-Smartwatch_01.jpg … _25.jpg y _28.jpg, 2025/12/20251217-210650.jpg y 2_10.jpg (imágenes de la descripción, leídas en la pasada anterior de hoy)",
+    "https://us.kieslect.com/cdn/shop/files/kieslect-Elfin-woman-smartwatch_1.jpg … _9.jpg (galería de la tienda oficial de EE. UU., leída en la pasada anterior de hoy)"
    ]
   },
   "949acf0af2451a41eb9a4f0456907e0543b468321bf1abc9f95645ffe0b5305b": {
@@ -1864,16 +1864,17 @@
     "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
    ]
   },
-  "0a00c480507e6983d6fef21f6b8ac0f386d1b9b4681142a91ee0a4c3d92385d0": {
+  "8c948c9d7ba2176d758b0824a29d8409446a35cd454d232deb60dd5dd8f8c086": {
    "modelo": "Nikon Z30 en kit (16-50, 18-140 o 16-50 + 50-250)",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-r1-T12-1.json",
+   "informe": "informe-01.json",
    "fuentes": [
-    "https://www.nikon.com.mx/p/z-30/1737/overview (JSON __NEXT_DATA__: tabla completa, texto de presentación y variantes 1737/1743/1749)",
+    "https://www.nikon.com.mx/p/z-30/1737/overview",
     "https://imaging.nikon.com/imaging/lineup/mirrorless/z_30/",
     "https://www.nikon.co.uk/en_GB/product/cameras/mirrorless/z-30-18-140-kit-VOA110K003",
-    "https://www.nikonusa.com/p/z-30/1737/overview (no está en fuentes; sólo para ver qué lente traen los kits con 16-50)"
+    "https://www.nikon.co.uk/en_GB/product/cameras/mirrorless/z-30-16-50-vr-kit-VOA110K001",
+    "https://www.nikon.co.uk/en_GB/product/cameras/mirrorless/z-30-16-50-50-250-vr-kit-VOA110K002"
    ]
   },
   "b6e4ee59a1aea70a0c4926eb4cdbbf1087e16df7dcbb8da7a9814d93969aa827": {
@@ -2190,11 +2191,11 @@
     "https://www.mi.com/global/product/redmi-pad-2-4g/specs/"
    ]
   },
-  "025a551ee10643ea4e9cc6815145291eca5c732b150ba8d804fb4a33037b7a96": {
+  "802421236870ce76788450ea369d2dfb8956e09ebe35723398c26e201d9b0c3a": {
    "modelo": "Redmi Pad 2 Pro 6GB/128GB",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-07.json",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://www.mi.com/es/product/redmi-pad-2-pro/specs/",
     "https://www.mi.com/es/product/redmi-pad-2-pro/",
@@ -2475,16 +2476,13 @@
     "https://www.sigmaphoto.com/56mm-f1-4-dc-dn-c"
    ]
   },
-  "16a97972bcc10a01eca5430179c31820ee1faa38b6bffa60ba364870111786e6": {
+  "5c63909975dfbb9ec318158a9b0ac43b53088d1476f3e786e8236e0314c90c35": {
    "modelo": "Sigma 60-600mm F4.5-6.3 DG DN OS Sports (Sony E)",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-r3-T06-2.json",
+   "informe": "informe-01.json",
    "fuentes": [
-    "https://www.sigma-global.com/en/lenses/s023_60_600_45_63/",
-    "https://www.sigma-global.com/lenses/s023_60_600_45_63_specification_01.png",
-    "https://www.sigma-global.com/en/lenses/s018_60_600_45_63/",
-    "https://www.sigma-global.com/jp/lenses/s023_60_600_45_63/ (copia del verificador a-T06-1, sólo para cruzar peso, medidas y estabilizador: coincide)"
+    "https://www.sigma-global.com/en/lenses/s023_60_600_45_63/"
    ]
   },
   "4082b9b01afc36923adb3f067aafdb3fb669e52fa1e1d0f089d237a4069139a0": {

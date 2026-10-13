@@ -598,7 +598,7 @@ function desdeEnDesplegable(){
   const mal = [...$('q-sug').querySelectorAll('.qs[data-key]')].filter(b => {
     const m = buscarModelo(b.dataset.key);
     const debe = m && m.multi && m.precio !== null && m.precio !== m.precioMax;
-    return !!debe !== /desde USD/.test(b.textContent);
+    return !!debe !== /Desde USD/.test(b.textContent);
   });
   ok(!mal.length, '[72] el desplegable dice "desde" justo donde la tarjeta lo dice', mal.map(b => b.textContent.trim().slice(0, 30)).join(' · ') || q);
 }

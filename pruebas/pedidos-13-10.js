@@ -1,0 +1,245 @@
+// Los pedidos de Benja del 13/10/2026 ("Cambios antes de publicar"):
+//   [1] tocar la tarjeta de un mundo en cualquier lado lleva al rubro de la
+//       foto que se esta viendo (con el drone a la vista, abre Drones); los
+//       botones siguen llevando cada uno al suyo
+//   [2] el nombre "Advance Tecno" de la barra de arriba es el mismo link al
+//       inicio que el triangulo, y responde igual al mouse
+//   [3] volver al inicio se nota: body.volviendo, y .entera cuando se viene de
+//       otro lado; si ya se estaba en el inicio se mueve solo el logo
+//   [5] los filtros propios de Camaras, Objetivos y Drones (FILTROS_RUBRO):
+//       que cada opcion traiga lo que dice, contado aca por otro camino (el
+//       SKU o el nombre a mano, sin pasar por rasgosDe), que viajen en el
+//       link, que se suelten al salir del rubro y que un valor inventado no
+//       deje la grilla vacia
+//   [8] "Desde" va con mayuscula en todos los lugares donde antecede un precio
+const R = []; let fallas = 0;
+const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
+const info = t => R.push('  --  ' + t);
+const $$ = s => document.querySelectorAll(s);
+
+const esperaP13 = setInterval(() => {
+  if(!MODELOS.length || !$$('#cats .chip').length || !$$('#mosaico .mundo').length) return;
+  clearInterval(esperaP13);
+  for(let i=1;i<5000;i++) clearInterval(i);
+  try{ correrPruebas(); }catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; }
+  try{ pararPaseos(); pararOfertas(); pararNuevos(); pararMarcas(); pararMundos(); }catch(e){}
+  for(let i=1;i<5000;i++) clearInterval(i);
+  const pre=document.createElement('pre'); pre.id='RESULTADO';
+  pre.textContent='\n===== '+(fallas?fallas+' FALLA(S)':'TODO OK')+' =====\n'+R.join('\n');
+  document.body.appendChild(pre);
+}, 150);
+
+const p13Clic = el => el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, button: 0 }));
+const p13Tarjetas = () => [...$$('#mosaico .mundo')];
+const p13Fotos = t => [...t.querySelectorAll('.mundo-foto img')];
+
+function correrPruebas(){
+  document.documentElement.style.scrollBehavior = 'auto';
+  const mundos = mundosDeLaPortada();
+
+  /* ---- [1] La tarjeta entera lleva al rubro de la foto ---- */
+  ok(p13Tarjetas().every(t => getComputedStyle(t).cursor === 'pointer'), '[1] toda la tarjeta de un mundo tiene la manito');
+  // Cada foto de cada mundo: se la pone a la vista y se toca el titulo
+  const mal1 = [];
+  let probadas = 0;
+  mundos.forEach((w, i) => {
+    const n = p13Fotos(p13Tarjetas()[i]).length;
+    for(let k = 0; k < n; k++){
+      const t = p13Tarjetas()[i];
+      mostrarCapa(t, k, false);
+      const j = Number(p13Fotos(t)[k].dataset.j);
+      const espera = j >= 0 ? w.porRubro[j].cat
+                   : (w.porRubro.find(x => norm(x.cat) === norm(w.foto)) || w.porRubro[0]).cat;
+      p13Clic(t.querySelector('.mundo-cab h3'));
+      probadas++;
+      if(filtros.cat !== espera || enPortada()) mal1.push(w.nombre + ' foto ' + k + ': ' + (filtros.cat || 'no entro') + ' y era ' + espera);
+      irAlInicio();
+    }
+  });
+  ok(probadas > 6 && !mal1.length, '[1] tocar el titulo de la tarjeta abre el rubro de la foto que se ve, en cada foto de cada mundo',
+     mal1.join(' | ') || probadas + ' fotos');
+
+  // El caso del pedido: con el drone a la vista, la foto misma abre Drones
+  const iFoto = mundos.findIndex(w => w.porRubro.some(r => r.cat === 'Drone' && r.foto));
+  if(iFoto < 0) info('[1] hoy ningun mundo tiene la foto de Drones: no se mira el caso del pedido');
+  else{
+    const t = p13Tarjetas()[iFoto], jDrone = mundos[iFoto].porRubro.findIndex(r => r.cat === 'Drone');
+    const k = p13Fotos(t).findIndex(img => img.dataset.j === String(jDrone));
+    mostrarCapa(t, k, false);
+    ok(t.querySelector('.rubro.en-foto')?.dataset.cat === 'Drone', '[1] con la foto del drone a la vista, el boton marcado es Drones');
+    // La foto no recibe el clic (pointer-events:none): cae en la tarjeta
+    p13Clic(t);
+    ok(filtros.cat === 'Drone' && !enPortada(), '[1] y tocar la tarjeta ahi abre Drones', filtros.cat);
+    ok(location.search.includes('cat=Drone'), '[1] con su direccion, como desde el boton', location.search);
+    irAlInicio();
+    // Un boton manda sobre la foto: con el drone a la vista, "Cámaras" abre Camaras
+    const t2 = p13Tarjetas()[iFoto];
+    mostrarCapa(t2, k, false);
+    const otro = [...t2.querySelectorAll('.rubro')].find(b => b.dataset.cat !== 'Drone');
+    if(otro){
+      otro.click();
+      ok(filtros.cat === otro.dataset.cat, '[1] los botones siguen llevando cada uno a su rubro, no al de la foto', otro.dataset.cat + ' -> ' + filtros.cat);
+      irAlInicio();
+    }
+  }
+
+  /* ---- [2] El nombre es el mismo link que el triangulo ---- */
+  const nombre = document.querySelector('.topbar #logo-inicio b');
+  ok(!!nombre && /advance\s*tecno/i.test(nombre.textContent), '[2] el nombre "Advance Tecno" esta adentro del link al inicio', nombre && nombre.textContent);
+  entrarAlRubro('Celular');
+  p13Clic(nombre);
+  ok(enPortada() && !filtros.cat && location.search === '', '[2] tocar el nombre desde un rubro lleva al inicio', filtros.cat + ' ' + location.search);
+  const css = [...document.styleSheets].flatMap(s => { try{ return [...s.cssRules]; }catch(e){ return []; } })
+                .map(r => r.selectorText || '').join('\n');
+  ok(/a\.logo:hover b/.test(css) && /a\.logo:hover \.marca-btn img/.test(css),
+     '[2] al pasar el mouse por el link se encienden el nombre y el triangulo, los dos');
+  ok(/a\.logo:active/.test(css), '[2] y al tocarlo se hunde el link entero, no solo el triangulo');
+
+  /* ---- [3] La vuelta al inicio se nota ---- */
+  if(quieto) info('[3] este navegador pide reducir movimiento: no hay animacion que mirar');
+  else{
+    const b = document.body;
+    b.classList.remove('volviendo', 'entera');
+    entrarAlRubro('Celular');
+    irAlInicio();
+    ok(b.classList.contains('volviendo') && b.classList.contains('entera'),
+       '[3] al volver desde un rubro la portada entra animada (body.volviendo.entera)', b.className);
+    const anima = sel => { const e = document.querySelector(sel); return e ? getComputedStyle(e).animationName : 'no esta'; };
+    ok(anima('#mosaico') === 'inicioEntra' && anima('header .wrap') === 'inicioEntra',
+       '[3] el encabezado y los rubros entran desde abajo', anima('header .wrap') + ' / ' + anima('#mosaico'));
+    ok(anima('.topbar .marca-btn') === 'inicioLogo', '[3] y el triangulo da su vuelta', anima('.topbar .marca-btn'));
+    ok(getComputedStyle(document.querySelector('.topbar'), '::after').animationName === 'inicioLinea', '[3] con la linea que cruza la barra de arriba');
+    // Ya en el inicio y arriba de todo: solo el logo
+    scrollTo(0, 0);
+    irAlInicio();
+    ok(b.classList.contains('volviendo') && !b.classList.contains('entera'),
+       '[3] si ya se estaba en el inicio se mueve solo el logo: la pagina no se sacude', b.className);
+    ok(anima('#mosaico') === 'none', '[3] (los rubros quedan quietos)', anima('#mosaico'));
+    b.classList.remove('volviendo', 'entera');
+  }
+
+  /* ---- [5] Los filtros propios de cada rubro ---- */
+  const tramo = p => String(p.skuVariante || '').toUpperCase().split('-').pop();
+  const focal = p => { const m = /(\d+(?:\.\d+)?)(?:-(\d+(?:\.\d+)?))?mm/i.exec(p.desc || ''); return m ? [parseFloat(m[1]), parseFloat(m[2] || m[1])] : null; };
+  // Lo que tiene que traer cada opcion, dicho por otro camino que rasgosDe
+  const REGLA = {
+    'Cámara|equipo|cuerpo': p => /^BODY/.test(tramo(p)),
+    'Cámara|equipo|kit':    p => /^K\d/.test(tramo(p)),
+    'Cámara|tipo|instantanea': p => /instax/i.test(p.desc),
+    'Cámara|tipo|compacta':    p => /powershot|rx100/i.test(p.desc),
+    'Cámara|tipo|reflex':      p => /\b(?:EOS \d+D|D\d{4})\b/i.test(p.desc),
+    'Objetivo|optica|zoom': p => { const f = focal(p); return !!f && f[1] > f[0]; },
+    'Objetivo|optica|fijo': p => { const f = focal(p); return !!f && f[1] === f[0]; },
+    'Objetivo|optica|macro': p => /macro/i.test(p.desc),
+    'Objetivo|focal|angular': p => { const f = focal(p); return !!f && f[0] < 35; },
+    'Objetivo|focal|tele':    p => { const f = focal(p); return !!f && f[1] >= 85; },
+    'Drone|combo|combo': p => /fly more|combo|bundle/i.test(p.desc),
+    'Drone|combo|solo':  p => !/fly more|combo|bundle/i.test(p.desc),
+  };
+  const limpiar = () => Object.assign(filtros, { q:'', marca:'', rango:'', capacidad:'', ram:'', montura:'', apertura:'', soloStock:false, orden:'modelo', ...SIN_PROPIOS });
+  const malCuenta = [], vacias = [];
+  let opciones = 0;
+  for(const f of FILTROS_RUBRO){
+    for(const [v, t] of f.opciones){
+      const regla = REGLA[f.rubro + '|' + f.campo + '|' + v];
+      limpiar(); entrarAlRubro(f.rubro);
+      filtros[f.campo] = v; aplicarFiltro(false);
+      opciones++;
+      if(!LISTA.length){ vacias.push(f.rubro + ' ' + t); continue; }
+      if(!regla) continue;
+      /* Los modelos del rubro con alguna version que cumple la regla, contados
+         a mano. Se compara con filtrar(), que devuelve los de MODELOS tal
+         cual: con un filtro de version, LISTA trae la vista filtrada de cada
+         modelo, que es otro objeto. */
+      const debe = MODELOS.filter(m => m.cat === f.rubro && m.variantes.some(regla));
+      const dio = filtrar();
+      const sobran = dio.filter(m => !debe.includes(m)), faltan = debe.filter(m => !dio.includes(m));
+      if(sobran.length || faltan.length) malCuenta.push(`${f.rubro} ${t}: sobran ${sobran.map(m => m.desc).slice(0, 3).join(', ') || 0} · faltan ${faltan.map(m => m.desc).slice(0, 3).join(', ') || 0}`);
+    }
+  }
+  ok(!malCuenta.length, '[5] cada opcion trae justo lo que dice, contado aca por el SKU y el nombre', malCuenta.join(' | ') || opciones + ' opciones');
+  if(vacias.length) info('[5] hoy sin productos (el panel no las ofrece): ' + vacias.join(', '));
+
+  // Ninguna camara, objetivo con focal ni drone se queda afuera de su grupo
+  const sinTipo = PRODUCTOS.filter(p => p.cat === 'Cámara' && !p.rasgos.tipo.length).map(p => p.desc);
+  ok(!sinTipo.length, '[5] todas las camaras tienen tipo', sinTipo.slice(0, 5).join(', ') || PRODUCTOS.filter(p => p.cat === 'Cámara').length + ' filas');
+  const sinFocal = PRODUCTOS.filter(p => p.cat === 'Objetivo' && focal(p) && !(p.rasgos.focal.length && p.rasgos.optica.length)).map(p => p.desc);
+  ok(!sinFocal.length, '[5] todo objetivo que dice sus mm tiene tipo y distancia focal', sinFocal.slice(0, 5).join(', ') || 'todos');
+  const sinMm = PRODUCTOS.filter(p => p.cat === 'Objetivo' && !focal(p));
+  ok(sinMm.every(p => !p.rasgos.focal.length && !p.rasgos.optica.filter(x => x !== 'macro').length),
+     '[5] y al que no los dice (teleconversores) no se le inventa', sinMm.map(p => p.desc).join(', ') || 'ninguno');
+
+  // El panel: los grupos aparecen en su rubro y solo ahi
+  const gruposDe = cat => { limpiar(); entrarAlRubro(cat); abrirFiltros();
+    const g = [...$$('#filtros-panel .mf-rot')].map(x => x.textContent);
+    document.querySelector('#filtros-panel [data-cerrar]').click(); return g; };
+  const gCam = gruposDe('Cámara'), gObj = gruposDe('Objetivo'), gDro = gruposDe('Drone'), gCel = gruposDe('Celular');
+  ok(gCam.includes('Tipo de cámara') && gCam.includes('Viene con'), '[5] Filtrar en Camaras ofrece "Tipo de cámara" y "Viene con"', gCam.join(' · '));
+  ok(gObj.includes('Tipo de objetivo') && gObj.includes('Distancia focal') && gObj.includes('Montura') && gObj.includes('Apertura'),
+     '[5] en Objetivos suma "Tipo de objetivo" y "Distancia focal" a Montura y Apertura', gObj.join(' · '));
+  ok(gDro.includes('Viene con'), '[5] en Drones, "Viene con"', gDro.join(' · '));
+  ok(!FILTROS_RUBRO.some(f => gCel.includes(f.titulo)), '[5] y en Celulares ninguno de esos', gCel.join(' · '));
+
+  // Elegir en el panel, la cruz, el link y la salida del rubro
+  limpiar(); entrarAlRubro('Cámara'); abrirFiltros();
+  document.querySelector('#filtros-panel [data-campo="equipo"][data-v="cuerpo"]').click();
+  ok(filtros.equipo === 'cuerpo' && LISTA.length > 0 && LISTA.every(m => m.variantes.some(v => /^BODY/.test(tramo(v)))),
+     '[5] tocar "Solo el cuerpo" en el panel filtra al toque', LISTA.length + ' modelos');
+  ok(/[?&]equipo=cuerpo/.test(location.search), '[5] y viaja en el link', location.search);
+  document.querySelector('#filtros-panel [data-cerrar]').click();
+  const cruz = document.querySelector('#rubro-cab [data-quitar="equipo"]');
+  ok(!!cruz && cruz.textContent === 'Solo el cuerpo', '[5] queda a la vista con su cruz', cruz && cruz.textContent);
+  /* Con el filtro puesto, la tarjeta muestra el precio de ESA version: el de
+     la mas barata con stock entre los cuerpos (o de todos, si ninguno tiene) */
+  const conKit = LISTA.find(m => m.variantes.some(v => /^K\d/.test(tramo(v)) && v.precio !== null) &&
+                                 m.variantes.some(v => /^BODY/.test(tramo(v)) && v.precio !== null));
+  if(!conKit) info('[5] hoy ninguna camara tiene cuerpo y kit en la misma tarjeta: no se mira el precio de la version');
+  else{
+    const cuerpos = conKit.variantes.filter(v => /^BODY/.test(tramo(v)) && v.precio !== null);
+    const hay = cuerpos.filter(v => v.stock);
+    const minimo = Math.min(...(hay.length ? hay : cuerpos).map(v => v.precio));
+    const card = [...$$('#grid .card')].find(c => c.querySelector('h3')?.textContent.includes(conKit.titulo || conKit.desc) ||
+                                                  c.textContent.includes(nombreCorto(conKit)));
+    ok(!!card && card.querySelector('.usd').textContent.includes('USD ' + plata(minimo)),
+       '[5] y la tarjeta con cuerpo y kit muestra el precio del cuerpo', (conKit.titulo || conKit.desc) + ': ' + plata(minimo) + ' / ' + (card ? card.querySelector('.usd').textContent.trim() : 'sin tarjeta'));
+  }
+  cruz && cruz.click();
+  ok(filtros.equipo === '' && !/equipo=/.test(location.search), '[5] la cruz lo saca', location.search);
+
+  filtros.tipo = 'reflex'; aplicarFiltro(true);
+  entrarAlRubro('Celular');
+  ok(FILTROS_RUBRO.every(f => !filtros[f.campo]) && !/tipo=/.test(location.search), '[5] al pasar a otro rubro se sueltan solos', location.search);
+  limpiar(); entrarAlRubro('Cámara');
+  filtros.tipo = 'cualquiercosa'; aplicarFiltro(false);
+  ok(filtros.tipo === '' && LISTA.length > 0, '[5] un valor que no existe (?tipo=cualquiercosa) se descarta: la grilla no queda vacia', LISTA.length + ' modelos');
+  // Dos que no se cruzan: el vacio dice por que y ofrece la salida
+  filtros.tipo = 'instantanea'; filtros.equipo = 'cuerpo'; aplicarFiltro(false);
+  const vacio = document.querySelector('#grid .vacio');
+  ok(!LISTA.length && !!vacio && /Instantánea/.test(vacio.textContent) && !!vacio.querySelector('[data-salida]'),
+     '[5] dos filtros que no se cruzan: el vacio nombra los filtros y ofrece sacar uno', vacio && vacio.textContent.replace(/\s+/g, ' ').trim().slice(0, 110));
+  irAlInicio();
+  ok(enPortada() && FILTROS_RUBRO.every(f => !filtros[f.campo]), '[5] y el inicio los saca todos');
+
+  /* ---- [8] "Desde" con mayuscula ---- */
+  const minuscula = /(^|[\s·>(])desde\s+USD/;
+  const textos = [];
+  textos.push(['la portada', document.querySelector('main').innerText + ' ' + (document.querySelector('#ofertas')?.innerText || '')]);
+  limpiar(); entrarAlRubro('Celular');
+  textos.push(['Celulares', document.querySelector('main').innerText]);
+  const multi = LISTA.find(m => m.multi && m.precio !== null && m.precio !== m.precioMax && m.stock);
+  if(multi){
+    abrirFicha(clave(multi.rep), null);
+    textos.push(['la ficha de ' + (multi.titulo || multi.desc), $('ficha') ? $('ficha').innerText : '']);
+    quitarFicha();
+  }
+  const conMinuscula = textos.filter(([, t]) => minuscula.test(t)).map(([d, t]) => d + ': …' + t.slice(Math.max(0, t.search(minuscula) - 20), t.search(minuscula) + 30).replace(/\s+/g, ' '));
+  ok(!conMinuscula.length, '[8] ningun precio dice "desde" en minuscula (portada, rubro y ficha)', conMinuscula.join(' | ') || textos.map(x => x[0]).join(', '));
+  const conDesde = textos.filter(([, t]) => /Desde\s+USD|DESDE\s+USD/.test(t)).length;
+  ok(conDesde >= 2, '[8] y si dice "Desde USD …" donde hay versiones a distinto precio', conDesde + ' de ' + textos.length + ' pantallas');
+  const etiqueta = [...$$('#grid .card .usd .desde')][0];
+  ok(!!etiqueta && etiqueta.textContent === 'Desde', '[8] la etiqueta de la tarjeta se escribe "Desde"', etiqueta && etiqueta.textContent);
+  irAlInicio();
+  const mundoTxt = [...$$('#mosaico .mundo-cab p')].map(p => p.textContent);
+  ok(mundoTxt.length > 0 && mundoTxt.every(t => !/desde USD/.test(t)) && mundoTxt.some(t => /· Desde USD/.test(t)),
+     '[8] tambien en el renglon de cada mundo ("239 productos · Desde USD 65")', mundoTxt[0]);
+}

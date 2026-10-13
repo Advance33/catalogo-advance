@@ -140,6 +140,15 @@ si alguna falta).
                   direccion limpia y sube arriba sin recargar; Cmd/Ctrl+clic
                   lo deja al navegador; el triangulo sigue siendo el easter
                   egg.
+  pedidos-13-10.js
+                  Los pedidos de Benja del 13/10: tocar la tarjeta de un
+                  mundo en cualquier lado lleva al rubro de la foto que se
+                  ve (con el drone a la vista, Drones); el nombre "Advance
+                  Tecno" responde igual que el triangulo; la vuelta al inicio
+                  se nota (y si ya se estaba ahi, se mueve solo el logo); los
+                  filtros propios de Camaras, Objetivos y Drones
+                  (FILTROS_RUBRO), contados aca por el SKU y el nombre; y
+                  "Desde" con mayuscula delante de cada precio.
   decision-colores.js
                   Como se elige el color en la ficha (Pedro, 30/09: la C,
                   "Vitrina de fotos", de muestras/colores): debajo de la

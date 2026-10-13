@@ -273,6 +273,46 @@
   a.logo:focus-visible{outline:2px solid var(--acento);outline-offset:4px}
   .topbar a.logo:focus-visible{outline-color:#A78BFA}
   a.cats-logo:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  /* El nombre responde igual que el triángulo (Benja, 13/10/2026). Los dos son
+     el mismo link al inicio desde el 29/09, pero solo el triángulo se encendía
+     al pasar el mouse y se hundía al tocarlo: el nombre parecía un rótulo y
+     nadie lo tocaba. Ahora se encienden y se hunden juntos. */
+  a.logo b{transition:text-shadow .2s}
+  a.logo:hover .marca-btn img{opacity:1;filter:drop-shadow(0 0 7px rgba(124,58,237,.55))}
+  .topbar a.logo:hover .marca-btn img{filter:brightness(0) invert(1) drop-shadow(0 0 7px rgba(196,166,255,.7))}
+  .topbar a.logo:hover b{text-shadow:0 0 14px rgba(196,166,255,.6)}
+  a.logo{transition:transform .12s}
+  a.logo:active{transform:scale(.97)}
+
+  /* ---------- La vuelta al inicio (Benja, 13/10/2026) ----------
+     "Que cuando se vuelva al inicio se vea una animación para que se den
+     cuenta": el logo llevaba a la portada de un salto y, si ya se estaba cerca,
+     no se notaba que había pasado algo. Ahora el triángulo da una vuelta, una
+     línea lila cruza la barra de arriba y la portada entra desde abajo, por
+     partes. Si ya se estaba en el inicio, arriba de todo, van solo el
+     triángulo y la línea: la página no se sacude por un clic que no cambia
+     nada (el triángulo son además 7 clics para el easter egg). Las clases las
+     pone y las saca animarInicio(); con "reducir movimiento" no pone ninguna.
+     Se anima cada bloque por adentro y con "backwards": terminado, no queda
+     ningún transform puesto que cambie quién contiene a lo fijo o a lo pegado. */
+  .topbar{position:relative}
+  .topbar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;pointer-events:none;
+                 background:linear-gradient(90deg,transparent,#C4A6FF 25%,#7C3AED 75%,transparent);
+                 transform:scaleX(0);transform-origin:left;opacity:0}
+  @keyframes inicioLinea{0%{transform:scaleX(0);opacity:1}70%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+  @keyframes inicioLogo{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.22)}100%{transform:rotate(360deg) scale(1)}}
+  @keyframes inicioEntra{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+  body.volviendo .topbar::after{animation:inicioLinea .75s cubic-bezier(.3,.7,.2,1)}
+  body.volviendo .topbar .marca-btn{animation:inicioLogo .65s cubic-bezier(.3,.7,.2,1)}
+  body.volviendo.entera header .wrap,
+  body.volviendo.entera .ofertas > .wrap,
+  body.volviendo.entera main > .seccion,
+  body.volviendo.entera #mosaico,
+  body.volviendo.entera #extras{animation:inicioEntra .55s cubic-bezier(.2,.7,.2,1) backwards}
+  body.volviendo.entera .ofertas > .wrap{animation-delay:.07s}
+  body.volviendo.entera main > .seccion{animation-delay:.14s}
+  body.volviendo.entera #mosaico{animation-delay:.2s}
+  body.volviendo.entera #extras{animation-delay:.3s}
   .stamp{margin-left:auto;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
          color:var(--muted);display:flex;align-items:center;gap:8px;white-space:nowrap}
   .dot{width:7px;height:7px;border-radius:50%;background:#12A06A;flex:none}
@@ -387,6 +427,10 @@
   .rubro:hover{background:var(--acento);color:#fff}
   .rubro:hover i{color:#DCCEFB}
   .rubro:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  /* Toda la tarjeta lleva al rubro de la foto que se está viendo (Benja,
+     13/10/2026; ver rubroALaVista): por eso la manito en cualquier lado, no
+     solo arriba de los botones. */
+  .mundo{cursor:pointer}
 
   .mundo-alto{grid-row:span 2}
   .mundo-alto .mundo-foto{top:96px;bottom:112px;left:10%;right:10%;width:auto;height:auto}
@@ -3711,6 +3755,40 @@ const MUNDOS = [
     rubros: ['Dyson'] },
 ];
 
+// ---------- LOS FILTROS PROPIOS DE CADA RUBRO ----------
+//
+// Además del precio y el stock, cada rubro de foto y video ofrece en "Filtrar"
+// lo que de verdad se elige al comprarlo (Benja, 13/10/2026: "agregar filtros
+// a las cámaras, lentes, drones"). Montura y apertura de los objetivos ya
+// estaban, y siguen aparte porque la montura sale del SKU.
+//   campo    → cómo viaja en el link (?tipo=reflex)
+//   rubro    → el rubro donde se ofrece, como se muestra ("Objetivo", no "Lente")
+//   titulo   → el rótulo del grupo en el panel
+//   opciones → [valor, texto]. Lo que va después de " · " es la aclaración.
+//
+// Nada de esto se carga a mano ni se inventa: sale del SKU de ADVAPP y del
+// nombre del producto (ver rasgosDe). Si de un producto no se puede saber, se
+// queda sin ese dato: no entra en ninguna opción y se ve con el filtro sacado.
+// Una opción sin productos hoy no se ofrece (como todas las del panel).
+const FILTROS_RUBRO = [
+  { campo: 'tipo',   rubro: 'Cámara',   titulo: 'Tipo de cámara',
+    opciones: [['sin-espejo', 'Sin espejo'], ['reflex', 'Réflex'], ['compacta', 'Compacta'],
+               ['instantanea', 'Instantánea'], ['cine', 'Cine y video']] },
+  { campo: 'equipo', rubro: 'Cámara',   titulo: 'Viene con',
+    opciones: [['cuerpo', 'Solo el cuerpo'], ['kit', 'Con objetivo']] },
+  { campo: 'optica', rubro: 'Objetivo', titulo: 'Tipo de objetivo',
+    opciones: [['fijo', 'Fijo'], ['zoom', 'Zoom'], ['macro', 'Macro']] },
+  /* Un zoom aparece en cada tramo que cubre: el 24-70 es gran angular y
+     estándar; el 70-200, solo teleobjetivo. */
+  { campo: 'focal',  rubro: 'Objetivo', titulo: 'Distancia focal',
+    opciones: [['angular', 'Gran angular · menos de 35 mm'], ['normal', 'Estándar · 35 a 60 mm'],
+               ['tele', 'Teleobjetivo · 85 mm o más']] },
+  { campo: 'combo',  rubro: 'Drone',    titulo: 'Viene con',
+    opciones: [['solo', 'Sin combo'], ['combo', 'Con combo']] },
+];
+// Todos sin elegir: para arrancar `filtros` y para cada "sacar todo"
+const SIN_PROPIOS = Object.fromEntries(FILTROS_RUBRO.map(f => [f.campo, '']));
+
 /* ========================================================================== */
 
 // Dos formas de leer el mismo Sheet. Si la primera falla, se prueba la segunda.
@@ -3733,7 +3811,7 @@ let TC = null;              // cotización efectiva (número) o null si no hay
 // desde el 17/09 es ADVAPP y viene ordenada por ID (ver porMarcaModelo).
 const ORDEN_DEF = 'modelo';
 const filtros = { q:'', cat:'', marca:'', orden:ORDEN_DEF, soloStock:false,
-                  rango:'', montura:'', apertura:'', capacidad:'', ram:'' };
+                  rango:'', montura:'', apertura:'', capacidad:'', ram:'', ...SIN_PROPIOS };
 
 // Tramos de precio. Los cortes salen de cómo está repartido el catálogo, no de
 // números redondos porque sí: hasta 200 entran los accesorios, entre 500 y 2000
@@ -5065,7 +5143,8 @@ function armarCarga(datos){
     /* La montura, primero la del SKU de ADVAPP y si no la del nombre (29/09),
        como la Sim y el teclado: el SKU es el dato y el nombre lo escribe el
        proveedor ("III NIKON" sin decir Z). */
-    .map(p => { p.montura = (esLente(p) && p.monturaSku) || monturaDe(p); p.apertura = aperturaDe(p); return p; });
+    .map(p => { p.montura = (esLente(p) && p.monturaSku) || monturaDe(p); p.apertura = aperturaDe(p);
+                p.rasgos = rasgosDe(p); return p; });
   /* La fuente viaja con los productos y la asigna actualizar(), no esta
      función (29/09): con dos refrescos superpuestos, el viejo que terminaba
      último pisaba FUENTE con la de una carga que después se descartaba. */
@@ -5093,12 +5172,18 @@ function armarCarga(datos){
    (listaDeLaGrilla, 2.1 B). null si no hay ningún filtro de versión. */
 function versionPedida(){
   const r = filtros.rango ? RANGOS.find(x => x[0] === filtros.rango) : null;
-  if(!(filtros.soloStock || filtros.capacidad || filtros.ram || filtros.montura || r)) return null;
+  /* Los filtros propios del rubro (13/10) también son de la versión: el
+     cuerpo solo y el kit de una cámara, o el drone con y sin combo, son
+     versiones de la misma tarjeta, y con "Solo el cuerpo" la tarjeta tiene
+     que mostrar el precio del cuerpo. */
+  const propios = FILTROS_RUBRO.filter(f => filtros[f.campo]);
+  if(!(filtros.soloStock || filtros.capacidad || filtros.ram || filtros.montura || r || propios.length)) return null;
   return v =>
     (!filtros.soloStock || v.stock) &&
     (!filtros.montura || v.montura === filtros.montura) &&
     (!filtros.capacidad || capacidadDe(v) === filtros.capacidad) &&
     (!filtros.ram || ramDe(v) === filtros.ram) &&
+    propios.every(f => tieneRasgo(v, f.campo, filtros[f.campo])) &&
     (!r || enTramo(v.precio, r));
 }
 
@@ -5468,6 +5553,66 @@ function aperturaDe(p){
   if(!m) return '';
   return parseFloat(m[1].replace(',','.')) <= 2.8 ? 'luminoso' : 'cerrado';
 }
+
+/* Los rasgos de cada producto para los filtros propios de su rubro
+   (FILTROS_RUBRO; Benja, 13/10/2026). Devuelve { campo: [valores] }: un
+   producto puede caer en más de una opción (un 24-70 es gran angular y
+   estándar; la Sony FX3 es sin espejo y de cine).
+
+   De dónde sale cada cosa, de lo más firme a lo menos:
+     · el SKU de ADVAPP (su último tramo: "BODY", "K18150", "RC2FLYMORE"),
+       que es el dato;
+     · el nombre que ve el cliente (p.desc, el que cuida ADVAPP);
+     · y recién después lo que escribió el proveedor (p.modelo), que trae
+       "EOR R7" o "COMBO MORE FLY" y solo sirve de respaldo.
+   Lo que no se reconoce queda sin rasgo: no se adivina. El 13/10 quedaban
+   sin alguno los 6 teleconversores (no tienen distancia focal) y las
+   compactas e instantáneas en "Viene con" (el objetivo no se cambia). */
+function rasgosDe(p){
+  const r = {};
+  const cat = norm(p.cat), marca = norm(p.marca);
+  const nombre = norm(p.desc || p.modelo);
+  const todo   = norm((p.desc || '') + ' ' + (p.modelo || ''));
+  const tramo  = String(p.skuVariante || '').toUpperCase().split('-').pop();
+
+  if(cat === 'camara'){
+    const tipo = [];
+    if(/\binstax\b/.test(nombre)) tipo.push('instantanea');
+    else if(/\b(?:powershot|cyber-?shot|dsc|rx100|zv-?1)\b/.test(nombre)) tipo.push('compacta');
+    else if(marca === 'canon'    && /\beos\s?r(?:p|\d)/.test(nombre)) tipo.push('sin-espejo');
+    else if(marca === 'canon'    && /\beos\s?\d{1,4}d\b|\brebel\b/.test(nombre)) tipo.push('reflex');
+    else if(marca === 'nikon'    && /\bz\s?(?:\d{1,2}|r|f|fc)\b/.test(nombre)) tipo.push('sin-espejo');
+    else if(marca === 'nikon'    && /\bd\d{2,4}\b/.test(nombre)) tipo.push('reflex');
+    else if(marca === 'sony'     && /\b(?:alfa|alpha)\s?\d|\ba\d{1,4}\b|\bzv-?e\d|\bfx\d/.test(nombre)) tipo.push('sin-espejo');
+    else if(marca === 'fujifilm' && /\b(?:x-?[a-z]{0,2}\d|gfx)/.test(nombre)) tipo.push('sin-espejo');
+    // Las de la línea de cine o hechas para video lo dicen en el nombre
+    // ("Cinema", "(Video)"); las Sony FX son la línea Cinema Line entera.
+    if(/\bcinema\b|\bvideo\b/.test(todo) || (marca === 'sony' && /\bfx\d/.test(nombre))) tipo.push('cine');
+    r.tipo = tipo;
+    // Solo las de objetivo intercambiable: en una compacta no hay nada que elegir
+    r.equipo = tipo.includes('compacta') || tipo.includes('instantanea') ? []
+             : /^BODY/.test(tramo) ? ['cuerpo'] : /^K\d/.test(tramo) ? ['kit']
+             : /\bbody\b/.test(nombre) ? ['cuerpo'] : /\bkit\b/.test(nombre) ? ['kit'] : [];
+  }else if(cat === 'objetivo'){
+    /* La distancia focal: "50mm" o "24-70mm" en el nombre. Sin "mm" (los
+       teleconversores, "RF 1.4X Extender") no hay focal y no se inventa. */
+    const m = /(\d+(?:[.,]\d+)?)(?:\s?-\s?(\d+(?:[.,]\d+)?))?\s?mm\b/.exec(nombre);
+    const num = s => parseFloat(String(s).replace(',', '.'));
+    const min = m ? num(m[1]) : null, max = m ? num(m[2] || m[1]) : null;
+    r.optica = [...(m ? [m[2] ? 'zoom' : 'fijo'] : []), ...(/\bmacro\b/.test(nombre) ? ['macro'] : [])];
+    r.focal = !m ? [] : [...(min < 35 ? ['angular'] : []),
+                         ...(min <= 60 && max >= 35 ? ['normal'] : []),
+                         ...(max >= 85 ? ['tele'] : [])];
+  }else if(cat === 'drone'){
+    r.combo = [/FLYMORE|COMBO|CREATOR|BUNDLE/.test(tramo) || /\b(?:fly more|combo|bundle)\b/.test(todo) ? 'combo' : 'solo'];
+  }
+  return r;
+}
+const tieneRasgo = (p, campo, valor) => ((p.rasgos || {})[campo] || []).includes(valor);
+// El texto de una opción, entero y sin la aclaración ("Gran angular")
+const textoPropio = (campo, valor) =>
+  ((FILTROS_RUBRO.find(f => f.campo === campo) || { opciones: [] }).opciones.find(o => o[0] === valor) || [0, valor])[1];
+const textoPropioCorto = (campo, valor) => String(textoPropio(campo, valor)).split(' · ')[0];
 
 // Cómo lo identificamos en el pedido y en el link compartido. Casi todos
 // tienen ID; si alguna fila viniera sin él, usamos su posición en la planilla.
@@ -7378,7 +7523,7 @@ const enPedidoModelo = m =>
 const conDesde = m => !!m.multi && m.precio !== null && m.precio !== m.precioMax;
 const precioTarjeta = m => {
   if(!conDesde(m)) return precioUSD(m);
-  return `<i class="desde">desde</i> ${precioUSD(m)}`;
+  return `<i class="desde">Desde</i> ${precioUSD(m)}`;
 };
 /* Con "desde" Y precio de antes, el tachado va al lado del precio y no abajo
    (06/10/2026): la etiqueta tiene lugar para uno de los dos renglones de más,
@@ -7669,7 +7814,7 @@ function htmlOferta(m){
         ${!hay && m.incluye ? `<div class="of-tags"><span class="of-regalo">${esc(textoIncluye(m.incluye))}</span></div>` : ''}
         <div class="of-precio">
           ${hay ? `<s>USD ${plata(m.antes)}</s>` : ''}
-          <b>${m.multi && m.precio !== m.precioMax ? 'desde ' : ''}USD ${plata(m.precio)}</b>
+          <b>${m.multi && m.precio !== m.precioMax ? 'Desde ' : ''}USD ${plata(m.precio)}</b>
           ${ars ? `<i>${ars}</i>` : ''}
         </div>
         <button type="button" class="of-ver" tabindex="-1">Ver el producto</button>
@@ -8085,7 +8230,7 @@ function pintarSugeridos(){
       <span class="sug-foto"><img src="${esc(m.imagen)}" alt="" loading="lazy" onerror="this.remove()"></span>
       <span class="sug-txt">
         <b>${esc(m.titulo || m.desc)}</b>
-        <i>${m.multi && m.precio !== m.precioMax ? 'desde ' : ''}USD ${plata(m.precio)}</i>
+        <i>${m.multi && m.precio !== m.precioMax ? 'Desde ' : ''}USD ${plata(m.precio)}</i>
       </span>
     </button>`).join('');
 
@@ -8126,6 +8271,7 @@ function filtrosActivos(conMarca){
   if(filtros.ram)       a.push(['ram', filtros.ram + ' de memoria']);
   if(filtros.montura)   a.push(['montura', filtros.montura]);
   if(filtros.apertura)  a.push(['apertura', TEXTO_APERTURA[filtros.apertura] || filtros.apertura]);
+  FILTROS_RUBRO.forEach(f => { if(filtros[f.campo]) a.push([f.campo, textoPropio(f.campo, filtros[f.campo])]); });
   if(filtros.soloStock) a.push(['soloStock', 'Con stock']);
   return a;
 }
@@ -8164,7 +8310,7 @@ function pintarCabecera(texto){
   const conMarcas = marcas.length >= 2;
   const foto = filtros.cat ? fotoDelRubro(filtros.cat) : '';
   const precios = LISTA.map(m => m.precio).filter(x => x !== null && x > 0);
-  const desde = precios.length ? ' · desde USD ' + plata(Math.min(...precios)) : '';
+  const desde = precios.length ? ' · Desde USD ' + plata(Math.min(...precios)) : '';
   const enPanel = filtrosActivos(false).length;
   // Una marca puesta que no está entre los botones se muestra con su cruz
   // (29/09): con Apple puesta en Consolas quedaban los botones sin ninguno
@@ -8295,6 +8441,9 @@ function gruposDeFiltros(){
     grupos.push({ campo: 'apertura', titulo: 'Apertura',
                   opciones: Object.entries(TEXTO_APERTURA).map(([v, t]) => ({ v, t })) });
   }
+  // Los propios del rubro abierto (13/10): ver FILTROS_RUBRO
+  FILTROS_RUBRO.filter(f => norm(f.rubro) === norm(filtros.cat)).forEach(f =>
+    grupos.push({ campo: f.campo, titulo: f.titulo, opciones: f.opciones.map(([v, t]) => ({ v, t })) }));
   return grupos;
 }
 
@@ -8342,7 +8491,7 @@ function abrirFiltros(){
       filtros.soloStock = !filtros.soloStock;
       foco = '[data-stock]';
     }else{
-      Object.assign(filtros, { rango: '', capacidad: '', ram: '', montura: '', apertura: '', soloStock: false });
+      Object.assign(filtros, { rango: '', capacidad: '', ram: '', montura: '', apertura: '', soloStock: false, ...SIN_PROPIOS });
     }
     // Se aplica al toque: la grilla de atrás ya muestra el resultado, y el botón
     // de abajo dice cuántos quedan. Reemplaza el link en vez de sumar historial.
@@ -8375,7 +8524,8 @@ let verTodo = false;
 const enPortada = () => !verTodo && !filtros.cat && !filtros.q.trim() && !filtros.marca
                      && !filtros.rango && !filtros.soloStock
                      && !filtros.montura && !filtros.apertura
-                     && !filtros.capacidad && !filtros.ram;
+                     && !filtros.capacidad && !filtros.ram
+                     && !FILTROS_RUBRO.some(f => filtros[f.campo]);
 
 /* Pedir la grilla completa a proposito: lo usa el boton del final del mosaico
    y tambien las pruebas, que necesitan los productos dibujados. */
@@ -8392,7 +8542,7 @@ function verTodoElCatalogo(){
    titulo "Elegi un rubro", para que se vea el menu y no el encabezado. */
 function irAlMenu(){
   Object.assign(filtros, { q:'', cat:'', marca:'', rango:'', soloStock:false,
-                           montura:'', apertura:'', capacidad:'', ram:'' });
+                           montura:'', apertura:'', capacidad:'', ram:'', ...SIN_PROPIOS });
   verTodo = false;
   cerrarMenusOrden();
   sincronizarControles();
@@ -8421,9 +8571,29 @@ function irAlMenu(){
    la dirección (un Atrás ahí no haría nada). Lo que no cambió no se redibuja
    (las fotos de los rubros no vuelven a la primera). */
 function urlDelInicio(){ return location.pathname; }
+
+/* Que se note la vuelta al inicio (Benja, 13/10/2026; el dibujo está en el
+   CSS, "La vuelta al inicio"). `entera` es false cuando ya se estaba en el
+   inicio, arriba de todo y sin nada abierto: ahí se mueve solo el logo.
+   Sacar la clase, leer offsetWidth y volver a ponerla reinicia la animación
+   si se toca dos veces seguidas. */
+let inicioTimer = 0;
+function animarInicio(entera){
+  if(quieto) return;
+  const b = document.body;
+  b.classList.remove('volviendo', 'entera');
+  void b.offsetWidth;
+  b.classList.add('volviendo');
+  b.classList.toggle('entera', !!entera);
+  clearTimeout(inicioTimer);
+  inicioTimer = setTimeout(() => b.classList.remove('volviendo', 'entera'), 1100);
+}
+
 function irAlInicio(){
   const st = history.state;
   const ventana = !!(st && (st.pedido || st.visor || st.usado));
+  // ¿Ya se estaba en el inicio, arriba de todo y sin nada abierto? (animarInicio)
+  const yaEstaba = enPortada() && !FICHA && !ventana && scrollY < 80 && !document.querySelector('.modal');
   // Las ventanas se sacan sin tocar el historial (cada una tenía su history.back)
   if(cerrarVisorDOM){ visorEmpujado = false; const c = cerrarVisorDOM; cerrarVisorDOM = null; c(); }
   if(cerrarUsadoDOM){ usadoEmpujado = false; const c = cerrarUsadoDOM; cerrarUsadoDOM = null; c(); }
@@ -8435,7 +8605,7 @@ function irAlInicio(){
 
   const antes = JSON.stringify([filtros, verTodo]);
   Object.assign(filtros, { q:'', cat:'', marca:'', orden: ORDEN_DEF, rango:'', soloStock:false,
-                           montura:'', apertura:'', capacidad:'', ram:'' });
+                           montura:'', apertura:'', capacidad:'', ram:'', ...SIN_PROPIOS });
   verTodo = false;
   cerrarMenusOrden();
   sincronizarControles();
@@ -8451,6 +8621,7 @@ function irAlInicio(){
   ponerTitulo();
   retomarCintaAuto();
   scrollTo({ top: 0, behavior: 'auto' });   // de una, como al entrar
+  animarInicio(!yaEstaba);
 }
 
 /* Los rubros con stock, repartidos en los mundos de la configuración.
@@ -8559,7 +8730,7 @@ function pintarMosaico(){
         <span class="mundo-cap" aria-hidden="true"></span>` : ''}
       <div class="mundo-cab">
         <h3 id="mundo-${i}">${esc(w.nombre)}</h3>
-        <p>${w.n} producto${w.n !== 1 ? 's' : ''}${w.desde ? ' · desde USD ' + plata(w.desde) : ''}</p>
+        <p>${w.n} producto${w.n !== 1 ? 's' : ''}${w.desde ? ' · Desde USD ' + plata(w.desde) : ''}</p>
       </div>
       <div class="mundo-rubros">${w.porRubro.map(r =>
         `<button type="button" class="rubro" data-cat="${esc(r.cat)}">${esc(plural(r.cat))}<i>${r.n}</i></button>`
@@ -8596,6 +8767,17 @@ function pintarMosaico(){
       b.addEventListener('pointerenter', e => { if(e.pointerType === 'mouse') ver(); });
       b.addEventListener('focus', ver);
     });
+    /* Tocar la tarjeta en cualquier lado (la foto, el título, el fondo) lleva
+       al rubro de la foto que se está viendo (Benja, 13/10/2026): con el drone
+       a la vista, abre Drones. Los botones siguen llevando cada uno al suyo,
+       y el foco va al título del rubro igual que con ellos. */
+    t.addEventListener('click', e => {
+      if(e.target.closest('.rubro')) return;
+      const cat = rubroALaVista(t, w);
+      if(!cat) return;
+      entrarAlRubro(cat);
+      $('rubro-cab')?.querySelector('h2')?.focus({ preventScroll: true });
+    });
     t._k = 0;
     // La tarjeta que alguien mira con el mouse no cambia sola
     t.addEventListener('pointerenter', e => { if(e.pointerType === 'mouse') t._frenada = true; });
@@ -8628,6 +8810,17 @@ function capasDelMundo(w){
     capas.push({ src: r.foto, j, prod: r.prod });
   });
   return capas;
+}
+
+/* El rubro de la foto que se ve en una tarjeta de mundo (Benja, 13/10/2026):
+   adónde lleva tocar la tarjeta fuera de sus botones. La foto de respaldo no
+   es de ningún rubro (j = -1): ahí va el rubro que representa al mundo
+   (MUNDOS.foto) y, si hoy no tiene stock, el primero de la tarjeta. */
+function rubroALaVista(t, w){
+  const img = t.querySelector('.mundo-foto img.ve');
+  const r = (img && w.porRubro[Number(img.dataset.j)])
+         || w.porRubro.find(x => norm(x.cat) === norm(w.foto)) || w.porRubro[0];
+  return r ? r.cat : '';
 }
 
 function mostrarCapa(t, k, conNombre){
@@ -8780,7 +8973,7 @@ function datosPresupuesto(){
 const tramoCorto = t => t.min === 0 ? 'Hasta ' + plata(t.max)
   : t.max === Infinity ? 'Más de ' + plata(t.min)
   : `USD ${plata(t.min)} – ${plata(t.max)}`;
-const precioChico = m => `${m.multi && m.precio !== m.precioMax ? '<small>desde</small>' : ''}USD ${plata(m.precio)}`;
+const precioChico = m => `${m.multi && m.precio !== m.precioMax ? '<small>Desde</small>' : ''}USD ${plata(m.precio)}`;
 
 function htmlVitrinas(t){
   return t.prods.map(m => `<button type="button" class="pv-vit" data-key="${esc(clave(m))}" title="${esc(nombreConMarca(m))}">
@@ -8858,7 +9051,7 @@ const nvFrenos = new Set();   // por qué está frenada: el mouse encima, el foc
 function htmlPrecioNuevo(m){
   const desde = m.multi && m.precio !== m.precioMax;
   const ars = precioARS(m);
-  return `<div class="nv-precio">${desde ? '<small>desde</small>' : ''}<b>USD ${plata(m.precio)}</b>${ars ? `<i>${ars}</i>` : ''}</div>`;
+  return `<div class="nv-precio">${desde ? '<small>Desde</small>' : ''}<b>USD ${plata(m.precio)}</b>${ars ? `<i>${ars}</i>` : ''}</div>`;
 }
 
 function htmlAgregarNuevo(m, texto){
@@ -9142,7 +9335,7 @@ function htmlPanelMarca(x, conFotos = true){
     return `<button class="mv-p" type="button" data-key="${esc(clave(m))}"${copia ? ' aria-hidden="true" tabindex="-1"' : ''}>
       <span class="mv-p-foto">${conFotos ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">` : ''}</span>
       <b>${esc(m.titulo || m.desc)}</b><span class="mv-tec">${esc(m.tecnica || '')}</span>
-      <i>${desde ? '<small>desde</small>' : ''}USD ${plata(m.precio)}</i>
+      <i>${desde ? '<small>Desde</small>' : ''}USD ${plata(m.precio)}</i>
     </button>`;
   }).join('');
   /* La tira va DUPLICADA y la animacion corre exactamente el ancho de la
@@ -9604,7 +9797,7 @@ function tituloDeLaGrilla(){
 // Lo que es del rubro y se va con él: la marca, la montura y la apertura
 // (solo Objetivos), la capacidad y la memoria (valoresDe las ofrece solo
 // adentro de un rubro)
-const SIN_RUBRO = { cat:'', marca:'', montura:'', apertura:'', capacidad:'', ram:'' };
+const SIN_RUBRO = { cat:'', marca:'', montura:'', apertura:'', capacidad:'', ram:'', ...SIN_PROPIOS };
 const sinFiltro = c => ({ [c]: c === 'soloStock' ? false : '' });
 
 function salidaDelVacio(q){
@@ -9642,6 +9835,8 @@ function fraseFiltro(c){
     const [a, b] = String(TEXTO_APERTURA[v] || v).split(' · ');
     return a.toLowerCase() + (b ? ' (' + b + ')' : '');
   }
+  // Los propios del rubro (13/10): "con “Solo el cuerpo”", "con “Gran angular”"
+  if(c in SIN_PROPIOS) return 'con “' + textoPropioCorto(c, v) + '”';
   return 'de ' + v;          // la marca y la capacidad
 }
 const unirConY = xs => xs.length > 1 ? xs.slice(0, -1).join(', ') + ' y ' + xs[xs.length - 1] : (xs[0] || '');
@@ -9990,6 +10185,16 @@ function sincronizarControles(){
 function sincronizarLentes(){
   const hayLentes = norm(filtros.cat) === 'objetivo';
   if(!hayLentes){ filtros.montura = ''; filtros.apertura = ''; }
+  /* Lo mismo los propios de cada rubro (13/10): se sueltan al salir de su
+     rubro, y también si el valor no es una de sus opciones (un link viejo o
+     mal escrito, ?tipo=cualquiercosa, dejaría la grilla vacía sin que se vea
+     ningún filtro puesto). */
+  FILTROS_RUBRO.forEach(f => {
+    if(!filtros[f.campo]) return;
+    const vale = FILTROS_RUBRO.some(g => g.campo === f.campo && norm(g.rubro) === norm(filtros.cat)
+                                      && g.opciones.some(o => o[0] === filtros[f.campo]));
+    if(!vale) filtros[f.campo] = '';
+  });
   sincronizarCapacidad();
 }
 
@@ -10535,6 +10740,8 @@ function leerURL(){
      vacío en la primera lectura. */
   filtros.capacidad = s.get('capacidad') || '';
   filtros.ram       = s.get('ram') || '';
+  // Los propios de cada rubro (13/10). Se validan en sincronizarLentes().
+  FILTROS_RUBRO.forEach(f => { filtros[f.campo] = s.get(f.campo) || ''; });
 }
 
 function urlActual(){
@@ -10550,6 +10757,7 @@ function urlActual(){
   set('apertura', filtros.apertura);
   set('capacidad', filtros.capacidad);
   set('ram',       filtros.ram);
+  FILTROS_RUBRO.forEach(f => set(f.campo, filtros[f.campo]));
   const qs = s.toString();
   return u.pathname + (qs ? '?' + qs : '') + (FICHA ? '#p=' + encodeURIComponent(FICHA) : '');
 }
@@ -11332,7 +11540,7 @@ function htmlOpcionesFicha(m, v){
     const base = conStock.length ? conStock : ps;
     if(!base.length) return 'Consultar';
     const min = Math.min(...base.map(x => x.precio));
-    return (ps.some(x => x.precio > min) ? 'desde USD ' : 'USD ') + plata(min);
+    return (ps.some(x => x.precio > min) ? 'Desde USD ' : 'USD ') + plata(min);
   };
   // A qué fila lleva una pestaña: la que se está mirando si cae adentro, y si
   // no la más barata con stock. Igual criterio que el "desde" que muestra.
@@ -11473,7 +11681,7 @@ function htmlSugerido(m, i){
       : ''}</span>
     <span class="pc-txt">
       <b>${esc(m.titulo || m.desc)}</b>${m.tecnica ? `<span class="pc-tec">${esc(m.tecnica)}</span>` : ''}
-      <i>${desde ? '<span class="desde">desde</span>' : ''}${m.precio === null
+      <i>${desde ? '<span class="desde">Desde</span>' : ''}${m.precio === null
         ? 'Consultar' : 'USD ' + plata(m.precio)}</i>
     </span>
   </button>`;
@@ -13767,7 +13975,7 @@ function pintarSug(){
           ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>
         <span class="qs-txt"><b>${esc(m.desc)}</b><i>${esc(m.marca)} · ${
           m.precio === null ? 'Consultar'
-          : (m.multi && m.precio !== m.precioMax ? 'desde ' : '') + 'USD ' + plata(m.precio)}</i></span>
+          : (m.multi && m.precio !== m.precioMax ? 'Desde ' : '') + 'USD ' + plata(m.precio)}</i></span>
       </button>`).join('') +
     /* En el rubro no hay nada y en todo el catálogo sí (3.1 B): lo mismo que
        dice la grilla, con el mismo número. El rótulo no es una opción: lo lee

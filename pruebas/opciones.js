@@ -131,7 +131,7 @@ function correrPruebas(){
   /* ---- 3. El boton de una version junta: su precio y la fila que abre ---- */
   const conPrecios = juntas.find(j => new Set(j.grupo.map(v => v.precio)).size > 1) || null;
   const mismoPrecio = juntas.find(j => new Set(j.grupo.map(v => v.precio)).size === 1) || null;
-  for(const [caso, esperado] of [[conPrecios, 'desde USD '], [mismoPrecio, 'USD ']]){
+  for(const [caso, esperado] of [[conPrecios, 'Desde USD '], [mismoPrecio, 'USD ']]){
     if(!caso) continue;
     abrirFicha(clave(caso.m.rep), null);
     irAVersion(caso.op);   // puede vivir en otra memoria
@@ -144,7 +144,7 @@ function correrPruebas(){
                                    x.dataset.op === caso.op);
     if(!b) R.push('  --  ' + caso.m.desc + ': ' + caso.op + ' no llega a tener pestaña');
     const minimo = Math.min(...caso.grupo.map(v => v.precio).filter(x => x !== null));
-    if(b) ok(texto(b).endsWith(esperado + plata(minimo)) && (esperado === 'USD ' ? !/desde/.test(texto(b)) : true),
+    if(b) ok(texto(b).endsWith(esperado + plata(minimo)) && (esperado === 'USD ' ? !/desde/i.test(texto(b)) : true),
              esperado === 'USD ' ? 'con todos los colores al mismo precio, el boton dice ese precio'
                                  : 'con colores a distinto precio, el boton dice "desde"',
              caso.m.desc + ': ' + texto(b));

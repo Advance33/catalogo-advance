@@ -657,6 +657,93 @@
     "https://store.dji.com/es/product/osmo-pocket-3?set_region=ES"
    ]
   },
+  "1ff7bf255014fac0f3302de45d7344aa14aa83cb0c405f074f0d034c00e6f226": {
+   "modelo": "Dyson Airwrap Co-anda2x (Ceramic Pink · Rose Gold)",
+   "fecha": "2026-10-13",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.dyson.es/cuidado-del-cabello/moldeador/airwrap-co-anda2x/liso-ondulado-ceramic-pink-rose-gold",
+    "https://www.dyson.co.uk/hair-care/hair-stylers/airwrap-co-anda2x/straight-wavy-ceramic-pink-rose-gold",
+    "https://www.dyson.co.uk/hair-care/hair-stylers/airwrap-co-anda2x/curly-coily-ceramic-pink-rose-gold",
+    "https://www.dyson.cn/dyson-598772-01-hs09.html",
+    "https://www.dyson.co.uk/content/dam/dyson/maintenance/user-guides/sg/Dyson_AW-Co-anda2x_User_Manual_SG.pdf",
+    "https://www.dyson.es/app (control: nota 5, no está en fuentes)"
+   ]
+  },
+  "8b642069c73a16272696b3db43d8b1d0aa8d6cd24f36f36949f4933d213f103a": {
+   "modelo": "Dyson Airwrap i.d. Straight+Wavy (Prussian Blue · Rich Copper)",
+   "fecha": "2026-10-13",
+   "por": "verificador-descripciones",
+   "informe": "informe-02.json",
+   "fuentes": [
+    "https://www.dyson.es/cuidado-del-cabello/moldeador/airwrap-id/liso-ondulado-azul-prusia-cobre",
+    "https://www.dyson.co.uk/hair-care/hair-stylers/airwrap-id/straight-wavy-prussian-blue-bright-copper",
+    "https://www.dyson.cn/dyson-airwrapid-tibetan-bronze.html",
+    "https://www.dyson.co.uk/content/dam/dyson/maintenance/user-guides/en_GB/personalcare/dyson-airwrap-multi-styler/N308F_OUG_UK.pdf",
+    "https://www.dyson.es/app (control: nota 5, no está en fuentes)"
+   ]
+  },
+  "7d15741b9baec13aec154d071b69d3a5a45e99024487e237726fcc1b7d41416a": {
+   "modelo": "Dyson PencilVac Fluffycones",
+   "fecha": "2026-10-13",
+   "por": "verificador-descripciones",
+   "informe": "informe-04.json",
+   "fuentes": [
+    "https://www.dyson.co.uk/vacuum-cleaners/cordless/pencilvac/fluffycones",
+    "https://www.dyson.com.sg/pencilvac-fluffycones-black",
+    "https://www.dyson.cn/dyson-492713-01-pencilvac.html",
+    "https://www.dyson.es/app"
+   ]
+  },
+  "d06c7d51036a7e2ce7041a8c750fd1e8bba7e0265ed8eede01f2d1ee870df7d7": {
+   "modelo": "Dyson Supersonic Nural HD16 (Ceramic Pink · Rose Gold)",
+   "fecha": "2026-10-13",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://www.dyson.es/cuidado-del-cabello/secador-de-pelo/supersonic-nural/liso-ondulado-ceramic-pink-rose-gold",
+    "https://www.dyson.co.uk/hair-care/hair-dryers/supersonic-nural/straight-wavy-ceramic-pink-rose-gold",
+    "https://www.dyson.co.uk/hair-care/hair-dryers/supersonic-nural/curly-coily-ceramic-pink-rose-gold",
+    "https://www.dyson.cn/533462-01-dyson-supersonic-hd16-ceramic-pink.html"
+   ]
+  },
+  "ceafc14848e531f2c25fcdedb1576f5677aa9085ede8a578ec8ef657b60e9c47": {
+   "modelo": "Dyson Supersonic r Professional HD18 (Vinca Blue · Topaz)",
+   "fecha": "2026-10-13",
+   "por": "verificador-descripciones",
+   "informe": "informe-03.json",
+   "fuentes": [
+    "https://www.dyson.es/empresas/cuidado-del-cabello/supersonic-r-pro/azul-indigo",
+    "https://www.dyson.co.uk/commercial/hair-care/supersonic-r-pro-bright-copper",
+    "https://www.dyson.cn/522276-01-dyson-supersonic-hd18-505d.html"
+   ]
+  },
+  "b5f8e901ffb0613d1db35bd060399de65c6d1fd6eb50b229e451395fc7855166": {
+   "modelo": "Dyson V15 Detect Fluffy (en la lista del proveedor: V15 Fluffy)",
+   "fecha": "2026-10-13",
+   "por": "verificador-descripciones",
+   "informe": "informe-05.json",
+   "fuentes": [
+    "https://www.dyson.cn/400471-01-dyson-v15-detect-fluffy-blue.html",
+    "https://www.dyson.cn/product/vacuum-cleaner/dyson-v15.html",
+    "https://www.dyson.com.au/products/vacuum-cleaners/stick-vacuums/dyson-v15-detect/overview",
+    "https://www.dyson.es/aspiradoras/sin-cable/v15/detect-amarillo-niquel (control de las notas: 240 AW, no está en fuentes)",
+    "https://www.dyson.com.au/dyson-v15-detect-absolute-447955-01-yellow-nickel (control de las notas: 240 AW y 3,1 kg, no está en fuentes)"
+   ]
+  },
+  "34d6a6f2314e1bd5fe6acd65365941c754b205cedfc44ddd047181a37b043e78": {
+   "modelo": "Dyson V16 Piston Animal",
+   "fecha": "2026-10-13",
+   "por": "verificador-descripciones",
+   "informe": "informe-06.json",
+   "fuentes": [
+    "https://www.dyson.es/aspiradoras/sin-cable/v16-piston-animal/mate-negro-cobre",
+    "https://www.dyson.co.uk/vacuum-cleaners/cordless/v16-piston-animal/black-copper",
+    "https://www.dyson.cn/dyson-496042-01-vacuum.html",
+    "https://www.dyson.es/app"
+   ]
+  },
   "47c395680fdf9648e1662d4b737e513c0c3c1c847d9e87a51c37f05ed65744bc": {
    "modelo": "EarPods (Lightning)",
    "fecha": "2026-10-13",

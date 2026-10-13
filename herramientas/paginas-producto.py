@@ -172,14 +172,31 @@ def leer_indice():
 
 def asignar_slugs(modelos, indice):
     """familia -> slug. Lo ya asignado no se toca; lo nuevo, del nombre, sin
-    pisar uno que ya exista."""
+    pisar uno que ya exista.
+
+    Salvo que la direccion que le tocaria por el nombre sea la de una familia
+    que HOY no esta (13/10/2026, auditoria W3-05 y el cambio de slug del
+    Joystick PS5 en ADVAPP): es el mismo producto, al que ADVAPP le cambio el
+    SKU madre o el grupo ("G:accesorio-gaming~sony~consultar-estandar-joystick-
+    ps5" pasa a "M:ACG-SON-JOYPS5"). Hereda esa direccion, la que ya conoce
+    Google: si no, la vieja quedaba "sin stock" y salia una nueva
+    "sony-joystick-ps5-2" con el mismo producto."""
     slugs = indice['slugs']
+    hoy = {m['familia'] for m in modelos}
+    libres = {}
+    for f, s in slugs.items():
+        if f not in hoy and s not in libres:
+            libres[s] = f
     usados = set(slugs.values())
     for m in modelos:
         f = m['familia']
         if f in slugs:
             continue
         base = slug(m['titulo'])
+        if base in libres:
+            del slugs[libres.pop(base)]
+            slugs[f] = base
+            continue
         s, n = base, 2
         while s in usados:
             s = '%s-%d' % (base, n)
@@ -685,6 +702,16 @@ def probar():
                        {'familia': 'M:OTRO', 'titulo': 'Apple iPhone 17 Pro'}], ind)
     ok(s['M:CEL-APL-17P'] == 'apple-iphone-17-pro', 'una direccion ya asignada no cambia aunque cambie el nombre')
     ok(s['M:OTRO'] == 'apple-iphone-17-pro-2', 'y otro modelo con el mismo nombre no la pisa')
+    # (13/10/2026) ADVAPP le cambia el SKU madre o el grupo a un producto: hereda su direccion
+    ind = {'slugs': {'G:accesorio-gaming~sony~consultar-estandar-joystick-ps5': 'sony-joystick-ps5',
+                     'M:CEL-APL-17P': 'apple-iphone-17-pro'}, 'lastmod': {}}
+    s = asignar_slugs([{'familia': 'M:ACG-SON-JOYPS5', 'titulo': 'Sony Joystick PS5'},
+                       {'familia': 'M:CEL-APL-17P', 'titulo': 'Apple iPhone 17 Pro'}], ind)
+    ok(s.get('M:ACG-SON-JOYPS5') == 'sony-joystick-ps5' and 'G:accesorio-gaming~sony~consultar-estandar-joystick-ps5' not in s,
+       'W3-05: el Joystick PS5 con su SKU madre nuevo sigue en sony-joystick-ps5 (no sale una "-2")')
+    ind = {'slugs': {'M:A': 'sony-joystick-ps5'}, 'lastmod': {}}
+    s = asignar_slugs([{'familia': 'M:A', 'titulo': 'Sony Joystick PS5'}, {'familia': 'M:B', 'titulo': 'Sony Joystick PS5'}], ind)
+    ok(s == {'M:A': 'sony-joystick-ps5', 'M:B': 'sony-joystick-ps5-2'}, 'y si la familia vieja sigue publicada, no se la saca')
     m = {'familia': 'M:CEL-APL-17P', 'titulo': 'Apple iPhone 17 Pro', 'marca': 'Apple', 'categoria': 'Celular', 'rubro': 'Celulares',
          'clave': 'CEL-APP-068', 'sku': 'CEL-APL-17P-256-ORG-ESIM', 'desde': 1200, 'hasta': 1570, 'stock': True,
          'incluye': '+ Cargador 20W + Funda + Templado 🎁',

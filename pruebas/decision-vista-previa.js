@@ -165,10 +165,20 @@ async function correrPruebas(){
      Array.isArray(ids) ? ids.length + ' IDs' : 'no esta: correr python3 herramientas/vista-previa.py');
   if(!Array.isArray(ids)) return;
   const paginas = new Map(), faltan = [];
-  await Promise.all(ids.map(async id => {
-    const t = await leerVP('p/' + encodeURIComponent(id) + '.html');
-    if(t === null) faltan.push(id); else paginas.set(id, t);
-  }));
+  /* De a 8 y con dos intentos mas (13/10/2026). Se pedian las ~775 a la vez
+     y el servidor local (una conexion por respuesta, cinco en espera) dejaba
+     alguna sin contestar: "cada ID tiene su pagina" fallaba de a ratos con
+     paginas que estaban (07/10 ACC-APP-005, 13/10 ACC-APP-008) y frenaba
+     PUBLICAR. Un archivo que de verdad falta sigue faltando al tercer intento. */
+  const leerPagina = async id => {
+    for(let i = 0; i < 3; i++){
+      const t = await leerVP('p/' + encodeURIComponent(id) + '.html');
+      if(t !== null) return paginas.set(id, t);
+      await new Promise(r => setTimeout(r, 200));
+    }
+    faltan.push(id);
+  };
+  for(let i = 0; i < ids.length; i += 8) await Promise.all(ids.slice(i, i + 8).map(leerPagina));
   ok(!faltan.length, 'cada ID de p/indice.json tiene su p/<ID>.html', ejemplos(faltan) || ids.length + ' paginas');
   const general = PUBLICA + 'assets/preview.png';
   const mal = { titulo: [], imagen: [], url: [], card: [], robots: [], ir: [], abre: [], precio: [], medidas: [] };

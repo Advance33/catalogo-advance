@@ -55,8 +55,19 @@ async function a8Leer(ruta){
     return r.ok ? await r.text() : null;
   }catch(e){ return null; }
 }
+/* ¿Esta el archivo? Solo la cabecera (HEAD), y con dos intentos mas si el
+   servidor local no contesta: son cientos de pedidos y alguno se pierde. Un
+   404 es un 404 a la primera. */
 async function a8Existe(ruta){
-  try{ const r = await fetch(ruta + '?_=' + Date.now(), { cache: 'no-store' }); return r.ok; }catch(e){ return false; }
+  for(let i = 0; i < 3; i++){
+    try{
+      const r = await fetch(ruta + '?_=' + Date.now() + i, { method: 'HEAD', cache: 'no-store' });
+      if(r.ok) return true;
+      if(r.status === 404) return false;
+    }catch(e){}
+    await a8Dormir(150);
+  }
+  return false;
 }
 // Lo que dibuja la grilla con estos filtros (sin tocar los de verdad)
 function a8Grilla(cambios){
@@ -65,6 +76,15 @@ function a8Grilla(cambios){
   try{ return listaDeLaGrilla(); } finally { Object.assign(filtros, antes); }
 }
 const esAccesorioA8 = m => /^accesorio/.test(norm(m.cat));
+/* De a tandas de 8: el servidor local cierra la conexion en cada respuesta y
+   atiende de a 5 en espera; con cientos de pedidos a la vez deja algunos sin
+   contestar ("connection reset", lo mismo que le pasa a decision-vista-previa
+   de a ratos) */
+async function a8DeATandas(lista, hacer, n = 8){
+  const out = [];
+  for(let i = 0; i < lista.length; i += n) out.push(...await Promise.all(lista.slice(i, i + n).map(hacer)));
+  return out;
+}
 
 async function correrPruebas(){
   ok(FUENTE.fuente === 'advapp', 'la pagina cargo desde ADVAPP (lo demas lo da por hecho)', FUENTE.fuente);
@@ -84,6 +104,36 @@ async function correrPruebas(){
   textos();
   descripcionRedmi();
   await paginasGoogle();
+  await garantiaDeAdvapp();
+}
+
+/* ---- La garantia de ADVAPP (coordinacion con ADVAPP PR #86, 13/10/2026) ----
+   El feed suma la columna "Garantía" (Garantías por categoría; en usados, la
+   del proveedor). La ficha la muestra si viene con texto; vacia o sin la
+   columna, lo de siempre. Nunca un plazo inventado. */
+async function garantiaDeAdvapp(){
+  const real = await (await fetch(ADVAPP_URL, { cache: 'no-store' })).json();
+  const prueba = '6 meses (prueba A8)';
+  const conCol = JSON.parse(JSON.stringify(real));
+  conCol.productos[0]['Garantía'] = prueba;
+  conCol.productos.slice(1).forEach(p => { p['Garantía'] = ''; });   // la columna en todos, vacia en el resto
+  const viaFetch = async (cuerpo) => {
+    const antes = window.fetch;
+    window.fetch = (u, o) => String(u).startsWith(ADVAPP_URL) ? Promise.resolve(new Response(JSON.stringify(cuerpo), { status: 200 })) : antes(u, o);
+    try{ return armarCarga(await bajarAdvapp()).productos; } finally { window.fetch = antes; }
+  };
+  const ps = await viaFetch(conCol);
+  const p0 = ps.find(p => p.id === String(conCol.productos[0].ID));
+  ok(!!p0 && p0.garantia === prueba, '[Garantia] la columna "Garantía" de ADVAPP llega a la fila aunque no la nombre en `columnas`', p0 && p0.garantia);
+  ok(ps.filter(p => p !== p0).every(p => !p.garantia || /a[ñn]o|mes/i.test(p.garantia)), '[Garantia] vacia, no se inventa nada');
+  const h = htmlServicio(p0 || {});
+  ok(h.includes(prueba), '[Garantia] y la ficha la muestra en el renglon de garantia', (h.match(/data-servicio="garantia"[\s\S]*?<\/li>/) || [''])[0].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
+  const sin = htmlServicio({ garantia: '' });
+  ok(!SERVICIO.garantia || (sin.includes(esc(SERVICIO.garantia[1] || '')) && !sin.includes(prueba)),
+     '[Garantia] sin dato, la ficha dice lo de siempre', SERVICIO.garantia && SERVICIO.garantia[1]);
+  const ps2 = await viaFetch(real);
+  const p2 = ps2.find(p => p.id === String(real.productos[0].ID));
+  ok(!!p2 && (p2.garantia || '') === (PRODUCTOS.find(p => p.id === p2.id) || {}).garantia, '[Garantia] sin la columna (ADVAPP de hoy), como siempre');
 }
 
 /* ---- [W3-17] El pedido a ADVAPP sale desde el <head> ---- */
@@ -149,7 +199,18 @@ async function paginasP(){
   const nombres = listado ? [...new Set([...listado.matchAll(/href="([^"?\/]+)\.html"/g)].map(m => decodeURIComponent(m[1])))] : [];
   if(!nombres.length){ info('[FOT-21] no se pudo leer el listado de p/'); return; }
   const sinFoto = [], sinModelo = [];
-  const paginas = await Promise.all(nombres.map(async id => [id, await a8Leer('p/' + encodeURIComponent(id) + '.html')]));
+  const leerP = async id => {
+    const ruta = 'p/' + encodeURIComponent(id) + '.html';
+    for(let i = 0; i < 3; i++){            // hasta tres intentos si el servidor no contesto
+      const t = await a8Leer(ruta);
+      if(t) return [id, t];
+      await a8Dormir(200);
+    }
+    return [id, null];
+  };
+  const paginas = await a8DeATandas(nombres, leerP);
+  const sinLeer = paginas.filter(([, t]) => !t).map(([id]) => id);
+  ok(!sinLeer.length, '[FOT-21] se pudieron leer todas las paginas p/', a8Ej(sinLeer) || paginas.length + ' paginas');
   const imagenes = new Map();
   for(const [id, t] of paginas){
     if(!t) continue;
@@ -166,7 +227,7 @@ async function paginasP(){
   }
   ok(!sinModelo.length, '[W3-05] ninguna pagina p/ de un modelo que sigue publicado abre "Ya no esta"', a8Ej(sinModelo) || paginas.length + ' paginas');
   const unicas = [...new Set(imagenes.values())];
-  const existe = new Map(await Promise.all(unicas.map(async u => [u, await a8Existe(u)])));
+  const existe = new Map(await a8DeATandas(unicas, async u => [u, await a8Existe(u)]));
   for(const [id, u] of imagenes) if(!existe.get(u)) sinFoto.push(id + ': ' + u);
   ok(!sinFoto.length, '[FOT-21] ninguna pagina p/ (tampoco las de filas dadas de baja) apunta a una foto que no existe',
      a8Ej(sinFoto) || imagenes.size + ' paginas, ' + unicas.length + ' fotos');

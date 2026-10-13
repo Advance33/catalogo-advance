@@ -4641,9 +4641,15 @@ async function bajarAdvapp(){
   if(!productos.length) throw new Error('vino sin productos');
   if(!/^landing\/1\./.test(d.contrato || ''))
     console.warn('ADVAPP viene con un contrato que esta web no conoce:', d.contrato);
-  const columnas = (Array.isArray(d.columnas) && d.columnas.length)
-    ? d.columnas.map(String)
-    : Object.keys(productos[0]).filter(k => k !== 'SKUS');
+  /* Las que nombra `columnas` y, además, las que traen los productos y ahí no
+     están (13/10/2026): ADVAPP suma la columna "Garantía" (lo cargado en
+     ⚙️ Garantías por categoría; en usados, la del proveedor) y la web la lee
+     sola (C.garantia en armarCarga, que manda sobre el texto general de la
+     ficha: htmlServicio). Si un día la mandara en los productos sin nombrarla
+     en `columnas`, igual llega. Vacía, la ficha dice lo de siempre ("Cada
+     producto tiene la suya"): nunca se inventa un plazo. */
+  const nombradas = (Array.isArray(d.columnas) && d.columnas.length) ? d.columnas.map(String) : [];
+  const columnas = [...nombradas, ...Object.keys(productos[0]).filter(k => k !== 'SKUS' && !nombradas.includes(k))];
   const texto = v => (v === null || v === undefined) ? '' : String(v);
   /* Stock y Activo en un formato que la web entienda (29/09). Hoy vienen
      'Sí'/'No' en las 757 filas; el día que cambien a algo que siNo() no lee,

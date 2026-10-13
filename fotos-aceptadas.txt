@@ -13,7 +13,7 @@ a1946c42773c1b22e9e9c9d03392a37e  2   # 56 F/1.4 DC DN CONT SONY E | 56MM F/1.4 
 0b30ee9450d530be456d63a5b6cbb1b8  2   # MACBOOK PRO M5 14" | MACBOOK PRO M5 MAX 14"
 8a8f0515ed38e828f385d6a8d4c0be61  2   # MACBOOK PRO M5 MAX 16" | MACBOOK PRO M5 PRO 16"
 57f81f74c5dfb5e636a3e709aab2710e  2   # IPAD 11 A16 | IPAD 11" A16
-56acf9f2a14130b4d7457ae94e948c46  2   # IPAD PRO M4 11" | IPAD PRO M5 11"
+56acf9f2a14130b4d7457ae94e948c46  3   # IPAD PRO M4 11" | IPAD PRO M5 11" (13/10/2026: tambien el M5 256GB Cellular AT-0540-01, Wifi y Cellular se ven igual: D18, Benja 08/10)
 846029a8ce6ac4e256e4e1888f5c7c0f  3   # IPAD AIR 13" M3 | IPAD AIR M4 13" (misma foto oficial de Apple: el diseno es identico)
 cbd80e88dc71aa95ef931965f2e9bcbf  3   # MACBOOK NEO 256GB | MACBOOK NEO 512GB Blush (la misma maquina: la memoria no se ve; 26/09 tambien el 256GB teclado ES)
 d7de8ade0ae668ebbbaa8133623ae60e  2   # MACBOOK NEO 256GB | MACBOOK NEO 512GB Silver (la misma maquina: la memoria no se ve)
@@ -28,3 +28,12 @@ c30b7227156f6b8ca67f569275d67565  2   # IPHONE 16 | IPHONE 16 PLUS (Ultramarine)
 a1ff01a9cb7ca9545b023c95d2e91d6d  2   # IPHONE 16 | IPHONE 16 PLUS (Teal): el mismo equipo, más grande; en la foto no se ve. 07/10/2026
 68e75c36082ecd2f6911c50a7732a2b5  2   # IPHONE 16 | IPHONE 16 PLUS (White): el mismo equipo, más grande; en la foto no se ve. 07/10/2026
 5d38bf86b4e2048ff12154fa00d7777a  2   # IPHONE 16 | IPHONE 16 PLUS (Pink): el mismo equipo, más grande; en la foto no se ve. 07/10/2026
+78199899db5258af08a76b59de27699f  2   # 50MM F/1.4 DG HSM ART CANON | 50 F/1.4 DG HSM ART NIKON: la misma foto oficial de Sigma (A014) para las dos monturas, como los 12-24 y el 16mm. 13/10/2026 (FOT-03)
+5d39d873360bab61ef314f7417eb8a3d  2   # IPHONE 17 PRO 1TB | 1TB SIM (Silver). Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+84d7734776242274c0653f37f7abde93  2   # IPHONE 17 PRO 1TB | 1TB SIM (Orange). Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+4591c185974aeeffd574a58cc8b7dac1  2   # IPHONE 17 PRO 1TB | 1TB SIM (Blue). Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+c84d5ee450f4e51503b151870739b89d  2   # IPHONE 17 PRO 256GB | 256GB SIM (Silver). Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+d842ee67124a37878b9600219398189e  4   # IPHONE 17 PRO 256GB | 512GB, eSIM y SIM (Blue): otra memoria y otra Sim, la foto es la misma. Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+42527c7c3c299229d5cf3898c5bf8f42  4   # IPHONE 17 PRO 256GB | 512GB, eSIM y SIM (Orange): otra memoria y otra Sim, la foto es la misma. Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+df88228f4c1d12e8df8b9a3b2490ea0a  2   # IPHONE 17 PRO 512GB | 512GB SIM (Silver). Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+59d5dbc05361152f3a80e68f5f9145f0  2   # GALAXY TAB A11+ 6/128GB WIFI | 5G (Gray): Wifi y Cellular, el mismo equipo; la antena no se ve (D18, Benja 08/10). 13/10/2026

@@ -54,7 +54,11 @@
 "AT-0048.jpg",
 "AT-0049-01.jpg",
 "AT-0050-01.jpg",
-"AT-0051.jpg",
+"AT-0051-01.jpg",
+"AT-0051-02.jpg",
+"AT-0051-03.jpg",
+"AT-0051-04.jpg",
+"AT-0051-05.jpg",
 "AT-0052-01.jpg",
 "AT-0052-02.jpg",
 "AT-0052-03.jpg",
@@ -153,6 +157,7 @@
 "AT-0092-01.jpg",
 "AT-0092-02.jpg",
 "AT-0092-03.jpg",
+"AT-0092-04.jpg",
 "AT-0093-01.jpg",
 "AT-0093-02.jpg",
 "AT-0093-03.jpg",
@@ -4042,7 +4047,18 @@
 "teclas negras": "AT-0050-01"
 },
 "AT-0051": {
-"": "AT-0051"
+"black": "AT-0051-01",
+"blanco": "AT-0051-02",
+"cosmic red": "AT-0051-03",
+"galactic purple": "AT-0051-04",
+"midnight black": "AT-0051-01",
+"negro": "AT-0051-01",
+"purple": "AT-0051-04",
+"red": "AT-0051-03",
+"rhythm blue": "AT-0051-05",
+"rojo": "AT-0051-03",
+"violeta": "AT-0051-04",
+"white": "AT-0051-02"
 },
 "AT-0052": {
 "astrobot": "AT-0052-03",
@@ -4324,11 +4340,14 @@
 "whites": "AT-0091-01"
 },
 "AT-0092": {
+"black": "AT-0092-04",
 "cinza": "AT-0092-01",
 "gray": "AT-0092-01",
 "grey": "AT-0092-01",
 "gris": "AT-0092-01",
+"negro": "AT-0092-04",
 "silverblue": "AT-0092-03",
+"titanium black": "AT-0092-04",
 "whitesilver": "AT-0092-02"
 },
 "AT-0093": {
@@ -5729,6 +5748,7 @@
 "black ceramic": "AT-0457-01",
 "black ceramic · black peach": "AT-0457-01",
 "black peach": "AT-0457-01",
+"black-peach ceramic bezel · white silicone band": "AT-0457-01",
 "black/peach ceramic bezel · white silicone band": "AT-0457-01"
 },
 "AT-0458": {
@@ -6175,5 +6195,5 @@
 }
 }
 },
-"generado": "2026-10-07T13:48:46"
+"generado": "2026-10-13T10:54:20"
 }

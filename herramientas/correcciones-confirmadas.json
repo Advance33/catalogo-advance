@@ -82,6 +82,11 @@
   {"id": "CEL-APL-15-128-PNK-SIM", "cambios": {"codigo": "AT-0065", "codigo_var": "AT-0065-03"}, "motivo": "Benja 07/10: el iPhone 15 128GB Sim Pink a la web; es el color -03 del AT-0065", "fecha": "2026-10-07"},
   {"id": "CEL-APL-16E-256-WHT-000", "cambios": {"codigo": "AT-0548", "codigo_var": "AT-0548-02", "nombre": "Apple iPhone 16e 256GB (White)"}, "motivo": "Benja 07/10: el iPhone 16e 256GB a la web (AT-0548, la -02 es White)", "fecha": "2026-10-07"},
   {"id": "CEL-APL-IPHONE16PLUS-128-BLK-000", "cambios": {"codigo": "AT-0549", "codigo_var": "AT-0549-01"}, "motivo": "Benja 07/10: el iPhone 16 Plus 128GB a la web (AT-0549, la -01 es Black)", "fecha": "2026-10-07"},
-  {"id": "CEL-APL-15-128-PNK-SIM", "cambios": {"nombre": "Apple iPhone 15 128GB Sim (Pink)"}, "motivo": "el SKU dice SIM y su hermana Blue se llama \"iPhone 15 128GB Sim (Blue)\"; sin \"Sim\" la web los mostraba como dos versiones (Base y Sim)", "fecha": "2026-10-07"}
+  {"id": "CEL-APL-15-128-PNK-SIM", "cambios": {"nombre": "Apple iPhone 15 128GB Sim (Pink)"}, "motivo": "el SKU dice SIM y su hermana Blue se llama \"iPhone 15 128GB Sim (Blue)\"; sin \"Sim\" la web los mostraba como dos versiones (Base y Sim)", "fecha": "2026-10-07"},
+  {"id": "ACC-SON-001", "cambios": {"codigo": "AT-0051", "codigo_var": "AT-0051-01"}, "motivo": "FOT-01 (auditoria 08/10): el Joystick PS5 por color, cada uno con su foto oficial de PlayStation (AT-0051-01 Black = Midnight Black)", "fecha": "2026-10-13"},
+  {"id": "ACG-SON-JOYPS5-000-WHT-000", "cambios": {"codigo": "AT-0051", "codigo_var": "AT-0051-02"}, "motivo": "FOT-01 (auditoria 08/10): el Joystick PS5 por color, cada uno con su foto oficial de PlayStation (AT-0051-02 White)", "fecha": "2026-10-13"},
+  {"id": "ACG-SON-JOYPS5-000-RED-000", "cambios": {"codigo": "AT-0051", "codigo_var": "AT-0051-03"}, "motivo": "FOT-01 (auditoria 08/10): el Joystick PS5 por color, cada uno con su foto oficial de PlayStation (AT-0051-03 Red = Cosmic Red)", "fecha": "2026-10-13"},
+  {"id": "ACG-SON-JOYPS5-000-PUR-000", "cambios": {"codigo": "AT-0051", "codigo_var": "AT-0051-04"}, "motivo": "FOT-01 (auditoria 08/10): el Joystick PS5 por color, cada uno con su foto oficial de PlayStation (AT-0051-04 Purple = Galactic Purple)", "fecha": "2026-10-13"},
+  {"id": "ACG-SON-JOYPS5-000-RBL-000", "cambios": {"codigo": "AT-0051", "codigo_var": "AT-0051-05"}, "motivo": "FOT-01 (auditoria 08/10): el Joystick PS5 por color, cada uno con su foto oficial de PlayStation (AT-0051-05 Rhythm Blue)", "fecha": "2026-10-13"}
  ]
 }

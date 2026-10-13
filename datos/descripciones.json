@@ -54458,7 +54458,7 @@
       ],
       "venta": [
         "Moldeador y secador con motor Hyperdymium 2 de hasta 150.000 rpm: el doble de presión de aire que la generación anterior, para secar y peinar con el mismo equipo.",
-        "Riza con efecto Coanda y la secuencia i.d. curl, que envuelve el mechón, lo moldea y lo fija con aire frío, midiendo la temperatura del aire más de 1.000 veces por segundo."
+        "Riza y ondula con aire gracias al efecto Coanda, y mide la temperatura del aire más de 1.000 veces por segundo para evitar el daño por calor extremo."
       ],
       "importante": [
         {
@@ -54466,12 +54466,12 @@
           "texto": "Motor Hyperdymium 2 con 7 kPa de presión: el doble que la generación anterior y un 30 % más potente."
         },
         {
-          "titulo": "Secuencia i.d. curl",
-          "texto": "Detecta el movimiento, envuelve el pelo y ajusta calor, aire y tiempos a tu tipo de pelo; fija el rizo con aire frío."
+          "titulo": "Riza con aire",
+          "texto": "Con el efecto Coanda riza y ondula el pelo dándole volumen, sin el daño del calor extremo."
         },
         {
-          "titulo": "App MyDyson por Bluetooth",
-          "texto": "Armás tu perfil con seis preguntas sobre tipo y largo de pelo, y la secuencia queda a tu medida."
+          "titulo": "4 temperaturas y 3 velocidades",
+          "texto": "Y un acelerómetro que detecta cuando lo apoyás y lo desactiva para reducir el ruido."
         },
         {
           "titulo": "Control del calor",
@@ -54513,7 +54513,7 @@
             ],
             [
               "Aire frío",
-              "Al final de la secuencia i.d. curl, para fijar el rizo"
+              "Lo activa la secuencia i.d. curl para fijar el rizo, antes de soltarlo"
             ]
           ]
         },
@@ -54522,15 +54522,15 @@
           "datos": [
             [
               "Conexión",
-              "Bluetooth, con la app MyDyson"
+              "Bluetooth, con la app MyDyson (las funciones de la app dependen del país)"
             ],
             [
               "i.d. curl",
-              "Envuelve, moldea, fija con aire frío y suelta el rizo, con los tiempos de tu perfil"
+              "Envuelve, moldea, fija con aire frío y suelta el rizo, con los tiempos de tu perfil. Se activa en la app MyDyson (según el país)"
             ],
             [
               "Acelerómetro",
-              "Arranca la secuencia cuando el pelo se enrolla y desactiva el equipo cuando lo apoyás"
+              "Arranca la secuencia i.d. curl cuando el pelo se enrolla y desactiva el equipo cuando lo apoyás"
             ]
           ]
         },
@@ -54539,11 +54539,11 @@
           "datos": [
             [
               "Reconocimiento",
-              "Chip RFID en cada accesorio, con ajustes recomendados que podés cambiar en la app"
+              "Chip RFID en cada accesorio, con ajustes recomendados de calor y aire; si los cambiás, el equipo los recuerda"
             ],
             [
               "Compatibilidad",
-              "Sólo accesorios de la Airwrap Co-anda2x"
+              "Sólo accesorios del Airwrap Co-anda2x"
             ]
           ]
         }
@@ -54564,10 +54564,14 @@
         {
           "texto": "dyson.cn/dyson-598772-01-hs09.html",
           "url": "https://www.dyson.cn/dyson-598772-01-hs09.html"
+        },
+        {
+          "texto": "dyson.co.uk/content/dam/…/Dyson_AW-Co-anda2x_User_Manual_SG.pdf (manual)",
+          "url": "https://www.dyson.co.uk/content/dam/dyson/maintenance/user-guides/sg/Dyson_AW-Co-anda2x_User_Manual_SG.pdf"
         }
       ],
       "verificado": "2026-10-13",
-      "notas": "NEWGADGETS: «HS09 — Dyson Airwrap Co-anda 2X — Ceramic Pink». HS09 es el código que Dyson China (dyson.cn) le da a la Co-anda 2x. NEWGADGETS no dice si es Straight+Wavy o Curly+Coily: en Ceramic Pink/Rose Gold existen las dos (dyson.co.uk) y traen accesorios distintos; además en China la HS09 Ceramic Pink se vende como «自动直发版» (3 en 1: seca, alisa y riza). Por eso NO se nombran accesorios, ni «En la caja», ni el «6 en 1» de Europa. Afuera también: peso (0,711 kg en dyson.es y 0,716 kg en dyson.co.uk), potencia en W y voltaje (cambian según el país; NEWGADGETS no dice de qué país es la unidad: preguntar si es la de China, 220 V). Fuentes: el 30 % y el doble de presión, de la descripción de dyson.es/.co.uk; 150.000 rpm y 7 kPa, de las preguntas frecuentes de dyson.es/.co.uk (dyson.cn también dice 150.000 rpm, el doble de presión y 1.000 veces por segundo); RFID y ajustes en la app, preguntas frecuentes de dyson.co.uk; compatibilidad sólo con accesorios Co-anda2x, dyson.co.uk y dyson.cn; 4 temperaturas y 3 velocidades, ficha de dyson.es/.co.uk."
+      "notas": "El proveedor lo lista como «HS09 — Dyson Airwrap Co-anda 2X — Ceramic Pink». HS09 es el código de Dyson para la Co-anda2x en todos los mercados (T1/T2 = Straight+Wavy, T3/T4 = Curly+Coily): dyson.es identifica su página como «HS09 T1/T2(26) EU/MEA/CL/PE CePk/RoseGd» y dyson.co.uk como «HS09 T1/T2(26) GBI/MEA/HK/MYSG» y «HS09 T3/T4(26) UK/IE/MEA». El código no dice de qué país es la unidad. En China el mismo HS09 se llama «Supersonic Co-anda 2x» y el Ceramic Pink se vende como «自动直发版» (3 en 1: seca, alisa y riza). El proveedor no dice si es Straight+Wavy o Curly+Coily: en Ceramic Pink/Rose Gold existen las dos (dyson.co.uk), con accesorios distintos, y el manual avisa «Your device may not include all attachments shown». Por eso NO se nombran accesorios, ni «En la caja», ni el «6 en 1» de Europa. Afuera también: peso (0,711 kg en dyson.es y 0,716 kg en dyson.co.uk), potencia en W y voltaje (cambian según el país). PREGUNTAR AL PROVEEDOR antes de publicar: país, voltaje y enchufe de la unidad, y si es Straight+Wavy o Curly+Coily. Fuentes: el 30 % y el doble de presión, de la descripción de dyson.es/.co.uk; 150.000 rpm y 7 kPa, de las preguntas frecuentes de dyson.es/.co.uk (dyson.cn también dice 150.000 rpm, el doble de presión y 1.000 veces por segundo); RFID y acelerómetro, preguntas frecuentes de dyson.es/.co.uk; compatibilidad sólo con accesorios Co-anda2x, dyson.co.uk y dyson.cn; 4 temperaturas y 3 velocidades, ficha de dyson.es/.co.uk.\nVerificación 1 (13/10): la secuencia i.d. curl, el perfil y la app salieron de «Por qué elegirlo» y de «Lo más importante»: la secuencia se arma en la app MyDyson (manual, pág. 8) y el manual oficial dice «App functionality may vary per market» (pág. 3); lo repite dyson.es/app (nota 5). En la ficha quedaron con la aclaración del país. Se sumó el manual a fuentes. «Reconocimiento» ya no nombra la app: los accesorios se adaptan y recuerdan los ajustes sin ella (dyson.es)."
     },
     {
       "modelo": "Dyson Airwrap i.d. Straight+Wavy (Prussian Blue · Rich Copper)",
@@ -54575,17 +54579,13 @@
         "AT-0551"
       ],
       "venta": [
-        "Moldeador y secador con Bluetooth: la secuencia i.d. curl envuelve, moldea y fija cada rizo con un toque, con los tiempos de tu perfil en la app MyDyson.",
+        "Moldeador y secador con 3 temperaturas y 3 velocidades, flujo de aire de 13,5 l/s e iones negativos que ayudan a reducir la estática.",
         "Riza con aire gracias al efecto Coanda y un motor de 110.000 rpm, con un control del calor que mantiene la temperatura por debajo de 150 °C."
       ],
       "importante": [
         {
-          "titulo": "Secuencia i.d. curl",
-          "texto": "Acercás el mechón, se enrolla solo y el equipo lo moldea, lo fija con aire frío y lo suelta."
-        },
-        {
-          "titulo": "Perfil en la app",
-          "texto": "Seis preguntas sobre tipo y largo de pelo en MyDyson, por Bluetooth, y la secuencia queda a tu medida."
+          "titulo": "Iones negativos",
+          "texto": "Tiene un ionizador, como el secador Supersonic: ayuda a reducir la estática del pelo."
         },
         {
           "titulo": "Efecto Coanda",
@@ -54627,15 +54627,15 @@
           "datos": [
             [
               "Conexión",
-              "Bluetooth, con la app MyDyson"
+              "Bluetooth, con la app MyDyson (las funciones de la app dependen del país)"
             ],
             [
               "i.d. curl",
-              "Envuelve, moldea, fija con aire frío y suelta el rizo, con los tiempos de tu perfil"
+              "Envuelve, moldea, fija con aire frío y suelta el rizo, con los tiempos de tu perfil. Se desbloquea en la app MyDyson (según el país)"
             ],
             [
               "En la app",
-              "Bajar el calor si tenés el cuero cabelludo sensible, ver los ajustes en vivo y recibir avisos de mantenimiento"
+              "Según el país: bajar el calor si tenés el cuero cabelludo sensible, ver los ajustes en vivo y recibir avisos de mantenimiento"
             ]
           ]
         },
@@ -54665,10 +54665,14 @@
         {
           "texto": "dyson.cn/dyson-airwrapid-tibetan-bronze.html",
           "url": "https://www.dyson.cn/dyson-airwrapid-tibetan-bronze.html"
+        },
+        {
+          "texto": "dyson.co.uk/content/dam/…/N308F_OUG_UK.pdf (manual)",
+          "url": "https://www.dyson.co.uk/content/dam/dyson/maintenance/user-guides/en_GB/personalcare/dyson-airwrap-multi-styler/N308F_OUG_UK.pdf"
         }
       ],
       "verificado": "2026-10-13",
-      "notas": "NEWGADGETS: «HS08 — Dyson Airwrap i.d. Straight + Wavy — Prussian / Blue». HS08 es el código del Airwrap i.d. en dyson.cn (color 藏青铜色). Los accesorios de la caja cambian según el país y hasta según el color (dyson.co.uk lista cinco en el Prussian y seis en el Ceramic Apricot; dyson.cn vende versiones «长发版»): no se nombran. Afuera también: largo del cable (2,675 m y 2 m en dos páginas de dyson.co.uk), peso (0,6 kg en dyson.co.uk y 0,55 kg en dyson.es), potencia en W y voltaje (dyson.es dice 120 V en la ficha del Airwrap i.d., un error de la página; NEWGADGETS no dice el país de la unidad: preguntar). Fuentes: 110.000 rpm, menos de 150 °C y efecto Coanda, sección de tecnología de dyson.es y dyson.co.uk; 3 temperaturas y 3 velocidades, 13,5 l/s e iones, ficha de dyson.es y dyson.co.uk (iones también en las preguntas de dyson.cn); i.d. curl y la app, dyson.es y dyson.co.uk. Dyson llama al color «Prussian blue/Rich copper» en el título y «bright copper» en la dirección de dyson.co.uk."
+      "notas": "El proveedor lo lista como «HS08 — Dyson Airwrap i.d. Straight + Wavy — Prussian / Blue». HS08 es el código de Dyson para el Airwrap i.d. en todos los mercados (T1/T2 = Straight+Wavy): dyson.es identifica su página como «HS08 T1/T2 EU/TR/ZA/EG PBu/RCo» y dyson.co.uk como «HS08 T1/T2 UK/IE/SA/AE PBu/RCo». El código no dice de qué país es la unidad. Los accesorios de la caja cambian según el país y hasta según el color (dyson.co.uk lista cinco en el Prussian y seis en el Ceramic Apricot; dyson.cn vende versiones «长发版»): no se nombran. Afuera también: largo del cable (2,675 m y 2 m en dos páginas de dyson.co.uk), peso (0,6 kg en dyson.co.uk y 0,55 kg en dyson.es), potencia en W y voltaje (la ficha de dyson.es dice 120 V, que parece un error de esa página; dyson.co.uk dice 220-240 V). Dyson aclara en las preguntas frecuentes de dyson.es que el equipo «se fabrica para su uso en el país de venta, con el voltaje adecuado para ese mercado» y desaconseja usarlo con adaptador. PREGUNTAR AL PROVEEDOR antes de publicar: país, voltaje y enchufe de la unidad. Fuentes: 110.000 rpm, menos de 150 °C y efecto Coanda, sección de tecnología de dyson.es y dyson.co.uk; 3 temperaturas y 3 velocidades, 13,5 l/s e iones, ficha de dyson.es y dyson.co.uk; el ionizador «como el del secador Supersonic», preguntas frecuentes de dyson.es y dyson.co.uk (también dyson.cn); i.d. curl y la app, dyson.es y dyson.co.uk. Dyson llama al color «Prussian blue/Rich copper» en el título y «bright copper» en la dirección de dyson.co.uk.\nVerificación 1 (13/10): la secuencia i.d. curl y el perfil en la app salieron de «Por qué elegirlo» y de «Lo más importante»: el manual oficial dice que la secuencia se desbloquea con el tutorial de la app MyDyson (pág. 3) y «App functionality may vary per market» (pág. 4); lo repite dyson.es/app (nota 5). En la ficha quedaron con la aclaración del país. Se sumó el manual a fuentes. Quedaron cuatro puntos en «Lo más importante»."
     },
     {
       "modelo": "Dyson Supersonic Nural HD16 (Ceramic Pink · Rose Gold)",
@@ -54777,7 +54781,7 @@
         }
       ],
       "verificado": "2026-10-13",
-      "notas": "NEWGADGETS: «HD16 — Dyson Hair Dryer Nural». HD16 es el código del Supersonic Nural en dyson.cn (Ceramic Pink/Rose Gold = 落日玫瑰). NEWGADGETS no dice Straight+Wavy o Curly+Coily: en Ceramic Pink/Rose Gold existen las dos (dyson.co.uk) con cinco accesorios distintos: no se nombran. Cantidad de temperaturas afuera: dyson.co.uk dice «4 heat, 3 speed» y en la misma ficha «3 heat settings», y dyson.es dice «cuatro modos de calor… el cuarto botón es el aire frío». Afuera también: peso (0,684 kg en dyson.co.uk, 0,65 kg en dyson.es), cable (2 m y 2,62 m), W y voltaje (NEWGADGETS no dice el país: preguntar si es la de China, 220 V), y los 55 °C del modo Scalp protect, que sólo publica dyson.cn. Fuentes: sensores Nural, tiempo de vuelo, Hall, acelerómetro, 3 velocidades y aire frío, tapa transparente, filtro: dyson.co.uk y dyson.es (tecnología y preguntas frecuentes); detección de pausa también en dyson.cn; motor Hyperdymium y control del calor, dyson.es; iones, fichas de dyson.es y dyson.co.uk y preguntas de dyson.cn."
+      "notas": "El proveedor lo lista como «HD16 — Dyson Hair Dryer Nural». HD16 es el código de Dyson para el Supersonic Nural en todos los mercados (T1/T2 = Straight+Wavy, T3/T4 = Curly+Coily): dyson.es identifica su página como «HD16 T1/T2 EU/TR/ZA/CL/EG/PE CePk/RoseGd» y dyson.co.uk como «HD16 T1/T2 UK/IE/SA/AE CePk/RoseGd» (Straight+Wavy, 161818-01) y «HD16 UK/IE/SA/AE CePk/RoseGd» (Curly+Coily, 598976-01). El código no dice de qué país es la unidad. En dyson.cn el Ceramic Pink/Rose Gold es 落日玫瑰; la página muestra el SKU 598967-01 (el 533462-01 sólo está en la dirección). El proveedor no dice Straight+Wavy o Curly+Coily: en Ceramic Pink/Rose Gold existen las dos (dyson.co.uk) con cinco accesorios distintos: no se nombran. Cantidad de temperaturas afuera: dyson.co.uk dice «4 heat, 3 speed» y en la misma ficha «3 heat settings», y dyson.es dice «cuatro modos de calor… el cuarto botón es el aire frío». Afuera también: peso (0,684 kg en dyson.co.uk, 0,65 kg en dyson.es), cable (2 m y 2,62 m), W y voltaje, y los 55 °C del modo Scalp protect, que sólo publica dyson.cn. PREGUNTAR AL PROVEEDOR antes de publicar: país, voltaje y enchufe de la unidad, y si es Straight+Wavy o Curly+Coily. Fuentes: sensores Nural, tiempo de vuelo, Hall, acelerómetro, 3 velocidades y aire frío, tapa transparente, filtro: dyson.co.uk y dyson.es (tecnología y preguntas frecuentes); detección de pausa también en dyson.cn; motor Hyperdymium y control del calor, dyson.es; iones, fichas de dyson.es y dyson.co.uk y preguntas de dyson.cn.\nVerificación 1 (13/10): ok, sin errores. Quedó un aviso opcional que NO se aplicó para no cambiar la huella: Dyson afirma lo del brillo y el cuero cabelludo «cuando se utiliza en el modo Scalp protect» (nota 1 de dyson.es y dyson.co.uk). Si alguna vez se retoca la primera frase de «Por qué elegirlo», sumar esa condición y volver a verificar."
     },
     {
       "modelo": "Dyson Supersonic r Professional HD18 (Vinca Blue · Topaz)",
@@ -54786,7 +54790,7 @@
       ],
       "venta": [
         "La versión para estilistas del Supersonic r: un 30 % más chico y un 20 % más liviano que el Supersonic, con motor Hyperdymium de hasta 110.000 rpm.",
-        "Diez láminas calefactoras en la curva calientan el aire de forma pareja, y los accesorios inteligentes con chip RFID ajustan solos la temperatura y el aire."
+        "Diez láminas calefactoras en la curva del secador calientan el aire de forma pareja, para un secado rápido y preciso."
       ],
       "importante": [
         {
@@ -54802,8 +54806,8 @@
           "texto": "Motor Dyson Hyperdymium de alta presión, con un chorro de aire controlado."
         },
         {
-          "titulo": "Accesorios inteligentes",
-          "texto": "Con chip RFID: el secador se adapta a cada uno y recuerda el último ajuste."
+          "titulo": "4 temperaturas y 3 velocidades",
+          "texto": "Incluido el aire frío. Los iones negativos ayudan a reducir la estática."
         },
         {
           "titulo": "Pensado para salones",
@@ -54845,11 +54849,11 @@
           "datos": [
             [
               "Tamaño",
-              "30 % más chico y 20 % más liviano que el Supersonic"
+              "30 % más chico y 20 % más liviano que el Supersonic (el peso, contando sólo el cuerpo)"
             ],
             [
               "Cable",
-              "3,2 m según Dyson China (Dyson aclara que el largo cambia según el mercado)"
+              "Más largo que el del Supersonic. Dyson publica 2,8 m en España y 3,2 m en China: cambia según el mercado"
             ],
             [
               "Filtro",
@@ -54862,19 +54866,24 @@
           "datos": [
             [
               "Reconocimiento",
-              "Chip RFID en cada accesorio inteligente, con su rango de temperatura y aire"
+              "Lee el chip RFID de los accesorios inteligentes de este modelo y se adapta al rango de temperatura y aire de cada uno"
             ]
           ]
         },
         {
-          "grupo": "Versión",
+          "grupo": "Alimentación",
           "datos": [
             [
-              "Versión",
+              "Voltaje",
               {
-                "proveedor": "China (CH specs), 220 V"
+                "proveedor": "220 V"
               }
-            ],
+            ]
+          ]
+        },
+        {
+          "grupo": "Qué trae",
+          "datos": [
             [
               "Estuche",
               {
@@ -54899,11 +54908,11 @@
         }
       ],
       "proveedor": {
-        "fuente": "Vivi (Difu Vivi), lista «PRODUCTOS DYSON (220V) CH SPECS»: «DYSON HD18 Hair Dryer R Professional (Sin estuche) - Vinca Blue/Topaz».",
-        "aviso": "la versión, el voltaje y que no trae estuche son dato del proveedor"
+        "fuente": "Lista del proveedor (13/10/2026), título «PRODUCTOS DYSON (220V) CH SPECS»: «DYSON HD18 Hair Dryer R Professional (Sin estuche) - Vinca Blue/Topaz».",
+        "aviso": "el voltaje y que no trae estuche son dato del proveedor"
       },
       "verificado": "2026-10-13",
-      "notas": "Producto confirmado: dyson.cn vende el «Supersonic r 精准造型吹风机专业版 HD18» en 湛蓝紫色 (Vinca blue), el mismo código y color que dice Vivi. Dyson UK también tiene el Supersonic r Professional en Vinca Blue/Topaz (lo recomienda en la página del Bright copper). dyson.es sólo tiene el Profesional en Azul Índigo: se usó por los datos, que son del modelo. Los accesorios de la caja cambian según el país (dyson.co.uk: concentrador, difusor, peine, Gentle y Powerful; dyson.cn: concentrador, Powerful, Gentle, alisador y antiencrespamiento) y Vivi dice «sin estuche»: no se nombran accesorios. Cable: dyson.cn dice 3,2 m, la ficha de dyson.co.uk 3.200 mm (y en el texto 3,3 m y 2,8 m), dyson.es 2,8 m con la nota «puede variar según el mercado»: se puso el de China porque Vivi dice CH. Afuera: peso (0,65 kg en dyson.es, 0,942 kg en dyson.co.uk, 325 g de cuerpo en el texto de dyson.co.uk) y W (1.600 y 1.700 W en la misma ficha de dyson.co.uk). Fuentes: 30 %/20 %, 10 láminas y RFID en dyson.es, dyson.co.uk y dyson.cn; 110.000 rpm, dyson.es y dyson.co.uk; 4 temperaturas con aire frío, 78 dBA e iones, fichas de dyson.es y dyson.co.uk; 3 velocidades, ficha de dyson.co.uk; luz amarilla del filtro, dyson.es y dyson.cn; filtro desmontable, dyson.cn; filtro más duradero y cable más largo, dyson.es y dyson.co.uk. «CH specs» se leyó como versión china (220 V; los códigos HD18/SV50 son los de dyson.cn); CH también es la sigla de Suiza, pero Suiza es 230 V. Benja decide si muestra la línea «Versión» en la web."
+      "notas": "El proveedor lo lista como «DYSON HD18 Hair Dryer R Professional (Sin estuche) - Vinca Blue/Topaz», en una lista titulada «PRODUCTOS DYSON (220V) CH SPECS». Producto confirmado: la página «azul-indigo» de dyson.es es este mismo color en versión europea (identificador «HD18 Pro EU/TR/ZA VnBu/Tz», SKU 522266-01, nombre global «Supersonic r PRO Vinca blue topaz»: «Azul Índigo» es cómo Dyson España llama al Vinca Blue/Topaz); dyson.cn vende el «Supersonic r 精准造型吹风机专业版 HD18» en 湛蓝紫色 y dyson.co.uk también lo tiene en Vinca Blue/Topaz. «CH SPECS» NO está aclarado: no se afirma ni China ni Europa (en los códigos de producto de Dyson «CH» es Suiza: «EU/CH/IL/EG/MEA»). Sólo se muestra lo que el proveedor dice: 220 V y sin estuche. PREGUNTAR AL PROVEEDOR: qué quiere decir «CH», qué enchufe trae, y si la unidad trae accesorios y cuáles (sólo dice «Sin estuche»). Por eso la entrada no da por hecho que traiga accesorios: sólo dice que el secador lee el chip RFID de los accesorios inteligentes. Los de la caja cambian según el país (dyson.co.uk: concentrador, difusor, peine, Gentle y Powerful; dyson.cn: concentrador, Powerful, Gentle, alisador y antiencrespamiento). Cable: dyson.es dice 2,8 m en el texto y 280 cm en la ficha, con la nota «puede variar ligeramente según el mercado»; dyson.cn 3,2 m; dyson.co.uk 3.200 mm en la ficha y 3,3 m y 2,8 m en el texto: se dicen España y China. Afuera: peso (0,65 kg en dyson.es, 0,942 kg en dyson.co.uk, 325 g de cuerpo en el texto de dyson.co.uk) y W (1.600 y 1.700 W en la misma ficha de dyson.co.uk). Fuentes: 30 %/20 % (el 20 % es sobre el peso del cuerpo: nota 2 de dyson.es y dyson.co.uk), 10 láminas y RFID en dyson.es, dyson.co.uk y dyson.cn; 110.000 rpm, dyson.es y dyson.co.uk; 4 temperaturas con aire frío, 78 dBA e iones, fichas de dyson.es y dyson.co.uk; 3 velocidades, ficha de dyson.co.uk; luz amarilla del filtro, dyson.es y dyson.cn; filtro desmontable, dyson.cn; filtro más duradero y cable más largo, dyson.es y dyson.co.uk.\nVerificación 1 (13/10): «Versión: China (CH specs), 220 V» pasó a «Voltaje: 220 V» (China era una deducción); el cable pasó a los dos valores publicados; los accesorios inteligentes salieron de «Por qué elegirlo» y de «Lo más importante» (el proveedor no dice que los traiga)."
     },
     {
       "modelo": "Dyson PencilVac Fluffycones",
@@ -55022,7 +55031,7 @@
           "datos": [
             [
               "App",
-              "MyDyson, con más ajustes y guías de mantenimiento"
+              "MyDyson, con más ajustes y guías de mantenimiento (las funciones de la app dependen del país)"
             ],
             [
               "Pantalla",
@@ -55031,12 +55040,12 @@
           ]
         },
         {
-          "grupo": "Versión",
+          "grupo": "Alimentación",
           "datos": [
             [
-              "Versión",
+              "Voltaje",
               {
-                "proveedor": "China (CH specs), 220 V"
+                "proveedor": "220 V"
               }
             ]
           ]
@@ -55054,14 +55063,18 @@
         {
           "texto": "dyson.cn/dyson-492713-01-pencilvac.html",
           "url": "https://www.dyson.cn/dyson-492713-01-pencilvac.html"
+        },
+        {
+          "texto": "dyson.es/app",
+          "url": "https://www.dyson.es/app"
         }
       ],
       "proveedor": {
-        "fuente": "Vivi (Difu Vivi), lista «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson Sv50 Pencilvac Fluffycones».",
-        "aviso": "la versión y el voltaje son dato del proveedor"
+        "fuente": "Lista del proveedor (13/10/2026), título «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson Sv50 Pencilvac Fluffycones».",
+        "aviso": "el voltaje es dato del proveedor"
       },
       "verificado": "2026-10-13",
-      "notas": "No hay página de dyson.es para la PencilVac. Sin accesorios ni «En la caja»: dyson.co.uk dice cabezal, cargador, accesorio combinado rotativo y base magnética, pero no está confirmado qué trae la unidad de Vivi. Afuera: tiempo de carga (la ficha de dyson.co.uk y dyson.cn dicen 3,5 h, las preguntas frecuentes de dyson.co.uk y dyson.com.sg dicen 4 h con la batería descargada), altura para pasar bajo muebles (95 mm en dyson.co.uk, 75 mm en dyson.cn) y la potencia en AW (no la encontré en una página oficial). «Sólo pisos duros» sale de las preguntas frecuentes de dyson.co.uk y dyson.com.sg. La ficha de dyson.co.uk dice «99.9% to 0.3 microns» y el texto 99,99 %: se usó 99,99 %, que dicen también dyson.com.sg y dyson.cn. LCD con modo y tiempo, sólo dyson.cn. SV50 es el código que usa Vivi (no lo vi en una página oficial): no se pone. Benja decide si muestra la línea «Versión»."
+      "notas": "El proveedor lo lista como «Dyson Sv50 Pencilvac Fluffycones», en una lista titulada «PRODUCTOS DYSON (220V) CH SPECS». SV50 es el código oficial de Dyson para la PencilVac (dyson.co.uk identifica su página como «SV50 PVac FCones DP20 UK/IE/MEA MatBk», SKU 492690-01): el nombre del proveedor calza con el producto. «CH SPECS» NO está aclarado: no se afirma ni China ni Europa (en los códigos de producto de Dyson «CH» es Suiza). Sólo se muestra lo que el proveedor dice: 220 V. PREGUNTAR AL PROVEEDOR: qué quiere decir «CH», qué enchufe trae el cargador y qué accesorios trae la caja (según dyson.com.sg el modo de mano se arma con un accesorio de la caja). No hay página de dyson.es para la PencilVac. Sin accesorios ni «En la caja»: dyson.co.uk dice cabezal, cargador, accesorio combinado rotativo y base magnética, pero no está confirmado qué trae la unidad. Afuera: tiempo de carga (la ficha de dyson.co.uk y dyson.cn dicen 3,5 h, las preguntas frecuentes de dyson.co.uk y dyson.com.sg dicen 4 h con la batería descargada), altura para pasar bajo muebles (95 mm en dyson.co.uk y dyson.com.sg, 75 mm en dyson.cn) y la potencia en AW (no la encontré en una página oficial). «Sólo pisos duros» sale de las preguntas frecuentes de dyson.co.uk y dyson.com.sg. La ficha de dyson.co.uk dice «99.9% to 0.3 microns» y el texto 99,99 %: se usó 99,99 %, que dicen también dyson.com.sg y dyson.cn (es la cifra con norma de ensayo, ASTM F1977 en modo Boost). Medidas y 0,08 L, sólo en la ficha de dyson.co.uk. LCD con modo y tiempo, sólo dyson.cn. Ningún dato de la entrada depende de la versión de la unidad.\nVerificación 1 (13/10): «Versión: China (CH specs), 220 V» pasó a «Voltaje: 220 V» (China era una deducción). A la app se le sumó la aclaración del país (dyson.es/app, nota 5: «Las funciones de la app pueden variar según el mercado») y esa página se sumó a fuentes."
     },
     {
       "modelo": "Dyson V15 Detect Fluffy (en la lista del proveedor: V15 Fluffy)",
@@ -55096,12 +55109,8 @@
       ],
       "ficha": [
         {
-          "grupo": "Potencia",
+          "grupo": "Motor y ciclones",
           "datos": [
-            [
-              "Succión",
-              "230 AW (Dyson China, en modo Boost)"
-            ],
             [
               "Motor",
               "Dyson Hyperdymium, hasta 125.000 rpm"
@@ -55160,12 +55169,12 @@
           ]
         },
         {
-          "grupo": "Versión",
+          "grupo": "Alimentación",
           "datos": [
             [
-              "Versión",
+              "Voltaje",
               {
-                "proveedor": "China (CH specs), 220 V"
+                "proveedor": "220 V"
               }
             ]
           ]
@@ -55186,11 +55195,11 @@
         }
       ],
       "proveedor": {
-        "fuente": "Vivi (Difu Vivi), lista «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson V15 Fluffy Aspiradora».",
-        "aviso": "la versión y el voltaje son dato del proveedor"
+        "fuente": "Lista del proveedor (13/10/2026), título «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson V15 Fluffy Aspiradora».",
+        "aviso": "el voltaje es dato del proveedor"
       },
       "verificado": "2026-10-13",
-      "notas": "Vivi dice «V15 Fluffy». Dyson no vende una «V15» sin «Detect»: en China (dyson.cn) la única V15 a la venta es la «V15 Detect Fluffy» (蓝色, 400471-01), así que es casi seguro esa. Sólo se puso lo que es de toda la V15 Detect y lo que dyson.cn dice de la Fluffy; nada de accesorios ni «En la caja» (dyson.cn habla de «1+6» accesorios y de un paquete con batería extra, y no sabemos cuál trae la unidad). Succión: dyson.cn dice 230 AW y dyson.com.au 240 AW (otra prueba o versión): se puso la de China porque Vivi dice CH. Afuera: peso (dyson.com.au da 3,1 kg para la Absolute, no para la Fluffy). Fuentes: 230 AW, 60 min/5 min, LCD con los cuatro tamaños, luz en el rodillo suave y modo Auto, dyson.cn (Fluffy); 125.000 rpm, 14 ciclones y 100.000 g, 15.000 lecturas, HEPA en cinco etapas al 99,99 % de 0,3 micras, batería de siete celdas desmontable y luz verde, dyson.cn (V15 Detect) y dyson.com.au. Benja decide si muestra la línea «Versión»."
+      "notas": "El proveedor lo lista como «Dyson V15 Fluffy Aspiradora», en una lista titulada «PRODUCTOS DYSON (220V) CH SPECS». No dice «Detect», pero no hay ninguna V15 sin «Detect» en las páginas oficiales y la propia dyson.cn la abrevia «V15 Fluffy» (nota 8 de la página de la gama). «CH SPECS» NO está aclarado: no se afirma ni China ni Europa (en los códigos de producto de Dyson «CH» es Suiza: dyson.es identifica la V15 Detect Absolute como «SV47 V15 Detect Abs EU/CH/MEA»). Sólo se muestra lo que el proveedor dice: 220 V. PREGUNTAR AL PROVEEDOR: qué quiere decir «CH» y qué enchufe trae el cargador. Succión AFUERA hasta confirmar la versión: dyson.cn dice 230 AW (V15 Detect Fluffy) y la V15 Detect Absolute, 240 AW (la europea de dyson.es y la australiana, dyson.com.au/dyson-v15-detect-absolute-447955-01-yellow-nickel; ninguna de las dos está en fuentes). Si el proveedor confirma China, vuelve «Succión: 230 AW». Nada de accesorios ni «En la caja» (dyson.cn habla de «1+6» accesorios y de un paquete con batería extra, y no sabemos cuál trae la unidad). Afuera: peso (dyson.com.au da 3,1 kg para la Absolute, no para la Fluffy). Fuentes: 60 min/5 min, LCD con los cuatro tamaños en micras, luz verde en el rodillo suave y modo Auto, dyson.cn (sólo dyson.cn publica los cuatro tamaños en micras, los 5 min en Boost, que la luz es verde y que la pantalla es LCD; ninguna página oficial los contradice); 125.000 rpm, 14 ciclones y 100.000 g, 15.000 lecturas, cinco etapas al 99,99 % de 0,3 micras y batería de siete celdas desmontable, dyson.cn (V15 Detect) y dyson.com.au. La página de dyson.com.au que está en fuentes es la general de la gama V15 Detect (habla de la Absolute) y no trae la succión: queda como control de los datos comunes.\nVerificación 1 (13/10): «Versión: China (CH specs), 220 V» pasó a «Voltaje: 220 V» (China era una deducción) y se sacó «Succión: 230 AW (Dyson China)»."
     },
     {
       "modelo": "Dyson V16 Piston Animal",
@@ -55317,17 +55326,17 @@
             ],
             [
               "App",
-              "MyDyson, con avisos de actualizaciones de software"
+              "MyDyson, con avisos de actualizaciones de software (las funciones de la app dependen del país)"
             ]
           ]
         },
         {
-          "grupo": "Versión",
+          "grupo": "Alimentación",
           "datos": [
             [
-              "Versión",
+              "Voltaje",
               {
-                "proveedor": "China (CH specs), 220 V"
+                "proveedor": "220 V"
               }
             ]
           ]
@@ -55345,14 +55354,18 @@
         {
           "texto": "dyson.cn/dyson-496042-01-vacuum.html",
           "url": "https://www.dyson.cn/dyson-496042-01-vacuum.html"
+        },
+        {
+          "texto": "dyson.es/app",
+          "url": "https://www.dyson.es/app"
         }
       ],
       "proveedor": {
-        "fuente": "Vivi (Difu Vivi), lista «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson V16 Piston ANIMAL DS60».",
-        "aviso": "la versión y el voltaje son dato del proveedor"
+        "fuente": "Lista del proveedor (13/10/2026), título «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson V16 Piston ANIMAL DS60».",
+        "aviso": "el voltaje es dato del proveedor"
       },
       "verificado": "2026-10-13",
-      "notas": "dyson.cn vende la «Piston Animal V16» (496042-01) con los mismos datos centrales (315 AW, 70 min, pelo de 60 cm, 30 días de polvo, filtrado en cinco etapas al 99,99 % de 0,1 micras). «DS60» lo dice Vivi; no lo encontré en Dyson: no se pone. Sin accesorios ni «En la caja»: dyson.es y dyson.co.uk listan cabezal, base de pared, rinconera, minicepillo 2.0, accesorio combinado y cargador, pero no sabemos qué trae la unidad china. Afuera: peso (3,4 kg en la ficha y 3,5 kg con el cabezal en las preguntas de dyson.es), capacidad (1,3 L en la ficha y 1,35 L en las preguntas) y medidas. Fuentes: todo en dyson.es y dyson.co.uk; 315 AW, 70 min, 60 cm, 30 días, cinco etapas y accesorios integrados también en dyson.cn; baterías intercambiables, dyson.es. No confundir con la V16 Piston Animal Submarine (otro producto). Benja decide si muestra la línea «Versión»."
+      "notas": "El proveedor lo lista como «Dyson V16 Piston ANIMAL DS60», en una lista titulada «PRODUCTOS DYSON (220V) CH SPECS». DS60 es de Dyson: dyson.es le da a este producto el nombre global «Dyson Piston Animal DS60 cordless vacuum» y lo identifica como «SV53-A 692B Ani EU/CH/IL/EG/MEA BCo/BCo» (SKU 492963-01). Confirma que es la V16 Piston Animal sin Submarine (la V16 Piston Animal Submarine es otro producto: no unificar). «CH SPECS» NO está aclarado: no se afirma ni China ni Europa (en ese código de Dyson «CH» es Suiza, junto a EU, IL y EG; dyson.cn la llama «Piston Animal V16», sin DS60). Sólo se muestra lo que el proveedor dice: 220 V. PREGUNTAR AL PROVEEDOR: qué quiere decir «CH» y qué enchufe trae el cargador. Si contesta China, considerar sacar «Carga: 4,5 h» (depende del cargador y dyson.cn no lo publica). Sin accesorios ni «En la caja»: dyson.es y dyson.co.uk listan cabezal, base de pared, rinconera, minicepillo 2.0, accesorio combinado y cargador, pero no sabemos qué trae la unidad. Afuera: peso (3,4 kg en la ficha y 3,5 kg con el cabezal en las preguntas de dyson.es), capacidad (1,3 L en la ficha y 1,35 L en las preguntas) y medidas. Fuentes: todo en dyson.es y casi todo en dyson.co.uk; dyson.cn confirma 315 AW, 70 min en Eco, pelo de 60 cm, 30 días, cinco etapas al 99,99 % de 0,1 micras, accesorios integrados, cambio de cabezal sin agacharse y depósito que queda limpio, y no publica en texto el motor de 900 W, los ciclones dinámicos, las siete celdas, la carga, la luz, el sensor, la LCD ni la app. La tabla de dyson.es y dyson.co.uk dice «99,9 % a 0,1 micras» y el texto 99,99 %: se usó el del texto (norma ASTM F3150). Baterías intercambiables, sólo dyson.es.\nVerificación 1 (13/10): «Versión: China (CH specs), 220 V» pasó a «Voltaje: 220 V» (China era una deducción). A la app se le sumó la aclaración del país (dyson.es/app, nota 5: «Las funciones de la app pueden variar según el mercado») y esa página se sumó a fuentes."
     }
   ]
 }

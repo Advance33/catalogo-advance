@@ -54450,6 +54450,909 @@
       ],
       "verificado": "2026-10-02",
       "notas": "La fila dice «Osmo Pocket 4P Standard»: es el «Pack Estándar Osmo Pocket 4P» oficial (no la Pocket 4, que es otro modelo). Lo que trae: inTheBoxes de osmo-pocket-4p en store.dji.com/es. El D-Log 2 sólo con zoom 1x (nota 2). El color no se puso (hay dos y la fila no dice). dji.com/mx: curl con -b 'region=MX; lang=es'."
+    },
+    {
+      "modelo": "Dyson Airwrap Co-anda2x (Ceramic Pink · Rose Gold)",
+      "codigos": [
+        "AT-0550"
+      ],
+      "venta": [
+        "Moldeador y secador con motor Hyperdymium 2 de hasta 150.000 rpm: el doble de presión de aire que la generación anterior, para secar y peinar con el mismo equipo.",
+        "Riza con efecto Coanda y la secuencia i.d. curl, que envuelve el mechón, lo moldea y lo fija con aire frío, midiendo la temperatura del aire más de 1.000 veces por segundo."
+      ],
+      "importante": [
+        {
+          "titulo": "Hasta 150.000 rpm",
+          "texto": "Motor Hyperdymium 2 con 7 kPa de presión: el doble que la generación anterior y un 30 % más potente."
+        },
+        {
+          "titulo": "Secuencia i.d. curl",
+          "texto": "Detecta el movimiento, envuelve el pelo y ajusta calor, aire y tiempos a tu tipo de pelo; fija el rizo con aire frío."
+        },
+        {
+          "titulo": "App MyDyson por Bluetooth",
+          "texto": "Armás tu perfil con seis preguntas sobre tipo y largo de pelo, y la secuencia queda a tu medida."
+        },
+        {
+          "titulo": "Control del calor",
+          "texto": "Mide la temperatura del aire más de 1.000 veces por segundo para evitar el daño por calor extremo."
+        },
+        {
+          "titulo": "Accesorios inteligentes",
+          "texto": "Cada uno se reconoce al ponerlo y usa sus propios ajustes de calor y aire, que el equipo recuerda."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Motor",
+          "datos": [
+            [
+              "Motor",
+              "Dyson Hyperdymium 2, hasta 150.000 rpm"
+            ],
+            [
+              "Presión de aire",
+              "7 kPa, el doble que la generación anterior"
+            ],
+            [
+              "Otro nombre",
+              "Airwrap2x, por el doble de presión de aire"
+            ]
+          ]
+        },
+        {
+          "grupo": "Calor y aire",
+          "datos": [
+            [
+              "Ajustes",
+              "4 temperaturas y 3 velocidades"
+            ],
+            [
+              "Control del calor",
+              "Mide la temperatura del aire más de 1.000 veces por segundo"
+            ],
+            [
+              "Aire frío",
+              "Al final de la secuencia i.d. curl, para fijar el rizo"
+            ]
+          ]
+        },
+        {
+          "grupo": "Inteligencia",
+          "datos": [
+            [
+              "Conexión",
+              "Bluetooth, con la app MyDyson"
+            ],
+            [
+              "i.d. curl",
+              "Envuelve, moldea, fija con aire frío y suelta el rizo, con los tiempos de tu perfil"
+            ],
+            [
+              "Acelerómetro",
+              "Arranca la secuencia cuando el pelo se enrolla y desactiva el equipo cuando lo apoyás"
+            ]
+          ]
+        },
+        {
+          "grupo": "Accesorios",
+          "datos": [
+            [
+              "Reconocimiento",
+              "Chip RFID en cada accesorio, con ajustes recomendados que podés cambiar en la app"
+            ],
+            [
+              "Compatibilidad",
+              "Sólo accesorios de la Airwrap Co-anda2x"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "dyson.es/cuidado-del-cabello/moldeador/airwrap-co-anda2x",
+          "url": "https://www.dyson.es/cuidado-del-cabello/moldeador/airwrap-co-anda2x/liso-ondulado-ceramic-pink-rose-gold"
+        },
+        {
+          "texto": "dyson.co.uk/hair-care/hair-stylers/airwrap-co-anda2x (Straight+Wavy)",
+          "url": "https://www.dyson.co.uk/hair-care/hair-stylers/airwrap-co-anda2x/straight-wavy-ceramic-pink-rose-gold"
+        },
+        {
+          "texto": "dyson.co.uk/hair-care/hair-stylers/airwrap-co-anda2x (Curly+Coily)",
+          "url": "https://www.dyson.co.uk/hair-care/hair-stylers/airwrap-co-anda2x/curly-coily-ceramic-pink-rose-gold"
+        },
+        {
+          "texto": "dyson.cn/dyson-598772-01-hs09.html",
+          "url": "https://www.dyson.cn/dyson-598772-01-hs09.html"
+        }
+      ],
+      "verificado": "2026-10-13",
+      "notas": "NEWGADGETS: «HS09 — Dyson Airwrap Co-anda 2X — Ceramic Pink». HS09 es el código que Dyson China (dyson.cn) le da a la Co-anda 2x. NEWGADGETS no dice si es Straight+Wavy o Curly+Coily: en Ceramic Pink/Rose Gold existen las dos (dyson.co.uk) y traen accesorios distintos; además en China la HS09 Ceramic Pink se vende como «自动直发版» (3 en 1: seca, alisa y riza). Por eso NO se nombran accesorios, ni «En la caja», ni el «6 en 1» de Europa. Afuera también: peso (0,711 kg en dyson.es y 0,716 kg en dyson.co.uk), potencia en W y voltaje (cambian según el país; NEWGADGETS no dice de qué país es la unidad: preguntar si es la de China, 220 V). Fuentes: el 30 % y el doble de presión, de la descripción de dyson.es/.co.uk; 150.000 rpm y 7 kPa, de las preguntas frecuentes de dyson.es/.co.uk (dyson.cn también dice 150.000 rpm, el doble de presión y 1.000 veces por segundo); RFID y ajustes en la app, preguntas frecuentes de dyson.co.uk; compatibilidad sólo con accesorios Co-anda2x, dyson.co.uk y dyson.cn; 4 temperaturas y 3 velocidades, ficha de dyson.es/.co.uk."
+    },
+    {
+      "modelo": "Dyson Airwrap i.d. Straight+Wavy (Prussian Blue · Rich Copper)",
+      "codigos": [
+        "AT-0551"
+      ],
+      "venta": [
+        "Moldeador y secador con Bluetooth: la secuencia i.d. curl envuelve, moldea y fija cada rizo con un toque, con los tiempos de tu perfil en la app MyDyson.",
+        "Riza con aire gracias al efecto Coanda y un motor de 110.000 rpm, con un control del calor que mantiene la temperatura por debajo de 150 °C."
+      ],
+      "importante": [
+        {
+          "titulo": "Secuencia i.d. curl",
+          "texto": "Acercás el mechón, se enrolla solo y el equipo lo moldea, lo fija con aire frío y lo suelta."
+        },
+        {
+          "titulo": "Perfil en la app",
+          "texto": "Seis preguntas sobre tipo y largo de pelo en MyDyson, por Bluetooth, y la secuencia queda a tu medida."
+        },
+        {
+          "titulo": "Efecto Coanda",
+          "texto": "El aire envuelve y sujeta el pelo alrededor del moldeador: rizos con aire, sin calor extremo."
+        },
+        {
+          "titulo": "Menos de 150 °C",
+          "texto": "El control inteligente del calor evita el daño por calor extremo y protege el brillo."
+        },
+        {
+          "titulo": "Motor de 110.000 rpm",
+          "texto": "Genera la presión necesaria para el efecto Coanda."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Calor y aire",
+          "datos": [
+            [
+              "Ajustes",
+              "3 temperaturas y 3 velocidades"
+            ],
+            [
+              "Temperatura",
+              "Por debajo de 150 °C, con control inteligente del calor"
+            ],
+            [
+              "Flujo de aire",
+              "13,5 l/s"
+            ],
+            [
+              "Iones negativos",
+              "Ayudan a reducir la estática"
+            ]
+          ]
+        },
+        {
+          "grupo": "Inteligencia",
+          "datos": [
+            [
+              "Conexión",
+              "Bluetooth, con la app MyDyson"
+            ],
+            [
+              "i.d. curl",
+              "Envuelve, moldea, fija con aire frío y suelta el rizo, con los tiempos de tu perfil"
+            ],
+            [
+              "En la app",
+              "Bajar el calor si tenés el cuero cabelludo sensible, ver los ajustes en vivo y recibir avisos de mantenimiento"
+            ]
+          ]
+        },
+        {
+          "grupo": "Motor",
+          "datos": [
+            [
+              "Velocidad",
+              "110.000 rpm"
+            ],
+            [
+              "Tecnología",
+              "Efecto Coanda: el aire envuelve y sujeta el pelo alrededor del moldeador"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "dyson.es/cuidado-del-cabello/moldeador/airwrap-id",
+          "url": "https://www.dyson.es/cuidado-del-cabello/moldeador/airwrap-id/liso-ondulado-azul-prusia-cobre"
+        },
+        {
+          "texto": "dyson.co.uk/hair-care/hair-stylers/airwrap-id",
+          "url": "https://www.dyson.co.uk/hair-care/hair-stylers/airwrap-id/straight-wavy-prussian-blue-bright-copper"
+        },
+        {
+          "texto": "dyson.cn/dyson-airwrapid-tibetan-bronze.html",
+          "url": "https://www.dyson.cn/dyson-airwrapid-tibetan-bronze.html"
+        }
+      ],
+      "verificado": "2026-10-13",
+      "notas": "NEWGADGETS: «HS08 — Dyson Airwrap i.d. Straight + Wavy — Prussian / Blue». HS08 es el código del Airwrap i.d. en dyson.cn (color 藏青铜色). Los accesorios de la caja cambian según el país y hasta según el color (dyson.co.uk lista cinco en el Prussian y seis en el Ceramic Apricot; dyson.cn vende versiones «长发版»): no se nombran. Afuera también: largo del cable (2,675 m y 2 m en dos páginas de dyson.co.uk), peso (0,6 kg en dyson.co.uk y 0,55 kg en dyson.es), potencia en W y voltaje (dyson.es dice 120 V en la ficha del Airwrap i.d., un error de la página; NEWGADGETS no dice el país de la unidad: preguntar). Fuentes: 110.000 rpm, menos de 150 °C y efecto Coanda, sección de tecnología de dyson.es y dyson.co.uk; 3 temperaturas y 3 velocidades, 13,5 l/s e iones, ficha de dyson.es y dyson.co.uk (iones también en las preguntas de dyson.cn); i.d. curl y la app, dyson.es y dyson.co.uk. Dyson llama al color «Prussian blue/Rich copper» en el título y «bright copper» en la dirección de dyson.co.uk."
+    },
+    {
+      "modelo": "Dyson Supersonic Nural HD16 (Ceramic Pink · Rose Gold)",
+      "codigos": [
+        "AT-0553"
+      ],
+      "venta": [
+        "Secador Supersonic con sensores Nural que ajustan solos el aire y la temperatura, para cuidar el brillo natural y el cuero cabelludo.",
+        "Reconoce cada accesorio y vuelve a tus ajustes, y cuando lo apoyás corta el calor y baja el aire."
+      ],
+      "importante": [
+        {
+          "titulo": "Modo Scalp protect",
+          "texto": "Un sensor mide la distancia al cuero cabelludo y ajusta el calor a esa distancia."
+        },
+        {
+          "titulo": "Aprende tus accesorios",
+          "texto": "Un sensor Hall reconoce cada accesorio y vuelve solo a tus ajustes preferidos."
+        },
+        {
+          "titulo": "Detección de pausa",
+          "texto": "Un acelerómetro nota cuando lo apoyás: corta el calor y baja el aire."
+        },
+        {
+          "titulo": "Control del calor",
+          "texto": "Regula la temperatura del aire para evitar el daño por exceso de calor y proteger el brillo."
+        },
+        {
+          "titulo": "3 velocidades y aire frío",
+          "texto": "El aire frío enfría el pelo y fija el peinado."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Sensores",
+          "datos": [
+            [
+              "Distancia",
+              "Sensor de tiempo de vuelo, para el modo Scalp protect"
+            ],
+            [
+              "Accesorios",
+              "Sensor Hall: reconoce cada uno y recuerda tus ajustes"
+            ],
+            [
+              "Movimiento",
+              "Acelerómetro: al apoyarlo corta el calor y baja el aire (no actúa con un difusor puesto)"
+            ]
+          ]
+        },
+        {
+          "grupo": "Calor y aire",
+          "datos": [
+            [
+              "Velocidades",
+              "3"
+            ],
+            [
+              "Aire frío",
+              "Sí, para enfriar y fijar el peinado"
+            ],
+            [
+              "Control del calor",
+              "Inteligente, para evitar el daño por exceso de calor"
+            ],
+            [
+              "Iones negativos",
+              "Ayudan a reducir la estática"
+            ]
+          ]
+        },
+        {
+          "grupo": "Diseño",
+          "datos": [
+            [
+              "Motor",
+              "Dyson Hyperdymium"
+            ],
+            [
+              "Tapa",
+              "Transparente, con el botón del modo Scalp protect"
+            ],
+            [
+              "Filtro",
+              "Con rejilla magnética que se saca para limpiarla; Dyson recomienda limpiarlo una vez por mes"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "dyson.es/cuidado-del-cabello/secador-de-pelo/supersonic-nural",
+          "url": "https://www.dyson.es/cuidado-del-cabello/secador-de-pelo/supersonic-nural/liso-ondulado-ceramic-pink-rose-gold"
+        },
+        {
+          "texto": "dyson.co.uk/hair-care/hair-dryers/supersonic-nural (Straight+Wavy)",
+          "url": "https://www.dyson.co.uk/hair-care/hair-dryers/supersonic-nural/straight-wavy-ceramic-pink-rose-gold"
+        },
+        {
+          "texto": "dyson.co.uk/hair-care/hair-dryers/supersonic-nural (Curly+Coily)",
+          "url": "https://www.dyson.co.uk/hair-care/hair-dryers/supersonic-nural/curly-coily-ceramic-pink-rose-gold"
+        },
+        {
+          "texto": "dyson.cn/533462-01-dyson-supersonic-hd16-ceramic-pink.html",
+          "url": "https://www.dyson.cn/533462-01-dyson-supersonic-hd16-ceramic-pink.html"
+        }
+      ],
+      "verificado": "2026-10-13",
+      "notas": "NEWGADGETS: «HD16 — Dyson Hair Dryer Nural». HD16 es el código del Supersonic Nural en dyson.cn (Ceramic Pink/Rose Gold = 落日玫瑰). NEWGADGETS no dice Straight+Wavy o Curly+Coily: en Ceramic Pink/Rose Gold existen las dos (dyson.co.uk) con cinco accesorios distintos: no se nombran. Cantidad de temperaturas afuera: dyson.co.uk dice «4 heat, 3 speed» y en la misma ficha «3 heat settings», y dyson.es dice «cuatro modos de calor… el cuarto botón es el aire frío». Afuera también: peso (0,684 kg en dyson.co.uk, 0,65 kg en dyson.es), cable (2 m y 2,62 m), W y voltaje (NEWGADGETS no dice el país: preguntar si es la de China, 220 V), y los 55 °C del modo Scalp protect, que sólo publica dyson.cn. Fuentes: sensores Nural, tiempo de vuelo, Hall, acelerómetro, 3 velocidades y aire frío, tapa transparente, filtro: dyson.co.uk y dyson.es (tecnología y preguntas frecuentes); detección de pausa también en dyson.cn; motor Hyperdymium y control del calor, dyson.es; iones, fichas de dyson.es y dyson.co.uk y preguntas de dyson.cn."
+    },
+    {
+      "modelo": "Dyson Supersonic r Professional HD18 (Vinca Blue · Topaz)",
+      "codigos": [
+        "AT-0554"
+      ],
+      "venta": [
+        "La versión para estilistas del Supersonic r: un 30 % más chico y un 20 % más liviano que el Supersonic, con motor Hyperdymium de hasta 110.000 rpm.",
+        "Diez láminas calefactoras en la curva calientan el aire de forma pareja, y los accesorios inteligentes con chip RFID ajustan solos la temperatura y el aire."
+      ],
+      "importante": [
+        {
+          "titulo": "30 % más chico y 20 % más liviano",
+          "texto": "Que el Supersonic, para secar y peinar con más control y comodidad."
+        },
+        {
+          "titulo": "10 láminas calefactoras",
+          "texto": "En la curva del secador: calientan el aire de forma pareja para un secado rápido y preciso."
+        },
+        {
+          "titulo": "Hasta 110.000 rpm",
+          "texto": "Motor Dyson Hyperdymium de alta presión, con un chorro de aire controlado."
+        },
+        {
+          "titulo": "Accesorios inteligentes",
+          "texto": "Con chip RFID: el secador se adapta a cada uno y recuerda el último ajuste."
+        },
+        {
+          "titulo": "Pensado para salones",
+          "texto": "Cable más largo y filtro con luz amarilla que avisa cuándo limpiarlo."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Motor y calor",
+          "datos": [
+            [
+              "Motor",
+              "Dyson Hyperdymium, hasta 110.000 rpm"
+            ],
+            [
+              "Calefactor",
+              "10 láminas en la curva del secador"
+            ],
+            [
+              "Temperaturas",
+              "4, incluido el aire frío"
+            ],
+            [
+              "Velocidades",
+              "3"
+            ],
+            [
+              "Iones negativos",
+              "Ayudan a reducir la estática"
+            ],
+            [
+              "Ruido",
+              "78 dBA"
+            ]
+          ]
+        },
+        {
+          "grupo": "Diseño",
+          "datos": [
+            [
+              "Tamaño",
+              "30 % más chico y 20 % más liviano que el Supersonic"
+            ],
+            [
+              "Cable",
+              "3,2 m según Dyson China (Dyson aclara que el largo cambia según el mercado)"
+            ],
+            [
+              "Filtro",
+              "Desmontable y más duradero, con luz amarilla que avisa cuándo limpiarlo"
+            ]
+          ]
+        },
+        {
+          "grupo": "Accesorios",
+          "datos": [
+            [
+              "Reconocimiento",
+              "Chip RFID en cada accesorio inteligente, con su rango de temperatura y aire"
+            ]
+          ]
+        },
+        {
+          "grupo": "Versión",
+          "datos": [
+            [
+              "Versión",
+              {
+                "proveedor": "China (CH specs), 220 V"
+              }
+            ],
+            [
+              "Estuche",
+              {
+                "proveedor": "No trae estuche"
+              }
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "dyson.es/empresas/cuidado-del-cabello/supersonic-r-pro",
+          "url": "https://www.dyson.es/empresas/cuidado-del-cabello/supersonic-r-pro/azul-indigo"
+        },
+        {
+          "texto": "dyson.co.uk/commercial/hair-care/supersonic-r-pro-bright-copper",
+          "url": "https://www.dyson.co.uk/commercial/hair-care/supersonic-r-pro-bright-copper"
+        },
+        {
+          "texto": "dyson.cn/522276-01-dyson-supersonic-hd18-505d.html",
+          "url": "https://www.dyson.cn/522276-01-dyson-supersonic-hd18-505d.html"
+        }
+      ],
+      "proveedor": {
+        "fuente": "Vivi (Difu Vivi), lista «PRODUCTOS DYSON (220V) CH SPECS»: «DYSON HD18 Hair Dryer R Professional (Sin estuche) - Vinca Blue/Topaz».",
+        "aviso": "la versión, el voltaje y que no trae estuche son dato del proveedor"
+      },
+      "verificado": "2026-10-13",
+      "notas": "Producto confirmado: dyson.cn vende el «Supersonic r 精准造型吹风机专业版 HD18» en 湛蓝紫色 (Vinca blue), el mismo código y color que dice Vivi. Dyson UK también tiene el Supersonic r Professional en Vinca Blue/Topaz (lo recomienda en la página del Bright copper). dyson.es sólo tiene el Profesional en Azul Índigo: se usó por los datos, que son del modelo. Los accesorios de la caja cambian según el país (dyson.co.uk: concentrador, difusor, peine, Gentle y Powerful; dyson.cn: concentrador, Powerful, Gentle, alisador y antiencrespamiento) y Vivi dice «sin estuche»: no se nombran accesorios. Cable: dyson.cn dice 3,2 m, la ficha de dyson.co.uk 3.200 mm (y en el texto 3,3 m y 2,8 m), dyson.es 2,8 m con la nota «puede variar según el mercado»: se puso el de China porque Vivi dice CH. Afuera: peso (0,65 kg en dyson.es, 0,942 kg en dyson.co.uk, 325 g de cuerpo en el texto de dyson.co.uk) y W (1.600 y 1.700 W en la misma ficha de dyson.co.uk). Fuentes: 30 %/20 %, 10 láminas y RFID en dyson.es, dyson.co.uk y dyson.cn; 110.000 rpm, dyson.es y dyson.co.uk; 4 temperaturas con aire frío, 78 dBA e iones, fichas de dyson.es y dyson.co.uk; 3 velocidades, ficha de dyson.co.uk; luz amarilla del filtro, dyson.es y dyson.cn; filtro desmontable, dyson.cn; filtro más duradero y cable más largo, dyson.es y dyson.co.uk. «CH specs» se leyó como versión china (220 V; los códigos HD18/SV50 son los de dyson.cn); CH también es la sigla de Suiza, pero Suiza es 230 V. Benja decide si muestra la línea «Versión» en la web."
+    },
+    {
+      "modelo": "Dyson PencilVac Fluffycones",
+      "codigos": [
+        "AT-0555"
+      ],
+      "venta": [
+        "Aspiradora sin cable en formato lápiz: mango de 38 mm, 1,8 kg y motor Hyperdymium 140k de hasta 140.000 rpm, para pisos duros.",
+        "El cabezal Fluffycones tiene cuatro rodillos cónicos que desenredan el pelo largo, limpian hasta el borde e iluminan el polvo hacia adelante y hacia atrás."
+      ],
+      "importante": [
+        {
+          "titulo": "Cabezal Fluffycones",
+          "texto": "Cuatro rodillos cónicos suaves: el pelo largo no se enreda y limpia hasta el borde."
+        },
+        {
+          "titulo": "Luz hacia los dos lados",
+          "texto": "Muestra el polvo microscópico en pisos duros, hacia adelante y hacia atrás."
+        },
+        {
+          "titulo": "Hasta 30 minutos",
+          "texto": "En modo Eco, con batería de cuatro celdas que se cambia con un clic."
+        },
+        {
+          "titulo": "Filtra el 99,99 %",
+          "texto": "De las partículas de hasta 0,3 micras, con separación lineal en dos etapas y filtrado sellado."
+        },
+        {
+          "titulo": "Vaciado tipo jeringa",
+          "texto": "El depósito comprime el polvo y lo empuja hasta el fondo del tacho al vaciarlo, con menos polvo en el aire."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Limpieza",
+          "datos": [
+            [
+              "Superficies",
+              "Sólo pisos duros"
+            ],
+            [
+              "Cabezal",
+              "Fluffycones: cuatro rodillos cónicos suaves, gira en el lugar y limpia en todas las direcciones"
+            ],
+            [
+              "Iluminación",
+              "Hacia adelante y hacia atrás"
+            ],
+            [
+              "Muebles bajos",
+              "Se acuesta para pasar por debajo de sillones y muebles bajos"
+            ],
+            [
+              "De mano",
+              "Se usa también como aspiradora de mano (800 g)"
+            ]
+          ]
+        },
+        {
+          "grupo": "Motor y batería",
+          "datos": [
+            [
+              "Motor",
+              "Dyson Hyperdymium 140k, hasta 140.000 rpm"
+            ],
+            [
+              "Autonomía",
+              "Hasta 30 min en modo Eco"
+            ],
+            [
+              "Batería",
+              "Litio, de cuatro celdas; se saca con un clic, sin tornillos"
+            ]
+          ]
+        },
+        {
+          "grupo": "Depósito y filtrado",
+          "datos": [
+            [
+              "Separación",
+              "Lineal en dos etapas, sin ciclones"
+            ],
+            [
+              "Filtrado",
+              "Sellado: retiene el 99,99 % de las partículas de hasta 0,3 micras"
+            ],
+            [
+              "Depósito",
+              "0,08 L, de carga superior, comprime el polvo con aire"
+            ],
+            [
+              "Vaciado",
+              "Tipo jeringa: empuja el polvo comprimido hasta el fondo del tacho"
+            ]
+          ]
+        },
+        {
+          "grupo": "Diseño",
+          "datos": [
+            [
+              "Peso",
+              "1,8 kg aprox. (800 g en modo de mano)"
+            ],
+            [
+              "Mango",
+              "38 mm de diámetro"
+            ],
+            [
+              "Medidas",
+              "Alto 1.160 mm · largo 226 mm · ancho 38 mm"
+            ]
+          ]
+        },
+        {
+          "grupo": "Conectividad",
+          "datos": [
+            [
+              "App",
+              "MyDyson, con más ajustes y guías de mantenimiento"
+            ],
+            [
+              "Pantalla",
+              "LCD con el modo y el tiempo de funcionamiento"
+            ]
+          ]
+        },
+        {
+          "grupo": "Versión",
+          "datos": [
+            [
+              "Versión",
+              {
+                "proveedor": "China (CH specs), 220 V"
+              }
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "dyson.co.uk/vacuum-cleaners/cordless/pencilvac/fluffycones",
+          "url": "https://www.dyson.co.uk/vacuum-cleaners/cordless/pencilvac/fluffycones"
+        },
+        {
+          "texto": "dyson.com.sg/pencilvac-fluffycones-black",
+          "url": "https://www.dyson.com.sg/pencilvac-fluffycones-black"
+        },
+        {
+          "texto": "dyson.cn/dyson-492713-01-pencilvac.html",
+          "url": "https://www.dyson.cn/dyson-492713-01-pencilvac.html"
+        }
+      ],
+      "proveedor": {
+        "fuente": "Vivi (Difu Vivi), lista «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson Sv50 Pencilvac Fluffycones».",
+        "aviso": "la versión y el voltaje son dato del proveedor"
+      },
+      "verificado": "2026-10-13",
+      "notas": "No hay página de dyson.es para la PencilVac. Sin accesorios ni «En la caja»: dyson.co.uk dice cabezal, cargador, accesorio combinado rotativo y base magnética, pero no está confirmado qué trae la unidad de Vivi. Afuera: tiempo de carga (la ficha de dyson.co.uk y dyson.cn dicen 3,5 h, las preguntas frecuentes de dyson.co.uk y dyson.com.sg dicen 4 h con la batería descargada), altura para pasar bajo muebles (95 mm en dyson.co.uk, 75 mm en dyson.cn) y la potencia en AW (no la encontré en una página oficial). «Sólo pisos duros» sale de las preguntas frecuentes de dyson.co.uk y dyson.com.sg. La ficha de dyson.co.uk dice «99.9% to 0.3 microns» y el texto 99,99 %: se usó 99,99 %, que dicen también dyson.com.sg y dyson.cn. LCD con modo y tiempo, sólo dyson.cn. SV50 es el código que usa Vivi (no lo vi en una página oficial): no se pone. Benja decide si muestra la línea «Versión»."
+    },
+    {
+      "modelo": "Dyson V15 Detect Fluffy (en la lista del proveedor: V15 Fluffy)",
+      "codigos": [
+        "AT-0556"
+      ],
+      "venta": [
+        "Aspiradora sin cable con un sensor que cuenta y mide el polvo que aspira, lo muestra en la pantalla LCD y en modo Auto sube la succión cuando hay más.",
+        "Motor Hyperdymium de hasta 125.000 rpm, 14 ciclones, filtrado HEPA sellado y hasta 60 minutos de autonomía."
+      ],
+      "importante": [
+        {
+          "titulo": "Sensor de polvo",
+          "texto": "Cuenta las partículas 15.000 veces por segundo; en modo Auto sube la succión cuando hay más polvo."
+        },
+        {
+          "titulo": "Pantalla LCD",
+          "texto": "Muestra cuántas partículas aspiró, en cuatro tamaños: 10, 60, 180 y 500 micras."
+        },
+        {
+          "titulo": "Luz en el piso",
+          "texto": "El cabezal de rodillo suave ilumina el polvo que no se ve en pisos duros."
+        },
+        {
+          "titulo": "Hasta 60 minutos",
+          "texto": "En modo Eco con el cabezal de rodillo suave en piso duro. Batería de siete celdas, desmontable."
+        },
+        {
+          "titulo": "HEPA en cinco etapas",
+          "texto": "Filtrado sellado que retiene el 99,99 % de las partículas de hasta 0,3 micras."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Potencia",
+          "datos": [
+            [
+              "Succión",
+              "230 AW (Dyson China, en modo Boost)"
+            ],
+            [
+              "Motor",
+              "Dyson Hyperdymium, hasta 125.000 rpm"
+            ],
+            [
+              "Ciclones",
+              "14, con fuerza de hasta 100.000 g"
+            ]
+          ]
+        },
+        {
+          "grupo": "Batería",
+          "datos": [
+            [
+              "Autonomía",
+              "Hasta 60 min en modo Eco (cabezal de rodillo suave en piso duro); hasta 5 min en Boost con un accesorio sin motor"
+            ],
+            [
+              "Batería",
+              "Siete celdas, se puede sacar y cambiar"
+            ]
+          ]
+        },
+        {
+          "grupo": "Sensores",
+          "datos": [
+            [
+              "Polvo",
+              "Sensor piezoeléctrico, 15.000 lecturas por segundo"
+            ],
+            [
+              "Pantalla",
+              "LCD con la cantidad y el tamaño de las partículas"
+            ],
+            [
+              "Modo Auto",
+              "Sube la succión cuando detecta más polvo (con cabezales motorizados)"
+            ],
+            [
+              "Luz",
+              "Verde, en el cabezal de rodillo suave, para pisos duros"
+            ]
+          ]
+        },
+        {
+          "grupo": "Filtrado",
+          "datos": [
+            [
+              "Sistema",
+              "HEPA sellado en cinco etapas"
+            ],
+            [
+              "Retención",
+              "99,99 % de las partículas de hasta 0,3 micras"
+            ]
+          ]
+        },
+        {
+          "grupo": "Versión",
+          "datos": [
+            [
+              "Versión",
+              {
+                "proveedor": "China (CH specs), 220 V"
+              }
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "dyson.cn/400471-01-dyson-v15-detect-fluffy-blue.html",
+          "url": "https://www.dyson.cn/400471-01-dyson-v15-detect-fluffy-blue.html"
+        },
+        {
+          "texto": "dyson.cn/product/vacuum-cleaner/dyson-v15.html",
+          "url": "https://www.dyson.cn/product/vacuum-cleaner/dyson-v15.html"
+        },
+        {
+          "texto": "dyson.com.au/products/vacuum-cleaners/stick-vacuums/dyson-v15-detect",
+          "url": "https://www.dyson.com.au/products/vacuum-cleaners/stick-vacuums/dyson-v15-detect/overview"
+        }
+      ],
+      "proveedor": {
+        "fuente": "Vivi (Difu Vivi), lista «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson V15 Fluffy Aspiradora».",
+        "aviso": "la versión y el voltaje son dato del proveedor"
+      },
+      "verificado": "2026-10-13",
+      "notas": "Vivi dice «V15 Fluffy». Dyson no vende una «V15» sin «Detect»: en China (dyson.cn) la única V15 a la venta es la «V15 Detect Fluffy» (蓝色, 400471-01), así que es casi seguro esa. Sólo se puso lo que es de toda la V15 Detect y lo que dyson.cn dice de la Fluffy; nada de accesorios ni «En la caja» (dyson.cn habla de «1+6» accesorios y de un paquete con batería extra, y no sabemos cuál trae la unidad). Succión: dyson.cn dice 230 AW y dyson.com.au 240 AW (otra prueba o versión): se puso la de China porque Vivi dice CH. Afuera: peso (dyson.com.au da 3,1 kg para la Absolute, no para la Fluffy). Fuentes: 230 AW, 60 min/5 min, LCD con los cuatro tamaños, luz en el rodillo suave y modo Auto, dyson.cn (Fluffy); 125.000 rpm, 14 ciclones y 100.000 g, 15.000 lecturas, HEPA en cinco etapas al 99,99 % de 0,3 micras, batería de siete celdas desmontable y luz verde, dyson.cn (V15 Detect) y dyson.com.au. Benja decide si muestra la línea «Versión»."
+    },
+    {
+      "modelo": "Dyson V16 Piston Animal",
+      "codigos": [
+        "AT-0557"
+      ],
+      "venta": [
+        "Aspiradora sin cable con 315 AW de succión, motor Hyperdymium de 900 W y hasta 70 minutos de autonomía.",
+        "El cabezal All Floor Cones Sense, con dos rodillos cónicos, desenreda el pelo de hasta 60 cm y se ajusta solo a cada tipo de piso."
+      ],
+      "importante": [
+        {
+          "titulo": "315 AW",
+          "texto": "Motor Hyperdymium de 900 W y ciclones dinámicos: en modo Boost se suma una serie de ciclones."
+        },
+        {
+          "titulo": "Hasta 70 minutos",
+          "texto": "Batería de litio de siete celdas; las baterías se pueden cambiar para seguir limpiando."
+        },
+        {
+          "titulo": "Desenreda el pelo",
+          "texto": "Dos rodillos cónicos llevan el pelo de hasta 60 cm directo al depósito."
+        },
+        {
+          "titulo": "Depósito CleanCompaktor",
+          "texto": "Comprime el polvo para guardar hasta 30 días y queda limpio al vaciarlo."
+        },
+        {
+          "titulo": "Sensor y pantalla",
+          "texto": "Cuenta las partículas 15.000 veces por segundo y muestra en la LCD lo que aspiró."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Potencia",
+          "datos": [
+            [
+              "Succión",
+              "315 AW"
+            ],
+            [
+              "Motor",
+              "Dyson Hyperdymium de 900 W"
+            ],
+            [
+              "Separación",
+              "Ciclones dinámicos, con una serie extra que se activa en modo Boost"
+            ]
+          ]
+        },
+        {
+          "grupo": "Batería",
+          "datos": [
+            [
+              "Autonomía",
+              "Hasta 70 min (modo Eco, en piso duro)"
+            ],
+            [
+              "Batería",
+              "Litio, de siete celdas, intercambiable"
+            ],
+            [
+              "Carga",
+              "4,5 h"
+            ]
+          ]
+        },
+        {
+          "grupo": "Cabezal",
+          "datos": [
+            [
+              "Modelo",
+              "All Floor Cones Sense, con dos rodillos cónicos"
+            ],
+            [
+              "Pelo",
+              "Desenreda pelo de hasta 60 cm"
+            ],
+            [
+              "Pisos",
+              "Ajusta solo la velocidad del rodillo según el piso (y la succión, en modo Auto); cerdas de nailon para alfombras y fibras suaves para pisos duros"
+            ],
+            [
+              "Luz",
+              "Muestra el polvo microscópico en pisos duros"
+            ]
+          ]
+        },
+        {
+          "grupo": "Depósito y filtrado",
+          "datos": [
+            [
+              "Depósito",
+              "CleanCompaktor: comprime hasta 30 días de polvo"
+            ],
+            [
+              "Vaciado",
+              "Queda limpio al vaciarlo, sin polvo ni pelo enredado"
+            ],
+            [
+              "Filtrado",
+              "HEPA sellado en cinco etapas: 99,99 % de las partículas de hasta 0,1 micras"
+            ]
+          ]
+        },
+        {
+          "grupo": "Uso",
+          "datos": [
+            [
+              "Accesorios integrados",
+              "Dos, para limpiar arriba y abajo; se usa como aspiradora de mano"
+            ],
+            [
+              "Cambio rápido",
+              "Soltás y ponés el cabezal sin agacharte"
+            ],
+            [
+              "Sensor de polvo",
+              "15.000 lecturas por segundo, adapta la potencia"
+            ],
+            [
+              "Pantalla",
+              "LCD con lo que aspiró, en tiempo real"
+            ],
+            [
+              "App",
+              "MyDyson, con avisos de actualizaciones de software"
+            ]
+          ]
+        },
+        {
+          "grupo": "Versión",
+          "datos": [
+            [
+              "Versión",
+              {
+                "proveedor": "China (CH specs), 220 V"
+              }
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "dyson.es/aspiradoras/sin-cable/v16-piston-animal",
+          "url": "https://www.dyson.es/aspiradoras/sin-cable/v16-piston-animal/mate-negro-cobre"
+        },
+        {
+          "texto": "dyson.co.uk/vacuum-cleaners/cordless/v16-piston-animal",
+          "url": "https://www.dyson.co.uk/vacuum-cleaners/cordless/v16-piston-animal/black-copper"
+        },
+        {
+          "texto": "dyson.cn/dyson-496042-01-vacuum.html",
+          "url": "https://www.dyson.cn/dyson-496042-01-vacuum.html"
+        }
+      ],
+      "proveedor": {
+        "fuente": "Vivi (Difu Vivi), lista «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson V16 Piston ANIMAL DS60».",
+        "aviso": "la versión y el voltaje son dato del proveedor"
+      },
+      "verificado": "2026-10-13",
+      "notas": "dyson.cn vende la «Piston Animal V16» (496042-01) con los mismos datos centrales (315 AW, 70 min, pelo de 60 cm, 30 días de polvo, filtrado en cinco etapas al 99,99 % de 0,1 micras). «DS60» lo dice Vivi; no lo encontré en Dyson: no se pone. Sin accesorios ni «En la caja»: dyson.es y dyson.co.uk listan cabezal, base de pared, rinconera, minicepillo 2.0, accesorio combinado y cargador, pero no sabemos qué trae la unidad china. Afuera: peso (3,4 kg en la ficha y 3,5 kg con el cabezal en las preguntas de dyson.es), capacidad (1,3 L en la ficha y 1,35 L en las preguntas) y medidas. Fuentes: todo en dyson.es y dyson.co.uk; 315 AW, 70 min, 60 cm, 30 días, cinco etapas y accesorios integrados también en dyson.cn; baterías intercambiables, dyson.es. No confundir con la V16 Piston Animal Submarine (otro producto). Benja decide si muestra la línea «Versión»."
     }
   ]
 }

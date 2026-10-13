@@ -194,7 +194,15 @@
 "AT-0103-04.jpg",
 "AT-0104-01.jpg",
 "AT-0105-01.jpg",
+"AT-0105-02.jpg",
+"AT-0106-01.jpg",
+"AT-0106-02.jpg",
+"AT-0106-03.jpg",
 "AT-0107-01.jpg",
+"AT-0107-02.jpg",
+"AT-0108-01.jpg",
+"AT-0108-02.jpg",
+"AT-0108-03.jpg",
 "AT-0109-01.jpg",
 "AT-0109-02.jpg",
 "AT-0110-01.jpg",
@@ -799,7 +807,13 @@
 "AT-0575.jpg",
 "AT-0576-01.jpg",
 "AT-0577-01.jpg",
-"AT-0578-01.jpg"
+"AT-0578-01.jpg",
+"AT-0579-01.jpg",
+"AT-0580-01.jpg",
+"AT-0580-02.jpg",
+"AT-0581-01.jpg",
+"AT-0582-01.jpg",
+"AT-0583-01.jpg"
 ],
 "catalogo": {
 "firmas": {
@@ -2573,6 +2587,22 @@
 ],
 "AT-0578": [
 "apple|tablet|11:1,128:1,air:1,cellular:1,m4:1"
+],
+"AT-0579": [
+"samsung|celular|16:1,1tb:1,8:1,ultra:1"
+],
+"AT-0580": [
+"samsung|celular|12:1,256:1,8:1",
+"samsung|celular|256:1,8:1"
+],
+"AT-0581": [
+"samsung|celular|12:1,512:1,s26:1,ultra:1"
+],
+"AT-0582": [
+"samsung|tablet|12:1,256:1,plus:1,s12:1,wifi:1"
+],
+"AT-0583": [
+"samsung|celular|12:1,256:1,a37:1"
 ]
 },
 "ids": {
@@ -2877,6 +2907,7 @@
 "CEL-SAM-100": "AT-0512",
 "CEL-SAM-A36-6G128-BLU-000": "AT-0511",
 "CEL-SAM-A36-8G256-LAV-000": "AT-0504",
+"CEL-SAM-A37-12G256-CHR-000": "AT-0583",
 "CEL-SAM-A56-12G256-OLV-000": "AT-0086",
 "CEL-SAM-A56-8G256-OLV-000": "AT-0087",
 "CEL-SAM-A57-8G128-DBL-000": "AT-0088",
@@ -2887,6 +2918,17 @@
 "CEL-SAM-S26-12G256-WHT-000": "AT-0096",
 "CEL-SAM-S26FE-8G128-PIS-000": "AT-0097",
 "CEL-SAM-S26PLUS-512-WHT-000": "AT-0101",
+"CEL-SAM-S26ULT-12G512-BLU-000": "AT-0581",
+"CEL-SAM-ZFLIP8-12G256-CRM-000": "AT-0580",
+"CEL-SAM-ZFLIP8-12G256-GPH-000": "AT-0580",
+"CEL-SAM-ZFOLD8-12G256-CRM-000": "AT-0105",
+"CEL-SAM-ZFOLD8-12G512-LAV-000": "AT-0106",
+"CEL-SAM-ZFOLD8-512-CRM-000": "AT-0106",
+"CEL-SAM-ZFOLD8ULT-12G256-GPH-000": "AT-0107",
+"CEL-SAM-ZFOLD8ULT-1TB-GPH-000": "AT-0579",
+"CEL-SAM-ZFOLD8ULT-512-CRM-000": "AT-0108",
+"CEL-SAM-ZFOLD8ULT-512-GPH-000": "AT-0108",
+"CEL-SAM-ZFOLD8ULT-512-VIO-000": "AT-0108",
 "CEL-XIA-088": "AT-0116",
 "CEL-XIA-092": "AT-0120",
 "CEL-XIA-093": "AT-0119",
@@ -3332,6 +3374,7 @@
 "TAB-SAM-TABS10FEPLUS-8G128-LBL-WIFIPEN": "AT-0492",
 "TAB-SAM-TABS10FEPLUS-8G128-SLV-WIFIPEN": "AT-0492",
 "TAB-SAM-TABS11ULTRA-12G256-BLK-WIFIPEN": "AT-0497",
+"TAB-SAM-TABS12PLUSWIFI-12G256-GRY-000": "AT-0582",
 "TAB-XIA-007": "AT-0499",
 "TAB-XIA-008": "AT-0525",
 "TAB-XIA-009": "AT-0526"
@@ -4631,19 +4674,30 @@
 "graphite": "AT-0104-01"
 },
 "AT-0105": {
+"cream": "AT-0105-02",
+"crema": "AT-0105-02",
 "garphite": "AT-0105-01",
 "grafito": "AT-0105-01",
 "graphite": "AT-0105-01"
 },
 "AT-0106": {
+"cream": "AT-0106-02",
+"crema": "AT-0106-02",
 "garphite": "AT-0106-01",
 "grafito": "AT-0106-01",
-"graphite": "AT-0106-01"
+"graphite": "AT-0106-01",
+"lavanda": "AT-0106-03",
+"lavender": "AT-0106-03"
 },
 "AT-0107": {
-"cream": "AT-0107-01"
+"cream": "AT-0107-01",
+"garphite": "AT-0107-02",
+"grafito": "AT-0107-02",
+"graphite": "AT-0107-02"
 },
 "AT-0108": {
+"cream": "AT-0108-03",
+"crema": "AT-0108-03",
 "garphite": "AT-0108-01",
 "grafito": "AT-0108-01",
 "graphite": "AT-0108-01",
@@ -6452,8 +6506,34 @@
 },
 "AT-0578": {
 "space gray": "AT-0578-01"
+},
+"AT-0579": {
+"garphite": "AT-0579-01",
+"grafito": "AT-0579-01",
+"graphite": "AT-0579-01"
+},
+"AT-0580": {
+"cream": "AT-0580-01",
+"crema": "AT-0580-01",
+"garphite": "AT-0580-02",
+"grafito": "AT-0580-02",
+"graphite": "AT-0580-02"
+},
+"AT-0581": {
+"blue": "AT-0581-01",
+"sky blue": "AT-0581-01",
+"skyblue": "AT-0581-01"
+},
+"AT-0582": {
+"cinza": "AT-0582-01",
+"gray": "AT-0582-01",
+"grey": "AT-0582-01",
+"gris": "AT-0582-01"
+},
+"AT-0583": {
+"charcoal": "AT-0583-01"
 }
 }
 },
-"generado": "2026-10-13T11:09:21"
+"generado": "2026-10-13T11:23:15"
 }

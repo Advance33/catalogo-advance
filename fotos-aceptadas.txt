@@ -37,3 +37,12 @@ d842ee67124a37878b9600219398189e  4   # IPHONE 17 PRO 256GB | 512GB, eSIM y SIM 
 42527c7c3c299229d5cf3898c5bf8f42  4   # IPHONE 17 PRO 256GB | 512GB, eSIM y SIM (Orange): otra memoria y otra Sim, la foto es la misma. Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
 df88228f4c1d12e8df8b9a3b2490ea0a  2   # IPHONE 17 PRO 512GB | 512GB SIM (Silver). Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
 59d5dbc05361152f3a80e68f5f9145f0  2   # GALAXY TAB A11+ 6/128GB WIFI | 5G (Gray): Wifi y Cellular, el mismo equipo; la antena no se ve (D18, Benja 08/10). 13/10/2026
+09eb58ba579b41b9307e7e68f4ef1877  3   # GALAXY S25 ULTRA 12/256GB | 12/512GB | 1TB (Titanium Black): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+6d6081a9835451711620a480eef79799  2   # GALAXY S26 12/512GB | 12/256GB (Violet): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+f082b177a56adf09f54d4aa59c28823c  2   # IPAD 11 A16 256GB | 128GB (Yellow): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+ab4489982f90561cd3662543e07b1e66  2   # GALAXY A36 6/128GB | 8/256GB (Lavender): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+600c1156447a645ecdc79de5be31e03c  2   # IPAD 11 A16 128GB WIFI | CELLULAR (Silver): Wifi y Cellular se ven igual (D18, Benja 08/10). 13/10/2026 (D5)
+8ff0173ff93abe94c65a5e3ed2b9a9cc  2   # IPAD 11 A16 256GB WIFI | CELLULAR (Silver): Wifi y Cellular se ven igual (D18, Benja 08/10). 13/10/2026 (D5)
+d2c99849db2a86d9bb4190d5562faae8  4   # IPAD AIR M4 11" 128GB WIFI | CELLULAR (Space Gray): Wifi y Cellular se ven igual (D18, Benja 08/10). 13/10/2026 (D5)
+eef2f653e3d39e386d3d414b02578b6d  2   # IPHONE AIR 1TB | 256GB (Black): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+59ab47dd9f42c3e1f08a6d13f794fc2f  2   # IPHONE AIR 1TB | 256GB (White): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)

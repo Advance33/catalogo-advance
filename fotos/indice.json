@@ -3,6 +3,7 @@
 "AT-0001.jpg",
 "AT-0002.jpg",
 "AT-0003-01.jpg",
+"AT-0003-02.jpg",
 "AT-0004-01.jpg",
 "AT-0005-01.jpg",
 "AT-0006-01.jpg",
@@ -161,14 +162,17 @@
 "AT-0093-01.jpg",
 "AT-0093-02.jpg",
 "AT-0093-03.jpg",
+"AT-0093-04.jpg",
 "AT-0094-01.jpg",
 "AT-0094-02.jpg",
 "AT-0094-03.jpg",
+"AT-0094-04.jpg",
 "AT-0095-01.jpg",
 "AT-0095-02.jpg",
 "AT-0095-03.jpg",
 "AT-0095-04.jpg",
 "AT-0096-01.jpg",
+"AT-0096-03.jpg",
 "AT-0097-01.jpg",
 "AT-0097-02.jpg",
 "AT-0098-01.jpg",
@@ -613,6 +617,7 @@
 "AT-0465-02.jpg",
 "AT-0466-01.jpg",
 "AT-0466-02.jpg",
+"AT-0466-03.jpg",
 "AT-0467-01.jpg",
 "AT-0467-02.jpg",
 "AT-0467-03.jpg",
@@ -677,6 +682,7 @@
 "AT-0504-01.jpg",
 "AT-0504-02.jpg",
 "AT-0504-03.jpg",
+"AT-0504-04.jpg",
 "AT-0505-01.jpg",
 "AT-0506-01.jpg",
 "AT-0507-01.jpg",
@@ -701,6 +707,8 @@
 "AT-0519.jpg",
 "AT-0520.jpg",
 "AT-0521-01.jpg",
+"AT-0521-02.jpg",
+"AT-0521-03.jpg",
 "AT-0522-01.jpg",
 "AT-0522-02.jpg",
 "AT-0523-01.jpg",
@@ -768,7 +776,30 @@
 "AT-0549-02.jpg",
 "AT-0549-03.jpg",
 "AT-0549-04.jpg",
-"AT-0549-05.jpg"
+"AT-0549-05.jpg",
+"AT-0558-01.jpg",
+"AT-0558-02.jpg",
+"AT-0559.jpg",
+"AT-0560.jpg",
+"AT-0561-01.jpg",
+"AT-0562-01.jpg",
+"AT-0563-01.jpg",
+"AT-0563-02.jpg",
+"AT-0564-01.jpg",
+"AT-0565.jpg",
+"AT-0566-01.jpg",
+"AT-0567.jpg",
+"AT-0568.jpg",
+"AT-0569.jpg",
+"AT-0570.jpg",
+"AT-0571.jpg",
+"AT-0572.jpg",
+"AT-0573.jpg",
+"AT-0574.jpg",
+"AT-0575.jpg",
+"AT-0576-01.jpg",
+"AT-0577-01.jpg",
+"AT-0578-01.jpg"
 ],
 "catalogo": {
 "firmas": {
@@ -2472,9 +2503,84 @@
 ],
 "AT-0549": [
 "apple|celular|128:1,16:1,plus:1"
+],
+"AT-0558": [
+"canon|camara|18:1,45:1,kit:1,r50:1",
+"canon|camara|18:1,45mm:1,r50:1"
+],
+"AT-0559": [
+"canon|camara|14:1,30:1,kit:1,r50:1",
+"canon|camara|14:1,30mm:1,r50:1"
+],
+"AT-0560": [
+"canon|camara|body:1,r6:1",
+"canon|camara|r6:1"
+],
+"AT-0561": [
+"fujifilm|camara|16:1,50:1,kit:1,t5:1"
+],
+"AT-0562": [
+"fujifilm|camara|16:1,80:1,kit:1,t5:1"
+],
+"AT-0563": [
+"fujifilm|camara|16:1,50:1,kit:1,t50:1",
+"fujifilm|camara|16:1,50:1,t50:1"
+],
+"AT-0564": [
+"fujifilm|camara|15:1,45:1,kit:1,t50:1"
+],
+"AT-0565": [
+"nikon|camara|body:1,z9:1",
+"nikon|camara|z9:1"
+],
+"AT-0566": [
+"nikon|camara|",
+"nikon|camara|body:1"
+],
+"AT-0567": [
+"sony|camara|7:1",
+"sony|camara|7:1,body:1"
+],
+"AT-0568": [
+"apple|accesorio apple|20w:1"
+],
+"AT-0569": [
+"apple|accesorio apple|40w:1"
+],
+"AT-0570": [
+"apple|accesorio apple|air:1"
+],
+"AT-0571": [
+"apple|accesorio apple|"
+],
+"AT-0572": [
+"canon|lente|1:1,14mm:1,4:1"
+],
+"AT-0573": [
+"nikon|lente|1:1,20mm:1,8:1"
+],
+"AT-0574": [
+"tamron|lente|12:1,2:1,20mm:1,8:1,a084:1"
+],
+"AT-0575": [
+"tamron|lente|2:1,200mm:1,25:1,8:1,g2:1"
+],
+"AT-0576": [
+"apple|tablet|11:1,128:1,a16:1,cellular:1"
+],
+"AT-0577": [
+"apple|tablet|11:1,256:1,a16:1,cellular:1"
+],
+"AT-0578": [
+"apple|tablet|11:1,128:1,air:1,cellular:1,m4:1"
 ]
 },
 "ids": {
+"ACA-APL-BATERIAMAGSAFEIPHONEAIR-000-000-000": "AT-0570",
+"ACA-APL-CABLE-000-000-USBCLIGHT": "AT-0571",
+"ACA-APL-CARGADOR40WUSBC-000-000-000": "AT-0569",
+"ACA-APL-MKTOUCHIDNUM-000-BLK-EN": "AT-0003",
+"ACA-APL-PA20W-000-000-000": "AT-0568",
 "ACC-APP-001": "AT-0002",
 "ACC-APP-002": "AT-0001",
 "ACC-APP-003": "AT-0014",
@@ -2591,6 +2697,10 @@
 "CAM-CAN-036": "AT-0150",
 "CAM-CAN-037": "AT-0153",
 "CAM-CAN-038": "AT-0154",
+"CAM-CAN-EOSR50-000-BLK-K1845": "AT-0558",
+"CAM-CAN-EOSR50-000-WHT-K1845": "AT-0558",
+"CAM-CAN-EOSR50V-000-000-K1430": "AT-0559",
+"CAM-CAN-EOSR6M2-000-000-BODY": "AT-0560",
 "CAM-DJI-002": "AT-0194",
 "CAM-DJI-003": "AT-0195",
 "CAM-DJI-005": "AT-0193",
@@ -2599,6 +2709,11 @@
 "CAM-FUJ-001": "AT-0159",
 "CAM-FUJ-008": "AT-0024",
 "CAM-FUJ-009": "AT-0159",
+"CAM-FUJ-XT5-000-BLK-K1650": "AT-0561",
+"CAM-FUJ-XT5-000-BLK-K1680": "AT-0562",
+"CAM-FUJ-XT50-000-BLK-K1545": "AT-0564",
+"CAM-FUJ-XT501650-000-BLK-000": "AT-0563",
+"CAM-FUJ-XT501650-000-SLV-000": "AT-0563",
 "CAM-GOP-002": "AT-0197",
 "CAM-GOP-003": "AT-0196",
 "CAM-GOP-005": "AT-0198",
@@ -2616,6 +2731,8 @@
 "CAM-NIK-016": "AT-0166",
 "CAM-NIK-017": "AT-0169",
 "CAM-NIK-020": "AT-0164",
+"CAM-NIK-Z9-000-000-BODY": "AT-0565",
+"CAM-NIK-ZF-000-BLK-BODY": "AT-0566",
 "CAM-SON-003": "AT-0192",
 "CAM-SON-005": "AT-0179",
 "CAM-SON-006": "AT-0174",
@@ -2638,8 +2755,14 @@
 "CAM-SON-024": "AT-0187",
 "CAM-SON-027": "AT-0175",
 "CAM-SON-032": "AT-0172",
+"CAM-SON-A7IV-000-000-BODY": "AT-0567",
+"CEL-APL-15-128-BLK-SIM": "AT-0065",
 "CEL-APL-15-128-PNK-SIM": "AT-0065",
+"CEL-APL-16-128-BLK-000": "AT-0067",
+"CEL-APL-16-128-PNK-000": "AT-0067",
+"CEL-APL-16-128-TLX-000": "AT-0067",
 "CEL-APL-16E-256-WHT-000": "AT-0548",
+"CEL-APL-16PM-256-BLK-000": "AT-0068",
 "CEL-APL-17E-512-PNK-ESIM": "AT-0530",
 "CEL-APL-17P-1TB-BLU-ESIM": "AT-0071",
 "CEL-APL-17P-1TB-BLU-SIM": "AT-0537",
@@ -2655,12 +2778,21 @@
 "CEL-APL-17P-512-SLV-ESIM": "AT-0073",
 "CEL-APL-17P-512-SLV-SIM": "AT-0536",
 "CEL-APL-AIR-1TB-SKY-ESIM": "AT-0077",
+"CEL-APL-AIR-256-BLK-ESIM": "AT-0521",
+"CEL-APL-AIR-256-WHT-ESIM": "AT-0521",
 "CEL-APL-IPHONE16PLUS-128-BLK-000": "AT-0549",
+"CEL-APL-IPHONE18PRO-1TB-BLK-ESIM": "AT-0547",
+"CEL-APL-IPHONE18PRO-1TB-BRG-ESIM": "AT-0547",
+"CEL-APL-IPHONE18PRO-1TB-GLC-ESIM": "AT-0547",
 "CEL-APL-IPHONE18PRO-1TB-SLV-000": "AT-0547",
 "CEL-APL-IPHONE18PRO-256-BLK-000": "AT-0541",
+"CEL-APL-IPHONE18PRO-256-BRG-ESIM": "AT-0541",
 "CEL-APL-IPHONE18PRO-256-GLC-ESIM": "AT-0541",
 "CEL-APL-IPHONE18PRO-256-SLV-ESIM": "AT-0541",
 "CEL-APL-IPHONE18PRO-512-BLK-ESIM": "AT-0542",
+"CEL-APL-IPHONE18PRO-512-BRG-ESIM": "AT-0542",
+"CEL-APL-IPHONE18PRO-512-GLC-ESIM": "AT-0542",
+"CEL-APL-IPHONE18PRO-512-SLV-ESIM": "AT-0542",
 "CEL-APL-IPHONE18PROMAX-1TB-BLK-ESIM": "AT-0545",
 "CEL-APL-IPHONE18PROMAX-256-BLK-ESIM": "AT-0543",
 "CEL-APL-IPHONE18PROMAX-256-BRG-ESIM": "AT-0543",
@@ -2668,6 +2800,7 @@
 "CEL-APL-IPHONE18PROMAX-256-SLV-ESIM": "AT-0543",
 "CEL-APL-IPHONE18PROMAX-2TB-BLK-ESIM": "AT-0546",
 "CEL-APL-IPHONE18PROMAX-512-BLK-ESIM": "AT-0544",
+"CEL-APL-IPHONE18PROMAX-512-SLV-ESIM": "AT-0544",
 "CEL-APP-003": "AT-0064",
 "CEL-APP-004": "AT-0065",
 "CEL-APP-005": "AT-0067",
@@ -2743,8 +2876,14 @@
 "CEL-SAM-099": "AT-0093",
 "CEL-SAM-100": "AT-0512",
 "CEL-SAM-A36-6G128-BLU-000": "AT-0511",
+"CEL-SAM-A36-8G256-LAV-000": "AT-0504",
+"CEL-SAM-A56-12G256-OLV-000": "AT-0086",
+"CEL-SAM-A56-8G256-OLV-000": "AT-0087",
 "CEL-SAM-A57-8G128-DBL-000": "AT-0088",
 "CEL-SAM-S25FE-256-WHT-000": "AT-0090",
+"CEL-SAM-S25ULT-12G1TB-BLK-000": "AT-0094",
+"CEL-SAM-S25ULT-12G512-BLK-000": "AT-0093",
+"CEL-SAM-S26-12G256-VIO-000": "AT-0096",
 "CEL-SAM-S26-12G256-WHT-000": "AT-0096",
 "CEL-SAM-S26FE-8G128-PIS-000": "AT-0097",
 "CEL-SAM-S26PLUS-512-WHT-000": "AT-0101",
@@ -2877,6 +3016,7 @@
 "LEN-CAN-056": "AT-0227",
 "LEN-CAN-057": "AT-0249",
 "LEN-CAN-058": "AT-0236",
+"LEN-CAN-RF14MMF14LVCM-000-000-000": "AT-0572",
 "LEN-NIK-001": "AT-0268",
 "LEN-NIK-002": "AT-0269",
 "LEN-NIK-003": "AT-0285",
@@ -2911,6 +3051,7 @@
 "LEN-NIK-038": "AT-0275",
 "LEN-NIK-039": "AT-0284",
 "LEN-NIK-040": "AT-0288",
+"LEN-NIK-Z20MMF18S-000-000-NIKZ": "AT-0573",
 "LEN-SIG-001": "AT-0328",
 "LEN-SIG-002": "AT-0337",
 "LEN-SIG-003": "AT-0313",
@@ -3023,6 +3164,8 @@
 "LEN-TAM-030": "AT-0388",
 "LEN-TAM-031": "AT-0396",
 "LEN-TAM-032": "AT-0389",
+"LEN-TAM-1220MMF28NIKONZA084-000-000-NIKZ": "AT-0574",
+"LEN-TAM-25200MMF28IIIG2VXDSONY-000-000-SONYE": "AT-0575",
 "MON-APP-004": "AT-0419",
 "MON-APP-006": "AT-0419",
 "MON-APP-007": "AT-0419",
@@ -3075,7 +3218,9 @@
 "NB-APP-108": "AT-0434",
 "NB-APP-109": "AT-0434",
 "NB-APP-110": "AT-0532",
+"NBK-APL-MBA13M5-16G1TB-MID-EN": "AT-0428",
 "NBK-APL-MBA13M5-16G512-SKY-EN": "AT-0522",
+"NBK-APL-MBA13M5-24G1TB-STL-EN": "AT-0429",
 "NBK-APL-MBP14M4P-24G512-SBK-EN": "AT-0436",
 "NBK-APL-MBP14M5-16G1TB-SBK-EN": "AT-0539",
 "NBK-APL-MBP14M5-16G1TB-SBK-ES": "AT-0437",
@@ -3127,6 +3272,10 @@
 "SW-KIE-002": "AT-0463",
 "SW-KIE-003": "AT-0464",
 "SW-KIE-004": "AT-0461",
+"TAB-APL-IPAD11A16-128-SLV-CELL": "AT-0576",
+"TAB-APL-IPAD11A16-128-YEL-WIFI": "AT-0466",
+"TAB-APL-IPAD11A16-256-SLV-CELL": "AT-0577",
+"TAB-APL-IPADAIR11M4-128-SGR-CELL": "AT-0578",
 "TAB-APL-IPADAIR11M4-512-BLU-WIFI": "AT-0470",
 "TAB-APL-IPADAIR11M4-512-PUR-WIFI": "AT-0470",
 "TAB-APL-IPADAIR11M4-512-STL-WIFI": "AT-0470",
@@ -3824,8 +3973,12 @@
 "": "AT-0002"
 },
 "AT-0003": {
+"black": "AT-0003-02",
+"black keys": "AT-0003-02",
+"black keys · ingles": "AT-0003-02",
 "blanco": "AT-0003-01",
 "teclas blancas": "AT-0003-01",
+"teclas negras": "AT-0003-02",
 "whi": "AT-0003-01",
 "white": "AT-0003-01",
 "white keys · ingles": "AT-0003-01",
@@ -4162,6 +4315,7 @@
 "bla": "AT-0068-01",
 "black": "AT-0068-01",
 "black keys": "AT-0068-01",
+"black titanium": "AT-0068-01",
 "desert titanium": "AT-0068-02",
 "natural": "AT-0068-03",
 "natural titanium": "AT-0068-03",
@@ -4293,33 +4447,39 @@
 "violeta": "AT-0085-03"
 },
 "AT-0086": {
+"awesome olive": "AT-0086-02",
 "bla": "AT-0086-01",
 "black": "AT-0086-01",
 "black keys": "AT-0086-01",
 "gre": "AT-0086-02",
 "green": "AT-0086-02",
 "negro": "AT-0086-01",
+"olive": "AT-0086-02",
 "pin": "AT-0086-03",
 "pink": "AT-0086-03",
 "teclas negras": "AT-0086-01"
 },
 "AT-0087": {
+"awesome olive": "AT-0087-02",
 "cinza": "AT-0087-01",
 "gray": "AT-0087-01",
 "gre": "AT-0087-02",
 "green": "AT-0087-02",
 "grey": "AT-0087-01",
-"gris": "AT-0087-01"
+"gris": "AT-0087-01",
+"olive": "AT-0087-02"
 },
 "AT-0088": {
 "cinza": "AT-0088-01",
 "dark blue": "AT-0088-02",
 "gray": "AT-0088-01",
 "grey": "AT-0088-01",
-"gris": "AT-0088-01"
+"gris": "AT-0088-01",
+"navy": "AT-0088-02"
 },
 "AT-0089": {
-"dark blue": "AT-0089-01"
+"dark blue": "AT-0089-01",
+"navy": "AT-0089-01"
 },
 "AT-0090": {
 "icy blue": "AT-0090-03",
@@ -4351,19 +4511,25 @@
 "whitesilver": "AT-0092-02"
 },
 "AT-0093": {
+"black": "AT-0093-04",
 "cinza": "AT-0093-01",
 "gray": "AT-0093-01",
 "grey": "AT-0093-01",
 "gris": "AT-0093-01",
+"negro": "AT-0093-04",
 "silverblue": "AT-0093-03",
+"titanium black": "AT-0093-04",
 "whitesilver": "AT-0093-02"
 },
 "AT-0094": {
+"black": "AT-0094-04",
 "cinza": "AT-0094-01",
 "gray": "AT-0094-01",
 "grey": "AT-0094-01",
 "gris": "AT-0094-01",
+"negro": "AT-0094-04",
 "silverblue": "AT-0094-03",
+"titanium black": "AT-0094-04",
 "whitesilver": "AT-0094-02"
 },
 "AT-0095": {
@@ -4385,8 +4551,11 @@
 "bla": "AT-0096-01",
 "black": "AT-0096-01",
 "black keys": "AT-0096-01",
+"cobalt violet": "AT-0096-03",
 "negro": "AT-0096-01",
 "teclas negras": "AT-0096-01",
+"violet": "AT-0096-03",
+"violeta": "AT-0096-03",
 "white": "AT-0096-02"
 },
 "AT-0097": {
@@ -5745,6 +5914,7 @@
 "teclas negras": "AT-0456-01"
 },
 "AT-0457": {
+"black and peach ceramic bezel · white silicone band": "AT-0457-01",
 "black ceramic": "AT-0457-01",
 "black ceramic · black peach": "AT-0457-01",
 "black peach": "AT-0457-01",
@@ -5798,10 +5968,12 @@
 "silver": "AT-0465-02"
 },
 "AT-0466": {
+"amarillo": "AT-0466-03",
 "blu": "AT-0466-01",
 "blue": "AT-0466-01",
 "sil": "AT-0466-02",
-"silver": "AT-0466-02"
+"silver": "AT-0466-02",
+"yellow": "AT-0466-03"
 },
 "AT-0467": {
 "blu": "AT-0467-01",
@@ -5997,8 +6169,11 @@
 "pink": "AT-0503-03"
 },
 "AT-0504": {
+"awesome lavender": "AT-0504-04",
 "black": "AT-0504-01",
 "blue": "AT-0504-03",
+"lavanda": "AT-0504-04",
+"lavender": "AT-0504-04",
 "lime": "AT-0504-02"
 },
 "AT-0505": {
@@ -6060,7 +6235,13 @@
 "": "AT-0520"
 },
 "AT-0521": {
-"skyblue": "AT-0521-01"
+"black": "AT-0521-02",
+"blanco": "AT-0521-03",
+"cloud white": "AT-0521-03",
+"negro": "AT-0521-02",
+"skyblue": "AT-0521-01",
+"space black": "AT-0521-02",
+"white": "AT-0521-03"
 },
 "AT-0522": {
 "midnight": "AT-0522-02",
@@ -6192,8 +6373,87 @@
 "teal": "AT-0549-03",
 "ultramarine": "AT-0549-02",
 "white": "AT-0549-04"
+},
+"AT-0558": {
+"black": "AT-0558-01",
+"blanco": "AT-0558-02",
+"negro": "AT-0558-01",
+"white": "AT-0558-02"
+},
+"AT-0559": {
+"": "AT-0559"
+},
+"AT-0560": {
+"": "AT-0560"
+},
+"AT-0561": {
+"black": "AT-0561-01",
+"blc": "AT-0561-01",
+"negro": "AT-0561-01"
+},
+"AT-0562": {
+"black": "AT-0562-01",
+"blc": "AT-0562-01",
+"negro": "AT-0562-01"
+},
+"AT-0563": {
+"black": "AT-0563-01",
+"blc": "AT-0563-01",
+"negro": "AT-0563-01",
+"plata": "AT-0563-02",
+"silver": "AT-0563-02"
+},
+"AT-0564": {
+"black": "AT-0564-01",
+"blc": "AT-0564-01",
+"negro": "AT-0564-01"
+},
+"AT-0565": {
+"": "AT-0565"
+},
+"AT-0566": {
+"black": "AT-0566-01",
+"negro": "AT-0566-01"
+},
+"AT-0567": {
+"": "AT-0567"
+},
+"AT-0568": {
+"": "AT-0568"
+},
+"AT-0569": {
+"": "AT-0569"
+},
+"AT-0570": {
+"": "AT-0570"
+},
+"AT-0571": {
+"": "AT-0571"
+},
+"AT-0572": {
+"": "AT-0572"
+},
+"AT-0573": {
+"": "AT-0573"
+},
+"AT-0574": {
+"": "AT-0574"
+},
+"AT-0575": {
+"": "AT-0575"
+},
+"AT-0576": {
+"sil": "AT-0576-01",
+"silver": "AT-0576-01"
+},
+"AT-0577": {
+"sil": "AT-0577-01",
+"silver": "AT-0577-01"
+},
+"AT-0578": {
+"space gray": "AT-0578-01"
 }
 }
 },
-"generado": "2026-10-13T10:54:20"
+"generado": "2026-10-13T11:09:21"
 }

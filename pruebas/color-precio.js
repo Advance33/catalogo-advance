@@ -60,9 +60,12 @@ function correrPruebas(){
 
   /* ---- 2. Los casos reales de la planilla de hoy ---- */
   const casos = [];
+  /* 13/10/2026 (D15 B de Benja): lo agotado no muestra precio, asi que el
+     precio "cambia segun el color" se mira entre los colores con stock */
   conVar.forEach(m => m.variantes.forEach(v => {
     const h = (v.hermanasColor || []).filter(x => x.color);
-    if(h.length > 1 && new Set(h.map(x => x.precio)).size > 1) casos.push({ m, v, h });
+    const hs = h.filter(x => x.stock);
+    if(v.stock && hs.length > 1 && new Set(hs.map(x => x.precio)).size > 1) casos.push({ m, v, h });
   }));
 
   if(!casos.length){
@@ -85,10 +88,12 @@ function correrPruebas(){
   /* 30/09: el aviso "El precio cambia segun el color" se fue con la tira. En
      la vitrina (opcion C de la muestra de los colores) cada color dice su
      precio abajo de la foto, que es mas que avisar que cambia. */
-  const conPrecio = puntos.filter(b => (b.querySelector('.pr')?.textContent || '').trim());
-  ok(conPrecio.length === puntos.length &&
+  const conStockP = puntos.filter(b => !b.classList.contains('agotada'));
+  const conPrecio = conStockP.filter(b => /USD/.test(b.querySelector('.pr')?.textContent || ''));
+  const agotadoConPrecio = puntos.filter(b => b.classList.contains('agotada') && /\d/.test(b.querySelector('.pr')?.textContent || ''));
+  ok(conPrecio.length === conStockP.length && !agotadoConPrecio.length &&
      new Set(conPrecio.map(b => b.querySelector('.pr').textContent.trim())).size > 1,
-     'la ficha dice el precio de cada color, abajo de su foto',
+     'la ficha dice el precio de cada color con stock, abajo de su foto (el agotado, sin precio: D15 B)',
      conPrecio.map(b => b.dataset.color + ' ' + b.querySelector('.pr').textContent.trim()).join(' / '));
 
   /* Ojo con cual se toca: dos hermanas pueden valer lo mismo y entonces tocar

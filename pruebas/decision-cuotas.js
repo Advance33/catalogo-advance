@@ -334,10 +334,12 @@ async function probarElPedido(){
     let guardado = null; try{ guardado = localStorage.getItem(CUOTAS_KEY); }catch(e){}
     ok(guardado === String(c.cuotas), '[3C] queda guardado en el navegador', guardado);
     const e = TC ? cuEsperado(totalPedido(), c) : null;
-    const renglon = e ? `Lo pago con tarjeta en ${c.cuotas} cuotas: aprox. $ ${cuPlata(e.cuota)} c/u (total aprox. $ ${cuPlata(e.total)}).`
+    /* 13/10/2026 (D13 A de Benja, auditoria W3-09): solo la cuota, sin el
+       total en cuotas, en la ayuda y en el mensaje (igual que la ficha) */
+    const renglon = e ? `Lo pago con tarjeta en ${c.cuotas} cuotas: aprox. $ ${cuPlata(e.cuota)} c/u.`
                       : `Lo pago con tarjeta en ${c.cuotas} cuotas.`;
-    if(e) ok(cuTxt(b2.querySelector('.pd-ayuda')) === `${c.cuotas} cuotas de $ ${cuPlata(e.cuota)} · total $ ${cuPlata(e.total)}`,
-             '[3C] la ayuda dice la cuota y el total del pedido', cuTxt(b2.querySelector('.pd-ayuda')));
+    if(e) ok(cuTxt(b2.querySelector('.pd-ayuda')) === `${c.cuotas} cuotas de $ ${cuPlata(e.cuota)}`,
+             '[3C] la ayuda dice la cuota del pedido, sin el total en cuotas (D13)', cuTxt(b2.querySelector('.pd-ayuda')));
     const partes = mensajePedido().split('\n\n');
     ok(partes[partes.length - 1] === renglon, '[3C] el mensaje suma el plan, con los montos, al final', partes[partes.length - 1]);
     const a = document.querySelector('#pedido .botones a.pri');

@@ -53,9 +53,12 @@ function correrPruebas(){
   const conRegalo = cs.filter(c => buscarModelo(c.dataset.key)?.incluye);
   const malRegalo = cs.filter(c => {
     const p = buscarModelo(c.dataset.key), cinta = c.querySelector('.foto .cinta');
-    return !!(p && p.incluye) !== !!cinta || (cinta && cinta.textContent !== textoIncluye(p.incluye));
+    /* 13/10/2026 (auditoria W3-11): el 🎁 va adelante, en lugar del "+" del
+       principio (textoCinta), para que en el celular nunca se corte; el title
+       sigue con el texto de siempre (textoIncluye) */
+    return !!(p && p.incluye) !== !!cinta || (cinta && (cinta.textContent !== textoCinta(p.incluye) || cinta.title !== textoIncluye(p.incluye)));
   });
-  ok(conRegalo.length > 0 && !malRegalo.length, 'el regalo va como cinta sobre la foto, con el texto de la planilla (y su 🎁 si es regalo)',
+  ok(conRegalo.length > 0 && !malRegalo.length, 'el regalo va como cinta sobre la foto, con el texto de la planilla (y su 🎁 adelante si es regalo)',
      malRegalo.map(c => c.dataset.key).slice(0, 3).join(', ') || conRegalo.length + ' con regalo');
   /* Los colores salieron de la tarjeta el 21/09 y se ven adentro de la ficha,
      en la vitrina debajo de la foto (30/09, la C de la muestra de los
@@ -73,7 +76,9 @@ function correrPruebas(){
   }
   ok(!cs.some(c => c.querySelector('.meta, .specs, .opciones, .incluye')),
      'no quedaron los colores escritos, las capacidades, las opciones ni la caja verde');
-  ok(!TC || cs.every(c => c.querySelector('.pie .ars')), 'el precio en pesos va en la etiqueta');
+  // Lo agotado, sin precio ni pesos (13/10/2026, D15 B de Benja)
+  ok(!TC || cs.every(c => !!c.querySelector('.pie .ars') === !!buscarModelo(c.dataset.key)?.stock),
+     'el precio en pesos va en la etiqueta (la agotada, sin pesos: D15 B)');
 
   /* ---- 2b. En la tarjeta, solo el nombre del modelo (21/09) ----
      Pedro: "aca figura la memoria de los celulares y en otros no". Pasaba

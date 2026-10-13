@@ -378,7 +378,8 @@ async function probarTodasLasVersiones(){
     if(el.classList.contains('fi-grupo')){ prev = null; continue; }
     const v = buscarProducto(el.dataset.k);
     if(!v){ datos = false; cual = el.dataset.k; continue; }
-    if(dfTxt(el.querySelector('.p')) !== precioUSD(v) || el.classList.contains('agotada') === !!v.stock
+    // Lo agotado, sin precio (13/10/2026, D15 B de Benja): el renglon ya dice "Sin stock"
+    if(dfTxt(el.querySelector('.p')) !== (v.stock ? precioUSD(v) : '') || el.classList.contains('agotada') === !!v.stock
        || dfTxt(el.querySelector('.q i')) !== (v.stock ? 'En stock' : 'Sin stock')){ datos = false; cual = v.id; }
     const hexes = pintas(v.color).filter(c => c.hex).map(c => c.hex.toLowerCase());
     const puestos = [...el.querySelectorAll('.pinta')].map(s => s.getAttribute('style').replace(/^background:/, '').toLowerCase());

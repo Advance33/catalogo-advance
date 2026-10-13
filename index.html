@@ -75,6 +75,29 @@
      quiere adelantar, va sin crossorigin: las <img> se piden sin él. -->
 <link rel="preconnect" href="https://advapp-blond.vercel.app" crossorigin>
 <link rel="preconnect" href="https://dolarapi.com" crossorigin>
+<!-- Los productos se piden ACÁ, apenas llega el <head> (13/10/2026, auditoría
+     del 08/10, W3-17). Con 4G lento el pedido a ADVAPP salía recién a los
+     1,7 s, cuando el navegador terminaba de leer el script entero (841 KB),
+     y los productos aparecían a los 2,5 s. Ahora baja mientras baja la
+     página. bajarAdvapp() lo usa UNA vez (la primera carga) si la dirección
+     es la misma ADVAPP_URL, con su mismo tope de espera; el refresco de cada
+     5 minutos, el Reintentar y las pruebas piden como siempre. No es un
+     <link rel="preload">: ése no garantiza que fetch() con cache 'no-cache'
+     lo reutilice y se podía bajar dos veces. Si ADVAPP_URL cambia, cambiar
+     también la dirección de acá (si no coincide, se ignora sola). -->
+<script>
+window.ADVAPP_TEMPRANO = (() => {
+  const url = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web';
+  try{
+    const r = fetch(url, { cache: 'no-cache' }).then(x => {
+      if(!x.ok) throw new Error('HTTP ' + x.status);
+      return x.json();
+    });
+    r.catch(() => {});         // si falla, lo dice bajarAdvapp: acá no queda un error suelto
+    return { url, respuesta: r };
+  }catch(e){ return null; }
+})();
+</script>
 
 <style>
   /* ==========================================================================
@@ -1256,6 +1279,14 @@
     padding:5px 9px;border-radius:0 7px 7px 0;background:var(--ok);color:#fff;
     font:600 10.5px/1.25 var(--sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
+  /* En el celular (13/10/2026, auditoría W3-11) la cinta puede usar dos
+     renglones: "🎁 Cargador 20W + Funda + Templado" no entra en uno a 360 o
+     390 px. El 🎁 va adelante (textoCinta), así que si algo se corta en el
+     segundo renglón nunca es el regalo. */
+  @media (max-width:760px){
+    .cinta{white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+           line-clamp:2;text-overflow:clip;overflow-wrap:break-word}
+  }
   /* El precio de antes, al lado del de hoy */
   .pie s.antes{font:500 11.5px/1 var(--mono);color:#A597C4;margin-left:7px}
   /* Al lado del precio (con "desde") no se parte en dos renglones; en el
@@ -1279,6 +1310,12 @@
     color:var(--ambar-ink);background:var(--ambar-soft);border:1px solid var(--ambar-line);
     padding:3px 7px;border-radius:999px;white-space:nowrap;margin-block:-4px}
   .marca .badge + .destacado{margin-left:0}
+  /* "Usado" en la tarjeta y en la ficha (13/10/2026, auditoría W3-10): al
+     lado de la marca, en el tono de la tinta, para que se lea antes que el
+     nombre. */
+  .usado-tag{display:inline-block;margin-left:8px;font:700 10px/1 var(--sans);letter-spacing:.02em;
+    text-transform:none;color:#fff;background:var(--ink);padding:3px 7px;border-radius:999px;
+    white-space:nowrap;vertical-align:middle;margin-block:-4px}
   /* El nombre vuelve a las mayúsculas de display el 21/09, y esta vez sí.
      Había salido de ahí porque con nombres como "iPhone 17 Pro Max 512GB" dos
      renglones en mayúsculas se leían peor que en la letra de texto. Lo que
@@ -1425,6 +1462,8 @@
   .msg.vacio h2{margin:0 auto 10px;max-width:30ch;text-wrap:balance}
   .msg.vacio p{margin:0 auto;max-width:46ch;font-size:15px}
   .msg.vacio .v-acc{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:18px}
+  /* Lo más parecido (13/10/2026, W3-12), debajo de la bajada */
+  .msg.vacio p.v-parecido{margin-top:10px;color:var(--ink);font-weight:600}
   .msg .b-salida{display:inline-flex;align-items:center;gap:9px;padding:12px 18px;border-radius:999px;border:0;
                  cursor:pointer;background:var(--ink);color:#fff;font:600 13.5px/1.2 var(--sans)}
   .msg .b-salida b{display:grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;
@@ -3619,6 +3658,12 @@ let ANALITICA_URL = '';
 // la suya, y prometer un plazo que no se cumple es un problema con el cliente.
 
 const DIRECCION = 'Av. De los Incas 5150, 1A, CABA';
+/* Instagram (13/10/2026, decisión D16 A de Benja, auditoría W3-16): la cuenta
+   que atiende Pancho. Va en el pie ("Instagram @advancetecno", al perfil) y en
+   la ayuda ("o por Instagram", al chat: ig.me/m/), además del cotizador de
+   usados (Enviar por Instagram, 06/10). Vacía, no aparece en ningún lado. */
+const INSTAGRAM_TECNO = 'advancetecno';     // @advancetecno
+const linkIG = () => INSTAGRAM_TECNO ? 'https://ig.me/m/' + INSTAGRAM_TECNO : '';
 const MAPA      = 'https://maps.app.goo.gl/kzwGpTwUNLkTEwWRA';
 
 // Las tres líneas debajo del botón de WhatsApp, en cada ficha: [título, detalle].
@@ -3667,8 +3712,11 @@ const PREGUNTAS = [
     r: [`Sí. Estamos en ${DIRECCION}.`,
         'Atendemos solo con cita previa: escribinos por WhatsApp y coordinamos día y hora.'],
     link: ['Ver en Google Maps', MAPA] },
+  /* (13/10/2026, decisión D14 A de Benja, auditoría DW-11 y W3-15) Decía "Sí,
+     sin excepciones: todo lo que publicamos es nuevo y sellado", y hay
+     objetivos "Caja blanca" a la venta (nuevos, sin la caja original). */
   { p: '¿Los productos son nuevos?',
-    r: ['Sí, sin excepciones: todo lo que publicamos es nuevo y sellado.'] },
+    r: ['Sí, nuevos. Los de caja blanca vienen sin la caja original y lo dice la ficha.'] },
   { p: '¿Los productos tienen garantía?',
     r: ['Sí, todos. La garantía cambia según el producto, así que preguntanos por la del que te interesa y te la confirmamos antes de que compres.'] },
   { p: '¿Cómo hago el pedido?',
@@ -4570,9 +4618,19 @@ async function bajarAdvapp(){
        solo la bajada: fetch le entrega la copia guardada a r.json(), y cargar()
        la vuelve a leer y a armar entera; lo que se saltea si nada cambio es
        el repintado (FIRMA_DATOS, en actualizar). */
-    const r = await fetch(ADVAPP_URL, { cache: 'no-cache', signal: corte.signal });
-    if(!r.ok) throw new Error('HTTP ' + r.status);
-    d = await r.json();
+    /* El pedido que salió desde el <head> (W3-17, 13/10/2026): sólo la
+       primera vez y sólo si es la misma dirección. No se puede cortar, pero
+       el tope de espera es el mismo: si se pasa, se deja de esperarlo. */
+    const temprano = window.ADVAPP_TEMPRANO;
+    window.ADVAPP_TEMPRANO = null;
+    if(temprano && temprano.url === ADVAPP_URL && temprano.respuesta){
+      d = await Promise.race([temprano.respuesta, new Promise((_, no) =>
+        corte.signal.addEventListener('abort', () => no(Object.assign(new Error('corte'), { name: 'AbortError' })), { once: true }))]);
+    }else{
+      const r = await fetch(ADVAPP_URL, { cache: 'no-cache', signal: corte.signal });
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      d = await r.json();
+    }
   }catch(e){
     throw new Error(e && e.name === 'AbortError'
       ? `tardo mas de ${ADVAPP_ESPERA_MS / 1000} s` : (e && e.message) || String(e));
@@ -5191,7 +5249,83 @@ function filtrar(){
   const porDestacada = (a,b) =>
     dest ? (norm(b.marca) === dest) - (norm(a.marca) === dest) : 0;
 
-  return out.sort((a,b) => (V(b).stock - V(a).stock) || porDestacada(a,b) || orden(a,b));
+  /* Con algo buscado, lo que más se parece va primero (13/10/2026, auditoría
+     W3-07): con "ipad" la grilla mostraba ocho Magic Keyboard y fundas antes
+     del primer iPad, porque "Accesorio Apple" va antes que "iPad" en la
+     barra, y el desplegable decía otra cosa. Ahora los dos usan el mismo
+     puntaje (puntajeDeBusqueda): el equipo antes que sus accesorios. Sólo en
+     el orden de siempre: si el cliente pidió "Menor precio" o "A-Z", manda
+     lo que pidió. Lo que tiene stock sigue primero. */
+  const q = filtros.q.trim();
+  const parecido = q && filtros.orden === ORDEN_DEF ? puntajeDeBusqueda(q, out) : null;
+  const puntos = parecido ? new Map(out.map(p => [p, parecido(p)])) : null;
+  const porParecido = (a,b) => puntos ? puntos.get(b) - puntos.get(a) : 0;
+
+  /* Los usados, siempre al final (13/10/2026, auditoría W3-10; regla del
+     negocio): después de lo nuevo, también de lo nuevo agotado, en el rubro
+     y en la búsqueda. Hoy ADVAPP no manda ninguno. */
+  const usado = p => esUsadoModelo(p) ? 1 : 0;
+  return out.sort((a,b) => (usado(a) - usado(b)) || (V(b).stock - V(a).stock) || porParecido(a,b)
+                        || porDestacada(a,b) || orden(a,b));
+}
+
+/* Usados (13/10/2026, auditoría W3-10). La regla del negocio: van siempre al
+   final y diciendo qué son. ADVAPP manda el usado con la categoría de siempre
+   ("Celular") y lo dice en la Condición. Un usado arma su propia tarjeta
+   (familia) aunque comparta el SKU madre con el nuevo: no puede ser una
+   pestaña más de un producto nuevo. "Caja blanca" NO es usado (es nuevo sin
+   la caja original). */
+const RE_USADO = /\b(usad[oa]s?|semi ?nuev[oa]s?|reacondicionad[oa]s?|refurbished|refurb)\b/;
+const esUsado = p => !!p && RE_USADO.test(norm(p.condicion || ''));
+const esUsadoModelo = m => !!m && (m.variantes || [m]).some(esUsado);
+// El rótulo de la tarjeta y de la ficha: lo que dice ADVAPP ("Usado")
+function htmlUsado(m){
+  const v = m && (m.variantes || [m]).find(esUsado);
+  if(!v) return '';
+  const t = String(v.condicion || '').trim();
+  return `<span class="usado-tag">${esc(t.charAt(0).toUpperCase() + t.slice(1))}</span>`;
+}
+
+/* El parecido con lo buscado, el mismo para la grilla (filtrar) y el
+   desplegable (candidatosSug). Salió de candidatosSug el 13/10/2026
+   (auditoría W3-07 y W3-13), con dos cosas nuevas:
+     · el nombre corto cuenta como parte del título (buscableDe: "ps5" de la
+       "PlayStation 5"): con "ps5" el desplegable ponía la consola quinta,
+       después del VR2, el volante y los joysticks;
+     · -3 al accesorio cuando lo buscado nombra sólo al equipo: cada palabra
+       la tiene algún producto que no es accesorio (un iPad, una consola).
+       "ipad" pone los iPad antes que los Magic Keyboard; "magic keyboard
+       ipad" o "joystick ps5" no bajan nada, porque nombran el accesorio.
+   Lo de antes sigue igual:
+       +3 todas las palabras empiezan alguna palabra del título de la tarjeta
+       +2 el título empieza con la primera palabra
+       +4 una palabra es justo la marca: pesa más que el título, o los Sigma
+          "... Sony" le ganaban a las cámaras Sony
+       -2 un accesorio cuyo título las nombra solo en el "para qué": "Magic
+          Keyboard For iPad Pro" baja con "ipad pro" y sube con "keyboard".
+   `candidatos` son los modelos entre los que se ordena. Devuelve m -> puntos. */
+function puntajeDeBusqueda(txt, candidatos){
+  const q = norm(txt).trim();
+  const partes = q.split(/\s+/).filter(Boolean);
+  if(!partes.length) return () => 0;
+  const palabras = prepararBusqueda(q);
+  const inicio = partes.map(w => new RegExp('(^|[^a-z0-9])' + escRe(w)));
+  const esAccesorio = m => /^accesorio/.test(norm(m.cat));
+  const soloEquipo = palabras.length > 0 && palabras.every(x =>
+    (candidatos || []).some(m => !esAccesorio(m) && coincide(m, [x])));
+  return m => {
+    const nombre = norm(m.titulo || m.desc);
+    const alias = buscableDe(m).alias;
+    const tit = alias ? nombre + ' ' + alias : nombre;
+    const cabeza = nombre.split(/\s(?:for|para|p\/)\s|\(/)[0];
+    let s = 0;
+    if(inicio.every(re => re.test(tit))) s += 3;
+    if(nombre.startsWith(partes[0])) s += 2;
+    if(m.marca && partes.includes(norm(m.marca))) s += 4;
+    if(esAccesorio(m) && !inicio.every(re => re.test(cabeza))) s -= 2;
+    if(esAccesorio(m) && soloEquipo) s -= 3;
+    return s;
+  };
 }
 
 // Lo que dibuja la grilla: filtrar(), con cada modelo en la versión que pide el filtro
@@ -5474,7 +5608,15 @@ function aperturaDe(p){
 const clave = p => p.id || ('#' + p.idx);
 const buscarProducto = k => PRODUCTOS.find(p => clave(p) === k);
 
-const precioUSD = p => p.precio === null ? 'Consultar' : 'USD ' + plata(p.precio);
+/* Lo agotado no muestra precio (13/10/2026, decisión D15 B de Benja,
+   auditoría AW-12 y AW-21): sin costo del día ADVAPP publica un precio de
+   referencia congelado, que no es el que va a tener cuando vuelva a entrar
+   (13 agotados se veían USD 40 a 85 más baratos). Dice "Sin stock" en la
+   tarjeta, en la ficha, en las pestañas, en los colores y en "Ver las N
+   versiones"; tampoco van los pesos ni el tachado (precioARS, ahorro). */
+const SIN_PRECIO = 'Sin stock';
+const precioUSD = p => p && p.stock === false ? SIN_PRECIO
+  : p.precio === null ? 'Consultar' : 'USD ' + plata(p.precio);
 /* Los pesos van marcados como aproximados (29/09): Pedro eligió "≈ $ …" con
    el title "Referencia con la cotización del día" (muestra 2.2 B). Salían
    pelados, "$ 2.108.050", y se podían leer como un precio cerrado; sólo el
@@ -5484,7 +5626,7 @@ const precioUSD = p => p.precio === null ? 'Consultar' : 'USD ' + plata(p.precio
    el signo y los pesos bajaban de renglón. Es HTML: se usa dentro de plantillas. */
 const REF_PESOS = 'Referencia con la cotización del día';
 const htmlPesos = n => `<span class="aprox" title="${REF_PESOS}">≈ $ ${plata(n)}</span>`;
-const precioARS = p => (TC && p.precio) ? htmlPesos(Math.round(p.precio * TC)) : '';
+const precioARS = p => (TC && p.precio && p.stock !== false) ? htmlPesos(Math.round(p.precio * TC)) : '';
 
 /* ---------- Cuotas con tarjeta (30/09) ----------
    Pedro eligió en muestras/cuotas: "Hasta 12 cuotas" en la tarjeta (1B), los
@@ -5581,6 +5723,8 @@ function buscableDe(p){
   const extra = [];
   if(/\bplay ?station ?5\b/.test(base)) extra.push('ps5');
   for(const m of base.matchAll(/\balfa ?(\d+[a-z]*)\b/g)) extra.push('alpha ' + m[1], 'a' + m[1]);
+  // Los nombres cortos, aparte: el puntaje los cuenta como parte del título (W3-13)
+  const alias = extra.join(' ');
   if(TECLADO_SI.includes(p.cat) || /keyboard|teclado/i.test(p.desc || ''))
     extra.push(...vs.map(v => nombreTeclado(v.teclado)).filter(Boolean));
   const txt = norm(base + ' ' + extra.join(' '));
@@ -5599,7 +5743,7 @@ function buscableDe(p){
     .flatMap(c => norm(c).split(/[^a-z0-9-]+/))
     .filter(c => /^at-?\d/.test(c))
     .map(c => c.replace(/^at-?/, 'at-')))];
-  b = { txt, comp, codigos };
+  b = { txt, comp, codigos, alias };
   BUSCABLES.set(p, b);
   return b;
 }
@@ -5673,6 +5817,8 @@ function partesMensaje(p, color){
   const esTeclado = TECLADO_SI.includes(p.cat) || /keyboard|teclado/i.test(p.desc || '');
   const palabra = t => new RegExp('(^|[^a-z0-9])(' + t + ')($|[^a-z0-9])');
   const yaDiceColor = c && pintas(p.color).length === 1 && palabra(escRe(norm(c))).test(norm(nombre));
+  // El usado lo dice también en el mensaje, si el nombre no lo dice (W3-10, 13/10/2026)
+  if(vs.every(esUsado) && !RE_USADO.test(norm(nombre))) nombre += ' usado';
   return {
     nombre,
     sim: sim && !diceSim(nombre) ? sim : '',
@@ -5808,8 +5954,66 @@ function htmlFoto(p, clase, grande){
   const src = (grande && p.imagenGrande) || p.imagen;
   return `<img src="${esc(src)}" alt="${esc(nombreConMarca(p))}" ${clase || ''} decoding="async"
                onload="this.classList.add('ok')"
-               onerror="this.parentElement.classList.add('vacia'); this.outerHTML=this.dataset.alt"
+               onerror="fotoQueFalla(this, 'vacia')"
                data-alt="${esc(sinFoto)}">`;
+}
+
+/* Una foto que no carga al primer intento (13/10/2026, auditoría del 08/10,
+   FOT-12). El onerror ponía "sin imagen" al primer error y la tarjeta quedaba
+   así hasta recargar: en una de tres corridas fallaron 5 de 406 fotos que
+   existían (un "connection reset" de la red, que al reintentar contesta
+   200). Ahora se vuelve a pedir la misma dos veces, con 1,5 y 3 s de espera,
+   y si sigue fallando se prueba la siguiente copia de la MISMA foto (la sin
+   fondo .webp → la .jpg chica → la .jpg grande: fotosDeRepuesto). Recién sin
+   ninguna queda lo de siempre: "sin imagen" (al: 'vacia', htmlFoto) o la
+   <img> afuera (al: 'quitar', las chicas de las cintas y el desplegable).
+   Nunca la foto de otro producto ni de otro color. */
+const FOTO_REINTENTOS = [1500, 3000];
+function fotosDeRepuesto(u){
+  const s = String(u || '');
+  const i = s.lastIndexOf(CARPETA_FOTOS);
+  if(i === -1) return [];
+  const raiz = s.slice(0, i), nombre = s.slice(i + CARPETA_FOTOS.length).split(/[?#]/)[0];
+  const sinExt = n => n.slice(0, n.lastIndexOf('.'));
+  // fotos/mini/sinfondo/X.webp → fotos/mini/X.jpg → fotos/X.jpg
+  if(nombre.startsWith('mini/' + SUB_SIN_FONDO) && nombre.endsWith(EXT_SIN_FONDO)){
+    const x = sinExt(nombre.slice(('mini/' + SUB_SIN_FONDO).length));
+    return [raiz + CARPETA_MINIS + x + EXT_FOTOS, raiz + CARPETA_FOTOS + x + EXT_FOTOS];
+  }
+  // fotos/sinfondo/X.webp → fotos/X.jpg
+  if(nombre.startsWith(SUB_SIN_FONDO) && nombre.endsWith(EXT_SIN_FONDO))
+    return [raiz + CARPETA_FOTOS + sinExt(nombre.slice(SUB_SIN_FONDO.length)) + EXT_FOTOS];
+  // fotos/mini/X.jpg → fotos/X.jpg
+  if(nombre.startsWith('mini/') && !nombre.slice(5).includes('/'))
+    return [raiz + CARPETA_FOTOS + nombre.slice(5)];
+  return [];
+}
+function fotoQueFalla(img, al){
+  if(!img) return;
+  const vez = Number(img.dataset.reintento || 0);
+  const actual = img.getAttribute('src') || '';
+  if(!img.dataset.original) img.dataset.original = actual;
+  if(vez < FOTO_REINTENTOS.length){
+    img.dataset.reintento = String(vez + 1);
+    // La misma dirección otra vez: la <img> vuelve a pedirla si se le pone de nuevo
+    setTimeout(() => {
+      if(!img.isConnected || (img.getAttribute('src') || '') !== actual) return;
+      img.removeAttribute('src');
+      img.setAttribute('src', actual);
+    }, FOTO_REINTENTOS[vez]);
+    return;
+  }
+  const otras = img.dataset.repuestos !== undefined
+    ? img.dataset.repuestos.split('\n').filter(Boolean) : fotosDeRepuesto(img.dataset.original);
+  if(otras.length){
+    img.dataset.repuestos = otras.slice(1).join('\n');
+    img.dataset.reintento = String(FOTO_REINTENTOS.length);     // la de repuesto, sin reintentos
+    img.setAttribute('src', otras[0]);
+    return;
+  }
+  if(al === 'quitar'){ img.remove(); return; }
+  img.parentElement?.classList.add('vacia');
+  img.outerHTML = img.dataset.alt || '';
 }
 // En la grilla el badge solo aparece cuando FALTA stock: con 472 productos
 // disponibles, "En stock" repetido 472 veces no distingue nada. En la ficha
@@ -6074,7 +6278,9 @@ function coloresFicha(p, m){
   lista.sort((a, b) => (orden.get(norm(a.nombre)) ?? Infinity) - (orden.get(norm(b.nombre)) ?? Infinity));
   // Los precios sólo si de verdad cambian: dos hermanas al mismo precio
   // existen igual (las separa el color) y ahí no hay nada que mostrar.
-  return { lista, precioVaria: new Set(lista.map(c => c.precio)).size > 1 };
+  // Sólo entre los que tienen stock (D15 B, 13/10/2026): lo agotado no muestra precio
+  const conStock = lista.filter(c => !(c.fila && c.fila.stock === false));
+  return { lista, precioVaria: new Set(conStock.map(c => c.precio)).size > 1 };
 }
 
 /* El lugar de cada color en la vitrina, el mismo en todas las versiones del
@@ -6166,18 +6372,19 @@ function htmlVitrinaFicha(p, m){
   const sel = lista.find(c => norm(c.nombre) === norm(eleg)) || lista.find(c => c.k === aqui) || lista[0];
   const nombres = partesDeColores(lista.map(c => c.nombre));
   const hay = c => !(c.fila && c.fila.stock === false);
-  const precio = c => c.precio === null || c.precio === undefined ? 'Consultar' : 'USD ' + plata(c.precio);
+  // Sin stock, sin precio (D15 B, 13/10/2026): ya lo dice el "Sin stock" de la foto
+  const precio = c => !hay(c) ? '' : c.precio === null || c.precio === undefined ? 'Consultar' : 'USD ' + plata(c.precio);
 
   const tonos = lista.map((c, i) => {
     const mini = miniColorFicha(c.fila, c.nombre);
     const foto = mini
       ? `<span class="ph" style="background-image:url(${esc(mini)})"></span>`
       : `<span class="sw${c.hex ? '' : ' raya'}"${c.hex ? ` style="background:${c.hex}"` : ''}></span>`;
-    const dice = c.nombre + (hay(c) ? '' : ', sin stock') + (precioVaria ? ', ' + precio(c) : '');
+    const dice = c.nombre + (hay(c) ? '' : ', sin stock') + (precioVaria && precio(c) ? ', ' + precio(c) : '');
     return `<button type="button" class="fi-tono${hay(c) ? '' : ' agotada'}" data-color="${esc(c.nombre)}" data-k="${esc(c.k)}"
              aria-pressed="${c === sel}" aria-label="${esc(dice)}" title="${esc(dice)}">
       <span class="fi-tono-img">${foto}${hay(c) ? '' : '<span class="sin">Sin stock</span>'}</span>
-      <span class="nm">${esc(nombres[i].top)}</span>${precioVaria ? `<span class="pr">${precio(c)}</span>` : ''}</button>`;
+      <span class="nm">${esc(nombres[i].top)}</span>${precioVaria ? `<span class="pr"${precio(c) ? '' : ' aria-hidden="true"'}>${precio(c) || '&nbsp;'}</span>` : ''}</button>`;
   }).join('');
 
   const n = nombres[lista.indexOf(sel)];
@@ -6530,14 +6737,16 @@ function madreDelSku(s){
    el Grupo y, si no hay, el nombre. Lo que separa a las versiones lo dicen
    los botones de la ficha (armarModelo, htmlOpcionesFicha). */
 function familia(p){
+  // Un usado nunca comparte tarjeta con el nuevo (13/10/2026, W3-10: ver esUsado)
+  const u = esUsado(p) ? '|usado' : '';
   const madre = madreDelSku(p.skuVariante);
-  if(madre) return 'M:' + madre;
-  if(p.grupo) return 'G:' + norm(p.grupo);
+  if(madre) return 'M:' + madre + u;
+  if(p.grupo) return 'G:' + norm(p.grupo) + u;
   let t = (p.desc || '').replace(RE_PAREN,' ').replace(RE_CORCH,' ')
                         .replace(RE_DUAL,' ').replace(RE_CAP,' ').replace(RE_RAM,' ');
   if(esReloj(p))
     t = t.replace(RE_MM,' ').replace(RE_CORREA,' ').replace(RE_TALLE,' ').replace(RE_COLOR,' ');
-  return [norm(p.cat), norm(p.marca), norm(t).replace(/[\s\-–/]+/g,' ').trim()].join('|');
+  return [norm(p.cat), norm(p.marca), norm(t).replace(/[\s\-–/]+/g,' ').trim()].join('|') + u;
 }
 
 /* ---------- El nombre sin la memoria (21/09) ----------
@@ -6828,6 +7037,12 @@ function etiquetaVariante(p, nombre, coloresDelModelo){
      número de esa generación. */
   if(/\d$/.test(String(nombre || '').trim())) e = e.replace(/^gen\.?\s+(?=\S)/i, '');
   e = emparejarVersion(e, p, coloresDelModelo);
+  /* Las baterías del kit son la versión (13/10/2026, decisión D17 A de Benja,
+     auditoría DW-18): el DJI Mini 5 Pro que trae "+ 4 Baterías" en Incluye no
+     dice nada más en el nombre y quedaba "Base" a USD 1.320, al lado de "RC 2
+     + Fly More Combo" al mismo precio. Ahora es "4 baterías", y el Incluye ya
+     no es un regalo (esRegalo). */
+  if(!e) e = bateriasDelKit(p.incluye);
   // Si no le quedó nada, armarModelo lo sabe por acá (ver 'Base' allá)
   p.sinVersion = !e;
   if(e) return e;
@@ -7377,7 +7592,7 @@ const enPedidoModelo = m =>
 // Cuando las variantes no valen lo mismo, el precio de la tarjeta es un "desde"
 const conDesde = m => !!m.multi && m.precio !== null && m.precio !== m.precioMax;
 const precioTarjeta = m => {
-  if(!conDesde(m)) return precioUSD(m);
+  if(!conDesde(m) || m.stock === false) return precioUSD(m);
   return `<i class="desde">desde</i> ${precioUSD(m)}`;
 };
 /* Con "desde" Y precio de antes, el tachado va al lado del precio y no abajo
@@ -7459,11 +7674,11 @@ function tarjeta(p){
   el.innerHTML = `
     ${CON_FOTOS ? `<div class="foto${p.imagen ? '' : ' vacia'}">
       ${badge}${htmlAhorro(p)}${htmlFoto(p,'loading="lazy"')}
-      ${p.incluye ? `<span class="cinta" title="${esc(textoIncluye(p.incluye))}">${esc(textoIncluye(p.incluye))}</span>` : ''}
+      ${p.incluye ? `<span class="cinta" title="${esc(textoIncluye(p.incluye))}">${esc(textoCinta(p.incluye))}</span>` : ''}
       ${abajo ? '' : acciones}
     </div>` : ''}
     <div class="cuerpo">
-      <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}${htmlDestacado(p)}</span>
+      <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}${htmlUsado(p)}${htmlDestacado(p)}</span>
       <h3 class="nombre">${esc(p.titulo || p.desc)}</h3>
       ${p.tecnica ? `<p class="tecnica" title="${esc(p.tecnica)}">${esc(p.tecnica)}</p>` : ''}
       <div class="pie">
@@ -7567,7 +7782,8 @@ const descuento = m => Math.round((1 - m.precio / m.antes) * 100);
 /* Lo que se muestra es la PLATA que se ahorra, no el porcentaje. En este rubro
    las bajas son de 15 o 20 dolares sobre productos de mil y pico: "1% OFF" no
    le dice nada a nadie, "Ahorrás USD 20" si, y no depende de la proporcion. */
-const ahorro = m => (m.antes !== null && m.precio !== null && m.antes > m.precio)
+// Sin stock no hay ahorro que mostrar: el tachado también es un precio (D15 B, 13/10/2026)
+const ahorro = m => (m.antes !== null && m.precio !== null && m.antes > m.precio && m.stock !== false)
   ? Math.round(m.antes - m.precio) : 0;
 const htmlAhorro = m => ahorro(m)
   ? `<span class="badge ahorro">Ahorrás USD ${plata(ahorro(m))}</span>` : '';
@@ -7586,13 +7802,31 @@ function htmlDestacado(m){
    de otra manera, lo decide él. Con "+ Funda + Solo el lápiz" sigue contando,
    porque la funda es un regalo de verdad. s[oó] porque la nota puede venir
    con tilde: con "solo" a secas, "+ Sólo el lápiz" se colaba. */
-function esRegalo(t){ return /^\s*\+|🎁/.test(t || '') && !/^\s*\+\s*s[oó]lo\b/i.test(t || ''); }
+/* Y tampoco "+ 4 Baterías" ni "+ 2 Baterías" (13/10/2026, decisión D17 A de
+   Benja, auditoría DW-18): las baterías son parte del kit, no un regalo. El
+   DJI Mini 5 Pro de 4 baterías y el Cargador SmallRig salían con el 🎁; ahora
+   la cantidad va en el nombre de la versión (bateriasDelKit, etiquetaVariante). */
+function bateriasDelKit(t){
+  const r = /^\s*\+\s*(\d+)\s*bater[ií]as?\s*$/i.exec(String(t || '').replace(/\s*🎁\s*/gu, ' '));
+  return r ? `${r[1]} batería${r[1] === '1' ? '' : 's'}` : '';
+}
+function esRegalo(t){ return /^\s*\+|🎁/.test(t || '') && !/^\s*\+\s*s[oó]lo\b/i.test(t || '') && !bateriasDelKit(t); }
 const conRegalo = m => esRegalo(m.incluye);
 /* El 🎁 en todos los regalos (Pedro, 03/10/2026: "faltan logos de regalos").
    ADVAPP lo escribe en algunos ("+ Cargador 20W + Funda + Templado 🎁") y en
    otros no ("+ Cargador 20W"): acá va uno solo, al final, en todos los que son
    regalo. Lo que no es regalo ("Sin cargador", "+ Solo el lápiz") queda igual. */
 function textoIncluye(t){ return esRegalo(t) ? String(t).replace(/\s*🎁\s*/gu, ' ').trim() + ' 🎁' : (t || ''); }
+/* La cinta de la tarjeta (13/10/2026, auditoría W3-11): en el celular "+
+   Cargador 20W + Funda + Templado 🎁" no entraba en un renglón y se cortaba
+   con "…" justo antes del 🎁. Ahora el 🎁 va ADELANTE, en lugar del "+" del
+   principio ("🎁 Cargador 20W + Funda + Templado"), y la cinta puede usar dos
+   renglones (.cinta en el CSS): lo que se corte, si algo se corta, nunca es
+   el regalo. El texto es el mismo de ADVAPP; lo que no es regalo va igual. */
+function textoCinta(t){
+  if(!esRegalo(t)) return t || '';
+  return '🎁 ' + String(t).replace(/\s*🎁\s*/gu, ' ').replace(/^\s*\+\s*/, '').trim();
+}
 
 /* Como mucho dos del mismo rubro mientras haya de otros: la vidriera tiene que
    mostrar que hay de todo. Lo que se saltea vuelve al final, por si no alcanza
@@ -8082,7 +8316,7 @@ function pintarSugeridos(){
 
   caja.innerHTML = `<span class="rotulo">${rotulo}</span>` + lista.map(m => `
     <button class="sug" type="button" data-key="${esc(clave(m.rep))}">
-      <span class="sug-foto"><img src="${esc(m.imagen)}" alt="" loading="lazy" onerror="this.remove()"></span>
+      <span class="sug-foto"><img src="${esc(m.imagen)}" alt="" loading="lazy" onerror="fotoQueFalla(this, 'quitar')"></span>
       <span class="sug-txt">
         <b>${esc(m.titulo || m.desc)}</b>
         <i>${m.multi && m.precio !== m.precioMax ? 'desde ' : ''}USD ${plata(m.precio)}</i>
@@ -8163,7 +8397,8 @@ function pintarCabecera(texto){
   const marcas = filtros.cat ? marcasDisponibles() : [];
   const conMarcas = marcas.length >= 2;
   const foto = filtros.cat ? fotoDelRubro(filtros.cat) : '';
-  const precios = LISTA.map(m => m.precio).filter(x => x !== null && x > 0);
+  // Sólo lo que tiene stock (D15 B, 13/10/2026): lo agotado no muestra precio
+  const precios = LISTA.filter(m => m.stock).map(m => m.precio).filter(x => x !== null && x > 0);
   const desde = precios.length ? ' · desde USD ' + plata(Math.min(...precios)) : '';
   const enPanel = filtrosActivos(false).length;
   // Una marca puesta que no está entre los botones se muestra con su cruz
@@ -8784,7 +9019,7 @@ const precioChico = m => `${m.multi && m.precio !== m.precioMax ? '<small>desde<
 
 function htmlVitrinas(t){
   return t.prods.map(m => `<button type="button" class="pv-vit" data-key="${esc(clave(m))}" title="${esc(nombreConMarca(m))}">
-      <span class="pv-caja"><img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span>
+      <span class="pv-caja"><img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="fotoQueFalla(this, 'quitar')"></span>
       <b>${esc(nombreCorto(m))}</b><span class="pv-precio">${precioChico(m)}</span></button>`).join('');
 }
 
@@ -8799,7 +9034,7 @@ function htmlPresupuesto(lista, mirados){
     <div class="pv-movil"><button type="button" class="pv-ver" data-ver>Ver los ${t.n} · ${esc(t.txt)} <span aria-hidden="true">→</span></button></div>
     ${mirados.length ? `<div class="pv-pie"><span class="pv-lab">Visto hace poco</span><div class="pv-visto">${mirados.map(m =>
       `<button type="button" class="pv-vi" data-key="${esc(clave(m))}" title="${esc(nombreConMarca(m))}">
-         <span class="pv-placa"><img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span>
+         <span class="pv-placa"><img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="fotoQueFalla(this, 'quitar')"></span>
          <span class="pv-t"><b>${esc(nombreCorto(m))}</b><span class="pv-precio">${precioChico(m)}</span></span></button>`).join('')}</div></div>` : ''}
   </section>`;
 }
@@ -9140,7 +9375,7 @@ function htmlPanelMarca(x, conFotos = true){
   const tarjetas = (copia) => x.nuevos.map(m => {
     const desde = m.multi && m.precio !== m.precioMax;
     return `<button class="mv-p" type="button" data-key="${esc(clave(m))}"${copia ? ' aria-hidden="true" tabindex="-1"' : ''}>
-      <span class="mv-p-foto">${conFotos ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">` : ''}</span>
+      <span class="mv-p-foto">${conFotos ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="fotoQueFalla(this, 'quitar')">` : ''}</span>
       <b>${esc(m.titulo || m.desc)}</b><span class="mv-tec">${esc(m.tecnica || '')}</span>
       <i>${desde ? '<small>desde</small>' : ''}USD ${plata(m.precio)}</i>
     </button>`;
@@ -9422,8 +9657,10 @@ function htmlAyuda(){
       <div class="ay-lista" role="group" aria-label="Preguntas frecuentes">${lista}</div>
       <div class="ay-panel">
         <div class="ay-pila">${respuestas}</div>
-        ${WHATSAPP ? `<p class="ay-otra">¿Te quedó otra duda?
-          <a href="${linkWA('Hola! Tengo una consulta')}" target="_blank" rel="noopener">Escribinos por WhatsApp</a></p>` : ''}
+        ${WHATSAPP || linkIG() ? `<p class="ay-otra">¿Te quedó otra duda?
+          ${WHATSAPP ? `<a href="${linkWA('Hola! Tengo una consulta')}" target="_blank" rel="noopener">Escribinos por WhatsApp</a>` : ''}${
+          WHATSAPP && linkIG() ? ' o por ' : ''}${
+          linkIG() ? `<a class="ay-ig" href="${esc(linkIG())}" target="_blank" rel="noopener">${WHATSAPP ? '' : 'Escribinos por '}Instagram @${esc(INSTAGRAM_TECNO)}</a>` : ''}</p>` : ''}
       </div>
     </div>
     <div class="ay-pedilo">
@@ -9649,23 +9886,55 @@ const unirConY = xs => xs.length > 1 ? xs.slice(0, -1).join(', ') + ' y ' + xs[x
 // El mismo mensaje del "¿Buscás algo que no está?" de la portada (3.3 A)
 const mensajeBusco = q => 'Hola! Estoy buscando: ' + q + '\n¿Lo consiguen?';
 
+/* Lo más parecido a una búsqueda que no encontró nada (13/10/2026, auditoría
+   W3-12): "macbook air m4" decía "no está en el catálogo" con dos MacBook Air
+   M5 con stock (el bot sí ofrecía el M5). Se prueba lo buscado con menos
+   palabras, de lo que menos cambia a lo que más: sin los números ("m4",
+   "15", "r50": el chip o la generación), sin la primera palabra, sin la
+   última, y cada vez más corto desde el final. Va lo primero que encuentra
+   algo CON stock, en todo el catálogo y sin filtros, y se nombran hasta tres
+   (los primeros de esa grilla). Con una sola palabra no hay nada que sacar. */
+function parecidoDe(q){
+  const ws = norm(q).trim().split(/\s+/).filter(Boolean);
+  if(ws.length < 2) return null;
+  const pruebas = [];
+  const sinNumeros = ws.filter(w => !/\d/.test(w));
+  if(sinNumeros.length && sinNumeros.length < ws.length) pruebas.push(sinNumeros);
+  pruebas.push(ws.slice(1), ws.slice(0, -1));
+  for(let k = ws.length - 2; k >= 1; k--) pruebas.push(ws.slice(0, k));
+  const vistas = new Set();
+  for(const p of pruebas){
+    const t = p.join(' ');
+    if(t.length < 2 || vistas.has(t)) continue;
+    vistas.add(t);
+    const lista = listaCon({ q: t, ...SIN_RUBRO, rango: '', soloStock: false }).filter(m => m.stock);
+    if(lista.length) return { q: t, n: lista.length, modelos: lista.slice(0, 3) };
+  }
+  return null;
+}
+/* ¿Lo buscado es sobre entregar un usado? (W3-12): "usado", "canje",
+   "cotizar" o "parte de pago" ofrecen el cotizador en vez de "no está". */
+const RE_BUSCA_USADO = /\b(usad[oa]s?|canje|canjear|cotiz\w*|parte de pago|permuta\w*|vend[oe]r?|entrego)\b/;
+const buscaUsado = q => RE_BUSCA_USADO.test(norm(q || ''));
+
 /* El vacío en dos partes: los textos (textosVacio) y el HTML (htmlVacio).
    #anuncio dice el título y la frase (29/09, revisión): decía siempre "No
    encontramos nada" y el que usa lector de pantalla no se enteraba de la
    salida. */
 function htmlVacio(){
-  const { h, p, acc } = textosVacio();
+  const { h, p, parecido, acc } = textosVacio();
   return `<div class="msg vacio" style="grid-column:1/-1"><h2>${esc(h)}</h2>${p ? `<p>${esc(p)}</p>` : ''}${
+    parecido ? `<p class="v-parecido">${esc(parecido)}</p>` : ''}${
     acc ? `<div class="v-acc">${acc}</div>` : ''}</div>`;
 }
-const anuncioVacio = () => { const { h, p } = textosVacio(); return h + '.' + (p ? ' ' + p : ''); };
+const anuncioVacio = () => { const { h, p, parecido } = textosVacio(); return h + '.' + (p ? ' ' + p : '') + (parecido ? ' ' + parecido : ''); };
 
 function textosVacio(){
   const q = filtros.q.trim();
   const s = salidaDelVacio(q);
   const lugar = filtros.cat ? plural(filtros.cat) : '';
   const boton = (t, n) => `<button type="button" class="b-salida" data-salida aria-label="${esc(t)}: ${n} producto${n !== 1 ? 's' : ''}">${esc(t)} <b aria-hidden="true">${n}</b></button>`;
-  let h = 'No encontramos nada', p = '', acc = '';
+  let h = 'No encontramos nada', p = '', acc = '', parecido = '';
   if(s && (s.tipo === 'filtro' || s.tipo === 'filtros')){
     const que = unirConY(filtrosActivos(true).map(([c]) => fraseFiltro(c)));
     h = `${lugar ? `En ${lugar} no hay` : 'No hay'} ${q ? `“${q}”` : 'nada'} ${que}`;
@@ -9684,12 +9953,22 @@ function textosVacio(){
     p = WHATSAPP ? 'Conseguimos más marcas y modelos de los que están cargados acá.'
                  : 'Probá con menos palabras, o buscá por marca (Apple, Canon, Samsung…).';
     acc = WHATSAPP ? `<a class="b-consulta" href="${esc(linkWA(mensajeBusco(q)))}" target="_blank" rel="noopener" data-pedilo>${ICONO_WA}Preguntanos si lo conseguimos</a>` : '';
+    /* Lo parecido y el cotizador, antes de preguntar (13/10/2026, W3-12).
+       Los nombres son los de la tarjeta; el botón busca eso, con su número. */
+    const par = parecidoDe(q);
+    if(par){
+      const nombres = par.modelos.map(m => m.titulo || m.desc);
+      parecido = `Lo más parecido que tenemos: ${unirConY(nombres)}${par.n > nombres.length ? ' y más' : ''}.`;
+      acc = `<button type="button" class="b-salida" data-parecido="${esc(par.q)}" aria-label="Ver “${esc(par.q)}”: ${par.n} producto${par.n !== 1 ? 's' : ''}">Ver “${esc(par.q)}” <b aria-hidden="true">${par.n}</b></button>` + acc;
+    }
+    if(buscaUsado(q) && USADOS)
+      acc = `<button type="button" class="b-salida b-usado" data-cotizar>🔁 Cotizá tu usado</button>` + acc;
   }else{
     // Sin salida: el texto de siempre, y "menos palabras" solo si escribiste
     p = q ? 'Probá con menos palabras, o buscá por marca (Apple, Canon, Samsung…).'
           : 'Probá sacando alguno de los filtros de arriba.';
   }
-  return { h, p, acc };
+  return { h, p, parecido, acc };
 }
 
 /* El botón del vacío y el renglón del desplegable hacen lo mismo: la salida
@@ -9704,6 +9983,18 @@ function usarSalida(desdeBuscador){
   aplicarFiltro(true);
   if(desdeBuscador) $('q').focus({ preventScroll: true });
   else $('rubro-cab')?.querySelector('h2')?.focus({ preventScroll: true });
+}
+
+/* "Ver lo parecido" (W3-12): la búsqueda pasa a lo parecido, en todo el
+   catálogo y sin filtros, y el foco va al título como en usarSalida. */
+function usarParecido(t){
+  if(!t) return;
+  Object.assign(filtros, SIN_RUBRO, { q: t, rango: '', soloStock: false });
+  if($('q')){ $('q').value = t; $('clear').hidden = !t; }
+  sincronizarControles();
+  rendirCintaAuto(); centrarChipElegido();
+  aplicarFiltro(true);
+  $('rubro-cab')?.querySelector('h2')?.focus({ preventScroll: true });
 }
 
 /* El aviso de 3.4 B se ve mientras lo pedido siga igual: el refresco de cada
@@ -10560,9 +10851,23 @@ function escribirURL(push){
   try{ history[push ? 'pushState' : 'replaceState'](null, '', urlActual()); }catch{}
 }
 
+/* El ID es lo que va entre "#p=" y el primer "&" (13/10/2026): las páginas
+   p/ mandan además "&o=<su ID>&s=<su SKU>" (respaldosDelHash, W3-03). Un ID
+   no tiene "&": se escribe con encodeURIComponent. */
 const claveDeHash = () => {
-  const m = /^#p=(.+)$/.exec(location.hash);
+  const m = /^#p=([^&]+)/.exec(location.hash);
   try{ return m ? decodeURIComponent(m[1]) : ''; }catch{ return ''; }
+};
+/* Lo que la página p/<ID>.html de WhatsApp manda además del destino
+   (13/10/2026, auditoría W3-03): el ID de esa fila (&o=) si lleva a una
+   gemela, y su SKU de ADVAPP (&s=). Si mañana el destino desaparece, con eso
+   todavía se encuentra el modelo (destinoDelLink). */
+const respaldosDelHash = () => {
+  const out = [];
+  for(const [, v] of String(location.hash || '').matchAll(/&(?:o|s)=([^&]+)/g)){
+    try{ const x = decodeURIComponent(v).trim(); if(x && !out.includes(x)) out.push(x); }catch{}
+  }
+  return out;
 };
 
 // Si venís scrolleado y cambiás un filtro, los resultados nuevos empiezan
@@ -10639,7 +10944,7 @@ addEventListener('popstate', () => {
     if(cerrarYaNoEstaDOM){ const c = cerrarYaNoEstaDOM; cerrarYaNoEstaDOM = null; c(); }
     /* Un link pegado en la barra también pasa por acá: el ID viejo abre el
        producto de hoy y el que ya no está avisa (4.5, ver destinoDelLink) */
-    const dest = destinoDelLink(k);
+    const dest = destinoDelLink(k, respaldosDelHash());
     if(dest.clave) abrirFicha(dest.clave, dest.clave === k ? null : false);
     else if(dest.baja) avisarYaNoEsta();
   }
@@ -10823,7 +11128,7 @@ function htmlDatosFicha(m, v){
      ("Precio anterior"); acá sólo se resta, como en la tarjeta (ahorro()).
      Una versión sin precio anterior no muestra ninguno de los dos. */
   return `
-    <span class="fi-marca">${esc(v.marca)}</span>
+    <span class="fi-marca">${esc(v.marca)}${htmlUsado(v)}</span>
     <h3 class="fi-nombre">${esc(nombre)}</h3>
     ${linea ? `<p class="fi-linea">${esc(linea)}</p>` : ''}
     ${lista.length ? `<div class="specs">${lista.map(s=>`<span>${esc(s)}</span>`).join('')}</div>` : ''}
@@ -11326,12 +11631,14 @@ function htmlOpcionesFicha(m, v){
      mínimo de todas y la pestaña "512GB" del Galaxy S26 FE decía "desde USD
      730" (el Pistachio, agotado) y llevaba a una fila de 980. Dice "desde" si
      alguna otra fila del grupo vale más, igual que la tarjeta con precioMax. */
+  /* Sin stock en ninguna fila del grupo, sin precio (D15 B, 13/10/2026): la
+     pestaña dice "Sin stock". El "desde" mira sólo las que tienen stock: un
+     color agotado más caro no es un precio que se pueda pagar hoy. */
   const precioDe = grupo => {
-    const ps = grupo.filter(x => x.precio !== null);
-    const conStock = ps.filter(x => x.stock);
-    const base = conStock.length ? conStock : ps;
-    if(!base.length) return 'Consultar';
-    const min = Math.min(...base.map(x => x.precio));
+    if(!grupo.some(x => x.stock)) return SIN_PRECIO;
+    const ps = grupo.filter(x => x.precio !== null && x.stock);
+    if(!ps.length) return 'Consultar';
+    const min = Math.min(...ps.map(x => x.precio));
     return (ps.some(x => x.precio > min) ? 'desde USD ' : 'USD ') + plata(min);
   };
   // A qué fila lleva una pestaña: la que se está mirando si cae adentro, y si
@@ -11347,7 +11654,7 @@ function htmlOpcionesFicha(m, v){
     return `<button type="button" class="fi-op${hay ? '' : ' agotada'}"
              data-k="${esc(clave(destino))}" data-op="${esc(destino.opcion || destino.etiqueta)}"${extra || ''}
              aria-pressed="${verPrecio.some(x => clave(x) === elegida)}"${hay ? '' : ' title="Sin stock"'}>
-             <b>${esc(et)}</b>${hay ? '' : '<span class="solo-lector">, sin stock, </span>'}<i>${precioDe(verPrecio)}</i></button>`;
+             <b>${esc(et)}</b>${hay ? `<i>${precioDe(verPrecio)}</i>` : '<span class="solo-lector">, sin stock</span><i aria-hidden="true">' + SIN_PRECIO + '</i>'}</button>`;
   };
   /* Para el lector de pantalla (29/09): el grupo se llama como su rótulo
      ("Memoria", "Versión"), igual que los demás grupos de botones del sitio
@@ -11469,7 +11776,7 @@ function htmlSugerido(m, i){
   return `<button class="pc" type="button" data-key="${esc(clave(m.rep))}" style="--i:${i}"
                   title="${esc(nombreConMarca(m.rep))}">
     <span class="pc-foto">${m.imagen
-      ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`
+      ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" decoding="async" onerror="fotoQueFalla(this, 'quitar')">`
       : ''}</span>
     <span class="pc-txt">
       <b>${esc(m.titulo || m.desc)}</b>${m.tecnica ? `<span class="pc-tec">${esc(m.tecnica)}</span>` : ''}
@@ -12059,14 +12366,59 @@ function claveDeHoy(k){
     .sort((a, b) => (a.precio ?? Infinity) - (b.precio ?? Infinity))[0]);
 }
 
+/* El mismo modelo, en la versión más parecida (13/10/2026, auditoría W3-03
+   y W3-05). De 60 links p/ viejos, 40 abrían "Ya no está" y en 25 el modelo
+   seguía publicado en otro color o memoria: ADVAPP cambia IDs y colores casi
+   todos los días (el S26 Ultra Sky Blue, el iPhone 17 Pro Sim, el MacBook Neo
+   ES, el iPad Pro M4 11" 512GB, que tenía stock). claveDeHoy sólo traduce por
+   el código AT de fotos/indice.json, que se arma al publicar.
+   `k` tiene que tener forma de SKU de ADVAPP (CATEGORIA-MARCA-MODELO-MEMORIA-
+   COLOR-VARIABLE, cinco partes o más): los tres primeros bloques son el modelo
+   (madreDelSku). Un ID viejo ("TAB-APP-046") no dice su modelo y da ''.
+   Entre las versiones de ese modelo que se ven en la ficha:
+     · la que tiene ese mismo SKU (cambió sólo el ID);
+     · si hay de la misma memoria, entre ésas: la misma variable del final
+       (Sim/E-Sim, Wifi/Cellular, teclado EN/ES), el mismo color, con stock, la
+       más barata;
+     · si no, la más barata con stock (con la misma variable si puede).
+   Nunca otro modelo: sin filas de ese SKU madre, ''. */
+function claveDelMismoModelo(k){
+  const b = String(k || '').trim().toUpperCase().split('-');
+  if(b.length < 5 || b.some(x => !x)) return '';
+  const madre = b.slice(0, 3).join('-');
+  const partes = p => String(p.skuVariante || '').trim().toUpperCase().split('-');
+  const filas = PRODUCTOS.filter(p => madreDelSku(p.skuVariante) === madre && buscarModelo(clave(p)));
+  if(!filas.length) return '';
+  const visibles = filas.filter(p => buscarModelo(clave(p)).variantes.some(x => clave(x) === clave(p)));
+  const base = visibles.length ? visibles : filas;
+  const igual = base.find(p => partes(p).join('-') === b.join('-'));
+  if(igual) return clave(igual);
+  const resto = b.slice(5).join('-');
+  const misma = (p, i) => partes(p)[i] === b[i] ? 1 : 0;
+  const mismaVariable = p => partes(p).slice(5).join('-') === resto ? 1 : 0;
+  const conStock = p => p.stock ? 1 : 0;
+  const precio = p => p.precio ?? Infinity;
+  const deMemoria = base.filter(p => misma(p, 3));
+  const lista = deMemoria.length ? deMemoria : base;
+  const orden = deMemoria.length
+    ? (x, y) => mismaVariable(y) - mismaVariable(x) || misma(y, 4) - misma(x, 4) || conStock(y) - conStock(x) || precio(x) - precio(y)
+    : (x, y) => conStock(y) - conStock(x) || mismaVariable(y) - mismaVariable(x) || precio(x) - precio(y);
+  return clave([...lista].sort(orden)[0]);
+}
+
 /* Qué se hace con el #p=: { clave } la ficha que se abre, { baja } el aviso
    de "Ya no está" o { espera } todavía no se sabe. Que no esté en la copia de
    este navegador no quiere decir que se dio de baja (el mismo criterio que
    refrescarFichaAbierta), y sin el índice de fotos un ID viejo no se puede
-   traducir: en esos dos casos se vuelve a probar con la carga siguiente. */
-function destinoDelLink(k){
-  const hoy = claveDeHoy(k);
-  if(hoy) return { clave: hoy };
+   traducir: en esos dos casos se vuelve a probar con la carga siguiente.
+   `respaldos` (13/10/2026, W3-03): el ID y el SKU que manda la página p/
+   (respaldosDelHash). Se prueba primero cada uno tal cual o por su código AT
+   (claveDeHoy), y después el mismo modelo (claveDelMismoModelo), antes de
+   decir "Ya no está". */
+function destinoDelLink(k, respaldos = []){
+  const todos = [k, ...respaldos.filter(x => x && x !== k)];
+  for(const x of todos){ const hoy = claveDeHoy(x); if(hoy) return { clave: hoy }; }
+  for(const x of todos){ const hoy = claveDelMismoModelo(x); if(hoy) return { clave: hoy }; }
   const firme = (!ADVAPP_URL || (FUENTE && FUENTE.fuente === 'advapp')) && !!(CATALOGO && CATALOGO.ids);
   return firme ? { baja: true } : { espera: true };
 }
@@ -12075,7 +12427,7 @@ function destinoDelLink(k){
 function abrirFichaDesdeURL(){
   const k = claveDeHash();
   if(!k) return true;
-  const dest = destinoDelLink(k);
+  const dest = destinoDelLink(k, respaldosDelHash());
   if(dest.clave){ abrirFicha(dest.clave, false); return true; }
   if(dest.baja){ avisarYaNoEsta(); return true; }
   return false;
@@ -12325,7 +12677,7 @@ function htmlTodasFicha(m, v){
     return `<button type="button" class="fi-fila${x.stock ? '' : ' agotada'}" data-k="${esc(clave(x))}"${
       colores.length === 1 ? ` data-color="${esc(colores[0])}"` : ''} aria-pressed="${clave(x) === elegida}">
       <span class="q"><b>${puntos}<span class="t">${esc(texto)}</span></b><i>${x.stock ? 'En stock' : 'Sin stock'}</i></span>
-      <span class="p">${precioUSD(x)}</span></button>`;
+      <span class="p">${x.stock ? precioUSD(x) : ''}</span></button>`;
   };
   const lista = gruposDeVersiones(m).map(g => (g.rot ? `<div class="fi-grupo">${esc(g.rot)}</div>` : '') +
     [...g.filas].sort(orden).map(renglon).join('')).join('');
@@ -12474,8 +12826,9 @@ document.addEventListener('visibilitychange', () => { if(!document.hidden){ rele
 /* ¿Pagás con tarjeta? (Pedro eligió 3C el 30/09, muestras/cuotas): en la
    ventana del pedido, debajo de "¿Cómo lo recibís?", los planes de CUOTAS
    como botones, opcionales igual que aquél. Si elige uno, la ayuda dice la
-   cuota y el total y el mensaje suma un renglón: "Lo pago con tarjeta en 6
-   cuotas: aprox. $ … c/u (total aprox. $ …)." Queda guardado en ese
+   cuota y el mensaje suma un renglón: "Lo pago con tarjeta en 6 cuotas:
+   aprox. $ … c/u." (sin el total en cuotas desde el 13/10, D13 A; ver
+   renglonCuotas). Queda guardado en ese
    navegador aparte del pedido, como la entrega: "Vaciar" no lo borra. */
 const CUOTAS_KEY = 'advtecno.cuotas';
 // null si no se pudo leer; 0 si no eligió o el plan ya no existe
@@ -12508,7 +12861,12 @@ function cuentaCuotasPedido(){
   if(!CUOTAS_PEDIDO || hayAConsultar() || soloSinStockPedido() || usadoEnRevision() || pagaTodoConUsado()) return null;
   return cuentaCuotas(aPagarPedido(), CUOTAS_PEDIDO);
 }
-// El renglón que se suma al mensaje; '' si no eligió nada
+/* El renglón que se suma al mensaje; '' si no eligió nada.
+   Sólo la cuota, sin el total en cuotas (13/10/2026, decisión D13 A de
+   Benja, auditoría W3-09): el pedido decía "6 cuotas de $ 413.229 · total
+   $ 2.479.371" debajo del total contado, y el interés salía de restar dos
+   números que estaban uno encima del otro. Igual que la ficha, que lo sacó el
+   30/09. El mensaje de WhatsApp tampoco lleva el total en cuotas. */
 function renglonCuotas(){
   const c = planCuotas(CUOTAS_PEDIDO);
   if(!c || soloSinStockPedido() || pagaTodoConUsado()) return '';
@@ -12516,7 +12874,7 @@ function renglonCuotas(){
   if(!x) return `Lo pago con tarjeta en ${nombreCuotas(c.cuotas)}.`;
   return c.cuotas === 1
     ? `Lo pago con tarjeta en 1 pago: aprox. $ ${plata(x.total)}.`
-    : `Lo pago con tarjeta en ${c.cuotas} cuotas: aprox. $ ${plata(x.cuota)} c/u (total aprox. $ ${plata(x.total)}).`;
+    : `Lo pago con tarjeta en ${c.cuotas} cuotas: aprox. $ ${plata(x.cuota)} c/u.`;
 }
 function htmlCuotasPedido(){
   // Si el usado paga todo (5A), con la tarjeta no hay nada que pagar
@@ -12525,7 +12883,7 @@ function htmlCuotasPedido(){
   let ayuda = 'Por Mercado Pago, con cualquier tarjeta bancarizada. Si no marcás nada, lo hablamos por WhatsApp.';
   if(c && x) ayuda = c.cuotas === 1
     ? `<b>1 pago de $ ${plata(x.total)}</b>`
-    : `<b>${c.cuotas} cuotas de $ ${plata(x.cuota)}</b> · total $ ${plata(x.total)}`;
+    : `<b>${c.cuotas} cuotas de $ ${plata(x.cuota)}</b>`;       // sin el total (D13 A, 13/10/2026)
   else if(c) ayuda = `<b>${esc(nombreCuotas(c.cuotas))}</b> (el monto te lo pasamos por WhatsApp)`;
   return `<div class="pd-cuotas" role="group" aria-labelledby="pd-rot-cuotas">
       <span class="pd-rot" id="pd-rot-cuotas">¿Pagás con tarjeta? <i>opcional</i></span>
@@ -13084,7 +13442,7 @@ function abrirPedido(){
           const version = [x.sim, x.teclado].filter(Boolean).join(' · ');
           return `
           <div class="pd-item" data-key="${esc(clave(p))}">
-            ${p.imagen ? `<button type="button" class="pd-abre pd-abre-foto" tabindex="-1" aria-label="Ver ${quien}"><img class="pd-foto" src="${esc(p.imagen)}" alt="" onerror="this.remove()"></button>` : ''}
+            ${p.imagen ? `<button type="button" class="pd-abre pd-abre-foto" tabindex="-1" aria-label="Ver ${quien}"><img class="pd-foto" src="${esc(p.imagen)}" alt="" onerror="fotoQueFalla(this, 'quitar')"></button>` : ''}
             <button type="button" class="pd-abre pd-abre-txt"><span class="pd-txt">
               <b>${esc(p.desc)}</b>
               <i>${esc(p.marca)}</i>
@@ -13278,8 +13636,7 @@ function mensajeUsado(c, prod, color){
    como WhatsApp, así que su botón copia el mensaje y abre el chat de la
    cuenta (la que atiende Pancho), y el cliente lo pega. Sin href no se pueden
    tocar: así quedan apagados mientras al formulario le falta algo. */
-const INSTAGRAM_TECNO = 'advancetecno';     // @advancetecno
-const linkIG = () => INSTAGRAM_TECNO ? 'https://ig.me/m/' + INSTAGRAM_TECNO : '';
+// INSTAGRAM_TECNO y linkIG() están arriba, con la configuración (13/10/2026: los usan el pie y la ayuda)
 function htmlEnviarUsado(msg, ids = ['us-wa', 'us-ig']){
   const apagado = msg === null ? ' aria-disabled="true"' : '';
   const wa = WHATSAPP ? `<a class="pri" id="${ids[0]}"${msg !== null ? ` href="${linkWA(msg)}"` : ''}${apagado} target="_blank" rel="noopener">Enviar por WhatsApp</a>` : '';
@@ -13690,7 +14047,6 @@ let sugIdx = -1;        // cual esta marcada con las flechas
 function candidatosSug(txt){
   const q = norm(txt).trim();
   if(q.length < 2) return {cats: [], prods: []};
-  const partes = q.split(/\s+/);
   const palabras = prepararBusqueda(q);
 
   // Con el alias también (29/09): "notebook" ofrece MacBook, "lente" Objetivo
@@ -13703,25 +14059,9 @@ function candidatosSug(txt){
      "con foto" y después el de las filas, que en ADVAPP es por ID: "ipad pro"
      sugería cuatro Magic Keyboard antes que un iPad Pro, "apple" siete
      accesorios y ningún iPhone, "mini" hélices DJI antes que el Mini 5 Pro.
-       +3 todas las palabras empiezan alguna palabra del título de la tarjeta
-       +2 el título empieza con la primera palabra
-       +4 una palabra es justo la marca: pesa más que el título, o los Sigma
-          "... Sony" le ganaban a las cámaras Sony
-       -2 un accesorio cuyo título las nombra solo en el "para qué": "Magic
-          Keyboard For iPad Pro" baja con "ipad pro" y sube con "keyboard".
-     Sin listas de palabras que mantener. Empates: con foto, y el orden de
-     siempre. Filtrar sigue siendo coincide(), el mismo que la grilla. */
-  const inicio = partes.map(w => new RegExp('(^|[^a-z0-9])' + escRe(w)));
-  const puntaje = m => {
-    const tit = norm(m.titulo || m.desc);
-    const cabeza = tit.split(/\s(?:for|para|p\/)\s|\(/)[0];
-    let s = 0;
-    if(inicio.every(re => re.test(tit))) s += 3;
-    if(tit.startsWith(partes[0])) s += 2;
-    if(m.marca && partes.includes(norm(m.marca))) s += 4;
-    if(/^accesorio/.test(norm(m.cat)) && !inicio.every(re => re.test(cabeza))) s -= 2;
-    return s;
-  };
+     El puntaje es puntajeDeBusqueda, el mismo de la grilla desde el 13/10
+     (W3-07). Sin listas de palabras que mantener. Empates: con foto, y el
+     orden de siempre. Filtrar sigue siendo coincide(), el mismo que la grilla. */
   /* Busca donde busca la grilla (29/09, muestra 3.1 B): con un rubro
      abierto, en el rubro, con los filtros puestos y cada modelo en la versión
      del filtro (listaDeLaGrilla, 2.1 B). Buscaba en todo el catálogo: en
@@ -13729,6 +14069,7 @@ function candidatosSug(txt){
      nada. Si en el rubro no hay nada y en todo el catálogo sí, `todo` es la
      salida del vacío (salidaDelVacio), la misma que ofrece la grilla. */
   const enLaGrilla = listaCon({ q: txt });
+  const puntaje = puntajeDeBusqueda(q, enLaGrilla);
   const prods = enLaGrilla
     .filter(m => m.stock && coincide(m, palabras))
     .map(m => [m, puntaje(m)])
@@ -13762,10 +14103,14 @@ function pintarSug(){
     // "desde" cuando la tarjeta lo dice (29/09): el iPhone 17 Pro Max decía
     // "USD 1.330" acá y "desde USD 1.330" en la grilla. La misma condición que
     // precioTarjeta y "Te puede servir"; el precio no cambia.
+    /* El nombre es el de la tarjeta, m.titulo (13/10/2026, auditoría W3-14):
+       decía la descripción de la versión que representa al modelo ("iPhone
+       17 256GB E-Sim", "Galaxy Z Fold 8 Ultra 12/256GB (Cream)") y parecía
+       una versión puntual cuando abre el modelo. */
     prods.map((m, i) => `<button class="qs" type="button" ${opcion(cats.length + i)} data-key="${esc(clave(m.rep))}">
         <span class="qs-foto">${m.imagen
-          ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>
-        <span class="qs-txt"><b>${esc(m.desc)}</b><i>${esc(m.marca)} · ${
+          ? `<img src="${esc(m.imagen)}" alt="" loading="lazy" onerror="fotoQueFalla(this, 'quitar')">` : ''}</span>
+        <span class="qs-txt"><b>${esc(m.titulo || m.desc)}</b><i>${esc(m.marca)} · ${
           m.precio === null ? 'Consultar'
           : (m.multi && m.precio !== m.precioMax ? 'desde ' : '') + 'USD ' + plata(m.precio)}</i></span>
       </button>`).join('') +
@@ -13929,6 +14274,10 @@ grid.addEventListener('load', e => {
 grid.addEventListener('click', e => {
   // La salida de la grilla vacía (3.1 B y 3.2 B)
   if(e.target.closest('[data-salida]')){ usarSalida(false); return; }
+  // Lo más parecido y el cotizador (W3-12, 13/10/2026)
+  const par = e.target.closest('[data-parecido]');
+  if(par){ usarParecido(par.dataset.parecido); return; }
+  if(e.target.closest('[data-cotizar]')){ abrirCotizador({}); return; }
   const card = e.target.closest('.card');
   if(!card) return;
   if(e.target.closest('.mas')){ togglePedidoModelo(card.dataset.key); return; }
@@ -14381,8 +14730,9 @@ const telefonoLegible = n => {
   const r = /^549(11)(\d{4})(\d{4})$/.exec(String(n || ''));
   return r ? `+54 9 ${r[1]} ${r[2]}-${r[3]}` : '+' + n;
 };
-// datos: { direccion, mapa } en lugar de DIRECCION y MAPA (las pruebas miran
-// que lo vacío no se muestre: las constantes no se pueden vaciar)
+// datos: { direccion, mapa, instagram } en lugar de DIRECCION, MAPA e
+// INSTAGRAM_TECNO (las pruebas miran que lo vacío no se muestre: las
+// constantes no se pueden vaciar)
 function pintarPie(datos = {}){
   const pie = $('pie-id');
   if(!pie) return;
@@ -14395,6 +14745,10 @@ function pintarPie(datos = {}){
   if(dir) partes.push(`<span>${esc(dir)}</span>`);
   if(/^https:\/\//i.test(mapa)) partes.push(`<a href="${esc(mapa)}" target="_blank" rel="noopener">Ver en mapa</a>`);
   if(wa) partes.push(`<a href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp ${esc(telefonoLegible(WHATSAPP))}</a>`);
+  // Instagram, después del WhatsApp (D16 A, 13/10/2026)
+  const ig = String(('instagram' in datos ? datos.instagram : INSTAGRAM_TECNO) || '').trim();
+  if(/^[A-Za-z0-9._]+$/.test(ig))
+    partes.push(`<a href="${esc('https://www.instagram.com/' + ig + '/')}" target="_blank" rel="noopener">Instagram @${esc(ig)}</a>`);
   if(cita) partes.push('<span>Atención con cita previa</span>');
   pie.hidden = !partes.length;
   pie.innerHTML = partes.length

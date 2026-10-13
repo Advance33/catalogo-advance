@@ -176,7 +176,8 @@ async function correrPruebas(){
   for(const [id, t] of paginas){
     const d = new DOMParser().parseFromString(t, 'text/html');
     const meta = k => { const e = d.querySelector(`meta[property="${k}"], meta[name="${k}"]`); return e ? e.getAttribute('content') : null; };
-    const pag = { titulo: meta('og:title'), linea: meta('og:description') || '', imagen: meta('og:image') || '' };
+    const pag = { titulo: meta('og:title'), linea: meta('og:description') || '', imagen: meta('og:image') || '',
+                  ir: '#' + ((/location\.replace\("\.\.\/#([^"]+)"\)/.exec(t) || [])[1] || '') };
     leidas.set(id, pag);
     if(!pag.titulo || !pag.titulo.trim()) mal.titulo.push(id);
     const propia = pag.imagen.startsWith(PUBLICA + CARPETA_FOTOS) && pag.imagen.endsWith(EXT_FOTOS);
@@ -190,9 +191,15 @@ async function correrPruebas(){
     const link = d.querySelector('a[href^="../#p="]');
     if(!va || !link || link.getAttribute('href') !== '../#p=' + va) mal.ir.push(id);
     else if(hoy.has(id)){
-      // abrirFicha abre ESA version si esta entre las visibles (si no, m.rep)
-      const m = buscarModelo(va);
-      if(!m || !m.variantes.some(y => clave(y) === va)) mal.abre.push(id + ' -> ' + va);
+      /* El destino y, desde el 13/10/2026 (auditoria W3-03), el ID y el SKU de
+         respaldo (&o= &s=): lo que se mira es lo que abre la web con eso
+         (destinoDelLink), y tiene que ser el modelo de ESA fila. El iPad Pro
+         M4 11" 512GB (TAB-APP-046) llevaba a una gemela que desaparecio y
+         abria "Ya no esta" con stock. */
+      const k = va.split('&')[0], resp = [...va.matchAll(/&(?:o|s)=([^&]+)/g)].map(x => x[1]);
+      const dest = destinoDelLink(k, resp);
+      const m = buscarModelo(id);
+      if(!dest.clave || !m || buscarModelo(dest.clave) !== m) mal.abre.push(id + ' -> ' + va);
     }
     if(conPrecio(d.body ? d.body.textContent : '') || conPrecio(pag.titulo) || conPrecio(pag.linea)) mal.precio.push(id);
   }
@@ -203,7 +210,7 @@ async function correrPruebas(){
   ok(!mal.card.length, 'twitter:card: summary con la foto cuadrada, summary_large_image con la general', ejemplos(mal.card));
   ok(!mal.robots.length, 'todas piden noindex', ejemplos(mal.robots));
   ok(!mal.ir.length, 'la redireccion y el link visible llevan al mismo #p=', ejemplos(mal.ir));
-  ok(!mal.abre.length, 'y ese #p= abre la ficha de esa fila', ejemplos(mal.abre));
+  ok(!mal.abre.length, 'y ese #p= abre la ficha del modelo de esa fila (con el ID y el SKU de respaldo, W3-03)', ejemplos(mal.abre));
   ok(!mal.precio.length, 'ninguna pagina dice un precio', ejemplos(mal.precio));
 
   /* ---- 5a. Las paginas son lo que calculo la herramienta ---- */
@@ -225,6 +232,8 @@ async function correrPruebas(){
       if(!pag) continue;          // sin archivo: ya lo dice "cada ID de p/indice.json tiene su p/<ID>.html"
       const d = difiere(pag, x);
       if(d) malHechas.push(id + ': ' + d);
+      // El link entero, con sus respaldos (13/10/2026: _generado.json trae "ir")
+      else if(x.ir && pag.ir && pag.ir !== x.ir) malHechas.push(id + ': lleva a ' + pag.ir + ' y no a ' + x.ir);
     }
     const sobran = Object.keys(gen.vistas).filter(id => !ids.includes(id));
     ok(!malHechas.length && !sobran.length,

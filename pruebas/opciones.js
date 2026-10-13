@@ -129,8 +129,11 @@ function correrPruebas(){
   if(!juntas.length) return;
 
   /* ---- 3. El boton de una version junta: su precio y la fila que abre ---- */
-  const conPrecios = juntas.find(j => new Set(j.grupo.map(v => v.precio)).size > 1) || null;
-  const mismoPrecio = juntas.find(j => new Set(j.grupo.map(v => v.precio)).size === 1) || null;
+  /* Los precios que muestra el boton son los de las filas con stock (13/10/2026,
+     D15 B de Benja: lo agotado no muestra precio) */
+  const psStock = j => j.grupo.filter(v => v.stock && v.precio !== null).map(v => v.precio);
+  const conPrecios = juntas.find(j => new Set(psStock(j)).size > 1) || null;
+  const mismoPrecio = juntas.find(j => psStock(j).length && new Set(psStock(j)).size === 1) || null;
   for(const [caso, esperado] of [[conPrecios, 'desde USD '], [mismoPrecio, 'USD ']]){
     if(!caso) continue;
     abrirFicha(clave(caso.m.rep), null);
@@ -143,7 +146,7 @@ function correrPruebas(){
     if(!b) b = botones().find(x => x.dataset.mem === memoriaDeOpcion(caso.op) &&
                                    x.dataset.op === caso.op);
     if(!b) R.push('  --  ' + caso.m.desc + ': ' + caso.op + ' no llega a tener pestaña');
-    const minimo = Math.min(...caso.grupo.map(v => v.precio).filter(x => x !== null));
+    const minimo = Math.min(...psStock(caso));
     if(b) ok(texto(b).endsWith(esperado + plata(minimo)) && (esperado === 'USD ' ? !/desde/.test(texto(b)) : true),
              esperado === 'USD ' ? 'con todos los colores al mismo precio, el boton dice ese precio'
                                  : 'con colores a distinto precio, el boton dice "desde"',
@@ -166,7 +169,7 @@ function correrPruebas(){
   if(punto){
     punto.click();
     ok(FICHA === clave(b), 'tocar ese color pasa a su fila', FICHA + ' (' + b.color + ')');
-    ok(document.querySelector('#ficha .fi-precio .usd').textContent.includes(b.precio === null ? 'Consultar' : plata(b.precio)),
+    ok(document.querySelector('#ficha .fi-precio .usd').textContent.includes(!b.stock ? 'Sin stock' : b.precio === null ? 'Consultar' : plata(b.precio)),
        'con su precio', document.querySelector('#ficha .fi-precio .usd').textContent.trim());
     const sigue = botones().find(x => x.dataset.op === j.op);
     ok(sigue && sigue.getAttribute('aria-pressed') === 'true', 'y el boton de la version sigue marcado');

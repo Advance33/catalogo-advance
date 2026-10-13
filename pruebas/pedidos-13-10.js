@@ -11,14 +11,25 @@
 //       SKU o el nombre a mano, sin pasar por rasgosDe), que viajen en el
 //       link, que se suelten al salir del rubro y que un valor inventado no
 //       deje la grilla vacia
+//   [6] las reseñas de Google: el bloque de la portada y el sello del
+//       encabezado dicen lo que dice datos/resenas.json, tal cual, y sin el
+//       archivo (o con uno mal formado) no aparece nada
 //   [8] "Desde" va con mayuscula en todos los lugares donde antecede un precio
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const info = t => R.push('  --  ' + t);
 const $$ = s => document.querySelectorAll(s);
 
+// El archivo de las reseñas, leido aparte de la pagina para comparar
+let P13_RESENAS = null, p13Leido = false;
+const p13T0 = Date.now();
+fetch('datos/resenas.json', { cache: 'no-cache' }).then(r => r.json()).then(j => { P13_RESENAS = j; })
+  .catch(() => {}).finally(() => { p13Leido = true; });
+
 const esperaP13 = setInterval(() => {
   if(!MODELOS.length || !$$('#cats .chip').length || !$$('#mosaico .mundo').length) return;
+  // La pagina lee las reseñas por su cuenta: se le da tiempo a que lleguen
+  if(!p13Leido || (!RESENAS && Date.now() - p13T0 < 12000)) return;
   clearInterval(esperaP13);
   for(let i=1;i<5000;i++) clearInterval(i);
   try{ correrPruebas(); }catch(e){ R.push('EXCEPCION: '+(e&&e.stack||e)); fallas++; }
@@ -219,6 +230,57 @@ function correrPruebas(){
      '[5] dos filtros que no se cruzan: el vacio nombra los filtros y ofrece sacar uno', vacio && vacio.textContent.replace(/\s+/g, ' ').trim().slice(0, 110));
   irAlInicio();
   ok(enPortada() && FILTROS_RUBRO.every(f => !filtros[f.campo]), '[5] y el inicio los saca todos');
+
+  /* ---- [6] Las reseñas de Google ---- */
+  irAlInicio();
+  const archivo = P13_RESENAS;
+  if(!archivo) ok(false, '[6] datos/resenas.json se pudo leer para comparar');
+  else{
+    ok(!!RESENAS && RESENAS.puntaje === archivo.puntaje && RESENAS.cantidad === archivo.cantidad,
+       '[6] la pagina leyo el puntaje y la cantidad del archivo', RESENAS && (RESENAS.puntaje + ' · ' + RESENAS.cantidad));
+    pintarExtras();
+    const sec = $('resenas'), nota = notaGoogle(archivo.puntaje);
+    ok(!!sec && !sec.closest('[hidden]'), '[6] la portada tiene el bloque "Reseñas en Google"');
+    ok(!!sec && sec.querySelector('.rs-nota > b').textContent === nota && sec.querySelector('.rs-nota').textContent.includes(plata(archivo.cantidad) + ' reseñas'),
+       '[6] con el puntaje y la cantidad del archivo, sin redondear', sec && sec.querySelector('.rs-nota').textContent.replace(/\s+/g, ' ').trim());
+    const tarjetas = sec ? [...sec.querySelectorAll('.rs-card')] : [];
+    const distintas = archivo.resenas.filter((r, i) => !tarjetas[i] ||
+      tarjetas[i].querySelector('blockquote').textContent !== r.texto.trim() ||
+      tarjetas[i].querySelector('figcaption b').textContent !== r.autor ||
+      tarjetas[i].querySelector('.rs-estrellas').style.getPropertyValue('--v') !== String(r.estrellas));
+    ok(tarjetas.length === archivo.resenas.length && !distintas.length,
+       '[6] una tarjeta por reseña del archivo, con el texto, el autor y las estrellas TAL CUAL', distintas.map(r => r.autor).join(', ') || tarjetas.length + ' reseñas');
+    const ver = sec && sec.querySelector('.rs-ver');
+    ok(!!ver && ver.href === archivo.ver && /(^|\.)google\.com$/.test(new URL(ver.href).hostname) && ver.target === '_blank',
+       '[6] "Ver todas en Google" lleva a la ficha de Google, en otra pestaña', ver && ver.href);
+    const larga = tarjetas.find(t => t.querySelector('[data-rs-mas]'));
+    if(larga){
+      larga.querySelector('[data-rs-mas]').click();
+      ok(larga.classList.contains('entera') && larga.querySelector('[data-rs-mas]').getAttribute('aria-expanded') === 'true',
+         '[6] una reseña larga se abre entera con "Leer completa"');
+    }else info('[6] hoy ninguna reseña pasa de ' + RESENA_LARGA + ' letras: no hay "Leer completa" que mirar');
+    const sello = $('sello-google');
+    ok(!sello.hidden && sello.textContent.includes(nota) && sello.textContent.includes(plata(archivo.cantidad) + ' reseñas en Google'),
+       '[6] el sello del encabezado dice el puntaje y cuantas son', sello.textContent.replace(/\s+/g, ' ').trim());
+    entrarAlRubro('Celular');
+    p13Clic(sello);
+    ok(enPortada() && !!$('resenas'), '[6] tocar el sello desde un rubro lleva al inicio, donde esta el bloque');
+  }
+  // Lo que no sirve no se muestra
+  const base = { formato: 'resenas/1', puntaje: 4.9, cantidad: 469, ver: 'https://search.google.com/local/reviews?placeid=x',
+                 resenas: [{ autor: 'A', estrellas: 5, texto: 'bien' }] };
+  ok(!!validarResenas(base) && validarResenas(base).resenas.length === 1, '[6] un archivo bien formado se acepta');
+  ok(validarResenas({ ...base, formato: 'otro' }) === null && validarResenas({ ...base, puntaje: 7 }) === null &&
+     validarResenas({ ...base, cantidad: 0 }) === null && validarResenas({ ...base, ver: 'https://otro-sitio.com/x' }) === null &&
+     validarResenas({ ...base, ver: 'javascript:alert(1)' }) === null,
+     '[6] sin formato, con puntaje fuera de 1 a 5, sin cantidad o con un link que no es de Google: no se muestra nada');
+  const filtradas = validarResenas({ ...base, resenas: [{ autor: '', estrellas: 5, texto: 'x' }, { autor: 'B', estrellas: 9, texto: 'x' },
+                                                       { autor: 'C', estrellas: 4, texto: '' }, { autor: 'D', estrellas: 4, texto: 'ok' }] });
+  ok(filtradas.resenas.length === 1 && filtradas.resenas[0].autor === 'D', '[6] una reseña sin autor, sin texto o con estrellas raras se saltea');
+  const guardada = RESENAS;
+  RESENAS = null; FIRMA_EXTRAS = ''; pintarExtras(); pintarSelloGoogle();
+  ok(!$('resenas') && $('sello-google').hidden && !!$('ayuda'), '[6] sin el archivo no hay bloque ni sello, y la portada sigue entera');
+  RESENAS = guardada; FIRMA_EXTRAS = ''; pintarExtras(); pintarSelloGoogle();
 
   /* ---- [8] "Desde" con mayuscula ---- */
   const minuscula = /(^|[\s·>(])desde\s+USD/;

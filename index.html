@@ -1019,6 +1019,65 @@
     .pv-visto{margin:0 -16px;padding:0 12px}
   }
 
+  /* ---------- Las reseñas de Google (Benja, 13/10/2026) ----------
+     "Que se vean nuestras reseñas en Google". Dos piezas: el sello del
+     encabezado (el puntaje y cuántas son, a la vista apenas se entra) y el
+     bloque de la portada, antes de las preguntas, con el puntaje grande y las
+     reseñas en una fila que se desliza. Todo sale de datos/resenas.json: sin
+     el archivo no aparece ninguna de las dos. Las estrellas son dos capas de
+     ★★★★★, la de color recortada al puntaje (--v): 4,9 se ve casi llena. */
+  .rs-estrellas{--v:5;position:relative;display:inline-block;font:15px/1 var(--sans);letter-spacing:2px;
+                color:#D8CDEE;white-space:nowrap}
+  .rs-estrellas::before{content:"★★★★★"}
+  .rs-estrellas::after{content:"★★★★★";position:absolute;left:0;top:0;width:calc(var(--v) / 5 * 100%);
+                       overflow:hidden;color:#E0A106}
+  .sello-google{display:inline-flex;align-items:center;gap:8px;margin:0 0 4px;text-decoration:none;
+                font:600 11px/1 var(--mono);letter-spacing:.06em;color:var(--muted);border-radius:8px}
+  .sello-google[hidden]{display:none}
+  .sello-google b{font-weight:700;color:var(--ink)}
+  .sello-google .rs-estrellas{font-size:13px;letter-spacing:1px}
+  .sello-google:hover{color:var(--acento)}
+  .sello-google:focus-visible{outline:2px solid var(--acento);outline-offset:4px}
+  @media (min-width:900px){
+    /* Arriba de la bajada, alineado con su texto (20 px de aire + 2 de la
+       raya) y en el renglón de "Catálogo": sin margen propio, así no le suma
+       alto al encabezado ni baja el título. */
+    .sello-google{grid-column:2;grid-row:1;justify-self:start;align-self:center;margin:0 0 0 22px}
+  }
+  .resenas{display:flex;flex-direction:column;gap:14px;scroll-margin-top:calc(var(--alto-cinta,0px) + 18px)}
+  .rs-cab{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
+  .resenas h2{margin:0;font:400 22px/1.1 var(--display);text-transform:uppercase}
+  .rs-nota{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .rs-nota > b{font:400 38px/1 var(--display);color:var(--ink)}
+  .rs-nota > span{display:flex;flex-direction:column;gap:6px;font:500 11px/1 var(--mono);letter-spacing:.04em;color:var(--faint)}
+  .rs-ver{margin-left:6px;padding:10px 16px;border-radius:999px;background:var(--ink);color:#fff;text-decoration:none;
+          font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;transition:background .2s ease}
+  .rs-ver:hover{background:#2C2048}
+  .rs-ver:focus-visible{outline:2px solid var(--acento);outline-offset:3px}
+  .rs-pista{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 36px) / 4);gap:12px;
+            overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:2px;padding:2px 2px 8px;scrollbar-width:thin}
+  .rs-pista:focus-visible{outline:2px solid var(--acento);outline-offset:3px;border-radius:22px}
+  .rs-card{scroll-snap-align:start;display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+           margin:0;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:22px}
+  .rs-card blockquote{margin:0;font:400 14px/1.5 var(--sans);color:var(--ink);white-space:pre-line;overflow-wrap:anywhere;
+                      display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:7;overflow:hidden}
+  .rs-card.entera blockquote{display:block;-webkit-line-clamp:unset}
+  .rs-mas{border:0;background:none;padding:0;cursor:pointer;font:600 12.5px/1 var(--sans);color:var(--acento)}
+  .rs-mas:hover{text-decoration:underline}
+  .rs-mas:focus-visible{outline:2px solid var(--acento);outline-offset:3px;border-radius:4px}
+  .rs-card figcaption{margin-top:auto;padding-top:4px;display:flex;flex-direction:column;gap:4px}
+  .rs-card figcaption b{font:600 13.5px/1.2 var(--sans);color:var(--ink)}
+  .rs-card figcaption i{font:500 10.5px/1 var(--mono);font-style:normal;letter-spacing:.04em;color:var(--faint)}
+  @media (max-width:1100px){ .rs-pista{grid-auto-columns:calc((100% - 24px) / 3)} }
+  @media (max-width:760px){
+    /* A sangre, como las demás filas que se deslizan: la primera tarjeta
+       alineada con el título (los 20 px del .wrap) y la última con aire */
+    .rs-pista{grid-auto-columns:82%;margin-inline:-20px;padding-inline:20px;scroll-padding-inline:20px;scrollbar-width:none}
+    .rs-pista::-webkit-scrollbar{display:none}
+    .rs-nota > b{font-size:32px}
+    .rs-ver{margin-left:0}
+  }
+
   /* ---------- Ayuda: las preguntas y lo que no está (17/09) ----------
      Antes eran dos cajas claras, una encima de la otra: "¿No lo encontrás?" y
      una lista de desplegables. Ahora es un solo bloque oscuro, de la misma
@@ -3349,6 +3408,10 @@
     <span class="eyebrow">Catálogo</span>
     <h1 class="titulo-h">Los precios de hoy.<br><span>Hoy.</span></h1>
     <p class="bajada">Sin listas viejas: los precios y el stock se actualizan solos durante el día. Tocá un producto y el WhatsApp se abre con el modelo y el color ya escritos.</p>
+    <!-- El puntaje de Google (Benja, 13/10/2026): lo llena pintarSelloGoogle()
+         con datos/resenas.json y lleva al bloque de reseñas de la portada. Sin
+         el archivo queda escondido. -->
+    <a class="sello-google" id="sello-google" href="#resenas" hidden></a>
   </div>
 </header>
 
@@ -3662,7 +3725,7 @@ let ANALITICA_URL = '';
 // OJO con la garantía: no poner un plazo fijo ("1 año"). Cada producto tiene
 // la suya, y prometer un plazo que no se cumple es un problema con el cliente.
 
-const DIRECCION = 'Av. De los Incas 5150, 1A, CABA';
+const DIRECCION = 'Av. de los Incas 5150, 1A, CABA';
 const MAPA      = 'https://maps.app.goo.gl/kzwGpTwUNLkTEwWRA';
 
 // Las tres líneas debajo del botón de WhatsApp, en cada ficha: [título, detalle].
@@ -7999,7 +8062,7 @@ function htmlFilaMarcas(){
   if(lista.length < 3) return '';
   const items = lista.map(([marca, n]) => {
     const logo = hayLogo(marca) ? urlFoto(CARPETA_MARCAS + slugMarca(marca) + '.png') : '';
-    return `<button class="mk" type="button" data-marca="${esc(marca)}" title="${esc(marca)} · ${n} productos">
+    return `<button class="mk" type="button" data-marca="${esc(marca)}" title="${esc(marca)} · ${n} producto${n !== 1 ? 's' : ''}">
       <span class="mk-cir">
         ${logo ? `<img src="${esc(logo)}" alt="" loading="lazy" onerror="this.remove()">` : ''}
         <b data-largo="${marca.length > 8 ? 'mucho' : marca.length > 6 ? 'algo' : 'no'}">${esc(marca)}</b>
@@ -9369,7 +9432,7 @@ function htmlPanelMarca(x, conFotos = true){
    costados son decorado: no las leen los lectores ni se llega con el tabulador. */
 function htmlMarcas(lista){
   const copia = c => lista.map((x, k) => `<button class="mv-it" type="button" data-k="${k}" data-copia="${c}"
-      ${c === 1 ? `aria-pressed="false" aria-label="${esc(x.marca)}, ${x.n} productos"` : 'aria-hidden="true" tabindex="-1"'}>
+      ${c === 1 ? `aria-pressed="false" aria-label="${esc(x.marca)}, ${x.n} producto${x.n !== 1 ? 's' : ''}"` : 'aria-hidden="true" tabindex="-1"'}>
       ${htmlLogoMarca(x.marca)}<i>${x.n}</i><span class="mv-barra" aria-hidden="true"><span></span></span>
     </button>`).join('');
   return `<section class="mv" id="marcas-vitrina" aria-labelledby="mv-titulo" style="--mv-ms:${MARCAS_MS}ms">
@@ -9506,7 +9569,9 @@ function pintarExtras(){
     + mirados.map(m => clave(m) + ':' + m.precio + ':' + m.precioMax).join(',') + '|'
     + tramos.map(t => [t.val, t.n, ...t.prods.map(m => clave(m) + ':' + m.precio + ':' + m.precioMax)].join(':')).join(',') + '|'
     + nuevos.map(m => [clave(m), m.precio, m.precioMax, m.incluye, m.imagen, m.variantes.length].join(':')).join(',') + '|'
-    + marcas.map(x => [x.marca, x.n, x.cats.join(';'), ...x.nuevos.map(m => clave(m) + ':' + m.precio + ':' + m.precioMax)].join(':')).join(',');
+    + marcas.map(x => [x.marca, x.n, x.cats.join(';'), ...x.nuevos.map(m => clave(m) + ':' + m.precio + ':' + m.precioMax)].join(':')).join(',')
+    // Las reseñas llegan aparte (cargarResenas): cuando llegan, el bloque se suma
+    + '|' + (RESENAS ? [RESENAS.puntaje, RESENAS.cantidad, RESENAS.resenas.length].join(':') : '');
   if(firma === FIRMA_EXTRAS && caja.children.length){
     // Las vidrieras se frenaron al esconderse: vuelven a girar
     arrancarNuevos();
@@ -9545,6 +9610,11 @@ function pintarExtras(){
      casillero para decirlo: el catálogo no tiene todo, pero se consigue, y es
      mejor que lo escriba a que se vaya sin decir nada. Si lo resuelve acá,
      llega al WhatsApp con la decisión más tomada. */
+  /* 5. Las reseñas de Google (13/10), justo antes de la ayuda. Sin el
+     archivo no hay bloque. */
+  const resenas = htmlResenas();
+  if(resenas) partes.push(resenas);
+
   const ayuda = htmlAyuda();
   if(ayuda) partes.push(ayuda);
 
@@ -9556,6 +9626,9 @@ function pintarExtras(){
 
   const secAyuda = $('ayuda');
   if(secAyuda) montarAyuda(secAyuda);
+
+  const secResenas = $('resenas');
+  if(secResenas) montarResenas(secResenas);
 
   const vidriera = $('nuevos');
   if(vidriera) montarNuevos(vidriera); else pararNuevos();
@@ -9576,6 +9649,112 @@ function pintarExtras(){
     inp.addEventListener('keydown', e => { if(e.key === 'Enter') mandar(); });
     listo();
   }
+}
+
+/* ---------- Las reseñas de Google (Benja, 13/10/2026) ----------
+   "Que se vean nuestras reseñas en Google". Salen de datos/resenas.json
+   (formato resenas/1, ver datos/LEEME-resenas.md): el puntaje y la cantidad de
+   la ficha de Google del negocio, y las reseñas copiadas TAL CUAL, con su
+   autor y sus estrellas. Acá no se escribe ninguna: lo que no está en el
+   archivo no se muestra, y si el archivo no llega o viene mal, no aparece ni
+   el bloque ni el sello del encabezado (la portada queda como antes).
+   Va antes de las preguntas: es lo que termina de decidir al que duda. */
+const RESENAS_URL = 'datos/resenas.json';
+const RESENAS_ESPERA_MS = 8000;
+const RESENAS_MAX = 12;         // tarjetas, como mucho
+const RESENA_LARGA = 300;       // de ahí para arriba, "Leer completa"
+let RESENAS = null;             // { puntaje, cantidad, ver, resenas } ya validado, o null
+
+/* El archivo, con lo que no sirve afuera. Sin puntaje, cantidad o link bien
+   formados no hay nada que mostrar; una reseña sin autor, sin texto o con
+   estrellas raras se saltea sola. El link tiene que ser de Google. */
+function validarResenas(j){
+  if(!j || j.formato !== 'resenas/1') return null;
+  const puntaje = Number(j.puntaje), cantidad = Number(j.cantidad);
+  if(!(puntaje >= 1 && puntaje <= 5) || !Number.isInteger(cantidad) || cantidad < 1) return null;
+  let ver = '';
+  try{ const u = new URL(String(j.ver || '')); if(u.protocol === 'https:' && /(^|\.)google\.com$/.test(u.hostname)) ver = u.href; }catch{}
+  if(!ver) return null;
+  const resenas = (Array.isArray(j.resenas) ? j.resenas : [])
+    .map(r => ({ autor: String((r && r.autor) || '').trim(), texto: String((r && r.texto) || '').trim(),
+                 estrellas: Number(r && r.estrellas) }))
+    .filter(r => r.autor && r.texto && Number.isInteger(r.estrellas) && r.estrellas >= 1 && r.estrellas <= 5)
+    .slice(0, RESENAS_MAX);
+  return { puntaje, cantidad, ver, resenas };
+}
+
+const notaGoogle = n => n.toLocaleString('es-AR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+function cargarResenas(){
+  return conTope(RESENAS_ESPERA_MS, async senal => {
+      const r = await fetch(RESENAS_URL, { cache:'no-cache', signal: senal });
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(j => {
+      RESENAS = validarResenas(j);
+      if(!RESENAS) throw new Error('formato');
+      pintarSelloGoogle();
+      // Si la portada ya estaba dibujada, suma el bloque (la firma cambió)
+      if(MODELOS.length && enPortada()) pintarExtras();
+      return RESENAS;
+    })
+    .catch(e => { console.warn('No se pudo leer ' + RESENAS_URL + ':', e); return null; });
+}
+
+function pintarSelloGoogle(){
+  const a = $('sello-google');
+  if(!a) return;
+  a.hidden = !RESENAS;
+  if(!RESENAS) return;
+  const nota = notaGoogle(RESENAS.puntaje);
+  a.innerHTML = `<span class="rs-estrellas" style="--v:${RESENAS.puntaje}" aria-hidden="true"></span>
+    <span><b>${nota}</b> · ${plata(RESENAS.cantidad)} reseñas en Google</span>`;
+  a.setAttribute('aria-label', `${nota} de 5 en Google, ${plata(RESENAS.cantidad)} reseñas: ver las reseñas`);
+}
+
+/* El sello lleva al bloque. Desde un rubro, primero al inicio: el bloque vive
+   solo en la portada. */
+function irAResenas(){
+  const lejos = !enPortada();
+  if(lejos) irAlInicio();
+  $('resenas')?.scrollIntoView({ behavior: quieto || lejos ? 'auto' : 'smooth', block: 'start' });
+}
+
+function htmlResenas(){
+  const d = RESENAS;
+  if(!d) return '';
+  const nota = notaGoogle(d.puntaje);
+  const tarjetas = d.resenas.map(r => `
+    <figure class="rs-card">
+      <span class="rs-estrellas" style="--v:${r.estrellas}" role="img" aria-label="${r.estrellas} de 5 estrellas"></span>
+      <blockquote>${esc(r.texto)}</blockquote>
+      ${r.texto.length > RESENA_LARGA ? '<button type="button" class="rs-mas" data-rs-mas aria-expanded="false">Leer completa</button>' : ''}
+      <figcaption><b>${esc(r.autor)}</b><i>Reseña en Google</i></figcaption>
+    </figure>`).join('');
+  return `<section class="resenas" id="resenas" aria-labelledby="rs-titulo">
+    <div class="rs-cab">
+      <h2 id="rs-titulo">Reseñas en Google</h2>
+      <div class="rs-nota">
+        <b>${nota}</b>
+        <span><span class="rs-estrellas" style="--v:${d.puntaje}" role="img" aria-label="${nota} de 5 estrellas"></span>
+              ${plata(d.cantidad)} reseñas</span>
+        <a class="rs-ver" href="${esc(d.ver)}" target="_blank" rel="noopener">Ver todas en Google</a>
+      </div>
+    </div>
+    ${tarjetas ? `<div class="rs-pista" tabindex="0" role="group" aria-label="Reseñas de clientes en Google">${tarjetas}</div>` : ''}
+  </section>`;
+}
+
+// "Leer completa" abre y cierra la reseña larga, sin redibujar nada
+function montarResenas(sec){
+  sec.addEventListener('click', e => {
+    const b = e.target.closest('[data-rs-mas]');
+    if(!b) return;
+    const abierta = b.closest('.rs-card').classList.toggle('entera');
+    b.setAttribute('aria-expanded', String(abierta));
+    b.textContent = abierta ? 'Leer menos' : 'Leer completa';
+  });
 }
 
 // Cuál de las ocho se está mostrando. Vive fuera del pintado para que volver a
@@ -12629,8 +12808,9 @@ function guardarPedido(){ try{ localStorage.setItem(PEDIDO_KEY, JSON.stringify(P
 
 /* ¿Cómo lo recibís? (Pedro eligió A el 29/09, muestra 5.3): en la ventana del
    pedido, dos botones opcionales, "Retiro en CABA" / "Envío", y si elige envío
-   la localidad. El mensaje suma un renglón: "Lo retiro en CABA." o "Me lo
-   mandan a Rosario?" ("Me lo mandan?" si no escribió la localidad). Sin
+   la localidad. El mensaje suma un renglón: "Lo retiro en CABA." o "¿Me lo
+   mandan a Rosario?" ("¿Me lo mandan?" si no escribió la localidad; con el
+   signo de apertura desde el 13/10, como las demás preguntas). Sin
    elegir nada, el mensaje sale igual que antes. Saber si es retiro o envío
    ayuda a cotizar el envío; la forma de pago (la B) quedó para el chat.
    Queda guardado en ese navegador para la próxima, aparte del pedido:
@@ -12662,7 +12842,7 @@ function renglonEntrega(){
   if(ENTREGA.entrega === 'retiro') return 'Lo retiro en CABA.';
   if(ENTREGA.entrega === 'envio'){
     const l = limpiarLocalidad(ENTREGA.localidad);
-    return l ? `Me lo mandan a ${l}?` : 'Me lo mandan?';
+    return l ? `¿Me lo mandan a ${l}?` : '¿Me lo mandan?';
   }
   return '';
 }
@@ -14575,7 +14755,7 @@ if(WHATSAPP){
 }
 
 /* ---------- El pie con el contacto (29/09, muestra 6.7 B) ----------
-   "Advance Tecno · Av. De los Incas 5150, 1A, CABA · Ver en mapa · WhatsApp
+   "Advance Tecno · Av. de los Incas 5150, 1A, CABA · Ver en mapa · WhatsApp
    +54 9 11 2475-1466 · Atención con cita previa", arriba de la cotización,
    como la muestra B que eligió Pedro. Todo sale de la configuración: la
    dirección es DIRECCION y el mapa es MAPA (las mismas de la pregunta
@@ -15022,6 +15202,12 @@ sincronizarControles();
 pintarPedido();          // el pedido guardado de la visita anterior
 actualizar(true);
 cargarUsados();          // los valores de toma de usados (datos/usados.json, 05/10)
+cargarResenas();         // el puntaje y las reseñas de Google (datos/resenas.json, 13/10)
+$('sello-google').addEventListener('click', e => {
+  if(e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  irAResenas();
+});
 addEventListener('online', () => { if(!USADOS) cargarUsados(); });
 
 /* Con la pestaña de fondo no se baja nada (29/09): eran unos 105 KB y cuatro

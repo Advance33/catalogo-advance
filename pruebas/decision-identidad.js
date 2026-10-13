@@ -19,7 +19,7 @@
 //   6.6 B  en pantallas tactiles, mas zona para el dedo con el mismo dibujo:
 //          puntitos de 24, + y WhatsApp de 43x44, X de 44, contadores de 42 y
 //          40, "Ver pedido" de 44 de alto, sin pisarse. En la compu, nada
-//   6.7 B  el pie con "Advance Tecno · Av. De los Incas 5150, 1A, CABA · Ver
+//   6.7 B  el pie con "Advance Tecno · Av. de los Incas 5150, 1A, CABA · Ver
 //          en mapa · WhatsApp +54 9 11 2475-1466 · Atencion con cita previa",
 //          como la muestra B, todo de la configuracion (DIRECCION, MAPA,
 //          WHATSAPP, SERVICIO.retiro); sin horario, redes ni razon social; lo
@@ -547,7 +547,7 @@ function probarPie(){
   const esperado = ['Advance Tecno', ...(DIRECCION ? [DIRECCION] : []), ...(MAPA ? ['Ver en mapa'] : []),
                     ...(WHATSAPP ? ['WhatsApp ' + numero] : []), ...(cita ? ['Atención con cita previa'] : [])];
   ok(JSON.stringify(partes) === JSON.stringify(esperado), '[6.7] dice ' + esperado.join(' · '), partes.join(' · '));
-  ok(DIRECCION !== 'Av. De los Incas 5150, 1A, CABA' || partes[1] === 'Av. De los Incas 5150, 1A, CABA',
+  ok(DIRECCION !== 'Av. de los Incas 5150, 1A, CABA' || partes[1] === 'Av. de los Incas 5150, 1A, CABA',
      '[6.7] la direccion entera, con el 1A, como la muestra', partes[1]);
   const flot = document.getElementById('wa-flotante');
   const a = [...pie.querySelectorAll('a')].find(x => /wa\.me\//.test(x.getAttribute('href') || ''));

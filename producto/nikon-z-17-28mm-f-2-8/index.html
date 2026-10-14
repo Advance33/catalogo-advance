@@ -109,11 +109,11 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
 </main>
 <footer>
   <b>Advance Tecno</b>
-  <span>Av. De los Incas 5150, 1A, CABA · Envíos a todo el país · Atención con cita previa</span>
+  <span>Av. de los Incas 5150, 1A, CABA · Envíos a todo el país · Atención con cita previa</span>
   <span><a href="https://wa.me/5491124751466" target="_blank" rel="noopener">WhatsApp +54 9 11 2475-1466</a> · <a href="https://maps.app.goo.gl/kzwGpTwUNLkTEwWRA" target="_blank" rel="noopener">Ver en el mapa</a></span>
   <span>Precios sujetos a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</span>
 </footer>
-<script id="datos" type="application/json">{"versiones": [{"version": "Estándar", "color": "", "precio": 1375, "stock": true, "clave": "LEN-NIK-022", "foto": "fotos/sinfondo/AT-0274.webp", "wa": "https://wa.me/5491124751466?text=Hola!%20Me%20interesa%20el%20Nikon%20Z%2017-28mm%20F%2F2.8.%20%C2%BFMe%20pas%C3%A1s%20info%3F"}], "advapp": "https://advapp-blond.vercel.app/api/catalog?resource=tecno-web", "cuotas": 12, "cotizacion": {"tipo": "blue", "recargo": 0, "recargoFijo": 20, "valor": 1560}}</script>
+<script id="datos" type="application/json">{"versiones": [{"version": "Estándar", "color": "", "precio": 1375, "stock": true, "clave": "LEN-NIK-022", "foto": "fotos/sinfondo/AT-0274.webp", "wa": "https://wa.me/5491124751466?text=Hola!%20Me%20interesa%20el%20Nikon%20Z%2017-28mm%20F%2F2.8.%20%C2%BFMe%20pas%C3%A1s%20info%3F"}], "advapp": "https://advapp-blond.vercel.app/api/catalog?resource=tecno-web", "cuotas": 12, "cotizacion": {"tipo": "blue", "recargo": 0, "recargoFijo": 20, "valor": 1570}}</script>
 <script>
 (() => {
   const D = JSON.parse(document.getElementById('datos').textContent);
@@ -147,7 +147,7 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
       caja.innerHTML = `<b>USD ${plata(x.precio)}</b><i>${tc ? '≈ $ ' + plata(x.precio * tc) + ' · ' : ''}${D.cuotas ? 'hasta ' + D.cuotas + ' cuotas' : ''}</i>`;
     }else{
       caja.className = 'precio sin';
-      caja.innerHTML = '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entra</i>';
+      caja.innerHTML = '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entre</i>';
     }
     document.querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { version = b.dataset.v; color = null; pintar(); });
     // (los data-v y data-c llevan el texto tal cual: se compara con el de la versión)

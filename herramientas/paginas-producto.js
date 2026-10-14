@@ -17,9 +17,15 @@
    paginasDeProducto() devuelve
      { generado_en, cotizacion: { tipo, recargo, recargoFijo, valor },
        whatsapp, cuotas, modelos: [ { familia, titulo, marca, rubro, categoria,
-         clave, desde, hasta, stock, incluye, regalo, foto, foto_og, wa,
-         versiones: [ { version, color, precio, stock, clave, foto } ],
-         descripcion: { venta, importante: [{ t, x }], ficha: [{ grupo, filas }] } | null } ] } */
+         clave, sku, desde, hasta, stock, usado, incluye, regalo, foto, foto_og, wa,
+         versiones: [ { version, color, precio, stock, clave, sku, foto, wa, aviso } ],
+         descripcion: { venta, importante: [{ t, x }], ficha: [{ grupo, filas }] } | null } ] }
+   (13/10/2026, auditoría W3-06) El precio y el stock de hoy se siguen
+   calculando (ordenan las versiones), pero paginas-producto.py ya NO los
+   escribe en el HTML: los pone el script de la página con lo de ADVAPP del
+   momento. Por eso cada versión lleva los dos WhatsApp (wa: la consulta,
+   aviso: "avisame cuando entre") y su sku, para encontrarla si ADVAPP le
+   cambia el ID (W3-03). */
 
 // La ruta de una foto dentro del sitio ("fotos/sinfondo/AT-0072-03.webp"); la de
 // afuera (la de respaldo de ADVAPP) queda entera.
@@ -85,8 +91,9 @@ async function paginasDeProducto(){
         // El WhatsApp de cada versión y color, el mismo de la ficha (06/10:
         // la página mandaba siempre el de la versión del "desde")
         versiones.push({ version, color: c, precio: Math.round(Number(v.precio)),
-                         stock: !!v.stock, clave: clave(v), foto: ppRuta(foto),
-                         wa: linkWA(v.stock ? mensajeWA(v, c) : mensajeAviso(v, c)) });
+                         stock: !!v.stock, clave: clave(v), sku: String(v.skuVariante || '').trim(),
+                         foto: ppRuta(foto),
+                         wa: linkWA(mensajeWA(v, c)), aviso: linkWA(mensajeAviso(v, c)) });
       }
     }
     const conStock = versiones.filter(x => x.stock);
@@ -100,6 +107,9 @@ async function paginasDeProducto(){
       categoria: m.cat || rep.cat || '',
       rubro: plural(m.cat || rep.cat || ''),
       clave: clave(rep),
+      sku: String(rep.skuVariante || '').trim(),
+      // Usado (W3-10): para Google, UsedCondition y no NewCondition
+      usado: typeof esUsadoModelo === 'function' ? esUsadoModelo(m) : false,
       desde: Math.min(...precios),
       hasta: Math.max(...precios),
       stock: versiones.some(x => x.stock),

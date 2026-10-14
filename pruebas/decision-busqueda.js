@@ -380,7 +380,11 @@ async function consulta(){
   const esperado = linkWA('Hola! Estoy buscando: ' + q + '\n¿Lo consiguen?');
   ok(!!a && dbTxt(a) === 'Preguntanos si lo conseguimos' && a.href === esperado && a.target === '_blank' && /noopener/.test(a.rel),
      '[3.3] el boton "Preguntanos si lo conseguimos" abre WhatsApp con lo buscado', a && decodeURIComponent(a.href.split('text=')[1] || ''));
-  ok(!!a && !!a.querySelector('svg') && v.querySelectorAll('button, a').length === 1, '[3.3] con el icono de WhatsApp, y es la unica salida');
+  /* 13/10/2026 (auditoria W3-12): ademas puede ofrecer lo mas parecido
+     ("Ver «xiaomi 15»") y, si se busca un usado, el cotizador. Ninguna otra. */
+  const otras = v ? [...v.querySelectorAll('button, a')].filter(x => x !== a) : [];
+  ok(!!a && !!a.querySelector('svg') && otras.every(x => x.hasAttribute('data-parecido') || x.hasAttribute('data-cotizar')),
+     '[3.3] con el icono de WhatsApp; las otras salidas son solo lo parecido o el cotizador', otras.map(dbTxt).join(' | ') || 'la unica');
   ok(!/te lo conseguimos|lo conseguimos seguro|garantizamos/i.test(v.textContent), '[3.3] pregunta, no promete');
   const hayNov = novedades().length;
   ok($('sugeridos').hidden === !hayNov && (!hayNov || /Lo último que entró/.test($('sugeridos').textContent)),

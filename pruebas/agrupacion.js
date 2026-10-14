@@ -338,7 +338,10 @@ function correrPruebas(){
   // 01/10/2026: salvo que esa fila sea la version "Base" del modelo (la que no
   // agrega nada: "Drone DJI Mini 5 Pro" al lado de sus combos). Eso no es
   // rendirse: es el modelo pelado.
-  const enteros = multi.filter(m => m.variantes.length > 1 && m.variantes.some(v => v.desc === m.desc && v.etiqueta !== 'Base') &&
+  // 13/10/2026 (D17 A de Benja): ese Mini 5 Pro trae "+ 4 Baterías" y su
+  // version se llama "4 baterías" en vez de "Base": tampoco es rendirse.
+  const pelada = v => v.etiqueta === 'Base' || (!!bateriasDelKit(v.incluye) && v.etiqueta === bateriasDelKit(v.incluye));
+  const enteros = multi.filter(m => m.variantes.length > 1 && m.variantes.some(v => v.desc === m.desc && !pelada(v)) &&
                                     !m.variantes.every(v => v.desc === m.desc));
   ok(!enteros.length, 'ningun grupo se titula con el nombre entero de una de sus filas',
      enteros.map(m => m.desc).slice(0, 3).join(' | ') || 'ninguno');

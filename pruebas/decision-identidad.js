@@ -545,7 +545,10 @@ function probarPie(){
   const partes = [...pie.children].filter(x => !x.classList.contains('sep')).map(diTxt);
   const cita = /cita previa/i.test((SERVICIO.retiro || []).join(' '));
   const esperado = ['Advance Tecno', ...(DIRECCION ? [DIRECCION] : []), ...(MAPA ? ['Ver en el mapa'] : []),
-                    ...(WHATSAPP ? ['WhatsApp ' + numero] : []), ...(cita ? ['Atención con cita previa'] : [])];
+                    ...(WHATSAPP ? ['WhatsApp ' + numero] : []),
+                    // Instagram despues del WhatsApp (13/10/2026, D16 A de Benja)
+                    ...(INSTAGRAM_TECNO ? ['Instagram @' + INSTAGRAM_TECNO] : []),
+                    ...(cita ? ['Atención con cita previa'] : [])];
   ok(JSON.stringify(partes) === JSON.stringify(esperado), '[6.7] dice ' + esperado.join(' · '), partes.join(' · '));
   ok(DIRECCION !== 'Av. de los Incas 5150, 1A, CABA' || partes[1] === 'Av. de los Incas 5150, 1A, CABA',
      '[6.7] la direccion entera, con el 1A, como la muestra', partes[1]);
@@ -560,8 +563,11 @@ function probarPie(){
   ok(pie.querySelectorAll('.sep').length === esperado.length - 1 && [...pie.querySelectorAll('.sep')].every(s => s.getAttribute('aria-hidden') === 'true'),
      '[6.7] separados por "·" que el lector no lee');
   const todo = diTxt(footer);
-  ok(!/horario|raz[oó]n social|instagram|\[Pedro/i.test(todo),
-     '[6.7] sin horario, redes ni razon social (eso es la C, con datos de Pedro)', todo.slice(0, 60));
+  ok(!/horario|raz[oó]n social|facebook|tiktok|\[Pedro/i.test(todo),
+     '[6.7] sin horario ni razon social (eso es la C, con datos de Pedro); de las redes, solo Instagram (D16 A, 13/10/2026)', todo.slice(0, 60));
+  const ig = INSTAGRAM_TECNO && [...pie.querySelectorAll('a')].find(x => diTxt(x) === 'Instagram @' + INSTAGRAM_TECNO);
+  if(INSTAGRAM_TECNO) ok(!!ig && ig.getAttribute('href') === 'https://www.instagram.com/' + INSTAGRAM_TECNO + '/' && ig.target === '_blank' && /noopener/.test(ig.rel),
+                         '[6.7] "Instagram @' + INSTAGRAM_TECNO + '" abre el perfil (D16 A)', ig && ig.getAttribute('href'));
   ok(footer.querySelector('.pie-legal #pie-cotiz') && /Precios sujetos a cambio sin previo aviso · Consultá disponibilidad antes de comprar/.test(todo),
      '[6.7] abajo sigue la cotizacion y "Precios sujetos a cambio"');
   const b = pie.querySelector('b'), csb = b && getComputedStyle(b), csp = getComputedStyle(pie);
@@ -587,8 +593,8 @@ function probarPie(){
     flot.removeAttribute('href');
     pintarPie();
     ok(!/WhatsApp/.test(diTxt(pie)) && !pie.hidden, '[6.7] sin WhatsApp, esa parte no va', diTxt(pie));
-    pintarPie({ direccion: '', mapa: '' });
-    ok(pie.hidden && !diTxt(pie), '[6.7] y sin nada (ni direccion, ni mapa, ni WhatsApp, ni cita): la linea no aparece');
+    pintarPie({ direccion: '', mapa: '', instagram: '' });
+    ok(pie.hidden && !diTxt(pie), '[6.7] y sin nada (ni direccion, ni mapa, ni WhatsApp, ni Instagram, ni cita): la linea no aparece');
   } finally {
     SERVICIO.retiro = retiro;
     if(href) flot.setAttribute('href', href);

@@ -54806,7 +54806,15 @@
         },
         {
           "titulo": "Hasta 110.000 rpm",
-          "texto": "Motor Dyson Hyperdymium de alta presión, con un chorro de aire controlado."
+          "texto": "Motor Dyson Hyperdymium: flujo de aire de alta presión, con un chorro de aire controlado."
+        },
+        {
+          "titulo": {
+            "proveedor": "5 accesorios en la caja"
+          },
+          "texto": {
+            "proveedor": "Concentrador profesional, accesorios para un secado potente y para un secado suave, boquilla alisadora y accesorio para cabellos encrespados. El secador reconoce cada uno y ajusta el calor y el aire."
+          }
         },
         {
           "titulo": "4 temperaturas y 3 velocidades",
@@ -54856,7 +54864,7 @@
             ],
             [
               "Cable",
-              "Más largo que el del Supersonic. Dyson publica 2,8 m en España y 3,2 m en China: cambia según el mercado"
+              "Más largo que el del Supersonic: 3,2 m en la versión de China (Dyson publica 2,8 m en España)"
             ],
             [
               "Filtro",
@@ -54874,8 +54882,14 @@
           ]
         },
         {
-          "grupo": "Alimentación",
+          "grupo": "Versión",
           "datos": [
+            [
+              "Mercado",
+              {
+                "proveedor": "China"
+              }
+            ],
             [
               "Voltaje",
               {
@@ -54888,9 +54902,9 @@
           "grupo": "Qué trae",
           "datos": [
             [
-              "Estuche",
+              "En la caja",
               {
-                "proveedor": "No trae estuche"
+                "proveedor": "Secador y 5 accesorios: boquilla concentradora profesional, accesorio para un secado potente, accesorio para un secado suave, boquilla alisadora y accesorio para cabellos encrespados. No trae estuche"
               }
             ]
           ]
@@ -54908,14 +54922,22 @@
         {
           "texto": "dyson.cn/522276-01-dyson-supersonic-hd18-505d.html",
           "url": "https://www.dyson.cn/522276-01-dyson-supersonic-hd18-505d.html"
+        },
+        {
+          "texto": "dyson.es/cuidado-del-cabello/secador-de-pelo/supersonic-nural/liso-ondulado-ceramic-pink-rose-gold",
+          "url": "https://www.dyson.es/cuidado-del-cabello/secador-de-pelo/supersonic-nural/liso-ondulado-ceramic-pink-rose-gold"
+        },
+        {
+          "texto": "dyson.co.uk/hair-care/hair-dryers/supersonic-nural/straight-wavy-ceramic-pink-rose-gold",
+          "url": "https://www.dyson.co.uk/hair-care/hair-dryers/supersonic-nural/straight-wavy-ceramic-pink-rose-gold"
         }
       ],
       "proveedor": {
-        "fuente": "Lista del proveedor (13/10/2026), título «PRODUCTOS DYSON (220V) CH SPECS»: «DYSON HD18 Hair Dryer R Professional (Sin estuche) - Vinca Blue/Topaz».",
-        "aviso": "el voltaje y que no trae estuche son dato del proveedor"
+        "fuente": "Lista del proveedor (13/10/2026), título «PRODUCTOS DYSON (220V) CH SPECS»: «DYSON HD18 Hair Dryer R Professional (Sin estuche) - Vinca Blue/Topaz». Respuesta del proveedor (14/10/2026), con foto de la caja abierta: «Accesorios: 1 powerful air attachment, 1 pro concentrator, 1 smoothing nozzle, 1 gentle air attachment, 1 flyaway attachment». Benja aclaró el 14/10/2026 que el «CH SPECS» de esa lista quiere decir China, y eligió que la web lo diga (opción a).",
+        "aviso": "la versión (China), el voltaje, que no trae estuche y los accesorios de la caja son datos del proveedor"
       },
-      "verificado": "2026-10-13",
-      "notas": "El proveedor lo lista como «DYSON HD18 Hair Dryer R Professional (Sin estuche) - Vinca Blue/Topaz», en una lista titulada «PRODUCTOS DYSON (220V) CH SPECS». Producto confirmado: la página «azul-indigo» de dyson.es es este mismo color en versión europea (identificador «HD18 Pro EU/TR/ZA VnBu/Tz», SKU 522266-01, nombre global «Supersonic r PRO Vinca blue topaz»: «Azul Índigo» es cómo Dyson España llama al Vinca Blue/Topaz); dyson.cn vende el «Supersonic r 精准造型吹风机专业版 HD18» en 湛蓝紫色 y dyson.co.uk también lo tiene en Vinca Blue/Topaz. «CH SPECS» NO está aclarado: no se afirma ni China ni Europa (en los códigos de producto de Dyson «CH» es Suiza: «EU/CH/IL/EG/MEA»). Sólo se muestra lo que el proveedor dice: 220 V y sin estuche. PREGUNTAR AL PROVEEDOR: qué quiere decir «CH», qué enchufe trae, y si la unidad trae accesorios y cuáles (sólo dice «Sin estuche»). Por eso la entrada no da por hecho que traiga accesorios: sólo dice que el secador lee el chip RFID de los accesorios inteligentes. Los de la caja cambian según el país (dyson.co.uk: concentrador, difusor, peine, Gentle y Powerful; dyson.cn: concentrador, Powerful, Gentle, alisador y antiencrespamiento). Cable: dyson.es dice 2,8 m en el texto y 280 cm en la ficha, con la nota «puede variar ligeramente según el mercado»; dyson.cn 3,2 m; dyson.co.uk 3.200 mm en la ficha y 3,3 m y 2,8 m en el texto: se dicen España y China. Afuera: peso (0,65 kg en dyson.es, 0,942 kg en dyson.co.uk, 325 g de cuerpo en el texto de dyson.co.uk) y W (1.600 y 1.700 W en la misma ficha de dyson.co.uk). Fuentes: 30 %/20 % (el 20 % es sobre el peso del cuerpo: nota 2 de dyson.es y dyson.co.uk), 10 láminas y RFID en dyson.es, dyson.co.uk y dyson.cn; 110.000 rpm, dyson.es y dyson.co.uk; 4 temperaturas con aire frío, 78 dBA e iones, fichas de dyson.es y dyson.co.uk; 3 velocidades, ficha de dyson.co.uk; luz amarilla del filtro, dyson.es y dyson.cn; filtro desmontable, dyson.cn; filtro más duradero y cable más largo, dyson.es y dyson.co.uk.\nVerificación 1 (13/10): «Versión: China (CH specs), 220 V» pasó a «Voltaje: 220 V» (China era una deducción); el cable pasó a los dos valores publicados; los accesorios inteligentes salieron de «Por qué elegirlo» y de «Lo más importante» (el proveedor no dice que los traiga)."
+      "verificado": "2026-10-14",
+      "notas": "El proveedor lo lista como «DYSON HD18 Hair Dryer R Professional (Sin estuche) - Vinca Blue/Topaz», en una lista titulada «PRODUCTOS DYSON (220V) CH SPECS». Producto confirmado: la página «azul-indigo» de dyson.es es este mismo color en versión europea (identificador «HD18 Pro EU/TR/ZA VnBu/Tz», SKU 522266-01, nombre global «Supersonic r PRO Vinca blue topaz»: «Azul Índigo» es cómo Dyson España llama al Vinca Blue/Topaz); dyson.cn vende el «Supersonic r 精准造型吹风机专业版 HD18» en 湛蓝紫色 y dyson.co.uk también lo tiene en Vinca Blue/Topaz. «CH SPECS» es China (lo aclaró Benja el 14/10/2026) y los accesorios de la caja los dijo el proveedor ese día: ver el último párrafo. Falta preguntar sólo qué enchufe trae. Los kits cambian según el país (dyson.co.uk: concentrador, difusor, peine, Gentle y Powerful; dyson.es: concentrador, flyaway, peine, Powerful y difusor; dyson.cn: concentrador, Powerful, Gentle, alisador y antiencrespamiento), por eso los accesorios van con la marca del proveedor. Cable: dyson.es dice 2,8 m en el texto y 280 cm en la ficha, con la nota «puede variar ligeramente según el mercado»; dyson.cn 3,2 m; dyson.co.uk 3.200 mm en la ficha y 3,3 m y 2,8 m en el texto: se dicen España y China. Afuera: peso (0,65 kg en dyson.es, 0,942 kg en dyson.co.uk, 325 g de cuerpo en el texto de dyson.co.uk) y W (1.600 y 1.700 W en la misma ficha de dyson.co.uk). Fuentes: 30 %/20 % (el 20 % es sobre el peso del cuerpo: nota 2 de dyson.es y dyson.co.uk), 10 láminas y RFID en dyson.es, dyson.co.uk y dyson.cn; 110.000 rpm, dyson.es y dyson.co.uk; 4 temperaturas con aire frío, 78 dBA e iones, fichas de dyson.es y dyson.co.uk; 3 velocidades, ficha de dyson.co.uk; luz amarilla del filtro, dyson.es y dyson.cn; filtro desmontable, dyson.cn; filtro más duradero y cable más largo, dyson.es y dyson.co.uk.\nVerificación 1 (13/10): «Versión: China (CH specs), 220 V» pasó a «Voltaje: 220 V» (China era una deducción); el cable pasó a los dos valores publicados; los accesorios inteligentes salieron de «Por qué elegirlo» y de «Lo más importante» (el proveedor no dice que los traiga).\nRespuesta del proveedor (14/10/2026): El proveedor pasó los accesorios de la caja (powerful air, pro concentrator, smoothing nozzle, gentle air y flyaway) y Benja aclaró que «CH» es China. Es el kit que publica dyson.cn para el HD18 (522276-01): 专业造型风嘴, 强劲气流风嘴, 柔和风嘴, 顺滑风嘴 y 防飞翘风嘴. Los nombres en castellano son los de dyson.es: «Boquilla concentradora profesional», «Accesorio para un secado potente» y «Accesorio para cabellos encrespados» en la página del Supersonic r Profesional; «Accesorio para un secado suave» y «boquilla alisadora» («Boquilla ancha alisadora») en la del Supersonic Nural, porque dyson.es no vende esas dos piezas para el r.\n14/10/2026: Benja aclaró que «CH SPECS» es China y eligió mostrarlo en la ficha: el grupo «Alimentación» pasó a «Versión», con «Mercado: China» y «Voltaje: 220 V», los dos como dato del proveedor."
     },
     {
       "modelo": "Dyson PencilVac Fluffycones",
@@ -55043,8 +55065,14 @@
           ]
         },
         {
-          "grupo": "Alimentación",
+          "grupo": "Versión",
           "datos": [
+            [
+              "Mercado",
+              {
+                "proveedor": "China"
+              }
+            ],
             [
               "Voltaje",
               {
@@ -55073,11 +55101,11 @@
         }
       ],
       "proveedor": {
-        "fuente": "Lista del proveedor (13/10/2026), título «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson Sv50 Pencilvac Fluffycones».",
-        "aviso": "el voltaje es dato del proveedor"
+        "fuente": "Lista del proveedor (13/10/2026), título «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson Sv50 Pencilvac Fluffycones». Benja aclaró el 14/10/2026 que el «CH SPECS» de esa lista quiere decir China, y eligió que la web lo diga (opción a).",
+        "aviso": "la versión (China) y el voltaje son datos del proveedor"
       },
-      "verificado": "2026-10-13",
-      "notas": "El proveedor lo lista como «Dyson Sv50 Pencilvac Fluffycones», en una lista titulada «PRODUCTOS DYSON (220V) CH SPECS». SV50 es el código oficial de Dyson para la PencilVac (dyson.co.uk identifica su página como «SV50 PVac FCones DP20 UK/IE/MEA MatBk», SKU 492690-01): el nombre del proveedor calza con el producto. «CH SPECS» NO está aclarado: no se afirma ni China ni Europa (en los códigos de producto de Dyson «CH» es Suiza). Sólo se muestra lo que el proveedor dice: 220 V. PREGUNTAR AL PROVEEDOR: qué quiere decir «CH», qué enchufe trae el cargador y qué accesorios trae la caja (según dyson.com.sg el modo de mano se arma con un accesorio de la caja). No hay página de dyson.es para la PencilVac. Sin accesorios ni «En la caja»: dyson.co.uk dice cabezal, cargador, accesorio combinado rotativo y base magnética, pero no está confirmado qué trae la unidad. Afuera: tiempo de carga (la ficha de dyson.co.uk y dyson.cn dicen 3,5 h, las preguntas frecuentes de dyson.co.uk y dyson.com.sg dicen 4 h con la batería descargada), altura para pasar bajo muebles (95 mm en dyson.co.uk y dyson.com.sg, 75 mm en dyson.cn) y la potencia en AW (no la encontré en una página oficial). «Sólo pisos duros» sale de las preguntas frecuentes de dyson.co.uk y dyson.com.sg. La ficha de dyson.co.uk dice «99.9% to 0.3 microns» y el texto 99,99 %: se usó 99,99 %, que dicen también dyson.com.sg y dyson.cn (es la cifra con norma de ensayo, ASTM F1977 en modo Boost). Medidas y 0,08 L, sólo en la ficha de dyson.co.uk. LCD con modo y tiempo, sólo dyson.cn. Ningún dato de la entrada depende de la versión de la unidad.\nVerificación 1 (13/10): «Versión: China (CH specs), 220 V» pasó a «Voltaje: 220 V» (China era una deducción). A la app se le sumó la aclaración del país (dyson.es/app, nota 5: «Las funciones de la app pueden variar según el mercado») y esa página se sumó a fuentes."
+      "verificado": "2026-10-14",
+      "notas": "El proveedor lo lista como «Dyson Sv50 Pencilvac Fluffycones», en una lista titulada «PRODUCTOS DYSON (220V) CH SPECS». SV50 es el código oficial de Dyson para la PencilVac (dyson.co.uk identifica su página como «SV50 PVac FCones DP20 UK/IE/MEA MatBk», SKU 492690-01): el nombre del proveedor calza con el producto. «CH SPECS» es China (lo aclaró Benja el 14/10/2026): la ficha lo muestra como dato del proveedor, junto con los 220 V. PREGUNTAR AL PROVEEDOR: qué enchufe trae el cargador y qué accesorios trae la caja (según dyson.com.sg el modo de mano se arma con un accesorio de la caja). No hay página de dyson.es para la PencilVac. Sin accesorios ni «En la caja»: dyson.co.uk dice cabezal, cargador, accesorio combinado rotativo y base magnética, pero no está confirmado qué trae la unidad. Afuera: tiempo de carga (la ficha de dyson.co.uk y dyson.cn dicen 3,5 h, las preguntas frecuentes de dyson.co.uk y dyson.com.sg dicen 4 h con la batería descargada), altura para pasar bajo muebles (95 mm en dyson.co.uk y dyson.com.sg, 75 mm en dyson.cn) y la potencia en AW (no la encontré en una página oficial). «Sólo pisos duros» sale de las preguntas frecuentes de dyson.co.uk y dyson.com.sg. La ficha de dyson.co.uk dice «99.9% to 0.3 microns» y el texto 99,99 %: se usó 99,99 %, que dicen también dyson.com.sg y dyson.cn (es la cifra con norma de ensayo, ASTM F1977 en modo Boost). Medidas y 0,08 L, sólo en la ficha de dyson.co.uk. LCD con modo y tiempo, sólo dyson.cn. Ningún dato de la entrada depende de la versión de la unidad.\nVerificación 1 (13/10): «Versión: China (CH specs), 220 V» pasó a «Voltaje: 220 V» (China era una deducción). A la app se le sumó la aclaración del país (dyson.es/app, nota 5: «Las funciones de la app pueden variar según el mercado») y esa página se sumó a fuentes.\n14/10/2026: Benja aclaró que «CH SPECS» es China y eligió mostrarlo en la ficha: el grupo «Alimentación» pasó a «Versión», con «Mercado: China» y «Voltaje: 220 V», los dos como dato del proveedor."
     },
     {
       "modelo": "Dyson V15 Detect Fluffy (en la lista del proveedor: V15 Fluffy)",
@@ -55121,6 +55149,10 @@
             [
               "Ciclones",
               "14, con fuerza de hasta 100.000 g"
+            ],
+            [
+              "Succión",
+              "230 AW"
             ]
           ]
         },
@@ -55172,8 +55204,14 @@
           ]
         },
         {
-          "grupo": "Alimentación",
+          "grupo": "Versión",
           "datos": [
+            [
+              "Mercado",
+              {
+                "proveedor": "China"
+              }
+            ],
             [
               "Voltaje",
               {
@@ -55198,11 +55236,11 @@
         }
       ],
       "proveedor": {
-        "fuente": "Lista del proveedor (13/10/2026), título «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson V15 Fluffy Aspiradora».",
-        "aviso": "el voltaje es dato del proveedor"
+        "fuente": "Lista del proveedor (13/10/2026), título «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson V15 Fluffy Aspiradora». Benja aclaró el 14/10/2026 que el «CH SPECS» de esa lista quiere decir China, y eligió que la web lo diga (opción a).",
+        "aviso": "la versión (China) y el voltaje son datos del proveedor"
       },
-      "verificado": "2026-10-13",
-      "notas": "El proveedor lo lista como «Dyson V15 Fluffy Aspiradora», en una lista titulada «PRODUCTOS DYSON (220V) CH SPECS». No dice «Detect», pero no hay ninguna V15 sin «Detect» en las páginas oficiales y la propia dyson.cn la abrevia «V15 Fluffy» (nota 8 de la página de la gama). «CH SPECS» NO está aclarado: no se afirma ni China ni Europa (en los códigos de producto de Dyson «CH» es Suiza: dyson.es identifica la V15 Detect Absolute como «SV47 V15 Detect Abs EU/CH/MEA»). Sólo se muestra lo que el proveedor dice: 220 V. PREGUNTAR AL PROVEEDOR: qué quiere decir «CH» y qué enchufe trae el cargador. Succión AFUERA hasta confirmar la versión: dyson.cn dice 230 AW (V15 Detect Fluffy) y la V15 Detect Absolute, 240 AW (la europea de dyson.es y la australiana, dyson.com.au/dyson-v15-detect-absolute-447955-01-yellow-nickel; ninguna de las dos está en fuentes). Si el proveedor confirma China, vuelve «Succión: 230 AW». Nada de accesorios ni «En la caja» (dyson.cn habla de «1+6» accesorios y de un paquete con batería extra, y no sabemos cuál trae la unidad). Afuera: peso (dyson.com.au da 3,1 kg para la Absolute, no para la Fluffy). Fuentes: 60 min/5 min, LCD con los cuatro tamaños en micras, luz verde en el rodillo suave y modo Auto, dyson.cn (sólo dyson.cn publica los cuatro tamaños en micras, los 5 min en Boost, que la luz es verde y que la pantalla es LCD; ninguna página oficial los contradice); 125.000 rpm, 14 ciclones y 100.000 g, 15.000 lecturas, cinco etapas al 99,99 % de 0,3 micras y batería de siete celdas desmontable, dyson.cn (V15 Detect) y dyson.com.au. La página de dyson.com.au que está en fuentes es la general de la gama V15 Detect (habla de la Absolute) y no trae la succión: queda como control de los datos comunes.\nVerificación 1 (13/10): «Versión: China (CH specs), 220 V» pasó a «Voltaje: 220 V» (China era una deducción) y se sacó «Succión: 230 AW (Dyson China)»."
+      "verificado": "2026-10-14",
+      "notas": "El proveedor lo lista como «Dyson V15 Fluffy Aspiradora», en una lista titulada «PRODUCTOS DYSON (220V) CH SPECS». No dice «Detect», pero no hay ninguna V15 sin «Detect» en las páginas oficiales y la propia dyson.cn la abrevia «V15 Fluffy» (nota 8 de la página de la gama). «CH SPECS» es China (lo aclaró Benja el 14/10/2026): la ficha lo muestra como dato del proveedor, junto con los 220 V. PREGUNTAR AL PROVEEDOR: qué enchufe trae el cargador. Succión: 230 AW, la que publica dyson.cn para la V15 Detect Fluffy (400471-01, en fuentes), ahora que la versión es la china (14/10/2026). No va la de la V15 Detect Absolute, 240 AW (la europea de dyson.es, dyson.co.uk y la australiana, dyson.com.au/dyson-v15-detect-absolute-447955-01-yellow-nickel; ninguna está en fuentes): es otra variante, y dyson.sa publica para la Absolute las dos cifras («240 AW» y «boost 230AW»). Nada de accesorios ni «En la caja» (dyson.cn habla de «1+6» accesorios y de un paquete con batería extra, y no sabemos cuál trae la unidad). Afuera: peso (dyson.com.au da 3,1 kg para la Absolute, no para la Fluffy). Fuentes: 60 min/5 min, LCD con los cuatro tamaños en micras, luz verde en el rodillo suave y modo Auto, dyson.cn (sólo dyson.cn publica los cuatro tamaños en micras, los 5 min en Boost, que la luz es verde y que la pantalla es LCD; ninguna página oficial los contradice); 125.000 rpm, 14 ciclones y 100.000 g, 15.000 lecturas, cinco etapas al 99,99 % de 0,3 micras y batería de siete celdas desmontable, dyson.cn (V15 Detect) y dyson.com.au. La página de dyson.com.au que está en fuentes es la general de la gama V15 Detect (habla de la Absolute) y no trae la succión: queda como control de los datos comunes.\nVerificación 1 (13/10): «Versión: China (CH specs), 220 V» pasó a «Voltaje: 220 V» (China era una deducción) y se sacó «Succión: 230 AW (Dyson China)».\n14/10/2026: Benja aclaró que «CH SPECS» es China y eligió mostrarlo en la ficha: el grupo «Alimentación» pasó a «Versión», con «Mercado: China» y «Voltaje: 220 V», los dos como dato del proveedor."
     },
     {
       "modelo": "Dyson V16 Piston Animal",
@@ -55232,7 +55270,7 @@
         },
         {
           "titulo": "Sensor y pantalla",
-          "texto": "Cuenta las partículas 15.000 veces por segundo y muestra en la LCD lo que aspiró."
+          "texto": "Cuenta las partículas hasta 15.000 veces por segundo y muestra en la LCD lo que aspiró."
         }
       ],
       "ficha": [
@@ -55321,7 +55359,7 @@
             ],
             [
               "Sensor de polvo",
-              "15.000 lecturas por segundo, adapta la potencia"
+              "Hasta 15.000 lecturas por segundo, adapta la potencia"
             ],
             [
               "Pantalla",
@@ -55334,8 +55372,14 @@
           ]
         },
         {
-          "grupo": "Alimentación",
+          "grupo": "Versión",
           "datos": [
+            [
+              "Mercado",
+              {
+                "proveedor": "China"
+              }
+            ],
             [
               "Voltaje",
               {
@@ -55364,11 +55408,11 @@
         }
       ],
       "proveedor": {
-        "fuente": "Lista del proveedor (13/10/2026), título «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson V16 Piston ANIMAL DS60».",
-        "aviso": "el voltaje es dato del proveedor"
+        "fuente": "Lista del proveedor (13/10/2026), título «PRODUCTOS DYSON (220V) CH SPECS»: «Dyson V16 Piston ANIMAL DS60». Benja aclaró el 14/10/2026 que el «CH SPECS» de esa lista quiere decir China, y eligió que la web lo diga (opción a).",
+        "aviso": "la versión (China) y el voltaje son datos del proveedor"
       },
-      "verificado": "2026-10-13",
-      "notas": "El proveedor lo lista como «Dyson V16 Piston ANIMAL DS60», en una lista titulada «PRODUCTOS DYSON (220V) CH SPECS». DS60 es de Dyson: dyson.es le da a este producto el nombre global «Dyson Piston Animal DS60 cordless vacuum» y lo identifica como «SV53-A 692B Ani EU/CH/IL/EG/MEA BCo/BCo» (SKU 492963-01). Confirma que es la V16 Piston Animal sin Submarine (la V16 Piston Animal Submarine es otro producto: no unificar). «CH SPECS» NO está aclarado: no se afirma ni China ni Europa (en ese código de Dyson «CH» es Suiza, junto a EU, IL y EG; dyson.cn la llama «Piston Animal V16», sin DS60). Sólo se muestra lo que el proveedor dice: 220 V. PREGUNTAR AL PROVEEDOR: qué quiere decir «CH» y qué enchufe trae el cargador. Si contesta China, considerar sacar «Carga: 4,5 h» (depende del cargador y dyson.cn no lo publica). Sin accesorios ni «En la caja»: dyson.es y dyson.co.uk listan cabezal, base de pared, rinconera, minicepillo 2.0, accesorio combinado y cargador, pero no sabemos qué trae la unidad. Afuera: peso (3,4 kg en la ficha y 3,5 kg con el cabezal en las preguntas de dyson.es), capacidad (1,3 L en la ficha y 1,35 L en las preguntas) y medidas. Fuentes: todo en dyson.es y casi todo en dyson.co.uk; dyson.cn confirma 315 AW, 70 min en Eco, pelo de 60 cm, 30 días, cinco etapas al 99,99 % de 0,1 micras, accesorios integrados, cambio de cabezal sin agacharse y depósito que queda limpio, y no publica en texto el motor de 900 W, los ciclones dinámicos, las siete celdas, la carga, la luz, el sensor, la LCD ni la app. La tabla de dyson.es y dyson.co.uk dice «99,9 % a 0,1 micras» y el texto 99,99 %: se usó el del texto (norma ASTM F3150). Baterías intercambiables, sólo dyson.es.\nVerificación 1 (13/10): «Versión: China (CH specs), 220 V» pasó a «Voltaje: 220 V» (China era una deducción). A la app se le sumó la aclaración del país (dyson.es/app, nota 5: «Las funciones de la app pueden variar según el mercado») y esa página se sumó a fuentes."
+      "verificado": "2026-10-14",
+      "notas": "El proveedor lo lista como «Dyson V16 Piston ANIMAL DS60», en una lista titulada «PRODUCTOS DYSON (220V) CH SPECS». DS60 es de Dyson: dyson.es le da a este producto el nombre global «Dyson Piston Animal DS60 cordless vacuum» y lo identifica como «SV53-A 692B Ani EU/CH/IL/EG/MEA BCo/BCo» (SKU 492963-01). Confirma que es la V16 Piston Animal sin Submarine (la V16 Piston Animal Submarine es otro producto: no unificar). «CH SPECS» es China (lo aclaró Benja el 14/10/2026): la ficha lo muestra como dato del proveedor, junto con los 220 V. PREGUNTAR AL PROVEEDOR: qué enchufe trae el cargador. «Carga: 4,5 h» queda: dyson.cn no la publica, pero la dicen dyson.es, dyson.co.uk y la página de dueños de dyson.co.id, y ninguna página oficial da otro número. Sin accesorios ni «En la caja»: dyson.es y dyson.co.uk listan cabezal, base de pared, rinconera, minicepillo 2.0, accesorio combinado y cargador, pero no sabemos qué trae la unidad. Afuera: peso (3,4 kg en la ficha y 3,5 kg con el cabezal en las preguntas de dyson.es), capacidad (1,3 L en la ficha y 1,35 L en las preguntas) y medidas. Fuentes: todo en dyson.es y casi todo en dyson.co.uk; dyson.cn confirma 315 AW, 70 min en Eco, pelo de 60 cm, 30 días, cinco etapas al 99,99 % de 0,1 micras, accesorios integrados, cambio de cabezal sin agacharse y depósito que queda limpio, y no publica en texto el motor de 900 W, los ciclones dinámicos, las siete celdas, la carga, la luz, el sensor, la LCD ni la app. La tabla de dyson.es y dyson.co.uk dice «99,9 % a 0,1 micras» y el texto 99,99 %: se usó el del texto (norma ASTM F3150). Baterías intercambiables, sólo dyson.es.\nVerificación 1 (13/10): «Versión: China (CH specs), 220 V» pasó a «Voltaje: 220 V» (China era una deducción). A la app se le sumó la aclaración del país (dyson.es/app, nota 5: «Las funciones de la app pueden variar según el mercado») y esa página se sumó a fuentes.\n14/10/2026: Benja aclaró que «CH SPECS» es China y eligió mostrarlo en la ficha: el grupo «Alimentación» pasó a «Versión», con «Mercado: China» y «Voltaje: 220 V», los dos como dato del proveedor."
     }
   ]
 }

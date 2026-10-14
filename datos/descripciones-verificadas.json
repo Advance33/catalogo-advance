@@ -941,12 +941,11 @@
     "https://www.dyson.es/app (control: nota 5, no está en fuentes)"
    ]
   },
-  "e234e09c99e4b10be32568a860dc94c7f1df9888ae673530f0bc38665f1a771f": {
+  "9397050d5843f72131a8949d084158f65b9714a2bd294907deb636d7d25d30ae": {
    "modelo": "Dyson PencilVac Fluffycones",
    "fecha": "2026-10-14",
-   "por": "prueba-mecanica",
-   "desde": "7d15741b9baec13aec154d071b69d3a5a45e99024487e237726fcc1b7d41416a",
-   "informe": "solo formato desde la verificada en origin/main (2026-10-13)",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://www.dyson.co.uk/vacuum-cleaners/cordless/pencilvac/fluffycones",
     "https://www.dyson.com.sg/pencilvac-fluffycones-black",
@@ -966,43 +965,44 @@
     "https://www.dyson.cn/533462-01-dyson-supersonic-hd16-ceramic-pink.html"
    ]
   },
-  "ae3c15c88bd84639bf37247adfb824690274e0891a1f06253e7bdc4ab6cb7a78": {
+  "3270c0a4b1524a67310c767cfb9c399ae9c94f560d70da1daa36fe3ca1f65cd3": {
    "modelo": "Dyson Supersonic r Professional HD18 (Vinca Blue · Topaz)",
    "fecha": "2026-10-14",
-   "por": "prueba-mecanica",
-   "desde": "ceafc14848e531f2c25fcdedb1576f5677aa9085ede8a578ec8ef657b60e9c47",
-   "informe": "solo formato desde la verificada en origin/main (2026-10-13)",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://www.dyson.es/empresas/cuidado-del-cabello/supersonic-r-pro/azul-indigo",
     "https://www.dyson.co.uk/commercial/hair-care/supersonic-r-pro-bright-copper",
-    "https://www.dyson.cn/522276-01-dyson-supersonic-hd18-505d.html"
+    "https://www.dyson.cn/522276-01-dyson-supersonic-hd18-505d.html",
+    "https://www.dyson.es/cuidado-del-cabello/secador-de-pelo/supersonic-nural/liso-ondulado-ceramic-pink-rose-gold",
+    "https://www.dyson.co.uk/hair-care/hair-dryers/supersonic-nural/straight-wavy-ceramic-pink-rose-gold",
+    "/Users/a.../catalogo-advance-trabajo/fotos-dyson/hd18-caja-vivi-14-10.png (foto del proveedor)"
    ]
   },
-  "4f6a4745d438f40a78774ef3cb35708dd7165143334a0c94c5ac524c62ef6b39": {
+  "f70f076c4632969bfe90995900fa2b58fe5ce114d10e6e7d9aa27530f2b28870": {
    "modelo": "Dyson V15 Detect Fluffy (en la lista del proveedor: V15 Fluffy)",
    "fecha": "2026-10-14",
-   "por": "prueba-mecanica",
-   "desde": "b5f8e901ffb0613d1db35bd060399de65c6d1fd6eb50b229e451395fc7855166",
-   "informe": "solo formato desde la verificada en origin/main (2026-10-13)",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://www.dyson.cn/400471-01-dyson-v15-detect-fluffy-blue.html",
     "https://www.dyson.cn/product/vacuum-cleaner/dyson-v15.html",
     "https://www.dyson.com.au/products/vacuum-cleaners/stick-vacuums/dyson-v15-detect/overview",
-    "https://www.dyson.es/aspiradoras/sin-cable/v15/detect-amarillo-niquel (control de las notas: 240 AW, no está en fuentes)",
-    "https://www.dyson.com.au/dyson-v15-detect-absolute-447955-01-yellow-nickel (control de las notas: 240 AW y 3,1 kg, no está en fuentes)"
+    "https://www.dyson.co.uk/vacuum-cleaners/cordless/v15/detect-yellow-nickel (control de la succión de la Absolute; no está en fuentes)",
+    "https://www.dyson.sa/en-SA/dyson-v15-detect-absolute (control de la succión de la Absolute; no está en fuentes)"
    ]
   },
-  "8a6de5be85fd5d8096b7a6d3dc787dee71365b33cba308da6e1cf2adb7bb09dc": {
+  "feac49b1844a85feefe91956589b1dbc9a1f1c9bd0094f184b2f6428af961b5d": {
    "modelo": "Dyson V16 Piston Animal",
    "fecha": "2026-10-14",
-   "por": "prueba-mecanica",
-   "desde": "34d6a6f2314e1bd5fe6acd65365941c754b205cedfc44ddd047181a37b043e78",
-   "informe": "solo formato desde la verificada en origin/main (2026-10-13)",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://www.dyson.es/aspiradoras/sin-cable/v16-piston-animal/mate-negro-cobre",
     "https://www.dyson.co.uk/vacuum-cleaners/cordless/v16-piston-animal/black-copper",
     "https://www.dyson.cn/dyson-496042-01-vacuum.html",
-    "https://www.dyson.es/app"
+    "https://www.dyson.es/app",
+    "https://www.dyson.co.id/en-ID/products/vacuum-cleaners/cordless/v16-piston-animal/owners (control de la carga; no está en fuentes)"
    ]
   },
   "47c395680fdf9648e1662d4b737e513c0c3c1c847d9e87a51c37f05ed65744bc": {

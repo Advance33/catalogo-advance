@@ -5716,7 +5716,12 @@ function puntajeDeBusqueda(txt, candidatos){
   return m => {
     const nombre = norm(m.titulo || m.desc);
     const alias = buscableDe(m).alias;
-    const tit = alias ? nombre + ' ' + alias : nombre;
+    /* La marca cuenta como parte del título (14/10/2026): la tarjeta la
+       muestra arriba del nombre, que sale sin ella (nombreGrupo). Sin esto,
+       con "sony" la "Batería Sony NP-FZ100" -que repite la marca en el
+       nombre- se llevaba los +3 que la "ZV-E10 II" no, empataban en 4 con el
+       -3 del accesorio y el desplegable ponía la batería primero. */
+    const tit = [norm(m.marca || ''), nombre, alias].filter(Boolean).join(' ');
     const cabeza = nombre.split(/\s(?:for|para|p\/)\s|\(/)[0];
     let s = 0;
     if(inicio.every(re => re.test(tit))) s += 3;

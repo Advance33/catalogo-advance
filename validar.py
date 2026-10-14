@@ -727,6 +727,10 @@ def regla_color_por_precio(filas, ctx):
 
     porgrupo = collections.defaultdict(list)
     for f in filas:
+        # Dos usados del mismo modelo y color a precios distintos son dos
+        # equipos, cada uno con su tarjeta (Benja, 14/10/2026): no es este caso.
+        if es_usado_declarado(f):
+            continue
         g = (f.get('Grupo') or '').strip()
         # Sin columna Grupo no hay forma barata de saber quién es hermano de
         # quién: esta regla simplemente no aplica y no inventa falsos avisos.
@@ -1182,6 +1186,14 @@ def leer_condicion_aceptada():
     return aceptadas
 
 
+def es_usado_declarado(f):
+    """Un equipo de la sección Usados (Benja, 14/10/2026): ADVAPP lo manda con
+    Condición "Usado" y la web lo muestra aparte, en su rubro, con el rótulo
+    "Usado" y una tarjeta por equipo. No es un nuevo que se coló en la carga:
+    las reglas que cuidan la promesa de "nuevo y sellado" no lo miran."""
+    return bool(re.match(r'^usad[oa]s?$', norm(limpio(f.get('Condición')) or '')))
+
+
 def regla_condicion(filas, ctx):
     """Productos que podrían no ser nuevos y sellados.
 
@@ -1198,6 +1210,8 @@ def regla_condicion(filas, ctx):
     aceptadas = leer_condicion_aceptada()
     fallas = []
     for f in filas:
+        if es_usado_declarado(f):
+            continue            # se vende como usado, a la vista (14/10)
         senales = set()
         cond = limpio(f.get('Condición'))
         if cond and not CONDICION_NUEVA.match(norm(cond)):

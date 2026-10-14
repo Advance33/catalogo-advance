@@ -210,7 +210,7 @@ function probarFiltroDeVersion(){
   const precios = LISTA.map(x => x.precio).filter(x => x !== null && x > 0);
   const minimo = precios.length ? Math.min(...precios) : null;
   const cab = dtTxt(document.querySelector('#rubro-cab .rc-tit p'));
-  ok(minimo !== null && cab.includes('desde USD ' + plata(minimo)), '[2.1] la cabecera se recalcula con lo filtrado', cab);
+  ok(minimo !== null && cab.includes('Desde USD ' + plata(minimo)), '[2.1] la cabecera se recalcula con lo filtrado', cab);
   ok(minimo !== null && MODELOS.some(m => m.variantes.some(v => cumple(v) && v.precio === minimo)),
      '[2.1] y hay un ' + CAP + ' a ese precio', 'USD ' + (minimo && plata(minimo)));
 
@@ -239,6 +239,8 @@ function probarFiltroDeVersion(){
       if(!x) return true;
       const e = dtEsperado(x, c);
       const usd = dtTxt(card.querySelector('.usd'));
+      // La tarjeta agotada dice "Sin stock" y ningun numero (13/10/2026, D15 B de Benja)
+      if(!e.stock) return usd !== 'Sin stock';
       return /desde/i.test(usd) !== e.desde || (e.min !== null && !usd.includes('USD ' + plata(e.min)));
     });
     ok(!malDom.length, '[2.1] ' + nombre + ': el numero y el "desde" de cada tarjeta dibujada',

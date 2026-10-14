@@ -15,7 +15,7 @@ nada (Pedro eligió la G, 05/10).
    modelos ("pasamelo a mí siempre", 05/10). Un valor que no está en su
    lista no se inventa.
 2. **Lo que no está en la lista no se toma.** El cotizador lo dice ("Por
-   ahora tomamos sólo estos modelos") y no ofrece nada más.
+   ahora tomamos solo estos modelos") y no ofrece nada más.
 3. **El valor es "si cumple todas las condiciones".** La batería por debajo
    del umbral resta lo que dice `bateria.resta`. Si cualquier otra
    condición no se cumple, no se muestra ningún número: "Mandanos los

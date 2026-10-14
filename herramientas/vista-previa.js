@@ -25,7 +25,10 @@
               version y el color ("256GB · E-Sim · Orange"); vacia si el
               titulo ya lo dice todo (un objetivo, un accesorio)
    - foto:    la foto propia que muestra la ficha al abrirse
-              ("fotos/AT-0072-03.jpg"), o '' si muestra la de ADVAPP o ninguna */
+              ("fotos/AT-0072-03.jpg"), o '' si muestra la de ADVAPP o ninguna
+   - sku:     el SKU de ADVAPP de la fila (SKU_VARIANTE), o '' (13/10/2026,
+              auditoría W3-03): la página lo manda en el link (&s=) para que la
+              web encuentre el modelo aunque mañana el ID ya no esté */
 
 /* Las partes de la version, partidas como las pestañas de la ficha: la memoria
    por un lado (memoriaDeOpcion) y el resto por el otro (restoDeOpcion). La
@@ -148,7 +151,8 @@ function vistasPrevias(){
       id, destino: clave(v), titulo,
       linea: vpLinea(m, v, titulo),
       // la que abre la ficha: htmlFoto(v, '', true), la grande
-      foto: vpFotoPropia(v.imagenGrande || v.imagen)
+      foto: vpFotoPropia(v.imagenGrande || v.imagen),
+      sku: String(p.skuVariante || '').trim()
     });
   }
   return {

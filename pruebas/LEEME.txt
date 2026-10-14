@@ -140,6 +140,19 @@ si alguna falta).
                   direccion limpia y sube arriba sin recargar; Cmd/Ctrl+clic
                   lo deja al navegador; el triangulo sigue siendo el easter
                   egg.
+  pedidos-13-10.js
+                  Los pedidos de Benja del 13/10: tocar la tarjeta de un
+                  mundo en cualquier lado lleva al rubro de la foto que se
+                  ve (con el drone a la vista, Drones); el nombre "Advance
+                  Tecno" responde igual que el triangulo; la vuelta al inicio
+                  se nota (y si ya se estaba ahi, se mueve solo el logo); los
+                  filtros propios de Camaras, Objetivos y Drones
+                  (FILTROS_RUBRO), contados aca por el SKU y el nombre; las
+                  reseñas de Google tal cual estan en datos/resenas.json; y
+                  "Desde" con mayuscula delante de cada precio. Y lo que
+                  eligio en el muestrario ese dia: los links de la barra de
+                  arriba (NAV) y su "Más", el bloque "Quiénes somos"
+                  (NOSOTROS) y el boton "Dejá tu reseña".
   decision-colores.js
                   Como se elige el color en la ficha (Pedro, 30/09: la C,
                   "Vitrina de fotos", de muestras/colores): debajo de la
@@ -169,6 +182,16 @@ si alguna falta).
                   pasado por el agente verificador sin cambiar despues: su
                   huella tiene que estar en datos/descripciones-verificadas.json
                   (herramientas/verificar-descripciones.py).
+  guardas-auditoria-08-10.js
+                  Los arreglos de la web de la auditoria del 08/10 (paquete
+                  P4, 13/10/2026): los links viejos que caen en el mismo
+                  modelo (W3-03, W3-05), las fotos que se reintentan (FOT-12),
+                  la busqueda con el equipo antes que sus accesorios y la
+                  vacia con lo parecido (W3-07, W3-12 a W3-14), los usados al
+                  final (W3-10), la cinta del regalo (W3-11), el pedido a
+                  ADVAPP desde el <head> (W3-17), las paginas para Google sin
+                  precio fijo (W3-06) y las decisiones D13 a D17 de Benja
+                  (cuotas, nuevos, agotados sin precio, Instagram, baterias).
   guardas-pie-precio.js
                   El precio arriba del pie pegado al abrir la ficha en el
                   celular (Pedro, 01/10): todas las fichas con stock, con y

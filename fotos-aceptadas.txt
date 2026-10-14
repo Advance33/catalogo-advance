@@ -1,6 +1,6 @@
 # Duplicados de foto ya revisados y dados por buenos:
 # huella de la imagen, en cuantos modelos aparece, y cuales.
-# Se regenera con: python verificar-fotos.py --aceptar
+# Se SUMAN con: python3 verificar-fotos.py --aceptar (no borra nada: lo que ya no haga falta se borra a mano)
 4ab61b4ed5b2a2fe2fcbab3406d650d5  2   # MAGIC KEYBOARD FOR 11" IPAD AIR M3/M4 | MAGIC KEYBOARD FOR 11" IPAD PR
 7c7c83efb96478e75d9fadcc070b74dd  2   # MAGIC KEYBOARD FOR 13" IPAD AIR M3/M4 | MAGIC KEYBOARD FOR 13" IPAD PR
 0643f19065528feec343f77052bb6e0d  2   # MAC MINI M4 | MAC MINI M4 PRO
@@ -54,3 +54,6 @@ eef2f653e3d39e386d3d414b02578b6d  2   # IPHONE AIR 1TB | 256GB (Black): la misma
 960e9c55c59d4a3b5c8f93f8719ca59f  2   # GALAXY Z FOLD 8 ULTRA 256GB | GALAXY Z FOLD 8 ULTRA 512GB (Cream): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
 22e059924730004030958838f10000c2  3   # GALAXY Z FOLD 8 ULTRA 16/1TB | GALAXY Z FOLD 8 ULTRA 256GB | GALAXY Z FOLD 8 ULTRA 512GB (Graphite): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
 e1492d0242c08404aae96697f8a5d6e1  2   # MAC MINI M6 16GB/256GB | 16GB/512GB: la misma maquina, la memoria no se ve. 13/10/2026 (D5)
+3629ecdceee22f9b6c36bfddde991a24  2   #  | SAMSUNG A56 (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)
+8080544902d5a6754d642fdc0715650e  2   #  | SAMSUNG S25 ULTRA (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)
+4343a7d1402b4ec24bfb1aeda4e8bcc1  2   #  | SAMSUNG S25 ULTRA (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)

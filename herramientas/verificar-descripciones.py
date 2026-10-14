@@ -24,6 +24,17 @@ Uso (desde la carpeta del catálogo):
   python3 herramientas/verificar-descripciones.py --registrar DIR/informe-*.json
       Registra las "ok" cuya huella coincide con la entrada de hoy. Las que no
       coinciden (la entrada cambió después) o no son "ok" se listan y no entran.
+  python3 herramientas/verificar-descripciones.py --registrar-mecanicas REF
+      La prueba mecánica (Benja, 14/10/2026). Para una entrada que cambió SOLO
+      de formato desde una versión ya verificada, sin tocar ningún dato, no
+      hace falta otra vuelta del verificador: esto lo comprueba un programa.
+      REF es la versión de git donde estaba verificada (por ejemplo
+      origin/main). Se registra la entrada de hoy si en REF la misma entrada
+      tenía su huella registrada y las dos quedan iguales después de
+      deshacer, en las dos, exactamente estos cambios (FORMATO_SIN_DATOS):
+      la tilde de "sólo", el punto de miles ("7.000" / "7000"), el espacio
+      antes del % y "súper rápida" / "superrápida". Cualquier otra diferencia,
+      aunque sea una coma, la deja afuera: esa va al verificador.
 """
 import glob, hashlib, json, os, re, shutil, socket, subprocess, sys, tempfile, threading
 import datetime, functools, http.server, socketserver
@@ -167,8 +178,77 @@ def registrar(rutas):
     return estado()
 
 
+# ---------- La prueba mecánica (Benja, 14/10/2026) ----------
+# Los únicos cambios que se aceptan sin el verificador: los de formato que
+# eligió Benja el 13/10 para todas las descripciones. Se deshacen en la versión
+# vieja y en la nueva; si quedan iguales, no cambió ningún dato.
+FORMATO_SIN_DATOS = [
+    (re.compile(r'\b([Ss])ólo\b'), r'\1olo'),                 # sólo → solo
+    (re.compile(r'(?<=\d)\.(?=\d{3}\b)'), ''),                # 7.000 → 7000
+    (re.compile(r'(?<=\d)[   ]%'), '%'),            # 100 % → 100%
+    (re.compile(r'([Ss])úper rápid'), r'\1uperrápid'),        # súper rápida → superrápida
+]
+
+
+def sin_formato(entrada):
+    """El JSON de la huella con los cambios de FORMATO_SIN_DATOS deshechos"""
+    txt = json.dumps({k: v for k, v in entrada.items() if k != 'notas'},
+                     sort_keys=True, ensure_ascii=False, separators=(',', ':'))
+    for re_, por in FORMATO_SIN_DATOS:
+        txt = re_.sub(por, txt)
+    return txt
+
+
+def de_git(ref, ruta):
+    rel = os.path.relpath(ruta, RAIZ).replace(os.sep, '/')
+    out = subprocess.run(['git', '-C', RAIZ, 'show', '%s:%s' % (ref, rel)], capture_output=True, text=True)
+    if out.returncode:
+        raise SystemExit('No pude leer %s en %s: %s' % (rel, ref, out.stderr.strip()))
+    return json.loads(out.stdout)
+
+
+def registrar_mecanicas(ref):
+    viejas = de_git(ref, DESC)['descripciones']
+    reg_viejo = de_git(ref, REG)['verificadas']
+    por_modelo = {}
+    for e in viejas:
+        por_modelo.setdefault(e['modelo'], []).append(e)
+    r = leer_registro()
+    nuevas, afuera = 0, []
+    for e in entradas():
+        h = huella(e)
+        if h in r['verificadas']:
+            continue
+        previas = [v for v in por_modelo.get(e['modelo'], []) if huella(v) in reg_viejo]
+        if not previas:
+            afuera.append('%s: en %s no estaba verificada' % (e['modelo'], ref))
+            continue
+        igual = next((v for v in previas if sin_formato(v) == sin_formato(e)), None)
+        if not igual:
+            afuera.append('%s: cambió algo más que el formato' % e['modelo'])
+            continue
+        hv = huella(igual)
+        r['verificadas'][h] = {'modelo': e['modelo'], 'fecha': datetime.date.today().isoformat(),
+                               'por': 'prueba-mecanica', 'desde': hv,
+                               'informe': 'solo formato desde la verificada en %s (%s)' % (ref, reg_viejo[hv].get('fecha', '?')),
+                               'fuentes': reg_viejo[hv].get('fuentes', [])}
+        nuevas += 1
+    hoy = {huella(e) for e in entradas()}
+    r['verificadas'] = {h: x for h, x in r['verificadas'].items() if h in hoy}
+    escribir_registro(r)
+    print('%d registradas por la prueba mecánica.' % nuevas)
+    for x in afuera:
+        print('   NO registrada:', x)
+    return estado()
+
+
 def main():
     a = sys.argv[1:]
+    if '--registrar-mecanicas' in a:
+        i = a.index('--registrar-mecanicas')
+        if i + 1 >= len(a):
+            raise SystemExit('Falta la versión de git donde estaban verificadas: --registrar-mecanicas origin/main')
+        return registrar_mecanicas(a[i + 1])
     if '--registrar' in a:
         rutas = [x for x in a[a.index('--registrar') + 1:] if not x.startswith('--')]
         return registrar(rutas)

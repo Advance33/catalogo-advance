@@ -66,7 +66,7 @@
           "titulo": {
             "segun": {
               "Sim": "Con chip físico",
-              "E-Sim": "Sólo eSIM"
+              "E-Sim": "Solo eSIM"
             }
           },
           "texto": {
@@ -547,7 +547,7 @@
       ],
       "venta": [
         "Una Mac liviana, de 1,23 kg, con chip A18 Pro y pantalla Liquid Retina de 13 pulgadas.",
-        "Hasta 16 horas de video en streaming, y como no tiene ventilador, trabaja en silencio."
+        "Hasta 16 horas de video en streaming y, como no tiene ventilador, trabaja en silencio."
       ],
       "importante": [
         {
@@ -616,7 +616,7 @@
             ],
             [
               "GPU",
-              "5 núcleos, ray tracing por hardware"
+              "5 núcleos, trazado de rayos por hardware"
             ],
             [
               "Neural Engine",
@@ -661,7 +661,7 @@
               "Teclado",
               {
                 "segun": {
-                  "256GB": "Magic Keyboard, sin Touch ID",
+                  "256GB": "Magic Keyboard sin Touch ID",
                   "512GB": "Magic Keyboard con Touch ID"
                 }
               }
@@ -1144,7 +1144,7 @@
                   "RC 2 + Combo More Fly Plus": "Drone, control DJI RC 2, 3 baterías Plus, centro de carga, filtros ND, 3 pares de hélices y bolso"
                 },
                 "proveedor": {
-                  "4 baterías": "Trae el dron, el control remoto con pantalla y un total de cuatro baterías inteligentes, junto con accesorios de carga y traslado"
+                  "4 baterías": "Trae el drone, el control remoto con pantalla y un total de cuatro baterías inteligentes, junto con accesorios de carga y traslado"
                 }
               }
             ],
@@ -1267,11 +1267,11 @@
             ],
             [
               "Frontal",
-              "TrueDepth de 12 MP, ƒ/1.9, con autoenfoque"
+              "TrueDepth de 12 MP, ƒ/1.9, con autofoco"
             ],
             [
               "Video",
-              "4K Dolby Vision hasta 60 fps; Modo Cine hasta 4K HDR a 30 fps"
+              "4K Dolby Vision hasta 60 fps; modo Cine hasta 4K HDR a 30 fps"
             ]
           ]
         },
@@ -2368,7 +2368,7 @@
         {
           "titulo": {
             "segun": {
-              "E-Sim": "Sólo eSIM"
+              "E-Sim": "Solo eSIM"
             }
           },
           "texto": {
@@ -2581,7 +2581,7 @@
         {
           "titulo": {
             "segun": {
-              "E-Sim": "Sólo eSIM"
+              "E-Sim": "Solo eSIM"
             }
           },
           "texto": {
@@ -2775,7 +2775,7 @@
         }
       ],
       "venta": [
-        "Tres cámaras de 48 MP atrás, con un teleobjetivo que llega a 8x con calidad óptica: lo que antes quedaba lejos, ahora sale nítido.",
+        "Tres cámaras de 48 MP atrás, con un teleobjetivo que llega a 8x con calidad óptica: lo que antes quedaba lejos ahora sale nítido.",
         "Pantalla de 6,9\" con ProMotion hasta 120 Hz y hasta 3.000 nits al sol. Cuerpo de aluminio unibody, resistencia al agua IP68 y hasta 2 TB de almacenamiento."
       ],
       "importante": [
@@ -2802,7 +2802,7 @@
         {
           "titulo": {
             "segun": {
-              "E-Sim": "Sólo eSIM"
+              "E-Sim": "Solo eSIM"
             }
           },
           "texto": {
@@ -3037,7 +3037,7 @@
         {
           "titulo": {
             "segun": {
-              "E-Sim": "Sólo eSIM"
+              "E-Sim": "Solo eSIM"
             }
           },
           "texto": {
@@ -3278,7 +3278,7 @@
         {
           "titulo": {
             "segun": {
-              "E-Sim": "Sólo eSIM"
+              "E-Sim": "Solo eSIM"
             }
           },
           "texto": {
@@ -3497,7 +3497,7 @@
           "texto": "De reproducción. Carga rápida: hasta 50% en unos 30 minutos con un adaptador de 20 W o más."
         },
         {
-          "titulo": "Sólo eSIM",
+          "titulo": "Solo eSIM",
           "texto": "No tiene bandeja para chip físico: usa dos eSIM activas."
         }
       ],
@@ -4371,7 +4371,7 @@
             ],
             [
               "Inalámbrica",
-              "Carga inalámbrica súper rápida y Wireless PowerShare"
+              "Carga inalámbrica superrápida y Wireless PowerShare"
             ]
           ]
         },
@@ -5240,7 +5240,7 @@
       ],
       "venta": [
         "Pantalla Super AMOLED de 6,7\" con resolución FHD+ y 90 Hz, en un cuerpo de 7,9 mm de espesor.",
-        "Batería de 5.000 mAh con carga súper rápida de 25 W, y hasta 6 generaciones de actualizaciones de Android y 6 años de seguridad, según Samsung."
+        "Batería de 5.000 mAh con carga superrápida de 25 W, y hasta 6 generaciones de actualizaciones de Android y 6 años de seguridad, según Samsung."
       ],
       "importante": [
         {
@@ -5349,7 +5349,7 @@
             ],
             [
               "Carga",
-              "Súper rápida de 25 W"
+              "Superrápida de 25 W"
             ]
           ]
         },
@@ -5650,7 +5650,7 @@
       ],
       "venta": [
         "Pantalla Super AMOLED de 6,7\" hasta 120 Hz con Vision Booster, y procesador Snapdragon 6 Gen 3 de 4 nm.",
-        "Batería de 5.000 mAh con hasta 23 h de video y carga súper rápida de 25 W: hasta 45% en 30 minutos. Resiste polvo y salpicaduras (IP64)."
+        "Batería de 5.000 mAh con hasta 23 h de video y carga superrápida de 25 W: hasta 45% en 30 minutos. Resiste polvo y salpicaduras (IP64)."
       ],
       "importante": [
         {
@@ -5774,7 +5774,7 @@
             ],
             [
               "Carga",
-              "Súper rápida de 25 W: hasta 45% en 30 minutos"
+              "Superrápida de 25 W: hasta 45% en 30 minutos"
             ]
           ]
         },
@@ -5876,7 +5876,7 @@
       ],
       "venta": [
         "Pantalla Super AMOLED de 6,7\" a 120 Hz y 1.200 nits, en un cuerpo de 7,4 mm con dorso de vidrio.",
-        "Batería de 5.000 mAh con hasta 29 h de video y carga súper rápida de 45 W. Resiste polvo y salpicaduras (IP67)."
+        "Batería de 5.000 mAh con hasta 29 h de video y carga superrápida de 45 W. Resiste polvo y salpicaduras (IP67)."
       ],
       "importante": [
         {
@@ -5997,7 +5997,7 @@
             ],
             [
               "Carga",
-              "Súper rápida de 45 W"
+              "Superrápida de 45 W"
             ]
           ]
         },
@@ -6068,7 +6068,7 @@
       ],
       "venta": [
         "Pantalla Super AMOLED de 6,7\" hasta 120 Hz con Vision Booster, en un cuerpo de 7,4 mm con dorso de vidrio y resistencia IP68.",
-        "Batería de 5.000 mAh que, según Samsung, dura dos días, y carga súper rápida 2.0: hasta 60% en 30 minutos."
+        "Batería de 5.000 mAh que, según Samsung, dura dos días, y carga superrápida 2.0: hasta 60% en 30 minutos."
       ],
       "importante": [
         {
@@ -6173,7 +6173,7 @@
             ],
             [
               "Carga",
-              "Súper rápida 2.0: hasta 60% en 30 minutos"
+              "Superrápida 2.0: hasta 60% en 30 minutos"
             ]
           ]
         },
@@ -6269,7 +6269,7 @@
       ],
       "venta": [
         "Pantalla Super AMOLED de 6,7\" a 120 Hz y 1.200 nits, en un cuerpo de 7,4 mm con marco de metal y protección IP67.",
-        "Tres cámaras con una principal de 50 MP con estabilización óptica, y batería de 5.000 mAh con carga súper rápida de 45 W."
+        "Tres cámaras con una principal de 50 MP con estabilización óptica, y batería de 5.000 mAh con carga superrápida de 45 W."
       ],
       "importante": [
         {
@@ -6388,7 +6388,7 @@
             ],
             [
               "Carga",
-              "Súper rápida de 45 W"
+              "Superrápida de 45 W"
             ]
           ]
         },
@@ -6460,7 +6460,7 @@
       ],
       "venta": [
         "Un Galaxy A de 6,9 mm y 179 g, con pantalla Super AMOLED Plus de 6,7\" hasta 120 Hz y resistencia IP68.",
-        "Batería de 5.000 mAh que, según Samsung, dura dos días, y carga súper rápida 2.0: hasta 60% en 30 minutos."
+        "Batería de 5.000 mAh que, según Samsung, dura dos días, y carga superrápida 2.0: hasta 60% en 30 minutos."
       ],
       "importante": [
         {
@@ -6565,7 +6565,7 @@
             ],
             [
               "Carga",
-              "Súper rápida 2.0: hasta 60% en 30 minutos"
+              "Superrápida 2.0: hasta 60% en 30 minutos"
             ]
           ]
         },
@@ -6640,13 +6640,13 @@
         "AT-0079"
       ],
       "venta": [
-        "Batería de 7000 mAh: con 15 minutos de carga TurboPower tenés hasta 7 horas de uso, según Motorola.",
+        "Batería de 7.000 mAh: con 15 minutos de carga TurboPower tenés hasta 7 horas de uso, según Motorola.",
         "Pantalla de 6,88\" a 120 Hz con parlantes estéreo Dolby Atmos, y Water Touch para usarla con los dedos mojados."
       ],
       "importante": [
         {
-          "titulo": "Batería de 7000 mAh",
-          "texto": "Carga de 18 W. Pensada para conservar más del 80% de su salud tras 1000 ciclos de carga."
+          "titulo": "Batería de 7.000 mAh",
+          "texto": "Carga de 18 W. Pensada para conservar más del 80% de su salud tras 1.000 ciclos de carga."
         },
         {
           "titulo": "Pantalla de 6,88\"",
@@ -6734,7 +6734,7 @@
           "datos": [
             [
               "Batería",
-              "7000 mAh (típica)"
+              "7.000 mAh (típica)"
             ],
             [
               "Carga",
@@ -6742,7 +6742,7 @@
             ],
             [
               "Vida útil",
-              "Más del 80% de salud tras 1000 ciclos, según pruebas de Motorola"
+              "Más del 80% de salud tras 1.000 ciclos, según pruebas de Motorola"
             ]
           ]
         },
@@ -6826,7 +6826,7 @@
       ],
       "venta": [
         "Cámara principal de 50 MP con sensor Sony LYTIA 600 y frontal de 32 MP.",
-        "Batería de 5200 mAh con carga TurboPower de 18 W, pantalla FHD+ de 6,72\" y parlantes estéreo Dolby Atmos. Resiste salpicaduras (IP64)."
+        "Batería de 5.200 mAh con carga TurboPower de 18 W, pantalla FHD+ de 6,72\" y parlantes estéreo Dolby Atmos. Resiste salpicaduras (IP64)."
       ],
       "importante": [
         {
@@ -6838,12 +6838,12 @@
           "texto": "f/2.2, con video Full HD."
         },
         {
-          "titulo": "5200 mAh y carga de 18 W",
+          "titulo": "5.200 mAh y carga de 18 W",
           "texto": "Hasta 55,8 h de batería, según Motorola."
         },
         {
           "titulo": "Pantalla de 6,72\"",
-          "texto": "LCD FHD+ (2400 x 1080), 60 Hz, hasta 1050 nits. Gorilla Glass 3."
+          "texto": "LCD FHD+ (2400 x 1080), 60 Hz, hasta 1.050 nits. Gorilla Glass 3."
         },
         {
           "titulo": "MediaTek Helio G81 Extreme",
@@ -6872,7 +6872,7 @@
             ],
             [
               "Brillo",
-              "800 nits típico · 1050 nits en modo de alto brillo"
+              "800 nits típico · 1.050 nits en modo de alto brillo"
             ],
             [
               "Protección",
@@ -6927,7 +6927,7 @@
           "datos": [
             [
               "Batería",
-              "5200 mAh (típica)"
+              "5.200 mAh (típica)"
             ],
             [
               "Duración",
@@ -7019,7 +7019,7 @@
       ],
       "venta": [
         "Cámara de 50 MP con sensor Sony LYTIA 600 y procesador Snapdragon 6s Gen 4 de 4 nm, con 5G.",
-        "Pantalla FHD+ de 6,7\" a 120 Hz y hasta 1050 nits, con Gorilla Glass 7i y pruebas de resistencia MIL-STD-810H."
+        "Pantalla FHD+ de 6,7\" a 120 Hz y hasta 1.050 nits, con Gorilla Glass 7i y pruebas de resistencia MIL-STD-810H."
       ],
       "importante": [
         {
@@ -7031,12 +7031,12 @@
           "texto": "Principal f/1.8 con PDAF y ultra gran angular de 8 MP (119,5°). Video 2K."
         },
         {
-          "titulo": "5200 mAh y carga de 30 W",
+          "titulo": "5.200 mAh y carga de 30 W",
           "texto": "Hasta 47 h de batería. Hasta 90% en 58 minutos, según Motorola."
         },
         {
           "titulo": "Pantalla de 6,7\" a 120 Hz",
-          "texto": "LCD FHD+ (2400 x 1080), hasta 1050 nits, con Water Touch."
+          "texto": "LCD FHD+ (2400 x 1080), hasta 1.050 nits, con Water Touch."
         },
         {
           "titulo": "IP64 y MIL-STD-810H",
@@ -7065,7 +7065,7 @@
             ],
             [
               "Brillo",
-              "Hasta 1050 nits en modo de alto brillo"
+              "Hasta 1.050 nits en modo de alto brillo"
             ]
           ]
         },
@@ -7108,7 +7108,7 @@
           "datos": [
             [
               "Batería",
-              "5200 mAh (típica)"
+              "5.200 mAh (típica)"
             ],
             [
               "Duración",
@@ -7120,7 +7120,7 @@
             ],
             [
               "Vida útil",
-              "Más del 80% de salud tras 1000 ciclos, según pruebas de Motorola"
+              "Más del 80% de salud tras 1.000 ciclos, según pruebas de Motorola"
             ]
           ]
         },
@@ -9696,7 +9696,7 @@
             ],
             [
               "Brillo",
-              "1.000 nits constantes (XDR) · pico de 1.600 nits (sólo HDR) · hasta 1.000 nits en exteriores (SDR)"
+              "1.000 nits constantes (XDR) · pico de 1.600 nits (solo HDR) · hasta 1.000 nits en exteriores (SDR)"
             ],
             [
               "Contraste",
@@ -9932,7 +9932,7 @@
             ],
             [
               "Brillo",
-              "1.000 nits constantes (XDR) · pico de 1.600 nits (sólo HDR) · hasta 1.000 nits en exteriores (SDR)"
+              "1.000 nits constantes (XDR) · pico de 1.600 nits (solo HDR) · hasta 1.000 nits en exteriores (SDR)"
             ],
             [
               "Contraste",
@@ -10164,7 +10164,7 @@
             ],
             [
               "Brillo",
-              "1.000 nits constantes (XDR) · pico de 1.600 nits (sólo HDR) · hasta 1.000 nits en exteriores (SDR)"
+              "1.000 nits constantes (XDR) · pico de 1.600 nits (solo HDR) · hasta 1.000 nits en exteriores (SDR)"
             ],
             [
               "Contraste",
@@ -10389,7 +10389,7 @@
             ],
             [
               "Brillo",
-              "1.000 nits constantes (XDR) · pico de 1.600 nits (sólo HDR) · hasta 1.000 nits en exteriores (SDR)"
+              "1.000 nits constantes (XDR) · pico de 1.600 nits (solo HDR) · hasta 1.000 nits en exteriores (SDR)"
             ],
             [
               "Contraste",
@@ -10596,7 +10596,7 @@
             ],
             [
               "Brillo",
-              "1.000 nits constantes (XDR) · pico de 1.600 nits (sólo HDR) · hasta 1.000 nits en exteriores (SDR)"
+              "1.000 nits constantes (XDR) · pico de 1.600 nits (solo HDR) · hasta 1.000 nits en exteriores (SDR)"
             ],
             [
               "Contraste",
@@ -10805,7 +10805,7 @@
             ],
             [
               "Brillo",
-              "1.000 nits constantes (XDR) · pico de 1.600 nits (sólo HDR) · hasta 1.000 nits en exteriores (SDR)"
+              "1.000 nits constantes (XDR) · pico de 1.600 nits (solo HDR) · hasta 1.000 nits en exteriores (SDR)"
             ],
             [
               "Contraste",
@@ -11002,7 +11002,7 @@
             ],
             [
               "Brillo",
-              "1.000 nits constantes (XDR) · pico de 1.600 nits (sólo HDR) · hasta 1.000 nits en exteriores (SDR)"
+              "1.000 nits constantes (XDR) · pico de 1.600 nits (solo HDR) · hasta 1.000 nits en exteriores (SDR)"
             ],
             [
               "Contraste",
@@ -12153,7 +12153,7 @@
             ],
             [
               "Brillo",
-              "1.000 nits SDR · 1.000 nits XDR en toda la pantalla · 1.600 nits de pico (sólo HDR)"
+              "1.000 nits SDR · 1.000 nits XDR en toda la pantalla · 1.600 nits de pico (solo HDR)"
             ],
             [
               "Contraste",
@@ -12381,7 +12381,7 @@
             ],
             [
               "Brillo",
-              "1.000 nits SDR · 1.000 nits XDR en toda la pantalla · 1.600 nits de pico (sólo HDR)"
+              "1.000 nits SDR · 1.000 nits XDR en toda la pantalla · 1.600 nits de pico (solo HDR)"
             ],
             [
               "Contraste",
@@ -12393,7 +12393,7 @@
             ],
             [
               "Vidrio",
-              "Estándar (el nanotexturizado es una opción sólo de 1 TB y 2 TB)"
+              "Estándar (el nanotexturizado es una opción solo de 1 TB y 2 TB)"
             ],
             [
               "Apple Pencil",
@@ -12601,7 +12601,7 @@
           "texto": {
             "segun": {
               "Sin confirmar": "Con el chip N1 de Apple.",
-              "Wi-Fi + Cellular": "Módem C1X de Apple: 5G y Gigabit LTE, sólo datos. Usa eSIM: no admite SIM física."
+              "Wi-Fi + Cellular": "Módem C1X de Apple: 5G y Gigabit LTE, solo datos. Usa eSIM: no admite SIM física."
             }
           }
         }
@@ -12628,7 +12628,7 @@
             ],
             [
               "Brillo",
-              "1.000 nits SDR · 1.000 nits XDR en toda la pantalla · 1.600 nits de pico (sólo HDR) · mínimo 1 nit"
+              "1.000 nits SDR · 1.000 nits XDR en toda la pantalla · 1.600 nits de pico (solo HDR) · mínimo 1 nit"
             ],
             [
               "Contraste",
@@ -12640,7 +12640,7 @@
             ],
             [
               "Vidrio",
-              "Estándar (el nanotexturizado es una opción sólo de 1 TB y 2 TB)"
+              "Estándar (el nanotexturizado es una opción solo de 1 TB y 2 TB)"
             ],
             [
               "Apple Pencil",
@@ -12765,8 +12765,8 @@
               "Red celular",
               {
                 "segun": {
-                  "Sin confirmar": "Sólo en el modelo Wi-Fi + Cellular: 5G (sub-6 GHz) y Gigabit LTE, sólo datos",
-                  "Wi-Fi + Cellular": "Módem C1X de Apple: 5G (sub-6 GHz) y Gigabit LTE, sólo datos"
+                  "Sin confirmar": "Solo en el modelo Wi-Fi + Cellular: 5G (sub-6 GHz) y Gigabit LTE, solo datos",
+                  "Wi-Fi + Cellular": "Módem C1X de Apple: 5G (sub-6 GHz) y Gigabit LTE, solo datos"
                 }
               }
             ],
@@ -12774,8 +12774,8 @@
               "SIM",
               {
                 "segun": {
-                  "Sin confirmar": "Sólo en el modelo Wi-Fi + Cellular: eSIM (no admite SIM física)",
-                  "Wi-Fi + Cellular": "Sólo eSIM (no admite SIM física)"
+                  "Sin confirmar": "Solo en el modelo Wi-Fi + Cellular: eSIM (no admite SIM física)",
+                  "Wi-Fi + Cellular": "Solo eSIM (no admite SIM física)"
                 }
               }
             ],
@@ -12783,7 +12783,7 @@
               "GPS",
               {
                 "segun": {
-                  "Sin confirmar": "GPS/GNSS sólo en el modelo Wi-Fi + Cellular",
+                  "Sin confirmar": "GPS/GNSS solo en el modelo Wi-Fi + Cellular",
                   "Wi-Fi + Cellular": "GPS/GNSS"
                 }
               }
@@ -12910,7 +12910,7 @@
             ],
             [
               "Brillo",
-              "1.000 nits SDR · 1.000 nits XDR en toda la pantalla · 1.600 nits de pico (sólo HDR) · mínimo 1 nit"
+              "1.000 nits SDR · 1.000 nits XDR en toda la pantalla · 1.600 nits de pico (solo HDR) · mínimo 1 nit"
             ],
             [
               "Contraste",
@@ -13163,8 +13163,8 @@
         {
           "titulo": {
             "segun": {
-              "Wi-Fi 8GB/128GB": "Sólo Wi-Fi",
-              "Wi-Fi 12GB/256GB": "Sólo Wi-Fi",
+              "Wi-Fi 8GB/128GB": "Solo Wi-Fi",
+              "Wi-Fi 12GB/256GB": "Solo Wi-Fi",
               "5G 8GB/128GB": "Con 5G"
             }
           },
@@ -13316,8 +13316,8 @@
               "Red",
               {
                 "segun": {
-                  "Wi-Fi 8GB/128GB": "Sólo Wi-Fi",
-                  "Wi-Fi 12GB/256GB": "Sólo Wi-Fi",
+                  "Wi-Fi 8GB/128GB": "Solo Wi-Fi",
+                  "Wi-Fi 12GB/256GB": "Solo Wi-Fi",
                   "5G 8GB/128GB": "5G y 4G LTE"
                 }
               }
@@ -13558,7 +13558,7 @@
           "datos": [
             [
               "Red",
-              "Sólo Wi-Fi"
+              "Solo Wi-Fi"
             ],
             [
               "Wi-Fi y Bluetooth",
@@ -13650,7 +13650,7 @@
         {
           "titulo": {
             "segun": {
-              "Wi-Fi": "Sólo Wi-Fi",
+              "Wi-Fi": "Solo Wi-Fi",
               "4G LTE": "Con 4G LTE"
             }
           },
@@ -13764,7 +13764,7 @@
               "Red",
               {
                 "segun": {
-                  "Wi-Fi": "Sólo Wi-Fi",
+                  "Wi-Fi": "Solo Wi-Fi",
                   "4G LTE": "4G LTE"
                 }
               }
@@ -13864,7 +13864,7 @@
       ],
       "venta": [
         "Pantalla de 11\" a 90 Hz y parlantes con sonido Dolby: rinde para series, juegos y videollamadas.",
-        "Batería de 7.040 mAh con hasta 15 horas de video y carga súper rápida de 25 W."
+        "Batería de 7.040 mAh con hasta 15 horas de video y carga superrápida de 25 W."
       ],
       "importante": [
         {
@@ -13886,7 +13886,7 @@
         {
           "titulo": {
             "segun": {
-              "Wi-Fi": "Sólo Wi-Fi",
+              "Wi-Fi": "Solo Wi-Fi",
               "5G": "Con 5G",
               "Sin confirmar": "Wi-Fi o 5G"
             }
@@ -13973,7 +13973,7 @@
             ],
             [
               "Carga",
-              "Súper rápida de 25 W"
+              "Superrápida de 25 W"
             ],
             [
               "Parlantes",
@@ -14011,7 +14011,7 @@
               "Red",
               {
                 "segun": {
-                  "Wi-Fi": "Sólo Wi-Fi",
+                  "Wi-Fi": "Solo Wi-Fi",
                   "5G": "5G y 4G LTE",
                   "Sin confirmar": "Wi-Fi o 5G, según el modelo"
                 }
@@ -14062,7 +14062,7 @@
       ],
       "venta": [
         "Pantalla de 10,9\" a 90 Hz y S Pen en la caja: para tomar apuntes, dibujar y resolver cuentas escritas a mano con Solve Math.",
-        "Batería de 8.000 mAh con hasta 16 horas de video y carga súper rápida de 25 W, en un cuerpo de 6,6 mm y 524 g."
+        "Batería de 8.000 mAh con hasta 16 horas de video y carga superrápida de 25 W, en un cuerpo de 6,6 mm y 524 g."
       ],
       "importante": [
         {
@@ -14163,7 +14163,7 @@
             ],
             [
               "Carga",
-              "Súper rápida de 25 W: de 0 a 100% en unos 120 minutos"
+              "Superrápida de 25 W: de 0 a 100% en unos 120 minutos"
             ]
           ]
         },
@@ -14189,7 +14189,7 @@
           "datos": [
             [
               "Red",
-              "Sólo Wi-Fi"
+              "Solo Wi-Fi"
             ],
             [
               "Wi-Fi y Bluetooth",
@@ -14382,7 +14382,7 @@
           "datos": [
             [
               "Red",
-              "Sólo Wi-Fi"
+              "Solo Wi-Fi"
             ],
             [
               "Wi-Fi y Bluetooth",
@@ -14576,7 +14576,7 @@
           "datos": [
             [
               "Red",
-              "Sólo Wi-Fi"
+              "Solo Wi-Fi"
             ],
             [
               "Wi-Fi y Bluetooth",
@@ -15604,7 +15604,7 @@
             ],
             [
               "Ubicación",
-              "GPS L1 (GLONASS, Galileo, QZSS y BeiDou)"
+              "GPS (L1), GLONASS, Galileo, QZSS y BeiDou"
             ],
             [
               "Wi-Fi y Bluetooth",
@@ -15989,7 +15989,7 @@
             ],
             [
               "Satelital",
-              "Emergencia SOS, Mensajes y Encontrar vía satélite, sujeto a disponibilidad en cada país"
+              "Emergencia SOS, Mensajes y Encontrar vía satélite, sujetos a disponibilidad en cada país"
             ]
           ]
         },
@@ -16277,7 +16277,7 @@
             ],
             [
               "Funciones",
-              "Notificaciones, respuesta con texto (sólo Android), control de música, calendario, clima y apps Connect IQ"
+              "Notificaciones, respuesta con texto (solo Android), control de música, calendario, clima y apps Connect IQ"
             ],
             [
               "Memoria",
@@ -16310,7 +16310,7 @@
       ],
       "venta": [
         "Pantalla AMOLED de 1,2\" con cristal de zafiro en una caja de 42 mm, pensada para muñecas más chicas. Con linterna LED, mapas en el reloj y GPS multibanda.",
-        "Hasta 10 días en modo smartwatch y hasta 28 horas sólo con GPS. 32 GB para mapas y música, Wi-Fi y 10 ATM de resistencia al agua."
+        "Hasta 10 días en modo smartwatch y hasta 28 horas solo con GPS. 32 GB para mapas y música, Wi-Fi y 10 ATM de resistencia al agua."
       ],
       "importante": [
         {
@@ -16327,7 +16327,7 @@
         },
         {
           "titulo": "Hasta 10 días de batería",
-          "texto": "En modo smartwatch; 4 con la pantalla siempre activa. Sólo GPS: hasta 28 horas."
+          "texto": "En modo smartwatch; 4 con la pantalla siempre activa. Solo GPS: hasta 28 horas."
         },
         {
           "titulo": "Música en el reloj",
@@ -16368,7 +16368,7 @@
               "Hasta 14 días"
             ],
             [
-              "Sólo GPS",
+              "Solo GPS",
               "Hasta 28 horas (20 con pantalla siempre activa)"
             ],
             [
@@ -16402,7 +16402,7 @@
             ],
             [
               "Peso",
-              "58 g con bisel de titanio · 63 g con bisel de acero inoxidable (sólo la caja: 42 g y 47 g)"
+              "58 g con bisel de titanio · 63 g con bisel de acero inoxidable (solo la caja: 42 g y 47 g)"
             ],
             [
               "Materiales",
@@ -16510,7 +16510,7 @@
       ],
       "venta": [
         "Pantalla AMOLED de 1,4\" con cristal de zafiro y bisel de titanio, con hasta 31 días de batería en modo smartwatch.",
-        "Linterna LED, mapas en el reloj, GPS multibanda y hasta 82 horas sólo con GPS. 32 GB de memoria, Wi-Fi y 10 ATM de resistencia al agua."
+        "Linterna LED, mapas en el reloj, GPS multibanda y hasta 82 horas solo con GPS. 32 GB de memoria, Wi-Fi y 10 ATM de resistencia al agua."
       ],
       "importante": [
         {
@@ -16519,7 +16519,7 @@
         },
         {
           "titulo": "Hasta 31 días de batería",
-          "texto": "En modo smartwatch; 11 con la pantalla siempre activa. Sólo GPS: hasta 82 horas."
+          "texto": "En modo smartwatch; 11 con la pantalla siempre activa. Solo GPS: hasta 82 horas."
         },
         {
           "titulo": "Linterna LED",
@@ -16568,7 +16568,7 @@
               "Hasta 41 días"
             ],
             [
-              "Sólo GPS",
+              "Solo GPS",
               "Hasta 82 horas (58 con pantalla siempre activa)"
             ],
             [
@@ -16602,7 +16602,7 @@
             ],
             [
               "Peso",
-              "88 g (sólo la caja: 60 g)"
+              "88 g (solo la caja: 60 g)"
             ],
             [
               "Materiales",
@@ -16744,7 +16744,7 @@
             ],
             [
               "Distancias",
-              "Al frente, centro y fondo del green, a aproximación y dogleg; tocás la pantalla para medir a cualquier punto"
+              "Al frente, centro y fondo del green, de aproximación y al dogleg; tocás la pantalla para medir a cualquier punto"
             ],
             [
               "Juego",
@@ -17611,7 +17611,7 @@
         },
         {
           "titulo": "Controles Touch Plus",
-          "texto": "Con háptica TruTouch. También podés navegar y escribir sólo con las manos."
+          "texto": "Con háptica TruTouch. También podés navegar y escribir solo con las manos."
         }
       ],
       "ficha": [
@@ -18505,7 +18505,7 @@
       ],
       "venta": [
         "Toda la potencia de la Series X sin lectora de discos: 4K nativo hasta 120 fps, GPU de 12 TFLOPS y SSD de 1 TB.",
-        "Los juegos se compran y se descargan, y suma miles de títulos digitales de Xbox One, Xbox 360 y Xbox original."
+        "Los juegos se compran y se descargan, y la consola suma miles de títulos digitales de Xbox One, Xbox 360 y Xbox original."
       ],
       "importante": [
         {
@@ -18702,7 +18702,7 @@
             ],
             [
               "Tarjetas de memoria",
-              "Sólo microSD Express, de hasta 2 TB"
+              "Solo microSD Express, de hasta 2 TB"
             ],
             [
               "Juegos",
@@ -18886,7 +18886,7 @@
             ],
             [
               "Tarjetas de memoria",
-              "Sólo microSD Express, de hasta 2 TB"
+              "Solo microSD Express, de hasta 2 TB"
             ],
             [
               "Juegos",
@@ -19089,7 +19089,7 @@
             ],
             [
               "Tarjetas de memoria",
-              "Sólo microSD Express, de hasta 2 TB"
+              "Solo microSD Express, de hasta 2 TB"
             ],
             [
               "Juegos",
@@ -20830,7 +20830,7 @@
             ],
             [
               "Otros celulares",
-              "Se conectan por Bluetooth con cualquier sistema; la app Galaxy Wearable es sólo para Android (Android 11 o superior)"
+              "Se conectan por Bluetooth con cualquier sistema; la app Galaxy Wearable es solo para Android (Android 11 o superior)"
             ]
           ]
         }
@@ -21604,12 +21604,12 @@
           "texto": "La apertura máxima del objetivo se cierra un paso (por ejemplo, f/5.6-8 pasa a f/8-11)."
         },
         {
-          "titulo": "Sólo con objetivos RF compatibles",
+          "titulo": "Solo con objetivos RF compatibles",
           "texto": "Por ejemplo, RF 100-400mm F5.6-8, RF 200-800mm F6.3-9, RF 100-500mm, RF 600mm F11 y RF 800mm F11."
         },
         {
           "titulo": "Mantiene el autofoco",
-          "texto": "Con el RF 100-400mm y el RF 200-800mm sigue andando el AF y el estabilizador."
+          "texto": "Con el RF 100-400mm y el RF 200-800mm siguen andando el AF y el estabilizador."
         },
         {
           "titulo": "Resiste polvo y agua",
@@ -22880,7 +22880,7 @@
           "texto": "La apertura máxima del objetivo se cierra dos pasos (por ejemplo, f/5.6-8 pasa a f/11-16)."
         },
         {
-          "titulo": "Sólo con objetivos RF compatibles",
+          "titulo": "Solo con objetivos RF compatibles",
           "texto": "Por ejemplo, RF 100-400mm F5.6-8, RF 200-800mm F6.3-9, RF 100-500mm, RF 600mm F11 y RF 800mm F11."
         },
         {
@@ -24065,7 +24065,7 @@
           "texto": "Personalizable: apertura, velocidad, ISO o compensación de exposición."
         },
         {
-          "titulo": "Pesa 1430 g",
+          "titulo": "Pesa 1.430 g",
           "texto": "Mide 103,8 x 139,8 mm y usa filtros de 95 mm."
         }
       ],
@@ -24137,7 +24137,7 @@
             ],
             [
               "Peso",
-              "1430 g"
+              "1.430 g"
             ]
           ]
         }
@@ -25307,7 +25307,7 @@
             ],
             [
               "Peso",
-              "1110 g sin el soporte para trípode (versión negra)"
+              "1.110 g sin el soporte para trípode (versión negra)"
             ]
           ]
         }
@@ -25589,7 +25589,7 @@
         "AT-0260"
       ],
       "venta": [
-        "Superteleobjetivo de 800 mm que pesa 1260 g y se retrae a 281,8 mm para guardarlo.",
+        "Superteleobjetivo de 800 mm que pesa 1.260 g y se retrae a 281,8 mm para guardarlo.",
         "Con estabilizador de 4 pasos y enfoque STM, para naturaleza, viajes y sujetos muy lejanos, en foto y video."
       ],
       "importante": [
@@ -25602,7 +25602,7 @@
           "texto": "Para fotos y video sin trípode."
         },
         {
-          "titulo": "Pesa 1260 g",
+          "titulo": "Pesa 1.260 g",
           "texto": "Retráctil, gracias a la óptica difractiva y la apertura f/11."
         },
         {
@@ -25699,7 +25699,7 @@
             ],
             [
               "Peso",
-              "1260 g"
+              "1.260 g"
             ]
           ]
         }
@@ -26024,7 +26024,7 @@
             ],
             [
               "Enfoque mínimo",
-              "0,17 m con autoenfoque a 18 y 35 mm; 0,12 m en enfoque manual a 18 mm; 0,45 m a 150 mm"
+              "0,17 m con autofoco a 18 y 35 mm; 0,12 m en enfoque manual a 18 mm; 0,45 m a 150 mm"
             ],
             [
               "Ampliación máxima",
@@ -26191,7 +26191,7 @@
           "datos": [
             [
               "Cámaras",
-              "Sólo cámaras EOS R compatibles: Canon pide consultar la compatibilidad"
+              "Solo cámaras EOS R compatibles: Canon pide consultar la compatibilidad"
             ],
             [
               "Software",
@@ -26462,7 +26462,7 @@
           "datos": [
             [
               "Cámaras",
-              "Sólo cámaras compatibles: según Canon, en principio la EOS R7 (video 4K); pide comprobar la compatibilidad"
+              "Solo cámaras compatibles: según Canon, en principio la EOS R7 (video 4K); pide comprobar la compatibilidad"
             ]
           ]
         },
@@ -26529,7 +26529,7 @@
         },
         {
           "titulo": "Enfoque interno",
-          "texto": "Al enfocar sólo se mueven grupos internos: el largo no cambia. Enfoca desde 30 cm."
+          "texto": "Al enfocar solo se mueven grupos internos: el largo no cambia. Enfoca desde 30 cm."
         }
       ],
       "ficha": [
@@ -28635,7 +28635,7 @@
         "AT-0284"
       ],
       "venta": [
-        "Un solo zoom de 28 mm gran angular a 400 mm de superteleobjetivo (14,2 aumentos): paisaje, retrato, viaje, deporte y fauna sin cambiar de lente.",
+        "Un solo zoom de 28 mm de gran angular a 400 mm de superteleobjetivo (14,2 aumentos): paisaje, retrato, viaje, deporte y fauna sin cambiar de lente.",
         "Pesa 725 g, tiene estabilizador VR de 5,0 pasos y enfoca a 0,2 m en 28 mm, con primeros planos de hasta 0,35x."
       ],
       "importante": [
@@ -30548,7 +30548,7 @@
           "texto": "La apertura efectiva baja dos pasos con el teleconversor puesto."
         },
         {
-          "titulo": "Sólo con lentes compatibles",
+          "titulo": "Solo con lentes compatibles",
           "texto": "Para NIKKOR Z que aceptan teleconversor. No funciona con el adaptador FTZ."
         },
         {
@@ -30591,7 +30591,7 @@
           "datos": [
             [
               "Montura",
-              "Nikon Z de los dos lados; adelante, sólo objetivos que aceptan teleconversor"
+              "Nikon Z de los dos lados; adelante, solo objetivos que aceptan teleconversor"
             ],
             [
               "Compatible con (según Nikon)",
@@ -30899,7 +30899,7 @@
             ],
             [
               "Controles",
-              "Selector de modo de enfoque, limitador de enfoque y botón AFL (el botón, sólo en cámaras compatibles y con funciones que dependen de la cámara)"
+              "Selector de modo de enfoque, limitador de enfoque y botón AFL (el botón, solo en cámaras compatibles y con funciones que dependen de la cámara)"
             ],
             [
               "Anillo",
@@ -34144,7 +34144,7 @@
         },
         {
           "titulo": "Pesa 2.485 g",
-          "texto": "Collar para trípode compatible Arca Swiss. Resiste polvo y salpicaduras; no es a prueba de agua."
+          "texto": "Collar para trípode compatible con Arca-Swiss. Resiste polvo y salpicaduras; no es a prueba de agua."
         }
       ],
       "ficha": [
@@ -34231,7 +34231,7 @@
             ],
             [
               "Collar para trípode",
-              "TS-121 de magnesio, compatible Arca Swiss, con pie intercambiable"
+              "TS-121 de magnesio, compatible con Arca-Swiss, con pie intercambiable"
             ],
             [
               "Filtro",
@@ -34251,7 +34251,7 @@
             ],
             [
               "Teleconversores Sigma",
-              "TC-1411 y TC-2011: sólo para la versión L-Mount"
+              "TC-1411 y TC-2011: solo para la versión L-Mount"
             ],
             [
               "Monturas del modelo",
@@ -34259,7 +34259,7 @@
             ],
             [
               "Accesorios de Sigma",
-              "Estuche, parasol LH1144-02, tapa cobertora LC-740E, tapa delantera, tapa trasera, collar TS-121 y correa"
+              "Estuche, parasol LH1144-02, tapa protectora LC-740E, tapa delantera, tapa trasera, collar TS-121 y correa"
             ]
           ]
         }
@@ -34289,7 +34289,7 @@
         },
         {
           "titulo": "Pesa 625 g",
-          "texto": "Diseñado sólo para cámaras sin espejo. Filtro de 77 mm."
+          "texto": "Diseñado solo para cámaras sin espejo. Filtro de 77 mm."
         },
         {
           "titulo": "Motor paso a paso",
@@ -34609,7 +34609,7 @@
         },
         {
           "titulo": "Pesa 725 g",
-          "texto": "Mide 86,4 x 87,6 mm. Peso y medidas son el dato de Sigma para la versión SA."
+          "texto": "Mide 86,4 x 87,6 mm. Peso y medidas son datos de Sigma para la versión SA."
         },
         {
           "titulo": {
@@ -34620,7 +34620,7 @@
           },
           "texto": {
             "segun": {
-              "Canon EF": "Entre las réflex de rollo, sólo se puede usar en la EOS-1v.",
+              "Canon EF": "Entre las réflex de rollo, solo se puede usar en la EOS-1v.",
               "Nikon F": "Sin anillo de diafragma; según la cámara, algunas funciones pueden no andar."
             }
           }
@@ -34737,7 +34737,7 @@
         },
         {
           "titulo": "Resiste polvo y humedad",
-          "texto": "Sony aclara que no está garantizado al 100 %. Traba de zoom para el traslado."
+          "texto": "Sony aclara que no está garantizado al 100%. Traba de zoom para el traslado."
         },
         {
           "titulo": "Pesa 625 g",
@@ -34816,7 +34816,7 @@
             ],
             [
               "Resistencia",
-              "Polvo y humedad (no garantizada al 100 %)"
+              "Polvo y humedad (no garantizada al 100%)"
             ],
             [
               "Filtro",
@@ -34973,7 +34973,7 @@
             ],
             [
               "Peso",
-              "1215 g (sin la montura de trípode)"
+              "1.215 g (sin la montura de trípode)"
             ],
             [
               "En la caja",
@@ -35023,7 +35023,7 @@
         },
         {
           "titulo": "Para exteriores",
-          "texto": "Resiste polvo y humedad (no garantizado al 100 %). Frente con flúor y montura de trípode desmontable."
+          "texto": "Resiste polvo y humedad (no garantizado al 100%). Frente con flúor y montura de trípode desmontable."
         }
       ],
       "ficha": [
@@ -35110,7 +35110,7 @@
             ],
             [
               "Resistencia",
-              "Polvo y humedad (no garantizada al 100 %); frente con flúor"
+              "Polvo y humedad (no garantizada al 100%); frente con flúor"
             ],
             [
               "Filtro",
@@ -35126,7 +35126,7 @@
             ],
             [
               "Peso",
-              "1395 g (sin la montura de trípode)"
+              "1.395 g (sin la montura de trípode)"
             ],
             [
               "En la caja",
@@ -35176,7 +35176,7 @@
         },
         {
           "titulo": "Resiste polvo y humedad",
-          "texto": "No garantizado al 100 %. Frente con flúor y parasol integrado con tapa."
+          "texto": "No garantizado al 100%. Frente con flúor y parasol integrado con tapa."
         }
       ],
       "ficha": [
@@ -35251,7 +35251,7 @@
             ],
             [
               "Resistencia",
-              "Polvo y humedad (no garantizada al 100 %); frente con flúor"
+              "Polvo y humedad (no garantizada al 100%); frente con flúor"
             ],
             [
               "Filtros",
@@ -35321,7 +35321,7 @@
         },
         {
           "titulo": "Pesa 950 g",
-          "texto": "Tubo de aleación de magnesio, resistente al polvo y la humedad (no garantizado al 100 %)."
+          "texto": "Tubo de aleación de magnesio, resistente al polvo y la humedad (no garantizado al 100%)."
         }
       ],
       "ficha": [
@@ -35408,7 +35408,7 @@
             ],
             [
               "Resistencia",
-              "Polvo y humedad (no garantizada al 100 %); frente con flúor"
+              "Polvo y humedad (no garantizada al 100%); frente con flúor"
             ],
             [
               "Filtro",
@@ -35474,7 +35474,7 @@
         },
         {
           "titulo": "Pesa 460 g",
-          "texto": "Resiste polvo y humedad (no garantizado al 100 %). Flúor adelante y atrás."
+          "texto": "Resiste polvo y humedad (no garantizado al 100%). Flúor adelante y atrás."
         }
       ],
       "ficha": [
@@ -35549,7 +35549,7 @@
             ],
             [
               "Resistencia",
-              "Polvo y humedad (no garantizada al 100 %); flúor en el elemento delantero y en el trasero"
+              "Polvo y humedad (no garantizada al 100%); flúor en el elemento delantero y en el trasero"
             ],
             [
               "Filtro",
@@ -35597,7 +35597,7 @@
         "AT-0352"
       ],
       "venta": [
-        "Un zoom gran angular de 16 a 25 mm con F2.8 constante para cámaras Sony full frame, en 409 g: paisajes, ciudad, selfis y viajes.",
+        "Un zoom gran angular de 16 a 25 mm con F2.8 constante para cámaras Sony full frame, en 409 g: paisajes, ciudad, selfies y viajes.",
         "Anillos de enfoque, zoom y apertura y enfoque silencioso: sirve tanto para foto como para video."
       ],
       "importante": [
@@ -35619,7 +35619,7 @@
         },
         {
           "titulo": "Tres anillos",
-          "texto": "Enfoque, zoom y apertura (clic desactivable). Resiste polvo y humedad (no garantizado al 100 %)."
+          "texto": "Enfoque, zoom y apertura (clic desactivable). Resiste polvo y humedad (no garantizado al 100%)."
         }
       ],
       "ficha": [
@@ -35694,7 +35694,7 @@
             ],
             [
               "Resistencia",
-              "Polvo y humedad (no garantizada al 100 %); frente con flúor"
+              "Polvo y humedad (no garantizada al 100%); frente con flúor"
             ],
             [
               "Filtro",
@@ -35742,7 +35742,7 @@
         "AT-0354"
       ],
       "venta": [
-        "La segunda generación del zoom G Master 16-35 mm F2.8 para cámaras Sony full frame: 547 g, alrededor de un 20 % menos que el FE 16-35 mm F2.8 GM.",
+        "La segunda generación del zoom G Master 16-35 mm F2.8 para cámaras Sony full frame: 547 g, alrededor de un 20% menos que el FE 16-35 mm F2.8 GM.",
         "Cuatro motores lineales XD y enfoque desde 0,22 m en todo el zoom, para foto y video."
       ],
       "importante": [
@@ -35913,7 +35913,7 @@
         },
         {
           "titulo": "Controles",
-          "texto": "Anillo de apertura con clic desactivable y botones de fijación de enfoque en dos lugares. Resiste polvo y humedad (no garantizado al 100 %)."
+          "texto": "Anillo de apertura con clic desactivable y botones de fijación de enfoque en dos lugares. Resiste polvo y humedad (no garantizado al 100%)."
         }
       ],
       "ficha": [
@@ -35988,7 +35988,7 @@
             ],
             [
               "Resistencia",
-              "Polvo y humedad (no garantizada al 100 %); frente con flúor"
+              "Polvo y humedad (no garantizada al 100%); frente con flúor"
             ],
             [
               "Filtro",
@@ -36145,7 +36145,7 @@
             ],
             [
               "Resistencia",
-              "Polvo y humedad (no garantizada al 100 %); frente con flúor"
+              "Polvo y humedad (no garantizada al 100%); frente con flúor"
             ],
             [
               "Filtro",
@@ -36165,7 +36165,7 @@
             ],
             [
               "Peso",
-              "2115 g"
+              "2.115 g"
             ],
             [
               "En la caja",
@@ -36193,7 +36193,7 @@
         "AT-0357"
       ],
       "venta": [
-        "Un gran angular fijo de 20 mm y F1.8 para cámaras Sony full frame, en 373 g: paisajes, ciudad, selfis y video.",
+        "Un gran angular fijo de 20 mm y F1.8 para cámaras Sony full frame, en 373 g: paisajes, ciudad, selfies y video.",
         "Dos motores lineales XD, enfoque desde 0,18 m y rosca de 67 mm para filtros polarizadores o ND."
       ],
       "importante": [
@@ -36215,7 +36215,7 @@
         },
         {
           "titulo": "Anillo de apertura",
-          "texto": "Con clic desactivable. Resiste polvo y humedad (no garantizado al 100 %)."
+          "texto": "Con clic desactivable. Resiste polvo y humedad (no garantizado al 100%)."
         }
       ],
       "ficha": [
@@ -36290,7 +36290,7 @@
             ],
             [
               "Resistencia",
-              "Polvo y humedad (no garantizada al 100 %); frente con flúor"
+              "Polvo y humedad (no garantizada al 100%); frente con flúor"
             ],
             [
               "Filtro",
@@ -36359,7 +36359,7 @@
         },
         {
           "titulo": "Resiste polvo y humedad",
-          "texto": "No garantizado al 100 %. Frente con flúor. Pesa 663 g."
+          "texto": "No garantizado al 100%. Frente con flúor. Pesa 663 g."
         }
       ],
       "ficha": [
@@ -36434,7 +36434,7 @@
             ],
             [
               "Resistencia",
-              "Polvo y humedad (no garantizada al 100 %); frente con flúor"
+              "Polvo y humedad (no garantizada al 100%); frente con flúor"
             ],
             [
               "Filtro",
@@ -36500,7 +36500,7 @@
         },
         {
           "titulo": "Tres anillos",
-          "texto": "Enfoque, zoom y apertura (clic desactivable). Resiste polvo y humedad (no garantizado al 100 %)."
+          "texto": "Enfoque, zoom y apertura (clic desactivable). Resiste polvo y humedad (no garantizado al 100%)."
         }
       ],
       "ficha": [
@@ -36575,7 +36575,7 @@
             ],
             [
               "Resistencia",
-              "Polvo y humedad (no garantizada al 100 %); frente con flúor"
+              "Polvo y humedad (no garantizada al 100%); frente con flúor"
             ],
             [
               "Filtro",
@@ -36772,7 +36772,7 @@
         },
         {
           "titulo": "Pesa 445 g",
-          "texto": "Resiste polvo y humedad (no garantizado al 100 %). Frente con flúor."
+          "texto": "Resiste polvo y humedad (no garantizado al 100%). Frente con flúor."
         }
       ],
       "ficha": [
@@ -36847,7 +36847,7 @@
             ],
             [
               "Resistencia",
-              "Polvo y humedad (no garantizada al 100 %); frente con flúor"
+              "Polvo y humedad (no garantizada al 100%); frente con flúor"
             ],
             [
               "Filtro",
@@ -36912,7 +36912,7 @@
         },
         {
           "titulo": "Controles y sellado",
-          "texto": "Anillo de apertura con clic desactivable, traba de iris y dos botones de fijación de enfoque. Resiste polvo y humedad (no garantizado al 100 %)."
+          "texto": "Anillo de apertura con clic desactivable, traba de iris y dos botones de fijación de enfoque. Resiste polvo y humedad (no garantizado al 100%)."
         }
       ],
       "ficha": [
@@ -36991,7 +36991,7 @@
             ],
             [
               "Sellado",
-              "Botones con juntas de silicona y anillo de goma en la montura, contra polvo y humedad (no garantizado al 100 %); frente con flúor"
+              "Botones con juntas de silicona y anillo de goma en la montura, contra polvo y humedad (no garantizado al 100%); frente con flúor"
             ],
             [
               "Filtro",
@@ -37267,7 +37267,7 @@
         "AT-0367"
       ],
       "venta": [
-        "Un 35 mm F1.4 ZEISS Distagon para full frame: sirve para escenas e instantáneas, y con F1.4 saca a pulso en interiores con poca luz o de noche.",
+        "Un 35 mm F1.4 ZEISS Distagon para full frame: sirve para escenas e instantáneas, y con F1.4 se saca a pulso en interiores con poca luz o de noche.",
         "Desenfoca el fondo en retratos y enfoca desde 30 cm. Enfoque DDSSM silencioso y anillo de apertura con clic desactivable, para foto y video."
       ],
       "importante": [
@@ -37417,7 +37417,7 @@
         },
         {
           "titulo": "Pesa 524 g",
-          "texto": "Mide 76 x 96 mm. Resiste polvo y humedad (según Sony, no al 100 %)."
+          "texto": "Mide 76 x 96 mm. Resiste polvo y humedad (según Sony, no al 100%)."
         }
       ],
       "ficha": [
@@ -37488,7 +37488,7 @@
           "datos": [
             [
               "Resistencia",
-              "Polvo y humedad (según Sony, no al 100 %); frente con revestimiento de flúor"
+              "Polvo y humedad (según Sony, no al 100%); frente con revestimiento de flúor"
             ],
             [
               "Filtro",
@@ -37560,8 +37560,8 @@
           "texto": "Dos motores lineales y limitador de distancia. Enfoca desde 1,7 m."
         },
         {
-          "titulo": "Pesa 2475 g",
-          "texto": "Pie de trípode giratorio. Resiste polvo y humedad (según Sony, no al 100 %)."
+          "titulo": "Pesa 2.475 g",
+          "texto": "Pie de trípode giratorio. Resiste polvo y humedad (según Sony, no al 100%)."
         }
       ],
       "ficha": [
@@ -37640,7 +37640,7 @@
           "datos": [
             [
               "Resistencia",
-              "Polvo y humedad (según Sony, no al 100 %); frente con revestimiento de flúor"
+              "Polvo y humedad (según Sony, no al 100%); frente con revestimiento de flúor"
             ],
             [
               "Pie de trípode",
@@ -37660,7 +37660,7 @@
             ],
             [
               "Peso",
-              "2475 g"
+              "2.475 g"
             ],
             [
               "Montura",
@@ -37692,7 +37692,7 @@
       ],
       "venta": [
         "Un zoom de 50 a 150 mm con F2 en todo el recorrido: retratos, bodas y eventos en interiores con un solo objetivo.",
-        "Zoom interno y cuatro motores lineales XD, en 1340 g sin el pie de trípode."
+        "Zoom interno y cuatro motores lineales XD, en 1.340 g sin el pie de trípode."
       ],
       "importante": [
         {
@@ -37709,11 +37709,11 @@
         },
         {
           "titulo": "Zoom interno",
-          "texto": "No cambia de largo. Mide 102,8 x 200 mm y pesa 1340 g sin el pie de trípode."
+          "texto": "No cambia de largo. Mide 102,8 x 200 mm y pesa 1.340 g sin el pie de trípode."
         },
         {
           "titulo": "Controles a mano",
-          "texto": "Anillo de apertura con clic y traba, 3 botones de fijación de enfoque y sellado contra polvo y humedad (según Sony, no al 100 %)."
+          "texto": "Anillo de apertura con clic y traba, 3 botones de fijación de enfoque y sellado contra polvo y humedad (según Sony, no al 100%)."
         }
       ],
       "ficha": [
@@ -37792,7 +37792,7 @@
           "datos": [
             [
               "Resistencia",
-              "Juntas en botones, interruptores y montura contra polvo y humedad (según Sony, no al 100 %); frente con revestimiento de flúor"
+              "Juntas en botones, interruptores y montura contra polvo y humedad (según Sony, no al 100%); frente con revestimiento de flúor"
             ],
             [
               "Pie de trípode",
@@ -37808,7 +37808,7 @@
             ],
             [
               "Peso",
-              "1340 g sin el pie de trípode"
+              "1.340 g sin el pie de trípode"
             ],
             [
               "Montura",
@@ -37861,7 +37861,7 @@
         },
         {
           "titulo": "Pesa 778 g",
-          "texto": "Mide 87 x 108 mm. Resiste polvo y humedad (según Sony, no al 100 %)."
+          "texto": "Mide 87 x 108 mm. Resiste polvo y humedad (según Sony, no al 100%)."
         }
       ],
       "ficha": [
@@ -37932,7 +37932,7 @@
           "datos": [
             [
               "Resistencia",
-              "Polvo y humedad (según Sony, no al 100 %); frente con revestimiento de flúor"
+              "Polvo y humedad (según Sony, no al 100%); frente con revestimiento de flúor"
             ],
             [
               "Filtro",
@@ -38006,7 +38006,7 @@
         },
         {
           "titulo": "Resiste polvo y humedad",
-          "texto": "Según Sony, no al 100 %. Frente con revestimiento de flúor."
+          "texto": "Según Sony, no al 100%. Frente con revestimiento de flúor."
         }
       ],
       "ficha": [
@@ -38077,7 +38077,7 @@
           "datos": [
             [
               "Resistencia",
-              "Polvo y humedad (según Sony, no al 100 %); frente con revestimiento de flúor"
+              "Polvo y humedad (según Sony, no al 100%); frente con revestimiento de flúor"
             ],
             [
               "Filtro",
@@ -38480,8 +38480,8 @@
         "AT-0376"
       ],
       "venta": [
-        "La segunda generación del 70-200 mm F2.8 G Master: pesa 1045 g, cerca de 29 % menos que el modelo anterior, y no cambia de largo al hacer zoom.",
-        "Cuatro motores lineales XD: según Sony, enfoca hasta 4 veces más rápido que el modelo anterior (con α1). Estabilizador óptico y compatible con teleconversores 1,4x y 2x."
+        "La segunda generación del 70-200 mm F2.8 G Master: pesa 1.045 g, cerca de 29% menos que el modelo anterior, y no cambia de largo al hacer zoom.",
+        "Cuatro motores lineales XD: según Sony, enfoca hasta 4 veces más rápido que el modelo anterior (con α1). Tiene estabilizador óptico y es compatible con teleconversores 1,4x y 2x."
       ],
       "importante": [
         {
@@ -38489,8 +38489,8 @@
           "texto": "Apertura constante y diafragma circular de 11 hojas."
         },
         {
-          "titulo": "Pesa 1045 g",
-          "texto": "Sin el pie de trípode, cerca de 29 % menos que el modelo anterior. Zoom interno."
+          "titulo": "Pesa 1.045 g",
+          "texto": "Sin el pie de trípode, cerca de 29% menos que el modelo anterior. Zoom interno."
         },
         {
           "titulo": "4 motores lineales XD",
@@ -38585,7 +38585,7 @@
           "datos": [
             [
               "Resistencia",
-              "Juntas selladas, botones con silicona y montura con anillo de goma (según Sony, no al 100 %); frente con revestimiento de flúor"
+              "Juntas selladas, botones con silicona y montura con anillo de goma (según Sony, no al 100%); frente con revestimiento de flúor"
             ],
             [
               "Tubo",
@@ -38609,7 +38609,7 @@
             ],
             [
               "Peso",
-              "1045 g sin el pie de trípode"
+              "1.045 g sin el pie de trípode"
             ],
             [
               "Montura",
@@ -38797,7 +38797,7 @@
         "AT-0378"
       ],
       "venta": [
-        "La segunda generación del 85 mm F1.4 G Master, para retratos: según Sony, más nítido que el FE 85 mm F1.4 GM y con 20 % menos peso (642 g).",
+        "La segunda generación del 85 mm F1.4 G Master, para retratos: según Sony, más nítido que el FE 85 mm F1.4 GM y con 20% menos peso (642 g).",
         "Dos motores lineales XD: Sony indica un AF hasta 3 veces más rápido que el modelo anterior (con α1)."
       ],
       "importante": [
@@ -38815,11 +38815,11 @@
         },
         {
           "titulo": "Pesa 642 g",
-          "texto": "20 % menos peso y 13 % menos volumen que el modelo anterior. Mide 84,7 x 107,3 mm."
+          "texto": "20% menos peso y 13% menos volumen que el modelo anterior. Mide 84,7 x 107,3 mm."
         },
         {
           "titulo": "Control completo",
-          "texto": "Anillo de apertura con clic desactivable, 2 botones de fijación de enfoque, selector AF/MF y resistencia a polvo y humedad (según Sony, no al 100 %)."
+          "texto": "Anillo de apertura con clic desactivable, 2 botones de fijación de enfoque, selector AF/MF y resistencia a polvo y humedad (según Sony, no al 100%)."
         }
       ],
       "ficha": [
@@ -38890,7 +38890,7 @@
           "datos": [
             [
               "Resistencia",
-              "Polvo y humedad (según Sony, no al 100 %); frente con revestimiento de flúor"
+              "Polvo y humedad (según Sony, no al 100%); frente con revestimiento de flúor"
             ],
             [
               "Filtro",
@@ -38955,7 +38955,7 @@
         },
         {
           "titulo": "Resiste polvo y humedad",
-          "texto": "Según Sony, no al 100 %."
+          "texto": "Según Sony, no al 100%."
         }
       ],
       "ficha": [
@@ -39018,7 +39018,7 @@
           "datos": [
             [
               "Resistencia",
-              "Diseño sellado contra polvo y humedad (según Sony, no al 100 %)"
+              "Diseño sellado contra polvo y humedad (según Sony, no al 100%)"
             ],
             [
               "Filtro",
@@ -39224,7 +39224,7 @@
         },
         {
           "titulo": "Pensado para filmar",
-          "texto": "Anillo de apertura con clic desactivable y traba de iris. Resiste polvo y humedad (según Sony, no al 100 %)."
+          "texto": "Anillo de apertura con clic desactivable y traba de iris. Resiste polvo y humedad (según Sony, no al 100%)."
         }
       ],
       "ficha": [
@@ -39299,7 +39299,7 @@
           "datos": [
             [
               "Resistencia",
-              "Polvo y humedad (según Sony, no al 100 %); frente con revestimiento de flúor"
+              "Polvo y humedad (según Sony, no al 100%); frente con revestimiento de flúor"
             ],
             [
               "Filtro",
@@ -39549,7 +39549,7 @@
         },
         {
           "titulo": "Pesa 1,725 kg",
-          "texto": "Sin el pie para trípode (155 g), que viene con el lente y es compatible Arca-Swiss."
+          "texto": "Sin el pie para trípode (155 g), que viene con el lente y es compatible con Arca-Swiss."
         }
       ],
       "ficha": [
@@ -39636,7 +39636,7 @@
             ],
             [
               "Accesorios de Tamron",
-              "Parasol redondo con borde de goma, tapas y pie para trípode compatible Arca-Swiss"
+              "Parasol redondo con borde de goma, tapas y pie para trípode compatible con Arca-Swiss"
             ]
           ]
         }
@@ -44001,7 +44001,7 @@
         },
         {
           "titulo": "4K 30p desde 6K",
-          "texto": "4K 60p con recorte (64 % del ancho) y Full HD hasta 119,9 fps."
+          "texto": "4K 60p con recorte (64% del ancho) y Full HD hasta 119,9 fps."
         },
         {
           "titulo": "Pantalla de ángulo variable",
@@ -44099,7 +44099,7 @@
           "datos": [
             [
               "4K",
-              "30p sobremuestreado desde 6K; 60p con recorte del 64 % horizontal"
+              "30p sobremuestreado desde 6K; 60p con recorte del 64% horizontal"
             ],
             [
               "Full HD",
@@ -44226,7 +44226,7 @@
         },
         {
           "titulo": "Dual Pixel CMOS AF",
-          "texto": "Detecta caras y ojos y sigue personas en el 88 % del cuadro. En 4K enfoca por contraste."
+          "texto": "Detecta caras y ojos y sigue personas en el 88% del cuadro. En 4K enfoca por contraste."
         },
         {
           "titulo": "Hasta 6,5 fps",
@@ -44497,7 +44497,7 @@
             ],
             [
               "Cobertura",
-              "88 % horizontal y 100 % vertical"
+              "88% horizontal y 100% vertical"
             ],
             [
               "Con poca luz",
@@ -44565,7 +44565,7 @@
             ],
             [
               "Wi-Fi",
-              "802.11b/g/n, sólo 2,4 GHz (según el país)"
+              "802.11b/g/n, solo 2,4 GHz (según el país)"
             ],
             [
               "Bluetooth",
@@ -44658,7 +44658,7 @@
         },
         {
           "titulo": "Visor óptico",
-          "texto": "Pentaespejo con 95 % de cobertura. Pantalla de 3\" y 920.000 puntos."
+          "texto": "Pentaespejo con 95% de cobertura. Pantalla de 3\" y 920.000 puntos."
         },
         {
           "titulo": "Enfoque de 9 puntos",
@@ -44759,7 +44759,7 @@
           "datos": [
             [
               "Visor",
-              "Óptico pentaespejo, aprox. 95 % de cobertura, 0,80x"
+              "Óptico pentaespejo, aprox. 95% de cobertura, 0,80x"
             ],
             [
               "Pantalla",
@@ -44776,11 +44776,11 @@
             ],
             [
               "Wi-Fi",
-              "802.11b/g/n, sólo 2,4 GHz (según el país)"
+              "802.11b/g/n, solo 2,4 GHz (según el país)"
             ],
             [
               "NFC",
-              "Sólo con dispositivos Android o Canon compatibles"
+              "Solo con dispositivos Android o Canon compatibles"
             ],
             [
               "Puertos",
@@ -44866,7 +44866,7 @@
         },
         {
           "titulo": "Visor óptico",
-          "texto": "Pentaespejo con 95 % de cobertura. Pantalla de 2,7\"."
+          "texto": "Pentaespejo con 95% de cobertura. Pantalla de 2,7\"."
         },
         {
           "titulo": "Enfoque de 9 puntos",
@@ -44963,7 +44963,7 @@
           "datos": [
             [
               "Visor",
-              "Óptico pentaespejo, aprox. 95 % de cobertura, 0,80x"
+              "Óptico pentaespejo, aprox. 95% de cobertura, 0,80x"
             ],
             [
               "Pantalla",
@@ -44980,7 +44980,7 @@
             ],
             [
               "Wi-Fi",
-              "802.11b/g/n, sólo 2,4 GHz (según el país)"
+              "802.11b/g/n, solo 2,4 GHz (según el país)"
             ],
             [
               "Puertos",
@@ -45062,7 +45062,7 @@
         },
         {
           "titulo": "Visor óptico de pentaprisma",
-          "texto": "100 % de cobertura y 0,71x. Pantalla táctil Clear View II de 3,2\"."
+          "texto": "100% de cobertura y 0,71x. Pantalla táctil Clear View II de 3,2\"."
         }
       ],
       "ficha": [
@@ -45155,7 +45155,7 @@
           "datos": [
             [
               "Visor",
-              "Óptico de pentaprisma, aprox. 100 % de cobertura, 0,71x"
+              "Óptico de pentaprisma, aprox. 100% de cobertura, 0,71x"
             ],
             [
               "Pantalla",
@@ -45176,7 +45176,7 @@
             ],
             [
               "Wi-Fi",
-              "802.11b/g/n, sólo 2,4 GHz (según el país)"
+              "802.11b/g/n, solo 2,4 GHz (según el país)"
             ],
             [
               "NFC",
@@ -45349,7 +45349,7 @@
           "datos": [
             [
               "Wi-Fi",
-              "802.11b/g/n, sólo 2,4 GHz"
+              "802.11b/g/n, solo 2,4 GHz"
             ],
             [
               "Bluetooth",
@@ -45555,7 +45555,7 @@
             ],
             [
               "Peso",
-              "Aprox. 299 g (CIPA); 275 g sólo el cuerpo"
+              "Aprox. 299 g (CIPA); 275 g solo el cuerpo"
             ]
           ]
         }
@@ -45832,7 +45832,7 @@
             ],
             [
               "Wi-Fi",
-              "802.11a/b/g/n/ac (2,4 y 5 GHz); en algunos países, sólo 802.11b/g/n en 2,4 GHz"
+              "802.11a/b/g/n/ac (2,4 y 5 GHz); en algunos países, solo 802.11b/g/n en 2,4 GHz"
             ],
             [
               "Bluetooth",
@@ -45840,7 +45840,7 @@
             ],
             [
               "Red con cable",
-              "LAN 2,5GBASE-T"
+              "LAN 2.5GBASE-T"
             ],
             [
               "USB",
@@ -45869,7 +45869,7 @@
             ],
             [
               "Peso",
-              "Aprox. 743 g con batería y tarjeta (658 g sólo el cuerpo)"
+              "Aprox. 743 g con batería y tarjeta (658 g solo el cuerpo)"
             ],
             [
               "Medidas",
@@ -45877,7 +45877,7 @@
             ],
             [
               "Montura",
-              "Sony E. Es sólo el cuerpo: no trae lente"
+              "Sony E. Es solo el cuerpo: no trae lente"
             ]
           ]
         }
@@ -46112,7 +46112,7 @@
         },
         {
           "titulo": "Enfoque con IA",
-          "texto": "759 puntos sobre cerca del 94% de la imagen. Reconoce personas, animales, aves, insectos y vehículos."
+          "texto": "759 puntos que cubren cerca del 94% de la imagen. Reconoce personas, animales, aves, insectos y vehículos."
         },
         {
           "titulo": "Video 4K 60p",
@@ -46221,7 +46221,7 @@
             ],
             [
               "Wi-Fi",
-              "802.11a/b/g/n/ac (2,4 y 5 GHz); en algunos países, sólo 802.11b/g/n en 2,4 GHz"
+              "802.11a/b/g/n/ac (2,4 y 5 GHz); en algunos países, solo 802.11b/g/n en 2,4 GHz"
             ],
             [
               "Bluetooth",
@@ -46254,7 +46254,7 @@
             ],
             [
               "Peso",
-              "Aprox. 514 g con batería y tarjeta (429 g sólo el cuerpo)"
+              "Aprox. 514 g con batería y tarjeta (429 g solo el cuerpo)"
             ],
             [
               "Medidas",
@@ -46266,7 +46266,7 @@
             ],
             [
               "Montura",
-              "Sony E. Es sólo el cuerpo: no trae lente"
+              "Sony E. Es solo el cuerpo: no trae lente"
             ]
           ]
         }
@@ -46338,7 +46338,7 @@
         {
           "titulo": {
             "segun": {
-              "Cuerpo": "Sólo el cuerpo"
+              "Cuerpo": "Solo el cuerpo"
             },
             "proveedor": {
               "Kit 28-70": "Con lente 28-70 mm"
@@ -46491,7 +46491,7 @@
               "Lente",
               {
                 "segun": {
-                  "Cuerpo": "No trae: es sólo el cuerpo (montura E)"
+                  "Cuerpo": "No trae: es solo el cuerpo (montura E)"
                 },
                 "proveedor": {
                   "Kit 28-70": "Zoom 28-70 mm"
@@ -46651,7 +46651,7 @@
             ],
             [
               "Wi-Fi",
-              "802.11a/b/g/n/ac (2,4 y 5 GHz); en algunos países, sólo 802.11b/g/n en 2,4 GHz"
+              "802.11a/b/g/n/ac (2,4 y 5 GHz); en algunos países, solo 802.11b/g/n en 2,4 GHz"
             ],
             [
               "Bluetooth",
@@ -46886,7 +46886,7 @@
             ],
             [
               "Peso",
-              "Aprox. 695 g con batería y tarjeta (610 g sólo el cuerpo), sin lente"
+              "Aprox. 695 g con batería y tarjeta (610 g solo el cuerpo), sin lente"
             ],
             [
               "Medidas",
@@ -46979,7 +46979,7 @@
             ],
             [
               "Formatos de foto",
-              "JPEG y RAW (comprimido o sin comprimir; 14 bits sólo sin comprimir)"
+              "JPEG y RAW (comprimido o sin comprimir; 14 bits solo sin comprimir)"
             ]
           ]
         },
@@ -47072,7 +47072,7 @@
             ],
             [
               "Peso",
-              "Aprox. 509 g con batería y tarjeta (424 g sólo el cuerpo)"
+              "Aprox. 509 g con batería y tarjeta (424 g solo el cuerpo)"
             ],
             [
               "Medidas",
@@ -47084,7 +47084,7 @@
             ],
             [
               "Montura",
-              "Sony E. Es sólo el cuerpo: no trae lente"
+              "Sony E. Es solo el cuerpo: no trae lente"
             ]
           ]
         }
@@ -47260,7 +47260,7 @@
             ],
             [
               "Peso",
-              "Aprox. 515 g con batería y tarjeta (430 g sólo el cuerpo)"
+              "Aprox. 515 g con batería y tarjeta (430 g solo el cuerpo)"
             ],
             [
               "Medidas",
@@ -47272,7 +47272,7 @@
             ],
             [
               "Montura",
-              "Sony E. Es sólo el cuerpo: no trae lente"
+              "Sony E. Es solo el cuerpo: no trae lente"
             ]
           ]
         }
@@ -47452,7 +47452,7 @@
             ],
             [
               "Montura",
-              "Sony E. Es sólo el cuerpo: no trae lente"
+              "Sony E. Es solo el cuerpo: no trae lente"
             ]
           ]
         }
@@ -47640,7 +47640,7 @@
             ],
             [
               "Montura",
-              "Sony E. Es sólo el cuerpo: no trae lente"
+              "Sony E. Es solo el cuerpo: no trae lente"
             ]
           ]
         }
@@ -47824,7 +47824,7 @@
             ],
             [
               "Montura",
-              "Sony E. Es sólo el cuerpo: no trae lente"
+              "Sony E. Es solo el cuerpo: no trae lente"
             ]
           ]
         }
@@ -47992,7 +47992,7 @@
           "datos": [
             [
               "Batería",
-              "NP-SA100 de 2670 mAh: aprox. 600 fotos con visor o 710 con pantalla (CIPA)"
+              "NP-SA100 de 2.670 mAh: aprox. 600 fotos con visor o 710 con pantalla (CIPA)"
             ],
             [
               "Video con una carga",
@@ -48000,7 +48000,7 @@
             ],
             [
               "Peso",
-              "Aprox. 713 g con batería y tarjeta (622 g sólo el cuerpo)"
+              "Aprox. 713 g con batería y tarjeta (622 g solo el cuerpo)"
             ],
             [
               "Medidas",
@@ -48012,7 +48012,7 @@
             ],
             [
               "Montura",
-              "Sony E. Es sólo el cuerpo: no trae lente"
+              "Sony E. Es solo el cuerpo: no trae lente"
             ]
           ]
         }
@@ -48159,7 +48159,7 @@
             ],
             [
               "Wi-Fi",
-              "802.11a/b/g/n/ac (2,4 y 5 GHz); en algunos países, sólo 802.11b/g/n en 2,4 GHz"
+              "802.11a/b/g/n/ac (2,4 y 5 GHz); en algunos países, solo 802.11b/g/n en 2,4 GHz"
             ],
             [
               "Bluetooth",
@@ -48200,7 +48200,7 @@
             ],
             [
               "Montura",
-              "Sony E. Es sólo el cuerpo: no trae lente"
+              "Sony E. Es solo el cuerpo: no trae lente"
             ]
           ]
         }
@@ -48372,7 +48372,7 @@
             ],
             [
               "Peso",
-              "Aprox. 702 g con batería y tarjeta (617 g sólo el cuerpo)"
+              "Aprox. 702 g con batería y tarjeta (617 g solo el cuerpo)"
             ],
             [
               "Medidas",
@@ -48573,7 +48573,7 @@
             ],
             [
               "Peso",
-              "Aprox. 302 g con batería y tarjeta (275 g sólo el cuerpo)"
+              "Aprox. 302 g con batería y tarjeta (275 g solo el cuerpo)"
             ],
             [
               "Medidas",
@@ -48753,7 +48753,7 @@
             ],
             [
               "Peso",
-              "Aprox. 679 g con batería y tarjeta (594 g sólo el cuerpo)"
+              "Aprox. 679 g con batería y tarjeta (594 g solo el cuerpo)"
             ],
             [
               "Medidas",
@@ -48904,7 +48904,7 @@
             ],
             [
               "Wi-Fi",
-              "802.11a/b/g/n/ac (2,4 y 5 GHz); en algunos países, sólo 802.11b/g/n en 2,4 GHz"
+              "802.11a/b/g/n/ac (2,4 y 5 GHz); en algunos países, solo 802.11b/g/n en 2,4 GHz"
             ],
             [
               "Bluetooth",
@@ -48933,7 +48933,7 @@
             ],
             [
               "Peso",
-              "Aprox. 715 g con batería y tarjeta (630 g sólo el cuerpo)"
+              "Aprox. 715 g con batería y tarjeta (630 g solo el cuerpo)"
             ],
             [
               "Medidas",
@@ -49084,7 +49084,7 @@
             ],
             [
               "Wi-Fi",
-              "802.11a/b/g/n/ac (en algunos países, sólo 802.11b/g/n)"
+              "802.11a/b/g/n/ac (en algunos países, solo 802.11b/g/n)"
             ],
             [
               "Bluetooth",
@@ -49113,7 +49113,7 @@
             ],
             [
               "Peso",
-              "Aprox. 646 g con batería y tarjeta (562 g sólo el cuerpo)"
+              "Aprox. 646 g con batería y tarjeta (562 g solo el cuerpo)"
             ],
             [
               "Medidas",
@@ -49289,7 +49289,7 @@
             ],
             [
               "Peso",
-              "Aprox. 890 g sólo la unidad principal"
+              "Aprox. 890 g solo la unidad principal"
             ],
             [
               "Medidas",
@@ -49326,7 +49326,7 @@
       ],
       "venta": [
         "Cámara para vlogs con sensor APS-C de 26 MP, pantalla de ángulo variable y micrófono de 3 cápsulas: graba 4K 60p en 10 bits 4:2:2.",
-        "Pesa 292 g sólo el cuerpo y usa la batería NP-FZ100: hasta 195 minutos de grabación continua por carga. Montura E para lentes intercambiables."
+        "Pesa 292 g solo el cuerpo y usa la batería NP-FZ100: hasta 195 minutos de grabación continua por carga. Montura E para lentes intercambiables."
       ],
       "importante": [
         {
@@ -49465,7 +49465,7 @@
             ],
             [
               "Peso",
-              "Aprox. 292 g sólo el cuerpo"
+              "Aprox. 292 g solo el cuerpo"
             ],
             [
               "Medidas",
@@ -49473,7 +49473,7 @@
             ],
             [
               "Montura",
-              "Sony E. Es sólo el cuerpo: no trae lente"
+              "Sony E. Es solo el cuerpo: no trae lente"
             ]
           ]
         }
@@ -49633,7 +49633,7 @@
             ],
             [
               "Peso",
-              "Cuerpo: aprox. 720 g con batería y tarjeta; 640 g sólo el cuerpo (sin lente)"
+              "Cuerpo: aprox. 720 g con batería y tarjeta; 640 g solo el cuerpo (sin lente)"
             ],
             [
               "Lente del kit",
@@ -49702,7 +49702,7 @@
       ],
       "venta": [
         "Mirrorless DX de 20,9 MP pensada para video y vlogs: 4K UHD a 30p, Full HD hasta 120p y pantalla táctil de ángulo variable para filmarte de frente.",
-        "Pesa 350 g sólo el cuerpo y no tiene visor: se encuadra con la pantalla. Viene en kit: según la versión, con el lente 16-50 mm, el 18-140 mm o los zooms 16-50 y 50-250 mm."
+        "Pesa 350 g solo el cuerpo y no tiene visor: se encuadra con la pantalla. Viene en kit: según la versión, con el lente 16-50 mm, el 18-140 mm o los zooms 16-50 y 50-250 mm."
       ],
       "importante": [
         {
@@ -49853,7 +49853,7 @@
             ],
             [
               "Peso",
-              "Aprox. 405 g con batería y tarjeta; 350 g sólo el cuerpo"
+              "Aprox. 405 g con batería y tarjeta; 350 g solo el cuerpo"
             ],
             [
               "Lente del kit",
@@ -49892,7 +49892,7 @@
       ],
       "venta": [
         "Full frame de 24,5 MP con dos procesadores EXPEED 6: ráfaga de hasta 14 fotos por segundo, video 4K UHD y estabilizador de 5 ejes en el cuerpo.",
-        "Dos ranuras de tarjeta (CFexpress/XQD y SD UHS-II) y cuerpo de aleación de magnesio sellado contra polvo y humedad. Es sólo el cuerpo: el lente va aparte."
+        "Dos ranuras de tarjeta (CFexpress/XQD y SD UHS-II) y cuerpo de aleación de magnesio sellado contra polvo y humedad. Es solo el cuerpo: el lente va aparte."
       ],
       "importante": [
         {
@@ -50040,7 +50040,7 @@
             ],
             [
               "Peso",
-              "Aprox. 705 g con batería y tarjeta; 615 g sólo el cuerpo"
+              "Aprox. 705 g con batería y tarjeta; 615 g solo el cuerpo"
             ],
             [
               "Construcción",
@@ -50118,7 +50118,7 @@
         {
           "titulo": {
             "segun": {
-              "Cuerpo": "Sólo el cuerpo",
+              "Cuerpo": "Solo el cuerpo",
               "Kit 24-120": "Kit con lente 24-120 mm"
             }
           },
@@ -50212,7 +50212,7 @@
           "datos": [
             [
               "Visor",
-              "OLED de 0,5\", unos 5.760.000 puntos, hasta 4000 cd/m² y gama equivalente a DCI-P3"
+              "OLED de 0,5\", unos 5.760.000 puntos, hasta 4.000 cd/m² y gama equivalente a DCI-P3"
             ],
             [
               "Pantalla",
@@ -50250,7 +50250,7 @@
             ],
             [
               "Peso",
-              "Aprox. 760 g con batería y tarjeta; 670 g sólo el cuerpo"
+              "Aprox. 760 g con batería y tarjeta; 670 g solo el cuerpo"
             ],
             [
               "Construcción",
@@ -50292,7 +50292,7 @@
       ],
       "venta": [
         "Full frame de 45,7 MP sin filtro óptico de paso bajo, con dos procesadores EXPEED 6 e ISO desde 64: para fotos con mucho detalle, y video 4K UHD a 60p.",
-        "Estabilizador de 5 ejes en el cuerpo, dos ranuras de tarjeta y cuerpo de aleación de magnesio sellado contra polvo y humedad. Es sólo el cuerpo: el lente va aparte."
+        "Estabilizador de 5 ejes en el cuerpo, dos ranuras de tarjeta y cuerpo de aleación de magnesio sellado contra polvo y humedad. Es solo el cuerpo: el lente va aparte."
       ],
       "importante": [
         {
@@ -50440,7 +50440,7 @@
             ],
             [
               "Peso",
-              "Aprox. 705 g con batería y tarjeta; 615 g sólo el cuerpo"
+              "Aprox. 705 g con batería y tarjeta; 615 g solo el cuerpo"
             ],
             [
               "Construcción",
@@ -50511,12 +50511,12 @@
         },
         {
           "titulo": "Enfoque con 9 tipos de sujeto",
-          "texto": "Personas, perros, gatos, aves, aviones, autos, motos, bicicletas y trenes. Enfoca hasta −9 EV con la vista luz de estrellas."
+          "texto": "Personas, perros, gatos, aves, aviones, autos, motos, bicicletas y trenes. Enfoca hasta −9 EV con la función Vista luz de estrellas."
         },
         {
           "titulo": {
             "segun": {
-              "Cuerpo": "Sólo el cuerpo",
+              "Cuerpo": "Solo el cuerpo",
               "Kit 24-120": "Kit con lente 24-120 mm"
             }
           },
@@ -50576,7 +50576,7 @@
             ],
             [
               "Rango",
-              "−7 a +19 EV (−9 a +19 EV con la vista luz de estrellas)"
+              "−7 a +19 EV (−9 a +19 EV con la función Vista luz de estrellas)"
             ],
             [
               "Sujetos",
@@ -50648,7 +50648,7 @@
             ],
             [
               "Peso",
-              "Aprox. 910 g con batería y tarjeta; 820 g sólo el cuerpo"
+              "Aprox. 910 g con batería y tarjeta; 820 g solo el cuerpo"
             ],
             [
               "Construcción",
@@ -50686,7 +50686,7 @@
       ],
       "venta": [
         "Cámara de cine full frame de Nikon con ciencia de color de RED: graba RAW interno (R3D NE de 12 bits) hasta 6K/60p y 4K/120p, y Full HD hasta 240p en H.265.",
-        "Pantalla táctil de 4\" y 1000 cd/m², audio de 32 bits flotante con el micrófono incorporado y estabilizador en el cuerpo de hasta 7,5 pasos. Pesa unos 540 g sólo el cuerpo."
+        "Pantalla táctil de 4\" y 1.000 cd/m², audio de 32 bits flotante con el micrófono incorporado y estabilizador en el cuerpo de hasta 7,5 pasos. Pesa unos 540 g solo el cuerpo."
       ],
       "importante": [
         {
@@ -50699,7 +50699,7 @@
         },
         {
           "titulo": "Pantalla de 4\"",
-          "texto": "Táctil y de ángulo variable, 3.070.000 puntos, 1000 cd/m² y gama DCI-P3."
+          "texto": "Táctil y de ángulo variable, 3.070.000 puntos, 1.000 cd/m² y gama DCI-P3."
         },
         {
           "titulo": "Audio de 32 bits flotante",
@@ -50796,7 +50796,7 @@
           "datos": [
             [
               "Pantalla",
-              "4\" (16:10) táctil de ángulo variable, unos 3.070.000 puntos, 1000 cd/m², DCI-P3"
+              "4\" (16:10) táctil de ángulo variable, unos 3.070.000 puntos, 1.000 cd/m², DCI-P3"
             ],
             [
               "Tarjetas",
@@ -50825,7 +50825,7 @@
             ],
             [
               "Peso",
-              "Aprox. 630 g con batería y tarjeta; 540 g sólo el cuerpo"
+              "Aprox. 630 g con batería y tarjeta; 540 g solo el cuerpo"
             ],
             [
               "Construcción",
@@ -50854,7 +50854,7 @@
       ],
       "venta": [
         "Filmadora profesional 4K a 60p en 10 bits (HEVC), con grabación interna 4:2:2 de 10 bits hasta 4K 30p y Full HD 60p, lente gran angular de 25 mm y zoom óptico de 24x (hasta 600 mm).",
-        "Salidas 3G-SDI y HDMI, dos ranuras SD, asa desmontable con dos entradas XLR y luz LED, Wi-Fi y visor OLED. Pesa unos 850 g sólo el cuerpo."
+        "Salidas 3G-SDI y HDMI, dos ranuras SD, asa desmontable con dos entradas XLR y luz LED, Wi-Fi y visor OLED. Pesa unos 850 g solo el cuerpo."
       ],
       "importante": [
         {
@@ -51001,7 +51001,7 @@
           "datos": [
             [
               "Peso",
-              "Aprox. 0,85 kg sólo el cuerpo; 1,5 kg con asa, parasol, batería y ocular"
+              "Aprox. 0,85 kg solo el cuerpo; 1,5 kg con asa, parasol, batería y ocular"
             ],
             [
               "Medidas",
@@ -51348,7 +51348,7 @@
             ],
             [
               "Peso",
-              "Aprox. 0,85 kg sólo el cuerpo; 1,5 kg con asa, parasol, batería y ocular"
+              "Aprox. 0,85 kg solo el cuerpo; 1,5 kg con asa, parasol, batería y ocular"
             ],
             [
               "Medidas",
@@ -51841,7 +51841,7 @@
             ],
             [
               "Peso",
-              "740 g sólo la cámara; 880 g con parasol, batería BP-820 y dos tarjetas"
+              "740 g solo la cámara; 880 g con parasol, batería BP-820 y dos tarjetas"
             ]
           ]
         }
@@ -52020,7 +52020,7 @@
             ],
             [
               "Peso",
-              "Aprox. 1,93 kg sólo el cuerpo; 2,38 kg con parasol, batería BP-U35, cubierta del monitor, soporte de micrófono y ocular"
+              "Aprox. 1,93 kg solo el cuerpo; 2,38 kg con parasol, batería BP-U35, cubierta del monitor, soporte de micrófono y ocular"
             ],
             [
               "Medidas",
@@ -52223,7 +52223,7 @@
             ],
             [
               "Peso",
-              "Aprox. 1,96 kg sólo el cuerpo; 2,4 kg con parasol, batería BP-U35, cubierta del monitor, soporte de micrófono y ocular"
+              "Aprox. 1,96 kg solo el cuerpo; 2,4 kg con parasol, batería BP-U35, cubierta del monitor, soporte de micrófono y ocular"
             ],
             [
               "Medidas",
@@ -52386,7 +52386,7 @@
           "datos": [
             [
               "Batería de vuelo",
-              "2360 mAh, 16,9 Wh"
+              "2.360 mAh, 16,9 Wh"
             ],
             [
               "Carga",
@@ -52532,7 +52532,7 @@
             ],
             [
               "Funciones",
-              "ActiveTrack 360°, Enfoque de objetivos, Panorámica Libre, Vuelo de trayectoria y Control de crucero"
+              "ActiveTrack 360°, Enfoque de objetivos, Panorámica libre, Vuelo de trayectoria y Control de crucero"
             ],
             [
               "Satélites",
@@ -52570,7 +52570,7 @@
           "datos": [
             [
               "Batería",
-              "4276 mAh, 62,5 Wh, aprox. 247 g"
+              "4.276 mAh, 62,5 Wh, aprox. 247 g"
             ],
             [
               "Centro de carga",
@@ -52750,7 +52750,7 @@
           "datos": [
             [
               "Batería",
-              "2788 mAh, 19,52 Wh, aprox. 74 g"
+              "2.788 mAh, 19,52 Wh, aprox. 74 g"
             ],
             [
               "Centro de carga",
@@ -52854,7 +52854,7 @@
             ],
             [
               "Color",
-              "10 bits en D-Log, D-Log M y HLG; ALL-I 4:2:2 de 10 bits (sólo la versión de 512 GB)"
+              "10 bits en D-Log, D-Log M y HLG; ALL-I 4:2:2 de 10 bits (solo la versión de 512 GB)"
             ],
             [
               "Tasa de bits",
@@ -52884,7 +52884,7 @@
           "datos": [
             [
               "Peso",
-              "Aprox. 1063 g"
+              "Aprox. 1.063 g"
             ],
             [
               "Medidas",
@@ -52946,7 +52946,7 @@
           "datos": [
             [
               "Batería",
-              "6654 mAh, 95,3 Wh, aprox. 332 g"
+              "6.654 mAh, 95,3 Wh, aprox. 332 g"
             ],
             [
               "Carga",
@@ -53005,7 +53005,7 @@
         },
         {
           "titulo": "ActiveTrack y SelfieShot",
-          "texto": "Te sigue hasta a 12 m/s y encuadra solo. También QuickShots, MasterShots y Dolly Zoom."
+          "texto": "Te sigue a hasta 12 m/s y encuadra solo. También QuickShots, MasterShots y Dolly Zoom."
         },
         {
           "titulo": "4K a 60 fps",
@@ -53101,7 +53101,7 @@
           "datos": [
             [
               "Batería",
-              "1606 mAh, 11,5 Wh, 46 g"
+              "1.606 mAh, 11,5 Wh, 46 g"
             ],
             [
               "Centro de carga",
@@ -53256,7 +53256,7 @@
           "datos": [
             [
               "Batería",
-              "1606 mAh, 11,5 Wh, 46 g"
+              "1.606 mAh, 11,5 Wh, 46 g"
             ],
             [
               "Centro de carga",
@@ -53311,7 +53311,7 @@
         },
         {
           "titulo": "HyperSmooth 6.0",
-          "texto": "Estabilización con AutoBoost y Bloqueo del horizonte integrado."
+          "texto": "Estabilización con AutoBoost y bloqueo del horizonte integrado."
         },
         {
           "titulo": "Sumergible hasta 10 m",
@@ -53323,7 +53323,7 @@
         },
         {
           "titulo": "Hasta 1,5 h a 5,3K30",
-          "texto": "Y más de 2,5 h a 1080p30, con la batería Enduro de 1720 mAh."
+          "texto": "Y más de 2,5 h a 1080p30, con la batería Enduro de 1.720 mAh."
         }
       ],
       "ficha": [
@@ -53402,7 +53402,7 @@
           "datos": [
             [
               "Batería",
-              "Enduro de 1720 mAh, extraíble"
+              "Enduro de 1.720 mAh, extraíble"
             ],
             [
               "Conexión",
@@ -53443,7 +53443,7 @@
       ],
       "venta": [
         "Cámara de acción que graba 5,3K a 60 fps y 4K a 120 fps, con HyperSmooth 6.0, video HLG HDR y color de 10 bits. Sumergible hasta 10 m.",
-        "Detecta sola las lentes de la serie HB (se venden aparte), tiene GPS y Wi-Fi 6, y su batería Enduro de 1900 mAh graba más de 1,5 h a 5,3K30."
+        "Detecta sola las lentes de la serie HB (se venden aparte), tiene GPS y Wi-Fi 6, y su batería Enduro de 1.900 mAh graba más de 1,5 h a 5,3K30."
       ],
       "importante": [
         {
@@ -53459,7 +53459,7 @@
           "texto": "Color de 10 bits con GP-Log y LUT. Fotos de 27 MP."
         },
         {
-          "titulo": "Batería Enduro de 1900 mAh",
+          "titulo": "Batería Enduro de 1.900 mAh",
           "texto": "Más de 2,5 h a 1080p30 y más de 1,5 h a 4K30 y 5,3K30."
         },
         {
@@ -53547,7 +53547,7 @@
           "datos": [
             [
               "Batería",
-              "Enduro de 1900 mAh, extraíble (no sirve en GoPro anteriores)"
+              "Enduro de 1.900 mAh, extraíble (no sirve en GoPro anteriores)"
             ],
             [
               "Conexión",
@@ -53614,7 +53614,7 @@
         },
         {
           "titulo": "Hasta 208 min de batería",
-          "texto": "2400 mAh, en 5,7K a 24 fps con modo resistencia. Carga al 80% en 20 min."
+          "texto": "2.400 mAh, en 5,7K a 24 fps con modo resistencia. Carga al 80% en 20 min."
         },
         {
           "titulo": {
@@ -53693,7 +53693,7 @@
           "datos": [
             [
               "Batería",
-              "2400 mAh"
+              "2.400 mAh"
             ],
             [
               "Duración",
@@ -53778,7 +53778,7 @@
         },
         {
           "titulo": "Hasta 240 min de batería",
-          "texto": "Batería extrema Plus de 1950 mAh, en 1080p a 24 fps. Carga al 80% en 22 min."
+          "texto": "Batería extrema Plus de 1.950 mAh, en 1080p a 24 fps. Carga al 80% en 22 min."
         }
       ],
       "ficha": [
@@ -53844,7 +53844,7 @@
             ],
             [
               "Pantallas",
-              "Táctiles OLED: frontal de 1,46\" y trasera de 2,5\" (hasta 1000 nits de pico)"
+              "Táctiles OLED: frontal de 1,46\" y trasera de 2,5\" (hasta 1.000 nits de pico)"
             ],
             [
               "Agua",
@@ -53865,7 +53865,7 @@
           "datos": [
             [
               "Batería",
-              "1950 mAh; hasta 240 min (1080p a 24 fps)"
+              "1.950 mAh; hasta 240 min (1080p a 24 fps)"
             ],
             [
               "Carga",
@@ -53890,7 +53890,7 @@
           "datos": [
             [
               "En la caja",
-              "Cámara, batería extrema Plus (1950 mAh), soporte adaptador de liberación rápida bidireccional, base adhesiva curva, tornillo de fijación, cable USB-C (USB 3.1) y parche antideslizante"
+              "Cámara, batería extrema Plus (1.950 mAh), soporte adaptador de liberación rápida bidireccional, base adhesiva curva, tornillo de fijación, cable USB-C (USB 3.1) y parche antideslizante"
             ]
           ]
         }
@@ -53960,7 +53960,7 @@
         },
         {
           "titulo": "Dock multifuncional",
-          "texto": "Pantalla táctil OLED para ver en vivo y controlar la cámara hasta a 10 m, y ranura microSD para exportar."
+          "texto": "Pantalla táctil OLED para ver en vivo y controlar la cámara a hasta 10 m, y ranura microSD para exportar."
         },
         {
           "titulo": "Hasta 200 min con el dock",
@@ -54092,7 +54092,7 @@
             ],
             [
               "Con el dock",
-              "1300 mAh más; hasta 200 min en total (1080p a 24 fps)"
+              "1.300 mAh más; hasta 200 min en total (1080p a 24 fps)"
             ],
             [
               "Modo resistencia",
@@ -54143,7 +54143,7 @@
       ],
       "venta": [
         "Cámara de bolsillo con gimbal de 3 ejes y sensor de 1\": graba 4K a 60 fps y 4K a 120 fps en cámara lenta, con D-Log M y HLG de 10 bits.",
-        "Su pantalla táctil de 2\" gira para pasar de horizontal a vertical, sigue al sujeto con ActiveTrack 6.0 y carga al 80% en 16 minutos con el cargador de 65 W de DJI (aparte)."
+        "Su pantalla táctil de 2\" gira para pasar de horizontal a vertical; la cámara sigue al sujeto con ActiveTrack 6.0 y carga al 80% en 16 minutos con el cargador de 65 W de DJI (aparte)."
       ],
       "importante": [
         {
@@ -54248,7 +54248,7 @@
           "datos": [
             [
               "Batería",
-              "1300 mAh integrada; hasta 166 min (1080p a 24 fps)"
+              "1.300 mAh integrada; hasta 166 min (1080p a 24 fps)"
             ],
             [
               "Carga",
@@ -54390,7 +54390,7 @@
             ],
             [
               "Pantalla",
-              "Táctil giratoria de 2\", 556 x 314, 1000 nits"
+              "Táctil giratoria de 2\", 556 x 314, 1.000 nits"
             ],
             [
               "Micrófonos",
@@ -54407,7 +54407,7 @@
           "datos": [
             [
               "Batería",
-              "1545 mAh; hasta 210 min (1080p a 24 fps)"
+              "1.545 mAh; hasta 210 min (1080p a 24 fps)"
             ],
             [
               "Carga",
@@ -54466,7 +54466,7 @@
       "importante": [
         {
           "titulo": "Hasta 150.000 rpm",
-          "texto": "Motor Hyperdymium 2 con 7 kPa de presión: el doble que la generación anterior y un 30 % más potente."
+          "texto": "Motor Hyperdymium 2 con 7 kPa de presión: el doble que la generación anterior y un 30% más potente."
         },
         {
           "titulo": "Riza con aire",
@@ -54546,7 +54546,7 @@
             ],
             [
               "Compatibilidad",
-              "Sólo accesorios del Airwrap Co-anda2x"
+              "Solo accesorios del Airwrap Co-anda2x"
             ]
           ]
         }
@@ -54792,12 +54792,12 @@
         "AT-0554"
       ],
       "venta": [
-        "La versión para estilistas del Supersonic r: un 30 % más chico y un 20 % más liviano que el Supersonic, con motor Hyperdymium de hasta 110.000 rpm.",
+        "La versión para estilistas del Supersonic r: un 30% más chico y un 20% más liviano que el Supersonic, con motor Hyperdymium de hasta 110.000 rpm.",
         "Diez láminas calefactoras en la curva del secador calientan el aire de forma pareja, para un secado rápido y preciso."
       ],
       "importante": [
         {
-          "titulo": "30 % más chico y 20 % más liviano",
+          "titulo": "30% más chico y 20% más liviano",
           "texto": "Que el Supersonic, para secar y peinar con más control y comodidad."
         },
         {
@@ -54852,7 +54852,7 @@
           "datos": [
             [
               "Tamaño",
-              "30 % más chico y 20 % más liviano que el Supersonic (el peso, contando sólo el cuerpo)"
+              "30% más chico y 20% más liviano que el Supersonic (el peso, contando solo el cuerpo)"
             ],
             [
               "Cable",
@@ -54940,7 +54940,7 @@
           "texto": "En modo Eco, con batería de cuatro celdas que se cambia con un clic."
         },
         {
-          "titulo": "Filtra el 99,99 %",
+          "titulo": "Filtra el 99,99%",
           "texto": "De las partículas de hasta 0,3 micras, con separación lineal en dos etapas y filtrado sellado."
         },
         {
@@ -54954,7 +54954,7 @@
           "datos": [
             [
               "Superficies",
-              "Sólo pisos duros"
+              "Solo pisos duros"
             ],
             [
               "Cabezal",
@@ -55000,7 +55000,7 @@
             ],
             [
               "Filtrado",
-              "Sellado: retiene el 99,99 % de las partículas de hasta 0,3 micras"
+              "Sellado: retiene el 99,99% de las partículas de hasta 0,3 micras"
             ],
             [
               "Depósito",
@@ -55107,7 +55107,7 @@
         },
         {
           "titulo": "HEPA en cinco etapas",
-          "texto": "Filtrado sellado que retiene el 99,99 % de las partículas de hasta 0,3 micras."
+          "texto": "Filtrado sellado que retiene el 99,99% de las partículas de hasta 0,3 micras."
         }
       ],
       "ficha": [
@@ -55167,7 +55167,7 @@
             ],
             [
               "Retención",
-              "99,99 % de las partículas de hasta 0,3 micras"
+              "99,99% de las partículas de hasta 0,3 micras"
             ]
           ]
         },
@@ -55304,7 +55304,7 @@
             ],
             [
               "Filtrado",
-              "HEPA sellado en cinco etapas: 99,99 % de las partículas de hasta 0,1 micras"
+              "HEPA sellado en cinco etapas: 99,99% de las partículas de hasta 0,1 micras"
             ]
           ]
         },

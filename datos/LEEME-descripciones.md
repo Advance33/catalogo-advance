@@ -158,6 +158,13 @@ consola del navegador: `MODELOS.find(m => /s26 ultra/i.test(m.desc)).variantes.m
    Una entrada sin su huella (nueva, o cambiada después de verificarse, aunque
    sea una coma) hace fallar la prueba y frena la publicación. Las `notas` no
    cuentan: se pueden cambiar sin volver a verificar.
+   **La única excepción: un cambio solo de formato** (Benja, 14/10/2026). Si a
+   una entrada ya verificada se le cambió nada más que la tilde de "sólo", el
+   punto de miles, el espacio antes del % o "súper rápida", no hace falta otra
+   vuelta del verificador: `python3 herramientas/verificar-descripciones.py
+   --registrar-mecanicas origin/main` comprueba con un programa que, deshechos
+   esos cambios, la entrada es idéntica a la verificada en `origin/main`, y
+   recién ahí la anota. Cualquier otra diferencia la deja afuera.
 5. Corré las pruebas: `python3 pruebas/correr.py` (la tanda
    `decision-descripciones` revisa el formato: códigos que existen en el
    maestro, ninguno repetido entre entradas, versiones que cubren sus

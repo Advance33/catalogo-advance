@@ -41,11 +41,12 @@
     "https://www.apple.com/la/airpods-pro/"
    ]
   },
-  "bc4e5337c5395ffe18c90ef7eb1b46cfad5457fe67c41ce4be9c063607802e52": {
+  "0a0c29c3d805ddb487d409536da7d008bd301556da173810b9b2ce2a7dc95c11": {
    "modelo": "Antigravity A1 (Paquete Explorador)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r4-T13-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "bc4e5337c5395ffe18c90ef7eb1b46cfad5457fe67c41ce4be9c063607802e52",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.antigravity.tech/mx/drone/antigravity-a1/specs",
     "https://www.antigravity.tech/mx/drone/antigravity-a1",
@@ -62,14 +63,17 @@
     "https://www.apple.com/watchos/feature-availability/"
    ]
   },
-  "6ab20989693fcc85dd6e5f78bfb2997578ab84085f11a504ba05cca2c61a5a25": {
+  "2e604e9fab440e4231f735c67e8c0f5e85bf768c8e0053fc6315ccc98617df7a": {
    "modelo": "Apple Watch SE 3",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-03.json",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://www.apple.com/la/apple-watch-se-3/specs/",
-    "https://support.apple.com/es-la/125094"
+    "https://support.apple.com/es-la/125094",
+    "https://support.apple.com/es-mx/125094",
+    "https://support.apple.com/es-es/125094",
+    "https://support.apple.com/en-us/125094"
    ]
   },
   "16208f8dddba58604ea63499c8010067dad10effa58a96c6534fb519b9ff1499": {
@@ -82,14 +86,15 @@
     "https://www.apple.com/la/watchos/feature-availability/"
    ]
   },
-  "73a38caf534b360be632c0ec278b0e6a044b2d94f7e7c672f38fa3ffa875e868": {
+  "ce0527a4fcc56f4351c635568bd0865b08587c169d932d617e7908be4d0ef78b": {
    "modelo": "Apple Watch Ultra 3 49 mm",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-05.json",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://support.apple.com/es-la/125095",
-    "https://www.apple.com/la/watchos/feature-availability/ (Oxígeno en Sangre según el país; la ficha 125095 remite a esta lista)"
+    "https://support.apple.com/es-es/125095",
+    "https://support.apple.com/en-us/125095"
    ]
   },
   "5b6bdb98eee8da1f84bf6e843e30cb252865fc86054b043dba4fcb207a14c388": {
@@ -158,32 +163,35 @@
     "https://global.canon/en/c-museum/product/ef434.html"
    ]
   },
-  "e221b6ac5659386b8ba0984f3f377d44429f6de7b70a312e3a27308a35748ef9": {
+  "d7a9d19496bcd9936dc1d10a87fe2a4534ec0e1f63fc885578813b774d9339ad": {
    "modelo": "Canon EOS 2000D (EOS Rebel T7) con lente 18-55 III",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r5-T10-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "e221b6ac5659386b8ba0984f3f377d44429f6de7b70a312e3a27308a35748ef9",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "copia de trabajo-r1-T10-1 (bajada hoy 13:32-13:33, canonical comprobado): https://www.canon.es/cameras/eos-2000d/specifications/",
     "copia de trabajo-r1-T10-1 (bajada hoy 13:32-13:33, canonical comprobado): https://www.cla.canon.com/es/p/eos-rebel-t7",
     "copia de trabajo-r1-T10-1 (bajada hoy 13:32-13:33, canonical comprobado): https://global.canon/en/c-museum/product/dslr873.html"
    ]
   },
-  "b5eb9f996f1ee352bbd88fea2f1e922d7fdd60ea2117a9ada41c7997f7c6ceea": {
+  "20c22f58945e253d229a403c575cd91cc2ead9446620d9898f0c817fe63987a8": {
    "modelo": "Canon EOS 4000D (EOS Rebel T100) con lente 18-55 III",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r1-T10-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "b5eb9f996f1ee352bbd88fea2f1e922d7fdd60ea2117a9ada41c7997f7c6ceea",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.canon.es/cameras/eos-4000d/specifications/",
     "https://www.cla.canon.com/es/p/eos-rebel-t100"
    ]
   },
-  "9999a276b3a7f5cd00887a4a8ade0f6cfa65698718a9c45d0ebad8eb7f3dfda9": {
+  "fc5a8f8b8b8b097261e6d7cedbc9f6a89de92414fcf1fe82e755bdc6d65a3b6c": {
    "modelo": "Canon EOS 5D Mark IV (cuerpo)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T10-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "9999a276b3a7f5cd00887a4a8ade0f6cfa65698718a9c45d0ebad8eb7f3dfda9",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.canon.es/cameras/eos-5d-mark-iv/specifications/"
    ]
@@ -198,22 +206,24 @@
     "bajada de nuevo hoy 13:33: https://www.canon.es/cameras/eos-r1/"
    ]
   },
-  "ee71231041d805a0c72ab250153279abf6d9209e966879b90f534e3cf8c26f96": {
+  "64a490bc2825d58c8663f2c47d8254a5ec199cdc0bc75181009fc9cd0c056286": {
    "modelo": "Canon EOS R10 (cuerpo y kit RF-S 18-150mm F3.5-6.3 IS STM)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r1-T10-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "ee71231041d805a0c72ab250153279abf6d9209e966879b90f534e3cf8c26f96",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r10/specifications/",
     "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r10/",
     "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/store/canon-camara-mirrorless-eos-r10-objetivo-rf-s-18-150mm-f3-5-6-3-is-stm-de-canon/5331C017/"
    ]
   },
-  "7aaef3202ed0917e0430f21524c685001016ed462ed9b8cbbb0358293de4a727": {
+  "111470d0e0ace0f1345c30a59e2e9aa512b20195fe4a490a310290719dee4dba": {
    "modelo": "Canon EOS R100 + RF-S 18-45mm F4.5-6.3 IS STM + RF-S 55-210mm F5-7.1 IS STM",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r1-T10-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "7aaef3202ed0917e0430f21524c685001016ed462ed9b8cbbb0358293de4a727",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.canon.es/cameras/eos-r100/specifications/",
     "https://www.canon.co.uk/store/canon-eos-r100-mirrorless-camera-rf-s-18-45mm-is-stm-lens-rf-s-55-210mm-is-stm-lens/6052C035/"
@@ -292,22 +302,23 @@
     "https://www.canon.es/store/canon-camara-mirrorless-eos-r7-objetivo-rf-s-18-150mm-f3-5-6-3-is-stm-de-canon/5137C010/"
    ]
   },
-  "9d813617cae90249f83c3653b0417b5abea3125d257a93a9b48de2381a9cf0ac": {
+  "b4d8959ec3e0a94cc999caf2bb99915b67e7c5050b8e567e0d8a4c59c3470b8f": {
    "modelo": "Canon EOS RP (cuerpo y kit RF 24-105mm F4-7.1 IS STM)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T10-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "9d813617cae90249f83c3653b0417b5abea3125d257a93a9b48de2381a9cf0ac",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.canon.es/cameras/eos-rp/specifications/",
     "https://www.canon.es/cameras/eos-rp/",
     "https://www.canon.es/store/canon-camara-canon-eos-rp-objetivo-rf-24-105mm-f4-7-1-is-stm/3380C133/"
    ]
   },
-  "cd60b1dab05429bb7ed3f6cc0bbe1b6a53c7c8d0c009c7ea55f9039d7c2fa0f7": {
+  "f9c5300f3f7a6da19214f6f76064b9d3449f298b2d7ea50a4a3431e0c8db4f4d": {
    "modelo": "Canon Extender RF1.4x",
    "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "informe": "informe-02.json",
    "fuentes": [
     "https://www.canon.es/lenses/extender-rf-1-4x/",
     "https://www.canon.es/lenses/extender-rf-1-4x/specifications/",
@@ -316,11 +327,12 @@
     "https://www.canon.es/lenses/rf-200-800mm-f6-3-9-is-usm/specifications/"
    ]
   },
-  "35f8a900554dea0a424b8dfd0728cda584829aa0951246184785758e870305db": {
+  "b22d233a36b6841d2805aa654957a42783fffedc9c6fd882c8f9ac6b08d5d8d6": {
    "modelo": "Canon Extender RF2x",
-   "fecha": "2026-10-13",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "35f8a900554dea0a424b8dfd0728cda584829aa0951246184785758e870305db",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-13)",
    "fuentes": [
     "https://www.canon.es/lenses/extender-rf-2x/",
     "https://www.canon.es/lenses/extender-rf-2x/specifications/",
@@ -329,21 +341,23 @@
     "https://www.canon.es/lenses/rf-200-800mm-f6-3-9-is-usm/specifications/"
    ]
   },
-  "25053447cf41e9e7f87cb15afa1956294d719d541b59dd809a871070d96f05cb": {
+  "1cbf6a2965e8e5d9fdbf0b23cf859786bb04ab27e7e399aed2228ae3ea71fab5": {
    "modelo": "Canon PowerShot G7 X Mark III",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r1-T10-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "25053447cf41e9e7f87cb15afa1956294d719d541b59dd809a871070d96f05cb",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/powershot-g7-x-mark-iii/specifications/",
     "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.cla.canon.com/es/p/powershot-g7-x-mark-iii"
    ]
   },
-  "522b429d9fc1a1d60abc89c7802f83117dc06d9408868f0a39760f80631a0891": {
+  "e886ed724b53716327bbf35616c999b60a8afe2fd53d7e664c03b85b1eb6ac95": {
    "modelo": "Canon PowerShot SX740 HS",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T10-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "522b429d9fc1a1d60abc89c7802f83117dc06d9408868f0a39760f80631a0891",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.cla.canon.com/es/p/powershot-sx740-hs",
     "https://www.canon.es/cameras/powershot-sx740-hs-lite-edition/",
@@ -532,11 +546,12 @@
     "https://asia.canon/en/consumer/sitemap-product.xml"
    ]
   },
-  "4e2b8ca03719a044aa3ef8083fad01b37ff00ddf0d2997c44e6658bc9678b27b": {
+  "c985efb10cc0ae81b268684fd531d573d52eb229cff2aa38e265db360e591ca3": {
    "modelo": "Canon RF 28-70mm F2 L USM",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r9-T02-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "4e2b8ca03719a044aa3ef8083fad01b37ff00ddf0d2997c44e6658bc9678b27b",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.canon.es/lenses/rf-28-70mm-f-2l-usm-lens/",
     "https://www.canon.es/lenses/rf-28-70mm-f-2l-usm-lens/specifications/ (la tabla no carga)",
@@ -647,11 +662,12 @@
     "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://faq.canon.jp/app/answers/detail/a_id/105610/"
    ]
   },
-  "418e5c9e735f093b1b51b78c21bfb20fa9332b02f6467f77c5a52a20c4dd6002": {
+  "68829bf49d41fa094f82cdd9e57f2cd6fda74f3f6a4b3f5402ea0210cd769118": {
    "modelo": "Canon RF 70-200mm F2.8 L IS USM Z (negro)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-c-T02-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "418e5c9e735f093b1b51b78c21bfb20fa9332b02f6467f77c5a52a20c4dd6002",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.canon.es/lenses/rf-70-200mm-f2-8l-is-usm-z/",
     "https://www.canon.es/lenses/rf-70-200mm-f2-8l-is-usm-z/specifications/",
@@ -681,11 +697,12 @@
     "https://asia.canon/en/consumer/sitemap-product.xml"
    ]
   },
-  "e2ea29cf148c7c45802d092745e09efe8a411f4032b6893fcd417d44cc1def30": {
+  "0c6194f19dd7786591dead85be78c80db892533e4cad4adaeb0f46456ab2405d": {
    "modelo": "Canon RF 800mm F11 IS STM",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-c-T02-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "e2ea29cf148c7c45802d092745e09efe8a411f4032b6893fcd417d44cc1def30",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.canon.es/lenses/rf-800mm-f11-is-stm/",
     "https://www.canon.es/lenses/rf-800mm-f11-is-stm/specifications/"
@@ -712,24 +729,22 @@
     "https://www.canon.es/lenses/rf-s-10-18mm-f4-5-6-3-is-stm/specifications/"
    ]
   },
-  "42b9a5338daf2e8b50549e1b0f52cadcef98dad10960352ab44568076b66455c": {
+  "3bcabd578080c8c32e3871d9676042cc99b21b05f0be5dbc2b773d41a653f738": {
    "modelo": "Canon RF-S 18-150mm F3.5-6.3 IS STM",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-r12-T02-1.json",
+   "informe": "informe-02.json",
    "fuentes": [
     "https://www.canon.es/lenses/rf-s-18-150mm-f3-5-6-3-is-stm/",
-    "https://www.canon.es/lenses/rf-s-18-150mm-f3-5-6-3-is-stm/specifications/",
-    "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://asia.canon/en/consumer/rf-s18-150mm-f-3-5-6-3-is-stm/specification",
-    "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://www.canon.com.au/camera-lenses/rf-s-18-150mm-f3-5-6-3-is-stm",
-    "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://faq.canon.jp/app/answers/detail/a_id/103434/"
+    "https://www.canon.es/lenses/rf-s-18-150mm-f3-5-6-3-is-stm/specifications/"
    ]
   },
-  "44441ebe5671fabe914cf018a7b87e0866e251ece5595f599931904a8ca502d8": {
+  "fd5b02eaf7634ff74850abd673ec2299fb2ca3f1e02a5d3719e9738aa946e49e": {
    "modelo": "Canon RF-S 3.9mm F3.5 STM Dual Fisheye",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-c-T02-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "44441ebe5671fabe914cf018a7b87e0866e251ece5595f599931904a8ca502d8",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.canon.es/lenses/rf-s-3-9mm-f3-5-stm-dual-fisheye-lens/",
     "https://www.canon.es/lenses/rf-s-3-9mm-f3-5-stm-dual-fisheye-lens/specifications/"
@@ -750,11 +765,12 @@
     "https://www.canon.es/ sitemap de productos (copia del redactor)"
    ]
   },
-  "200583af7f3aba504b4c13e0bba8a4afa19e7b995dbaa93f63c4ca9291bf8c6e": {
+  "a175626206bf8364258847f06a40e156329042fdf7a06e9aa9804e80ab96cf66": {
    "modelo": "Canon RF-S 7.8mm F4 STM Dual",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r12-T02-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "200583af7f3aba504b4c13e0bba8a4afa19e7b995dbaa93f63c4ca9291bf8c6e",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.canon.es/lenses/rf-s-7-8mm-f4-stm/",
     "https://www.canon.es/lenses/rf-s-7-8mm-f4-stm/specifications/",
@@ -763,43 +779,46 @@
     "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://faq.canon.jp/app/answers/detail/a_id/104930/"
    ]
   },
-  "50e6a3938118d046507a6435dfabc87589b8a723398f3409fd62cc4ea192cd52": {
+  "6fc67a41b0fe56a2bc485acdde185a81ebe325de138f88958f305a2286b5e996": {
    "modelo": "Canon VIXIA HF G70",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T12-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "50e6a3938118d046507a6435dfabc87589b8a723398f3409fd62cc4ea192cd52",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://gdlp01.c-wss.com/gds/1/0300044581/03/hfg70-im4-n-en.pdf (págs. 3-4, 29, 35, 43, 58-60, 73-77, 131-134)"
    ]
   },
-  "d9a664692eb8b3798375da71de9db861e1552fff1b8a9a063216e77fe2480c6e": {
+  "ec541b728910425db6de35dc4c1a7b0a882bb4cc69ead310e36657a842bdff96": {
    "modelo": "DJI Air 3S Pack Vuela Más (DJI RC 2)",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-a-T13-2.json",
+   "informe": "informe-04.json",
    "fuentes": [
     "https://www.dji.com/mx/air-3s/specs",
-    "https://www.dji.com/mx/air-3s (textos en español del JSON de la página)",
-    "https://store.dji.com/es/product/dji-air-3s?set_region=ES (inTheBoxes de dji-air-3s-fly-more-combo-rc-2)",
-    "https://store.dji.com/product/dji-air-3s?set_region=US (misma caja del pack RC 2, para ver que no cambia por país)"
+    "https://www.dji.com/mx/air-3s",
+    "https://store.dji.com/es/product/dji-air-3s?set_region=ES",
+    "https://store.dji.com/es/product/dji-air-3s-fly-more-combo-rc-2?set_region=ES"
    ]
   },
-  "40d787545338e5cadf1c4cba3c956489145ed272a71f17f93c19fe527d23e47c": {
+  "cbc2d1866eb280b93fefa51d78185db4d6dd5f255039e694af0dd6499472d782": {
    "modelo": "DJI Lito X1 Pack Vuela Más (DJI RC-N3)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r4-T13-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "40d787545338e5cadf1c4cba3c956489145ed272a71f17f93c19fe527d23e47c",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.dji.com/mx/lito-x1/specs (RC-N3: «Sin cargar ningún dispositivo móvil: 3.5 horas / Al cargar un dispositivo móvil: 1.5 horas»: el aviso de la primera pasada quedó bien aplicado)",
     "https://www.dji.com/mx/lito-x1 (textos en español del JSON de la página: HDR 4K/60, nota 7 de los 14 pasos, MasterShots, QuickShots, Hyperlapse, Panorámica, inclinación de 40°)",
     "https://store.dji.com/es/product/dji-lito-x1?set_region=ES (inTheBoxes de dji-lito-x1-fly-more-combo-dji-rc-n3: coincide con «En la caja», 3 baterías estándar)"
    ]
   },
-  "50ce7e4bf84b9dab8a504b1d6aba9badf1f55de33afccc07aa2d4da891bb0cc6": {
+  "0797372dea55dd0da7fe7d9b37e6a448f07db7ca215a449b4f4b0c9a8f6d8fe0": {
    "modelo": "DJI Mavic 4 Pro 512 GB Pack para Creadores (DJI RC Pro 2)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T13-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "50ce7e4bf84b9dab8a504b1d6aba9badf1f55de33afccc07aa2d4da891bb0cc6",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.dji.com/mx/mavic-4-pro/specs",
     "https://www.dji.com/mx/mavic-4-pro (textos en español del JSON de la página)",
@@ -807,46 +826,50 @@
     "https://store.dji.com/uk/product/dji-mavic-4-pro?set_region=GB (misma caja del Pack para Creadores)"
    ]
   },
-  "505c05aaff5de400e489ba2212170bbdd03d0edbe0380c9b05fc40671b6ffa99": {
+  "f7750ecf572d9b6acdfd91ac9fbc04bfacfd10a9e64c37c799923af80aaee9a1": {
    "modelo": "DJI Mini 5 Pro",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-05.json",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://www.dji.com/mx/mini-5-pro/specs",
     "https://www.dji.com/mx/mini-5-pro",
+    "https://www.dji.com/global/mini-5-pro/specs",
+    "https://www.dji.com/global/mini-5-pro",
     "https://store.dji.com/es/product/dji-mini-5-pro?set_region=ES",
-    "~/catalogo-advance-trabajo/descripciones-armador/datos-de-pedro.md"
+    "https://store.dji.com/es/product/dji-mini-5-pro-fly-more-combo-dji-rc2?set_region=ES",
+    "https://store.dji.com/es/product/dji-mini-5-pro-fly-more-combo-plus-dji-rc2?set_region=ES"
    ]
   },
-  "9873643aab4ee0d7059a92d5337b83c20c3fbc1acc17ba91361696f5e96a3070": {
+  "4c3a149cab3b4a583e838917443da7a31da91a5650c09e40219ddee40c03a727": {
    "modelo": "DJI Neo 2 Motion Pack Vuela Más",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r4-T13-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "9873643aab4ee0d7059a92d5337b83c20c3fbc1acc17ba91361696f5e96a3070",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.dji.com/mx/neo-2/specs",
     "https://www.dji.com/mx/neo-2 (textos en español del JSON: «Cuando se combina con el control de movimientos y las gafas, Neo 2 permite el control de movimientos e Easy ACRO, para ofrecer una experiencia inmersiva en FPV», notas 8, 12, 13 y 17)",
     "https://store.dji.com/es/product/dji-neo-2?set_region=ES (inTheBoxes de dji-neo-2-motion-fly-more-combo: coincide con «En la caja»)"
    ]
   },
-  "c0444c8401d5bc8e8242d75a811fb012df8836bf904feaff4a353a27255e07ae": {
+  "cf39f41a69ca08c981a3215576bf43e31738cd5ae95a0c03da8755ff7742f8ab": {
    "modelo": "DJI Neo 2 Pack Vuela Más",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-r11-T13-1.json",
+   "informe": "informe-04.json",
    "fuentes": [
-    "https://www.dji.com/mx/neo-2/specs (curl -b 'region=MX; lang=es': 151 g / 160 g, 147 × 171 × 41 mm con protectores y sin transceptor, 12 m/s en Sport y siguiendo, aprox. 19 min (17 min con protectores), 10.7 m/s, 49 GB, C0 (UE), 1/2 pulgada, 16.5 mm, f/2.2, 119.8°, enfoque 0.7 m a ∞, 12 MP 4000 × 3000, JPEG, 4K 100/60/50/30 fps con la nota «100 fps solo con control de movimientos o control remoto», vertical 2.7K 60/50/30, RockSteady, estabilizador mecánico de 2 ejes, visión monocular omnidireccional + infrarrojo abajo + LiDAR adelante, transceptor O4 opcional, RC-N3 hasta 1080p/60 fps, FCC 10 km / CE 6 km, Wi-Fi 500 m (FCC), sin microSD, 1606 mAh, 11.5 Wh, 46 g, centro de carga 65 W en aprox. 68 min las tres y «superior a 45 W permite cargar tres baterías al mismo tiempo»)",
-    "https://www.dji.com/mx/neo-2 (textos en español del JSON de la página: palma, control gestual, Regreso a la palma, ActiveTrack y SelfieShot «encuadran automáticamente», Dolly Zoom, QuickShots, MasterShots, 12 m/s de seguimiento, «detectar y evitar obstáculos», protectores de hélices integrales, control desde la app por Wi-Fi, notas 6, 12, 13, 15 y 17, los tres packs Vuela Más)",
-    "https://store.dji.com/es/product/dji-neo-2?set_region=ES (inTheBoxes de dji-neo-2-fly-more-combo-drone-only, -fly-more-combo, -fly-more-140w-gan-charging-combo y -motion-fly-more-combo)",
-    "https://store.dji.com/uk/product/dji-neo-2?set_region=GB (control: mismos packs y mismo contenido, sin el de 140 W)"
+    "https://www.dji.com/mx/neo-2/specs",
+    "https://www.dji.com/mx/neo-2",
+    "https://store.dji.com/es/product/dji-neo-2?set_region=ES"
    ]
   },
-  "ab0ceda3b73d2e26be76a4ed2e09808a36e995610069db927b127c82a6b47390": {
+  "360dd910c06b50c1d38104f42f5d5105002964d15e2026484d96ea0695517856": {
    "modelo": "DJI Osmo Action 6 Pack Estándar",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T13-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "ab0ceda3b73d2e26be76a4ed2e09808a36e995610069db927b127c82a6b47390",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.dji.com/mx/osmo-action-6/specs",
     "https://www.dji.com/mx/osmo-action-6 (textos en español del JSON de la página)",
@@ -854,34 +877,35 @@
     "https://store.dji.com/uk/product/osmo-action-6?set_region=GB (misma caja del Standard Combo)"
    ]
   },
-  "9a16f5dbe0803edbd237dc5aa6d468c6351df01e3b471022cc054dcc3bf581c2": {
+  "9b5ea23fad626a5262cd853a6f37fedee0526e2b55b152c3c06401b59047852e": {
    "modelo": "DJI Osmo Nano (64 GB y Standard Combo de 128 GB)",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-r4-T13-1.json",
+   "informe": "informe-04.json",
    "fuentes": [
     "https://www.dji.com/mx/nano/specs",
-    "https://www.dji.com/mx/nano (textos en español del JSON: 13.5 pasos, OLED, ±30°, Supernoche, 80 % en 20 min, notas 3, 8 y 9, hasta dos transmisores)",
-    "https://store.dji.com/es/product/osmo-nano?set_region=ES (los 7 ítems de «En la caja» están en todos los packs de 64 GB y en el Pack Estándar de 128 GB)",
-    "https://store.dji.com/product/osmo-nano?set_region=US (ídem)"
+    "https://www.dji.com/mx/nano",
+    "https://store.dji.com/es/product/osmo-nano?set_region=ES",
+    "https://store.dji.com/product/osmo-nano?set_region=US"
    ]
   },
-  "f814bef601cbf1f741717ea2fef6a50723cbdc01d26ce9240d3e02d23e205a3e": {
+  "9c29fdfe15c046eb6d0633f4487ac9f9203137754d88b819d41754670c0cea7d": {
    "modelo": "DJI Osmo Pocket 3",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-r4-T13-1.json",
+   "informe": "informe-04.json",
    "fuentes": [
-    "https://www.dji.com/mx/osmo-pocket-3/specs («Tamaño máx. de imagen: 16:9, 3840×2160; 1:1, 3072×3072», «Disparo único: Aprox. 9.4 MP», carga «con el cargador PD de 65 W DJI (se vende por separado)»: los dos arreglos de la primera pasada quedaron bien)",
-    "https://www.dji.com/mx/osmo-pocket-3 (textos en español del JSON: OLED, 116 min en 4K/60, D-Log M y HLG de 10 bits, Mic 2/Mic Mini, webcam, directo y código de tiempo)",
-    "https://store.dji.com/es/product/osmo-pocket-3?set_region=ES (los 5 ítems de «En la caja» están en todos los packs)"
+    "https://www.dji.com/mx/osmo-pocket-3/specs",
+    "https://www.dji.com/mx/osmo-pocket-3",
+    "https://store.dji.com/es/product/osmo-pocket-3?set_region=ES"
    ]
   },
-  "64e14627d2096fda45c4469f95bd70bd986f78ad980a23c8b6e79f82b07ac183": {
+  "7e91fcf083868aeb3303d1e05c8897cb83f62bce4c7361ce31769b2fb7db01d6": {
    "modelo": "DJI Osmo Pocket 4P Pack Estándar",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T13-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "64e14627d2096fda45c4469f95bd70bd986f78ad980a23c8b6e79f82b07ac183",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.dji.com/mx/osmo-pocket-4p/specs",
     "https://www.dji.com/mx/osmo-pocket-4p",
@@ -889,11 +913,12 @@
     "https://store.dji.com/hk/product/osmo-pocket-4p?set_region=HK (el Pack Estándar también trae la luz de relleno)"
    ]
   },
-  "1ff7bf255014fac0f3302de45d7344aa14aa83cb0c405f074f0d034c00e6f226": {
+  "05931f4d058a1937ea0e9fbc010b280dd539499c09d1644b55080fe563b24330": {
    "modelo": "Dyson Airwrap Co-anda2x (Ceramic Pink · Rose Gold)",
-   "fecha": "2026-10-13",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "1ff7bf255014fac0f3302de45d7344aa14aa83cb0c405f074f0d034c00e6f226",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-13)",
    "fuentes": [
     "https://www.dyson.es/cuidado-del-cabello/moldeador/airwrap-co-anda2x/liso-ondulado-ceramic-pink-rose-gold",
     "https://www.dyson.co.uk/hair-care/hair-stylers/airwrap-co-anda2x/straight-wavy-ceramic-pink-rose-gold",
@@ -916,11 +941,12 @@
     "https://www.dyson.es/app (control: nota 5, no está en fuentes)"
    ]
   },
-  "7d15741b9baec13aec154d071b69d3a5a45e99024487e237726fcc1b7d41416a": {
+  "e234e09c99e4b10be32568a860dc94c7f1df9888ae673530f0bc38665f1a771f": {
    "modelo": "Dyson PencilVac Fluffycones",
-   "fecha": "2026-10-13",
-   "por": "verificador-descripciones",
-   "informe": "informe-04.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "7d15741b9baec13aec154d071b69d3a5a45e99024487e237726fcc1b7d41416a",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-13)",
    "fuentes": [
     "https://www.dyson.co.uk/vacuum-cleaners/cordless/pencilvac/fluffycones",
     "https://www.dyson.com.sg/pencilvac-fluffycones-black",
@@ -940,22 +966,24 @@
     "https://www.dyson.cn/533462-01-dyson-supersonic-hd16-ceramic-pink.html"
    ]
   },
-  "ceafc14848e531f2c25fcdedb1576f5677aa9085ede8a578ec8ef657b60e9c47": {
+  "ae3c15c88bd84639bf37247adfb824690274e0891a1f06253e7bdc4ab6cb7a78": {
    "modelo": "Dyson Supersonic r Professional HD18 (Vinca Blue · Topaz)",
-   "fecha": "2026-10-13",
-   "por": "verificador-descripciones",
-   "informe": "informe-03.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "ceafc14848e531f2c25fcdedb1576f5677aa9085ede8a578ec8ef657b60e9c47",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-13)",
    "fuentes": [
     "https://www.dyson.es/empresas/cuidado-del-cabello/supersonic-r-pro/azul-indigo",
     "https://www.dyson.co.uk/commercial/hair-care/supersonic-r-pro-bright-copper",
     "https://www.dyson.cn/522276-01-dyson-supersonic-hd18-505d.html"
    ]
   },
-  "b5f8e901ffb0613d1db35bd060399de65c6d1fd6eb50b229e451395fc7855166": {
+  "4f6a4745d438f40a78774ef3cb35708dd7165143334a0c94c5ac524c62ef6b39": {
    "modelo": "Dyson V15 Detect Fluffy (en la lista del proveedor: V15 Fluffy)",
-   "fecha": "2026-10-13",
-   "por": "verificador-descripciones",
-   "informe": "informe-05.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "b5f8e901ffb0613d1db35bd060399de65c6d1fd6eb50b229e451395fc7855166",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-13)",
    "fuentes": [
     "https://www.dyson.cn/400471-01-dyson-v15-detect-fluffy-blue.html",
     "https://www.dyson.cn/product/vacuum-cleaner/dyson-v15.html",
@@ -964,11 +992,12 @@
     "https://www.dyson.com.au/dyson-v15-detect-absolute-447955-01-yellow-nickel (control de las notas: 240 AW y 3,1 kg, no está en fuentes)"
    ]
   },
-  "34d6a6f2314e1bd5fe6acd65365941c754b205cedfc44ddd047181a37b043e78": {
+  "8a6de5be85fd5d8096b7a6d3dc787dee71365b33cba308da6e1cf2adb7bb09dc": {
    "modelo": "Dyson V16 Piston Animal",
-   "fecha": "2026-10-13",
-   "por": "verificador-descripciones",
-   "informe": "informe-06.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "34d6a6f2314e1bd5fe6acd65365941c754b205cedfc44ddd047181a37b043e78",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-13)",
    "fuentes": [
     "https://www.dyson.es/aspiradoras/sin-cable/v16-piston-animal/mate-negro-cobre",
     "https://www.dyson.co.uk/vacuum-cleaners/cordless/v16-piston-animal/black-copper",
@@ -1004,11 +1033,12 @@
     "https://www.fujifilm.com/ar/es/consumer/instax/cameras/mini12"
    ]
   },
-  "86d2ba7fb9a14ce509d00abb3b9eb836dbe6c9bd8cc12c7e08e247b7f43fae34": {
+  "0d8a4359877b7442a0fd5befaf269c61fd685d2b0a3fdb2fa23048992b0fe4f5": {
    "modelo": "Galaxy A16 4G",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-02.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "86d2ba7fb9a14ce509d00abb3b9eb836dbe6c9bd8cc12c7e08e247b7f43fae34",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a16-black-128gb-sm-a165mzkmaro/",
     "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a17-black-128gb-sm-a175fzkraro/",
@@ -1025,21 +1055,23 @@
     "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a17-5g-blue-256gb-sm-a176bzbzaro/"
    ]
   },
-  "3b42db4c712304400f38d804e5befe1d543bb1b2a4aae6958535cdda6e3d80bb": {
+  "44d969b811c8488254ed6965b082cae6cc9d65e93ee953429290c4505fb218dd": {
    "modelo": "Galaxy A27 5G",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-04.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "3b42db4c712304400f38d804e5befe1d543bb1b2a4aae6958535cdda6e3d80bb",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a27-5g-black-256gb-sm-a276bzkfaro/",
     "https://www.samsung.com/mx/smartphones/galaxy-a/galaxy-a27-5g-black-128gb-sm-a276bzkaltm/"
    ]
   },
-  "04359cd78ff2eddf693e516892b0d82afbed721c9f99b11bb559a4671e577f2c": {
+  "42885b52aaafe8e0be204ceea4d141255869b297a67dd5e07a46be1b93b407aa": {
    "modelo": "Galaxy A36 5G",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-05.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "04359cd78ff2eddf693e516892b0d82afbed721c9f99b11bb559a4671e577f2c",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a36-5g-awesome-black-256gb-sm-a366ezkflea/",
     "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-A366EZKFLEA&specAnnotationYN=Y",
@@ -1047,20 +1079,22 @@
     "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=latin&modelList=SM-A366ELGBGTO&specAnnotationYN=Y"
    ]
   },
-  "e9dee9a7f541ee57bca92b0143c0698bd91b87a2cbbf92490cfd735963f16f70": {
+  "470e2c656d073266f33f5516fd7eef89f8357a0931766f41f1b0fc3d7bd0fb2d": {
    "modelo": "Galaxy A37 5G",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-06.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "e9dee9a7f541ee57bca92b0143c0698bd91b87a2cbbf92490cfd735963f16f70",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a37-5g-awesome-charcoal-256gb-sm-a376bzafaro/"
    ]
   },
-  "77bea8baee507ba6d0ef3a1c1cf011fab4e83e0b6aa7fab4873b502a52ba8cb5": {
+  "4f50815bca2fbc34e6b007cac78a3211e2c97a28a85950f3f521cfd5aaaeba43": {
    "modelo": "Galaxy A56 5G",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-07.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "77bea8baee507ba6d0ef3a1c1cf011fab4e83e0b6aa7fab4873b502a52ba8cb5",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a56-5g-awesome-graphite-256gb-sm-a566ezkflea/",
     "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-A566EZKFLEA",
@@ -1068,11 +1102,12 @@
     "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=in&modelList=SM-A566EZKHINS"
    ]
   },
-  "d7050b9354f20659210e23b59e1d8e7ca81e1de5fd2dda867fc5afe8b348ee48": {
+  "0415e89ed2c5422e503b17bc0f6201250c8534ebda015ca18402a15b2c309dea": {
    "modelo": "Galaxy A57 5G",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-08.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "d7050b9354f20659210e23b59e1d8e7ca81e1de5fd2dda867fc5afe8b348ee48",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a57-5g-awesome-icyblue-256gb-sm-a576blbnaro/",
     "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-A576BLBNARO&specAnnotationYN=Y",
@@ -1129,11 +1164,12 @@
     "https://www.samsung.com/us/smartphones/galaxy-s26-fe/"
    ]
   },
-  "8d914e45e88ce5abdd73e55c8348b5119336556314407360fbeecc25d8da2293": {
+  "624cc05b57ee67e5ca1c87fb7fcaa44796c97f6a9d649d2c93f4cf82b32b16f4": {
    "modelo": "Galaxy S26 Plus",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-07.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "8d914e45e88ce5abdd73e55c8348b5119336556314407360fbeecc25d8da2293",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/ar/smartphones/galaxy-s26/specs/ (la tabla se arma con JavaScript; leída en la API pública de la misma página: https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S947BZVLARO&specAnnotationYN=Y y SM-S947BZVMARO)",
     "https://www.samsung.com/ar/smartphones/galaxy-s26/",
@@ -1156,33 +1192,36 @@
     "https://news.samsung.com/global/samsung-unveils-galaxy-s26-series-the-most-intuitive-galaxy-ai-phone-yet"
    ]
   },
-  "68909517adb95981881b87ef9c6fffe3e3d588f73fc8311e4527f3705c8aa537": {
+  "ba0057a7050546337a1294c587896534a802bb64a668f015be79fa3fdd7d0c77": {
    "modelo": "Galaxy Tab A11 (Wi-Fi y 4G LTE)",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-09.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "68909517adb95981881b87ef9c6fffe3e3d588f73fc8311e4527f3705c8aa537",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/ar/tablets/galaxy-tab-a/galaxy-tab-a11-gray-64gb-sm-x133nzaal09/",
     "https://www.samsung.com/latin/tablets/galaxy-tab-a/galaxy-tab-a11-gray-128gb-sm-x135gzazgto/",
     "https://www.samsung.com/es/tablets/galaxy-tab-a/galaxy-tab-a11-gray-64gb-sm-x135fzaaeub/"
    ]
   },
-  "8cf252a46f799da0b39782560a92522168e350ab232db7ecc1ed610ca681d78a": {
+  "dcc024ddb6c52ed1f702ffae78c5cfc2a5f6cc1e32c1ca887eca0f9e737e06bf": {
    "modelo": "Galaxy Tab A11+ 6GB/128GB (Wi-Fi y 5G)",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-05.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "8cf252a46f799da0b39782560a92522168e350ab232db7ecc1ed610ca681d78a",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/ar/tablets/galaxy-tab-a/galaxy-tab-a11-plus-silver-128gb-sm-x230nzsaaro/ (y API siteCode=ar&modelList=SM-X230NZSAARO)",
     "https://www.samsung.com/es/tablets/galaxy-tab-a/galaxy-tab-a11-plus-gray-128gb-sm-x236bzareub/ (y API siteCode=es&modelList=SM-X236BZAREUB)",
     "Búsqueda de una versión sólo LTE del A11+ (para que «Cellular» = 5G no sea deducción): Samsung sólo tiene SM-X230 (Wi-Fi) y SM-X236B/X238U (5G)"
    ]
   },
-  "1a0728995eef4245d9023c7eb0f635cd15b890edee6d08bdaf860131f50fe367": {
+  "36a0dce345cd6ab37c78354f20c54041f4bdee7e7c4bf752eb31089811169ec8": {
    "modelo": "Galaxy Tab S10 FE (Wi-Fi y 5G)",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-07.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "1a0728995eef4245d9023c7eb0f635cd15b890edee6d08bdaf860131f50fe367",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s10-fe-gray-128gb-sm-x520nzaamxo/",
     "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-X520NZAAMXO",
@@ -1193,44 +1232,48 @@
     "https://www.samsung.com/ie/support/mobile-devices/what-are-the-features-of-the-galaxy-tab-s10-fe-plus-and-s10-fe/"
    ]
   },
-  "9459161e0f92c24ecfc5612899eb94e70d6696e6caa0f57aef4937b567e944e6": {
+  "dbdeaefa64aafe4c92bb7aa6f755b1d57baf9e81a0198670f9b40787a8d3d8f8": {
    "modelo": "Galaxy Tab S10 FE+ Wi-Fi",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-04.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "9459161e0f92c24ecfc5612899eb94e70d6696e6caa0f57aef4937b567e944e6",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s10-fe-plus-gray-128gb-sm-x620nzaamxo/",
     "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s10-fe-plus-gray-256gb-sm-x620nzaemxo/",
     "https://www.samsung.com/ie/support/mobile-devices/what-are-the-features-of-the-galaxy-tab-s10-fe-plus-and-s10-fe/"
    ]
   },
-  "4923e8430c95ca479c23aec22ae02c8fb2bea19dc2f94a43afb72a4f148aa539": {
+  "ccb4e15e4c5727844556915bb0990173db7261e57c8ea9b45c12c9cd3009d35c": {
    "modelo": "Galaxy Tab S10 Lite Wi-Fi 6GB/128GB",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-11.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "4923e8430c95ca479c23aec22ae02c8fb2bea19dc2f94a43afb72a4f148aa539",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s10-lite-gray-128gb-sm-x400nzaamxo/",
     "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-X400NZAAMXO&specAnnotationYN=Y",
     "https://news.samsung.com/es/galaxy-tab-s10-lite-una-tablet-con-una-excelente-relacion-calidad-precio-para-las-necesidades-del-dia-a-dia"
    ]
   },
-  "51ee0f4f7da512afc13950363fe71194c08538adf40667a3b9cd66522fc54c9c": {
+  "79bb9b9e7e027d6c2dc27447fbe2c3b8fc5e0c5f03c40e74dd0577c4cb9a3f0e": {
    "modelo": "Galaxy Tab S11 Ultra Wi-Fi 12GB/256GB",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-06.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "51ee0f4f7da512afc13950363fe71194c08538adf40667a3b9cd66522fc54c9c",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s11-ultra-gray-256gb-sm-x930nzaamxo/",
     "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-X930NZAAMXO&specAnnotationYN=Y",
     "https://news.samsung.com/global/meet-samsung-galaxy-tab-s11-series-packing-everything-you-expect-from-a-premium-tablet"
    ]
   },
-  "74f572db3ae17c49f0e049c6e660bda3859ef434e22a5ec1b7b3b7cbe3d61873": {
+  "93ec290bfc1e7328e71c94fd41564a891d003edc7ecdad4138e4331dd5fcf42b": {
    "modelo": "Galaxy Tab S11 Wi-Fi 12GB/128GB",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "74f572db3ae17c49f0e049c6e660bda3859ef434e22a5ec1b7b3b7cbe3d61873",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/mx/tablets/galaxy-tab-s/galaxy-tab-s11-gray-128gb-sm-x730nzaamxo/",
     "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-X730NZAAMXO&specAnnotationYN=Y",
@@ -1278,72 +1321,78 @@
     "https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living"
    ]
   },
-  "f02760c281f477a7a83e95dda2f62796e4a8b63574648978b73ecb218d2ab4e6": {
+  "46db39ad7fe88e8a8318316584d51c0be7c6055f996bbe2f195e9e4884804acc": {
    "modelo": "Garmin Approach S70 42 mm",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-02.json",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://www.garmin.com/es-CL/p/847697/pn/010-02746-10",
-    "https://www.garmin.com/es-ES/p/847697/pn/010-02746-10"
+    "https://www.garmin.com/es-ES/p/847697/pn/010-02746-10",
+    "https://www8.garmin.com/manuals/webhelp/GUID-0F89E6A5-EC1C-4382-964E-27DC4B5FC932/ES-XM/GUID-2E8EE4BB-67F6-4B99-9E6C-83CB12DB33C3.html"
    ]
   },
-  "867b09ce62c487132adbf4975c24bef82939cccfa7ec21c4d48694f7ec25f903": {
+  "1ea6f4b375409ff5f78f49c06260cf61b74017b0cf6bafc9d9a18aede4b82415": {
    "modelo": "Garmin Instinct 2S Solar",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-06.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "867b09ce62c487132adbf4975c24bef82939cccfa7ec21c4d48694f7ec25f903",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.garmin.com/es-ES/p/741462/pn/010-02564-00 (descripción general, notas 1 a 5, «En la caja» y especificaciones del 010-02564-00, desde el JSON de la página)",
     "https://www.garmin.com/es-CL/p/741462/pn/010-02564-00 (ídem)"
    ]
   },
-  "04e2383ffb7ea4b4a44163b0a739b7c264cd12c29fd8d81f0458711ec103d8e2": {
+  "8c66e95343adc7cf9779a055b67e44c3fef44c854b61c98210821a72bb30fdfd": {
    "modelo": "Garmin epix Pro (Gen 2) Sapphire 42 mm",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "04e2383ffb7ea4b4a44163b0a739b7c264cd12c29fd8d81f0458711ec103d8e2",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.garmin.com/es-AR/p/894039/pn/010-02802-10",
     "https://www.garmin.com/es-ES/p/894039/pn/010-02802-11"
    ]
   },
-  "80cec46a381b2cdb966ef658afe5bb48043395a45bd7f79acf0e4347baa69a75": {
+  "82da6ee3aac2ab888606ba2394667a4baa89e34afbb1180b6f5412aeef62941c": {
    "modelo": "Garmin epix Pro (Gen 2) Sapphire 51 mm",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "80cec46a381b2cdb966ef658afe5bb48043395a45bd7f79acf0e4347baa69a75",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.garmin.com/es-AR/p/884088/pn/010-02804-10",
     "https://www.garmin.com/es-ES/p/884088/pn/010-02804-11"
    ]
   },
-  "69f95023d21bc38c9a3f919d755f29aafbdaa5ac3e7770ec5a6add9152904b7b": {
+  "75448cb93c946cea05138e4f81263f857ec7c4c4aeae4eff3b5ea3f3366a9c83": {
    "modelo": "GoPro HERO12 Black (Special Bundle)",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-a-T13-1.json",
+   "informe": "informe-04.json",
    "fuentes": [
     "https://gopro.com/es/es/shop/cameras/hero12-black/CHDHX-121-master.html",
-    "https://gopro.com/es/es/compare (JSON __NEXT_DATA__, producto CHDHX-121-master)"
+    "https://gopro.com/es/es/compare"
    ]
   },
-  "08669e06d805f448d71fe6e2e2d6a08c85c4be61b72ca7c13f692c11e0bb408e": {
+  "6cd84c8092f609c28595d7b745fe7d57f246670252b0f09c39b8044de6bb82d9": {
    "modelo": "GoPro HERO13 Black",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T13-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "08669e06d805f448d71fe6e2e2d6a08c85c4be61b72ca7c13f692c11e0bb408e",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://gopro.com/es/es/shop/cameras/buy/hero13black/CHDHX-131-master.html (JSON __NEXT_DATA__: textos y «Qué incluye la HERO13 Black (independiente)» y los kits)",
     "https://gopro.com/es/es/compare (JSON __NEXT_DATA__, producto CHDHX-131-master)",
     "https://gopro.com/en/us/shop/cameras/buy/hero13black/CHDHX-131-master.html (caja de la cámara sola, para ver que no cambia por país)"
    ]
   },
-  "9cab8d1e2dcd14bad41bb84f314cd3253f776f7b0617ff2fa215c2f758112a63": {
+  "331b6ed742d836d0b03282ee22c06db2531f6362049baceaf31dfd2dab5ab0e4": {
    "modelo": "Insta360 X5 (pack del proveedor: palo selfie, 2 baterías y tapa de lente)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r4-T13-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "9cab8d1e2dcd14bad41bb84f314cd3253f776f7b0617ff2fa215c2f758112a63",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.insta360.com/es/product/insta360-x5 (Chrome headless; tabla de especificaciones completa y «Efecto selfie stick invisible»: el aviso de venta 2 quedó bien aplicado)",
     "https://store.insta360.com/es/product/x5 (Chrome headless; ningún paquete se llama como la fila: queda bien como dato del proveedor)"
@@ -1438,23 +1487,22 @@
     "https://support.apple.com/es-la/126321"
    ]
   },
-  "2e99cf1bc75bfd018613d280dd2d4d4de3df3d0e162a924da1b6c15b7166833b": {
+  "541d5198f07019ec0176091517e173ba52c172dcdcefa93ba3e519889835b327": {
    "modelo": "MacBook Neo",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-03.json",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://www.apple.com/la/macbook-neo/specs/",
-    "https://www.apple.com/newsroom/2026/03/say-hello-to-macbook-neo/",
-    "https://www.apple.com/es/macbook-neo/specs/",
-    "https://www.apple.com/shop/buy-mac/macbook-neo (confirma: 256GB = Magic Keyboard sin Touch ID; 512GB = con Touch ID)"
+    "https://www.apple.com/newsroom/2026/03/say-hello-to-macbook-neo/"
    ]
   },
-  "aedd6b953a0069e703fff593be1d7afe9a48927e28ec88b178ebddf6858c9b94": {
+  "9b1eb6daa9ddd8bc0d12a150bf63eb0858164d7c712a3ce2bc957a59882baa8c": {
    "modelo": "MacBook Pro 14\" con chip M4 Pro (2024)",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-07.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "aedd6b953a0069e703fff593be1d7afe9a48927e28ec88b178ebddf6858c9b94",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/121553",
     "https://support.apple.com/en-us/121553",
@@ -1464,39 +1512,43 @@
     "https://support.apple.com/de-de/121553"
    ]
   },
-  "57063e117295f6d26caa05892c770a5c72b707b79fc2f69d4b46ea55d7dc0822": {
+  "057b6293021694c5fd8f83359dc7de158d63b24003429b6fd288f39cc62df795": {
    "modelo": "MacBook Pro 14\" con chip M5 (incluye la fila «16GB/1TB Esp»)",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "57063e117295f6d26caa05892c770a5c72b707b79fc2f69d4b46ea55d7dc0822",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/125405"
    ]
   },
-  "9ed137f1f19d5694d82f32acb7b234d574ccf1cada7d7a0d0adb98f533516a72": {
+  "fcb2d7e21919f7558b53f977ed126b7d2388f4217a41879a5f76c7cd217cde2e": {
    "modelo": "MacBook Pro 14\" con chip M5 Max (36GB/2TB)",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-06.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "9ed137f1f19d5694d82f32acb7b234d574ccf1cada7d7a0d0adb98f533516a72",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/126318"
    ]
   },
-  "3f3f2ff830ccacc81e345b08b21797e7ede4b21efd2fd93140a40cbc2b1d63cc": {
+  "b8349c10a1edcc71f413c04e449c7c919675c8a0573433f566a2b614951aff8c": {
    "modelo": "MacBook Pro 14\" con chip M5 Pro",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-03.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "3f3f2ff830ccacc81e345b08b21797e7ede4b21efd2fd93140a40cbc2b1d63cc",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/126318",
     "https://www.apple.com/la/macbook-pro/specs/"
    ]
   },
-  "44285279cb352a2021672908d014ba473f385c13f3a8b32cb57e6160f25154c1": {
+  "387c84195f1ad3eaf9924b7befa7996f8641c4852f7ea143cb1dd7bb67a43101": {
    "modelo": "MacBook Pro 16\" con chip M4 Pro (2024), 24GB/512GB",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "44285279cb352a2021672908d014ba473f385c13f3a8b32cb57e6160f25154c1",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/121554",
     "https://support.apple.com/es-es/121554 (control: adaptador de 140 W incluido)",
@@ -1506,31 +1558,34 @@
     "https://support.apple.com/en-us/121554 (control: adaptador de 140 W incluido)"
    ]
   },
-  "a80d54f5701e71f5c32b0d5ddc39a6cd776906773a569932c050172612701149": {
+  "f816b40ca334f06f40ba0f253e51bc9929eec4b31a676f959cedc55cb6154748": {
    "modelo": "MacBook Pro 16\" con chip M5 Max",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-05.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "a80d54f5701e71f5c32b0d5ddc39a6cd776906773a569932c050172612701149",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/126319",
     "https://support.apple.com/es-es/126319 (adaptador que se vende aparte y carga rápida con 140 W o más)"
    ]
   },
-  "b64c6a867f23c5a58aed625c37b31c2406f6496c1aca4ecf35cd79e867817bde": {
+  "16254d2a80247b7a2f79b064bedc41b0b14a9a35a3912035211db9929b1d0f18": {
    "modelo": "MacBook Pro 16\" con chip M5 Pro",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-04.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "b64c6a867f23c5a58aed625c37b31c2406f6496c1aca4ecf35cd79e867817bde",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/126319",
     "https://support.apple.com/es-es/126319"
    ]
   },
-  "4f737ec4d943ce2381e6fbdd4f55259e542adf3d3bbb5fe15bc8cc616e778547": {
+  "16e31d3597ec5658d6e08dc3dae0d664a62b3da84223aaf2ba32235fc6e3f731": {
    "modelo": "Meta Quest 3 512GB",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-05.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "4f737ec4d943ce2381e6fbdd4f55259e542adf3d3bbb5fe15bc8cc616e778547",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.meta.com/es/quest/quest-3/ (renderizada con Chrome headless)",
     "https://www.meta.com/es/quest/compare/ (renderizada con Chrome headless)",
@@ -1558,11 +1613,12 @@
     "https://www.meta.com/gb/quest/quest-3s/ (sólo para el criterio del adaptador: «the included 18W power adapter»)"
    ]
   },
-  "906d47f6dd7ac72a6bf4b04646effc29ed85c3b1aaa4de5ef1c790a8ba15b775": {
+  "52da48ef772ed1042a1557660c75ba9ca26998fbef19f5c07b60791752f8db16": {
    "modelo": "Nikon AF-S DX Zoom-Nikkor 12-24mm f/4G IF-ED",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T03-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "906d47f6dd7ac72a6bf4b04646effc29ed85c3b1aaa4de5ef1c790a8ba15b775",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.nikonusa.com/p/af-s-dx-zoom-nikkor-12-24mm-f4g-if-ed/2144/overview",
     "https://www.nikon.com.ar/lentes/reflex/af-s-dx-zoom-nikkor-12-24mm-f4g-if-ed",
@@ -1584,11 +1640,12 @@
     "https://imaging.nikon.com/imaging/lineup/lens/f-mount/ (lista: AF-S 50mm f/1.8G y f/1.4G)"
    ]
   },
-  "0d3edbe0365f1e2bf9d6312b2e27864f25424c870b83a868503512583b613997": {
+  "b8e3a703109af92ddfdd1c3963f464aec4864014e359c4e1e63ec4269f53a152": {
    "modelo": "Nikon D7500 Kit 18-140 (con AF-S DX NIKKOR 18-140mm f/3.5-5.6G ED VR)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r1-T12-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "0d3edbe0365f1e2bf9d6312b2e27864f25424c870b83a868503512583b613997",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.nikon.com.mx/p/d7500/1581/overview (JSON __NEXT_DATA__: tabla completa de specs, textos de presentación y variante 1582 «Kit de lente 18-140mm VR» con el AF-S DX NIKKOR 18-140mm f/3.5-5.6G ED VR)",
     "https://imaging.nikon.com/imaging/lineup/dslr/d7500/"
@@ -1742,11 +1799,11 @@
     "https://www.nikonusa.com/p/nikkor-z-28-135mm-f4-pz/20127/overview (cruce)"
    ]
   },
-  "583db4839122054247c39d1b9513a6497a0d43dec0bab39a5910bc43435860ea": {
+  "cc5d3ae02840176ecb0f9c56a4761620c342e1848a817da1effda56774c7e9ff": {
    "modelo": "Nikon NIKKOR Z 28-400mm f/4-8 VR",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-a-T04-1.json",
+   "informe": "informe-02.json",
    "fuentes": [
     "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-28-400mm-f4-8-vr",
     "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_28-400mmf4-8_vr/"
@@ -1936,11 +1993,12 @@
     "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
    ]
   },
-  "b68fb83da2bbc968ea9a3ad179e3f8b0289427c7b2bdbf853172411cda5f538b": {
+  "e33dc74c7d11509a14434321ef391140ad39ac742c7e35dd699e1067abed6d1a": {
    "modelo": "Nikon Z TELECONVERTER TC-2.0x",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T04-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "b68fb83da2bbc968ea9a3ad179e3f8b0289427c7b2bdbf853172411cda5f538b",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.nikon.es/es_ES/product/lenses/mirrorless/z-teleconverter-tc-2.0x",
     "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_tc_2x/",
@@ -1951,11 +2009,12 @@
     "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
    ]
   },
-  "8c948c9d7ba2176d758b0824a29d8409446a35cd454d232deb60dd5dd8f8c086": {
+  "6160b701fa626daf6e9469f033a297f4f7ccc68afc8132d240c2bb24f4eca393": {
    "modelo": "Nikon Z30 en kit (16-50, 18-140 o 16-50 + 50-250)",
-   "fecha": "2026-10-13",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "8c948c9d7ba2176d758b0824a29d8409446a35cd454d232deb60dd5dd8f8c086",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-13)",
    "fuentes": [
     "https://www.nikon.com.mx/p/z-30/1737/overview",
     "https://imaging.nikon.com/imaging/lineup/mirrorless/z_30/",
@@ -1964,62 +2023,70 @@
     "https://www.nikon.co.uk/en_GB/product/cameras/mirrorless/z-30-16-50-50-250-vr-kit-VOA110K002"
    ]
   },
-  "b6e4ee59a1aea70a0c4926eb4cdbbf1087e16df7dcbb8da7a9814d93969aa827": {
+  "79c0e097763ca64d8785c699f503da8c68f395601eaf3a0e68b18ea8146556bf": {
    "modelo": "Nikon Z6II (sólo cuerpo)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T12-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "b6e4ee59a1aea70a0c4926eb4cdbbf1087e16df7dcbb8da7a9814d93969aa827",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.nikon.com.mx/p/z-6ii/1659/overview (texto de presentación y JSON __NEXT_DATA__ con la tabla de specs)",
     "https://imaging.nikon.com/imaging/lineup/mirrorless/z_6_2/"
    ]
   },
-  "b7c7cd57bf73e9f176007b911d39cbc4ddecfcca1ff11d337e1ffb534c2c58c4": {
+  "4e6e8592acf5360e94a7a3df165ca578bf4fc8feea145dc2eebd35a3701c366f": {
    "modelo": "Nikon Z6III (cuerpo o kit 24-120)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T12-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "b7c7cd57bf73e9f176007b911d39cbc4ddecfcca1ff11d337e1ffb534c2c58c4",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.nikon.com.mx/p/z6iii/1890/overview (JSON __NEXT_DATA__: tabla completa, textos y nota CIPA de los 8 pasos)",
     "https://imaging.nikon.com/imaging/lineup/mirrorless/z6_3/",
     "https://www.nikonusa.com/p/z6iii/1890/overview (variante 1896 «24-120mm Kit» con NIKKOR Z 24-120mm f/4 S)"
    ]
   },
-  "616fb26b5bc8c02fc3d1e9697e38ab818296bb938321b024fc16d56f33ed896d": {
+  "c6394b10f5148e6aec9994aa624b92b017d005058a548e7add941d9bc4f3b4b7": {
    "modelo": "Nikon Z7II (sólo cuerpo)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T12-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "616fb26b5bc8c02fc3d1e9697e38ab818296bb938321b024fc16d56f33ed896d",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.nikon.com.mx/p/z-7ii/1653/overview (texto de presentación y JSON __NEXT_DATA__ con la tabla de specs)",
     "https://imaging.nikon.com/imaging/lineup/mirrorless/z_7_2/"
    ]
   },
-  "76283cec434cf672230b1d994ed3ee99b43ae69aacc2cfae2c6ddbff60a4a9d4": {
+  "b2fea1f16a227dc95514c474f3b38bea4b57303c0af83d97e8a0814b5f7cde15": {
    "modelo": "Nikon Z8 (cuerpo o kit 24-120)",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-r1-T12-1.json",
+   "informe": "informe-03.json",
    "fuentes": [
-    "https://www.nikon.com.mx/p/z-8/1695/overview (JSON __NEXT_DATA__: tabla completa, textos de presentación, cuadro comparativo y variante 1698 «Kit de un lente Z 8» con el NIKKOR Z 24-120 mm f/4 S)",
-    "https://imaging.nikon.com/imaging/lineup/mirrorless/z_8/"
+    "https://www.nikon.com.mx/p/z-8/1695/overview",
+    "https://imaging.nikon.com/imaging/lineup/mirrorless/z_8/",
+    "https://onlinemanual.nikonimglib.com/z8/es/",
+    "https://onlinemanual.nikonimglib.com/z8/es/csmd_starlight_view_photo_lv_240.html",
+    "https://onlinemanual.nikonimglib.com/z8/es/specifications_384.html"
    ]
   },
-  "557087511164d8e8f7b7e9b89004c9a06627071be891c79025d275a33ae2ce81": {
+  "ca0c1a1bfa38f41b5fd851861c980be29187f9d3ab75a3463150356aff953943": {
    "modelo": "Nikon ZR (cámara de cine 6K, sólo cuerpo)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r1-T12-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "557087511164d8e8f7b7e9b89004c9a06627071be891c79025d275a33ae2ce81",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.nikon.com.mx/p/zr/2006/overview (JSON __NEXT_DATA__: tabla «Cinema Tech Specs», textos de presentación, notas 1 y 7, cuadro comparativo; única variante 2006, sin kits)",
     "https://imaging.nikon.com/imaging/lineup/z_cinema/z_r/"
    ]
   },
-  "baf9b9541be64898dc3040d5e61a4f97b8f21f403d1bbf1dbf6dd087ed5bc961": {
+  "4b10640bfef157c9db36068bd01b3b466e659851fc99ff64b1f2a0244505e83a": {
    "modelo": "Nintendo Switch 2",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "baf9b9541be64898dc3040d5e61a4f97b8f21f403d1bbf1dbf6dd087ed5bc961",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.nintendo.com/es-mx/gaming-systems/switch-2/tech-specs/",
     "https://www.nintendo.com/us/store/products/nintendo-switch-2-system-123669/",
@@ -2027,11 +2094,12 @@
     "https://www.nintendo.com/es-es/Hardware/Nintendo-Switch-2/Nintendo-Switch-2-Especificaciones-tecnicas-2785627.html (control: dos revisiones, misma duración y carga de batería; VRR sólo en la pantalla)"
    ]
   },
-  "fc2799bdf01b78214f83af89636ce4eb41b1fd65d76d8452397d16c611264f4b": {
+  "eec58a370f4d224fe5ced5023798f86e817de8743d5dddf42acb17e8172d5331": {
    "modelo": "Nintendo Switch 2 (Choose One Game)",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-02.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "fc2799bdf01b78214f83af89636ce4eb41b1fd65d76d8452397d16c611264f4b",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.nintendo.com/es-mx/gaming-systems/switch-2/tech-specs/",
     "https://www.nintendo.com/us/store/products/nintendo-switch-2-system-123669/",
@@ -2040,11 +2108,12 @@
     "https://store.nintendo.com/es-es/nintendo-switch-2-000000000010015151"
    ]
   },
-  "bcc0ceb4eb2277d08f43cd77a5d94866ed523df56e12a6ff270da03ddbf064b7": {
+  "4db4b7eab659e761d8f35597826c35345385d104e06bd402da9f468406cdd1df": {
    "modelo": "Nintendo Switch 2 + Mario Kart World",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-03.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "bcc0ceb4eb2277d08f43cd77a5d94866ed523df56e12a6ff270da03ddbf064b7",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.nintendo.com/es-mx/gaming-systems/switch-2/tech-specs/",
     "https://www.nintendo.com/us/store/products/nintendo-switch-2-mario-kart-world-digital-bundle-122179/",
@@ -2114,11 +2183,12 @@
     "https://www.mi.com/mx/product/poco-x8-pro-max/specs/"
    ]
   },
-  "7106eadea61baaf34ef0d72d88844d01eaa9e7a1bdbe21a31189206a33a2f5f2": {
+  "dac0dd1f0f9e1b394de92147d1689cccd8780561cc2d10c10f907adba7471adc": {
    "modelo": "Panasonic AG-CX20",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r9-T12-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "7106eadea61baaf34ef0d72d88844d01eaa9e7a1bdbe21a31189206a33a2f5f2",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://pro-av.panasonic.net/en/products/ag-cx20/ (bajada hoy con curl; idéntica a la copia de trabajo-r7-T12-1)",
     "https://pro-av.panasonic.net/en/products/ag-cx20/spec.html (bajada hoy con curl; idéntica a la copia de trabajo-r7-T12-1)",
@@ -2160,11 +2230,12 @@
     "https://help.na.panasonic.com/wp-content/uploads/2025/06/HCX1200_X1600_X2100_OperatingInstructions_ESP.pdf (págs. 19, 25, 33-35 y 298-306)"
    ]
   },
-  "cdd091176e5358519cfdaddfa19adaf39c98a72c99d69589619a5cbc6395ab5a": {
+  "67c20b52d43721485d39a8754f96137c7918f21a364a13d6d03ef08541f325e1": {
    "modelo": "Panasonic HC-X2100",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r7-T12-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "cdd091176e5358519cfdaddfa19adaf39c98a72c99d69589619a5cbc6395ab5a",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://shop.panasonic.com/products/4k-professional-camcorder-24x-optical-zoom-live-streaming-hc-x2100 (más su .js público de Shopify, que no agrega datos)",
     "https://help.na.panasonic.com/answers/features-and-specifications-camcorder-hc-x2100/",
@@ -2291,11 +2362,12 @@
     "https://www.mi.com/es/product/redmi-pad-2-pro-5g/"
    ]
   },
-  "02750133563761cb96e0d6f8cdc26697d5f51bb2e1ddb13a022a9a9d052701b8": {
+  "ada7cfa2f2ebc5cd98e0ecac6e5873a88aaddbb72173384bda81d34b4058388d": {
    "modelo": "Samsung Galaxy Buds3",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "02750133563761cb96e0d6f8cdc26697d5f51bb2e1ddb13a022a9a9d052701b8",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/mx/audio-sound/galaxy-buds/galaxy-buds3-white-sm-r530nzwamxo/"
    ]
@@ -2310,11 +2382,12 @@
     "https://www.sigma-global.com/en/lenses/ (catálogo, para confirmar la identidad: hay un solo 10-18)"
    ]
   },
-  "f68e88f943bb06c1f87ba9ebea84aa2ecb6dbfbe6f135f175570ea09579a8061": {
+  "a834bd8525d55b4953e7dadb0a893646fc42457cbc8ea731d7526d18d188e1ac": {
    "modelo": "Sigma 105mm F2.8 DG DN MACRO | Art (Sony E)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r1-T05-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "f68e88f943bb06c1f87ba9ebea84aa2ecb6dbfbe6f135f175570ea09579a8061",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sigma-global.com/en/lenses/a020_105_28/"
    ]
@@ -2563,20 +2636,23 @@
     "https://www.sigmaphoto.com/56mm-f1-4-dc-dn-c"
    ]
   },
-  "5c63909975dfbb9ec318158a9b0ac43b53088d1476f3e786e8236e0314c90c35": {
+  "1b14ec7874c76a9cb1122d755e94929f43cefc79866f91afede5b847238b1d26": {
    "modelo": "Sigma 60-600mm F4.5-6.3 DG DN OS Sports (Sony E)",
    "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "informe": "informe-02.json",
    "fuentes": [
-    "https://www.sigma-global.com/en/lenses/s023_60_600_45_63/"
+    "https://www.sigma-global.com/en/lenses/s023_60_600_45_63/",
+    "https://www.sigma-global.com/en/lenses/s018_60_600_45_63/",
+    "https://www.sigma-global.com/en/discontinued/"
    ]
   },
-  "4082b9b01afc36923adb3f067aafdb3fb669e52fa1e1d0f089d237a4069139a0": {
+  "32f5bb4a677cea76fed38e0b94f0bb24746ec8d5a5e5639e40fca22772231c73": {
    "modelo": "Sigma 85mm F1.4 DG DN Art (Sony E)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r3-T06-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "4082b9b01afc36923adb3f067aafdb3fb669e52fa1e1d0f089d237a4069139a0",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sigma-global.com/en/lenses/a020_85_14/",
     "https://www.sigma-global.com/jp/lenses/a020_85_14/",
@@ -2594,90 +2670,96 @@
     "https://www.sigmaphoto.com/85mm-f1-4-dg-hsm-a (copia del verificador a-T06-1, sólo para cruzar datos: coincide)"
    ]
   },
-  "a5d0dd6212613abb08408c842707b936afdd0c7e1ee1e12342a22dfa71f52f34": {
+  "bb9ace827db71a77d6058995255986109c93fc287ee3bda495c2459ffdfeb999": {
    "modelo": "Sigma 85mm F1.4 EX DG HSM",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-r1-T06-1.json",
+   "informe": "informe-02.json",
    "fuentes": [
     "https://www.sigma-global.com/en/lenses/85_14/",
-    "https://www.sigma-global.com/jp/lenses/85_14/ («数値はシグマ SAマウント用です»; «ニコンF6、キヤノンEOS-1V 以外のフィルムカメラではご使用になれません»)",
-    "https://www.sigma-global.com/lenses/85_14_specification_01.jpg (esquema: 1 SLD y 1 asférica)",
+    "https://www.sigma-global.com/lenses/85_14_specification_01.jpg",
     "https://www.sigma-global.com/en/discontinued/"
    ]
   },
-  "72a7db88576a7980294109a2571ff727c6d7ac8028bf894af9b43b1b976b74f0": {
+  "7c9bf0e2476ff38184591a3222ec9effd10ed7dad890265e54a267517793b292": {
    "modelo": "Sony Distagon T* FE 35 mm F1.4 ZA (SEL35F14Z)",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-b-T08-1.json",
+   "informe": "informe-03.json",
    "fuentes": [
     "https://www.sony.com.ar/electronics/lentes-camara/sel35f14z",
     "https://www.sony.com.ar/electronics/lentes-camara/sel35f14z/specifications"
    ]
   },
-  "4cfd049e72bb13d1a0a98ad061f180e937d1ae0aeb54d095de7715dada832db0": {
+  "eddb8a2fa5921a45431857fcecc150ec8544fe0f5c3131ca25e52026e9c98cb0": {
    "modelo": "Sony E 70-350 mm F4.5-6.3 G OSS (SEL70350G)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r11-T07-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "4cfd049e72bb13d1a0a98ad061f180e937d1ae0aeb54d095de7715dada832db0",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel70350g/specifications (hoy dio «Page Not Found» o vacía; leí la misma ficha por su dirección canónica https://www.sony.com.ar/electronics/lentes-camara/sel70350g/specifications y la comparé con la copia de la dirección citada que bajó el verificador anterior, trabajo-a-T07-1/sel70350g-spec.html: texto idéntico)"
    ]
   },
-  "3e8e715c505adb3200187c11943506fdb6bf4c40741449d85d537dc58122b147": {
+  "11c3a2f41ddbca159fd580d4dc3be2f702918d80a9c56acbc0ea4e842924e749": {
    "modelo": "Sony FE 100-400 mm F4.5-5.6 GM OSS (SEL100400GM)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T07-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "3e8e715c505adb3200187c11943506fdb6bf4c40741449d85d537dc58122b147",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel100400gm/specifications"
    ]
   },
-  "27b6c72d3429c83f7eebde66ca5f7e08a2e0127d9bbad78362e197780321291d": {
+  "af0168d7a3b46aeffa08e3ce51647c1eeee44530e9f62d87474d3a5ccf2de9bb": {
    "modelo": "Sony FE 12-24 mm F2.8 GM (SEL1224GM)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T07-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "27b6c72d3429c83f7eebde66ca5f7e08a2e0127d9bbad78362e197780321291d",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/lenses/products/sel1224gm/spec",
     "https://www.sony.com.ar/lenses/products/sel1224gm/feature3"
    ]
   },
-  "7c2dc2de48ff165cdc1258134f8eaa203aa670fd0cddbdfdb78c55e0a6f7aaf6": {
+  "724ca09c109aedcaa952f505b848a324b3a25696ed8c5cc2ddafa5c8cb48a3d4": {
    "modelo": "Sony FE 135 mm F1.8 GM (SEL135F18GM)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r11-T07-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "7c2dc2de48ff165cdc1258134f8eaa203aa670fd0cddbdfdb78c55e0a6f7aaf6",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel135f18gm/specifications"
    ]
   },
-  "9230c257eba1e520b262d29f882a01e57ab779d712f684777541a4055a1319da": {
+  "3de1607a22a86c74084a6c7817f1421a79fceccb7ccb604ebe333f687c31232f": {
    "modelo": "Sony FE 14 mm F1.8 GM (SEL14F18GM)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r11-T07-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "9230c257eba1e520b262d29f882a01e57ab779d712f684777541a4055a1319da",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/lenses/products/sel14f18gm/spec",
     "https://www.sony.com.ar/lenses/products/sel14f18gm/feature3"
    ]
   },
-  "b9fdda59a64edeeaa183d41013beee311e13c731962646369cac8fc5814d54e1": {
+  "362cf9e1887902968ce561db3b2cf3bdefaa92c8fc10798057d818a71ea0f5e8": {
    "modelo": "Sony FE 16-25 mm F2.8 G (SEL1625G)",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-r11-T07-1.json",
+   "informe": "informe-02.json",
    "fuentes": [
     "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel1625g/specifications",
-    "https://www.sony.es/electronics/camaras-objetivos/sel1625g/specifications"
+    "https://www.sony.es/electronics/camaras-objetivos/sel1625g/specifications",
+    "https://www.sony.com.ar/electronics/lentes-camara/sel1625g"
    ]
   },
-  "10a90ad53005c5e78ec774d7b90417e0a48f4a0872f89b96e185ee07a21fcfb1": {
+  "20a80e30696ac47bd7e6b161d13bd3f725fbe3baf28cf833a87fbb7125141aac": {
    "modelo": "Sony FE 16-35 mm F2.8 GM II (SEL1635GM2)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T07-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "10a90ad53005c5e78ec774d7b90417e0a48f4a0872f89b96e185ee07a21fcfb1",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/lenses/products/sel1635gm2/spec",
     "https://www.sony.es/lenses/products/sel1635gm2/feature3",
@@ -2698,61 +2780,67 @@
     "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
    ]
   },
-  "42c8c733d6c52cd00e754fae56983ce3374b185f66b520f2892873625f07dcca": {
+  "9024de0b6ef91c8f8d79ed885d8790213821da6c4fe6e73f612fd4330f98aac0": {
    "modelo": "Sony FE 20 mm F1.8 G (SEL20F18G)",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-a-T07-1.json",
+   "informe": "informe-03.json",
    "fuentes": [
     "https://www.sony.com.ar/lenses/products/sel20f18g/spec",
-    "https://www.sony.com.ar/lenses/products/sel20f18g/feature3"
+    "https://www.sony.com.ar/lenses/products/sel20f18g/feature3",
+    "https://www.sony.com.ar/bin/footnotes.json?fnid=CameraNF1102lensSEL20F18G&contentPath=/content/sony/sola/ar/es-ar/general/cameras/lenses/products/sel20f18g/feature3"
    ]
   },
-  "2326b20c656414307b1cd33fe31330608fad3d49c52985a7011848e4778d52cc": {
+  "db1c070fb47ffff2d70b53bbdb4a5f1f6729d32843d96e9a0566c414e9ba9966": {
    "modelo": "Sony FE 20-70 mm F4 G (SEL2070G) (la fila dice «GM»)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T07-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "2326b20c656414307b1cd33fe31330608fad3d49c52985a7011848e4778d52cc",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/lenses/products/sel2070g/spec",
     "https://www.sony.com.ar/lenses/products/sel2070g/feature3"
    ]
   },
-  "c335d48d66cda79f60340025e93551f60f77cd81bc4f0c7cdc32f9df458c4ed2": {
+  "d91cf5652a8c8e85a3b017c434763667f1c44da5ddcbf7b096896a021a3e56ce": {
    "modelo": "Sony FE 200-600 mm F5.6-6.3 G OSS (SEL200600G)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T07-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "c335d48d66cda79f60340025e93551f60f77cd81bc4f0c7cdc32f9df458c4ed2",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel200600g/specifications",
     "https://www.sony.es/electronics/camaras-objetivos/sel200600g/specifications"
    ]
   },
-  "79e323c636a486e5d654521a852671769c173234b431b11a0acf49efd9d01e60": {
+  "08a5f0e8173619c847cba47a37ed912f74e95c87e491183d576916a85fe84570": {
    "modelo": "Sony FE 24 mm F1.4 GM (SEL24F14GM)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T07-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "79e323c636a486e5d654521a852671769c173234b431b11a0acf49efd9d01e60",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel24f14gm/specifications (me dio 403 / quedó colgada; leí la misma página por su dirección canónica: https://www.sony.com.ar/electronics/lentes-camara/sel24f14gm/specifications)",
     "https://www.sony.es/electronics/camaras-objetivos/sel24f14gm/specifications"
    ]
   },
-  "4968eeec96d757b36568fda3c2e61fda7d957de70562b3dc6dc9ed922087154f": {
+  "8d778588db7ed96b8febb780448a05cfcf1d87e2dd09096513c039fe667e007c": {
    "modelo": "Sony FE 24-105 mm F4 G OSS (SEL24105G)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T07-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "4968eeec96d757b36568fda3c2e61fda7d957de70562b3dc6dc9ed922087154f",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel24105g/specifications (me dio 403 / quedó colgada; leí la misma página por su dirección canónica: https://www.sony.com.ar/electronics/lentes-camara/sel24105g/specifications)",
     "https://www.sony.es/electronics/camaras-objetivos/sel24105g/specifications"
    ]
   },
-  "033f333ccf5fa9ec617894e2e8e83bf8321739638cb49c8447e9cf47d17f6584": {
+  "d3514b98943d734052a6fb8b07510f407e673d1b6236a9b4f2e0815525924b85": {
    "modelo": "Sony FE 24-50 mm F2.8 G (SEL2450G)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T07-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "033f333ccf5fa9ec617894e2e8e83bf8321739638cb49c8447e9cf47d17f6584",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/lenses/products/sel2450g/spec",
     "https://www.sony.com.ar/lenses/products/sel2450g/feature3"
@@ -2768,20 +2856,22 @@
     "https://www.sony.com.ar/electronics/lentes-camara/sel28f20/specifications"
    ]
   },
-  "c1146e93e43093807530ac4cb8795f97bc53982126d1229577ce6a8b4cf11784": {
+  "b362d00b111ef7c2d40b622a8528c90680a92a785a77760e2dcb85bbec1b671a": {
    "modelo": "Sony FE 28-70 mm F2 GM (SEL2870GM)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T07-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "c1146e93e43093807530ac4cb8795f97bc53982126d1229577ce6a8b4cf11784",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel2870gm/specifications"
    ]
   },
-  "8324b9bb9cae596f3849db26101ba426aca3428fea8d72abe20768a1f9775170": {
+  "99a2059605c0865ccbe3c373c43d08b6927c52929c9a27f534cf6b1fec69c542": {
    "modelo": "Sony FE 35 mm F1.4 GM (SEL35F14GM)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-b-T08-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "8324b9bb9cae596f3849db26101ba426aca3428fea8d72abe20768a1f9775170",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/lenses/products/sel35f14gm/spec",
     "https://www.sony.com.ar/lenses/products/sel35f14gm/feature1",
@@ -2791,21 +2881,23 @@
     "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
    ]
   },
-  "31f88a0b279fa54529994768245c782d093a0971ce958baaec0e8c90e79094c0": {
+  "6737f81128e92cc254e929fec20bf9b10b97fb497e845f2ca5c8f0d41b31bf9a": {
    "modelo": "Sony FE 400-800 mm F6.3-8 G OSS (SEL400800G)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-b-T08-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "31f88a0b279fa54529994768245c782d093a0971ce958baaec0e8c90e79094c0",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/electronics/lentes-camara/sel400800g",
     "https://www.sony.com.ar/electronics/lentes-camara/sel400800g/specifications"
    ]
   },
-  "6a001ec0c489c49570586adf98d181100bd440eeb681d5cd2cd14d7c211e1bfa": {
+  "3ee080061fd4096e3f8f8479469412fc16ea07d233e87ba83f3cad561ef9ce18": {
    "modelo": "Sony FE 50 mm F1.2 GM (SEL50F12GM)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r8-T08-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "6a001ec0c489c49570586adf98d181100bd440eeb681d5cd2cd14d7c211e1bfa",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/lenses/products/sel50f12gm/spec (bajada de nuevo con Chrome headless: 50 mm, full frame, 75 mm en APS-C, 10-14, 47°/32°, F1,2/F16, 11 láminas circular, 0,4 m, 0,17x, 72 mm, estabilización integrada en el cuerpo, 87 x 108 mm, 778 g; caja: bolsa blanda, funda con correa, parasol ALC-SH163, tapas ALC-R1EM y ALC-F72S)",
     "https://www.sony.com.ar/lenses/products/sel50f12gm/feature1 («AF y seguimiento rápidos, precisos y silenciosos», 4 motores lineales XD, 2 botones de fijación de enfoque, conmutador de modo de enfoque, Linear Response MF, resistencia al polvo y la humedad con nota «no está 100 % garantizada», revestimiento de flúor, enfoque flotante, nanorrevestimiento II)",
@@ -2814,11 +2906,12 @@
     "https://www.sony.com.ar/lenses (copia del verificador anterior, trabajo-b-T08-2/emount.html: hay un solo FE 50 mm F1.2 GM, SEL50F12GM)"
    ]
   },
-  "04263dc56a39ac64b8b364263a77b1605a8ab0f1e619a5717031f36ae6fe8533": {
+  "267746d7e3dcaf2bf8f69c0b1e68feae21fdd6db95e6800e66493580ad034cbd": {
    "modelo": "Sony FE 50 mm F1.4 GM (SEL50F14GM)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-b-T08-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "04263dc56a39ac64b8b364263a77b1605a8ab0f1e619a5717031f36ae6fe8533",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/lenses/products/sel50f14gm/spec",
     "https://www.sony.com.ar/lenses/products/sel50f14gm/feature1",
@@ -2838,11 +2931,12 @@
     "https://www.sony.com.ar/lenses (copia del verificador anterior, trabajo-b-T08-2/emount.html: un solo FE 50 mm F1.8, SEL50F18F; el nombre de la fila dice «FE», así que no es el E 50 mm F1.8 OSS de APS-C)"
    ]
   },
-  "0dc76610c50193378d482fa44358f9deff14c4c3b203096b1ed590e2ee1bc2e7": {
+  "93ef8376f4e05656a957c99233faa7178c6afdfb0a387c24e71607a759e37386": {
    "modelo": "Sony FE 50-150 mm F2 GM (SEL50150GM)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-b-T08-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "0dc76610c50193378d482fa44358f9deff14c4c3b203096b1ed590e2ee1bc2e7",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/electronics/lentes-camara/sel50150gm",
     "https://www.sony.com.ar/electronics/lentes-camara/sel50150gm/specifications",
@@ -2850,18 +2944,17 @@
     "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
    ]
   },
-  "18d26f30f836d0932a0fd0918478a192b25c11026a8394c5415e3779bd2f57be": {
+  "e92df907ad11bff0d5580c4bb934b155f0c13e4f5987c51a1790aebc44bd363c": {
    "modelo": "Sony FE 70-200 mm F2.8 GM OSS II (SEL70200GM2)",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-b-T08-2.json",
+   "informe": "informe-03.json",
    "fuentes": [
     "https://www.sony.com.ar/lenses/products/sel70200gm2/spec",
     "https://www.sony.com.ar/lenses/products/sel70200gm2/feature1",
-    "https://www.sony.com.ar/lenses/products/sel70200gm2/feature2 (control, no está en fuentes)",
     "https://www.sony.com.ar/lenses/products/sel70200gm2/feature3",
-    "https://www.sony.com.ar/lenses/e-mount (lista de objetivos montura E: no hay versiones II ni otras del mismo nombre)",
-    "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
+    "https://www.sony.com.ar/bin/footnotes.json?fnid=CameraNF1002lensSEL70200GM2,CameraNF1003lensSEL70200GM2,CameraNF1005lensSEL70200GM2,CameraNF1001lensSEL70200GM2,CameraNF1006lensSEL70200GM2,CameraNF1007lensSEL70200GM2&contentPath=/content/sony/sola/ar/es-ar/general/cameras/lenses/products/sel70200gm2/feature1",
+    "https://www.sony.com.ar/bin/footnotes.json?fnid=CameraNF1002lensSEL70200GM2,CameraNF1003lensSEL70200GM2,CameraNF1005lensSEL70200GM2,CameraNF1001lensSEL70200GM2,CameraNF1006lensSEL70200GM2,CameraNF1007lensSEL70200GM2,CameraNF1004lensSEL70200GM2&contentPath=/content/sony/sola/ar/es-ar/general/cameras/lenses/products/sel70200gm2/feature3"
    ]
   },
   "bcea777a2ba53c59ddabe38cc30d9f35f15a02ca3e0ee6ff30e1969d123e82c2": {
@@ -2877,11 +2970,12 @@
     "https://www.sony.jp/ichigan/products/SEL70200G2/spec.html (para el ángulo de visión: «34°-12°30'»; además 794 g «三脚座別» = sin el pie de trípode, y el pie de trípode como accesorio incluido)"
    ]
   },
-  "0c10bd4f3bd47f41361fef17b69111b3e6e79a5d340e3aeb9000ae7a67af58f0": {
+  "7e4b713e405e704e8815f637a3c741c05072defa8b25dd5ea170c9c9aee06fd6": {
    "modelo": "Sony FE 85 mm F1.4 GM II (SEL85F14GM2)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-b-T08-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "0c10bd4f3bd47f41361fef17b69111b3e6e79a5d340e3aeb9000ae7a67af58f0",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/electronics/lentes-camara/sel85f14gm2",
     "https://www.sony.com.ar/electronics/lentes-camara/sel85f14gm2/specifications",
@@ -2889,11 +2983,12 @@
     "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
    ]
   },
-  "6398dede3423a6f3ba36887c7019c9deaea2a93b33438d9a53fe2de67c9e3fd1": {
+  "a827e67351594c5a7c35cf4308e181a1895d08c545600ab087a319db5291938d": {
    "modelo": "Sony FE 85 mm F1.8 (SEL85F18)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-b-T08-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "6398dede3423a6f3ba36887c7019c9deaea2a93b33438d9a53fe2de67c9e3fd1",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/electronics/lentes-camara/sel85f18",
     "https://www.sony.com.ar/electronics/lentes-camara/sel85f18/specifications"
@@ -2911,84 +3006,92 @@
     "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=ILCE-1M2&area=gb&lang=en (lista global de modelos SEL: una sola variante de cada uno)"
    ]
   },
-  "63e71fd605a2c93a2e0faa03b17e65a52bff6bb8eff0d78c246814bca75b8d1a": {
+  "5d5c85bba97353f8c090e832c32463646c702f4fb802c420e2e8bcf9b72a6958": {
    "modelo": "Sony FE PZ 16-35 mm F4 G (SELP1635G)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-b-T08-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "63e71fd605a2c93a2e0faa03b17e65a52bff6bb8eff0d78c246814bca75b8d1a",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/lenses/products/selp1635g/spec",
     "https://www.sony.com.ar/lenses/products/selp1635g/feature2",
     "https://www.sony.com.ar/lenses/products/selp1635g/feature3"
    ]
   },
-  "84504bddffee975c9eed0940dd92fa29b6b918ffcaf0ca872449ba56a71e89c9": {
+  "2a27aa5690e7490461b8e70e847013b2af003640e1af16bdd3ff3d50858e4810": {
    "modelo": "Sony FE PZ 28-135 mm F4 G OSS (SELP28135G) (la fila dice «E PZ»)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r11-T07-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "84504bddffee975c9eed0940dd92fa29b6b918ffcaf0ca872449ba56a71e89c9",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/selp28135g/specifications"
    ]
   },
-  "928777ea353ac19ae1bea1ab4d74f12596063b5208a297ab5831344bab534439": {
+  "b2e88570ac307a5e9bbc363e7ea9ee862d14192a45b7ae91fcdde4131ae6b560": {
    "modelo": "Sony FX2, cuerpo",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r6-T11-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "928777ea353ac19ae1bea1ab4d74f12596063b5208a297ab5831344bab534439",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilme-fx2/specifications (las dos columnas, ILME-FX2B e ILME-FX2)",
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilme-fx2"
    ]
   },
-  "8b37ed089677ed4c7ee03d27408d768310ef2996609b84c801076faa8c520ec9": {
+  "b641bf06fbc6c003b4516c43137d075259f32dd2f6fa1b4ff3df100aa85efb2b": {
    "modelo": "Sony FX3, cuerpo (sólo lo común a ILME-FX3 e ILME-FX3A)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r6-T11-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "8b37ed089677ed4c7ee03d27408d768310ef2996609b84c801076faa8c520ec9",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx3/spec",
     "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx3/feature4",
     "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilme-fx3a/specifications"
    ]
   },
-  "d6e2f1f28df36b8f2e452a7434430cf3a7e216067d6928b5c465e5793b5a7103": {
+  "71d5e55bec23d64742bc13f97ed8ece56c611766a31ce8a596f3bee8e8b80c6f": {
    "modelo": "Sony FX30, cuerpo",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r10-T11-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "d6e2f1f28df36b8f2e452a7434430cf3a7e216067d6928b5c465e5793b5a7103",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx30/spec (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
     "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx30/feature5 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
     "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx30 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
    ]
   },
-  "e3310ce6077f79774d288045947279541131f0993da4ad98645939cfc955c0da": {
+  "8a6e8e63305f47227c46863a6b32da128b1dd5fbe6cd130692d0a30bbf7f6027": {
    "modelo": "Sony FX6 (ILME-FX6V), cuerpo",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r6-T11-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "e3310ce6077f79774d288045947279541131f0993da4ad98645939cfc955c0da",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx6/spec",
     "https://www.sony.es/interchangeable-lens-cameras/products/ilme-fx6/feature4"
    ]
   },
-  "65ca14e17d43ecf698d293e8c091194e9c984fa972804a16ccdceae7b3aad89b": {
+  "13aec6eb540e73f8e8ead3c2e7aaf45be254de20a9cd707eb3974d82007aff1c": {
    "modelo": "Sony HXR-NX800",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T12-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "65ca14e17d43ecf698d293e8c091194e9c984fa972804a16ccdceae7b3aad89b",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://helpguide.sony.net/pro/z200nx800/v1/es/contents/spec.html",
     "https://helpguide.sony.net/pro/z200nx800/v1/es/contents/shooting.html",
     "https://helpguide.sony.net/pro/z200nx800/v1/es/contents/network.html"
    ]
   },
-  "94fade62a32973e280596f6b0dc88278a51339b4ff6c5b768d413f207d821e13": {
+  "94d62984c7057d23d1e229dc0bfcc643dc3e4bac08d6534a63b9976ec6314cbe": {
    "modelo": "Sony PXW-Z200",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-a-T12-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "94fade62a32973e280596f6b0dc88278a51339b4ff6c5b768d413f207d821e13",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://helpguide.sony.net/pro/z200nx800/v1/es/contents/spec.html",
     "https://helpguide.sony.net/pro/z200nx800/v1/es/contents/shooting.html",
@@ -3005,11 +3108,12 @@
     "https://www.sony.com.ar/electronics/lentes-camara/sel50f14z/specifications"
    ]
   },
-  "027582a2b5a7b8a7b3fd4c3812e4e845f80a45b5a419a0a6bb9e1ba5a76f7970": {
+  "8d7d72991e8766088f1aa69de2635ccc964ffe52248219581127a0cb599f0f4f": {
    "modelo": "Sony RX100 VII (DSC-RX100M7)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r10-T11-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "027582a2b5a7b8a7b3fd4c3812e4e845f80a45b5a419a0a6bb9e1ba5a76f7970",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.es/electronics/camaras-compactas-cyber-shot/dsc-rx100m7/specifications (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
    ]
@@ -3034,21 +3138,22 @@
     "https://www.sony.com.ar/electronics/lentes-camara/sel2470z/specifications"
    ]
   },
-  "c755b48df27a98f084a5ff1a426d8c7cbc75b43c4f97e3ea8fece57725e8f8ce": {
+  "de4dff5610d3f53062bec215d6819ec897fef968d96688c2bcc840c80a3794ed": {
    "modelo": "Sony ZV-E10 II (ZV-E10M2), cuerpo",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r6-T11-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "c755b48df27a98f084a5ff1a426d8c7cbc75b43c4f97e3ea8fece57725e8f8ce",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/zv-e10m2/specifications",
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/zv-e10m2"
    ]
   },
-  "899128286bc4c91b7a8598621f701da765ac6b474fbc5842ef7c6ff73f43610b": {
+  "9a5df89550bb098ed0b1cc5964a4559abd971d6d5962eecf029dfeeffea98cd6": {
    "modelo": "Sony α1 II (ILCE-1M2), cuerpo",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-r6-T11-1.json",
+   "informe": "informe-03.json",
    "fuentes": [
     "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-1m2/specifications",
     "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-1m2"
@@ -3065,11 +3170,12 @@
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/lentes-camara/selp16502"
    ]
   },
-  "5e7b604f49ab2273c0ef83e9622ea540052507348152b86bac31fa8f7224fc74": {
+  "914265f351c47066e04fd9cdc8cc7c52d0ccae275880b059d93d4da412e60a1b": {
    "modelo": "Sony α7 III (ILCE-7M3): cuerpo y kit 28-70",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r10-T11-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "5e7b604f49ab2273c0ef83e9622ea540052507348152b86bac31fa8f7224fc74",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m3-body-kit/spec (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m3-body-kit/feature6 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
@@ -3077,52 +3183,56 @@
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m3-body-kit/feature1 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
    ]
   },
-  "bb0b5e96ed797329ed984c7883acda4e4fc5d0eec38090112dc8eff43295dc41": {
+  "6156ddf8622d563905e3cfb627dd3f9957e4b10ae3dd52d98d8bebc10faf9211": {
    "modelo": "Sony α7 IV (ILCE-7M4) kit 28-70",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r10-T11-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "bb0b5e96ed797329ed984c7883acda4e4fc5d0eec38090112dc8eff43295dc41",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m4/spec (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m4/feature61 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
    ]
   },
-  "a37ffb71afa9fbe62456f252c1857b5b1eaff629e11e968d4f6e20f1b3847637": {
+  "5a38d2fbab3daa5d848dfcb74d07890fd3377a815c362b657280d982d5aa99b4": {
    "modelo": "Sony α7 V (ILCE-7M5) kit 28-70",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r6-T11-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "a37ffb71afa9fbe62456f252c1857b5b1eaff629e11e968d4f6e20f1b3847637",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-7m5/specifications",
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-7m5"
    ]
   },
-  "035916620fb46b83c22b0a72e1cb669f70c0b9e6a9e0d2f919fac7311cde18bf": {
+  "286dba636dff2caab79180f3ee7abe7c0e1d203efa011df5009ab0f6001cab1c": {
    "modelo": "Sony α7C (ILCE-7C), cuerpo",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r10-T11-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "035916620fb46b83c22b0a72e1cb669f70c0b9e6a9e0d2f919fac7311cde18bf",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7c/spec (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7c/feature6 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
    ]
   },
-  "1dbd1eb29f35bd6a4d6fdaf143642cfb799d0daa9a98e9667c742feaf90131be": {
+  "e540212bbbb2a49d6936ac4ce0f6a57b4840c5fcafab6adb64351db871b939d4": {
    "modelo": "Sony α7C II (ILCE-7CM2), cuerpo",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-r10-T11-1.json",
+   "informe": "informe-03.json",
    "fuentes": [
-    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7cm2/spec (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
-    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7cm2/feature-list (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
-    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7cm2 (no está en fuentes; sólo para buscar «compacta») (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7cm2/spec",
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7cm2/feature-list",
+    "https://www.sony.com.ar/bin/footnotes.json?fnid=CameraNF1277e-mountILCE-7CM2,CameraNF1278e-mountILCE-7CM2,CameraNF1279e-mountILCE-7CM2,CameraNF1280e-mountILCE-7CM2,CameraNF1281e-mountILCE-7CM2,CameraNF1282e-mountILCE-7CM2,CameraNF1283e-mountILCE-7CM2,CameraNF1284e-mountILCE-7CM2,CameraNF1287e-mountILCE-7CM2,CameraNF1289e-mountILCE-7CM2,CameraNF1290e-mountILCE-7CM2,CameraNF1291e-mountILCE-7CM2,CameraNF1292e-mountILCE-7CM2,CameraNF1293e-mountILCE-7CM2,CameraNF1294e-mountILCE-7CM2,CameraNF1295e-mountILCE-7CM2,CameraNF1296e-mountILCE-7CM2,CameraNF1299e-mountILCE-7CM2,CameraNF1300e-mountILCE-7CM2&contentPath=/content/sony/sola/ar/es-ar/general/cameras/interchangeable-lens-cameras/products/ilce-7cm2/feature-list"
    ]
   },
-  "a7e84d9d2717afe36c38957d2d6386850df98958d25858b7737f5674e2312cf5": {
+  "7c79bb38814306fc6372664da0cdcddc431cdb159816edcb9bf2f3f1a4880161": {
    "modelo": "Sony α7CR (ILCE-7CR), cuerpo",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r6-T11-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "a7e84d9d2717afe36c38957d2d6386850df98958d25858b7737f5674e2312cf5",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.es/interchangeable-lens-cameras/products/ilce-7cr/spec",
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.es/interchangeable-lens-cameras/products/ilce-7cr/feature7",
@@ -3130,61 +3240,67 @@
     "bajada por mí (trabajo-r6-T11-2/): https://www.sony.es/electronics/camaras-lentes-intercambiables/ilce-7cr/specifications (redirige a la página de producto, sin tabla)"
    ]
   },
-  "edb8e2c167eb8dec5ca5eef048e2ca208e46f54f2f13d5e1c642bb56cd1394ae": {
+  "235845c41b9a2bc58bce06d14d4a22366aec8d2f13ba99576a50349107232d18": {
    "modelo": "Sony α7R III, cuerpo (sólo lo común a ILCE-7RM3 e ILCE-7RM3A)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-d-T11-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "edb8e2c167eb8dec5ca5eef048e2ca208e46f54f2f13d5e1c642bb56cd1394ae",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.es/electronics/camaras-lentes-intercambiables/ilce-7rm3/specifications",
     "https://www.sony.es/electronics/camaras-lentes-intercambiables/ilce-7rm3a/specifications"
    ]
   },
-  "e4e8c5cd8994878097ede017bb9e651f043ed8ae558f5f2f8f9f6a4d331551dc": {
+  "b1cf0fbd175593f23447db8679a542c452171d3511d15095ff11f81777ed18e4": {
    "modelo": "Sony α7R IV, cuerpo (sólo lo común a ILCE-7RM4 e ILCE-7RM4A)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r6-T11-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "e4e8c5cd8994878097ede017bb9e651f043ed8ae558f5f2f8f9f6a4d331551dc",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-7rm4a/specifications",
     "https://www.sony.es/electronics/camaras-lentes-intercambiables/ilce-7rm4/specifications"
    ]
   },
-  "2aac96da11a0ca7b77dae2600b6e51b966cbcbd81c8965947270ecd7448cbe86": {
+  "e63b5e6e0bdeba0da1af3594c73e6980b341d3f722128598d456c9508d2e996c": {
    "modelo": "Sony α7R V (ILCE-7RM5), cuerpo",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r6-T11-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "2aac96da11a0ca7b77dae2600b6e51b966cbcbd81c8965947270ecd7448cbe86",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "copia bajada hoy por el verificador d-T11-1 (trabajo-d-T11-1/): https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7rm5/spec",
     "copia bajada hoy por el verificador d-T11-1 (trabajo-d-T11-1/): https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7rm5/feature7"
    ]
   },
-  "b4900783e6189a4a156a125c855f1089cdfa80e755ef03b45d4019c7e0ea776c": {
+  "bfbda7441a232d213d99674df2daa5379108f560a6f9f69f84e579eb2bf2cd2c": {
    "modelo": "Sony α7R VI (ILCE-7RM6), cuerpo",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-d-T11-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "b4900783e6189a4a156a125c855f1089cdfa80e755ef03b45d4019c7e0ea776c",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-7rm6/specifications",
     "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-7rm6"
    ]
   },
-  "16f1979d78d24a46b8a2a197367055952623bd18953c74263b969319bf0534d8": {
+  "34e08dfe65b1a650de7d3024b1faa8b86c7298e7eb3c08a86556f6fbefad3ec5": {
    "modelo": "Sony α7S III (ILCE-7SM3), cuerpo",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r6-T11-1.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "16f1979d78d24a46b8a2a197367055952623bd18953c74263b969319bf0534d8",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7sm3/spec",
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7sm3/feature6"
    ]
   },
-  "d187daa0e78789bf305e93d1e4f9a92e2581ff3ad5aab7aecfbcef00ed04d2fa": {
+  "9c4dc06bd88e086765966b106074a3197eb0b151876d11714dcf4482fc1ae4e2": {
    "modelo": "Sony α9 III (ILCE-9M3)",
-   "fecha": "2026-10-02",
-   "por": "verificador-descripciones",
-   "informe": "informe-r6-T11-2.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "d187daa0e78789bf305e93d1e4f9a92e2581ff3ad5aab7aecfbcef00ed04d2fa",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-9m3/spec",
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-9m3"
@@ -3201,18 +3317,14 @@
     "https://www.tamron.com/global/consumer/lenses/sony_e/ · /canon_rf/ · /discontinued/ (identidad: un solo 11-20)"
    ]
   },
-  "d9377bcc81f6569c82d0f129bf98244aa8fd2e7232925d706f3e24a24aa4ec19": {
+  "8a78d3abda708dba1a38b49e76a31cfcebc1ed38cd11bd083cf06ebfcaf6a7ee": {
    "modelo": "Tamron 150-500mm F5-6.7 Di III VC VXD (A057) Sony E",
-   "fecha": "2026-10-02",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-a-T09-2.json",
+   "informe": "informe-03.json",
    "fuentes": [
     "https://www.tamron.com/global/consumer/lenses/a057/",
-    "https://www.tamron.com/global/consumer/lenses/a057/spec.html",
-    "https://tamron-americas.com/product/150-500mm-f-5-6-7-di-iii-vc-vxd/",
-    "https://www.tamron.com/global/consumer/lenses/sony_e/",
-    "https://www.tamron.com/global/consumer/lenses/nikon_z/",
-    "https://www.tamron.com/global/consumer/lenses/discontinued/"
+    "https://www.tamron.com/global/consumer/lenses/a057/spec.html"
    ]
   },
   "cb49472977dbba47bc047fd6e766b50f95e650d13cc8b4605fa4b2c23856b134": {
@@ -3461,11 +3573,11 @@
     "https://www.xbox.com/es-AR/consoles/xbox-series-x"
    ]
   },
-  "85227175875ce63c43d45af196b8d971637fe259a98fd836f20505ed00210b59": {
+  "421532581d44e0008bf951df7f4db5095c2527d3c63638dfaa033aa16e6a918d": {
    "modelo": "Xbox Series X 1TB Digital (blanca)",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "informe": "informe-02.json",
    "fuentes": [
     "https://www.xbox.com/es-MX/consoles/xbox-series-x",
     "https://www.xbox.com/es-AR/consoles/xbox-series-x"
@@ -3508,39 +3620,43 @@
     "https://support.apple.com/es-la/126472"
    ]
   },
-  "ecd939da5bc6ff9c4e1f992b21f83ecee31aa2e8d12372d10aed75f718377b73": {
+  "1e63685837c8d20f23cac37d813725e51361e46f4dc0d7bb0c4698b4632b4f72": {
    "modelo": "iPad Pro 11\" (M4)",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-07.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "ecd939da5bc6ff9c4e1f992b21f83ecee31aa2e8d12372d10aed75f718377b73",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/119892"
    ]
   },
-  "1924ee6a4baf1a2788aba4dfd76e0c0b7bc775462aad497c483a0eee7dfbbeff": {
+  "079daca75a71fa7084cabcab9721615fb147aabcfce167d6486f09ab7a97c129": {
    "modelo": "iPad Pro 11\" (M5)",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "1924ee6a4baf1a2788aba4dfd76e0c0b7bc775462aad497c483a0eee7dfbbeff",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/125406",
     "https://www.apple.com/la/ipad-pro/specs/"
    ]
   },
-  "124e6aba172b30600ac28d5980cf3067de749cb542a41b4f440cf1fc8984cea4": {
+  "f179aceb259669bcfd4c27d195238c276e8217387eb49d3a091f079a14e18d40": {
    "modelo": "iPad Pro 13\" (M4)",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "124e6aba172b30600ac28d5980cf3067de749cb542a41b4f440cf1fc8984cea4",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/119891"
    ]
   },
-  "195065083db6ac342ea51ac0e5c7b012a39c3e671ac7bd20f8ca987065315132": {
+  "7f8690f97563711367f5ffea358ef14103c483054150b19bf2035595d3d7f530": {
    "modelo": "iPad Pro 13\" (M5)",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-03.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "195065083db6ac342ea51ac0e5c7b012a39c3e671ac7bd20f8ca987065315132",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/125407",
     "https://www.apple.com/la/ipad-pro/specs/"
@@ -3555,11 +3671,11 @@
     "https://support.apple.com/es-la/121456"
    ]
   },
-  "3bec367b61b83ff0cf5a4068b66105e8be21b7fd17614fae82eea9deebb818ea": {
+  "b1a8e73224d7869d34b44e0f8f0b2c7e550846d0b6f32af4adf0626f2ec91d56": {
    "modelo": "iPhone 14",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-04.json",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://support.apple.com/es-la/111850"
    ]
@@ -3611,20 +3727,22 @@
     "https://support.apple.com/es-la/122208"
    ]
   },
-  "ebaa9bd49b1aa7a4909b4def366a65876187c298ce198a026bc52d479ae31ab3": {
+  "6ff60717a4e32622d3507bd4a984dbf6df0f7a7bd602a4b0ca046402058a20f8": {
    "modelo": "iPhone 17",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-02.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "ebaa9bd49b1aa7a4909b4def366a65876187c298ce198a026bc52d479ae31ab3",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/125089"
    ]
   },
-  "db512ae4df7f9e9c715c2311ec3e122b228fe8fa1b15b626fcd144042193a39c": {
+  "bebefab7490c0f2a15af4cd593746753be79127e9992405c0e90ffb4426d04c9": {
    "modelo": "iPhone 17 Pro",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "db512ae4df7f9e9c715c2311ec3e122b228fe8fa1b15b626fcd144042193a39c",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/125090",
     "https://support.apple.com/es-es/125090",
@@ -3632,69 +3750,75 @@
     "https://support.apple.com/zh-hk/125090 (control: A3523/A3526, 204 g, 31 h)"
    ]
   },
-  "30115fed4e299f7e825a89bacf3a0a5a91167ab698b1849a99aabb7a854b1f03": {
+  "cfbcaf8277b30d19a4af9a7220ff2a3a33998d5afe80f79787b5ef66fe30a458": {
    "modelo": "iPhone 17 Pro Max",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-13",
    "por": "verificador-descripciones",
-   "informe": "informe-03.json",
+   "informe": "informe-01.json",
    "fuentes": [
     "https://support.apple.com/es-la/125091"
    ]
   },
-  "762c35e4b28bdabb6a0fb630e07b1b49e5db6186eed18cb0956a7239c310d940": {
+  "d717202b71d9997f7f1d45388544e347b65866e965f79b1383db35f1fa18c188": {
    "modelo": "iPhone 17e",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-02.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "762c35e4b28bdabb6a0fb630e07b1b49e5db6186eed18cb0956a7239c310d940",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/126470"
    ]
   },
-  "74dc744b05920ce4506e6d83e1b7859c953e00741d65da671554e91aefed325b": {
+  "428dd5e52765e1d7667c084f5bc161157b19f3a644c263b9060d7c0629df7ac9": {
    "modelo": "iPhone 18 Pro",
-   "fecha": "2026-10-07",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "74dc744b05920ce4506e6d83e1b7859c953e00741d65da671554e91aefed325b",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-07)",
    "fuentes": [
     "https://www.apple.com/iphone-18-pro/specs/ (HTML entero con curl, 07/10/2026, HTTP 200). «Capacity: iPhone 18 Pro 256GB 512GB 1TB 2TB»: el 1TB existe. Ningún dato de la ficha depende de la capacidad: peso (211 g), medidas, batería (36 h de video, 33 h en streaming), chip, cámaras, SIM (Dual eSIM, not compatible with physical SIM cards) y conectividad se dan por modelo, no por capacidad (la única mención es la nota genérica «Size and weight vary by configuration and manufacturing process»). Revisé de nuevo dato por dato: colores, materiales, 150,0 x 71,9 x 8,75 mm, 6,3\" 2622x1206 a 460 ppi, 1000/1600/3000 nits, ProMotion 120 Hz, Always-On, Dynamic Island, A20 Pro (6 núcleos: 2 super cores + 4 de eficiencia), GPU de 7 núcleos con Neural Accelerators, Dual 16-core Neural Engine, cámaras 48 MP (24 mm con ƒ/1.48–ƒ/4.0, 13 mm ƒ/2.2 120°, 100 mm 4x ƒ/2.8), zoom 8x/2x/40x, frontal 18 MP ƒ/1.9, carga 50% en around 15 minutes con 60 W y AVS, MagSafe y Qi2 de 25 W, IP68 a 6 m durante 30 min, Wi-Fi 7 (nota de país), Bluetooth 6, UWB de 2.ª generación (nota de región), NFC, USB 3 hasta 10 Gb/s, iOS 27. Todo coincide.",
     "control (no fuente): diferencia contra la entrada ya verificada (verificar/lote-01.json, huella e4ab5439…): sólo cambian codigos y versiones[0].codigos (se suma AT-0547). Huella 74dc744b… recalculada con herramientas/verificar-descripciones.py: coincide con el lote y con datos/descripciones.json del worktree.",
     "control (no fuente): herramientas/catalogo-maestro.csv: AT-0547 = «iPhone 18 Pro 1TB E-Sim», SKU CEL-APL-IPHONE18PRO-1TB-SLV-000, nota «eSIM por la regla de Benja (si el proveedor no dice SIM, es eSIM)»; CORRECCIONES-07-10-B.json lo pasa a «Apple iPhone 18 Pro 1TB E-Sim (Silver)» con SKU -ESIM."
    ]
   },
-  "91bdd03ecf869d5e0d9a4c0531ff050f3554d2df64058f580fabf10165bd22e9": {
+  "9b6e824664bd730d36e49093191315d14e63a4054e709b4426df737772836c54": {
    "modelo": "iPhone 18 Pro Max",
-   "fecha": "2026-10-07",
-   "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "91bdd03ecf869d5e0d9a4c0531ff050f3554d2df64058f580fabf10165bd22e9",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-07)",
    "fuentes": [
     "https://www.apple.com/iphone-18-pro/specs/ (HTML entero con curl; la tabla está completa en el HTML. Revisado dato por dato en la columna del Pro Max: colores, materiales, capacidades 256 GB a 2 TB, medidas 163.4 x 78.0 x 8.75 mm, 249 g, 6.9\" 2868x1320 a 460 ppi, brillo 1000/1600/3000 nits, A20 Pro, cámaras (comunes a los dos), video 45 h y streaming 40 h, carga 50% en around 15 minutes con 60W y Adjustable Voltage Supply, MagSafe y Qi2 25W, IP68, Dual eSIM y not compatible with physical SIM cards, Wi-Fi 7 con nota de país, Bluetooth 6, UWB 2.ª gen con nota de región, USB 3 10Gb/s, iOS 27)",
     "https://www.apple.com/la/iphone-18-pro/specs/ (control, no fuente: nombres de los colores en español, traducción «fuente de voltaje ajustable», y confirma que es otro modelo: «Doble SIM (nano-SIM y eSIM)», 43 h de video y 38 h en streaming; mismo peso 249 g)",
     "control de códigos (no es fuente): ~/catalogo-advance-trabajo/wt-iphone18/herramientas/catalogo-maestro.csv — AT-0544 = 512GB, AT-0545 = 1TB y AT-0546 = 2TB, todos iPhone 18 Pro Max E-Sim, con los SKU de las filas de hoy (-512-BLK-ESIM, -1TB-BLK-ESIM, -2TB-BLK-ESIM). La huella 91bdd03e… se recalculó: es la entrada del lote con sólo codigos y versiones[0].codigos cambiados a AT-0543..AT-0546. Ningún dato de la ficha depende de la capacidad (Apple da peso y autonomía por modelo, no por capacidad)."
    ]
   },
-  "8cb187881ec0c2cd816cf3210809c7df4cbef3c9775064f5b4e8e11c5c28d870": {
+  "1b2fc46bb17b77d0b847673514e44fc245501006c505af279f3312bb7f449e66": {
    "modelo": "iPhone Air",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-04.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "8cb187881ec0c2cd816cf3210809c7df4cbef3c9775064f5b4e8e11c5c28d870",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://support.apple.com/es-la/125092"
    ]
   },
-  "fc84a41e18ed9b02137ae4d1e1ce78016cade004779fab44f88d950fd698bc97": {
+  "2a9fa93a7d743982896b3c5a65e0a63cc794c02191bbc2ddd3125072a157c3f0": {
    "modelo": "moto g06 power",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-09.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "fc84a41e18ed9b02137ae4d1e1ce78016cade004779fab44f88d950fd698bc97",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.motorola.com/es/es/p/phones/moto-g/moto-g06-power/pmipmhy43m4"
    ]
   },
-  "26ce7cf18ab585d0da7ad0eacb73780d2d2b99ba54f61952da7ad9f107487610": {
+  "e8c9f0c07cf2655d96e9d794078064d84666cd7b438ee678982d9c841296c18c": {
    "modelo": "moto g17",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-10.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "26ce7cf18ab585d0da7ad0eacb73780d2d2b99ba54f61952da7ad9f107487610",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.motorola.com.ar/moto-g17-256gb/p",
     "https://www.motorola.com/es/es/p/phones/moto-g/17/pmipmjn44mj",
@@ -3702,11 +3826,12 @@
     "https://www.motorola.com/hn/es/p/phones/moto-g/17/pmipmjn44mj (extra, para el color)"
    ]
   },
-  "d168ed0592e4e26231ba772da2c4fdd5a9c14c7c0069e02a9c1d6614743befe2": {
+  "8511c7d5988a976551621e5e538cf659857243f3bf42117fe26d0d6c3aca33bc": {
    "modelo": "moto g57",
-   "fecha": "2026-10-01",
-   "por": "verificador-descripciones",
-   "informe": "informe-06.json",
+   "fecha": "2026-10-14",
+   "por": "prueba-mecanica",
+   "desde": "d168ed0592e4e26231ba772da2c4fdd5a9c14c7c0069e02a9c1d6614743befe2",
+   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.motorola.com/au/en/p/phones/moto-g/57-5g/pmipmjf43mj (tabla de specs y notas 1 a 22 desde el JSON de la página)"
    ]

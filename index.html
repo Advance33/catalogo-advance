@@ -6212,7 +6212,17 @@ function buscableDe(p){
     .flatMap(c => norm(c).split(/[^a-z0-9-]+/))
     .filter(c => /^at-?\d/.test(c))
     .map(c => c.replace(/^at-?/, 'at-')))];
-  b = { txt, comp, codigos, alias };
+  /* Los ID de ADVAPP, aparte del resto (14/10/2026). Pegan el modelo en un
+     solo tramo ("tab-xia-redmipad2-4g256-grn-wifi") y, comparados como
+     cualquier texto, "ipad" encontraba la Redmi Pad 2 por el "redmIPAD2" de
+     su ID: buscando iPad salía una tablet Xiaomi, y "ipad" y "ipads" traían
+     cosas distintas. Un ID se sigue encontrando entero o desde el comienzo de
+     cualquiera de sus tramos ("cel-app-021", "app-021", "redmipad"), que es
+     como se lo escribe; por adentro de un tramo, no. */
+  const ids = [...new Set([p, ...vs].map(v => norm(v.id || '')).filter(Boolean))];
+  const esId = new Set(ids);
+  const sinId = txt.split(/\s+/).filter(w => !esId.has(w)).join(' ');
+  b = { txt, sinId, ids, comp, codigos, alias };
   BUSCABLES.set(p, b);
   return b;
 }
@@ -6248,10 +6258,12 @@ function prepararBusqueda(q){
 function coincide(p, palabras){
   if(!palabras.length) return true;
   const b = buscableDe(p);
+  // El ID, solo entero o desde el comienzo de un tramo (ver ids en buscableDe)
   return palabras.every(x =>
     (x.codigo ? b.codigos.some(c => c.startsWith(x.codigo)) : false) ||
-    b.txt.includes(x.w) ||
-    x.raices.some(re => re.test(b.txt)) ||
+    b.sinId.includes(x.w) ||
+    b.ids.some(id => id.startsWith(x.w) || id.includes('-' + x.w)) ||
+    x.raices.some(re => re.test(b.sinId)) ||
     (!!x.comp && b.comp.includes(' ' + x.comp)));
 }
 
@@ -8637,6 +8649,11 @@ const COMPLEMENTOS = {
   'Usado':               ['Auriculares', 'Accesorio Apple', 'Apple Watch'],
   'iPad':                ['Accesorio Apple', 'Auriculares'],
   'MacBook':             ['Accesorio Apple', 'Monitor', 'Auriculares'],
+  /* La primera notebook que no es Apple (Dell, 14/10/2026) cae en Notebook y
+     se quedaba sin "Te puede servir". Lleva lo mismo que MacBook, el rubro
+     más parecido; y como en Tablet frente a iPad, Notebook va en
+     MUNDO_DE_LA_MARCA: con una marca puesta no se le ofrece lo de Apple. */
+  'Notebook':            ['Accesorio Apple', 'Monitor', 'Auriculares'],
   'Apple Watch':         ['Accesorio Apple', 'Auriculares'],
   'Smartwatch':          ['Auriculares', 'Celular'],
   'Tablet':              ['Auriculares', 'Accesorio Apple'],
@@ -8697,7 +8714,8 @@ function techoSugeridos(){
 // Rubros donde la marca del equipo decide el mundo: con otra que no sea Apple,
 // lo de Apple no le sirve (los EarPods Lightning no entran en un Samsung).
 const MUNDO_DE_LA_MARCA = ['Celular', 'Tablet', 'E-Reader', 'Smartwatch', 'Auriculares', 'Parlante',
-                           'Usado'];   // 14/10/2026: un usado es un celular
+                           'Usado',      // 14/10/2026: un usado es un celular
+                           'Notebook'];  // 14/10/2026: las que no son Apple (Dell); las Apple van a MacBook
 
 /* Las monturas de lente que le entran a un cuerpo, por su nombre. Solo reglas
    que se conocen; lo que no encaja en ninguna no tiene montura y nunca se

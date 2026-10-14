@@ -17,6 +17,7 @@
 "AT-0011-01.jpg",
 "AT-0011-02.jpg",
 "AT-0012-01.jpg",
+"AT-0012-02.jpg",
 "AT-0013.jpg",
 "AT-0014.jpg",
 "AT-0015.jpg",
@@ -299,6 +300,7 @@
 "AT-0190.jpg",
 "AT-0191.jpg",
 "AT-0192-01.jpg",
+"AT-0192-02.jpg",
 "AT-0193.jpg",
 "AT-0194.jpg",
 "AT-0195.jpg",
@@ -866,6 +868,7 @@
 "apple|accesorio apple|2:1"
 ],
 "AT-0012": [
+"apple|accesorio apple|",
 "apple|accesorio apple|2:1"
 ],
 "AT-0013": [
@@ -1413,7 +1416,8 @@
 "sony|camara|fx6:1"
 ],
 "AT-0192": [
-"sony|camara|body:1,e10:1"
+"sony|camara|body:1,e10:1",
+"sony|camara|e10:1"
 ],
 "AT-0193": [
 "dji|camara de accion|6:1"
@@ -2651,6 +2655,7 @@
 "ACA-APL-BATERIAMAGSAFEIPHONEAIR-000-000-000": "AT-0570",
 "ACA-APL-CABLE-000-000-USBCLIGHT": "AT-0571",
 "ACA-APL-CARGADOR40WUSBC-000-000-000": "AT-0569",
+"ACA-APL-MAGICTRACKPAD2-000-WHT-000": "AT-0012",
 "ACA-APL-MKTOUCHIDNUM-000-BLK-EN": "AT-0003",
 "ACA-APL-PA20W-000-000-000": "AT-0568",
 "ACC-APP-001": "AT-0002",
@@ -2828,6 +2833,7 @@
 "CAM-SON-027": "AT-0175",
 "CAM-SON-032": "AT-0172",
 "CAM-SON-A7IV-000-000-BODY": "AT-0567",
+"CAM-SON-ZVE10II-000-BLK-BODY": "AT-0192",
 "CEL-APL-15-128-BLK-SIM": "AT-0065",
 "CEL-APL-15-128-PNK-SIM": "AT-0065",
 "CEL-APL-16-128-BLK-000": "AT-0067",
@@ -2835,6 +2841,7 @@
 "CEL-APL-16-128-TLX-000": "AT-0067",
 "CEL-APL-16E-256-WHT-000": "AT-0548",
 "CEL-APL-16PM-256-BLK-000": "AT-0068",
+"CEL-APL-17-256-LVN-ESIM": "AT-0070",
 "CEL-APL-17E-512-PNK-ESIM": "AT-0530",
 "CEL-APL-17P-1TB-BLU-ESIM": "AT-0071",
 "CEL-APL-17P-1TB-BLU-SIM": "AT-0537",
@@ -4188,8 +4195,12 @@
 "bla": "AT-0012-01",
 "black": "AT-0012-01",
 "black keys": "AT-0012-01",
+"blanco": "AT-0012-02",
 "negro": "AT-0012-01",
-"teclas negras": "AT-0012-01"
+"teclas negras": "AT-0012-01",
+"whi": "AT-0012-02",
+"white": "AT-0012-02",
+"whites": "AT-0012-02"
 },
 "AT-0013": {
 "": "AT-0013"
@@ -5121,7 +5132,10 @@
 "": "AT-0191"
 },
 "AT-0192": {
+"bla": "AT-0192-02",
+"black": "AT-0192-02",
 "blanco": "AT-0192-01",
+"negro": "AT-0192-02",
 "teclas blancas": "AT-0192-01",
 "whi": "AT-0192-01",
 "white": "AT-0192-01",
@@ -6638,5 +6652,5 @@
 }
 }
 },
-"generado": "2026-10-14T16:12:34"
+"generado": "2026-10-14T16:36:01"
 }

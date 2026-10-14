@@ -70,8 +70,14 @@ async function paginasDeProducto(){
     const vs = (m.variantes || [m]).filter(v => v && v.precio !== null && v.precio !== undefined);
     if(!vs.length) continue;
     const rep = vs.includes(m.rep) ? m.rep : vs[0];
-    const titulo = String(nombreConMarca({ marca: rep.marca || m.marca, desc: m.titulo || m.desc }) || '').trim();
+    let titulo = String(nombreConMarca({ marca: rep.marca || m.marca, desc: m.titulo || m.desc }) || '').trim();
     if(!titulo) continue;
+    /* El usado lo dice en el título (Benja, 14/10/2026): cada equipo tiene su
+       página ("apple-iphone-15-usado", "-usado-2"), y sin la palabra la de un
+       usado se llamaría como la del nuevo, o heredaría la dirección de un
+       nuevo que ya no está (asignar_slugs). */
+    const usado = typeof esUsadoModelo === 'function' && esUsadoModelo(m);
+    if(usado && !RE_USADO.test(norm(titulo))) titulo += ' usado';
     const versiones = [];
     for(const v of vs){
       const colores = partirColores(v.color || '');
@@ -102,14 +108,15 @@ async function paginasDeProducto(){
     modelos.push({
       familia: familia(rep),
       titulo,
-      nombre: String(m.titulo || m.desc || '').trim() || titulo,
+      // El título grande también dice "usado" (14/10/2026)
+      nombre: ((t => usado && t && !RE_USADO.test(norm(t)) ? t + ' usado' : t)(String(m.titulo || m.desc || '').trim())) || titulo,
       marca: rep.marca || m.marca || '',
       categoria: m.cat || rep.cat || '',
       rubro: plural(m.cat || rep.cat || ''),
       clave: clave(rep),
       sku: String(rep.skuVariante || '').trim(),
       // Usado (W3-10): para Google, UsedCondition y no NewCondition
-      usado: typeof esUsadoModelo === 'function' ? esUsadoModelo(m) : false,
+      usado,
       desde: Math.min(...precios),
       hasta: Math.max(...precios),
       stock: versiones.some(x => x.stock),

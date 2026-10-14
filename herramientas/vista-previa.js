@@ -90,6 +90,9 @@ function vpLinea(m, v, titulo){
   const grupo = m.variantes.filter(x => (x.opcion || x.etiqueta) === (v.opcion || v.etiqueta));
   const esVersion = m.multi && op && !opcionEsColor(grupo, v.opcion || v.etiqueta);
   const partes = [];
+  // El usado lo dice primero (Benja, 14/10/2026): el link compartido de un
+  // usado no puede verse como el de uno nuevo
+  if(typeof esUsado === 'function' && esUsado(v)) partes.push('Usado');
   if(m.tecnica) partes.push(m.tecnica);
   const version = esVersion ? vpPartesDeVersion(op) : [];
   // La memoria que no esta en ninguna pestaña (una sola version, o versiones

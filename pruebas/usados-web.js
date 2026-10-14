@@ -30,6 +30,16 @@
 //       las fotos de lo nuevo, exactamente las mismas que sin usados
 //  [11] la bateria en la tarjeta, "Batería 88%", solo si el Detalle la dice
 //       sin dudas
+//  [12] la foto ilustrativa (Benja, 14/10/2026): el usado sin ninguna foto
+//       suya muestra la del mismo modelo nuevo y del mismo color, con el
+//       cartel "Foto ilustrativa" en la tarjeta, en la ficha y en el visor
+//       (tambien a 390 px) y en el texto alternativo. El modelo, por la madre
+//       sin el tramo del equipo (CEL-APL-16PMU0007 -> CEL-APL-16PM) o, sin
+//       madre, por el nombre; otra memoria y la eSIM no importan. Un color que
+//       el nuevo no tiene: sin foto, como antes. Con foto suya (ADVAPP o el
+//       archivo de su codigo): la suya, sin cartel. La vista previa de
+//       WhatsApp y og:image/datos para Google de las paginas no la usan. Lo
+//       nuevo, igual que sin usados
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const info = t => R.push('  --  ' + t);
@@ -81,6 +91,32 @@ const UW_FILAS = [
                       fotos: ['https://advapp.invalid/tecno-productos/skus/usado-0006-a.jpg',
                               'https://advapp.invalid/tecno-productos/skus/usado-0006-b.jpg',
                               'https://advapp.invalid/tecno-productos/skus/usado-0006-c.jpg'] }] }),
+  // [12] La foto ilustrativa (14/10/2026). Como los carga ADVAPP desde la lista
+  // de LUCAS IMPORT: ID propio, madre del nuevo con la U y el numero, el color
+  // con el nombre oficial, sin codigo AT y sin fotos.
+  // El 16 Pro Max de 1TB Black Titanium: el nuevo no tiene 1TB (la foto es la
+  // misma) y es el mas caro de los usados (el mundo prefiere una foto propia)
+  uwFila({ 'ID': 'UW-USADO-7', 'Marca': 'Apple', 'Modelo': 'IPHONE 16 PRO MAX',
+           'Descripción completa': 'iPhone 16 Pro Max 1TB (Black Titanium)', 'Precio USD': '1150',
+           'Color': 'Black Titanium', 'Detalle': 'Batería 90 %.', 'Garantía': '30 días',
+           'SKU_MADRE': 'CEL-APL-16PMU0007', 'SKU_VARIANTE': 'CEL-APL-16PMU0007-1TB-BLK-000' }),
+  // eSIM, y el iPhone 15 nuevo es Sim: la foto es la misma
+  uwFila({ 'ID': 'UW-USADO-8', 'Modelo': 'IPHONE 15', 'Descripción completa': 'iPhone 15 128GB E-Sim (Pink)',
+           'Precio USD': '540', 'Color': 'Pink', 'SKU': 'celular~apple~15-iphone-usado-u0008~128-esim',
+           'SKU_MADRE': 'CEL-APL-15U0008', 'SKU_VARIANTE': 'CEL-APL-15U0008-128-PNK-ESIM' }),
+  // Un color que el 16 Pro Max nuevo no tiene: sin foto (otro color engaña)
+  uwFila({ 'ID': 'UW-USADO-9', 'Marca': 'Apple', 'Modelo': 'IPHONE 16 PRO MAX',
+           'Descripción completa': 'iPhone 16 Pro Max 256GB (Pink)', 'Precio USD': '900', 'Color': 'Pink',
+           'SKU_MADRE': 'CEL-APL-16PMU0009', 'SKU_VARIANTE': 'CEL-APL-16PMU0009-256-PNK-000' }),
+  // Sin madre: el mismo modelo, por el nombre
+  uwFila({ 'ID': 'UW-USADO-10', 'Marca': 'Apple', 'Modelo': 'IPHONE 16 PRO MAX',
+           'Descripción completa': 'iPhone 16 Pro Max 256GB (Natural)', 'Precio USD': '960', 'Color': 'Natural' }),
+  // Con una foto suya en ADVAPP: la suya, sin cartel
+  uwFila({ 'ID': 'UW-USADO-11', 'Marca': 'Apple', 'Modelo': 'IPHONE 16 PRO MAX',
+           'Descripción completa': 'iPhone 16 Pro Max 256GB (Desert Titanium)', 'Precio USD': '990',
+           'Color': 'Desert Titanium', 'SKU_MADRE': 'CEL-APL-16PMU0011', 'SKU_VARIANTE': 'CEL-APL-16PMU0011-256-DST-000',
+           'SKUS': [{ sku: 'CEL-APL-16PMU0011-256-DST-000', at: null,
+                      fotos: ['https://advapp.invalid/tecno-productos/skus/usado-0011-a.jpg'] }] }),
 ];
 const UW_FOTOS = UW_FILAS[5]['SKUS'][0].fotos;
 const UW_N = UW_FILAS.length;
@@ -110,6 +146,53 @@ async function uwCargar(agregar){
   for(let i=1;i<5000;i++) clearInterval(i);
   try{ pararPaseos(); pararOfertas(); pararNuevos(); pararMarcas(); pararMundos(); }catch(e){}
 }
+
+/* [12] Lo mismo adentro de un iframe (el celular de 390 px): la pagina del
+   iframe es otra, con su propio fetch y su propio ADVAPP_URL. */
+async function uwCargarEn(w, agregar){
+  const url = w.eval('ADVAPP_URL'), antes = w.fetch;
+  w.fetch = (u, o) => {
+    if(!url || !String(u).startsWith(url)) return antes.call(w, u, o);
+    return antes.call(w, u, o).then(r => r.json()).then(j => {
+      j.productos = j.productos.filter(p => !uwEsUsadoCrudo(p)).concat(agregar);
+      j.filas = j.productos.length;
+      if(Array.isArray(j.columnas) && !j.columnas.includes('Garantía')) j.columnas.push('Garantía');
+      return new w.Response(JSON.stringify(j), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    });
+  };
+  try{ await w.actualizar(false); } finally { w.fetch = antes; }
+  try{ w.pararPaseos(); w.pararOfertas(); w.pararNuevos(); w.pararMarcas(); w.pararMundos(); }catch(e){}
+}
+const uwDormir = ms => new Promise(r => setTimeout(r, ms));
+async function uwEsperarA(cond, ms = 25000){
+  const t0 = Date.now();
+  while(Date.now() - t0 < ms){
+    try{ if(cond()) return true; }catch(e){}
+    await uwDormir(150);
+  }
+  return false;
+}
+// Un script de herramientas/ (vista-previa.js, paginas-producto.js), como
+// decision-vista-previa.js. Hasta tres veces: con la suite entera, el servidor
+// local a veces corta una conexion mientras la pagina baja las fotos (paso una
+// vez en la primera corrida de esta tanda, 14/10/2026)
+function uwScript(src, vez = 1){
+  return new Promise((si, no) => {
+    const s = document.createElement('script');
+    s.src = src + '?_=' + Date.now();
+    s.onload = si; s.onerror = () => { s.remove(); no(new Error('no se pudo cargar ' + src)); };
+    document.head.appendChild(s);
+  }).catch(e => vez < 3 ? uwDormir(500 * vez).then(() => uwScript(src, vez + 1)) : Promise.reject(e));
+}
+// Las cajas: `a` adentro de `b`, y si dos se pisan
+const uwAdentro = (a, b) => a.left >= b.left - 1 && a.right <= b.right + 1 && a.top >= b.top - 1 && a.bottom <= b.bottom + 1;
+const uwPisan = (a, b) => a.left < b.right - 1 && b.left < a.right - 1 && a.top < b.bottom - 1 && b.top < a.bottom - 1;
+const uwCaja = r => r ? Math.round(r.left) + ',' + Math.round(r.top) + ' ' + Math.round(r.width) + 'x' + Math.round(r.height) : '-';
+// Donde se ve la foto de la ficha: cuadrada (como todas las de fotos/), centrada en el marco
+const uwCuadro = r => {
+  const s = Math.min(r.width, r.height), x = r.left + (r.width - s) / 2, y = r.top + (r.height - s) / 2;
+  return { left: x, top: y, right: x + s, bottom: y + s, width: s, height: s };
+};
 
 const uwChips = () => [...$$('#cats .chip:not(.clon)')];
 const uwMundoUsados = () => [...$$('#mosaico .mundo')].find(t => /usados/i.test(t.querySelector('h3')?.textContent || ''));
@@ -160,6 +243,13 @@ async function correrUW(){
   ok(!haySeccionUsados() && uwFaq() === UW_D14, '[0] y "¿Los productos son nuevos?" dice lo de D14 A', uwFaq());
   const sinMundos = [...$$('#mosaico .mundo')].length;
   const fotosSinUsados = new Map(PRODUCTOS.map(p => [clave(p), [p.imagen, p.imagenGrande]]));
+  // [12] La foto de cada tarjeta de lo nuevo sin usados: la clase, la foto, su
+  // texto alternativo y si lleva el cartel
+  const uwFotoTarjeta = m => {
+    const f = tarjeta(m).querySelector('.foto'), img = f && f.querySelector('img');
+    return f ? [f.className, img && img.getAttribute('src'), img && img.getAttribute('alt'), !!f.querySelector('.foto-ilus')].join('|') : '';
+  };
+  const tarjetasSinUsados = new Map(MODELOS.map(m => [clave(m.rep), uwFotoTarjeta(m)]));
 
   /* ---- Con los usados de ejemplo ---- */
   await uwCargar(UW_FILAS);
@@ -376,6 +466,174 @@ async function correrUW(){
   ok(!conBat.length, '[11] ninguna tarjeta nueva lleva bateria', conBat.slice(0, 3).map(m => m.desc).join(' | '));
   const c4 = tarjeta(buscarModelo('UW-USADO-1'));
   ok(c4.querySelector('.nombre').nextElementSibling === c4.querySelector('.tecnica'), '[11] va debajo del nombre');
+
+  /* ---- [12] La foto ilustrativa (Benja, 14/10/2026) ---- */
+  const [u7, u8, u9, u10, u11] = ['UW-USADO-7', 'UW-USADO-8', 'UW-USADO-9', 'UW-USADO-10', 'UW-USADO-11'].map(buscarProducto);
+  // Las fotos de ese color en el modelo nuevo de esa madre: las que muestra su
+  // ficha al elegir el color (fotosDeColor), sin pasar por lo que se prueba
+  const uwFotosNuevas = (madre, color) => {
+    const m = MODELOS.find(x => noEsUsado(x) && x.variantes.some(v => madreDelSku(v.skuVariante) === madre));
+    return new Set(m ? m.variantes.flatMap(v => fotosDeColor(v, color)) : []);
+  };
+  const archivo = u => String(u || '(ninguna)').split('/').pop();
+  const bt16 = uwFotosNuevas('CEL-APL-16PM', 'Black Titanium');
+  if(bt16.size)
+    ok(u7.fotoIlustrativa === true && bt16.has(u7.imagenGrande) && u7.imagen === fotoChica(u7.imagenGrande),
+       '[12] el 16 Pro Max usado sin foto lleva la del 16 Pro Max nuevo Black Titanium (y es de 1TB, que el nuevo no tiene: la memoria no importa)',
+       archivo(u7.imagenGrande));
+  else info('[12] hoy el 16 Pro Max nuevo no tiene foto Black Titanium: no se mira el de 1TB');
+  const pk15 = uwFotosNuevas('CEL-APL-15', 'Pink');
+  const simDelNuevo = PRODUCTOS.filter(p => !esUsado(p) && madreDelSku(p.skuVariante) === 'CEL-APL-15' &&
+                                            partirColores(p.color).some(c => norm(c) === 'pink')).map(p => p.sim || '-');
+  if(pk15.size)
+    ok(u8.sim === 'E-Sim' && u8.fotoIlustrativa === true && pk15.has(u8.imagenGrande),
+       '[12] el iPhone 15 E-Sim usado lleva la del iPhone 15 nuevo Pink, aunque sea Sim (la Sim no importa)',
+       u8.sim + ' / el nuevo: ' + simDelNuevo.join(',') + ' · ' + archivo(u8.imagenGrande));
+  else info('[12] hoy el iPhone 15 nuevo no tiene foto Pink: no se mira la eSIM');
+  if(!uwFotosNuevas('CEL-APL-16PM', 'Pink').size)
+    ok(!u9.imagen && !u9.imagenGrande && !u9.fotoIlustrativa && !!tarjeta(buscarModelo('UW-USADO-9')).querySelector('.foto.vacia')
+       && !tarjeta(buscarModelo('UW-USADO-9')).querySelector('.foto-ilus'),
+       '[12] un color que el 16 Pro Max nuevo no tiene (Pink): sin foto y sin cartel, como antes; nunca la de otro color',
+       archivo(u9.imagenGrande) + ' · el nuevo tiene ' + uwFotosNuevas('CEL-APL-16PM', 'Desert Titanium').size + ' foto(s) Desert Titanium');
+  else info('[12] hoy el 16 Pro Max nuevo tiene foto Pink: no se mira el color que falta');
+  const nt16 = uwFotosNuevas('CEL-APL-16PM', 'Natural');
+  if(nt16.size)
+    ok(!madreDelSku(u10.skuVariante) && u10.fotoIlustrativa === true && nt16.has(u10.imagenGrande),
+       '[12] sin madre, el modelo sale del nombre: la del 16 Pro Max nuevo Natural', archivo(u10.imagenGrande));
+  else info('[12] hoy el 16 Pro Max nuevo no tiene foto Natural: no se mira el nombre');
+  ok(!u11.fotoIlustrativa && u11.imagenGrande === UW_FILAS[10]['SKUS'][0].fotos[0],
+     '[12] con una foto suya en ADVAPP, la suya: la ilustrativa no entra', archivo(u11.imagenGrande));
+  ok([u1, u2, u3, u5, u6].every(p => p.imagen && !p.fotoIlustrativa) &&
+     [u1, u3, u6, u11].every(p => !tarjeta(buscarModelo(p.id)).querySelector('.foto-ilus')),
+     '[12] los que tienen foto suya (el archivo de su codigo o las de ADVAPP) siguen con la suya, sin cartel');
+  if(!PRODUCTOS.some(p => !esUsado(p) && /iphone 13\b/i.test(p.desc || '')))
+    ok(!u4.imagen && !u4.fotoIlustrativa, '[12] el iPhone 13 usado (no hay 13 nuevo): sin foto, como antes');
+
+  // La tarjeta, en la grilla del rubro (1920 px)
+  irAlInicio();
+  entrarAlRubro(CAT_USADO);
+  const k7 = document.querySelector('#grid .card[data-key="UW-USADO-7"]');
+  if(k7 && u7.fotoIlustrativa){
+    const fo = k7.querySelector('.foto'), ci = fo && fo.querySelector('.foto-ilus'), cin = fo && fo.querySelector('.cinta');
+    const rf = fo && fo.getBoundingClientRect(), rc = ci && ci.getBoundingClientRect(), rcin = cin && cin.getBoundingClientRect();
+    ok(!!ci && uwTexto(ci) === 'Foto ilustrativa' && getComputedStyle(ci).display !== 'none' && rc.width > 0,
+       '[12] la tarjeta dice "Foto ilustrativa" sobre la foto', uwTexto(ci));
+    ok(!!ci && uwAdentro(rc, rf) && (!rcin || !uwPisan(rc, rcin)) && rc.width < rf.width * .5,
+       '[12] chico, adentro de la foto y sin pisar la cinta ("Solo el equipo")', 'cartel ' + uwCaja(rc) + ' · foto ' + uwCaja(rf) + ' · cinta ' + uwCaja(rcin));
+    ok(/\(foto ilustrativa\)$/.test(k7.querySelector('.foto img')?.alt || ''), '[12] y el texto alternativo tambien', k7.querySelector('.foto img')?.alt);
+  } else info('[12] la tarjeta del 16 Pro Max usado no esta en la grilla o no tiene la ilustrativa');
+  irAlInicio();
+
+  // La ficha y el visor
+  abrirFicha('UW-USADO-7', false);
+  d = document.getElementById('ficha');
+  if(d && u7.fotoIlustrativa){
+    const marco = d.querySelector('.fi-marco'), ci = marco.querySelector(':scope > .foto-ilus'), lupa = marco.querySelector('.fi-lupa');
+    const rm = marco.getBoundingClientRect(), rc = ci && ci.getBoundingClientRect(), rl = lupa && lupa.getBoundingClientRect();
+    const rq = uwCuadro(rm);
+    ok(!!ci && uwTexto(ci) === 'Foto ilustrativa' && getComputedStyle(ci).display !== 'none' && uwAdentro(rc, rq)
+       && rq.bottom - rc.bottom < 30 && rq.right - rc.right < 30 && (!rl || !uwPisan(rc, rl)),
+       '[12] la ficha lo dice sobre la foto (en su esquina, no en la del marco), sin pisar la lupa',
+       'cartel ' + uwCaja(rc) + ' · foto ' + uwCaja(rq) + ' · marco ' + uwCaja(rm) + ' · lupa ' + uwCaja(rl));
+    ok(/\(foto ilustrativa\)$/.test(marco.querySelector(':scope > img')?.alt || ''), '[12] con el texto alternativo', marco.querySelector(':scope > img')?.alt);
+    abrirVisor(d);
+    const vi = document.getElementById('visor');
+    ok(!!vi && uwTexto(vi.querySelector('.visor-ilus')) === 'Foto ilustrativa' && /foto ilustrativa/.test(vi.querySelector('.vi img')?.alt || ''),
+       '[12] y la foto en grande (el visor) tambien', vi && uwTexto(vi.querySelector('.visor-ilus')));
+    if(cerrarVisorDOM){ visorEmpujado = false; const c = cerrarVisorDOM; cerrarVisorDOM = null; c(); }
+  }
+  quitarFicha();
+  abrirFicha('UW-USADO-3', false);
+  d = document.getElementById('ficha');
+  if(d){
+    abrirVisor(d);
+    ok(!d.querySelector('.foto-ilus') && !document.querySelector('#visor .visor-ilus'), '[12] la ficha de un usado con foto suya, ni en la foto ni en el visor');
+    if(cerrarVisorDOM){ visorEmpujado = false; const c = cerrarVisorDOM; cerrarVisorDOM = null; c(); }
+  }
+  quitarFicha();
+  if(nuevo){
+    abrirFicha(clave(nuevo.rep), false);
+    ok(!document.querySelector('#ficha .foto-ilus'), '[12] ni la de un nuevo');
+    quitarFicha();
+  }
+
+  // El mundo y el encabezado de Usados (ahi va la foto sin cartel): primero una propia
+  const wU = mundosDeLaPortada().find(x => x.rubros.includes(CAT_USADO));
+  const caro = MODELOS.filter(m => m.cat === CAT_USADO && m.stock && m.imagen).sort((a, b) => b.precio - a.precio)[0];
+  const deLaFoto = u => MODELOS.find(m => m.cat === CAT_USADO && m.imagen === u);
+  if(caro && caro.fotoIlustrativa)
+    ok(!!wU && !!deLaFoto(wU.fotos[0]) && !deLaFoto(wU.fotos[0]).fotoIlustrativa && !!deLaFoto(fotoDelRubro(CAT_USADO))
+       && !deLaFoto(fotoDelRubro(CAT_USADO)).fotoIlustrativa,
+       '[12] el mundo y el encabezado de Usados muestran una foto propia antes que la ilustrativa del mas caro',
+       wU && archivo(wU.fotos[0]) + ' (el mas caro: ' + caro.desc + ')');
+
+  // Lo nuevo, igual
+  ok(!PRODUCTOS.some(p => !esUsado(p) && p.fotoIlustrativa), '[12] ninguna fila nueva queda marcada como ilustrativa');
+  const cambiadas = MODELOS.filter(noEsUsado).filter(m => tarjetasSinUsados.has(clave(m.rep)) && tarjetasSinUsados.get(clave(m.rep)) !== uwFotoTarjeta(m));
+  ok(!cambiadas.length, '[12] la foto de cada tarjeta nueva (la foto, su texto alternativo, sin cartel) es la misma que sin usados',
+     cambiadas.slice(0, 3).map(m => clave(m.rep)).join(' ') || tarjetasSinUsados.size + ' tarjetas');
+
+  // La vista previa de WhatsApp y las paginas para Google
+  try{
+    await uwScript('herramientas/vista-previa.js');
+    await uwScript('herramientas/paginas-producto.js');
+    const vp = vistasPrevias().vistas, vpDe = id => vp.find(x => x.id === id) || {};
+    if(u7.fotoIlustrativa)
+      ok(vpDe('UW-USADO-7').foto === '', '[12] la vista previa de WhatsApp no usa la ilustrativa (la imagen va sola, sin cartel): la tarjeta general',
+         JSON.stringify(vpDe('UW-USADO-7').foto));
+    ok(/AT-0065-02\.jpg$/.test(vpDe('UW-USADO-1').foto || ''), '[12] la foto propia si va', vpDe('UW-USADO-1').foto);
+    const pp = (await paginasDeProducto()).modelos, ppDe = id => pp.find(x => x.clave === id);
+    const p7 = ppDe('UW-USADO-7');
+    if(u7.fotoIlustrativa)
+      ok(!!p7 && p7.ilustrativa === true && !!p7.foto && !p7.foto_og,
+         '[12] la pagina para Google la muestra marcada (cartel y texto alternativo) y sin og:image ni datos para Google',
+         p7 && [p7.foto, JSON.stringify(p7.foto_og)].join(' · '));
+    ok(!pp.some(x => 'ilustrativa' in x && !UW_IDS.includes(x.clave)) && !!ppDe('UW-USADO-3') && !('ilustrativa' in ppDe('UW-USADO-3'))
+       && !!ppDe('UW-USADO-3').foto_og, '[12] lo nuevo y el usado con foto suya, sin la marca y con su foto para Google',
+       ppDe('UW-USADO-3') && ppDe('UW-USADO-3').foto_og);
+  }catch(e){ ok(false, '[12] se cargan herramientas/vista-previa.js y paginas-producto.js', e && e.message); }
+
+  // A 390 px (el celular): en un iframe, con los mismos usados de ejemplo
+  if(u7.fotoIlustrativa){
+    const f = document.createElement('iframe');
+    f.style.cssText = 'width:390px;height:844px;border:0;position:absolute;left:-9999px;top:0';
+    f.src = 'index.html';
+    document.body.appendChild(f);
+    try{
+      const listo = await uwEsperarA(() => f.contentWindow.eval('MODELOS.length && FUENTE') && f.contentDocument.querySelector('#cats .chip'), 40000);
+      ok(listo, '[12 · 390] el celular carga');
+      if(listo){
+        const w = f.contentWindow, doc = f.contentDocument;
+        await uwCargarEn(w, UW_FILAS);
+        w.eval(`irAlInicio(); entrarAlRubro(${JSON.stringify(CAT_USADO)})`);
+        const k = await uwEsperarA(() => doc.querySelector('#grid .card[data-key="UW-USADO-7"] .foto-ilus'), 10000)
+          && doc.querySelector('#grid .card[data-key="UW-USADO-7"]');
+        if(k){
+          const fo = k.querySelector('.foto'), ci = fo.querySelector('.foto-ilus'), cin = fo.querySelector('.cinta');
+          const rf = fo.getBoundingClientRect(), rc = ci.getBoundingClientRect(), rcin = cin && cin.getBoundingClientRect();
+          ok(w.getComputedStyle(ci).display !== 'none' && uwAdentro(rc, rf) && (!rcin || !uwPisan(rc, rcin)) && rc.width < rf.width * .6,
+             '[12 · 390] en la tarjeta el cartel se ve, entra en la foto y no pisa la cinta',
+             'cartel ' + uwCaja(rc) + ' · foto ' + uwCaja(rf) + ' · cinta ' + uwCaja(rcin));
+          // Y en el celular mas angosto que se usa (360)
+          f.style.width = '360px';
+          await uwDormir(300);
+          const rf3 = fo.getBoundingClientRect(), rc3 = ci.getBoundingClientRect(), rcin3 = cin && cin.getBoundingClientRect();
+          ok(uwAdentro(rc3, rf3) && (!rcin3 || !uwPisan(rc3, rcin3)),
+             '[12 · 360] y a 360 tampoco', 'cartel ' + uwCaja(rc3) + ' · foto ' + uwCaja(rf3) + ' · cinta ' + uwCaja(rcin3));
+          f.style.width = '390px';
+          await uwDormir(300);
+        } else ok(false, '[12 · 390] la tarjeta del 16 Pro Max usado, con el cartel');
+        w.eval("abrirFicha('UW-USADO-7', false)");
+        const marco = doc.querySelector('#ficha .fi-marco'), ci = marco && marco.querySelector(':scope > .foto-ilus'), lupa = marco && marco.querySelector('.fi-lupa');
+        const rm = marco && marco.getBoundingClientRect(), rc = ci && ci.getBoundingClientRect(), rl = lupa && lupa.getBoundingClientRect();
+        const rq = rm && uwCuadro(rm);
+        ok(!!ci && w.getComputedStyle(ci).display !== 'none' && uwAdentro(rc, rq) && (!rl || !uwPisan(rc, rl)),
+           '[12 · 390] en la ficha tambien, sobre la foto y sin pisar la lupa',
+           'cartel ' + uwCaja(rc) + ' · foto ' + uwCaja(rq) + ' · lupa ' + uwCaja(rl));
+        try{ w.eval('quitarFicha()'); }catch(e){}
+      }
+    } finally { f.remove(); }
+  }
 
   /* ---- Y sin los de ejemplo, todo como estaba ---- */
   await uwCargar(null);

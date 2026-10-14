@@ -1480,6 +1480,29 @@ window.ADVAPP_TEMPRANO = (() => {
     .cinta{white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;
            line-clamp:2;text-overflow:clip;overflow-wrap:break-word}
   }
+  /* "Foto ilustrativa" (Benja, 14/10/2026, ver htmlIlustrativa): un usado sin
+     foto propia muestra la del mismo modelo nuevo y del mismo color, y lo dice
+     sobre la foto. Chico, claro y en la esquina de abajo a la derecha, donde
+     la toma deja aire: arriba a la izquierda van "Sin stock" y el ahorro,
+     abajo a la izquierda la cinta de lo que incluye y arriba a la derecha los
+     botones al pasar el mouse. No se toca: el clic sigue a la tarjeta. */
+  .foto-ilus{position:absolute;z-index:2;right:8px;bottom:8px;pointer-events:none;
+    font:600 10px/1 var(--sans);letter-spacing:.01em;color:var(--ink);white-space:nowrap;
+    padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.88);
+    box-shadow:inset 0 0 0 1px var(--line);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+  .foto.vacia .foto-ilus{display:none}
+  /* La cinta le deja lugar: una larga se acorta (o se parte, en el celular) y
+     nunca pasa por debajo del cartel. Sólo en la tarjeta que lo lleva. */
+  .foto:has(> .foto-ilus) .cinta{max-width:calc(100% - 112px)}
+  /* En la grilla del celular (dos columnas de 157 a 170 px) en un renglón no
+     entra al lado de "Solo el equipo", y arriba de la cinta tapaba la punta
+     del teléfono: va en dos ("Foto / ilustrativa"), en el mismo renglón que
+     la cinta, debajo del teléfono. */
+  @media (max-width:520px){
+    .foto > .foto-ilus{width:min-content;white-space:normal;text-align:center;font-size:9px;line-height:1.1;
+                       padding:3px 6px;right:6px;border-radius:8px}
+    .foto:has(> .foto-ilus) .cinta{max-width:calc(100% - 66px)}
+  }
   /* El precio de antes, al lado del de hoy */
   .pie s.antes{font:500 11.5px/1 var(--mono);color:#A597C4;margin-left:7px}
   /* Al lado del precio (con "desde") no se parte en dos renglones; en el
@@ -2292,6 +2315,21 @@ window.ADVAPP_TEMPRANO = (() => {
   .fi-lupa svg{width:16px;height:16px;display:block}
   /* Sin foto (el cartel con la marca) no hay nada que agrandar */
   .fi-marco:not(:has(> img)) .fi-lupa{display:none}
+  /* "Foto ilustrativa" en la ficha (14/10/2026): en la esquina de abajo a la
+     derecha de la FOTO, no del marco. En la compu el marco es alto (la columna
+     de la foto mide la pantalla) y la foto, cuadrada como todas las de fotos/,
+     queda en el medio: pegado al marco, el cartel caía lejos del teléfono. El
+     lado de la foto es el menor del marco, así que la esquina sale con las
+     medidas del marco (cqw/cqh). Sólo el marco que lleva el cartel es
+     contenedor: los demás quedan como estaban. Sin esas unidades, la esquina
+     del marco, enfrente de la lupa. Sin foto, nada. */
+  .fi-marco .foto-ilus{right:0;bottom:7px}
+  .fi-marco:has(> .foto-ilus){container-type:size}
+  .fi-marco > .foto-ilus{right:calc(50cqw - min(50cqw, 50cqh) + 8px);bottom:calc(50cqh - min(50cqw, 50cqh) + 8px)}
+  .fi-marco:not(:has(> img)) .foto-ilus{display:none}
+  /* En el visor, al pie y al medio, debajo de la foto: en la esquina de la
+     pantalla quedaba lejos del teléfono */
+  #visor .visor-ilus{position:static;display:inline-block;vertical-align:middle;margin:-4px 10px 0 0}
   #ficha .fi-marco > img{cursor:zoom-in}
   #visor{position:fixed;inset:0;z-index:950;background:var(--ficha-bg)}
   #visor .vi{position:absolute;inset:56px 24px 48px;pointer-events:none}
@@ -5450,6 +5488,11 @@ function armarCarga(datos){
        proveedor ("III NIKON" sin decir Z). */
     .map(p => { p.montura = (esLente(p) && p.monturaSku) || monturaDe(p); p.apertura = aperturaDe(p);
                 p.rasgos = rasgosDe(p); return p; });
+  /* El usado sin ninguna foto suya, con la del mismo modelo nuevo y del mismo
+     color (Benja, 14/10/2026, ver fotoIlustrativa). Con todas las filas ya
+     leídas, después de rubroDelUsado (esUsado) y de sacarNotasDelNombre (el
+     nombre del modelo es el que ve el cliente). A lo nuevo no lo toca. */
+  ponerFotosIlustrativas(productos);
   /* La fuente viaja con los productos y la asigna actualizar(), no esta
      función (29/09): con dos refrescos superpuestos, el viejo que terminaba
      último pisaba FUENTE con la de una carga que después se descartaba. */
@@ -5782,7 +5825,8 @@ function vistaFiltrada(m, cumple){
      como en armarModelo: el nombre, la línea técnica (titulo/tecnica, 6.8),
      la etiqueta y las versiones siguen siendo las del modelo. */
   const fila = {};
-  ['id', 'sku', 'codigo', 'codigoVar', 'imagen', 'imagenGrande', 'fotosAdvapp', 'antes', 'incluye']
+  // (14/10/2026) Con la foto va si es ilustrativa: el cartel es de esa foto
+  ['id', 'sku', 'codigo', 'codigoVar', 'imagen', 'imagenGrande', 'fotoIlustrativa', 'fotosAdvapp', 'antes', 'incluye']
     .forEach(k => { fila[k] = rep[k]; });
   return {
     ...m, ...fila,
@@ -6434,11 +6478,22 @@ function htmlFoto(p, clase, grande){
   if(!p.imagen) return sinFoto;
   // La chica alcanza en todos lados menos en la ficha, que la muestra grande.
   const src = (grande && p.imagenGrande) || p.imagen;
-  return `<img src="${esc(src)}" alt="${esc(nombreConMarca(p))}" ${clase || ''} decoding="async"
+  // La foto ilustrativa de un usado lo dice también acá (14/10/2026, ver htmlIlustrativa)
+  const alt = nombreConMarca(p) + (p.fotoIlustrativa ? ' (foto ilustrativa)' : '');
+  return `<img src="${esc(src)}" alt="${esc(alt)}" ${clase || ''} decoding="async"
                onload="this.classList.add('ok')"
                onerror="fotoQueFalla(this, 'vacia')"
                data-alt="${esc(sinFoto)}">`;
 }
+
+/* El cartel "Foto ilustrativa" (Benja, 14/10/2026): sobre la foto de un usado
+   que muestra la del mismo modelo nuevo (fotoIlustrativa), en la tarjeta y en
+   la ficha; el visor pone el suyo (abrirVisor). Para el lector de pantalla ya
+   lo dice el texto alternativo (htmlFoto): el cartel es para el que mira.
+   Cuando el usado tiene una foto suya, fotoIlustrativa no corre y el cartel
+   no sale. Sin foto (la que falla queda "sin imagen") lo esconde el CSS. */
+const htmlIlustrativa = p =>
+  p && p.fotoIlustrativa && p.imagen ? '<span class="foto-ilus" aria-hidden="true">Foto ilustrativa</span>' : '';
 
 /* Una foto que no carga al primer intento (13/10/2026, auditoría del 08/10,
    FOT-12). El onerror ponía "sin imagen" al primer error y la tarjeta quedaba
@@ -7652,18 +7707,96 @@ function fotoDeHermana(v, vs){
   if(!c) return '';
   const hermanas = vs.filter(x => x !== v && norm(x.sim) === norm(v.sim) &&
                                   norm(x.teclado) === norm(v.teclado));
+  return fotoDelColorEn(hermanas, c);
+}
+/* La foto del color `c` en alguna de esas filas, y nunca la de otro color ni
+   la general del producto (soloDeColor). La usan fotoDeHermana y
+   fotoIlustrativa (14/10/2026): es la misma regla, sacada de la primera tal
+   cual estaba. */
+function fotoDelColorEn(filas, c){
   if(INDICE_FOTOS){
-    for(const x of hermanas){
+    for(const x of filas){
       const n = nombresDeFoto(x, [c], true).find(n => INDICE_FOTOS.has(n + EXT_FOTOS));
       if(n) return urlFotoPropia(n);
     }
   }
-  // La hermana sin color no: fotoDeAdvapp() le daria la foto general
-  for(const x of hermanas.filter(x => partirColores(x.color || '').length)){
+  // La fila sin color no: fotoDeAdvapp() le daria la foto general
+  for(const x of filas.filter(x => partirColores(x.color || '').length)){
     const u = fotoDeAdvapp(x, c);
     if(u) return u;
   }
   return '';
+}
+
+/* ---------- La foto ilustrativa de un usado (Benja, 14/10/2026) ----------
+   "Mientras un usado no tenga foto propia, que muestre la foto del mismo
+   modelo nuevo, del mismo color, con un cartel 'Foto ilustrativa'." ADVAPP
+   carga cada equipo de LUCAS IMPORT con su ID (USADO-0001), su madre propia
+   (la del nuevo con la U y el número: CEL-APL-13U0001), el color con el
+   nombre oficial y, casi siempre, sin fotos. Sin esto la tarjeta decía "sin
+   imagen" teniendo el catálogo la foto de ese mismo iPhone y ese color.
+   Sólo para el usado que no tiene NINGUNA foto suya (la columna Imagen, el
+   archivo de su código o las de ADVAPP: armarCarga): cuando le cargan una,
+   esa manda y el cartel se va solo, porque esto no corre.
+   Cuál es "el mismo modelo nuevo", sin adivinar:
+     1. las filas nuevas de su madre sin el tramo del equipo (CEL-APL-13U0001
+        -> CEL-APL-13; una madre sin ese tramo, tal cual);
+     2. si ahí no está la foto, las de su mismo nombre de modelo -sin la
+        marca, la memoria, la Sim, el color ni "usado"-, de la misma categoría
+        y marca. Si la madre es de un modelo que existe, sólo las que no traen
+        madre: la madre es la identidad que da ADVAPP, y una distinta es otro
+        modelo aunque se escriba parecido.
+   Y el color, el mismo: la foto de SU variante en el catálogo (o la de ADVAPP
+   de ese color), como fotoDeHermana. Si ese color no tiene foto en el modelo
+   nuevo, no va otra del mismo modelo: un color equivocado engaña, y queda sin
+   foto como hasta hoy. La memoria y la Sim no importan (la foto es la misma,
+   Pedro 26/09); el teclado sí, que se ve. Un usado de dos colores no sabe de
+   cuál es: sin foto. */
+const RE_USADO_TEXTO = new RegExp(RE_USADO.source, 'gi');
+const sinUsado = t => String(t || '').replace(RE_USADO_TEXTO, ' ');
+function modeloDelNombre(p){
+  return norm(sinMarca(nombreSinMemoria(sinUsado(p.desc)), p.marca)).replace(/[^a-z0-9]+/g, '');
+}
+function madreDelNuevo(u){
+  const madre = madreDelSku(u.skuVariante);
+  const m = /^([^-]+-[^-]+-[^-]+?)U\d+$/.exec(madre);
+  return m ? m[1] : madre;
+}
+function fotoIlustrativa(u, nuevos){
+  const colores = partirColores(u.color || '');
+  if(colores.length !== 1) return '';
+  const mismoTeclado = x => norm(x.teclado) === norm(u.teclado);
+  const madre = madreDelNuevo(u);
+  const porMadre = madre ? nuevos.filter(x => madreDelSku(x.skuVariante) === madre && mismoTeclado(x)) : [];
+  const desdeMadre = fotoDelColorEn(porMadre, colores[0]);
+  if(desdeMadre) return desdeMadre;
+  const nombre = modeloDelNombre(u);
+  if(!nombre) return '';
+  const cat = p => norm(sinUsado(p.catPlanilla || p.cat)).replace(/\s+/g, ' ');
+  const existe = madre && nuevos.some(x => madreDelSku(x.skuVariante) === madre);
+  const porNombre = nuevos.filter(x => !porMadre.includes(x) && mismoTeclado(x) &&
+    (!existe || !madreDelSku(x.skuVariante)) &&
+    cat(x) === cat(u) && norm(x.marca) === norm(u.marca) && modeloDelNombre(x) === nombre);
+  return fotoDelColorEn(porNombre, colores[0]);
+}
+/* Se ponen al final de la carga, con todas las filas leídas: la del nuevo
+   puede venir después que la del usado. `fotoIlustrativa` queda en la fila
+   (y en su modelo, que la copia con el '...rep'): con eso la tarjeta, la
+   ficha y el visor ponen el cartel (htmlIlustrativa), el texto alternativo
+   lo dice (htmlFoto), y la vista previa de WhatsApp y las páginas para
+   Google saben que no es del equipo. */
+function ponerFotosIlustrativas(prods){
+  const sinFoto = prods.filter(p => esUsado(p) && !p.imagen);
+  if(!sinFoto.length) return prods;
+  const nuevos = prods.filter(p => !esUsado(p));
+  for(const u of sinFoto){
+    const url = fotoIlustrativa(u, nuevos);
+    if(!url) continue;
+    u.imagenGrande = url;
+    u.imagen = fotoChica(url);
+    u.fotoIlustrativa = true;
+  }
+  return prods;
 }
 
 /* Qué fila representa a un grupo de versiones: el "desde" y la fila que da
@@ -8182,7 +8315,7 @@ function tarjeta(p){
      letra y el margen los pone .nombre, no la etiqueta. */
   el.innerHTML = `
     ${CON_FOTOS ? `<div class="foto${p.imagen ? '' : ' vacia'}">
-      ${badge}${htmlAhorro(p)}${htmlFoto(p,'loading="lazy"')}
+      ${badge}${htmlAhorro(p)}${htmlFoto(p,'loading="lazy"')}${htmlIlustrativa(p)}
       ${p.incluye ? `<span class="cinta" title="${esc(textoIncluye(p.incluye))}">${esc(textoCinta(p.incluye))}</span>` : ''}
       ${abajo ? '' : acciones}
     </div>` : ''}
@@ -8861,8 +8994,9 @@ const altoCinta = () => parseFloat(getComputedStyle(document.documentElement).ge
 
 // La foto del rubro es la del más caro con stock y foto, como en los mundos
 function fotoDelRubro(cat){
+  // (14/10/2026) Primero los que tienen foto propia, como en los mundos
   const m = MODELOS.filter(x => x.cat === cat && x.stock && x.imagen)
-                   .sort((a, b) => (b.precio ?? 0) - (a.precio ?? 0))[0];
+                   .sort((a, b) => (!!a.fotoIlustrativa - !!b.fotoIlustrativa) || (b.precio ?? 0) - (a.precio ?? 0))[0];
   return m ? m.imagen : '';
 }
 
@@ -9273,7 +9407,11 @@ function mundosDeLaPortada(){
     /* La foto es la del más caro del rubro elegido para el mundo, y detrás, por
        si esa URL está rota, las de los demás rubros del mundo. Con un solo
        candidato, una URL caída dejaba la tarjeta sin foto. */
-    const porPrecio = l => l.filter(m => m.imagen).sort((a, b) => (b.precio ?? 0) - (a.precio ?? 0));
+    /* (14/10/2026) Y entre los usados, primero el que tiene foto suya: la
+       ilustrativa (fotoIlustrativa) es la del modelo nuevo, y acá va sin el
+       cartel. En lo nuevo el orden es el de siempre. */
+    const porPrecio = l => l.filter(m => m.imagen)
+      .sort((a, b) => (!!a.fotoIlustrativa - !!b.fotoIlustrativa) || (b.precio ?? 0) - (a.precio ?? 0));
     const delRubro = ms.filter(m => norm(m.cat) === norm(w.foto));
     const fotos = [...porPrecio(delRubro), ...porPrecio(ms.filter(m => !delRubro.includes(m)))]
                     .map(m => m.imagen).slice(0, 12);
@@ -12701,7 +12839,7 @@ function abrirFicha(k, historia = true){
       <div class="fi-cols">
         <div class="fi-foto">
           <div class="fi-arriba">${htmlArribaFicha(v)}</div>
-          <div class="fi-marco">${htmlFoto(v, '', true)}${htmlLupa()}</div>
+          <div class="fi-marco">${htmlFoto(v, '', true)}${htmlIlustrativa(v)}${htmlLupa()}</div>
           <div class="fi-colores">${htmlVitrinaFicha(v, m)}</div>
           <div class="fi-equipo">${htmlFotosEquipo(v)}</div>
         </div>
@@ -12892,8 +13030,12 @@ function pintarFotoFicha(d, v){
   // Las miniaturas del usado vuelven a marcar la de la foto grande (14/10/2026)
   const equipo = d.querySelector('.fi-equipo');
   if(equipo) equipo.innerHTML = htmlFotosEquipo(v);
-  if(!img || !v.imagen){ cont.innerHTML = htmlFoto(v, '', true) + htmlLupa(); return; }
+  if(!img || !v.imagen){ cont.innerHTML = htmlFoto(v, '', true) + htmlIlustrativa(v) + htmlLupa(); return; }
   if(img.getAttribute('src') !== grande){ img.classList.remove('ok'); img.src = grande; }
+  // El cartel de la foto ilustrativa, el de la versión de ahora (14/10/2026)
+  if(v.fotoIlustrativa) img.alt = nombreConMarca(v) + ' (foto ilustrativa)';
+  cont.querySelector('.foto-ilus')?.remove();
+  img.insertAdjacentHTML('afterend', htmlIlustrativa(v));
 }
 
 /* Las fotos del equipo en la ficha de un usado (Benja, 14/10/2026): las que
@@ -13464,6 +13606,9 @@ function abrirVisor(d){
   const p = buscarProducto(FICHA), m = FICHA_MODELO;
   const rotulo = [p && p.marca, m && p ? partirNombreFicha(m, p).nombre : '', COLOR_FICHA]
     .filter(Boolean).join(' · ');
+  /* La foto ilustrativa de un usado (Benja, 14/10/2026): en grande también lo
+     dice, con el mismo cartel que la ficha. Lo dice si lo dice la ficha. */
+  const ilustrativa = !!d.querySelector('.fi-marco > .foto-ilus');
   const previo = document.activeElement;
   const x = document.createElement('div');
   x.id = 'visor';
@@ -13471,7 +13616,8 @@ function abrirVisor(d){
   x.innerHTML = `<span class="visor-rot">${esc(rotulo)}</span>
     <button class="fi-cerrar" type="button" aria-label="Cerrar la foto">&times;</button>
     <div class="vi"><img src="${esc(src)}" alt="${esc(img.alt || rotulo)}"></div>
-    <span class="visor-pie">${esCelular() ? 'Pellizcá para agrandar más' : 'Tocá afuera o apretá Esc para cerrar'}</span>`;
+    <span class="visor-pie">${ilustrativa ? '<span class="foto-ilus visor-ilus" aria-hidden="true">Foto ilustrativa</span>' : ''}${
+      esCelular() ? 'Pellizcá para agrandar más' : 'Tocá afuera o apretá Esc para cerrar'}</span>`;
   const X = x.querySelector('.fi-cerrar');
   /* Esc y Tab los atiende el visor antes que nadie (en la captura de window):
      el Esc de la ficha la cerraba entera, y el Tab se iba a la ficha de atrás */

@@ -192,7 +192,7 @@ si alguna falta).
                   ADVAPP desde el <head> (W3-17), las paginas para Google sin
                   precio fijo (W3-06) y las decisiones D13 a D17 de Benja
                   (cuotas, nuevos, agotados sin precio, Instagram, baterias).
-  usados-web.js   La seccion de usados (Benja, 13-14/10/2026), con cinco
+  usados-web.js   La seccion de usados (Benja, 13-14/10/2026), con once
                   usados de ejemplo que se le agregan a la respuesta de
                   ADVAPP adentro de la pagina (el feed no se toca): sin
                   ninguno no se ve nada; con ellos, el rubro "Usados" (chip
@@ -203,7 +203,14 @@ si alguna falta).
                   garantia (sin inventar una), el WhatsApp con "usado" y el
                   codigo del equipo, la pregunta "¿Los productos son
                   nuevos?", las vitrinas de la portada sin usados, el link
-                  de uno vendido y la busqueda.
+                  de uno vendido y la busqueda. Y la foto ilustrativa
+                  (14/10/2026): el usado sin foto suya lleva la del mismo
+                  modelo nuevo y del mismo color (otra memoria o la eSIM no
+                  importan; un color que el nuevo no tiene, ninguna), con el
+                  cartel "Foto ilustrativa" en la tarjeta, la ficha y el
+                  visor, tambien a 390 px; con foto suya, la suya y sin
+                  cartel; WhatsApp y Google sin la ilustrativa; lo nuevo,
+                  igual.
   guardas-pie-precio.js
                   El precio arriba del pie pegado al abrir la ficha en el
                   celular (Pedro, 01/10): todas las fichas con stock, con y

@@ -105,6 +105,13 @@ async function paginasDeProducto(){
     const conStock = versiones.filter(x => x.stock);
     const precios = (conStock.length ? conStock : versiones).map(x => x.precio);
     const foto = rep.imagenGrande || rep.imagen || '';
+    /* La foto ilustrativa de un usado (Benja, 14/10/2026, ver fotoIlustrativa
+       en index.html): la del mismo modelo nuevo y del mismo color. En la
+       página va con el cartel y el texto alternativo que lo dicen
+       (paginas-producto.py), pero no en og:image ni en los datos para Google:
+       ahí la imagen viaja sola, sin cartel, y se vería un equipo nuevo como
+       si fuera ese usado. Sólo se marca en el usado: lo nuevo, igual que antes. */
+    const ilustrativa = !!rep.fotoIlustrativa;
     modelos.push({
       familia: familia(rep),
       titulo,
@@ -123,7 +130,8 @@ async function paginasDeProducto(){
       incluye: textoIncluye(rep.incluye || ''),
       regalo: esRegalo(rep.incluye || ''),
       foto: ppRuta(foto),
-      foto_og: vpFotoPropia(foto),
+      foto_og: ilustrativa ? '' : vpFotoPropia(foto),
+      ...(ilustrativa ? { ilustrativa: true } : {}),
       wa: linkWA(mensajeWA(rep)),
       // De la más barata a la más cara: la primera con stock es la del "desde"
       versiones: versiones.sort((a, b) => (b.stock - a.stock) || (a.precio - b.precio)),

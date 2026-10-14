@@ -19,6 +19,7 @@ abca6f1e6242be4584484dcbf4f7bc14  AT-0008-01.jpg                     # mirada
 f956abdaefeecdbd0aa8a44f208f0250  AT-0011-01.jpg                     # mirada
 44d89e37f94ac171dc6e84686ace4f1f  AT-0011-02.jpg                     # mirada
 a0d38444ec5f9aa7ade972b2debafa58  AT-0012-01.jpg                     # mirada
+013d4f35a3c2fe8dad283a9553e51faa  AT-0012-02.jpg                     # mirada (oficial de Apple, la que ADVAPP tiene para ese SKU, 14/10/2026)
 2ebb12b68f87cfb8b1d1507f9c0d8986  AT-0013.jpg                        # mirada
 b228e51e37cd0a103a6b5e2a7884a62e  AT-0014.jpg                        # mirada
 954007dba8c7050d92035af74d2c2594  AT-0015.jpg                        # mirada
@@ -276,7 +277,7 @@ fd3ea84441f6dee5bb179ae4cc4e45e0  AT-0160.jpg                        # mirada
 8bd22bbcc88cb71b32a12d7556638143  AT-0165.jpg                        # mirada
 a0d57e68f178c4824aa916953a12cb6f  AT-0166.jpg                        # mirada
 7120e329b3e594b6990e9ecae53010d0  AT-0167.jpg                        # mirada
-76d60d9dd2a421e36370e91d561e35d9  AT-0168.jpg                        # mirada
+76d60d9dd2a421e36370e91d561e35d9  AT-0168-01.jpg                     # mirada
 b1a0ccd0d5d2a2de58e4c170b1501b7e  AT-0169.jpg                        # mirada
 857c16d95af9970737ffa9659f52d3e2  AT-0170.jpg                        # mirada
 c973f66d3cc66d5d3717ac0efd690dbd  AT-0171.jpg                        # mirada
@@ -301,6 +302,7 @@ cd675eee54c3873df85a4dfbebbf0277  AT-0189.jpg                        # mirada
 0e2e9893646e97d87996c55c1f19296b  AT-0190.jpg                        # mirada
 761c45b5e9ac71fa325068918a1a0f4f  AT-0191.jpg                        # mirada
 958eee5be3ec4cb30dfcf2b2176a13c1  AT-0192-01.jpg                     # mirada
+76584ffeb5b42d4390ef16ee7c22b93b  AT-0192-02.jpg                     # mirada (oficial de Sony, la que ADVAPP tiene para ese SKU, 14/10/2026)
 d70862be1a445f2fb361d40f13393250  AT-0193.jpg                        # mirada
 7c92a56fb538a5b71ae6b7f2ca7ab495  AT-0194.jpg                        # mirada
 8ef5176ca80e40226845a6681726fae3  AT-0195.jpg                        # mirada
@@ -364,7 +366,7 @@ ab1f9ecaa2082f4ca27739f408f2fbb6  AT-0252.jpg                        # mirada
 872d281f03174ee1ee9b672c682e8bd2  AT-0254.jpg                        # mirada
 d67bba82472596c1d54c1361ae10bc27  AT-0255.jpg                        # mirada
 aa7b0b4ae8da673600edc2f4e9aba252  AT-0256.jpg                        # mirada
-add7cecf143ec89f3c9a9fa4f37962c5  AT-0257.jpg                        # mirada
+add7cecf143ec89f3c9a9fa4f37962c5  AT-0257-01.jpg                     # mirada
 76505958bac33fed8fda3ba1d2ac85ac  AT-0258.jpg                        # mirada
 1d16db6c2383a8a2e66cfa23f2419dec  AT-0259.jpg                        # mirada
 723814ef4529946772bb347e5d9007c5  AT-0260.jpg                        # mirada

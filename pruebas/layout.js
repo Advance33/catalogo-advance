@@ -120,15 +120,24 @@ function medir(f, w){
   const chips2 = [...d.querySelectorAll('#cats .chip')];
   const cel = chips2.find(b => b.dataset.cat === 'Celular');
   const todo = chips2.find(b => b.dataset.cat === '');
+  /* Lo que muestra la grilla se mide por la cuenta del encabezado ("281
+     productos · ..."), no por las tarjetas dibujadas (14/10/2026). La grilla
+     dibuja de a TANDA (60) y, desde que ADVAPP publico 173 productos nuevos,
+     "Todo" y Celulares pasan los 60: las dos vistas tenian 60 tarjetas y la
+     prueba decia que el clic no habia elegido nada, cuando si. */
+  const vista = () => {
+    const c = d.getElementById('sec-count');
+    return (c && c.textContent.trim()) || d.querySelectorAll('.card').length + ' tarjetas';
+  };
   if(cel && todo){
-    const antes = d.querySelectorAll('.card').length;
+    const antes = vista();
     gesto(cel, 2);
-    const conClic = d.querySelectorAll('.card').length;
+    const conClic = vista();
     ok(cel.getAttribute('aria-pressed') === 'true' && conClic !== antes,
-       'un clic normal elige la categoria', antes + ' -> ' + conClic + ' tarjetas');
+       'un clic normal elige la categoria', antes + ' -> ' + conClic);
 
     gesto(todo, 16);
-    ok(d.querySelectorAll('.card').length === conClic,
+    ok(vista() === conClic,
        'arrastrar la cinta NO cambia de categoria (a proposito)');
 
     // Con Celulares puesto aparecen las marcas en el encabezado, y filtran
@@ -136,10 +145,10 @@ function medir(f, w){
     const marcas = [...d.querySelectorAll('#rubro-cab .marca-chip')];
     ok(marcas.length > 1, 'adentro de Celulares el encabezado trae las marcas', marcas.length);
     if(marcas.length > 1){
-      const antesM = d.querySelectorAll('.card').length;
+      const antesM = vista();
       d.querySelectorAll('#rubro-cab .marca-chip')[1].click();
-      ok(d.querySelectorAll('.card').length !== antesM, 'tocar una marca filtra',
-         antesM + ' -> ' + d.querySelectorAll('.card').length + ' tarjetas');
+      ok(vista() !== antesM, 'tocar una marca filtra',
+         antesM + ' -> ' + vista());
       d.querySelector('#rubro-cab .marca-chip[data-marca=""]').click();
     }
     todo.click();

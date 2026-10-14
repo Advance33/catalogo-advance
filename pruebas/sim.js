@@ -66,14 +66,17 @@ function correrPruebas(){
 
   /* ---- 2. El catalogo de hoy: ninguna ficha queda ambigua ---- */
   const ambiguos = [], inventados = [], contradicen = [], callados = [];
-  let completados = 0, conRotulo = null;
+  let completados = 0, conRotulo = null, conRotuloParejo = null;
   MODELOS.forEach(m => {
     const vs = m.variantes;
+    // Si el modelo mezcla Sim y eSIM, el rotulo es lo que separa sus botones (ver 3)
+    const mezcla = new Set(vs.map(x => norm(x.sim || ''))).size > 1;
     vs.forEach(v => {
       const loDice = diceSim(v.etiqueta);
       if(loDice && !diceSim(v.desc || '')){
         completados++;
-        conRotulo = conRotulo || m;
+        if(mezcla) conRotulo = conRotulo || m;
+        else conRotuloParejo = conRotuloParejo || m;
         /* Lo agregado tiene que ser lo que dice el SKU, no otra cosa. La
            etiqueta puede seguir con el color ("1TB E-Sim · Blue") cuando dos
            filas quedan con el mismo nombre, asi que se compara la palabra. */
@@ -114,12 +117,22 @@ function correrPruebas(){
   });
   ok(!mudos.length, 'cada version eSIM lo dice en la ficha (chip, pestana o nombre)', mudos.slice(0, 3).join(' | ') || mirados + ' miradas');
 
-  /* ---- 3. Y se ve en la ficha ---- */
+  /* ---- 3. Y se ve en la ficha ----
+     14/10/2026: se prueba en un modelo que MEZCLA Sim y eSIM, que es donde el
+     boton separa versiones. Antes se tomaba el primer modelo con un rotulo
+     completado, y desde el 06/10 el rotulo se completa aunque todas las
+     versiones digan lo mismo: hoy el unico es el iPhone 15 (todo Sim, filas
+     nuevas de ADVAPP sin "Sim" en el nombre), y ahi la pestaña dice solo la
+     memoria a proposito -lo comun a todas no se repite (sinLoComun) y la de
+     version sale solo con Sim y eSIM en la misma memoria-. Que un modelo
+     todo eSIM lo diga en la ficha lo mira la 3b. */
   if(conRotulo){
     abrirFicha(clave(conRotulo.rep), null);
     const textos = [...document.querySelectorAll('#ficha .fi-op b')].map(b => b.textContent.trim());
     ok(textos.some(t => diceSim(t)), 'el boton de la ficha muestra el rotulo completo', textos.join(' · '));
     cerrarFicha();
+  } else if(conRotuloParejo){
+    R.push('      (hoy solo se completo en ' + conRotuloParejo.desc + ', que no mezcla Sim y eSIM: ahi el boton no separa versiones por eso)');
   } else {
     R.push('      (ningun rotulo para completar hoy: ADVAPP ya los manda enteros)');
   }

@@ -39,7 +39,15 @@ function correrPruebas(){
   const baja = s => (s||'').toLowerCase();
 
   /* ---- 1. Categorias derivadas por marca ---- */
-  ok(cuenta('Notebook') === 0, 'no quedan notebooks sin clasificar', cuenta('Notebook'));
+  /* 14/10/2026: pedia que Notebook quedara vacia, y eso era cierto solo
+     mientras todas las notebooks fueran MacBook. ADVAPP publico la primera de
+     otra marca (Dell 15 DC15250) y Notebook es justo donde tiene que ir: la
+     regla de categoriaReal la deja ahi a proposito (lo dice la comprobacion
+     de la "notebook Asus", mas abajo, y el comentario de ORDEN_CATS). Lo que
+     importa, como en Smartwatch, es que ahi no quede ningun Apple. */
+  ok(PRODUCTOS.filter(p => p.cat === 'Notebook').every(p => norm(p.marca) !== 'apple'),
+     'no quedan MacBook sin clasificar en Notebook',
+     [...new Set(PRODUCTOS.filter(p => p.cat === 'Notebook').map(p => p.marca))].join(', ') || 'vacia');
   // Smartwatch dejo de estar vacia cuando entraron Garmin y Kieslect: lo que
   // importa es que ahi no quede ningun Apple, y que en Apple Watch no haya otra marca.
   ok(PRODUCTOS.filter(p => p.cat==='Smartwatch').every(p => norm(p.marca) !== 'apple'),

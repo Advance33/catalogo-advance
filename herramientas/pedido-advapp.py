@@ -1228,8 +1228,13 @@ def correcciones_de(hallados, filas):
 # lo que alguien cambió después). Cuando ADVAPP ya dice lo mismo, dejan de
 # salir solas: no hay que borrarlas a mano.
 CONFIRMADAS = os.path.join(AQUI, 'correcciones-confirmadas.json')
+# El SKU, desde el 14/10/2026: una fila con el SKU madre de OTRO modelo (el
+# Redmi 17 con el del Mi 17) arma una sola tarjeta con los dos, y eso no se
+# arregla con el nombre. ADVAPP ya lo acepta en Padrón -> Correcciones de la
+# auditoría (se cambia como con el lápiz de la ficha, se lleva sus fotos y
+# nunca se junta con un SKU que ya existe); el "antes" es SKU_VARIANTE.
 CAMPOS_ADVAPP = {'codigo': 'CODIGO', 'codigo_var': 'CODIGO_VAR', 'categoria': 'Categoría',
-                 'nombre': 'Descripción completa', 'color': 'Color'}
+                 'nombre': 'Descripción completa', 'color': 'Color', 'sku': 'SKU_VARIANTE'}
 
 
 def leer_confirmadas(ruta=None):
@@ -1591,6 +1596,16 @@ def probar():
     ok(len(lst) == 1 and len(x1) == 1 and x1[0]['cambios'] == {'codigo': 'AT-0119', 'nombre': 'Redmi Note 15 Pro 4G 8/256GB (Black)'}
        and x1[0]['antes']['nombre'] == 'Redmi Note 15 Pro 5G 8/256GB (Black)' and ya == 1,
        'las confirmadas se suman a la misma corrección, con el "antes" de hoy; la ya aplicada y la de un ID que no está no salen')
+    # 12c) El SKU (14/10/2026): sale con el SKU_VARIANTE de hoy como "antes"
+    #      y deja de salir cuando ADVAPP ya lo cambió
+    filas_s = [fila('X-3', 'Xiaomi Redmi 17 4/128GB (Black)', 'Black', sv='CEL-XIA-17-4G128-BLK-000'),
+               fila('X-4', 'Xiaomi Redmi 17 4/128GB (Blue)', 'Blue', sv='CEL-XIA-REDMI17-4G128-BLU-000')]
+    conf_s = [{'id': 'X-3', 'cambios': {'sku': 'CEL-XIA-REDMI17-4G128-BLK-000'}, 'motivo': 'prueba'},
+              {'id': 'X-4', 'cambios': {'sku': 'CEL-XIA-REDMI17-4G128-BLU-000'}, 'motivo': 'prueba'}]
+    lst_s, ya_s = sumar_confirmadas([], filas_s, conf_s)
+    ok(len(lst_s) == 1 and lst_s[0]['id'] == 'X-3'
+       and lst_s[0]['antes'] == {'sku': 'CEL-XIA-17-4G128-BLK-000'} and ya_s == 1,
+       'una confirmada de SKU sale con el SKU_VARIANTE de hoy como "antes", y la ya aplicada no sale')
     with tempfile.TemporaryDirectory() as tmp:
         mala = os.path.join(tmp, 'c.json')
         open(mala, 'w', encoding='utf-8').write('{"correcciones": [{"id": "X", "cambios": {"precio": "1"}, "motivo": "m"}]}')

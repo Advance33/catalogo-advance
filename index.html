@@ -2125,6 +2125,17 @@ window.ADVAPP_TEMPRANO = (() => {
   .fi-vit-cab.solo b{white-space:normal;overflow-wrap:anywhere}
   .fi-vit-cab small{font:500 11px/1.3 var(--sans);color:var(--faint);white-space:nowrap}
   .fi-vit-cab small[hidden]{display:none}
+  /* Las fotos del equipo de un usado (14/10/2026, ver htmlFotosEquipo): una
+     fila de miniaturas debajo de la foto; la marcada es la que se ve grande.
+     Sin mezcla ni posición absoluta: eso es de la foto grande (.fi-foto img). */
+  .fi-equipo:empty{display:none}
+  .fi-fotos-equipo{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  .fi-fe{flex:none;width:52px;height:52px;padding:3px;border:0;border-radius:11px;background:#fff;cursor:pointer;
+         box-shadow:inset 0 0 0 1px var(--line);transition:box-shadow .15s}
+  .fi-fe[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--acento)}
+  .fi-fe:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  .fi-foto .fi-fe img{position:static;inset:auto;width:100%;height:100%;object-fit:contain;border-radius:8px;
+                      mix-blend-mode:normal;filter:none;max-height:none}
   .fi-vitrina{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;overscroll-behavior-x:contain;
               padding:3px 3px 6px;margin:0 -3px;scrollbar-width:none}
   .fi-vitrina::-webkit-scrollbar{display:none}
@@ -3923,8 +3934,14 @@ const PREGUNTAS = [
   /* (13/10/2026, decisión D14 A de Benja, auditoría DW-11 y W3-15) Decía "Sí,
      sin excepciones: todo lo que publicamos es nuevo y sellado", y hay
      objetivos "Caja blanca" a la venta (nuevos, sin la caja original). */
+  /* (14/10/2026, Benja) Con la sección de usados a la vista, el texto que él
+     aprobó para ella, con la aclaración de la caja blanca de D14 A (también
+     aprobada el 14/10: "de acuerdo"). Mientras ADVAPP no mande ningún usado
+     con stock, la sección no existe y queda el de D14 A (haySeccionUsados). */
   { p: '¿Los productos son nuevos?',
-    r: ['Sí, nuevos. Los de caja blanca vienen sin la caja original y lo dice la ficha.'] },
+    get r(){ return haySeccionUsados()
+      ? ['Sí, todo es nuevo y sellado, salvo los de la sección Usados, que lo dicen en su tarjeta y en su ficha. Los de caja blanca vienen sin la caja original y también lo dice la ficha.']
+      : ['Sí, nuevos. Los de caja blanca vienen sin la caja original y lo dice la ficha.']; } },
   { p: '¿Los productos tienen garantía?',
     r: ['Sí, todos. La garantía cambia según el producto, así que preguntanos por la del que te interesa y te la confirmamos antes de que compres.'] },
   { p: '¿Cómo hago el pedido?',
@@ -4009,6 +4026,13 @@ const MUNDOS = [
      Airwrap, planchitas, aspiradoras. Mundo propio: no es gaming ni relojes. */
   { nombre: 'Dyson',                foto: 'Dyson',       tamano: '',
     rubros: ['Dyson'] },
+  /* Los usados (Benja, 13-14/10/2026): un mundo propio, al final y del
+     tamaño normal. Son pocos equipos (iPhone usados de un solo proveedor):
+     con 'grande' o 'alto' pesarían en la portada como los rubros con cientos
+     de productos. Va al lado de Dyson, en la fila que hoy queda con lugar, y
+     sin ningún usado en ADVAPP no se ve (un mundo sin stock no se muestra). */
+  { nombre: 'Usados seleccionados', foto: 'Usado',       tamano: '',
+    rubros: ['Usado'] },
 ];
 
 // ---------- LOS FILTROS PROPIOS DE CADA RUBRO ----------
@@ -4571,7 +4595,8 @@ function codigoDeLaFila(f){
   const dado = ((f.codigo || '') + '').trim().toUpperCase();
   if(/^AT-\d{4}$/.test(dado)) return dado;
   if(!CATALOGO) return '';
-  const firmaHoy = norm(f.marca) + '|' + norm(f.catPlanilla || f.cat) + '|' + firmaDura(f.desc);
+  // La marca tal cual vino (marcaPlanilla: el iPhone usado pasa a Apple, ver rubroDelUsado)
+  const firmaHoy = norm(f.marcaPlanilla || f.marca) + '|' + norm(f.catPlanilla || f.cat) + '|' + firmaDura(f.desc);
   for(const clave of [f.id, f.sku]){
     const cod = clave && CATALOGO.ids && (CATALOGO.ids[clave] || (CATALOGO.skus || {})[clave]);
     /* Varias firmas por producto: una por cada nombre y cada categoria con
@@ -5374,6 +5399,9 @@ function armarCarga(datos){
         // Las fotos de ADVAPP por codigo de variante. Son el respaldo: solo se
         // usan cuando no hay archivo propio en fotos/ para ese color.
         fotosAdvapp: C.skus === -1 ? {} : fotosDeLosSkus(f[C.skus]),
+        // Las de un usado, todas y aunque no traigan código AT (14/10/2026,
+        // ver fotosDelUsado). En lo nuevo queda vacía: sus fotos, como siempre.
+        fotosUsado: C.skus === -1 ? [] : fotosDelUsado(f[C.skus], val(f,C.condicion), val(f,C.cat)),
         // Sim o eSIM segun ADVAPP: primero el SKU de la web, si no los de color.
         sim: simDelSku(val(f,C.sku)) || (C.skus === -1 ? '' : simDeLosSkus(f[C.skus])),
         // Wifi o Cellular, igual (29/09): ver conexionDelSku
@@ -5399,7 +5427,9 @@ function armarCarga(datos){
          del catalogo se quedaba sin foto por eso. */
       p.codigo = p.codigo || codigoDeLaFila(p);
       p.imagen = urlFoto(p.imagen) ||
-                 fotoDePortada(p, colorDeLaFila(p.color, p.desc || p.modelo));
+                 fotoDePortada(p, colorDeLaFila(p.color, p.desc || p.modelo)) ||
+                 // un usado sin archivo propio ni foto con código: la primera suya de ADVAPP
+                 p.fotosUsado[0] || '';
       /* `imagen` es la chica, que es la que usa TODO lo que se ve chico sin
          tener que acordarse de pedirla; la grande se guarda al lado y la pide
          la ficha. Así un bloque nuevo de la portada nace liviano. */
@@ -5412,6 +5442,9 @@ function armarCarga(datos){
     // La limpieza va antes de deducir montura y apertura: esas dos leen el
     // nombre, y conviene que lean el que de verdad ve el cliente.
     .map(sacarNotasDelNombre)
+    // Los usados, a su rubro (14/10/2026, ver rubroDelUsado). Después de la
+    // foto, que se verifica con la categoría y la marca tal cual vinieron.
+    .map(rubroDelUsado)
     /* La montura, primero la del SKU de ADVAPP y si no la del nombre (29/09),
        como la Sim y el teclado: el SKU es el dato y el nombre lo escribe el
        proveedor ("III NIKON" sin decir Z). */
@@ -5577,6 +5610,74 @@ function filtrar(){
 const RE_USADO = /\b(usad[oa]s?|semi ?nuev[oa]s?|reacondicionad[oa]s?|refurbished|refurb)\b/;
 const esUsado = p => !!p && RE_USADO.test(norm(p.condicion || ''));
 const esUsadoModelo = m => !!m && (m.variantes || [m]).some(esUsado);
+
+/* La sección de usados (Benja, 13-14/10/2026): iPhone usados de un solo
+   proveedor, cargados a mano en ADVAPP como productos del padrón con
+   Condición "Usado", con garantía de 30 días. Son un rubro propio, "Usados",
+   con su chip en la cinta, su mundo en la portada (MUNDOS) y su encabezado,
+   y dejan de contar en su categoría: un link viejo ?cat=Celular no los
+   muestra mezclados con los nuevos.
+   ADVAPP los manda con la categoría de siempre ("Celular") y, en un iPhone,
+   con la marca "iPhone" (así arma sus listas). Acá el rubro sale de la
+   Condición; la categoría de ADVAPP queda en catPlanilla y la marca pasa a
+   "Apple", como la de los iPhone nuevos, con la de ADVAPP en marcaPlanilla
+   (las dos las usa la firma que verifica la foto). Si algún día llega la
+   categoría "Celular Usado" con la Condición vacía (el botón "Guardar datos"
+   de la ficha de LISTAS la cambia así), el nombre de la categoría ya lo dice
+   y cuenta como usado: nunca un usado sin el rótulo.
+   Sin ningún usado en ADVAPP no hay rubro, ni chip, ni mundo: todo sale de
+   lo que llega. */
+const CAT_USADO = 'Usado';
+// Si una fila tal cual viene de ADVAPP es de un usado: su Condición o, vacía, su categoría
+const pareceUsado = (condicion, categoria) =>
+  RE_USADO.test(norm(condicion || '')) || (!limpio(condicion) && RE_USADO.test(norm(categoria || '')));
+function rubroDelUsado(p){
+  if(!limpio(p.condicion) && pareceUsado('', p.catPlanilla)) p.condicion = 'Usado';
+  if(!esUsado(p)) return p;
+  p.cat = CAT_USADO;
+  if(norm(p.marca) === 'iphone'){ p.marcaPlanilla = p.marca; p.marca = 'Apple'; }
+  return p;
+}
+// Si hoy hay sección de usados: algún usado con stock (como el chip y el mundo)
+function haySeccionUsados(){
+  return MODELOS.some(m => m.cat === CAT_USADO && m.stock);
+}
+/* Las vitrinas de la portada que mezclan rubros -Recién llegados, la de
+   ofertas, ¿Cuánto querés gastar? con su "Visto hace poco", la cinta de cada
+   marca- no muestran usados (14/10/2026): tienen su mundo, y esas tarjetas
+   chicas no dicen "Usado". Siguen en su rubro, en "Ver todo el catálogo" y en
+   la búsqueda, siempre al final y con el rótulo. */
+const noEsUsado = m => !esUsadoModelo(m);
+
+/* La batería de un usado, en su tarjeta (Benja, 14/10/2026): dos equipos del
+   mismo modelo y color se veían iguales salvo el precio. Sale del Detalle,
+   escrita como la eligió él: "Batería 88%", con el % pegado. Sólo si lo dice
+   sin dudas: "Batería 92 %", "batería al 88 %", "Batería: 100%", "88% de
+   batería" o "🔋 88%". Un rango ("89–95%"), dos números distintos, uno fuera
+   de 1 a 100 o una forma que no está acá no se muestran: no se adivina. */
+const RE_BATERIA = [
+  /\bbater[ií]a\s*(?:al|de|:|=)?\s*(\d{1,3})\s*%/gi,
+  /(?<![\d.,])(\d{1,3})\s*%\s*(?:de\s+)?(?:la\s+)?bater[ií]a\b/gi,
+  /🔋\s*(\d{1,3})\s*%/g,
+];
+function bateriaDe(m){
+  const vs = (m && (m.variantes || [m])) || [];
+  if(vs.length !== 1 || !esUsado(vs[0])) return '';
+  const t = String(vs[0].detalle || '');
+  const dichas = new Set();
+  RE_BATERIA.forEach(re => { for(const x of t.matchAll(re)) dichas.add(Number(x[1])); });
+  if(dichas.size !== 1) return '';
+  const n = [...dichas][0];
+  return n >= 1 && n <= 100 ? `Batería ${n}%` : '';
+}
+/* La línea chica de la tarjeta, debajo del nombre: en un usado su batería,
+   primero (la línea es de un renglón y en el celular un color largo, "Desert
+   Titanium", la cortaba), y la técnica (ponerTitulos). Sin batería es la de
+   siempre. */
+function htmlTecnicaTarjeta(p){
+  const t = [bateriaDe(p), p.tecnica].filter(Boolean).join(' · ');
+  return t ? `<p class="tecnica" title="${esc(t)}">${esc(t)}</p>` : '';
+}
 // El rótulo de la tarjeta y de la ficha: lo que dice ADVAPP ("Usado")
 function htmlUsado(m){
   const v = m && (m.variantes || [m]).find(esUsado);
@@ -5709,7 +5810,10 @@ const CATS_APPLE = { tablet:'iPad', notebook:'MacBook', smartwatch:'Apple Watch'
    con los objetivos de camara. Renombrar aca en vez de esperar a la Landing
    evita tener que cambiar las dos cosas el mismo dia: cuando la planilla los
    adopte, esta lista deja de encontrar nada y todo sigue igual. */
-const CATS_RENOMBRE = { 'lente':'Objetivo', 'lentes inteligentes':'Gafas Inteligentes' };
+const CATS_RENOMBRE = { 'lente':'Objetivo', 'lentes inteligentes':'Gafas Inteligentes',
+  // El rubro de los usados (14/10/2026) es "Usado": un link ?cat=Usados, como
+  // dice el chip, también lo abre
+  'usados':'Usado' };
 
 /* Las palabras con las que la gente busca un rubro que en la web se llama de
    otra forma (29/09). El renombre de arriba y el de CATS_APPLE sacaron del
@@ -5729,6 +5833,9 @@ const ALIAS_CAT = {
   // El proveedor escribe "Dyson HD16 Nural": el que busca "secador" o
   // "aspiradora" también tiene que llegar (07/10/2026).
   'Dyson':              'secador secadores aspiradora aspiradoras airwrap planchita purificador',
+  // Los usados (14/10/2026): el rubro ya dice "usado"; esto es por cómo se
+  // busca. La categoría de ADVAPP ("Celular") sigue en el texto (catPlanilla).
+  'Usado':              'usados seminuevo seminuevos',
 };
 
 function categoriaReal(cat, marca, desc){
@@ -5762,7 +5869,9 @@ const ORDEN_CATS = [
   // Lectura: entro en septiembre de 2026 y caia al final de la barra
   'E-Reader',
   // Dyson, desde el 07/10/2026 (Benja)
-  'Dyson'
+  'Dyson',
+  // Los usados, al final de la barra como en las listas (Benja, 14/10/2026)
+  'Usado'
 ];
 
 /* La marca que se pone adelante en cada categoría. NO filtra: aparece primera
@@ -5833,7 +5942,8 @@ const CATS_PLURAL = {
   'Monitor':'Monitores', 'E-Reader':'E-Readers',
   // Estas ya funcionan como plural: "Apple Watchs" y "Auricularess" no existen
   'Apple Watch':'Apple Watch', 'Auriculares':'Auriculares',
-  'Gafas Inteligentes':'Gafas Inteligentes', 'Dyson':'Dyson'
+  'Gafas Inteligentes':'Gafas Inteligentes', 'Dyson':'Dyson',
+  'Usado':'Usados'     // 14/10/2026
 };
 
 function plural(cat){
@@ -6161,7 +6271,8 @@ function coincide(p, palabras){
      criterio del buscador): en dos Nikon el SKU dice el idioma del menú. Y en
      la tarjeta, que es el modelo entero, sólo si todas sus versiones lo tienen
      igual: si no, nombraría una versión que el cliente no eligió.
-   Sigue sin código interno y sin precio (ver arriba). */
+   Sigue sin código interno y sin precio (ver arriba), salvo el usado, que
+   lleva el código del equipo (unidad, 14/10/2026). */
 function partesMensaje(p, color){
   const c = String(color || '').trim();
   let nombre = String(nombreConMarca(p) || '');
@@ -6177,9 +6288,16 @@ function partesMensaje(p, color){
   const palabra = t => new RegExp('(^|[^a-z0-9])(' + t + ')($|[^a-z0-9])');
   const yaDiceColor = c && pintas(p.color).length === 1 && palabra(escRe(norm(c))).test(norm(nombre));
   // El usado lo dice también en el mensaje, si el nombre no lo dice (W3-10, 13/10/2026)
-  if(vs.every(esUsado) && !RE_USADO.test(norm(nombre))) nombre += ' usado';
+  /* (14/10/2026) Antes del color entre paréntesis, si lo hay: "iPhone 15
+     128GB Sim usado (Blue)" y no "(Blue) usado". */
+  if(vs.every(esUsado) && !RE_USADO.test(norm(nombre))) nombre = nombre.replace(/(\s*\([^)]*\))?$/, m => ' usado' + m);
+  /* Y cuál es (Benja, 14/10/2026): dos usados iguales son dos equipos, y el
+     que contesta tiene que saber por cuál le escriben. Va el ID de la fila,
+     el mismo que lleva cada renglón del pedido y con el que se lo busca (y se
+     lo da de baja) en ADVAPP. Sólo en los usados: lo nuevo sigue sin código. */
+  const unidad = vs.length === 1 && esUsado(vs[0]) && vs[0].id ? String(vs[0].id).trim() : '';
   return {
-    nombre,
+    nombre, unidad,
     sim: sim && !diceSim(nombre) ? sim : '',
     teclado: tec && esTeclado && !palabra('teclado|ingles|english|espanol|spanish').test(norm(nombre + ' ' + c))
       ? nombreTeclado(tec) : '',
@@ -6190,9 +6308,12 @@ function partesMensaje(p, color){
 const textoMensaje = x => x.nombre + (x.sim ? ' ' + x.sim : '') +
   (x.teclado ? ' con ' + x.teclado.toLowerCase() : '');
 
+// ", código USADO-0001": cuál de los usados es (partesMensaje, 14/10/2026)
+const queUnidad = x => x.unidad ? `, código ${x.unidad}` : '';
+
 function mensajeWA(p, color){
   const x = partesMensaje(p, color);
-  return `Hola! Me interesa el ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}. ¿Me pasás info?`;
+  return `Hola! Me interesa el ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)}. ¿Me pasás info?`;
 }
 
 /* Sin stock el boton de siempre no sirve: el cliente pregunta por algo que no
@@ -6200,7 +6321,7 @@ function mensajeWA(p, color){
    cuando entre. */
 function mensajeAviso(p, color){
   const x = partesMensaje(p, color);
-  return `Hola! El ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''} figura sin stock. `
+  return `Hola! El ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)}${x.unidad ? ',' : ''} figura sin stock. `
        + `¿Me avisan cuando entre?`;
 }
 /* Un emoji cortado por un tope de largo (medio par de UTF-16) hacia tirar
@@ -6261,7 +6382,9 @@ const enGB = v => {
    "128GB" que pueda aparecer en el nombre es de la tarjeta de memoria que
    viene de regalo, no del producto: filtrar por eso confundiria. */
 const CATS_CON_CAPACIDAD = ['Celular', 'Tablet', 'iPad', 'Notebook', 'MacBook',
-                            'Desktop', 'Consola', 'E-Reader'];
+                            'Desktop', 'Consola', 'E-Reader',
+                            // los usados son iPhone: la memoria se elige igual (14/10/2026)
+                            'Usado'];
 
 /* Los rubros donde un "M3" es el procesador (29/09). En un teclado es para
    qué iPad sirve: el Magic Keyboard "For 11" iPad Air M3/M4" salía con el
@@ -6928,6 +7051,29 @@ function fotosDeLosSkus(txt){
   return salida;
 }
 
+/* Las fotos de ADVAPP de un usado, todas y en su orden (Benja, 14/10/2026).
+   Un usado de la sección se carga en ADVAPP con las fotos del equipo (frente,
+   dorso, batería...) y llega sin código AT: no hay un archivo en fotos/ por
+   cada equipo, que se vende una sola vez. fotosDeLosSkus se queda sólo con
+   las que tienen `at` y una por SKU, que es lo que sirve para lo nuevo; acá
+   van todas, sin pedir `at`. Sólo para una fila usada (pareceUsado, la misma
+   regla que rubroDelUsado): en lo nuevo devuelve [] y sus fotos se resuelven
+   igual que siempre. La primera es la de la tarjeta (si no tiene archivo
+   propio ni foto con código) y la ficha las muestra todas (htmlFotosEquipo). */
+function fotosDelUsado(txt, condicion, categoria){
+  if(!pareceUsado(condicion, categoria)) return [];
+  let lista;
+  try{ lista = JSON.parse(txt || '[]'); }catch{ return []; }
+  if(!Array.isArray(lista)) return [];
+  const salida = [];
+  for(const s of lista)
+    for(const u of (Array.isArray(s && s.fotos) ? s.fotos : [])){
+      const url = urlFoto(String(u || ''));
+      if(url && !salida.includes(url)) salida.push(url);
+    }
+  return salida;
+}
+
 /* La foto de ADVAPP para un color de la fila (o, sin color, la del primero
    que la tenga). El color se ubica por su posicion en CODIGO_VAR -el color 2
    es la variante 2- y esa variante por el `at` del SKU. Sin colores, la del
@@ -7096,16 +7242,20 @@ function madreDelSku(s){
    el Grupo y, si no hay, el nombre. Lo que separa a las versiones lo dicen
    los botones de la ficha (armarModelo, htmlOpcionesFicha). */
 function familia(p){
-  // Un usado nunca comparte tarjeta con el nuevo (13/10/2026, W3-10: ver esUsado)
-  const u = esUsado(p) ? '|usado' : '';
+  /* Un usado es una tarjeta por equipo (Benja, 14/10/2026): cada uno tiene su
+     batería, su estado y sus fotos, y dos del mismo modelo, memoria y color
+     son dos tarjetas, no dos versiones de una. Su familia es la fila misma:
+     el ID (sin ID, el SKU). Así tampoco comparte tarjeta con el nuevo, aunque
+     ADVAPP le haya puesto el mismo SKU madre (13/10/2026, W3-10). */
+  if(esUsado(p)) return 'U:' + (p.id || p.skuVariante || p.sku || '#' + p.idx);
   const madre = madreDelSku(p.skuVariante);
-  if(madre) return 'M:' + madre + u;
-  if(p.grupo) return 'G:' + norm(p.grupo) + u;
+  if(madre) return 'M:' + madre;
+  if(p.grupo) return 'G:' + norm(p.grupo);
   let t = (p.desc || '').replace(RE_PAREN,' ').replace(RE_CORCH,' ')
                         .replace(RE_DUAL,' ').replace(RE_CAP,' ').replace(RE_RAM,' ');
   if(esReloj(p))
     t = t.replace(RE_MM,' ').replace(RE_CORREA,' ').replace(RE_TALLE,' ').replace(RE_COLOR,' ');
-  return [norm(p.cat), norm(p.marca), norm(t).replace(/[\s\-–/]+/g,' ').trim()].join('|') + u;
+  return [norm(p.cat), norm(p.marca), norm(t).replace(/[\s\-–/]+/g,' ').trim()].join('|');
 }
 
 /* ---------- El nombre sin la memoria (21/09) ----------
@@ -8039,7 +8189,7 @@ function tarjeta(p){
     <div class="cuerpo">
       <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}${htmlUsado(p)}${htmlDestacado(p)}</span>
       <h3 class="nombre">${esc(p.titulo || p.desc)}</h3>
-      ${p.tecnica ? `<p class="tecnica" title="${esc(p.tecnica)}">${esc(p.tecnica)}</p>` : ''}
+      ${htmlTecnicaTarjeta(p)}
       <div class="pie">
         <div class="plata">
           <span class="usd">${precioTarjeta(p)}${ahorro(p) && conDesde(p) ? ` <s class="antes"><span class="antes-mon">USD </span>${plata(p.antes)}</s>` : ''}</span>
@@ -8206,7 +8356,7 @@ function variados(lista, tope, yaPuestos = []){
 }
 
 function ofertas(){
-  const base = MODELOS.filter(m => m.stock && m.precio !== null && m.imagen);
+  const base = MODELOS.filter(m => m.stock && m.precio !== null && m.imagen && noEsUsado(m));
 
   // Los pedidos a mano: van primero y la regla de variedad no los toca
   const fijos = VIDRIERA_FIJOS
@@ -8483,6 +8633,8 @@ function ponerFilaMarcas(){
    está acá, simplemente no se muestra nada y la columna queda como estaba. */
 const COMPLEMENTOS = {
   'Celular':             ['Auriculares', 'Accesorio Apple', 'Apple Watch'],
+  // Un celular usado necesita lo mismo que uno nuevo (14/10/2026)
+  'Usado':               ['Auriculares', 'Accesorio Apple', 'Apple Watch'],
   'iPad':                ['Accesorio Apple', 'Auriculares'],
   'MacBook':             ['Accesorio Apple', 'Monitor', 'Auriculares'],
   'Apple Watch':         ['Accesorio Apple', 'Auriculares'],
@@ -8544,7 +8696,8 @@ function techoSugeridos(){
 
 // Rubros donde la marca del equipo decide el mundo: con otra que no sea Apple,
 // lo de Apple no le sirve (los EarPods Lightning no entran en un Samsung).
-const MUNDO_DE_LA_MARCA = ['Celular', 'Tablet', 'E-Reader', 'Smartwatch', 'Auriculares', 'Parlante'];
+const MUNDO_DE_LA_MARCA = ['Celular', 'Tablet', 'E-Reader', 'Smartwatch', 'Auriculares', 'Parlante',
+                           'Usado'];   // 14/10/2026: un usado es un celular
 
 /* Las monturas de lente que le entran a un cuerpo, por su nombre. Solo reglas
    que se conocen; lo que no encaja en ninguna no tiene montura y nunca se
@@ -8654,7 +8807,7 @@ function novedades(cuantas = CUANTOS_SUGERIDOS, unaPorRubro = true){
   // El mismo lector que el sello: entiende la fecha de la planilla y la ISO de ADVAPP
   const fecha = p => msDeFecha(p.fecha);
   const orden = MODELOS
-    .filter(m => m.stock && m.precio !== null && m.imagen)
+    .filter(m => m.stock && m.precio !== null && m.imagen && noEsUsado(m))   // los usados, en su mundo
     .sort((a,b) => codigoMasAlto(b) - codigoMasAlto(a) || fecha(b.rep) - fecha(a.rep) || a.idx - b.idx);
 
   const out = [], vistas = new Set();
@@ -9383,7 +9536,7 @@ function anotarMirado(k){
    dos veces seguidas. */
 function modelosMirados(){
   return leerMirados().map(buscarModelo)
-    .filter((m, i, lista) => m && m.stock && m.imagen && lista.indexOf(m) === i);
+    .filter((m, i, lista) => m && m.stock && m.imagen && lista.indexOf(m) === i && noEsUsado(m));   // ver noEsUsado
 }
 
 // En letra grande va el nombre hasta el primer " — ", " | " o " (": lo que
@@ -9414,7 +9567,7 @@ function datosPresupuesto(){
     const n = MODELOS.filter(m => m.variantes.some(v => enTramo(v.precio, r))).length;
     // En las vitrinas, los más caros de ese precio con foto y stock, uno por
     // rubro mientras alcance: cuatro celulares seguidos no muestran el tramo
-    const cand = MODELOS.filter(m => m.stock && m.imagen && enTramo(m.precio, r))
+    const cand = MODELOS.filter(m => m.stock && m.imagen && enTramo(m.precio, r) && noEsUsado(m))
                         .sort((a, b) => b.precio - a.precio);
     const prods = [], rubros = new Set();
     cand.forEach(m => { if(prods.length < PV_VITRINAS && !rubros.has(m.cat)){ rubros.add(m.cat); prods.push(m); } });
@@ -9743,7 +9896,7 @@ const entroDespuesDel10_09 = m => codigoMasAlto(m) > ULTIMO_CODIGO_DEL_10_09;
    dice "Lo último de" solo en ese caso (ver htmlPanelMarca). */
 function cintaDeLaMarca(marca, ms){
   const porCodigo = (a, b) => codigoMasAlto(b) - codigoMasAlto(a) || a.idx - b.idx;
-  const hay = ms.filter(m => m.stock && m.precio !== null && m.imagen);
+  const hay = ms.filter(m => m.stock && m.precio !== null && m.imagen && noEsUsado(m));
   const nuevos = hay.filter(entroDespuesDel10_09).sort(porCodigo);
   const resto = hay.filter(m => !entroDespuesDel10_09(m));
   const suyos = (RUBROS_POR_MARCA[marca] || []).map(norm);
@@ -9961,7 +10114,9 @@ function pintarExtras(){
     + nuevos.map(m => [clave(m), m.precio, m.precioMax, m.incluye, m.imagen, m.variantes.length].join(':')).join(',') + '|'
     + marcas.map(x => [x.marca, x.n, x.cats.join(';'), ...x.nuevos.map(m => clave(m) + ':' + m.precio + ':' + m.precioMax)].join(':')).join(',')
     // Las reseñas llegan aparte (cargarResenas): cuando llegan, el bloque se suma
-    + '|' + (RESENAS ? [RESENAS.puntaje, RESENAS.cantidad, RESENAS.resenas.length].join(':') : '');
+    + '|' + (RESENAS ? [RESENAS.puntaje, RESENAS.cantidad, RESENAS.resenas.length].join(':') : '')
+    // "¿Los productos son nuevos?" cambia con la sección de usados (14/10/2026)
+    + '|' + haySeccionUsados();
   if(firma === FIRMA_EXTRAS && caja.children.length){
     // Las vidrieras se frenaron al esconderse: vuelven a girar
     arrancarNuevos();
@@ -12548,6 +12703,7 @@ function abrirFicha(k, historia = true){
           <div class="fi-arriba">${htmlArribaFicha(v)}</div>
           <div class="fi-marco">${htmlFoto(v, '', true)}${htmlLupa()}</div>
           <div class="fi-colores">${htmlVitrinaFicha(v, m)}</div>
+          <div class="fi-equipo">${htmlFotosEquipo(v)}</div>
         </div>
         <div class="fi-datos">${htmlDatosFicha(m, v)}</div>
       </div>
@@ -12564,6 +12720,11 @@ function abrirFicha(k, historia = true){
      clic se escucha en él y no en la foto. */
   d.querySelector('.fi-marco').addEventListener('click', e => {
     if(e.target.closest('.fi-lupa') || e.target.tagName === 'IMG') abrirVisor(d);
+  });
+  // Las fotos del equipo de un usado (14/10/2026): tocar una la pone grande
+  d.querySelector('.fi-equipo').addEventListener('click', e => {
+    const b = e.target.closest('.fi-fe');
+    if(b) verFotoEquipo(d, b.dataset.foto);
   });
   // El índice de las páginas de vista previa (4.2 B), una vez por visita: así
   // está leído cuando toque Compartir
@@ -12728,8 +12889,36 @@ function pintarFotoFicha(d, v){
   if(!cont) return;
   const img = cont.querySelector('img');
   const grande = v.imagenGrande || v.imagen;
+  // Las miniaturas del usado vuelven a marcar la de la foto grande (14/10/2026)
+  const equipo = d.querySelector('.fi-equipo');
+  if(equipo) equipo.innerHTML = htmlFotosEquipo(v);
   if(!img || !v.imagen){ cont.innerHTML = htmlFoto(v, '', true) + htmlLupa(); return; }
   if(img.getAttribute('src') !== grande){ img.classList.remove('ok'); img.src = grande; }
+}
+
+/* Las fotos del equipo en la ficha de un usado (Benja, 14/10/2026): las que
+   le subieron en ADVAPP (fotosDelUsado), en una fila de miniaturas debajo de
+   la foto. Tocar una la pone grande (verFotoEquipo), y la lupa abre esa. Con
+   una sola no hay fila; lo nuevo no la tiene. */
+function htmlFotosEquipo(v){
+  const fotos = (v && esUsado(v) && v.fotosUsado) || [];
+  if(fotos.length < 2) return '';
+  const grande = v.imagenGrande || v.imagen;
+  return `<div class="fi-fotos-equipo" role="group" aria-label="Fotos del equipo">${fotos.map((u, i) =>
+    `<button type="button" class="fi-fe" data-foto="${esc(u)}" aria-pressed="${u === grande}" aria-label="Foto ${i + 1} de ${fotos.length}"><img src="${esc(fotoChica(u))}" alt="" loading="lazy" decoding="async" onerror="fotoQueFalla(this, 'quitar')"></button>`
+  ).join('')}</div>`;
+}
+function verFotoEquipo(d, u){
+  const marco = d && d.querySelector('.fi-marco');
+  if(!marco || !u) return;
+  TURNO_FOTO++;              // una foto de color que venía en camino ya no va
+  const img = marco.querySelector('img');
+  if(img){ if(img.getAttribute('src') !== u){ img.classList.remove('ok'); img.src = u; } }
+  else{
+    const v = buscarProducto(FICHA);
+    if(v) marco.innerHTML = htmlFoto({ ...v, imagen: u, imagenGrande: u }, '', true) + htmlLupa();
+  }
+  d.querySelectorAll('.fi-fe').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.foto === u)));
 }
 
 // La vitrina de colores con el nombre del elegido y su aviso: todo lo que
@@ -13080,7 +13269,10 @@ function claveDelMismoModelo(k){
   if(b.length < 5 || b.some(x => !x)) return '';
   const madre = b.slice(0, 3).join('-');
   const partes = p => String(p.skuVariante || '').trim().toUpperCase().split('-');
-  const filas = PRODUCTOS.filter(p => madreDelSku(p.skuVariante) === madre && buscarModelo(clave(p)));
+  /* Nunca un usado (14/10/2026): cada uno es un equipo, y el link de uno que
+     se vendió no es "el mismo modelo en otra versión"; tampoco el de un nuevo
+     que cambió de ID. Sin otra fila, "Ya no está". */
+  const filas = PRODUCTOS.filter(p => madreDelSku(p.skuVariante) === madre && !esUsado(p) && buscarModelo(clave(p)));
   if(!filas.length) return '';
   const visibles = filas.filter(p => buscarModelo(clave(p)).variantes.some(x => clave(x) === clave(p)));
   const base = visibles.length ? visibles : filas;
@@ -14311,7 +14503,7 @@ function pasosUsado(b){
 function mensajeUsado(c, prod, color){
   const x = prod ? partesMensaje(prod, color) : null;
   let t = x
-    ? `Hola! Me interesa el ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''} y quiero entregar mi usado como parte de pago.`
+    ? `Hola! Me interesa el ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)} y quiero entregar mi usado como parte de pago.`
     : 'Hola! Quiero entregar mi usado como parte de pago.';
   t += '\n\nMi usado: ' + textoUsado(c) + (c.valor !== null ? ': ' + textoValorUsado(c) : '');
   if(c.valor !== null && x && typeof prod.precio === 'number'){
@@ -14345,7 +14537,7 @@ function htmlEnviarUsado(msg, ids = ['us-wa', 'us-ig']){
 function mensajeFuera(prod, color, c){
   const x = prod ? partesMensaje(prod, color) : null;
   return (x
-    ? `Hola! Me interesa el ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''} y quiero entregar mi usado como parte de pago.`
+    ? `Hola! Me interesa el ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)} y quiero entregar mi usado como parte de pago.`
     : 'Hola! Quiero entregar mi usado como parte de pago.') +
     '\n\nMi usado (no está en el cotizador):' +
     `\nQué es: ${c.tipo}\nModelo: ${c.m.nombre}` + (c.memoria ? `\nMemoria: ${c.memoria}` : '') +

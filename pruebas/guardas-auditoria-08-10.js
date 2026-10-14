@@ -353,7 +353,10 @@ function usados(){
   const base = MODELOS.find(m => m.stock && m.precio !== null && m.variantes.length === 1);
   if(!base){ info('[W3-10] no hay un modelo de una sola version con stock'); return; }
   const fila = { ...base.variantes[0], id: 'A8-USADO-1', condicion: 'Usado' };
-  ok(familia(fila) !== familia(base.variantes[0]) && familia(fila).endsWith('|usado'), '[W3-10] el usado arma su propia tarjeta (familia)');
+  /* Desde el 14/10/2026 (Benja, la seccion de usados) la familia de un usado
+     es la fila misma, U:<ID>: una tarjeta por equipo. El resto de la seccion
+     se prueba en usados-web.js */
+  ok(familia(fila) !== familia(base.variantes[0]) && familia(fila) === 'U:A8-USADO-1', '[W3-10] el usado arma su propia tarjeta (familia)', familia(fila));
   const falso = { ...base, id: 'A8-USADO-1', idx: 99999, rep: fila, variantes: [fila], condicion: 'Usado' };
   MODELOS.push(falso);
   try{

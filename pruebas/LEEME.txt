@@ -192,6 +192,18 @@ si alguna falta).
                   ADVAPP desde el <head> (W3-17), las paginas para Google sin
                   precio fijo (W3-06) y las decisiones D13 a D17 de Benja
                   (cuotas, nuevos, agotados sin precio, Instagram, baterias).
+  usados-web.js   La seccion de usados (Benja, 13-14/10/2026), con cinco
+                  usados de ejemplo que se le agregan a la respuesta de
+                  ADVAPP adentro de la pagina (el feed no se toca): sin
+                  ninguno no se ve nada; con ellos, el rubro "Usados" (chip
+                  al final, el mundo "Usados seleccionados", el encabezado,
+                  ?cat=Usados, y ?cat=Celular sin usados mezclados), una
+                  tarjeta por equipo, la tarjeta de los nuevos con el rotulo
+                  y las cuotas, la ficha con la bateria, el estado y la
+                  garantia (sin inventar una), el WhatsApp con "usado" y el
+                  codigo del equipo, la pregunta "¿Los productos son
+                  nuevos?", las vitrinas de la portada sin usados, el link
+                  de uno vendido y la busqueda.
   guardas-pie-precio.js
                   El precio arriba del pie pegado al abrir la ficha en el
                   celular (Pedro, 01/10): todas las fichas con stock, con y

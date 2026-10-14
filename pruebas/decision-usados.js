@@ -312,7 +312,7 @@ async function probarLaFicha(){
   ok(grupos[0] === 'iPhone 17' && grupos[grupos.length - 1] === 'iPhone 11', '[2A] los modelos por generacion, del 17 al 11', grupos.join(','));
   const b13 = uzCot().querySelector('.us-op[data-m="iphone-13-pro"]');
   ok(b13 && uzTxt(b13) === '13 Pro' && b13.getAttribute('aria-label') === 'iPhone 13 Pro', '[2A] adentro del grupo, «13 Pro» (el lector lee «iPhone 13 Pro»)');
-  ok(/tomamos sólo estos modelos/.test(uzTxt(uzCot())), '[2A] dice que lo que no esta no se toma');
+  ok(/tomamos solo estos modelos/.test(uzTxt(uzCot())), '[2A] dice que lo que no esta no se toma');
   uzTocar('.us-op[data-m="iphone-13"]');
   ok(uzPreg() === '¿Cuánta memoria tiene?' && [...uzCot().querySelectorAll('.us-op[data-o]')].map(uzTxt).join(',') === '128GB,256GB,512GB',
      '[2A] la memoria, con las del iPhone 13 de la lista');

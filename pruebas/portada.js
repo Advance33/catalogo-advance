@@ -84,7 +84,7 @@ function correrPruebas(){
     const ps = cats.flatMap(enStock).map(m => m.precio).filter(x => x !== null && x > 0);
     const txt = t.querySelector('.mundo-cab p').textContent;
     return !new RegExp('^' + n + ' producto').test(txt) ||
-           (ps.length && !txt.includes('desde USD ' + plata(Math.min(...ps))));
+           (ps.length && !txt.includes('Desde USD ' + plata(Math.min(...ps))));
   });
   ok(malMundo.length === 0, 'cada mundo suma bien sus productos y su "desde" es el mas bajo',
      malMundo.map(t => t.querySelector('h3').textContent).join(', ') || 'ninguno mal');

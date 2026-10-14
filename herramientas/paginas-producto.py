@@ -380,7 +380,7 @@ SCRIPT = r'''
       caja.innerHTML = `<b>USD ${plata(x.precio)}</b><i>${tc ? '≈ $ ' + plata(x.precio * tc) + ' · ' : ''}${D.cuotas ? 'hasta ' + D.cuotas + ' cuotas' : ''}</i>`;
     }else if(vivo){
       caja.className = 'precio sin';
-      caja.innerHTML = '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entra</i>';
+      caja.innerHTML = '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entre</i>';
     }else{
       caja.className = 'precio sin';
       caja.innerHTML = '<b>Consultá el precio</b><i>El precio y el stock del día, por WhatsApp</i>';
@@ -534,7 +534,7 @@ def armar_pagina(m, s, publica, general):
 </body>
 </html>
 '''.format(
-        direccion=e(general.get('direccion') or 'Av. De los Incas 5150, 1A, CABA'),
+        direccion=e(general.get('direccion') or 'Av. de los Incas 5150, 1A, CABA'),
         contacto=' · '.join(x for x in (
             ('<a href="https://wa.me/%s" target="_blank" rel="noopener">WhatsApp %s</a>' % (e(general['whatsapp']), e(numero_wa(general['whatsapp'])))) if general.get('whatsapp') else '',
             ('<a href="%s" target="_blank" rel="noopener">Ver en el mapa</a>' % e(general['mapa'])) if general.get('mapa') else '') if x).join(['<span>', '</span>']) if (general.get('whatsapp') or general.get('mapa')) else '',
@@ -596,7 +596,7 @@ def sin_precio_viejo(t):
         return x.group(1) + json.dumps(d, ensure_ascii=False).replace('</', '<\\/') + x.group(3)
     t = re.sub(r'(<script type="application/ld\+json">)(.*?)(</script>)', sin_oferta, t, flags=re.S)
     t = re.sub(r'<div class="precio" id="precio"><b>USD [\d.]+</b><i>[^<]*</i></div>',
-               '<div class="precio sin" id="precio"><b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entra</i></div>', t)
+               '<div class="precio sin" id="precio"><b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entre</i></div>', t)
     t = re.sub(r'<td class="num">u\$[\d.]+</td><td>Sí</td>', '<td class="num">—</td><td>Sin stock</td>', t)
     t = re.sub(r'<td class="num">u\$[\d.]+</td>', '<td class="num">—</td>', t)
     return t
@@ -751,7 +751,7 @@ def probar():
     # Auditoria del 06/10
     ok('"itemCondition": "https://schema.org/NewCondition"' in h, 'los datos para Google dicen que es nuevo')
     h3 = armar_pagina(dict(m, categoria='Accesorio Apple'), 'x', 'https://catalogo.advancetecno.com.ar/',
-                      {'cuotas': 12, 'whatsapp': '5491124751466', 'mapa': 'https://maps.app.goo.gl/x', 'direccion': 'Av. De los Incas 5150, 1A, CABA'})
+                      {'cuotas': 12, 'whatsapp': '5491124751466', 'mapa': 'https://maps.app.goo.gl/x', 'direccion': 'Av. de los Incas 5150, 1A, CABA'})
     ok('?cat=Accesorio%20Apple' in h3 and '?cat=Accesorio Apple' not in h3, 'la direccion del rubro va codificada (migas y datos para Google)')
     ok('<tbody id="filas">' in h3 and 'tb.innerHTML' in h3 and 'lowPrice: Math.min(...ps)' in h3, 'al abrir se rehacen la tabla y los datos para Google')
     ok('wa.href = (sin ? x.aviso : x.wa) || x.wa' in h3, 'el WhatsApp sigue a la version elegida y al stock del momento')

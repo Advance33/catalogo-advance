@@ -763,7 +763,14 @@
 "AT-0549-02.jpg",
 "AT-0549-03.jpg",
 "AT-0549-04.jpg",
-"AT-0549-05.jpg"
+"AT-0549-05.jpg",
+"AT-0550-01.jpg",
+"AT-0551-01.jpg",
+"AT-0553-01.jpg",
+"AT-0554-01.jpg",
+"AT-0555.jpg",
+"AT-0556.jpg",
+"AT-0557.jpg"
 ],
 "catalogo": {
 "firmas": {
@@ -2467,6 +2474,30 @@
 ],
 "AT-0549": [
 "apple|celular|128:1,16:1,plus:1"
+],
+"AT-0550": [
+"dyson|dyson|2x:1,hs09:1"
+],
+"AT-0551": [
+"dyson|dyson|hs08:1"
+],
+"AT-0552": [
+"dyson|dyson|hs09:1"
+],
+"AT-0553": [
+"dyson|dyson|hd16:1"
+],
+"AT-0554": [
+"dyson|dyson|hd18:1"
+],
+"AT-0555": [
+"dyson|dyson|sv50:1"
+],
+"AT-0556": [
+"dyson|dyson|v15:1"
+],
+"AT-0557": [
+"dyson|dyson|ds60:1,v16:1"
 ]
 },
 "ids": {
@@ -2782,6 +2813,14 @@
 "DRO-DJI-010": "AT-0209",
 "DRO-DJI-011": "AT-0210",
 "DRO-DJI-012": "AT-0207",
+"DYS-DYS-AIRWRAPCOANDA2XHS09-000-PNK-000": "AT-0550",
+"DYS-DYS-AIRWRAPIDSTRAIGHTWAVYHS08-000-PRS-000": "AT-0551",
+"DYS-DYS-AIRWRAPIDSTRAIGHTWAVYHS09-000-APR-000": "AT-0552",
+"DYS-DYS-HAIRDRYERNURALHD16-000-PNK-000": "AT-0553",
+"DYS-DYS-HD18HAIRDRYERRPROFESSIONAL-000-BLU-000": "AT-0554",
+"DYS-DYS-SV50PENCILVACFLUFFYCONES-000-000-000": "AT-0555",
+"DYS-DYS-V15FLUFFYASPIRADORA-000-000-000": "AT-0556",
+"DYS-DYS-V16PISTONANIMALDS60-000-000-000": "AT-0557",
 "ERD-AMZ-004": "AT-0212",
 "ERD-AMZ-005": "AT-0213",
 "ERD-AMZ-006": "AT-0214",
@@ -3449,6 +3488,14 @@
 "drone~dji~5-dji-drone-mini-pro": "AT-0208",
 "drone~dji~5-dji-drone-mini-pro-rc-n3": "AT-0211",
 "drone~dji~avata-dji-drone-pro-solo-view": "AT-0206",
+"dyson~dyson~2x-airwrap-anda-co-dyson-hs09": "AT-0550",
+"dyson~dyson~airwrap-dyson-hs08-i.d.-straight-wavy": "AT-0551",
+"dyson~dyson~airwrap-dyson-hs09-i.d.-straight-wavy": "AT-0552",
+"dyson~dyson~animal-ds60-dyson-piston-v16": "AT-0557",
+"dyson~dyson~aspiradora-dyson-fluffy-v15": "AT-0556",
+"dyson~dyson~dryer-dyson-hair-hd16-nural": "AT-0553",
+"dyson~dyson~dryer-dyson-hair-hd18-professional-r": "AT-0554",
+"dyson~dyson~dyson-fluffycones-pencilvac-sv50": "AT-0555",
 "e-reader~amazon~11-gen-kindle~16gb": "AT-0212",
 "e-reader~amazon~12-edition-gen-kindle-paperwhite-signature~32gb": "AT-0214",
 "e-reader~amazon~12-gen-kindle-paperwhite~16gb": "AT-0213",
@@ -4300,10 +4347,12 @@
 "dark blue": "AT-0088-02",
 "gray": "AT-0088-01",
 "grey": "AT-0088-01",
-"gris": "AT-0088-01"
+"gris": "AT-0088-01",
+"navy": "AT-0088-02"
 },
 "AT-0089": {
-"dark blue": "AT-0089-01"
+"dark blue": "AT-0089-01",
+"navy": "AT-0089-01"
 },
 "AT-0090": {
 "icy blue": "AT-0090-03",
@@ -5726,9 +5775,11 @@
 "teclas negras": "AT-0456-01"
 },
 "AT-0457": {
+"black and peach ceramic bezel · white silicone band": "AT-0457-01",
 "black ceramic": "AT-0457-01",
 "black ceramic · black peach": "AT-0457-01",
 "black peach": "AT-0457-01",
+"black-peach ceramic bezel · white silicone band": "AT-0457-01",
 "black/peach ceramic bezel · white silicone band": "AT-0457-01"
 },
 "AT-0458": {
@@ -6172,8 +6223,32 @@
 "teal": "AT-0549-03",
 "ultramarine": "AT-0549-02",
 "white": "AT-0549-04"
+},
+"AT-0550": {
+"ceramic pink · rose gold": "AT-0550-01"
+},
+"AT-0551": {
+"prussian blue · rich copper": "AT-0551-01"
+},
+"AT-0552": {
+"ceramic apricot · topaz": "AT-0552-01"
+},
+"AT-0553": {
+"ceramic pink · rose gold": "AT-0553-01"
+},
+"AT-0554": {
+"vinca blue · topaz": "AT-0554-01"
+},
+"AT-0555": {
+"": "AT-0555"
+},
+"AT-0556": {
+"": "AT-0556"
+},
+"AT-0557": {
+"": "AT-0557"
 }
 }
 },
-"generado": "2026-10-07T13:48:46"
+"generado": "2026-10-13T11:11:14"
 }

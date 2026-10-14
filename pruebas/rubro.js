@@ -40,7 +40,7 @@ function correrPruebas(){
   ok($('count').textContent.startsWith(cel.length + ' producto'), 'la cantidad es la del rubro',
      $('count').textContent + ' / ' + cel.length);
   const precios = cel.map(m => m.precio).filter(x => x !== null && x > 0);
-  ok(cab().querySelector('.rc-tit p').textContent.includes('desde USD ' + plata(Math.min(...precios))),
+  ok(cab().querySelector('.rc-tit p').textContent.includes('Desde USD ' + plata(Math.min(...precios))),
      'y el "desde" es el precio mas bajo del rubro', cab().querySelector('.rc-tit p').textContent);
   const img = cab().querySelector('.rc-foto img');
   ok(img && cel.some(m => m.imagen === img.getAttribute('src')), 'la foto es de un producto del rubro');

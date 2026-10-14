@@ -1,7 +1,7 @@
 // La seccion de usados de la web (Benja, 13-14/10/2026): iPhone usados de un
 // solo proveedor, cargados a mano en ADVAPP como productos del padron con
 // Condicion "Usado". Hoy ADVAPP no manda ninguno, asi que esta tanda le agrega
-// a la respuesta de ADVAPP, ADENTRO de la pagina (fetch envuelto), cinco filas
+// a la respuesta de ADVAPP, ADENTRO de la pagina (fetch envuelto), seis filas
 // de ejemplo con la forma en que llegaria un usado (usados-carga.md, 13/10), y
 // vuelve a cargar con actualizar(). El feed de verdad no se toca: al final se
 // carga otra vez sin ellas y todo tiene que volver a como estaba.
@@ -25,6 +25,11 @@
 //   [7] las vitrinas de la portada que mezclan rubros no muestran usados
 //   [8] el link de un usado vendido no abre otro equipo ni el nuevo
 //   [9] la busqueda: "usado" los trae; con el modelo, van al final
+//  [10] las fotos del equipo salen de ADVAPP aunque no tengan codigo AT: la
+//       primera en la tarjeta, todas en la ficha (tocar una la pone grande);
+//       las fotos de lo nuevo, exactamente las mismas que sin usados
+//  [11] la bateria en la tarjeta, "Batería 88%", solo si el Detalle la dice
+//       sin dudas
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const info = t => R.push('  --  ' + t);
@@ -65,9 +70,20 @@ const UW_FILAS = [
   // con la Condicion vacia
   uwFila({ 'ID': 'UW-USADO-5', 'Categoría': 'Celular Usado', 'Condición': '', 'Modelo': 'IPHONE 14',
            'Descripción completa': 'iPhone 14 128GB (Purple)', 'Precio USD': '450', 'Color': 'Purple',
-           'Detalle': 'Batería 89 %.', 'CODIGO': 'AT-0064', 'CODIGO_VAR': 'AT-0064-02',
+           'Detalle': 'Batería entre 85 y 90 %.', 'CODIGO': 'AT-0064', 'CODIGO_VAR': 'AT-0064-02',
            'SKU_MADRE': 'CEL-APL-14US', 'SKU_VARIANTE': 'CEL-APL-14US-128-PUR-U0005' }),
+  // Como lo carga ADVAPP desde el 14/10 (PR #96): ID propio, sin codigo AT y
+  // con las fotos que le subio Benja en SKUS, sin `at`
+  uwFila({ 'ID': 'UW-USADO-6', 'Modelo': 'IPHONE 13', 'Descripción completa': 'iPhone 13 128GB (Starlight)',
+           'Precio USD': '470', 'Color': 'Starlight', 'Detalle': 'batería al 87 %. Marca en el marco.', 'Garantía': '30 días',
+           'SKU_MADRE': 'CEL-APL-13U0006', 'SKU_VARIANTE': 'CEL-APL-13U0006-128-STL-000',
+           'SKUS': [{ sku: 'CEL-APL-13U0006-128-STL-000', at: null,
+                      fotos: ['https://advapp.invalid/tecno-productos/skus/usado-0006-a.jpg',
+                              'https://advapp.invalid/tecno-productos/skus/usado-0006-b.jpg',
+                              'https://advapp.invalid/tecno-productos/skus/usado-0006-c.jpg'] }] }),
 ];
+const UW_FOTOS = UW_FILAS[5]['SKUS'][0].fotos;
+const UW_N = UW_FILAS.length;
 const UW_IDS = UW_FILAS.map(f => f['ID']);
 const UW_APROBADO = 'Sí, todo es nuevo y sellado, salvo los de la sección Usados, que lo dicen en su tarjeta y en su ficha.';
 const UW_D14 = 'Sí, nuevos. Los de caja blanca vienen sin la caja original y lo dice la ficha.';
@@ -143,17 +159,18 @@ async function correrUW(){
      [...$$('#mosaico .mundo h3')].map(uwTexto).join(' · '));
   ok(!haySeccionUsados() && uwFaq() === UW_D14, '[0] y "¿Los productos son nuevos?" dice lo de D14 A', uwFaq());
   const sinMundos = [...$$('#mosaico .mundo')].length;
+  const fotosSinUsados = new Map(PRODUCTOS.map(p => [clave(p), [p.imagen, p.imagenGrande]]));
 
   /* ---- Con los usados de ejemplo ---- */
   await uwCargar(UW_FILAS);
   irAlInicio();
   const filas = UW_IDS.map(buscarProducto);
-  ok(filas.every(Boolean), 'las cinco filas de ejemplo llegaron a la pagina', filas.filter(Boolean).length + ' de 5');
+  ok(filas.every(Boolean), 'las filas de ejemplo llegaron a la pagina', filas.filter(Boolean).length + ' de ' + UW_N);
   if(!filas.every(Boolean)) return;
-  const [u1, u2, u3, u4, u5] = filas;
+  const [u1, u2, u3, u4, u5, u6] = filas;
 
   /* ---- [1] El rubro ---- */
-  ok(filas.every(p => p.cat === CAT_USADO && esUsado(p)), '[1] los cinco usados estan en el rubro "Usado"', filas.map(p => p.cat).join(','));
+  ok(filas.every(p => p.cat === CAT_USADO && esUsado(p)), '[1] los usados de ejemplo estan en el rubro "Usado"', filas.map(p => p.cat).join(','));
   ok(u1.catPlanilla === 'Celular' && u5.catPlanilla === 'Celular Usado', '[1] la categoria de ADVAPP queda en catPlanilla (la firma de las fotos)', u1.catPlanilla + ' / ' + u5.catPlanilla);
   ok(u1.marca === 'Apple' && u1.marcaPlanilla === 'iPhone' && u3.marca === 'Apple' && !u3.marcaPlanilla,
      '[1] la marca "iPhone" que manda ADVAPP pasa a Apple, como la de los nuevos', u1.marca + ' / ' + u1.marcaPlanilla);
@@ -171,15 +188,15 @@ async function correrUW(){
   const w = mundosDeLaPortada().find(x => x.rubros.includes(CAT_USADO));
   ok(!!w && w.nombre === 'Usados seleccionados' && w.rubros.length === 1 && w.tamano === '',
      '[1] el mundo "Usados seleccionados", solo con el rubro Usados y del tamaño normal', w && [w.nombre, w.rubros.join('+'), w.tamano || 'normal'].join(' · '));
-  ok(!!w && w.n === 5, '[1] cuenta los cinco (con y sin stock, como los demas mundos)', w && w.n);
+  ok(!!w && w.n === UW_N, '[1] cuenta todos (con y sin stock, como los demas mundos)', w && w.n);
   ok(!!w && w.desde === 450, '[1] el "Desde" del mundo es el mas barato con stock', w && w.desde);
   const t = uwMundoUsados();
   ok(!!t && !/mundo-(alto|grande|otros)/.test(t.className), '[1] la tarjeta del mundo esta en la portada', t && t.className);
   ok([...$$('#mosaico .mundo')].length === sinMundos + 1, '[1] es una tarjeta mas: los otros mundos siguen', sinMundos + ' -> ' + $$('#mosaico .mundo').length);
   if(t){
     const b = t.querySelector('.rubro');
-    ok(!!b && b.dataset.cat === CAT_USADO && /^Usados\s*5$/.test(uwTexto(b)), '[1] con su boton "Usados 5"', b && uwTexto(b));
-    ok(uwTexto(t.querySelector('.mundo-cab p')) === '5 productos · Desde USD 450', '[1] y "5 productos · Desde USD 450"', uwTexto(t.querySelector('.mundo-cab p')));
+    ok(!!b && b.dataset.cat === CAT_USADO && uwTexto(b).replace(/\s/g, '') === 'Usados' + UW_N, '[1] con su boton "Usados ' + UW_N + '"', b && uwTexto(b));
+    ok(uwTexto(t.querySelector('.mundo-cab p')) === UW_N + ' productos · Desde USD 450', '[1] y "' + UW_N + ' productos · Desde USD 450"', uwTexto(t.querySelector('.mundo-cab p')));
     // Que no desarme la grilla: ninguna tarjeta se pisa con otra
     const rs = [...$$('#mosaico .mundo')].map(x => x.getBoundingClientRect());
     const pisan = [];
@@ -195,14 +212,14 @@ async function correrUW(){
     ok(/Desde USD 450/.test(uwTexto(cab)), '[1] con el "Desde" de lo que tiene stock', uwTexto(cab).slice(0, 80));
     ok(location.search.includes('cat=Usado'), '[1] y la direccion ?cat=Usado', location.search);
     const lista = LISTA.slice();
-    ok(lista.length === 5 && lista.every(uwEsDeEjemplo), '[1] adentro, solo los cinco usados', lista.length);
+    ok(lista.length === UW_N && lista.every(uwEsDeEjemplo), '[1] adentro, solo los usados', lista.length);
     ok(lista[lista.length - 1].variantes[0].id === 'UW-USADO-4', '[1] el que no tiene stock, al final');
     irAlInicio();
   }
   // Los links
   history.replaceState(null, '', location.pathname + '?cat=Usados');
   leerURL(); armarFiltros(); aplicarFiltro(false);
-  ok(filtros.cat === CAT_USADO && LISTA.length === 5, '[1] ?cat=Usados (como dice el chip) abre el rubro', filtros.cat + ' ' + LISTA.length);
+  ok(filtros.cat === CAT_USADO && LISTA.length === UW_N, '[1] ?cat=Usados (como dice el chip) abre el rubro', filtros.cat + ' ' + LISTA.length);
   history.replaceState(null, '', location.pathname + '?cat=Celular');
   leerURL(); armarFiltros(); aplicarFiltro(false);
   ok(filtros.cat === 'Celular' && LISTA.length > 0 && !LISTA.some(uwEsDeEjemplo) && !LISTA.some(esUsadoModelo),
@@ -287,7 +304,7 @@ async function correrUW(){
   ok(!datosPresupuesto().some(t => t.prods.some(esUsadoModelo)), '[7] ¿Cuanto queres gastar?: sin usados en las vitrinas');
   ok(!datosMarcas().some(x => x.nuevos.some(esUsadoModelo)), '[7] la cinta de cada marca: sin usados');
   ok(!$$('#extras [data-key^="UW-USADO"]').length, '[7] y ninguna tarjeta de la portada es de un usado', $$('#extras [data-key^="UW-USADO"]').length);
-  ok(uwGrilla({}).filter(uwEsDeEjemplo).length === 5, '[7] "Ver todo el catalogo" si los trae (al final)');
+  ok(uwGrilla({}).filter(uwEsDeEjemplo).length === UW_N, '[7] "Ver todo el catalogo" si los trae (al final)');
 
   /* ---- [8] El link de un usado que se vendio ---- */
   const k9 = claveDelMismoModelo('CEL-APL-15US-128-BLU-U0009');
@@ -297,10 +314,68 @@ async function correrUW(){
 
   /* ---- [9] La busqueda ---- */
   const qu = uwGrilla({ q: 'usado' });
-  ok(qu.filter(uwEsDeEjemplo).length === 5 && qu.every(esUsadoModelo), '[9] buscar "usado" trae los usados (y no el vacio del cotizador)', qu.length);
+  ok(qu.filter(uwEsDeEjemplo).length === UW_N && qu.every(esUsadoModelo), '[9] buscar "usado" trae los usados (y no el vacio del cotizador)', qu.length);
   const q15 = uwGrilla({ q: 'iphone 15' });
   const i1 = q15.findIndex(uwEsDeEjemplo);
   ok(i1 > 0 && q15.slice(i1).every(esUsadoModelo), '[9] "iphone 15": primero los nuevos y los usados al final', q15.length + ' tarjetas, el primer usado en ' + i1);
+
+  /* ---- [10] Las fotos del equipo, de ADVAPP y sin codigo AT ---- */
+  ok(!u6.codigo && u6.fotosUsado.length === 3 && u6.fotosUsado.every((x, i) => x === UW_FOTOS[i]),
+     '[10] el usado sin codigo AT trae sus tres fotos de ADVAPP, en orden', u6.fotosUsado.length);
+  ok(u6.imagenGrande === UW_FOTOS[0] && u6.imagen === fotoChica(UW_FOTOS[0]), '[10] la primera es la de la tarjeta', u6.imagen);
+  const c6 = tarjeta(buscarModelo('UW-USADO-6'));
+  ok((c6.querySelector('.foto img') || {}).getAttribute?.('src') === fotoChica(UW_FOTOS[0]), '[10] y la tarjeta la muestra');
+  ok(u1.codigo === 'AT-0065' && u1.imagen && !u1.imagen.includes('advapp.invalid'), '[10] el que tiene archivo propio sigue con el suyo', u1.imagen.split('/').pop());
+  const malNuevas = PRODUCTOS.filter(p => !esUsado(p)).filter(p => {
+    const antes = fotosSinUsados.get(clave(p));
+    return (p.fotosUsado || []).length || (antes && (antes[0] !== p.imagen || antes[1] !== p.imagenGrande));
+  });
+  ok(!malNuevas.length, '[10] las fotos de lo nuevo son exactamente las mismas que sin usados',
+     malNuevas.slice(0, 3).map(clave).join(' ') || PRODUCTOS.filter(p => !esUsado(p)).length + ' filas');
+  const sinAt = JSON.stringify([{ sku: 'X', at: null, fotos: ['https://x.invalid/a.jpg', 'https://x.invalid/b.jpg'] }]);
+  ok(!fotosDelUsado(sinAt, '', 'Celular').length && fotosDelUsado(sinAt, 'Usado', 'Celular').length === 2
+     && fotosDelUsado(sinAt, '', 'Celular Usado').length === 2 && !Object.keys(fotosDeLosSkus(sinAt)).length,
+     '[10] una foto sin `at` la toma solo un usado: para lo nuevo sigue sin servir');
+  abrirFicha('UW-USADO-6', false);
+  d = document.getElementById('ficha');
+  const fes = d ? [...d.querySelectorAll('.fi-equipo .fi-fe')] : [];
+  const grande = () => (d.querySelector('.fi-marco > img') || {}).getAttribute?.('src');
+  ok(fes.length === 3 && fes[0].getAttribute('aria-pressed') === 'true' && grande() === UW_FOTOS[0],
+     '[10] la ficha muestra las tres, con la primera grande y marcada', fes.length + ' · ' + grande());
+  if(fes[1]){
+    fes[1].click();
+    ok(grande() === UW_FOTOS[1] && fes[1].getAttribute('aria-pressed') === 'true' && fes[0].getAttribute('aria-pressed') === 'false',
+       '[10] tocar la segunda la pone grande', grande());
+  }
+  ok(!!fes[0] && getComputedStyle(fes[0].querySelector('img')).position === 'static', '[10] las miniaturas no se apilan sobre la foto grande');
+  quitarFicha();
+  abrirFicha('UW-USADO-1', false);
+  ok(!document.querySelector('#ficha .fi-fe'), '[10] con una sola foto (o ninguna de ADVAPP) no hay fila');
+  quitarFicha();
+  if(nuevo){
+    abrirFicha(clave(nuevo.rep), false);
+    ok(!document.querySelector('#ficha .fi-fe'), '[10] y lo nuevo no la tiene');
+    quitarFicha();
+  }
+
+  /* ---- [11] La bateria en la tarjeta ---- */
+  const bat = x => bateriaDe({ variantes: [{ condicion: 'Usado', detalle: x }] });
+  const leidas = ['Batería 92 %. Sin marcas.', 'batería al 88 %', 'Batería: 100%', '88% de batería', '🔋 85%', 'BATERÍA 90%'].map(bat);
+  ok(leidas.join('|') === 'Batería 92%|Batería 88%|Batería 100%|Batería 88%|Batería 85%|Batería 90%',
+     '[11] se lee "Batería 92 %", "batería al 88 %", "Batería: 100%", "88% de batería", "🔋 85%" y en mayusculas', leidas.join(' | '));
+  const dudosas = ['Batería 89–95%', 'Batería 88 %, antes 92% de batería', 'Batería entre 85 y 90 %.', 'Batería 150%',
+                   'Batería 0%', 'Batería buena', 'Sin marcas. 90%', ''];
+  ok(dudosas.every(x => bat(x) === ''), '[11] un rango, dos numeros, uno imposible o algo no claro: nada', dudosas.filter(x => bat(x)).join(' | '));
+  ok(bateriaDe({ variantes: [{ condicion: '', detalle: 'Batería 92 %' }] }) === '', '[11] en un nuevo nunca');
+  const linea = id => uwTexto(tarjeta(buscarModelo(id)).querySelector('.tecnica'));
+  ok(/^Batería 91%( ·|$)/.test(linea('UW-USADO-1')) && /^Batería 86%( ·|$)/.test(linea('UW-USADO-2')),
+     '[11] los dos iPhone 15 iguales ya se distinguen en la tarjeta', linea('UW-USADO-1') + ' | ' + linea('UW-USADO-2'));
+  ok(/^Batería 87%( ·|$)/.test(linea('UW-USADO-6')), '[11] "batería al 87 %" se escribe "Batería 87%", chica, primera en la linea de abajo del nombre (el color largo la cortaba en el celular)', linea('UW-USADO-6'));
+  ok(!/Batería/.test(linea('UW-USADO-5')), '[11] "Batería entre 85 y 90 %" no pone nada', linea('UW-USADO-5') || '(sin linea)');
+  const conBat = MODELOS.filter(noEsUsado).filter(m => bateriaDe(m) || /Batería \d/.test(uwTexto(tarjeta(m).querySelector('.tecnica'))));
+  ok(!conBat.length, '[11] ninguna tarjeta nueva lleva bateria', conBat.slice(0, 3).map(m => m.desc).join(' | '));
+  const c4 = tarjeta(buscarModelo('UW-USADO-1'));
+  ok(c4.querySelector('.nombre').nextElementSibling === c4.querySelector('.tecnica'), '[11] va debajo del nombre');
 
   /* ---- Y sin los de ejemplo, todo como estaba ---- */
   await uwCargar(null);

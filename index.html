@@ -2125,6 +2125,17 @@ window.ADVAPP_TEMPRANO = (() => {
   .fi-vit-cab.solo b{white-space:normal;overflow-wrap:anywhere}
   .fi-vit-cab small{font:500 11px/1.3 var(--sans);color:var(--faint);white-space:nowrap}
   .fi-vit-cab small[hidden]{display:none}
+  /* Las fotos del equipo de un usado (14/10/2026, ver htmlFotosEquipo): una
+     fila de miniaturas debajo de la foto; la marcada es la que se ve grande.
+     Sin mezcla ni posición absoluta: eso es de la foto grande (.fi-foto img). */
+  .fi-equipo:empty{display:none}
+  .fi-fotos-equipo{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  .fi-fe{flex:none;width:52px;height:52px;padding:3px;border:0;border-radius:11px;background:#fff;cursor:pointer;
+         box-shadow:inset 0 0 0 1px var(--line);transition:box-shadow .15s}
+  .fi-fe[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--acento)}
+  .fi-fe:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  .fi-foto .fi-fe img{position:static;inset:auto;width:100%;height:100%;object-fit:contain;border-radius:8px;
+                      mix-blend-mode:normal;filter:none;max-height:none}
   .fi-vitrina{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;overscroll-behavior-x:contain;
               padding:3px 3px 6px;margin:0 -3px;scrollbar-width:none}
   .fi-vitrina::-webkit-scrollbar{display:none}
@@ -5387,6 +5398,9 @@ function armarCarga(datos){
         // Las fotos de ADVAPP por codigo de variante. Son el respaldo: solo se
         // usan cuando no hay archivo propio en fotos/ para ese color.
         fotosAdvapp: C.skus === -1 ? {} : fotosDeLosSkus(f[C.skus]),
+        // Las de un usado, todas y aunque no traigan código AT (14/10/2026,
+        // ver fotosDelUsado). En lo nuevo queda vacía: sus fotos, como siempre.
+        fotosUsado: C.skus === -1 ? [] : fotosDelUsado(f[C.skus], val(f,C.condicion), val(f,C.cat)),
         // Sim o eSIM segun ADVAPP: primero el SKU de la web, si no los de color.
         sim: simDelSku(val(f,C.sku)) || (C.skus === -1 ? '' : simDeLosSkus(f[C.skus])),
         // Wifi o Cellular, igual (29/09): ver conexionDelSku
@@ -5412,7 +5426,9 @@ function armarCarga(datos){
          del catalogo se quedaba sin foto por eso. */
       p.codigo = p.codigo || codigoDeLaFila(p);
       p.imagen = urlFoto(p.imagen) ||
-                 fotoDePortada(p, colorDeLaFila(p.color, p.desc || p.modelo));
+                 fotoDePortada(p, colorDeLaFila(p.color, p.desc || p.modelo)) ||
+                 // un usado sin archivo propio ni foto con código: la primera suya de ADVAPP
+                 p.fotosUsado[0] || '';
       /* `imagen` es la chica, que es la que usa TODO lo que se ve chico sin
          tener que acordarse de pedirla; la grande se guarda al lado y la pide
          la ficha. Así un bloque nuevo de la portada nace liviano. */
@@ -5611,8 +5627,11 @@ const esUsadoModelo = m => !!m && (m.variantes || [m]).some(esUsado);
    Sin ningún usado en ADVAPP no hay rubro, ni chip, ni mundo: todo sale de
    lo que llega. */
 const CAT_USADO = 'Usado';
+// Si una fila tal cual viene de ADVAPP es de un usado: su Condición o, vacía, su categoría
+const pareceUsado = (condicion, categoria) =>
+  RE_USADO.test(norm(condicion || '')) || (!limpio(condicion) && RE_USADO.test(norm(categoria || '')));
 function rubroDelUsado(p){
-  if(!limpio(p.condicion) && RE_USADO.test(norm(p.catPlanilla || ''))) p.condicion = 'Usado';
+  if(!limpio(p.condicion) && pareceUsado('', p.catPlanilla)) p.condicion = 'Usado';
   if(!esUsado(p)) return p;
   p.cat = CAT_USADO;
   if(norm(p.marca) === 'iphone'){ p.marcaPlanilla = p.marca; p.marca = 'Apple'; }
@@ -5628,6 +5647,36 @@ function haySeccionUsados(){
    chicas no dicen "Usado". Siguen en su rubro, en "Ver todo el catálogo" y en
    la búsqueda, siempre al final y con el rótulo. */
 const noEsUsado = m => !esUsadoModelo(m);
+
+/* La batería de un usado, en su tarjeta (Benja, 14/10/2026): dos equipos del
+   mismo modelo y color se veían iguales salvo el precio. Sale del Detalle,
+   escrita como la eligió él: "Batería 88%", con el % pegado. Sólo si lo dice
+   sin dudas: "Batería 92 %", "batería al 88 %", "Batería: 100%", "88% de
+   batería" o "🔋 88%". Un rango ("89–95%"), dos números distintos, uno fuera
+   de 1 a 100 o una forma que no está acá no se muestran: no se adivina. */
+const RE_BATERIA = [
+  /\bbater[ií]a\s*(?:al|de|:|=)?\s*(\d{1,3})\s*%/gi,
+  /(?<![\d.,])(\d{1,3})\s*%\s*(?:de\s+)?(?:la\s+)?bater[ií]a\b/gi,
+  /🔋\s*(\d{1,3})\s*%/g,
+];
+function bateriaDe(m){
+  const vs = (m && (m.variantes || [m])) || [];
+  if(vs.length !== 1 || !esUsado(vs[0])) return '';
+  const t = String(vs[0].detalle || '');
+  const dichas = new Set();
+  RE_BATERIA.forEach(re => { for(const x of t.matchAll(re)) dichas.add(Number(x[1])); });
+  if(dichas.size !== 1) return '';
+  const n = [...dichas][0];
+  return n >= 1 && n <= 100 ? `Batería ${n}%` : '';
+}
+/* La línea chica de la tarjeta, debajo del nombre: en un usado su batería,
+   primero (la línea es de un renglón y en el celular un color largo, "Desert
+   Titanium", la cortaba), y la técnica (ponerTitulos). Sin batería es la de
+   siempre. */
+function htmlTecnicaTarjeta(p){
+  const t = [bateriaDe(p), p.tecnica].filter(Boolean).join(' · ');
+  return t ? `<p class="tecnica" title="${esc(t)}">${esc(t)}</p>` : '';
+}
 // El rótulo de la tarjeta y de la ficha: lo que dice ADVAPP ("Usado")
 function htmlUsado(m){
   const v = m && (m.variantes || [m]).find(esUsado);
@@ -7001,6 +7050,29 @@ function fotosDeLosSkus(txt){
   return salida;
 }
 
+/* Las fotos de ADVAPP de un usado, todas y en su orden (Benja, 14/10/2026).
+   Un usado de la sección se carga en ADVAPP con las fotos del equipo (frente,
+   dorso, batería...) y llega sin código AT: no hay un archivo en fotos/ por
+   cada equipo, que se vende una sola vez. fotosDeLosSkus se queda sólo con
+   las que tienen `at` y una por SKU, que es lo que sirve para lo nuevo; acá
+   van todas, sin pedir `at`. Sólo para una fila usada (pareceUsado, la misma
+   regla que rubroDelUsado): en lo nuevo devuelve [] y sus fotos se resuelven
+   igual que siempre. La primera es la de la tarjeta (si no tiene archivo
+   propio ni foto con código) y la ficha las muestra todas (htmlFotosEquipo). */
+function fotosDelUsado(txt, condicion, categoria){
+  if(!pareceUsado(condicion, categoria)) return [];
+  let lista;
+  try{ lista = JSON.parse(txt || '[]'); }catch{ return []; }
+  if(!Array.isArray(lista)) return [];
+  const salida = [];
+  for(const s of lista)
+    for(const u of (Array.isArray(s && s.fotos) ? s.fotos : [])){
+      const url = urlFoto(String(u || ''));
+      if(url && !salida.includes(url)) salida.push(url);
+    }
+  return salida;
+}
+
 /* La foto de ADVAPP para un color de la fila (o, sin color, la del primero
    que la tenga). El color se ubica por su posicion en CODIGO_VAR -el color 2
    es la variante 2- y esa variante por el `at` del SKU. Sin colores, la del
@@ -8116,7 +8188,7 @@ function tarjeta(p){
     <div class="cuerpo">
       <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}${htmlUsado(p)}${htmlDestacado(p)}</span>
       <h3 class="nombre">${esc(p.titulo || p.desc)}</h3>
-      ${p.tecnica ? `<p class="tecnica" title="${esc(p.tecnica)}">${esc(p.tecnica)}</p>` : ''}
+      ${htmlTecnicaTarjeta(p)}
       <div class="pie">
         <div class="plata">
           <span class="usd">${precioTarjeta(p)}${ahorro(p) && conDesde(p) ? ` <s class="antes"><span class="antes-mon">USD </span>${plata(p.antes)}</s>` : ''}</span>
@@ -12630,6 +12702,7 @@ function abrirFicha(k, historia = true){
           <div class="fi-arriba">${htmlArribaFicha(v)}</div>
           <div class="fi-marco">${htmlFoto(v, '', true)}${htmlLupa()}</div>
           <div class="fi-colores">${htmlVitrinaFicha(v, m)}</div>
+          <div class="fi-equipo">${htmlFotosEquipo(v)}</div>
         </div>
         <div class="fi-datos">${htmlDatosFicha(m, v)}</div>
       </div>
@@ -12646,6 +12719,11 @@ function abrirFicha(k, historia = true){
      clic se escucha en él y no en la foto. */
   d.querySelector('.fi-marco').addEventListener('click', e => {
     if(e.target.closest('.fi-lupa') || e.target.tagName === 'IMG') abrirVisor(d);
+  });
+  // Las fotos del equipo de un usado (14/10/2026): tocar una la pone grande
+  d.querySelector('.fi-equipo').addEventListener('click', e => {
+    const b = e.target.closest('.fi-fe');
+    if(b) verFotoEquipo(d, b.dataset.foto);
   });
   // El índice de las páginas de vista previa (4.2 B), una vez por visita: así
   // está leído cuando toque Compartir
@@ -12810,8 +12888,36 @@ function pintarFotoFicha(d, v){
   if(!cont) return;
   const img = cont.querySelector('img');
   const grande = v.imagenGrande || v.imagen;
+  // Las miniaturas del usado vuelven a marcar la de la foto grande (14/10/2026)
+  const equipo = d.querySelector('.fi-equipo');
+  if(equipo) equipo.innerHTML = htmlFotosEquipo(v);
   if(!img || !v.imagen){ cont.innerHTML = htmlFoto(v, '', true) + htmlLupa(); return; }
   if(img.getAttribute('src') !== grande){ img.classList.remove('ok'); img.src = grande; }
+}
+
+/* Las fotos del equipo en la ficha de un usado (Benja, 14/10/2026): las que
+   le subieron en ADVAPP (fotosDelUsado), en una fila de miniaturas debajo de
+   la foto. Tocar una la pone grande (verFotoEquipo), y la lupa abre esa. Con
+   una sola no hay fila; lo nuevo no la tiene. */
+function htmlFotosEquipo(v){
+  const fotos = (v && esUsado(v) && v.fotosUsado) || [];
+  if(fotos.length < 2) return '';
+  const grande = v.imagenGrande || v.imagen;
+  return `<div class="fi-fotos-equipo" role="group" aria-label="Fotos del equipo">${fotos.map((u, i) =>
+    `<button type="button" class="fi-fe" data-foto="${esc(u)}" aria-pressed="${u === grande}" aria-label="Foto ${i + 1} de ${fotos.length}"><img src="${esc(fotoChica(u))}" alt="" loading="lazy" decoding="async" onerror="fotoQueFalla(this, 'quitar')"></button>`
+  ).join('')}</div>`;
+}
+function verFotoEquipo(d, u){
+  const marco = d && d.querySelector('.fi-marco');
+  if(!marco || !u) return;
+  TURNO_FOTO++;              // una foto de color que venía en camino ya no va
+  const img = marco.querySelector('img');
+  if(img){ if(img.getAttribute('src') !== u){ img.classList.remove('ok'); img.src = u; } }
+  else{
+    const v = buscarProducto(FICHA);
+    if(v) marco.innerHTML = htmlFoto({ ...v, imagen: u, imagenGrande: u }, '', true) + htmlLupa();
+  }
+  d.querySelectorAll('.fi-fe').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.foto === u)));
 }
 
 // La vitrina de colores con el nombre del elegido y su aviso: todo lo que

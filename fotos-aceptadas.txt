@@ -57,3 +57,4 @@ e1492d0242c08404aae96697f8a5d6e1  2   # MAC MINI M6 16GB/256GB | 16GB/512GB: la 
 3629ecdceee22f9b6c36bfddde991a24  2   #  | SAMSUNG A56 (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)
 8080544902d5a6754d642fdc0715650e  2   #  | SAMSUNG S25 ULTRA (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)
 4343a7d1402b4ec24bfb1aeda4e8bcc1  2   #  | SAMSUNG S25 ULTRA (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)
+0a3db0129bd049b91fe294b259abeb2b  2   #  | MACBOOK AIR M5 13.6" (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)

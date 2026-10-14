@@ -281,7 +281,7 @@ AT-0164,AT-0164,Cámara,Nikon,Z6 III Body (Español),,,,CAM-NIK-020,,camara~niko
 AT-0165,AT-0165,Cámara,Nikon,Z6 III Body (Ingles),,,,CAM-NIK-015,,camara~nikon~iii-z6~body-tecladoen,,,,2530,2026-09-10,,,
 AT-0166,AT-0166,Cámara,Nikon,Z6 III Kit 24-120MM (Ingles),,,,CAM-NIK-016,,camara~nikon~24-120mm-iii-z6~kit-tecladoen,,,,3410,2026-09-10,,,
 AT-0167,AT-0167,Cámara,Nikon,Z7 II Body Español,,,,CAM-NIK-006,,camara~nikon~ii-z7~body-tecladoes,,,,2310,2026-09-10,,,
-AT-0168,AT-0168,Cámara,Nikon,Z8 Body,,,,CAM-NIK-010,,camara~nikon~z8~body,,,,3850,2026-09-10,,,
+AT-0168,AT-0168-01,Cámara,Nikon,Z8 Body,Black,negro,01,CAM-NIK-010,,camara~nikon~z8~body,,,,3850,2026-09-10,,,variante Black el 2026-10-14: ADVAPP le puso color Black a la fila (auditoría DW-17) y un producto sin variantes con un color que no tiene anotado se queda sin foto en la web; solo viene en negro
 AT-0169,AT-0169,Cámara,Nikon,Z8 Kit 24-120,,,,CAM-NIK-017,,camara~nikon~24-120-z8~kit,,,,4400,2026-09-10,,,
 AT-0170,AT-0170,Cámara,Nikon,ZR 6K Cinema,,,,CAM-NIK-009,,camara~nikon~6k-cinema-zr,,,,2640,2026-09-10,,,
 AT-0171,AT-0171,Cámara,Sony,Alfa 1 II Body,,,,CAM-SON-023,,camara~sony~1-alfa-ii~body,,,,6545,2026-09-10,,,
@@ -371,7 +371,7 @@ AT-0253,AT-0253,Lente,Canon,RF 50mm F/1.2 L USM,,,,LEN-CAN-051,,lente~canon~l-rf
 AT-0254,AT-0254,Lente,Canon,RF 50mm F/1.8 STM,,,,LEN-CAN-001,,lente~canon~rf~50-f1.8-stm,,,,231,2026-09-10,,,
 AT-0255,AT-0255,Lente,Canon,RF 600mm F/11L IS STM,,,,LEN-CAN-012,,lente~canon~11l-f-rf~600-is-stm,,,,649,2026-09-10,,,
 AT-0256,AT-0256,Lente,Canon,RF 7-14mm F/2.8-3.5 L Fisheye STM,,,,LEN-CAN-029,,lente~canon~3.5-fisheye-l-rf~7-14-f2.8-stm,,,,2365,2026-09-10,,,
-AT-0257,AT-0257,Lente,Canon,RF 70-200mm F/2.8 IS USM Z Black,,,,LEN-CAN-035,,lente~canon~rf-z~70-200-f2.8-is-usm,,,,3685,2026-09-10,,,
+AT-0257,AT-0257-01,Lente,Canon,RF 70-200mm F/2.8 IS USM Z Black,Black,negro,01,LEN-CAN-035,,lente~canon~rf-z~70-200-f2.8-is-usm,,,,3685,2026-09-10,,,variante Black el 2026-10-14: ADVAPP le puso color Black a la fila (auditoría DW-17) y un producto sin variantes con un color que no tiene anotado se queda sin foto en la web; solo viene en negro
 AT-0258,AT-0258,Lente,Canon,RF 70-200mm F/4L IS,,,,LEN-CAN-023,,lente~canon~4l-f-rf~70-200-is,,,,1705,2026-09-10,,,
 AT-0259,AT-0259,Lente,Canon,RF 75-300mm F/4-5.6,,,,LEN-CAN-005,,lente~canon~5.6-rf~75-300-f4,,,,253,2026-09-10,,,
 AT-0260,AT-0260,Lente,Canon,RF 800mm F/11 IS STM,,,,LEN-CAN-018,,lente~canon~rf~800-f11-is-stm,,,,990,2026-09-10,,,

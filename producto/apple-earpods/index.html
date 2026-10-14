@@ -105,15 +105,15 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
     <div class="tabla"><table><thead><tr><th>Versión</th><th>Color</th><th>Precio</th><th>Stock</th></tr></thead><tbody id="filas"><tr><td>Lightning</td><td>—</td><td class="num">u$80</td><td>Sí</td></tr><tr><td>USB-C</td><td>—</td><td class="num">u$85</td><td>Sí</td></tr></tbody></table></div>
     <p>Precios en dólares, del día. Se pueden pagar en pesos con el dólar del día y con tarjeta en cuotas.</p>
   </section>
-  <section class="bloque ficha" aria-labelledby="t-ficha"><h2 id="t-ficha">Ficha técnica</h2><h3>Características</h3><dl><dt>Tipo</dt><dd>Auriculares con cable, diseñados por Apple</dd><dt>Diseño</dt><dd>Definido por la geometría del oído</dd><dt>Control remoto</dt><dd>Integrado: volumen, música y video, atender o cortar llamadas</dd><dt>Resistencia</dt><dd>Al agua y al sudor</dd></dl><h3>Conexión</h3><dl><dt>Conector</dt><dd>Lightning</dd><dt>Requisitos</dt><dd>Dispositivos con Lightning y iOS 10 o posterior</dd><dt>iPhone</dt><dd>Del iPhone 5 al iPhone 14, incluidos los iPhone SE de 1.ª, 2.ª y 3.ª generación</dd><dt>Otros</dt><dd>iPad con Lightning e iPod touch de 6.ª y 7.ª generación</dd><dt>En la caja</dt><dd>EarPods con conector Lightning</dd></dl></section>
+  <section class="bloque ficha" aria-labelledby="t-ficha"><h2 id="t-ficha">Ficha técnica</h2><h3>Características</h3><dl><dt>Tipo</dt><dd>Auriculares con cable, diseñados por Apple</dd><dt>Diseño</dt><dd>Definido por la geometría del oído</dd><dt>Control remoto</dt><dd>Integrado: volumen, música y video, atender o cortar llamadas</dd><dt>Resistencia</dt><dd>Al agua y al sudor</dd></dl><h3>Conexión</h3><dl><dt>Conector</dt><dd>Lightning</dd><dt>Requisitos</dt><dd>Dispositivos con Lightning y iOS 10 o posterior</dd><dt>iPhone</dt><dd>Del iPhone 5 al iPhone 14, incluidos los iPhone SE de 1.ª, 2.ª y 3.ª generación</dd><dt>Otros</dt><dd>iPad con Lightning y iPod touch de 6.ª y 7.ª generación</dd><dt>En la caja</dt><dd>EarPods con conector Lightning</dd></dl></section>
 </main>
 <footer>
   <b>Advance Tecno</b>
-  <span>Av. De los Incas 5150, 1A, CABA · Envíos a todo el país · Atención con cita previa</span>
+  <span>Av. de los Incas 5150, 1A, CABA · Envíos a todo el país · Atención con cita previa</span>
   <span><a href="https://wa.me/5491124751466" target="_blank" rel="noopener">WhatsApp +54 9 11 2475-1466</a> · <a href="https://maps.app.goo.gl/kzwGpTwUNLkTEwWRA" target="_blank" rel="noopener">Ver en el mapa</a></span>
   <span>Precios sujetos a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</span>
 </footer>
-<script id="datos" type="application/json">{"versiones": [{"version": "Lightning", "color": "", "precio": 80, "stock": true, "clave": "AUD-APP-015", "foto": "fotos/sinfondo/AT-0059.webp", "wa": "https://wa.me/5491124751466?text=Hola!%20Me%20interesa%20el%20Apple%20EarPods%20Lightning.%20%C2%BFMe%20pas%C3%A1s%20info%3F"}, {"version": "USB-C", "color": "", "precio": 85, "stock": true, "clave": "AUD-APP-016", "foto": "fotos/sinfondo/AT-0060.webp", "wa": "https://wa.me/5491124751466?text=Hola!%20Me%20interesa%20el%20Apple%20EarPods%20USB-C.%20%C2%BFMe%20pas%C3%A1s%20info%3F"}], "advapp": "https://advapp-blond.vercel.app/api/catalog?resource=tecno-web", "cuotas": 12, "cotizacion": {"tipo": "blue", "recargo": 0, "recargoFijo": 20, "valor": 1560}}</script>
+<script id="datos" type="application/json">{"versiones": [{"version": "Lightning", "color": "", "precio": 80, "stock": true, "clave": "AUD-APP-015", "foto": "fotos/sinfondo/AT-0059.webp", "wa": "https://wa.me/5491124751466?text=Hola!%20Me%20interesa%20el%20Apple%20EarPods%20Lightning.%20%C2%BFMe%20pas%C3%A1s%20info%3F"}, {"version": "USB-C", "color": "", "precio": 85, "stock": true, "clave": "AUD-APP-016", "foto": "fotos/sinfondo/AT-0060.webp", "wa": "https://wa.me/5491124751466?text=Hola!%20Me%20interesa%20el%20Apple%20EarPods%20USB-C.%20%C2%BFMe%20pas%C3%A1s%20info%3F"}], "advapp": "https://advapp-blond.vercel.app/api/catalog?resource=tecno-web", "cuotas": 12, "cotizacion": {"tipo": "blue", "recargo": 0, "recargoFijo": 20, "valor": 1570}}</script>
 <script>
 (() => {
   const D = JSON.parse(document.getElementById('datos').textContent);
@@ -147,7 +147,7 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
       caja.innerHTML = `<b>USD ${plata(x.precio)}</b><i>${tc ? '≈ $ ' + plata(x.precio * tc) + ' · ' : ''}${D.cuotas ? 'hasta ' + D.cuotas + ' cuotas' : ''}</i>`;
     }else{
       caja.className = 'precio sin';
-      caja.innerHTML = '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entra</i>';
+      caja.innerHTML = '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entre</i>';
     }
     document.querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { version = b.dataset.v; color = null; pintar(); });
     // (los data-v y data-c llevan el texto tal cual: se compara con el de la versión)

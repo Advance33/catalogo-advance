@@ -100,7 +100,7 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
     </div>
   </div>
   <section class="bloque" aria-labelledby="t-por"><h2 id="t-por">Por qué elegirlo</h2><p>Un multiplicador que va entre la cámara y un objetivo RF compatible y alarga su focal 1,4 veces: el RF 100-400mm pasa a 140-560 mm, y el RF 200-800mm, a 280-1120 mm.</p><p>Para naturaleza, deportes y prensa. Resiste polvo y agua, y pesa 225 g.</p></section>
-  <section class="bloque" aria-labelledby="t-imp"><h2 id="t-imp">Lo más importante</h2><ul class="puntos"><li><b>Focal x1,4</b><span>La apertura máxima del objetivo se cierra un paso (por ejemplo, f/5.6-8 pasa a f/8-11).</span></li><li><b>Sólo con objetivos RF compatibles</b><span>Por ejemplo RF 100-400mm F5.6-8, RF 200-800mm F6.3-9, RF 100-500mm, RF 600mm F11 y RF 800mm F11.</span></li><li><b>Mantiene el autofoco</b><span>Con el RF 100-400mm y el RF 200-800mm sigue andando el AF y el estabilizador.</span></li><li><b>Resiste polvo y agua</b><span>Pintura blanca que refleja el sol y el infrarrojo, para que el objetivo no se caliente.</span></li><li><b>Pesa 225 g</b><span>Mide 71,2 x 20,3 mm. 7 elementos en 4 grupos.</span></li></ul></section>
+  <section class="bloque" aria-labelledby="t-imp"><h2 id="t-imp">Lo más importante</h2><ul class="puntos"><li><b>Focal x1,4</b><span>La apertura máxima del objetivo se cierra un paso (por ejemplo, f/5.6-8 pasa a f/8-11).</span></li><li><b>Sólo con objetivos RF compatibles</b><span>Por ejemplo, RF 100-400mm F5.6-8, RF 200-800mm F6.3-9, RF 100-500mm, RF 600mm F11 y RF 800mm F11.</span></li><li><b>Mantiene el autofoco</b><span>Con el RF 100-400mm y el RF 200-800mm sigue andando el AF y el estabilizador.</span></li><li><b>Resiste polvo y agua</b><span>Pintura blanca que refleja el sol y el infrarrojo, para que el objetivo no se caliente.</span></li><li><b>Pesa 225 g</b><span>Mide 71,2 x 20,3 mm. 7 elementos en 4 grupos.</span></li></ul></section>
   <section class="bloque" aria-labelledby="t-precios"><h2 id="t-precios">Versiones y precios</h2>
     <div class="tabla"><table><thead><tr><th>Versión</th><th>Color</th><th>Precio</th><th>Stock</th></tr></thead><tbody id="filas"><tr><td>Estándar</td><td>—</td><td class="num">u$650</td><td>Sí</td></tr></tbody></table></div>
     <p>Precios en dólares, del día. Se pueden pagar en pesos con el dólar del día y con tarjeta en cuotas.</p>
@@ -109,11 +109,11 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
 </main>
 <footer>
   <b>Advance Tecno</b>
-  <span>Av. De los Incas 5150, 1A, CABA · Envíos a todo el país · Atención con cita previa</span>
+  <span>Av. de los Incas 5150, 1A, CABA · Envíos a todo el país · Atención con cita previa</span>
   <span><a href="https://wa.me/5491124751466" target="_blank" rel="noopener">WhatsApp +54 9 11 2475-1466</a> · <a href="https://maps.app.goo.gl/kzwGpTwUNLkTEwWRA" target="_blank" rel="noopener">Ver en el mapa</a></span>
   <span>Precios sujetos a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</span>
 </footer>
-<script id="datos" type="application/json">{"versiones": [{"version": "Estándar", "color": "", "precio": 650, "stock": true, "clave": "LEN-CAN-009", "foto": "fotos/sinfondo/AT-0229.webp", "wa": "https://wa.me/5491124751466?text=Hola!%20Me%20interesa%20el%20Canon%20RF%201.4X%20Extender.%20%C2%BFMe%20pas%C3%A1s%20info%3F"}], "advapp": "https://advapp-blond.vercel.app/api/catalog?resource=tecno-web", "cuotas": 12, "cotizacion": {"tipo": "blue", "recargo": 0, "recargoFijo": 20, "valor": 1560}}</script>
+<script id="datos" type="application/json">{"versiones": [{"version": "Estándar", "color": "", "precio": 650, "stock": true, "clave": "LEN-CAN-009", "foto": "fotos/sinfondo/AT-0229.webp", "wa": "https://wa.me/5491124751466?text=Hola!%20Me%20interesa%20el%20Canon%20RF%201.4X%20Extender.%20%C2%BFMe%20pas%C3%A1s%20info%3F"}], "advapp": "https://advapp-blond.vercel.app/api/catalog?resource=tecno-web", "cuotas": 12, "cotizacion": {"tipo": "blue", "recargo": 0, "recargoFijo": 20, "valor": 1570}}</script>
 <script>
 (() => {
   const D = JSON.parse(document.getElementById('datos').textContent);
@@ -147,7 +147,7 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
       caja.innerHTML = `<b>USD ${plata(x.precio)}</b><i>${tc ? '≈ $ ' + plata(x.precio * tc) + ' · ' : ''}${D.cuotas ? 'hasta ' + D.cuotas + ' cuotas' : ''}</i>`;
     }else{
       caja.className = 'precio sin';
-      caja.innerHTML = '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entra</i>';
+      caja.innerHTML = '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entre</i>';
     }
     document.querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { version = b.dataset.v; color = null; pintar(); });
     // (los data-v y data-c llevan el texto tal cual: se compara con el de la versión)

@@ -85,7 +85,7 @@ const UW_FILAS = [
 const UW_FOTOS = UW_FILAS[5]['SKUS'][0].fotos;
 const UW_N = UW_FILAS.length;
 const UW_IDS = UW_FILAS.map(f => f['ID']);
-const UW_APROBADO = 'Sí, todo es nuevo y sellado, salvo los de la sección Usados, que lo dicen en su tarjeta y en su ficha.';
+const UW_APROBADO = 'Sí, todo es nuevo y sellado, salvo los de la sección Usados, que lo dicen en su tarjeta y en su ficha. Los de caja blanca vienen sin la caja original y también lo dice la ficha.';
 const UW_D14 = 'Sí, nuevos. Los de caja blanca vienen sin la caja original y lo dice la ficha.';
 const uwEsUsadoCrudo = p => RE_USADO.test(norm(p['Condición'] || '')) || RE_USADO.test(norm(p['Categoría'] || ''));
 

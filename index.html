@@ -3935,11 +3935,12 @@ const PREGUNTAS = [
      sin excepciones: todo lo que publicamos es nuevo y sellado", y hay
      objetivos "Caja blanca" a la venta (nuevos, sin la caja original). */
   /* (14/10/2026, Benja) Con la sección de usados a la vista, el texto que él
-     aprobó para ella. Mientras ADVAPP no mande ningún usado con stock, la
-     sección no existe y queda el de D14 A (haySeccionUsados). */
+     aprobó para ella, con la aclaración de la caja blanca de D14 A (también
+     aprobada el 14/10: "de acuerdo"). Mientras ADVAPP no mande ningún usado
+     con stock, la sección no existe y queda el de D14 A (haySeccionUsados). */
   { p: '¿Los productos son nuevos?',
     get r(){ return haySeccionUsados()
-      ? ['Sí, todo es nuevo y sellado, salvo los de la sección Usados, que lo dicen en su tarjeta y en su ficha.']
+      ? ['Sí, todo es nuevo y sellado, salvo los de la sección Usados, que lo dicen en su tarjeta y en su ficha. Los de caja blanca vienen sin la caja original y también lo dice la ficha.']
       : ['Sí, nuevos. Los de caja blanca vienen sin la caja original y lo dice la ficha.']; } },
   { p: '¿Los productos tienen garantía?',
     r: ['Sí, todos. La garantía cambia según el producto, así que preguntanos por la del que te interesa y te la confirmamos antes de que compres.'] },

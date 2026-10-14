@@ -453,6 +453,17 @@ def armar_pagina(m, s, publica, general):
     foto = m.get('foto') or ''
     src_foto = foto if foto.startswith('http') else ('../../' + foto if foto else '../../assets/preview.png')
     og = publica + (m.get('foto_og') or 'assets/preview.png')
+    # La foto ilustrativa de un usado (Benja, 14/10/2026): la del mismo modelo
+    # nuevo y del mismo color. En la pagina, con el cartel "Foto ilustrativa"
+    # sobre la foto y en el texto alternativo, como en el catalogo. En og:image
+    # y en los datos para Google no va (paginas-producto.js deja foto_og
+    # vacio): ahi la imagen viaja sola, sin cartel. El estilo va en la etiqueta
+    # y no en CSS: asi las paginas de lo nuevo quedan exactamente iguales.
+    ilustrativa = bool(m.get('ilustrativa')) and bool(foto)
+    alt_foto = m['titulo'] + (' (foto ilustrativa)' if ilustrativa else '')
+    cartel = ('<span aria-hidden="true" style="position:absolute;right:8px;bottom:8px;padding:4px 9px;'
+              'border-radius:999px;background:rgba(255,255,255,.9);box-shadow:inset 0 0 0 1px var(--linea);'
+              'font:600 11px/1 var(--sans);color:var(--tinta)">Foto ilustrativa</span>') if ilustrativa else ''
     ld = datos_para_google(m, url, publica)
     # Sin precio ni stock (W3-06): los pone el script. Las versiones van en el
     # orden en que vinieron (con stock y mas barata primero, el dia que se armo).
@@ -504,7 +515,7 @@ def armar_pagina(m, s, publica, general):
 <main>
   <nav class="migas" aria-label="Estás en"><a href="../../">Catálogo</a> › <a href="../../?cat={cat_q}">{rubro}</a> › {titulo}</nav>
   <div class="prod">
-    <div class="foto"><img id="foto" src="{src_foto}" alt="{titulo}"></div>
+    <div class="foto"{foto_rel}><img id="foto" src="{src_foto}" alt="{alt_foto}">{cartel}</div>
     <div class="datos">
       <div><div class="marca">{marca}</div><h1>{nombre}</h1></div>
       {regalo}
@@ -542,6 +553,7 @@ def armar_pagina(m, s, publica, general):
         nombre=e(m.get('nombre') or m['titulo']),
         ld0=ld[0], ld1=ld[1], css=CSS, cat_q=e(urllib.parse.quote(m.get('categoria') or '')), rubro=e(m.get('rubro') or 'Productos'),
         src_foto=e(src_foto), marca=e(m.get('marca') or ''), regalo=regalo,
+        alt_foto=e(alt_foto), cartel=cartel, foto_rel=' style="position:relative"' if ilustrativa else '',
         precio_txt=precio_txt,
         wa=('<a class="wa" href="%s" target="_blank" rel="noopener">Consultar por WhatsApp</a>' % e(m['wa'])) if m.get('wa') else '',
         clave_q=e(m['clave']),
@@ -757,6 +769,15 @@ def probar():
     ok('wa.href = (sin ? x.aviso : x.wa) || x.wa' in h3, 'el WhatsApp sigue a la version elegida y al stock del momento')
     h4 = armar_pagina(dict(m, usado=True), 'x', 'https://catalogo.advancetecno.com.ar/', {'cuotas': 12})
     ok('UsedCondition' in h4 and 'NewCondition' not in h4, 'W3-10: un usado es UsedCondition para Google')
+    # La foto ilustrativa de un usado (Benja, 14/10/2026): asi la manda paginas-producto.js
+    h5 = armar_pagina(dict(m, usado=True, ilustrativa=True, foto_og=''), 'x', 'https://catalogo.advancetecno.com.ar/', {'cuotas': 12})
+    ok('alt="Apple iPhone 17 Pro (foto ilustrativa)"' in h5 and '>Foto ilustrativa</span>' in h5,
+       'la foto ilustrativa de un usado lo dice en la pagina: el cartel y el texto alternativo')
+    ok('fotos/AT-0072-03.jpg' not in h5 and '"image"' not in h5 and 'og:image" content="https://catalogo.advancetecno.com.ar/assets/preview.png"' in h5,
+       'y no va en og:image ni en los datos para Google (ahi viaja sola, sin el cartel)')
+    ok('ilustrativa' not in h.lower() and '<div class="foto"><img id="foto" src="../../fotos/sinfondo/AT-0072-03.webp" alt="Apple iPhone 17 Pro"></div>' in h
+       and '"image": ["https://catalogo.advancetecno.com.ar/fotos/AT-0072-03.jpg"]' in h,
+       'lo nuevo, como antes: sin cartel, con su foto en og:image y en los datos para Google')
     ok('WhatsApp +54 9 11 2475-1466' in h3 and 'Ver en el mapa' in h3, 'el pie con el WhatsApp y el mapa')
     d0 = descripcion_corta(dict(m, stock=False), 12)
     ok(d0 == descripcion_corta(m, 12) and d0.startswith('Apple iPhone 17 Pro: ') and '  ' not in d0,

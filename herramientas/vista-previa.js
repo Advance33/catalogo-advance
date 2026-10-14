@@ -26,6 +26,7 @@
               titulo ya lo dice todo (un objetivo, un accesorio)
    - foto:    la foto propia que muestra la ficha al abrirse
               ("fotos/AT-0072-03.jpg"), o '' si muestra la de ADVAPP o ninguna
+              (o la ilustrativa de un usado, 14/10/2026: ver vistasPrevias)
    - sku:     el SKU de ADVAPP de la fila (SKU_VARIANTE), o '' (13/10/2026,
               auditoría W3-03): la página lo manda en el link (&s=) para que la
               web encuentre el modelo aunque mañana el ID ya no esté */
@@ -154,7 +155,13 @@ function vistasPrevias(){
       id, destino: clave(v), titulo,
       linea: vpLinea(m, v, titulo),
       // la que abre la ficha: htmlFoto(v, '', true), la grande
-      foto: vpFotoPropia(v.imagenGrande || v.imagen),
+      /* Salvo la foto ilustrativa de un usado (Benja, 14/10/2026, ver
+         fotoIlustrativa en index.html): es la del modelo nuevo, y WhatsApp
+         muestra la imagen sola, sin el cartel de la ficha ni el texto
+         alternativo (og:image:alt no se ve). El que recibe el link vería un
+         iPhone nuevo como si fuera ese equipo. Va la tarjeta general, como la
+         fila sin foto propia; cuando el usado tenga la suya, va la suya. */
+      foto: v.fotoIlustrativa ? '' : vpFotoPropia(v.imagenGrande || v.imagen),
       sku: String(p.skuVariante || '').trim()
     });
   }

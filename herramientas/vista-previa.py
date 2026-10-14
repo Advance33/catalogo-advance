@@ -460,6 +460,23 @@ def e(s):
     return html.escape(str(s or ''), quote=True)
 
 
+def destino_del_link(v):
+    """A donde lleva la pagina: '#p=<destino>' y, para que la web encuentre el
+    modelo aunque manana ese destino ya no este (13/10/2026, auditoria W3-03:
+    p/TAB-APP-046.html llevaba a su gemela, la gemela desaparecio y el iPad con
+    stock abria "Ya no esta"), '&o=<el ID de la fila>' si es otro y '&s=<su
+    SKU de ADVAPP>' si es otro. La web los lee con respaldosDelHash(). Un SKU
+    que no sirve en una direccion (RE_ID) no va: no se inventa nada."""
+    ide, destino = v['id'], v.get('destino') or v['id']
+    sku = str(v.get('sku') or '').strip()
+    ir = '#p=' + destino
+    if ide != destino:
+        ir += '&o=' + ide
+    if sku and RE_ID.fullmatch(sku) and sku not in (ide, destino):
+        ir += '&s=' + sku
+    return ir
+
+
 def armar_pagina(v, publica, raiz=RAIZ):
     """El HTML de p/<ID>.html. Siempre igual para los mismos datos: sin
     fecha ni nada que cambie solo, asi no se reescribe si no cambio."""
@@ -469,7 +486,7 @@ def armar_pagina(v, publica, raiz=RAIZ):
     url_pagina = publica + 'p/' + ide + '.html'
     url_foto = publica + foto
     completo = titulo + (' · ' + linea if linea else '')
-    ir = '../#p=' + destino
+    ir = '../' + destino_del_link(v)
     # summary: la foto cuadrada, chica y al costado, como la dibujo la muestra.
     # La tarjeta general (1200x630) va grande, como la de la portada.
     tarjeta = 'summary' if propia else 'summary_large_image'
@@ -591,7 +608,9 @@ def texto_generado(vistas, generado_en):
     return json.dumps({'generado_en': generado_en,
                        'vistas': {v['id']: {'titulo': v.get('titulo'), 'linea': v.get('linea') or '',
                                             'foto': v.get('foto') or '',
-                                            'destino': v.get('destino') or v['id']}
+                                            'destino': v.get('destino') or v['id'],
+                                            # el #p= entero que arma la pagina (13/10/2026)
+                                            'ir': destino_del_link(v)}
                                   for v in vistas}},
                       ensure_ascii=False, indent=1, sort_keys=True) + '\n'
 
@@ -786,8 +805,19 @@ def probar():
 
         gem = dict(caso, id='TAB-X-WIFIPEN', destino='TAB-X-CELLPEN')
         h = armar_pagina(gem, pub, tmp)
-        ok('location.replace("../#p=TAB-X-CELLPEN")' in h and meta('og:url') == pub + 'p/TAB-X-WIFIPEN.html',
-           'la fila escondida por repetida tiene su pagina y lleva a su gemela visible')
+        ok('location.replace("../#p=TAB-X-CELLPEN&o=TAB-X-WIFIPEN")' in h
+           and 'href="../#p=TAB-X-CELLPEN&amp;o=TAB-X-WIFIPEN"' in h and meta('og:url') == pub + 'p/TAB-X-WIFIPEN.html',
+           'la fila escondida por repetida tiene su pagina y lleva a su gemela visible, con su propio ID de respaldo (&o=)')
+        # (13/10/2026, auditoria W3-03) El SKU de ADVAPP va de respaldo, si es otro
+        con_sku = dict(caso, id='TAB-APP-046', destino='TAB-APL-IPADPRO11M4-512-SBK-WIFI', sku='TAB-APL-IPADPRO11M4-512-000-WIFI')
+        h = armar_pagina(con_sku, pub, tmp)
+        ok('location.replace("../#p=TAB-APL-IPADPRO11M4-512-SBK-WIFI&o=TAB-APP-046&s=TAB-APL-IPADPRO11M4-512-000-WIFI")' in h,
+           'W3-03: el iPad Pro M4 de la auditoria lleva a su gemela, con su ID y su SKU de respaldo')
+        ok(destino_del_link(dict(caso, sku='CEL-APP-068')) == '#p=CEL-APP-068'
+           and destino_del_link(dict(caso, sku='CEL-APL-17P-256-ORG-ESIM')) == '#p=CEL-APP-068&s=CEL-APL-17P-256-ORG-ESIM',
+           'W3-03: el SKU va solo si es otro que el ID')
+        ok(destino_del_link(dict(caso, sku='CEL APL/17P"')) == '#p=CEL-APP-068' and destino_del_link(dict(caso, sku=None)) == '#p=CEL-APP-068',
+           'W3-03: un SKU que no sirve en una direccion no va (y sin SKU, nada)')
         comillas = dict(caso, titulo='Apple MacBook Pro M5 14"', linea='24GB/1TB · <b>')
         h = armar_pagina(comillas, pub, tmp)
         ok('content="Apple MacBook Pro M5 14&quot;"' in h and '&lt;b&gt;' in h and '<b>' not in h,
@@ -908,9 +938,9 @@ def probar():
             gen = json.load(fh)
         ok(gen == {'generado_en': '2026-09-29T19:22:20.026Z',
                    'vistas': {'F-000': {'titulo': 'Apple iPhone 17 Pro', 'linea': '256GB · E-Sim · Orange',
-                                        'foto': 'fotos/AT-0072-03.jpg', 'destino': 'F-000'},
+                                        'foto': 'fotos/AT-0072-03.jpg', 'destino': 'F-000', 'ir': '#p=F-000'},
                               'F-001': {'titulo': 'Apple iPhone 17 Pro', 'linea': '512GB · Sim · Blue',
-                                        'foto': 'fotos/AT-0072-03.jpg', 'destino': 'F-001'}}},
+                                        'foto': 'fotos/AT-0072-03.jpg', 'destino': 'F-001', 'ir': '#p=F-001'}}},
            'p/_generado.json tiene el generado_en y los valores de cada vista con que se armo cada pagina')
         r = aplicar(vistas[:2], pub, c3, tmp, generado_en='2026-09-29T19:25:00.000Z')
         with io.open(os.path.join(c3, GENERADO), encoding='utf-8') as fh:
@@ -923,7 +953,7 @@ def probar():
         aplicar([sin], pub, c3, tmp, confirmar_bajas=True)
         with io.open(os.path.join(c3, GENERADO), encoding='utf-8') as fh:
             gen = json.load(fh)
-        ok(gen['vistas'] == {'G-1': {'titulo': 'Apple iPhone 17 Pro', 'linea': '', 'foto': '', 'destino': 'G-1'}}
+        ok(gen['vistas'] == {'G-1': {'titulo': 'Apple iPhone 17 Pro', 'linea': '', 'foto': '', 'destino': 'G-1', 'ir': '#p=G-1'}}
            and gen['generado_en'] is None,
            'sin foto propia la foto va vacia, y el destino es el ID si la vista no trae otro')
 

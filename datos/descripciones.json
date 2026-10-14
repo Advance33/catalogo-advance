@@ -7213,10 +7213,10 @@
           ],
           "si": {
             "texto": [
-              "black"
+              "note 15 pro 4g"
             ],
             "sin": [
-              "xiaomi redmi note 15 pro 5g"
+              "note 15 pro 5g"
             ]
           }
         },
@@ -7228,6 +7228,9 @@
           "si": {
             "texto": [
               "xiaomi redmi note 15 pro 5g"
+            ],
+            "sin": [
+              "note 15 pro 4g"
             ]
           }
         },
@@ -7236,8 +7239,8 @@
           "codigos": [],
           "si": {
             "sin": [
-              "xiaomi redmi note 15 pro 5g",
-              "black"
+              "note 15 pro 4g",
+              "xiaomi redmi note 15 pro 5g"
             ]
           }
         }
@@ -7543,7 +7546,7 @@
         }
       ],
       "verificado": "2026-10-01",
-      "notas": "ADVAPP: las filas 4G dicen '5G' en el nombre; hay que corregirlas. Pedro (01/10): el 8/256 negro y el 12/512 negro/morado que en ADVAPP no dicen [5G] son 4G; los que dicen [5G] son 5G. La fila 8/256 titanio (CEL-XIA-REDMINOTE15PRO-8G256-TIT-5G) no está confirmada: el id dice 5G, el modelo no dice [5G] y trae AT-0119, que es del 4G; cae en «Sin confirmar», que sólo afirma lo común y muestra 4G y 5G en lo que cambia. Las versiones se reconocen por el [5G] del modelo de ADVAPP (texto «xiaomi redmi note 15 pro 5g») y por el color titanio, no por el código. Ojo: en mi.com el 4G viene en negro, azul glaciar y gris titanio; el morado figura sólo en el 5G. mi.com/es dice IP66 e IP68 solamente para el 5G; mi.com/ar y global dicen IP66, IP68, IP69 e IP69K. La ficha del 4G no dice qué vidrio tiene ni HDR10+/Dolby Vision: por eso no van. 01/10: se sacó el tipo de SIM (eSIM): cambia según el país de origen y la fila no lo dice (regla de Pedro: las dos sólo si lo especifica el proveedor). 01/10: 4G = sólo las negras sin [5G] (lo que confirmó Pedro); cualquier otro color sin [5G] cae en \"Sin confirmar\", así una fila nueva no queda sin versión.\nPasada pareja (01/10): «NFC (según el mercado)» pasó a «(según el país)», como en el resto de las fichas (mi.com/ar: «La disponibilidad de NFC puede variar según el mercado»; 5G: «Es posible que la disponibilidad de NFC varíe entre los mercados»)."
+      "notas": "ADVAPP: las filas 4G dicen '5G' en el nombre; hay que corregirlas. Pedro (01/10): el 8/256 negro y el 12/512 negro/morado que en ADVAPP no dicen [5G] son 4G; los que dicen [5G] son 5G. La fila 8/256 titanio (CEL-XIA-REDMINOTE15PRO-8G256-TIT-5G) no está confirmada: el id dice 5G, el modelo no dice [5G] y trae AT-0119, que es del 4G (desde la noche del 01/10 trae AT-0514, CORRECCIONES-01-10-F); cae en «Sin confirmar», que sólo afirma lo común y muestra 4G y 5G en lo que cambia. Las versiones se reconocen por el [5G] del modelo de ADVAPP (texto «xiaomi redmi note 15 pro 5g») y por el color titanio, no por el código. Ojo: en mi.com el 4G viene en negro, azul glaciar y gris titanio; el morado figura sólo en el 5G. mi.com/es dice IP66 e IP68 solamente para el 5G; mi.com/ar y global dicen IP66, IP68, IP69 e IP69K. La ficha del 4G no dice qué vidrio tiene ni HDR10+/Dolby Vision: por eso no van. 01/10: se sacó el tipo de SIM (eSIM): cambia según el país de origen y la fila no lo dice (regla de Pedro: las dos sólo si lo especifica el proveedor). 01/10: 4G = sólo las negras sin [5G] (lo que confirmó Pedro); cualquier otro color sin [5G] cae en \"Sin confirmar\", así una fila nueva no queda sin versión.\nPasada pareja (01/10): «NFC (según el mercado)» pasó a «(según el país)», como en el resto de las fichas (mi.com/ar: «La disponibilidad de NFC puede variar según el mercado»; 5G: «Es posible que la disponibilidad de NFC varíe entre los mercados»).\n13/10 (auditoría 08/10, DW-09; reemplaza lo del 01/10 sobre «black» y el color titanio): el 4G se reconoce por el «4G» del nombre de la fila («Note 15 Pro 4G»), sin mirar el color: ese 4G lo escribimos nosotros (herramientas/correcciones-confirmadas.json) con lo que confirmó Pedro el 01/10 para las negras. El 5G sigue pidiendo el [5G] del Modelo del proveedor («xiaomi redmi note 15 pro 5g»), y no el «5G» del nombre: ese texto venía también en las negras, que eran 4G. La 8/256 Titanium (CEL-XIA-REDMINOTE15PRO-8G256-TIT-5G) sigue sin confirmar: Benja contestó «No sé» el 01/10, su Modelo no dice [5G] y Xiaomi hace las dos versiones en 8/256 y en titanio; queda en «Sin confirmar». Si se confirma que es 5G, alcanza con que ADVAPP le ponga [5G] al Modelo (o una corrección que diga «4G» si es 4G)."
     },
     {
       "modelo": "REDMI Note 15 (4G) 8/256GB",

@@ -239,6 +239,8 @@ function probarFiltroDeVersion(){
       if(!x) return true;
       const e = dtEsperado(x, c);
       const usd = dtTxt(card.querySelector('.usd'));
+      // La tarjeta agotada dice "Sin stock" y ningun numero (13/10/2026, D15 B de Benja)
+      if(!e.stock) return usd !== 'Sin stock';
       return /desde/i.test(usd) !== e.desde || (e.min !== null && !usd.includes('USD ' + plata(e.min)));
     });
     ok(!malDom.length, '[2.1] ' + nombre + ': el numero y el "desde" de cada tarjeta dibujada',

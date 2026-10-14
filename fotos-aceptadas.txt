@@ -1,6 +1,6 @@
 # Duplicados de foto ya revisados y dados por buenos:
 # huella de la imagen, en cuantos modelos aparece, y cuales.
-# Se regenera con: python verificar-fotos.py --aceptar
+# Se SUMAN con: python3 verificar-fotos.py --aceptar (no borra nada: lo que ya no haga falta se borra a mano)
 4ab61b4ed5b2a2fe2fcbab3406d650d5  2   # MAGIC KEYBOARD FOR 11" IPAD AIR M3/M4 | MAGIC KEYBOARD FOR 11" IPAD PR
 7c7c83efb96478e75d9fadcc070b74dd  2   # MAGIC KEYBOARD FOR 13" IPAD AIR M3/M4 | MAGIC KEYBOARD FOR 13" IPAD PR
 0643f19065528feec343f77052bb6e0d  2   # MAC MINI M4 | MAC MINI M4 PRO
@@ -13,7 +13,7 @@ a1946c42773c1b22e9e9c9d03392a37e  2   # 56 F/1.4 DC DN CONT SONY E | 56MM F/1.4 
 0b30ee9450d530be456d63a5b6cbb1b8  2   # MACBOOK PRO M5 14" | MACBOOK PRO M5 MAX 14"
 8a8f0515ed38e828f385d6a8d4c0be61  2   # MACBOOK PRO M5 MAX 16" | MACBOOK PRO M5 PRO 16"
 57f81f74c5dfb5e636a3e709aab2710e  2   # IPAD 11 A16 | IPAD 11" A16
-56acf9f2a14130b4d7457ae94e948c46  2   # IPAD PRO M4 11" | IPAD PRO M5 11"
+56acf9f2a14130b4d7457ae94e948c46  3   # IPAD PRO M4 11" | IPAD PRO M5 11" (13/10/2026: tambien el M5 256GB Cellular AT-0540-01, Wifi y Cellular se ven igual: D18, Benja 08/10)
 846029a8ce6ac4e256e4e1888f5c7c0f  3   # IPAD AIR 13" M3 | IPAD AIR M4 13" (misma foto oficial de Apple: el diseno es identico)
 cbd80e88dc71aa95ef931965f2e9bcbf  3   # MACBOOK NEO 256GB | MACBOOK NEO 512GB Blush (la misma maquina: la memoria no se ve; 26/09 tambien el 256GB teclado ES)
 d7de8ade0ae668ebbbaa8133623ae60e  2   # MACBOOK NEO 256GB | MACBOOK NEO 512GB Silver (la misma maquina: la memoria no se ve)
@@ -28,3 +28,32 @@ c30b7227156f6b8ca67f569275d67565  2   # IPHONE 16 | IPHONE 16 PLUS (Ultramarine)
 a1ff01a9cb7ca9545b023c95d2e91d6d  2   # IPHONE 16 | IPHONE 16 PLUS (Teal): el mismo equipo, más grande; en la foto no se ve. 07/10/2026
 68e75c36082ecd2f6911c50a7732a2b5  2   # IPHONE 16 | IPHONE 16 PLUS (White): el mismo equipo, más grande; en la foto no se ve. 07/10/2026
 5d38bf86b4e2048ff12154fa00d7777a  2   # IPHONE 16 | IPHONE 16 PLUS (Pink): el mismo equipo, más grande; en la foto no se ve. 07/10/2026
+78199899db5258af08a76b59de27699f  2   # 50MM F/1.4 DG HSM ART CANON | 50 F/1.4 DG HSM ART NIKON: la misma foto oficial de Sigma (A014) para las dos monturas, como los 12-24 y el 16mm. 13/10/2026 (FOT-03)
+5d39d873360bab61ef314f7417eb8a3d  2   # IPHONE 17 PRO 1TB | 1TB SIM (Silver). Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+84d7734776242274c0653f37f7abde93  2   # IPHONE 17 PRO 1TB | 1TB SIM (Orange). Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+4591c185974aeeffd574a58cc8b7dac1  2   # IPHONE 17 PRO 1TB | 1TB SIM (Blue). Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+c84d5ee450f4e51503b151870739b89d  2   # IPHONE 17 PRO 256GB | 256GB SIM (Silver). Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+d842ee67124a37878b9600219398189e  4   # IPHONE 17 PRO 256GB | 512GB, eSIM y SIM (Blue): otra memoria y otra Sim, la foto es la misma. Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+42527c7c3c299229d5cf3898c5bf8f42  4   # IPHONE 17 PRO 256GB | 512GB, eSIM y SIM (Orange): otra memoria y otra Sim, la foto es la misma. Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+df88228f4c1d12e8df8b9a3b2490ea0a  2   # IPHONE 17 PRO 512GB | 512GB SIM (Silver). Sim y eSIM: el mismo equipo, en la foto no se ve (D18, Benja 08/10). 13/10/2026
+59d5dbc05361152f3a80e68f5f9145f0  2   # GALAXY TAB A11+ 6/128GB WIFI | 5G (Gray): Wifi y Cellular, el mismo equipo; la antena no se ve (D18, Benja 08/10). 13/10/2026
+09eb58ba579b41b9307e7e68f4ef1877  3   # GALAXY S25 ULTRA 12/256GB | 12/512GB | 1TB (Titanium Black): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+6d6081a9835451711620a480eef79799  2   # GALAXY S26 12/512GB | 12/256GB (Violet): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+f082b177a56adf09f54d4aa59c28823c  2   # IPAD 11 A16 256GB | 128GB (Yellow): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+ab4489982f90561cd3662543e07b1e66  2   # GALAXY A36 6/128GB | 8/256GB (Lavender): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+600c1156447a645ecdc79de5be31e03c  2   # IPAD 11 A16 128GB WIFI | CELLULAR (Silver): Wifi y Cellular se ven igual (D18, Benja 08/10). 13/10/2026 (D5)
+8ff0173ff93abe94c65a5e3ed2b9a9cc  2   # IPAD 11 A16 256GB WIFI | CELLULAR (Silver): Wifi y Cellular se ven igual (D18, Benja 08/10). 13/10/2026 (D5)
+d2c99849db2a86d9bb4190d5562faae8  4   # IPAD AIR M4 11" 128GB WIFI | CELLULAR (Space Gray): Wifi y Cellular se ven igual (D18, Benja 08/10). 13/10/2026 (D5)
+eef2f653e3d39e386d3d414b02578b6d  2   # IPHONE AIR 1TB | 256GB (Black): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+59ab47dd9f42c3e1f08a6d13f794fc2f  2   # IPHONE AIR 1TB | 256GB (White): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+5878cd8c4ed95044d440d7adc75a9c19  2   # GALAXY A37 12/256GB | GALAXY A37 8/256GB (Charcoal): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+307c523ae916ddaf463bbd3a87e7f2a0  2   # GALAXY S26 ULTRA 12/512GB 5G | GALAXY S26 ULTRA 16/1TB 5G (Skyblue): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+98f4be91b799fb55d6e0bf5b34352431  2   # GALAXY Z FLIP 8 256GB | GALAXY Z FLIP 8 512GB (Graphite): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+6fc8eab5c21ef69e217cc6f34b16a255  2   # GALAXY Z FOLD 8 256GB | GALAXY Z FOLD 8 512GB (Graphite): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+247c69455e0302e5f19b898d73b52861  2   # GALAXY Z FOLD 8 256GB | GALAXY Z FOLD 8 512GB (Cream): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+960e9c55c59d4a3b5c8f93f8719ca59f  2   # GALAXY Z FOLD 8 ULTRA 256GB | GALAXY Z FOLD 8 ULTRA 512GB (Cream): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+22e059924730004030958838f10000c2  3   # GALAXY Z FOLD 8 ULTRA 16/1TB | GALAXY Z FOLD 8 ULTRA 256GB | GALAXY Z FOLD 8 ULTRA 512GB (Graphite): la misma foto, otra memoria (no se ve). 13/10/2026 (D5)
+e1492d0242c08404aae96697f8a5d6e1  2   # MAC MINI M6 16GB/256GB | 16GB/512GB: la misma maquina, la memoria no se ve. 13/10/2026 (D5)
+3629ecdceee22f9b6c36bfddde991a24  2   #  | SAMSUNG A56 (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)
+8080544902d5a6754d642fdc0715650e  2   #  | SAMSUNG S25 ULTRA (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)
+4343a7d1402b4ec24bfb1aeda4e8bcc1  2   #  | SAMSUNG S25 ULTRA (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)

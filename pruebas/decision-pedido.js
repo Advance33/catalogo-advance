@@ -18,7 +18,7 @@
 //          recibis? opcional" con dos botones, "Retiro en CABA" / "Envio" (y
 //          la ayuda de SERVICIO debajo); si elige envio, el campo "Localidad".
 //          El mensaje suma un renglon al final: "Lo retiro en CABA." o "Me lo
-//          mandan a Rosario?" ("Me lo mandan?" sin localidad). Sin elegir
+//          mandan a Rosario?" ("¿Me lo mandan?" sin localidad). Sin elegir
 //          nada sale igual que hoy. Nada de forma de pago (eso era la B).
 //          Queda guardado en el navegador; "Vaciar" no lo borra, asi que
 //          "Deshacer" lo encuentra igual. La medicion anota solo "retiro" o
@@ -578,9 +578,9 @@ async function probarElMensaje(P){
        l.placeholder === 'Por ejemplo: Rosario' && l.getAttribute('autocomplete') === 'address-level2' && l.value === '',
        '[5.3] aparece el campo «Localidad», vacio, con «Por ejemplo: Rosario»', l && l.placeholder);
     ok(!!l && l.maxLength === 60, '[5.3] (hasta 60 letras)', l && l.maxLength);
-    ok(mensajePedido() === msj0 + '\n\nMe lo mandan?', '[5.3] sin localidad el renglon es «Me lo mandan?»', JSON.stringify(mensajePedido().slice(-30)));
+    ok(mensajePedido() === msj0 + '\n\n¿Me lo mandan?', '[5.3] sin localidad el renglon es «¿Me lo mandan?»', JSON.stringify(mensajePedido().slice(-30)));
     l.focus(); l.value = 'Rosario'; l.dispatchEvent(new Event('input', { bubbles: true }));
-    ok(mensajePedido() === msj0 + '\n\nMe lo mandan a Rosario?', '[5.3] con la localidad: «Me lo mandan a Rosario?»', JSON.stringify(mensajePedido().slice(-30)));
+    ok(mensajePedido() === msj0 + '\n\n¿Me lo mandan a Rosario?', '[5.3] con la localidad: «¿Me lo mandan a Rosario?»', JSON.stringify(mensajePedido().slice(-30)));
     ok(dpDelLink(pri()) === mensajePedido() && $('bp-enviar').href === pri().href, '[5.3] los dos botones ya lo mandan, letra por letra');
     ok(loc() === l && document.activeElement === l, '[5.3] escribir no redibuja la ventana: el campo no pierde el foco');
     ok(dpEntregaGuardada() === '{"entrega":"envio","localidad":"Rosario"}', '[5.3] y queda guardado', dpEntregaGuardada());
@@ -589,7 +589,7 @@ async function probarElMensaje(P){
        '[5.3] la medicion del clic a WhatsApp del pedido anota entrega: "envio"', JSON.stringify(w1[0] || {}).slice(0, 120));
     ok(w1.length === 1 && !('localidad' in w1[0]) && !JSON.stringify(w1[0]).includes('Rosario'), '[5.3] y nunca la localidad');
     l.value = '  Villa   María '; l.dispatchEvent(new Event('input', { bubbles: true }));
-    ok(mensajePedido().endsWith('\n\nMe lo mandan a Villa María?'), '[5.3] los espacios de mas no pasan al mensaje', JSON.stringify(mensajePedido().slice(-32)));
+    ok(mensajePedido().endsWith('\n\n¿Me lo mandan a Villa María?'), '[5.3] los espacios de mas no pasan al mensaje', JSON.stringify(mensajePedido().slice(-32)));
     // Lo que escribe el cliente no se vuelve HTML al redibujar
     window.__dp53 = 0;
     l.value = '<img src=x onerror="window.__dp53=1">'; l.dispatchEvent(new Event('input', { bubbles: true }));
@@ -607,7 +607,7 @@ async function probarElMensaje(P){
     ok(mensajePedido() === msj0 && dpDelLink(pri()) === msj0, '[5.3] y el mensaje vuelve a salir como hoy');
     chip('envio').click();
     await dpDormir(30);
-    ok(loc() && loc().value === 'Rosario' && mensajePedido().endsWith('\n\nMe lo mandan a Rosario?'),
+    ok(loc() && loc().value === 'Rosario' && mensajePedido().endsWith('\n\n¿Me lo mandan a Rosario?'),
        '[5.3] (la localidad escrita se recuerda si vuelve a elegir envio)');
 
     // Con la hora de la copia (1.5 A): la hora va con el total y el renglon despues
@@ -615,7 +615,7 @@ async function probarElMensaje(P){
     try{
       FUENTE = { ...(FUENTE || {}), fuente: 'copia' }; HORA_DATOS = Date.now() - 3600e3;
       const mh = mensajePedido();
-      ok(/\nTotal: USD [^\n]+\nPrecios de las \d\d:\d\d, a confirmar\.\n\nMe lo mandan a Rosario\?$/.test(mh),
+      ok(/\nTotal: USD [^\n]+\nPrecios de las \d\d:\d\d, a confirmar\.\n\n¿Me lo mandan a Rosario\?$/.test(mh),
          '[5.3 + 1.5] con la copia, «Precios de las …» sigue pegado al total y el renglon va despues', JSON.stringify(mh.slice(-80)));
     } finally { FUENTE = f0; HORA_DATOS = h0; }
 
@@ -627,7 +627,7 @@ async function probarElMensaje(P){
        '[5.3 + 5.4] «Vaciar el pedido» no borra la eleccion (la muestra: «Vaciar no lo borra»)', dpEntregaGuardada());
     document.getElementById('pd-deshacer').click();
     await dpDormir(30);
-    ok(apretado(chip('envio')) && loc() && loc().value === 'Rosario' && mensajePedido().endsWith('\n\nMe lo mandan a Rosario?') && dpDelLink(pri()) === mensajePedido(),
+    ok(apretado(chip('envio')) && loc() && loc().value === 'Rosario' && mensajePedido().endsWith('\n\n¿Me lo mandan a Rosario?') && dpDelLink(pri()) === mensajePedido(),
        '[5.3 + 5.4] «Deshacer» devuelve el pedido con «Envío» y «Rosario» como estaban, y el mensaje con su renglon');
 
     // Cerrar y volver a abrir: sigue
@@ -663,7 +663,7 @@ async function probarElMensaje(P){
       await dpDormir(30);
       releerEntrega();
     } finally { sp.getItem = gi; sp.setItem = si; sp.removeItem = ri; removeEventListener('error', alError); }
-    ok(!errores.length && ENTREGA.entrega === 'envio' && ENTREGA.localidad === 'Rosario' && mensajePedido().endsWith('\n\nMe lo mandan a Rosario?'),
+    ok(!errores.length && ENTREGA.entrega === 'envio' && ENTREGA.localidad === 'Rosario' && mensajePedido().endsWith('\n\n¿Me lo mandan a Rosario?'),
        '[5.3] sin poder guardar (incognito, bloqueado) igual anda, sin errores', errores.join(' | ') || ENTREGA.entrega);
   });
 
@@ -840,8 +840,8 @@ async function probarCelular(P){
            `[5.3 · ${ancho}] lo guardado vuelve: «Envío» marcado y «Rosario» en la localidad`);
         ok(!!inp && parseFloat(w.getComputedStyle(inp).fontSize) >= 16,
            `[5.3 · ${ancho}] la localidad en 16 px: el iPhone no agranda la pagina al tocarla`, inp && w.getComputedStyle(inp).fontSize);
-        ok(w.eval('mensajePedido()').endsWith('\n\nMe lo mandan a Rosario?') &&
-           decodeURIComponent(doc.getElementById('bp-enviar').href.split('text=')[1] || '').endsWith('\n\nMe lo mandan a Rosario?'),
+        ok(w.eval('mensajePedido()').endsWith('\n\n¿Me lo mandan a Rosario?') &&
+           decodeURIComponent(doc.getElementById('bp-enviar').href.split('text=')[1] || '').endsWith('\n\n¿Me lo mandan a Rosario?'),
            `[5.3 · ${ancho}] y el mensaje, tambien el de «Enviar pedido» de la barra, lo trae`);
       }
       // Al tocar el nombre, la ficha; y en otra version, el aviso en el pie pegado (2.7 B)

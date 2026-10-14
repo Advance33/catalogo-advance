@@ -344,7 +344,7 @@ SCRIPT = r'''
       caja.innerHTML = `<b>USD ${plata(x.precio)}</b><i>${tc ? '≈ $ ' + plata(x.precio * tc) + ' · ' : ''}${D.cuotas ? 'hasta ' + D.cuotas + ' cuotas' : ''}</i>`;
     }else{
       caja.className = 'precio sin';
-      caja.innerHTML = '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entra</i>';
+      caja.innerHTML = '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entre</i>';
     }
     document.querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { version = b.dataset.v; color = null; pintar(); });
     // (los data-v y data-c llevan el texto tal cual: se compara con el de la versión)
@@ -417,7 +417,7 @@ def armar_pagina(m, s, publica, general):
               if m.get('regalo') and m.get('incluye') else
               ('<div class="regalo">%s</div>' % e(m['incluye']) if m.get('incluye') else ''))
     precio_txt = ('<b>USD %s</b><i>%s</i>' % (plata(m['desde']), ('hasta %d cuotas' % cuotas) if cuotas else '')
-                  if m['stock'] else '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entra</i>')
+                  if m['stock'] else '<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entre</i>')
     return '''<!doctype html>
 <html lang="es">
 <head>
@@ -481,7 +481,7 @@ def armar_pagina(m, s, publica, general):
 </body>
 </html>
 '''.format(
-        direccion=e(general.get('direccion') or 'Av. De los Incas 5150, 1A, CABA'),
+        direccion=e(general.get('direccion') or 'Av. de los Incas 5150, 1A, CABA'),
         contacto=' · '.join(x for x in (
             ('<a href="https://wa.me/%s" target="_blank" rel="noopener">WhatsApp %s</a>' % (e(general['whatsapp']), e(numero_wa(general['whatsapp'])))) if general.get('whatsapp') else '',
             ('<a href="%s" target="_blank" rel="noopener">Ver en el mapa</a>' % e(general['mapa'])) if general.get('mapa') else '') if x).join(['<span>', '</span>']) if (general.get('whatsapp') or general.get('mapa')) else '',
@@ -636,7 +636,7 @@ def probar():
     # Auditoria del 06/10
     ok('"itemCondition": "https://schema.org/NewCondition"' in h, 'los datos para Google dicen que es nuevo')
     h3 = armar_pagina(dict(m, categoria='Accesorio Apple'), 'x', 'https://catalogo.advancetecno.com.ar/',
-                      {'cuotas': 12, 'whatsapp': '5491124751466', 'mapa': 'https://maps.app.goo.gl/x', 'direccion': 'Av. De los Incas 5150, 1A, CABA'})
+                      {'cuotas': 12, 'whatsapp': '5491124751466', 'mapa': 'https://maps.app.goo.gl/x', 'direccion': 'Av. de los Incas 5150, 1A, CABA'})
     ok('?cat=Accesorio%20Apple' in h3 and '?cat=Accesorio Apple' not in h3, 'la direccion del rubro va codificada (migas y datos para Google)')
     ok('<tbody id="filas">' in h3 and 'tb.innerHTML' in h3 and 'j.offers.lowPrice' in h3, 'al abrir se rehacen la tabla y los datos para Google')
     ok('wa.href = x.wa' in h3, 'el WhatsApp sigue a la version elegida')

@@ -109,7 +109,7 @@ async function correrPruebas(){
   {
     let corto = '';
     try{ await conTope(30, () => b1Nunca()); }catch(e){ corto = e.message; }
-    ok(/no contesto/.test(corto), 'conTope corta un pedido que no contesta (aunque no haga caso de la señal)', corto);
+    ok(/no contestó/.test(corto), 'conTope corta un pedido que no contesta (aunque no haga caso de la señal)', corto);
 
     const tc0 = TC, pie0 = b1Pie();
     const t0 = Date.now();
@@ -289,7 +289,7 @@ async function correrPruebas(){
           metaPromesa = null;
           const d2 = await b1SinCopia(() => b1Fetch((u, o, f) => esAdvapp(u) ? corto('2026-09-29T11:00:00Z')
                                              : esGoogle(u) ? b1Cae() : f(u, o), bajarDatos));
-          ok(d2.fuente === 'advapp' && nFilas(d2.filas) === n && filasDeAyer() === nHoy && /Meta no contesto/.test(d2.motivo || ''),
+          ok(d2.fuente === 'advapp' && nFilas(d2.filas) === n && filasDeAyer() === nHoy && /Meta no contestó/.test(d2.motivo || ''),
              '[3] sin copia y con Google caido, se muestra el ADVAPP corto de ultimo recurso, sin bajar la vara',
              d2.fuente + ' · ' + nFilas(d2.filas) + ' filas · vara ' + filasDeAyer() + ' · ' + d2.motivo);
 

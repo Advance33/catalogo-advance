@@ -4562,12 +4562,16 @@
 "charcoal": "AT-0085-04",
 "cinza": "AT-0085-01",
 "gray": "AT-0085-01",
+"gray green": "AT-0085-02",
+"graygreen": "AT-0085-02",
 "gre": "AT-0085-02",
 "green": "AT-0085-02",
 "grey": "AT-0085-01",
+"grey green": "AT-0085-02",
 "gris": "AT-0085-01",
 "lavanda": "AT-0085-03",
 "lavender": "AT-0085-03",
+"verde": "AT-0085-02",
 "violet": "AT-0085-03",
 "violeta": "AT-0085-03"
 },
@@ -6465,42 +6469,49 @@
 "AT-0541": {
 "black": "AT-0541-01",
 "burgundy": "AT-0541-04",
+"cherry": "AT-0541-04",
 "glacier": "AT-0541-03",
 "silver": "AT-0541-02"
 },
 "AT-0542": {
 "black": "AT-0542-01",
 "burgundy": "AT-0542-04",
+"cherry": "AT-0542-04",
 "glacier": "AT-0542-03",
 "silver": "AT-0542-02"
 },
 "AT-0543": {
 "black": "AT-0543-01",
 "burgundy": "AT-0543-04",
+"cherry": "AT-0543-04",
 "glacier": "AT-0543-03",
 "silver": "AT-0543-02"
 },
 "AT-0544": {
 "black": "AT-0544-01",
 "burgundy": "AT-0544-04",
+"cherry": "AT-0544-04",
 "glacier": "AT-0544-03",
 "silver": "AT-0544-02"
 },
 "AT-0545": {
 "black": "AT-0545-01",
 "burgundy": "AT-0545-04",
+"cherry": "AT-0545-04",
 "glacier": "AT-0545-03",
 "silver": "AT-0545-02"
 },
 "AT-0546": {
 "black": "AT-0546-01",
 "burgundy": "AT-0546-04",
+"cherry": "AT-0546-04",
 "glacier": "AT-0546-03",
 "silver": "AT-0546-02"
 },
 "AT-0547": {
 "black": "AT-0547-01",
 "burgundy": "AT-0547-04",
+"cherry": "AT-0547-04",
 "glacier": "AT-0547-03",
 "silver": "AT-0547-02"
 },
@@ -6652,5 +6663,5 @@
 }
 }
 },
-"generado": "2026-10-14T16:36:01"
+"generado": "2026-10-17T14:08:05"
 }

@@ -150,6 +150,7 @@
 "AT-0087-02.jpg",
 "AT-0088-01.jpg",
 "AT-0089-01.jpg",
+"AT-0089-02.jpg",
 "AT-0090-01.jpg",
 "AT-0090-02.jpg",
 "AT-0090-03.jpg",
@@ -2963,6 +2964,7 @@
 "CEL-SAM-A56-12G256-OLV-000": "AT-0086",
 "CEL-SAM-A56-8G256-OLV-000": "AT-0087",
 "CEL-SAM-A57-8G128-DBL-000": "AT-0088",
+"CEL-SAM-A57-8G256-BLU-000": "AT-0089",
 "CEL-SAM-S25FE-256-WHT-000": "AT-0090",
 "CEL-SAM-S25ULT-12G1TB-BLK-000": "AT-0094",
 "CEL-SAM-S25ULT-12G512-BLK-000": "AT-0093",
@@ -3592,12 +3594,15 @@
 "camara~sony~ii-zv-e10~body": "AT-0192",
 "celular~apple~14-iphone~128gb": "AT-0064",
 "celular~apple~15-iphone-plus~128gb": "AT-0066",
+"celular~apple~15-iphone-sim~128-sim": "AT-0065",
 "celular~apple~15-iphone~128gb": "AT-0065",
+"celular~apple~16-apple-iphone-plus~128": "AT-0549",
 "celular~apple~16-iphone-max-pro~256gb": "AT-0068",
 "celular~apple~16-iphone-max-pro~512gb": "AT-0069",
 "celular~apple~16-iphone-plus~128gb": "AT-0549",
 "celular~apple~16-iphone~128gb": "AT-0067",
 "celular~apple~16e-iphone~128gb": "AT-0510",
+"celular~apple~16e-iphone~256": "AT-0548",
 "celular~apple~16e-iphone~256gb": "AT-0548",
 "celular~apple~17-iphone-max-pro~1tb-esim": "AT-0074",
 "celular~apple~17-iphone-max-pro~256gb-esim": "AT-0075",
@@ -3612,6 +3617,7 @@
 "celular~apple~17-iphone-pro~512gb": "AT-0073",
 "celular~apple~17-iphone-pro~512gb-esim": "AT-0073",
 "celular~apple~17-iphone-pro~512gb-sim": "AT-0536",
+"celular~apple~17-iphone~256-esim": "AT-0070",
 "celular~apple~17-iphone~256gb": "AT-0070",
 "celular~apple~17e-iphone~256gb": "AT-0076",
 "celular~apple~17e-iphone~512gb": "AT-0530",
@@ -3619,6 +3625,7 @@
 "celular~apple~18-apple-iphone-max-pro~256-esim": "AT-0543",
 "celular~apple~18-apple-iphone-max-pro~2tb-esim": "AT-0546",
 "celular~apple~18-apple-iphone-max-pro~512-esim": "AT-0544",
+"celular~apple~18-apple-iphone-pro~1tb": "AT-0547",
 "celular~apple~18-apple-iphone-pro~1tb-esim": "AT-0547",
 "celular~apple~18-apple-iphone-pro~256-esim": "AT-0541",
 "celular~apple~18-apple-iphone-pro~512-esim": "AT-0542",
@@ -3648,6 +3655,7 @@
 "celular~samsung~a37-galaxy~8gb-256gb": "AT-0085",
 "celular~samsung~a56-galaxy~12gb-256gb": "AT-0086",
 "celular~samsung~a56-galaxy~8gb-256gb": "AT-0087",
+"celular~samsung~a57-galaxy~8g256": "AT-0089",
 "celular~samsung~a57-galaxy~8gb-128gb-5g": "AT-0088",
 "celular~samsung~a57-galaxy~8gb-256gb": "AT-0089",
 "celular~samsung~fe-galaxy-s25~256gb": "AT-0090",
@@ -4604,6 +4612,7 @@
 },
 "AT-0089": {
 "dark blue": "AT-0089-01",
+"icyblue": "AT-0089-02",
 "navy": "AT-0089-01"
 },
 "AT-0090": {
@@ -6380,6 +6389,7 @@
 "blanco": "AT-0521-03",
 "cloud white": "AT-0521-03",
 "negro": "AT-0521-02",
+"sky blue": "AT-0521-01",
 "skyblue": "AT-0521-01",
 "space black": "AT-0521-02",
 "white": "AT-0521-03"
@@ -6652,5 +6662,5 @@
 }
 }
 },
-"generado": "2026-10-14T16:36:01"
+"generado": "2026-10-17T13:06:34"
 }

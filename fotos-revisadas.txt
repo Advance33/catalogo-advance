@@ -827,3 +827,4 @@ d2c99849db2a86d9bb4190d5562faae8  AT-0578-01.jpg                     # mirada
 5878cd8c4ed95044d440d7adc75a9c19  AT-0583-01.jpg                     # mirada
 e1492d0242c08404aae96697f8a5d6e1  AT-0584.jpg                        # mirada
 e1492d0242c08404aae96697f8a5d6e1  AT-0585.jpg                        # mirada
+cf38bf2af9bdb940e43e2e5dcf765c65  AT-0089-02.jpg                     # mirada: A57 Icyblue, foto oficial de samsung.com (galería del SM-A576U Icyblue), misma toma que el Navy AT-0089-01 (17/10)

@@ -254,50 +254,55 @@ window.ADVAPP_TEMPRANO = (() => {
   .topbar .stamp{margin-left:18px;color:rgba(255,255,255,.62)}
   .topbar #cfg-btn{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)}
   .topbar #cfg-btn:hover{border-color:#A78BFA;color:#C4A6FF}
-  /* ---------- Los links de la barra (Benja, 13/10/2026) ----------
-     Eligió en el muestrario "links simples": texto en la monoespaciada de los
-     rótulos, sin caja, entre el nombre y el buscador. Con links en la barra
-     (.con-nav) el buscador deja de estirarse hasta 520 px y les cede el
-     lugar; los que igual no entran se esconden (.fuera) y aparecen en el
-     desplegable de "Más" (acomodarNav). El desplegable cuelga de la fila de
-     links, no de la barra, así queda debajo de su botón. */
-  .tb-nav{position:relative;display:flex;align-items:center;gap:6px 18px;flex:1 1 0;min-width:0;white-space:nowrap}
+  /* ---------- Los links de la barra (Benja, 19/10/2026: la 1F del muestrario) ----------
+     El 13/10 iban entre el nombre y el buscador, en la monoespaciada chica, y
+     "no se diferencia nada". Ahora tienen su propia fila oscura abajo de la
+     barra: los links en pastillas con su ícono, juntos en una cápsula, y
+     "Cotizá tu usado" aparte, como botón amarillo (el de Ofertas). El
+     buscador vuelve a tener su ancho. Si en la cápsula no entran todos, los
+     últimos pasan a "Más" (acomodarNav); el desplegable cuelga de la fila y
+     se abre debajo de su botón. En el celular la fila se desliza. */
+  .tb-nav{background:#1F1930;border-top:1px solid rgba(255,255,255,.07)}
   .tb-nav[hidden]{display:none}
-  .tb-nav a,.tb-mas{flex:none;padding:9px 0;border:0;border-radius:6px;background:none;cursor:pointer;text-decoration:none;
-                    font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
-                    color:rgba(255,255,255,.72);transition:color .16s}
-  .tb-nav a:hover,.tb-mas:hover,.tb-mas[aria-expanded="true"]{color:#fff}
-  .tb-nav a:focus-visible,.tb-mas:focus-visible,.tb-sello:focus-visible{outline:2px solid #A78BFA;outline-offset:3px}
+  /* .topbar .wrap (la fila de arriba) le pondría su alto y, en el celular, el salto de renglón */
+  .topbar .tb-nav-in{position:relative;display:flex;flex-wrap:nowrap;align-items:center;gap:12px;padding-top:6px;padding-bottom:6px;white-space:nowrap}
+  .tb-capsula{display:flex;align-items:center;gap:2px;flex:0 1 auto;min-width:0;overflow:hidden;padding:4px;border-radius:999px;
+              background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+  .tb-capsula a,.tb-mas{flex:none;display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border:0;border-radius:999px;
+                        background:none;cursor:pointer;text-decoration:none;font:500 14.5px/1 var(--sans);
+                        color:rgba(255,255,255,.9);transition:background .16s, color .16s}
+  .tb-capsula a svg,.tb-usado svg{width:17px;height:17px;flex:none}
+  .tb-capsula a svg{color:#C4A6FF}
+  .tb-capsula a:hover,.tb-mas:hover,.tb-mas[aria-expanded="true"]{background:rgba(255,255,255,.12);color:#fff}
+  .tb-mas{color:#C4A6FF;font-weight:600}
+  .tb-usado{flex:none;margin-left:auto;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;
+            text-decoration:none;font:700 14.5px/1 var(--sans);color:#3B2000;background:linear-gradient(135deg,#FFE9A8,#F0C24A);
+            box-shadow:0 6px 18px rgba(240,194,74,.30);transition:filter .16s, box-shadow .16s}
+  .tb-usado:hover{filter:brightness(1.05);box-shadow:0 8px 22px rgba(240,194,74,.42)}
+  .tb-capsula a:focus-visible,.tb-mas:focus-visible,.tb-usado:focus-visible,.tb-sello:focus-visible{outline:2px solid #A78BFA;outline-offset:3px}
   .tb-nav .fuera,.tb-mas[hidden],.tb-menu[hidden]{display:none}
-  .tb-mas{color:#C4A6FF}
-  .tb-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:40;display:flex;flex-direction:column;min-width:200px;
+  .tb-menu{position:absolute;top:calc(100% - 2px);left:0;z-index:40;display:flex;flex-direction:column;min-width:200px;
            padding:8px;border-radius:14px;background:#fff;border:1px solid var(--line);box-shadow:0 14px 34px rgba(24,18,38,.18)}
-  .tb-menu a{padding:11px 12px;border-radius:9px;color:var(--ink);font:600 13.5px/1.2 var(--sans);letter-spacing:0;text-transform:none}
+  .tb-menu a{padding:11px 12px;border-radius:9px;color:var(--ink);font:600 13.5px/1.2 var(--sans);letter-spacing:0;text-transform:none;text-decoration:none}
   .tb-menu a:hover{background:var(--surface-2);color:var(--ink)}
   .tb-sello{flex:none;display:inline-flex;align-items:center;gap:5px;text-decoration:none;border-radius:6px;
             font:600 11px/1 var(--mono);letter-spacing:.04em;color:rgba(255,255,255,.82)}
   .tb-sello[hidden]{display:none}
   .tb-sello i{font-style:normal;color:#E0A106}
   .tb-sello:hover{color:#fff}
-  /* Solo en la compu: en el celular el buscador se pliega (más abajo) y estas
-     dos reglas, que pesan más, le dejarían 220 px fijos. */
-  @media (min-width:721px){
-    .topbar.con-nav .search{flex:0 1 320px;min-width:220px}
-    .topbar.con-nav .stamp{margin-left:0}
-  }
   /* En el celular si se pliega: aparece la lupa y el buscador se abre con ella,
      llevandose un renglon entero, que es lo que mas se usa cuando se abre. */
   @media (max-width:720px){
     .topbar .wrap{flex-wrap:wrap;gap:10px 14px}
-    /* Los links, en el celular: una fila propia al final de la barra, que se
-       desliza con el dedo y llega a los bordes de la pantalla (Benja eligió
-       "una fila que se desliza"). Sin "Más": ahí están todos. El puntaje de
-       Google no va en la barra: el sello del encabezado queda justo abajo. */
-    .tb-nav{order:9;flex:0 0 auto;width:calc(100% + 40px);margin:0 -20px -2px;padding:0 20px;gap:0 20px;
-            overflow-x:auto;scrollbar-width:none}
-    .tb-nav::-webkit-scrollbar{display:none}
-    .tb-nav a{padding:8px 0 10px}
-    .tb-nav .fuera{display:block}
+    /* Los links, en el celular (1F, 19/10): su fila oscura se desliza con el
+       dedo, con la cápsula y "Cotizá tu usado" al final. Sin "Más": ahí están
+       todos. El puntaje de Google no va en la barra: está en el encabezado. */
+    .topbar .tb-nav-in{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;gap:10px;padding-top:7px;padding-bottom:7px}
+    .tb-nav-in::-webkit-scrollbar{display:none}
+    .tb-capsula{flex:none;overflow:visible}
+    .tb-capsula a{padding:7px 12px;font-size:14px}
+    .tb-nav .fuera{display:inline-flex}
+    .tb-usado{margin-left:0;padding:9px 14px;font-size:14px}
     .tb-mas,.tb-menu,.tb-sello{display:none}
     .lupa{display:grid}
     .topbar .search{
@@ -1118,19 +1123,27 @@ window.ADVAPP_TEMPRANO = (() => {
     .rz-txt b{font-size:15px}
     .rz-txt > span{font-size:13px}
   }
-  .resenas{display:flex;flex-direction:column;gap:14px;scroll-margin-top:calc(var(--alto-cinta,0px) + 18px)}
-  .rs-cab{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
-  .resenas h2{margin:0;font:400 22px/1.1 var(--display);text-transform:uppercase}
-  .rs-nota{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-  .rs-nota > b{font:400 38px/1 var(--display);color:var(--ink)}
-  .rs-nota > span{display:flex;flex-direction:column;gap:6px;font:500 11px/1 var(--mono);letter-spacing:.04em;color:var(--faint)}
-  .rs-ver{margin-left:6px;padding:10px 16px;border-radius:999px;background:var(--ink);color:#fff;text-decoration:none;
+  /* El bloque de la portada (Benja, 19/10/2026, ronda 3 del muestrario):
+     banda oscura como Ofertas, el 4,9 arriba al centro y las reseñas que
+     pasan solas de costado (más abajo, .rs-cinta). */
+  .resenas{display:flex;flex-direction:column;gap:22px;padding:32px 30px;border-radius:28px;color:#fff;
+           background:radial-gradient(90% 120% at 0% 0%, rgba(124,58,237,.35), transparent 60%), #151220;
+           scroll-margin-top:calc(var(--alto-cinta,0px) + 18px)}
+  .rs-cab{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+  .resenas h2{margin:0;font:400 26px/1.1 var(--display);text-transform:uppercase;color:#fff}
+  .rs-nota{display:flex;align-items:center;gap:12px}
+  .rs-nota > b{font:400 40px/1 var(--display);color:#fff}
+  .rs-nota > span{display:flex;flex-direction:column;align-items:flex-start;gap:6px;font:500 11px/1 var(--mono);letter-spacing:.04em;color:rgba(255,255,255,.62)}
+  .resenas .rs-estrellas{color:rgba(255,255,255,.18)}
+  .resenas .rs-estrellas::after{color:#FFD66B}
+  .rs-botones{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+  .rs-ver{padding:11px 17px;border-radius:999px;background:#fff;color:var(--ink);text-decoration:none;
           font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;transition:background .2s ease}
-  .rs-ver:hover{background:#2C2048}
-  .rs-ver:focus-visible{outline:2px solid var(--acento);outline-offset:3px}
+  .rs-ver:hover{background:#EDE4FD}
+  .rs-ver:focus-visible{outline:2px solid #A78BFA;outline-offset:3px}
   /* "Dejá tu reseña" (Benja, 13/10): el segundo botón, en contorno */
-  .rs-dejar{margin-left:0;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
-  .rs-dejar:hover{background:var(--surface-2)}
+  .rs-dejar{background:transparent;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+  .rs-dejar:hover{background:rgba(255,255,255,.1)}
 
   /* ---------- Quiénes somos (Benja, 13/10/2026) ----------
      El diseño D del muestrario: la foto del local a la izquierda y, a la
@@ -1174,28 +1187,46 @@ window.ADVAPP_TEMPRANO = (() => {
     .nosotros.sin-local .ns-caras{justify-content:flex-start}
     .nosotros.sin-local .ns-foto{width:64px;height:64px;font-size:26px}
   }
-  .rs-pista{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 36px) / 4);gap:12px;
-            overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:2px;padding:2px 2px 8px;scrollbar-width:thin}
-  .rs-pista:focus-visible{outline:2px solid var(--acento);outline-offset:3px;border-radius:22px}
-  .rs-card{scroll-snap-align:start;display:flex;flex-direction:column;align-items:flex-start;gap:10px;
-           margin:0;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:22px}
-  .rs-card blockquote{margin:0;font:400 14px/1.5 var(--sans);color:var(--ink);white-space:pre-line;overflow-wrap:anywhere;
+  /* La cinta (19/10): las reseñas pasan solas de costado y se frenan con el
+     mouse encima, al tocarlas (toman el foco) o con una abierta en "Leer
+     completa". La fila va dos veces (la copia, .rs-eco, el lector no la lee y
+     no se puede tocar) y corre media fila, así el final empalma con el
+     principio. Con "reducir movimiento", o con menos de tres reseñas
+     (.fija), quedan quietas y se deslizan con el dedo. */
+  .rs-cinta{overflow:hidden;margin:0 -30px;padding:2px 30px;
+            -webkit-mask-image:linear-gradient(90deg,transparent,#000 30px,#000 calc(100% - 30px),transparent);
+                    mask-image:linear-gradient(90deg,transparent,#000 30px,#000 calc(100% - 30px),transparent)}
+  .rs-cinta.fija{overflow-x:auto;scrollbar-width:thin}
+  .rs-cinta:focus-visible{outline:2px solid #A78BFA;outline-offset:-2px;border-radius:18px}
+  .rs-pista{display:flex;gap:14px;width:max-content;align-items:stretch}
+  .rs-cinta.fija .rs-pista{margin:0 auto}
+  .rs-card{flex:none;width:340px;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+           margin:0;padding:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px}
+  .rs-card blockquote{margin:0;font:400 14.5px/1.5 var(--sans);color:rgba(255,255,255,.9);white-space:pre-line;overflow-wrap:anywhere;
                       display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:7;overflow:hidden}
   .rs-card.entera blockquote{display:block;-webkit-line-clamp:unset}
-  .rs-mas{border:0;background:none;padding:0;cursor:pointer;font:600 12.5px/1 var(--sans);color:var(--acento)}
+  .rs-mas{border:0;background:none;padding:0;cursor:pointer;font:600 12.5px/1 var(--sans);color:#C4A6FF}
   .rs-mas:hover{text-decoration:underline}
-  .rs-mas:focus-visible{outline:2px solid var(--acento);outline-offset:3px;border-radius:4px}
+  .rs-mas:focus-visible{outline:2px solid #A78BFA;outline-offset:3px;border-radius:4px}
   .rs-card figcaption{margin-top:auto;padding-top:4px;display:flex;flex-direction:column;gap:4px}
-  .rs-card figcaption b{font:600 13.5px/1.2 var(--sans);color:var(--ink)}
-  .rs-card figcaption i{font:500 10.5px/1 var(--mono);font-style:normal;letter-spacing:.04em;color:var(--faint)}
-  @media (max-width:1100px){ .rs-pista{grid-auto-columns:calc((100% - 24px) / 3)} }
+  .rs-card figcaption b{font:600 13.5px/1.2 var(--sans);color:#fff}
+  .rs-card figcaption i{font:500 10.5px/1 var(--mono);font-style:normal;letter-spacing:.04em;color:rgba(255,255,255,.5)}
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes rsCinta{to{transform:translateX(calc(-50% - 7px))}}
+    .rs-pista.corre{animation:rsCinta var(--rs-dur,70s) linear infinite}
+    .rs-cinta:hover .rs-pista,.rs-cinta:focus-within .rs-pista,.rs-pista.quieta{animation-play-state:paused}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .rs-cinta{overflow-x:auto;scrollbar-width:thin}
+    .rs-eco{display:none}
+  }
   @media (max-width:760px){
-    /* A sangre, como las demás filas que se deslizan: la primera tarjeta
-       alineada con el título (los 20 px del .wrap) y la última con aire */
-    .rs-pista{grid-auto-columns:82%;margin-inline:-20px;padding-inline:20px;scroll-padding-inline:20px;scrollbar-width:none}
-    .rs-pista::-webkit-scrollbar{display:none}
-    .rs-nota > b{font-size:32px}
-    .rs-ver{margin-left:0}
+    .resenas{padding:24px 18px;border-radius:22px}
+    .rs-cinta{margin:0 -18px;padding:2px 18px;
+              -webkit-mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 18px),transparent);
+                      mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 18px),transparent)}
+    .rs-card{width:280px}
+    .rs-nota > b{font-size:34px}
   }
 
   /* ---------- Ayuda: las preguntas y lo que no está (17/09) ----------
@@ -3560,11 +3591,6 @@ window.ADVAPP_TEMPRANO = (() => {
       </span>
       <b>Advance <span>Tecno</span></b>
     </a>
-    <!-- Los links de la barra (Benja, 13/10/2026): ocupan el espacio que
-         quedaba vacío entre el nombre y el buscador. Los arma pintarNav() con
-         la lista NAV de la configuración; los que no entran pasan solos a
-         "Más" (acomodarNav). En el celular son una fila que se desliza. -->
-    <nav class="tb-nav" id="tb-nav" aria-label="Sobre Advance Tecno" hidden></nav>
     <!-- La barra de busqueda ocupaba el centro de la cabecera todo el tiempo.
          Ahora vive detras de la lupa: se abre cuando el cliente la pide y la
          marca se queda sola, que es lo primero que tiene que verse. -->
@@ -3601,6 +3627,11 @@ window.ADVAPP_TEMPRANO = (() => {
       </button>
     </div>
   </div>
+  <!-- Los links de la barra (Benja, 19/10/2026, la 1F del muestrario): su
+       propia fila oscura abajo de la barra. Los arma pintarNav() con la lista
+       NAV de la configuración; los que no entran en la cápsula pasan solos a
+       "Más" (acomodarNav). En el celular la fila se desliza. -->
+  <nav class="tb-nav" id="tb-nav" aria-label="Sobre Advance Tecno" hidden></nav>
 </div>
 
 <!-- La franja ámbar (29/09, muestra 1.1 B): aparece sola cuando ADVAPP no
@@ -4023,7 +4054,7 @@ const PREGUNTAS = [
 // vacío entre el nombre y el buscador: links simples, en este orden. Cada uno
 // es [a dónde lleva, texto]:
 //   nosotros  → el bloque "Quiénes somos" de la portada
-//   resenas   → el bloque "Reseñas en Google"
+//   resenas   → el bloque de las reseñas de Google ("Lo que dicen en Google")
 //   preguntas → las Preguntas frecuentes
 //   pagos, donde → abren SU pregunta dentro de las Preguntas frecuentes (la
 //               que tiene ese mismo `nav` en PREGUNTAS)
@@ -10528,40 +10559,59 @@ function hayDestinoNav(id){
   return PREGUNTAS.some(q => q.nav === id);
 }
 
+// El ícono de cada link (1F, 19/10): el dibujo de la línea, en el color de la letra
+const ICONO_NAV = {
+  nosotros:  '<path d="M16 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 17.5V19"/><circle cx="10" cy="7.5" r="3.5"/><path d="M20 19v-1.5a3.5 3.5 0 0 0-2.5-3.35M15.5 4.2a3.5 3.5 0 0 1 0 6.6"/>',
+  resenas:   '<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>',
+  preguntas: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.8-2.5 2.3-2.5 3.8"/><path d="M12 17.2h.01"/>',
+  pagos:     '<rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h3"/>',
+  donde:     '<path d="M12 21s-6.5-5.6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>',
+  usado:     '<path d="M4 12a8 8 0 0 1 13.7-5.6M20 4v4h-4"/><path d="M20 12a8 8 0 0 1-13.7 5.6M4 20v-4h4"/>',
+};
+const iconoNav = id => ICONO_NAV[id]
+  ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONO_NAV[id]}</svg>` : '';
+
+/* La fila (1F, 19/10): la cápsula con los links y su "Más", el menú de "Más"
+   y "Cotizá tu usado" aparte, como botón amarillo. Todos son <a data-nav>. */
 function pintarNav(){
   const nav = $('tb-nav');
   if(!nav) return;
   const links = NAV.filter(([id]) => hayDestinoNav(id));
   nav.hidden = !links.length;
   document.querySelector('.topbar').classList.toggle('con-nav', links.length > 0);
-  nav.innerHTML = !links.length ? ''
-    : links.map(([id, t]) => `<a href="#${anclaNav(id)}" data-nav="${esc(id)}">${esc(t)}</a>`).join('')
-      + `<button type="button" class="tb-mas" id="tb-mas" aria-expanded="false" aria-controls="tb-menu" hidden>Más <span aria-hidden="true">▾</span></button>
-         <div class="tb-menu" id="tb-menu" hidden></div>`;
+  const link = ([id, t]) => `<a href="#${anclaNav(id)}" data-nav="${esc(id)}"${id === 'usado' ? ' class="tb-usado"' : ''}>${iconoNav(id)}<span>${esc(t)}</span></a>`;
+  const enCapsula = links.filter(([id]) => id !== 'usado'), usado = links.find(([id]) => id === 'usado');
+  nav.innerHTML = !links.length ? '' : `<div class="wrap tb-nav-in">
+      ${enCapsula.length ? `<div class="tb-capsula" id="tb-capsula">${enCapsula.map(link).join('')}
+        <button type="button" class="tb-mas" id="tb-mas" aria-expanded="false" aria-controls="tb-menu" hidden>Más <span aria-hidden="true">▾</span></button>
+      </div>
+      <div class="tb-menu" id="tb-menu" hidden></div>` : ''}
+      ${usado ? link(usado) : ''}
+    </div>`;
   acomodarNav();
 }
 
 /* Los que no entran pasan a "Más", de atrás para adelante: el orden de NAV es
-   el de importancia. Se mide con la fila ya dibujada (su ancho es el que le
-   dejan el nombre, el buscador y el sello de la hora), así que se rehace cada
-   vez que ese ancho cambia (ver el ResizeObserver del arranque). En el
-   celular no se esconde ninguno: la fila se desliza. */
+   el de importancia. Se mide con la cápsula ya dibujada (desde el 19/10 su
+   ancho es el de la fila menos "Cotizá tu usado", que no pasa nunca a "Más"),
+   así que se rehace cada vez que ese ancho cambia (ver el ResizeObserver del
+   arranque). En el celular no se esconde ninguno: la fila se desliza. */
 function acomodarNav(){
-  const nav = $('tb-nav'), mas = $('tb-mas'), menu = $('tb-menu');
-  if(!nav || nav.hidden || !mas || !menu) return;
-  const links = [...nav.querySelectorAll(':scope > a')];
+  const nav = $('tb-nav'), cap = $('tb-capsula'), mas = $('tb-mas'), menu = $('tb-menu');
+  if(!nav || nav.hidden || !cap || !mas || !menu) return;
+  const links = [...cap.querySelectorAll(':scope > a')];
   links.forEach(a => a.classList.remove('fuera'));
   mas.hidden = true;
   cerrarMenuNav();
   if(NAV_CEL.matches){ menu.replaceChildren(); return; }
-  const sobra = () => nav.scrollWidth > nav.clientWidth + 1;
+  const sobra = () => cap.scrollWidth > cap.clientWidth + 1;
   if(sobra()){
     mas.hidden = false;
     for(let i = links.length - 1; i >= 0 && sobra(); i--) links[i].classList.add('fuera');
   }
   const fuera = links.filter(a => a.classList.contains('fuera'));
   mas.hidden = !fuera.length;
-  menu.innerHTML = fuera.map(a => `<a href="${esc(a.getAttribute('href'))}" data-nav="${esc(a.dataset.nav)}">${esc(a.textContent)}</a>`).join('');
+  menu.innerHTML = fuera.map(a => `<a href="${esc(a.getAttribute('href'))}" data-nav="${esc(a.dataset.nav)}">${esc(a.textContent.trim())}</a>`).join('');
 }
 
 function cerrarMenuNav(){
@@ -10576,6 +10626,8 @@ function clicNav(e){
   const mas = e.target.closest('#tb-mas');
   if(mas){
     const menu = $('tb-menu'), abrir = menu.hidden;
+    // Debajo de su botón: el menú cuelga de la fila, no de la cápsula (que recorta)
+    if(abrir) menu.style.left = Math.max(0, mas.getBoundingClientRect().left - menu.parentElement.getBoundingClientRect().left) + 'px';
     menu.hidden = !abrir;
     mas.setAttribute('aria-expanded', String(abrir));
     if(abrir) menu.querySelector('a')?.focus();
@@ -10645,25 +10697,32 @@ function htmlResenas(){
   const d = RESENAS;
   if(!d) return '';
   const nota = notaGoogle(d.puntaje);
-  const tarjetas = d.resenas.map(r => `
-    <figure class="rs-card">
+  // La copia de la cinta (.rs-eco) va escondida para el lector y sin foco
+  const tarjeta = (r, eco) => `
+    <figure class="rs-card${eco ? ' rs-eco' : ''}"${eco ? ' aria-hidden="true" inert' : ''}>
       <span class="rs-estrellas" style="--v:${r.estrellas}" role="img" aria-label="${r.estrellas} de 5 estrellas"></span>
       <blockquote>${esc(r.texto)}</blockquote>
       ${r.texto.length > RESENA_LARGA ? '<button type="button" class="rs-mas" data-rs-mas aria-expanded="false">Leer completa</button>' : ''}
       <figcaption><b>${esc(r.autor)}</b><i>Reseña en Google</i></figcaption>
-    </figure>`).join('');
+    </figure>`;
+  // Con menos de tres no hay vuelta que dar: quedan quietas (ver .rs-cinta)
+  const corre = d.resenas.length >= 3;
+  const tarjetas = d.resenas.map(r => tarjeta(r)).join('') + (corre ? d.resenas.map(r => tarjeta(r, true)).join('') : '');
   return `<section class="resenas" id="resenas" aria-labelledby="rs-titulo">
     <div class="rs-cab">
-      <h2 id="rs-titulo">Reseñas en Google</h2>
+      <h2 id="rs-titulo">Lo que dicen en Google</h2>
       <div class="rs-nota">
         <b>${nota}</b>
         <span><span class="rs-estrellas" style="--v:${d.puntaje}" role="img" aria-label="${nota} de 5 estrellas"></span>
               ${plata(d.cantidad)} reseñas</span>
+      </div>
+      <div class="rs-botones">
         <a class="rs-ver" href="${esc(d.ver)}" target="_blank" rel="noopener">Ver todas en Google</a>
         ${d.escribir ? `<a class="rs-ver rs-dejar" href="${esc(d.escribir)}" target="_blank" rel="noopener">Dejá tu reseña</a>` : ''}
       </div>
     </div>
-    ${tarjetas ? `<div class="rs-pista" tabindex="0" role="group" aria-label="Reseñas de clientes en Google">${tarjetas}</div>` : ''}
+    ${tarjetas ? `<div class="rs-cinta${corre ? '' : ' fija'}" tabindex="0" role="group" aria-label="Reseñas de clientes en Google">
+      <div class="rs-pista${corre ? ' corre' : ''}" style="--rs-dur:${d.resenas.length * 14}s">${tarjetas}</div></div>` : ''}
   </section>`;
 }
 
@@ -10675,6 +10734,8 @@ function montarResenas(sec){
     const abierta = b.closest('.rs-card').classList.toggle('entera');
     b.setAttribute('aria-expanded', String(abierta));
     b.textContent = abierta ? 'Leer menos' : 'Leer completa';
+    // Con una abierta, la cinta se frena hasta que se cierre (19/10)
+    sec.querySelector('.rs-pista')?.classList.toggle('quieta', !!sec.querySelector('.rs-card.entera'));
   });
 }
 

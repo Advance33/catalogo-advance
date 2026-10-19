@@ -251,7 +251,7 @@ function correrPruebas(){
     ok(!!sec && !sec.closest('[hidden]'), '[6] la portada tiene el bloque "Reseñas en Google"');
     ok(!!sec && sec.querySelector('.rs-nota > b').textContent === nota && sec.querySelector('.rs-nota').textContent.includes(plata(archivo.cantidad) + ' reseñas'),
        '[6] con el puntaje y la cantidad del archivo, sin redondear', sec && sec.querySelector('.rs-nota').textContent.replace(/\s+/g, ' ').trim());
-    const tarjetas = sec ? [...sec.querySelectorAll('.rs-card')] : [];
+    const tarjetas = sec ? [...sec.querySelectorAll('.rs-card:not(.rs-eco)')] : [];
     const distintas = archivo.resenas.filter((r, i) => !tarjetas[i] ||
       tarjetas[i].querySelector('blockquote').textContent !== r.texto.trim() ||
       tarjetas[i].querySelector('figcaption b').textContent !== r.autor ||
@@ -261,11 +261,23 @@ function correrPruebas(){
     const ver = sec && sec.querySelector('.rs-ver');
     ok(!!ver && ver.href === archivo.ver && /(^|\.)google\.com$/.test(new URL(ver.href).hostname) && ver.target === '_blank',
        '[6] "Ver todas en Google" lleva a la ficha de Google, en otra pestaña', ver && ver.href);
+    /* Ronda 3 del muestrario (19/10): banda oscura, el 4,9 arriba al centro y
+       las reseñas pasan solas; la copia de la vuelta no la lee el lector */
+    const pista = sec && sec.querySelector('.rs-pista'), ecos = sec ? [...sec.querySelectorAll('.rs-card.rs-eco')] : [];
+    const corre = archivo.resenas.filter(r => r.estrellas === 5).length >= 3;
+    ok(!!sec && sec.querySelector('h2').textContent === 'Lo que dicen en Google' && getComputedStyle(sec).backgroundColor === 'rgb(21, 18, 32)',
+       '[6] la banda oscura con "Lo que dicen en Google" (19/10)', sec && sec.querySelector('h2').textContent);
+    ok(!!pista && pista.classList.contains('corre') === corre && ecos.length === (corre ? tarjetas.length : 0) &&
+       ecos.every(c => c.getAttribute('aria-hidden') === 'true' && c.inert),
+       '[6] con tres o más, las reseñas pasan solas; la copia de la vuelta va escondida para el lector', ecos.length + ' copias');
     const larga = tarjetas.find(t => t.querySelector('[data-rs-mas]'));
     if(larga){
       larga.querySelector('[data-rs-mas]').click();
       ok(larga.classList.contains('entera') && larga.querySelector('[data-rs-mas]').getAttribute('aria-expanded') === 'true',
          '[6] una reseña larga se abre entera con "Leer completa"');
+      ok(pista.classList.contains('quieta'), '[6] y con una abierta la cinta se frena');
+      larga.querySelector('[data-rs-mas]').click();
+      ok(!pista.classList.contains('quieta'), '[6] al cerrarla vuelve a andar');
     }else info('[6] hoy ninguna reseña pasa de ' + RESENA_LARGA + ' letras: no hay "Leer completa" que mirar');
     const sello = $('sello-google');
     // Desde el 19/10 es el primer renglón de las tres razones (2D): "4,9 en Google" / "469 reseñas de clientes"
@@ -332,15 +344,20 @@ function correrPruebas(){
 
   /* ---- [9] Los links de la barra de arriba ---- */
   const nav = $('tb-nav');
-  const enBarra = () => [...nav.querySelectorAll(':scope > a')];
+  // Desde el 19/10 (1F) van en su fila: la cápsula y "Cotizá tu usado" aparte
+  const enBarra = () => [...nav.querySelectorAll('a[data-nav]')].filter(a => !a.closest('#tb-menu'));
+  const capsula = $('tb-capsula');
   const esperados = NAV.filter(([id]) => hayDestinoNav(id));
   ok(!nav.hidden && enBarra().map(a => a.dataset.nav).join() === esperados.map(x => x[0]).join() &&
-     enBarra().map(a => a.textContent).join('|') === esperados.map(x => x[1]).join('|'),
+     enBarra().map(a => a.textContent.trim()).join('|') === esperados.map(x => x[1]).join('|'),
      '[9] la barra trae los links de NAV, en su orden', enBarra().map(a => a.textContent).join(' · '));
   ok(esperados.length === NAV.length, '[9] hoy todos tienen a donde llevar', NAV.filter(([id]) => !hayDestinoNav(id)).map(x => x[1]).join(', ') || NAV.length + ' links');
-  ok(document.querySelector('.topbar').classList.contains('con-nav') && nav.closest('.topbar .wrap') &&
-     (nav.compareDocumentPosition($('q')) & Node.DOCUMENT_POSITION_FOLLOWING) && ($('logo-inicio').compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING),
-     '[9] van entre el nombre y el buscador');
+  const usadoBoton = nav.querySelector('a[data-nav="usado"]');
+  ok(document.querySelector('.topbar').classList.contains('con-nav') && nav.parentElement === document.querySelector('.topbar') && !nav.closest('.topbar .wrap') &&
+     ($('q').compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING) && !!capsula &&
+     (!usadoBoton || (usadoBoton.classList.contains('tb-usado') && !capsula.contains(usadoBoton))),
+     '[9] van en su propia fila, abajo de la barra, y "Cotizá tu usado" aparte, como boton (1F, 19/10)');
+  ok(enBarra().every(a => !!a.querySelector('svg')), '[9] cada link con su icono (1F)');
   const tocar = id => p13Clic(nav.querySelector('[data-nav="' + id + '"]'));
   entrarAlRubro('Celular'); tocar('resenas');
   ok(enPortada() && !!$('resenas'), '[9] "Reseñas" desde un rubro lleva al inicio, donde esta el bloque');
@@ -363,21 +380,25 @@ function correrPruebas(){
   // Con poco lugar, los que no entran pasan a "Más" y no se pierde ninguno
   if(NAV_CEL.matches) info('[9] esta ventana es de celular: ahi no hay "Más" que mirar');
   else{
-    nav.style.flex = '0 0 250px'; acomodarNav();
-    const visibles = enBarra().filter(a => !a.classList.contains('fuera')), menu = [...$('tb-menu').querySelectorAll('a')];
-    ok(!$('tb-mas').hidden && menu.length > 0 && visibles.length + menu.length === esperados.length &&
-       [...visibles, ...menu].map(a => a.dataset.nav).join() === esperados.map(x => x[0]).join(),
-       '[9] con poco lugar, los ultimos pasan a "Más" y entre la barra y el menu estan todos', visibles.length + ' a la vista + ' + menu.length + ' en Más');
-    ok(nav.scrollWidth <= nav.clientWidth + 1, '[9] y lo que queda a la vista entra', nav.scrollWidth + ' / ' + nav.clientWidth);
+    capsula.style.maxWidth = '250px'; acomodarNav();
+    const enCapsula = [...capsula.querySelectorAll('a[data-nav]')];
+    const visibles = enCapsula.filter(a => !a.classList.contains('fuera')), menu = [...$('tb-menu').querySelectorAll('a')];
+    ok(!$('tb-mas').hidden && menu.length > 0 && visibles.length + menu.length === enCapsula.length &&
+       [...visibles, ...menu, ...(usadoBoton ? [usadoBoton] : [])].map(a => a.dataset.nav).join() === esperados.map(x => x[0]).join(),
+       '[9] con poco lugar, los ultimos pasan a "Más" y entre la fila y el menu estan todos', visibles.length + ' a la vista + ' + menu.length + ' en Más');
+    ok(capsula.scrollWidth <= capsula.clientWidth + 1 && (!usadoBoton || !usadoBoton.classList.contains('fuera')),
+       '[9] y lo que queda a la vista entra; "Cotizá tu usado" no pasa nunca a "Más"', capsula.scrollWidth + ' / ' + capsula.clientWidth);
     $('tb-mas').click();
-    ok(!$('tb-menu').hidden && $('tb-mas').getAttribute('aria-expanded') === 'true', '[9] "Más" abre su menu');
+    const rMas = $('tb-mas').getBoundingClientRect(), rMenu = $('tb-menu').getBoundingClientRect();
+    ok(!$('tb-menu').hidden && $('tb-mas').getAttribute('aria-expanded') === 'true' && Math.abs(rMenu.left - rMas.left) < 2 && rMenu.top >= rMas.bottom - 4,
+       '[9] "Más" abre su menu, debajo del boton', Math.round(rMenu.left) + ' / ' + Math.round(rMas.left));
     entrarAlRubro('Celular');
     p13Clic(menu[menu.length - 1]);
     ok($('tb-menu').hidden && (menu[menu.length - 1].dataset.nav === 'usado' ? !!$('usado') : enPortada()), '[9] un link del menu hace lo mismo que en la barra, y el menu se cierra');
     if(cerrarUsadoDOM){ usadoEmpujado = false; const c = cerrarUsadoDOM; cerrarUsadoDOM = null; c(); }
     document.querySelectorAll('.modal').forEach(d => d.remove()); document.body.classList.remove('modal-abierto');
-    nav.style.flex = ''; acomodarNav();
-    ok(enBarra().every(a => !a.classList.contains('fuera')) === (nav.scrollWidth <= nav.clientWidth + 1), '[9] al volver el lugar, vuelven a la barra los que entran');
+    capsula.style.maxWidth = ''; acomodarNav();
+    ok(enBarra().every(a => !a.classList.contains('fuera')) === (capsula.scrollWidth <= capsula.clientWidth + 1), '[9] al volver el lugar, vuelven a la fila los que entran');
   }
   const selloBarra = $('tb-sello');
   ok(!selloBarra.hidden && selloBarra.textContent.includes(notaGoogle(RESENAS.puntaje)), '[9] el puntaje de Google tambien esta en la barra', selloBarra.textContent);

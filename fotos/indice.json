@@ -65,6 +65,7 @@
 "AT-0052-02.jpg",
 "AT-0052-03.jpg",
 "AT-0052-04.jpg",
+"AT-0052-05.jpg",
 "AT-0053.jpg",
 "AT-0054.jpg",
 "AT-0055.jpg",
@@ -2733,6 +2734,7 @@
 "ACC-SON-020": "AT-0366",
 "ACC-SON-021": "AT-0508",
 "ACC-SON-023": "AT-0051",
+"ACG-SON-JOYPS5ESP-000-LST-000": "AT-0052",
 "AUD-APP-002": "AT-0054",
 "AUD-APP-004": "AT-0058",
 "AUD-APP-005": "AT-0057",
@@ -4343,9 +4345,12 @@
 },
 "AT-0052": {
 "astrobot": "AT-0052-03",
+"last of us": "AT-0052-05",
 "remix green": "AT-0052-04",
 "rhythm blue": "AT-0052-01",
-"techno red": "AT-0052-02"
+"techno red": "AT-0052-02",
+"the last of us": "AT-0052-05",
+"tlou": "AT-0052-05"
 },
 "AT-0053": {
 "": "AT-0053"
@@ -6667,5 +6672,5 @@
 }
 }
 },
-"generado": "2026-10-19T10:34:57"
+"generado": "2026-10-19T15:00:44"
 }

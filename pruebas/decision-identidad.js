@@ -19,11 +19,10 @@
 //   6.6 B  en pantallas tactiles, mas zona para el dedo con el mismo dibujo:
 //          puntitos de 24, + y WhatsApp de 43x44, X de 44, contadores de 42 y
 //          40, "Ver pedido" de 44 de alto, sin pisarse. En la compu, nada
-//   6.7 B  el pie con "Advance Tecno · Av. de los Incas 5150, 1A, CABA · Ver
-//          en mapa · WhatsApp +54 9 11 2475-1466 · Atencion con cita previa",
-//          como la muestra B, todo de la configuracion (DIRECCION, MAPA,
-//          WHATSAPP, SERVICIO.retiro); sin horario, redes ni razon social; lo
-//          vacio no se muestra
+//   6.7 B  el pie con el contacto, todo de la configuracion (DIRECCION,
+//          MAPA, WHATSAPP, SERVICIO.retiro); sin horario ni razon social; lo
+//          vacio no se muestra. Desde el 19/10 con la forma de la 4C del
+//          muestrario: pie grafito, la marca y una columna por dato
 //   6.8 B  en "Busca por marca" y "Tambien te puede interesar" el nombre es el
 //          de la tarjeta: el modelo y abajo la linea tecnica
 //   6.9 C  la cinta de la marca: primero lo que entro despues del 10/09 y
@@ -532,50 +531,60 @@ async function probarDedo(){
   }
 }
 
-/* ---- 6.7 El pie ---- */
+/* ---- 6.7 El pie (19/10/2026: la 4C del muestrario, el pie oscuro) ----
+   Antes era la linea de 13 px de la muestra 6.7 B (29/09); Benja la encontro
+   "muy chica para algo tan importante". Lo que no cambia: todo sale de la
+   configuracion, lo vacio no se muestra y los links son los mismos. */
+function columnasPie(pie){
+  return [...pie.querySelectorAll('.pie-col')].map(c => [...c.children].map(diTxt).join(' | '));
+}
 function probarPie(){
   const pie = document.getElementById('pie-id');
   const footer = document.querySelector('footer');
-  ok(!!pie && !pie.hidden && footer.contains(pie) && footer.firstElementChild === pie, '[6.7] la linea de contacto, arriba en el pie');
+  ok(!!pie && !pie.hidden && footer.contains(pie) && footer.firstElementChild === pie, '[6.7] el contacto, arriba en el pie');
   if(!pie) return;
   const numero = WHATSAPP ? telefonoLegible(WHATSAPP) : '';
   ok(WHATSAPP !== '5491124751466' || numero === '+54 9 11 2475-1466', '[6.7] el numero se escribe como en la muestra (el de Tecno desde el 05/10)', numero);
-  /* (29/09) Como la muestra B elegida: con la direccion y "Ver en el mapa",
-     que salen de DIRECCION y MAPA (las de la pregunta "¿Puedo ir a verlos?") */
-  const partes = [...pie.children].filter(x => !x.classList.contains('sep')).map(diTxt);
+  /* Una columna por dato, con su rotulo, el dato grande y su link: salen de
+     DIRECCION y MAPA (las de la pregunta "¿Puedo ir a verlos?"), WHATSAPP e
+     INSTAGRAM_TECNO (D16 A, 13/10/2026) */
+  const cols = columnasPie(pie);
   const cita = /cita previa/i.test((SERVICIO.retiro || []).join(' '));
-  const esperado = ['Advance Tecno', ...(DIRECCION ? [DIRECCION] : []), ...(MAPA ? ['Ver en el mapa'] : []),
-                    ...(WHATSAPP ? ['WhatsApp ' + numero] : []),
-                    // Instagram despues del WhatsApp (13/10/2026, D16 A de Benja)
-                    ...(INSTAGRAM_TECNO ? ['Instagram @' + INSTAGRAM_TECNO] : []),
-                    ...(cita ? ['Atención con cita previa'] : [])];
-  ok(JSON.stringify(partes) === JSON.stringify(esperado), '[6.7] dice ' + esperado.join(' · '), partes.join(' · '));
-  ok(DIRECCION !== 'Av. de los Incas 5150, 1A, CABA' || partes[1] === 'Av. de los Incas 5150, 1A, CABA',
-     '[6.7] la direccion entera, con el 1A, como la muestra', partes[1]);
+  const esperado = [...((DIRECCION || MAPA) ? ['Dirección' + (DIRECCION ? ' | ' + DIRECCION : '') + (MAPA ? ' | Ver en el mapa' : '')] : []),
+                    ...(WHATSAPP ? ['WhatsApp | ' + numero + ' | Escribinos'] : []),
+                    ...(INSTAGRAM_TECNO ? ['Instagram | @' + INSTAGRAM_TECNO + ' | Ver Instagram'] : [])];
+  ok(JSON.stringify(cols) === JSON.stringify(esperado), '[6.7] una columna por dato: ' + esperado.join(' / '), cols.join(' / '));
+  ok(DIRECCION !== 'Av. de los Incas 5150, 1A, CABA' || (cols[0] || '').includes('Av. de los Incas 5150, 1A, CABA'),
+     '[6.7] la direccion entera, con el 1A, como la muestra', cols[0]);
+  const marca = pie.querySelector('.pie-marca');
+  ok(!!marca && /Advance Tecno/i.test(diTxt(marca)) && /Atención con cita previa/.test(diTxt(marca)) === cita,
+     '[6.7] la marca, con "Atención con cita previa" si el retiro lo dice', marca && diTxt(marca));
   const flot = document.getElementById('wa-flotante');
   const a = [...pie.querySelectorAll('a')].find(x => /wa\.me\//.test(x.getAttribute('href') || ''));
   if(WHATSAPP) ok(!!a && a.getAttribute('href') === flot.getAttribute('href') && a.target === '_blank' && /noopener/.test(a.rel),
                   '[6.7] el WhatsApp abre el mismo chat y saludo que el boton flotante', a && a.getAttribute('href'));
+  if(WHATSAPP) ok(!!a && (a.getAttribute('aria-label') || '').includes(numero), '[6.7] y el lector dice a donde escribe', a && a.getAttribute('aria-label'));
   const mapa = [...pie.querySelectorAll('a')].find(x => diTxt(x) === 'Ver en el mapa');
   if(MAPA) ok(!!mapa && mapa.getAttribute('href') === MAPA && mapa.target === '_blank' && /noopener/.test(mapa.rel),
               '[6.7] "Ver en el mapa" abre MAPA, el mismo link de la pregunta frecuente', mapa && mapa.getAttribute('href'));
   else info('[6.7] MAPA esta vacia: sin "Ver en el mapa"');
-  ok(pie.querySelectorAll('.sep').length === esperado.length - 1 && [...pie.querySelectorAll('.sep')].every(s => s.getAttribute('aria-hidden') === 'true'),
-     '[6.7] separados por "·" que el lector no lee');
   const todo = diTxt(footer);
   ok(!/horario|raz[oó]n social|facebook|tiktok|\[Pedro/i.test(todo),
-     '[6.7] sin horario ni razon social (eso es la C, con datos de Pedro); de las redes, solo Instagram (D16 A, 13/10/2026)', todo.slice(0, 60));
-  const ig = INSTAGRAM_TECNO && [...pie.querySelectorAll('a')].find(x => diTxt(x) === 'Instagram @' + INSTAGRAM_TECNO);
+     '[6.7] sin horario ni razon social (eso lo define Benja); de las redes, solo Instagram (D16 A, 13/10/2026)', todo.slice(0, 60));
+  const ig = INSTAGRAM_TECNO && [...pie.querySelectorAll('a')].find(x => diTxt(x) === 'Ver Instagram');
   if(INSTAGRAM_TECNO) ok(!!ig && ig.getAttribute('href') === 'https://www.instagram.com/' + INSTAGRAM_TECNO + '/' && ig.target === '_blank' && /noopener/.test(ig.rel),
-                         '[6.7] "Instagram @' + INSTAGRAM_TECNO + '" abre el perfil (D16 A)', ig && ig.getAttribute('href'));
+                         '[6.7] "Ver Instagram" abre el perfil @' + INSTAGRAM_TECNO + ' (D16 A)', ig && ig.getAttribute('href'));
   ok(footer.querySelector('.pie-legal #pie-cotiz') && /Precios sujetos a cambio sin previo aviso · Consultá disponibilidad antes de comprar/.test(todo),
      '[6.7] abajo sigue la cotizacion y "Precios sujetos a cambio"');
-  const b = pie.querySelector('b'), csb = b && getComputedStyle(b), csp = getComputedStyle(pie);
-  ok(csb && /Lilita/.test(csb.fontFamily) && csb.textTransform === 'uppercase' && csp.textTransform === 'none' && csp.fontSize === '13px',
-     '[6.7] "Advance Tecno" en Lilita y el resto en letra comun de 13 px, como la muestra', csb && csb.fontFamily.split(',')[0]);
+  // Como la 4C: grafito como la barra de arriba, la marca en Lilita y los datos grandes
+  const csf = getComputedStyle(footer), b = pie.querySelector('.pie-logo b'), csb = b && getComputedStyle(b);
+  const dato = pie.querySelector('.pie-col strong'), csd = dato && getComputedStyle(dato);
+  ok(diMismo(csf.backgroundColor, '#151220') && !!csb && /Lilita/.test(csb.fontFamily) && !!csd && parseFloat(csd.fontSize) >= 18,
+     '[6.7] pie grafito, "Advance Tecno" en Lilita y los datos de 18 px (antes, una linea de 13 px)',
+     [csf.backgroundColor, csb && csb.fontFamily.split(',')[0], csd && csd.fontSize].join(' · '));
   const links = [...pie.querySelectorAll('a')];
-  ok(links.length > 0 && links.every(x => diMismo(getComputedStyle(x).color, '#7C3AED') && /underline/.test(getComputedStyle(x).textDecorationLine)),
-     '[6.7] "Ver en el mapa" y el WhatsApp como links morados subrayados', links.map(diTxt).join(' · '));
+  ok(links.length > 0 && links.every(x => diMismo(getComputedStyle(x).color, '#FFFFFF') && /underline/.test(getComputedStyle(x).textDecorationLine)),
+     '[6.7] los links en blanco y subrayados', links.map(diTxt).join(' · '));
   // Lo que queda vacio no se muestra
   const retiro = SERVICIO.retiro, href = flot.getAttribute('href');
   try{
@@ -594,13 +603,13 @@ function probarPie(){
     pintarPie();
     ok(!/WhatsApp/.test(diTxt(pie)) && !pie.hidden, '[6.7] sin WhatsApp, esa parte no va', diTxt(pie));
     pintarPie({ direccion: '', mapa: '', instagram: '' });
-    ok(pie.hidden && !diTxt(pie), '[6.7] y sin nada (ni direccion, ni mapa, ni WhatsApp, ni Instagram, ni cita): la linea no aparece');
+    ok(pie.hidden && !diTxt(pie), '[6.7] y sin nada (ni direccion, ni mapa, ni WhatsApp, ni Instagram, ni cita): el contacto no aparece');
   } finally {
     SERVICIO.retiro = retiro;
     if(href) flot.setAttribute('href', href);
     pintarPie();
   }
-  ok(!pie.hidden && diTxt(pie) === esperado.join('·'), '[6.7] y vuelve como estaba', diTxt(pie));
+  ok(!pie.hidden && JSON.stringify(columnasPie(pie)) === JSON.stringify(esperado), '[6.7] y vuelve como estaba', columnasPie(pie).join(' / '));
 }
 // El WhatsApp del pie se mide con su origen (la medicion la prueba analitica.js);
 // aca, que ADVAPP lo tenga escrito
@@ -788,10 +797,9 @@ async function probarAnchos(){
          `[6.3] a ${ancho} px: Lilita, ${tam}, sin mayusculas (antes, la letra del sistema en negrita)`, [t.familia.split(',')[0], t.tam, t.peso, t.mayus].join(' · '));
       if(ancho === 390){
         const pie = doc.getElementById('pie-id'), cs = w.getComputedStyle(pie);
-        const seps = [...pie.querySelectorAll('.sep')];
-        ok(cs.display === 'flex' && cs.flexDirection === 'column' && seps.every(s => w.getComputedStyle(s).display === 'none'),
-           '[6.7] en el celular, un dato por renglon y sin los "·"', cs.display + ' ' + cs.flexDirection);
-        const rs = [...pie.children].filter(x => !x.classList.contains('sep')).map(x => x.getBoundingClientRect());
+        const rs = [...pie.children].map(x => x.getBoundingClientRect());
+        ok(cs.display === 'grid' && cs.gridTemplateColumns.split(' ').length === 1,
+           '[6.7] en el celular, un dato abajo del otro (4C, 19/10)', cs.display + ' ' + cs.gridTemplateColumns);
         ok(rs.every(r => r.right <= 390 && r.left >= 0) && rs.every((r, i) => i === 0 || r.top >= rs[i - 1].bottom - 1),
            '[6.7] y entra en el ancho', rs.map(r => Math.round(r.width)).join(','));
       }

@@ -19,6 +19,10 @@ Sale de la ficha del negocio en Google Maps (Advance Tecno, Av. de los Incas
 4. **Cuáles se muestran lo decide Benja.** El 13/10 se cargaron las cinco que
    Google muestra primero. Para cambiar una, se saca del archivo y se pone otra
    de la ficha, completa.
+5. **Solo se muestran las de 5 estrellas** (Benja, 19/10/2026: "¿también se
+   pueden evitar las malas?"). La web saltea sola una de 4 o menos aunque
+   esté en el archivo. El puntaje y la cantidad de arriba siguen siendo los
+   de la ficha de Google, con todas las reseñas.
 
 ## Formato (`resenas/1`)
 

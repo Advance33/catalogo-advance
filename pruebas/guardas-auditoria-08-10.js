@@ -503,9 +503,11 @@ function textos(){
   ok(!!n && n.r.join(' ') === d14,
      '[D14] "¿Los productos son nuevos?" dice lo que eligio Benja', n && n.r.join(' '));
   const pie = document.getElementById('pie-id');
+  // Desde el 19/10 (4C) el pie va en columnas: "Instagram", "@advancetecno" y el link "Ver Instagram"
   const ig = pie && [...pie.querySelectorAll('a')].find(a => /instagram\.com\/advancetecno/.test(a.href));
-  ok(!!ig && ig.textContent === 'Instagram @advancetecno' && ig.target === '_blank' && /noopener/.test(ig.rel),
-     '[D16] el pie dice "Instagram @advancetecno" con el link al perfil', ig && ig.href);
+  const colIg = ig && ig.closest('.pie-col');
+  ok(!!ig && ig.textContent === 'Ver Instagram' && !!colIg && /@advancetecno/.test(colIg.textContent) && ig.target === '_blank' && /noopener/.test(ig.rel),
+     '[D16] el pie dice "@advancetecno" con el link al perfil', ig && ig.href);
   const ay = document.querySelector('#ayuda .ay-otra');
   const ig2 = ay && ay.querySelector('a[href="https://ig.me/m/advancetecno"]');
   ok(!!ig2 && /Instagram @advancetecno/.test(ig2.textContent), '[D16] y la ayuda ofrece escribir por Instagram ademas de WhatsApp', ay && ay.textContent.replace(/\s+/g, ' ').trim());

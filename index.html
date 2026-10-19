@@ -199,18 +199,17 @@ window.ADVAPP_TEMPRANO = (() => {
   }
   header > .wrap{padding-top:32px;padding-bottom:28px}
   header .eyebrow{color:var(--acento)}
-  /* De 900px para arriba el titulo solo dejaba media pantalla vacia. La bajada
-     se muda al costado y se apoya en su linea de base: llena el aire sin
+  /* De 900px para arriba el titulo solo dejaba media pantalla vacia. Las tres
+     razones (19/10) van al costado, apoyadas abajo: llenan el aire sin
      inventar contenido que no existe. */
   @media (min-width:900px){
     header > .wrap{
       display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);
-      column-gap:54px;align-items:end;
+      grid-template-rows:1fr auto;column-gap:54px;align-items:end;
     }
     header .eyebrow{grid-column:1;grid-row:1}
     .titulo-h{grid-column:1;grid-row:2;margin-bottom:0}
-    .bajada{grid-column:2;grid-row:2;margin:0 0 8px;max-width:38ch;
-            border-left:2px solid var(--line);padding-left:20px}
+    .razones{grid-column:2;grid-row:1 / span 2;margin:0}
   }
 
   /* ---------- Barra de arriba ---------- */
@@ -423,9 +422,9 @@ window.ADVAPP_TEMPRANO = (() => {
   /* Entrada del encabezado, escalonada de arriba hacia abajo */
   @media (prefers-reduced-motion: no-preference){
     @keyframes subir{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-    header .eyebrow, .titulo-h, .bajada{animation:subir .6s cubic-bezier(.22,.7,.3,1) both}
+    header .eyebrow, .titulo-h, .razones{animation:subir .6s cubic-bezier(.22,.7,.3,1) both}
     .titulo-h{animation-delay:.06s}
-    .bajada  {animation-delay:.13s}
+    .razones {animation-delay:.13s}
     /* El resplandor del fondo respira despacio */
     @keyframes respirar{0%,100%{opacity:1}50%{opacity:.72}}
     header::before{
@@ -435,7 +434,6 @@ window.ADVAPP_TEMPRANO = (() => {
     }
     header > *{position:relative;z-index:1}
   }
-  .bajada{color:var(--muted);font-size:14.5px;margin:0 0 20px;max-width:52ch}
 
   .search{position:relative;display:flex;align-items:center;max-width:660px;padding-bottom:22px}
   .search svg{position:absolute;left:16px;width:18px;height:18px;color:var(--faint);pointer-events:none}
@@ -1095,18 +1093,30 @@ window.ADVAPP_TEMPRANO = (() => {
   .rs-estrellas::before{content:"★★★★★"}
   .rs-estrellas::after{content:"★★★★★";position:absolute;left:0;top:0;width:calc(var(--v) / 5 * 100%);
                        overflow:hidden;color:#E0A106}
-  .sello-google{display:inline-flex;align-items:center;gap:8px;margin:0 0 4px;text-decoration:none;
-                font:600 11px/1 var(--mono);letter-spacing:.06em;color:var(--muted);border-radius:8px}
-  .sello-google[hidden]{display:none}
-  .sello-google b{font-weight:700;color:var(--ink)}
-  .sello-google .rs-estrellas{font-size:13px;letter-spacing:1px}
-  .sello-google:hover{color:var(--acento)}
-  .sello-google:focus-visible{outline:2px solid var(--acento);outline-offset:4px}
-  @media (min-width:900px){
-    /* Arriba de la bajada, alineado con su texto (20 px de aire + 2 de la
-       raya) y en el renglón de "Catálogo": sin margen propio, así no le suma
-       alto al encabezado ni baja el título. */
-    .sello-google{grid-column:2;grid-row:1;justify-self:start;align-self:center;margin:0 0 6px 22px}
+  /* ---------- Las tres razones del encabezado (Benja, 19/10/2026) ----------
+     Eligió la 2D del muestrario ("es un asco eso" de las estrellas sueltas y
+     la bajada con raya): tres renglones con ícono, el puntaje de Google, los
+     precios de hoy y el WhatsApp. El primero es el sello (#sello-google): sin
+     datos/resenas.json se esconde y quedan los otros dos. */
+  .razones{display:flex;flex-direction:column;margin:18px 0 0}
+  .razon{display:flex;align-items:center;gap:14px;margin:0;padding:12px 0;color:var(--ink);text-decoration:none}
+  .razon[hidden]{display:none}
+  .razones > .razon:not([hidden]) ~ .razon{border-top:1px solid var(--line)}
+  .rz-ico{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#EDE4FD;color:var(--acento)}
+  .rz-ico svg{width:20px;height:20px;display:block}
+  .rz-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .rz-txt b{font:700 16px/1.25 var(--sans)}
+  .rz-txt > span{font-size:14px;line-height:1.4;color:var(--muted)}
+  a.razon{border-radius:12px}
+  a.razon:hover b{color:var(--acento)}
+  a.razon:hover .rz-ico{background:var(--acento);color:#fff}
+  a.razon:focus-visible{outline:2px solid var(--acento);outline-offset:4px}
+  @media (max-width:560px){
+    .razon{gap:12px;padding:10px 0}
+    .rz-ico{width:36px;height:36px;border-radius:12px}
+    .rz-ico svg{width:18px;height:18px}
+    .rz-txt b{font-size:15px}
+    .rz-txt > span{font-size:13px}
   }
   .resenas{display:flex;flex-direction:column;gap:14px;scroll-margin-top:calc(var(--alto-cinta,0px) + 18px)}
   .rs-cab{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
@@ -1745,9 +1755,9 @@ window.ADVAPP_TEMPRANO = (() => {
     .wa-flotante b{display:none}
   }
 
-  /* El 96 de abajo es el lugar que ocupa el botón flotante */
-  footer{border-top:1px solid var(--line);padding:26px 0 96px;color:var(--muted);
-         font:11px/1.7 var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:center}
+  /* El pie oscuro (Benja, 19/10/2026, 4C del muestrario: el renglón chico era
+     "muy chico para algo tan importante"). Grafito como la barra de arriba. */
+  footer{background:#151220;color:#fff;margin-top:40px}
 
   /* ---------- Panel de cotización ---------- */
   #cfg-btn{
@@ -2564,7 +2574,7 @@ window.ADVAPP_TEMPRANO = (() => {
      otro en la ficha: un tercero encima de la barra no suma, y le compite el
      lugar al único botón que importa en ese momento, que es enviar el pedido. */
   body.con-pedido .wa-flotante{display:none}
-  body.con-pedido footer{padding-bottom:120px}
+  body.con-pedido .pie-legal{padding-bottom:120px}
   @media (max-width:560px){
     .barra-pedido{padding:10px 14px;gap:10px}
     .bp-ver{padding:9px 11px;gap:6px;font-size:9.5px}
@@ -3440,23 +3450,39 @@ window.ADVAPP_TEMPRANO = (() => {
     .modal-filtros .caja{width:100%;height:auto;max-height:86vh;max-height:86dvh;border-radius:22px 22px 0 0}
   }
 
-  /* ---------- El pie con el contacto (29/09, muestra 6.7 B) ----------
-     Una línea arriba de la cotización. Sale de la configuración (DIRECCION,
-     MAPA, WHATSAPP y el "con cita previa" de SERVICIO.retiro): lo que quede
-     vacío no se muestra. Sin horario ni razón social: eso lo define Pedro
-     (opción C). En el celular va un dato por renglón. */
-  .pie-id{margin:0 0 12px;font:500 13px/1.6 var(--sans);letter-spacing:0;text-transform:none;color:var(--ink)}
+  /* ---------- El pie con el contacto (19/10/2026, 4C del muestrario) ----------
+     Antes (29/09, muestra 6.7 B) era una línea de 13 px. Ahora: la marca con
+     "Atención con cita previa" y una columna por dato (dirección, WhatsApp,
+     Instagram), cada una con su rótulo, el dato grande y su link. Sale de la
+     configuración (DIRECCION, MAPA, WHATSAPP, INSTAGRAM_TECNO y el "con cita
+     previa" de SERVICIO.retiro): lo que quede vacío no se muestra. Sin
+     horario ni razón social: eso lo define Benja. El 96 de abajo de la
+     cotización es el lugar que ocupa el botón flotante. */
+  .pie-id{display:grid;grid-template-columns:minmax(0,1.2fr) repeat(3,minmax(0,1fr));gap:30px;padding-top:40px;padding-bottom:30px}
   .pie-id[hidden]{display:none}
-  .pie-id b{font:400 15px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;margin-right:2px}
-  .pie-id .sep{color:var(--line);margin:0 6px}
-  .pie-id a{color:var(--acento);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;white-space:nowrap}
-  .pie-id a:hover{color:var(--glow)}
-  .pie-id a:focus-visible{outline:2px solid var(--acento);outline-offset:2px;border-radius:4px}
-  .pie-legal{display:block}
-  @media (max-width:560px){
-    .pie-id{display:flex;flex-direction:column;gap:4px;align-items:center}
-    .pie-id[hidden]{display:none}
-    .pie-id .sep{display:none}
+  .pie-marca{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+  .pie-logo{display:flex;align-items:center;gap:10px}
+  .pie-logo img{width:36px;height:auto;filter:brightness(0) invert(1);opacity:.9}
+  .pie-logo b{font:400 24px/1 var(--display);text-transform:uppercase;letter-spacing:.06em}
+  .pie-logo b span{color:#C4A6FF}
+  .pie-cita{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;
+            background:rgba(196,166,255,.14);color:#E3D3FF;font:600 13.5px/1.2 var(--sans)}
+  .pie-cita svg{width:15px;height:15px;flex:none}
+  .pie-col{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}
+  .pie-col small{font:600 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#C4A6FF}
+  .pie-col strong{font:650 18px/1.3 var(--sans);overflow-wrap:anywhere}
+  .pie-col a{color:#fff;font:600 14.5px/1.3 var(--sans);text-decoration:underline;text-decoration-color:rgba(196,166,255,.6);
+             text-underline-offset:4px;text-decoration-thickness:1px}
+  .pie-col a:hover{color:#E3D3FF;text-decoration-color:#C4A6FF}
+  .pie-col a:focus-visible{outline:2px solid #A78BFA;outline-offset:3px;border-radius:4px}
+  .pie-legal{padding-top:18px;padding-bottom:96px;border-top:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);
+             font:11px/1.7 var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:center}
+  @media (max-width:860px){
+    .pie-id{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}
+    .pie-marca{grid-column:1 / -1}
+  }
+  @media (max-width:480px){
+    .pie-id{grid-template-columns:1fr;gap:22px;padding-top:32px}
   }
 
   /* ---------- Botones a medida del dedo (29/09, muestra 6.6 B) ----------
@@ -3595,11 +3621,15 @@ window.ADVAPP_TEMPRANO = (() => {
   <div class="wrap">
     <span class="eyebrow">Catálogo</span>
     <h1 class="titulo-h">Los precios de hoy.<br><span>Hoy.</span></h1>
-    <p class="bajada">Sin listas viejas: los precios y el stock se actualizan solos durante el día. Tocá un producto y el WhatsApp se abre con el modelo y el color ya escritos.</p>
-    <!-- El puntaje de Google (Benja, 13/10/2026): lo llena pintarSelloGoogle()
-         con datos/resenas.json y lleva al bloque de reseñas de la portada. Sin
-         el archivo queda escondido. -->
-    <a class="sello-google" id="sello-google" href="#resenas" hidden></a>
+    <!-- Las tres razones (Benja, 19/10/2026, 2D del muestrario), en lugar de la
+         bajada con raya y las estrellas sueltas. La primera es el puntaje de
+         Google (13/10): la llena pintarSelloGoogle() con datos/resenas.json y
+         lleva al bloque de reseñas; sin el archivo queda escondida. -->
+    <div class="razones">
+      <a class="razon sello-google" id="sello-google" href="#resenas" hidden></a>
+      <p class="razon"><span class="rz-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="rz-txt"><b>Precios y stock de hoy</b><span>Sin listas viejas: se actualizan solos durante el día</span></span></p>
+      <p class="razon"><span class="rz-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z"/><path d="M9 10.5h6M9 13.5h4"/></svg></span><span class="rz-txt"><b>Consultá por WhatsApp</b><span>Elegí un producto: el mensaje sale con el modelo y el color ya escritos</span></span></p>
+    </div>
   </div>
 </header>
 
@@ -3699,12 +3729,12 @@ window.ADVAPP_TEMPRANO = (() => {
   <b>WhatsApp</b>
 </a>
 
-<footer class="wrap">
-  <!-- La línea de contacto (29/09, muestra 6.7 B): la arma pintarPie() con
-       lo que ya está en la configuración. Sin eso queda escondida. -->
-  <p class="pie-id" id="pie-id" hidden></p>
-  <span class="pie-legal"><span id="pie-cotiz"></span>
-  Precios sujetos a cambio sin previo aviso · Consultá disponibilidad antes de comprar</span>
+<footer>
+  <!-- El contacto (19/10, 4C del muestrario): lo arma pintarPie() con lo que ya
+       está en la configuración. Sin nada queda escondido. -->
+  <div class="wrap pie-id" id="pie-id" hidden></div>
+  <div class="wrap pie-legal"><span id="pie-cotiz"></span>
+  Precios sujetos a cambio sin previo aviso · Consultá disponibilidad antes de comprar</div>
 </footer>
 
 <script>
@@ -10408,7 +10438,10 @@ let RESENAS = null;             // { puntaje, cantidad, ver, resenas } ya valida
 
 /* El archivo, con lo que no sirve afuera. Sin puntaje, cantidad o link bien
    formados no hay nada que mostrar; una reseña sin autor, sin texto o con
-   estrellas raras se saltea sola. El link tiene que ser de Google. */
+   estrellas raras se saltea sola. El link tiene que ser de Google.
+   Solo las de 5 estrellas (Benja, 19/10/2026: "¿también se pueden evitar las
+   malas?"): una de 4 o menos no sale aunque alguien la cargue en el archivo.
+   El puntaje y la cantidad son los de Google y esos no se tocan. */
 function validarResenas(j){
   if(!j || j.formato !== 'resenas/1') return null;
   const puntaje = Number(j.puntaje), cantidad = Number(j.cantidad);
@@ -10425,7 +10458,7 @@ function validarResenas(j){
   const resenas = (Array.isArray(j.resenas) ? j.resenas : [])
     .map(r => ({ autor: String((r && r.autor) || '').trim(), texto: String((r && r.texto) || '').trim(),
                  estrellas: Number(r && r.estrellas) }))
-    .filter(r => r.autor && r.texto && Number.isInteger(r.estrellas) && r.estrellas >= 1 && r.estrellas <= 5)
+    .filter(r => r.autor && r.texto && r.estrellas === 5)
     .slice(0, RESENAS_MAX);
   return { puntaje, cantidad, ver, escribir, resenas };
 }
@@ -10457,8 +10490,9 @@ function pintarSelloGoogle(){
   a.hidden = !RESENAS;
   if(!RESENAS) return;
   const nota = notaGoogle(RESENAS.puntaje);
-  a.innerHTML = `<span class="rs-estrellas" style="--v:${RESENAS.puntaje}" aria-hidden="true"></span>
-    <span><b>${nota}</b> · ${plata(RESENAS.cantidad)} reseñas en Google</span>`;
+  // El primer renglón de las tres razones (2D, 19/10)
+  a.innerHTML = `<span class="rz-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></span>
+    <span class="rz-txt"><b>${nota} en Google</b><span>${plata(RESENAS.cantidad)} reseñas de clientes</span></span>`;
   a.setAttribute('aria-label', `${nota} de 5 en Google, ${plata(RESENAS.cantidad)} reseñas: ver las reseñas`);
 }
 /* El mismo puntaje, corto, en la barra de arriba (Benja, 13/10: "sí, también
@@ -15801,16 +15835,18 @@ if(WHATSAPP){
   wf.hidden = false;
 }
 
-/* ---------- El pie con el contacto (29/09, muestra 6.7 B) ----------
-   "Advance Tecno · Av. de los Incas 5150, 1A, CABA · Ver en el mapa · WhatsApp
-   +54 9 11 2475-1466 · Atención con cita previa", arriba de la cotización,
-   como la muestra B que eligió Pedro. Todo sale de la configuración: la
-   dirección es DIRECCION y el mapa es MAPA (las mismas de la pregunta
-   "¿Puedo ir a verlos o retirar en persona?"), el número es WHATSAPP y el
-   link es el del botón flotante (el mismo número y el mismo saludo); "con
-   cita previa" va solo si el retiro de SERVICIO lo dice. Lo que quede vacío
-   no se muestra, y sin nada la línea no aparece. Horario, redes y razón
-   social los tiene que pasar Pedro (esa es la opción C). */
+/* ---------- El pie con el contacto (19/10/2026, 4C del muestrario) ----------
+   Era una línea de 13 px (29/09, muestra 6.7 B) y Benja la encontró "muy
+   chica para algo tan importante". Ahora, sobre grafito: la marca con
+   "Atención con cita previa" y una columna por dato, con su rótulo, el dato
+   grande y su link: Dirección (Ver en el mapa), WhatsApp (Escribinos) e
+   Instagram (Ver Instagram). Todo sale de la configuración: la dirección es
+   DIRECCION y el mapa es MAPA (las mismas de la pregunta "¿Puedo ir a verlos
+   o retirar en persona?"), el número es WHATSAPP y el link es el del botón
+   flotante (el mismo número y el mismo saludo); "con cita previa" va solo si
+   el retiro de SERVICIO lo dice. Lo que quede vacío no se muestra, y sin nada
+   el pie queda solo con la cotización. Horario y razón social los tiene que
+   pasar Benja. */
 // 5491124751466 → "+54 9 11 2475-1466". Un número con otra forma va con el + y nada más.
 const telefonoLegible = n => {
   const r = /^549(11)(\d{4})(\d{4})$/.exec(String(n || ''));
@@ -15827,18 +15863,26 @@ function pintarPie(datos = {}){
   const cita = /cita previa/i.test((SERVICIO.retiro || []).join(' '));
   const dir = String(('direccion' in datos ? datos.direccion : (typeof DIRECCION === 'string' ? DIRECCION : '')) || '').trim();
   const mapa = String(('mapa' in datos ? datos.mapa : (typeof MAPA === 'string' ? MAPA : '')) || '').trim();
-  const partes = [];
-  if(dir) partes.push(`<span>${esc(dir)}</span>`);
-  if(/^https:\/\//i.test(mapa)) partes.push(`<a href="${esc(mapa)}" target="_blank" rel="noopener">Ver en el mapa</a>`);
-  if(wa) partes.push(`<a href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp ${esc(telefonoLegible(WHATSAPP))}</a>`);
+  const link = (href, txt, etiqueta) =>
+    `<a href="${esc(href)}" target="_blank" rel="noopener"${etiqueta ? ` aria-label="${esc(etiqueta)}"` : ''}>${txt}</a>`;
+  const columna = (rotulo, dato, accion) =>
+    `<div class="pie-col"><small>${rotulo}</small>${dato ? `<strong>${esc(dato)}</strong>` : ''}${accion}</div>`;
+  const cols = [];
+  const conMapa = /^https:\/\//i.test(mapa);
+  if(dir || conMapa) cols.push(columna('Dirección', dir, conMapa ? link(mapa, 'Ver en el mapa') : ''));
+  if(wa){
+    const tel = telefonoLegible(WHATSAPP);
+    cols.push(columna('WhatsApp', tel, link(wa, 'Escribinos', `Escribinos por WhatsApp al ${tel}`)));
+  }
   // Instagram, después del WhatsApp (D16 A, 13/10/2026)
   const ig = String(('instagram' in datos ? datos.instagram : INSTAGRAM_TECNO) || '').trim();
   if(/^[A-Za-z0-9._]+$/.test(ig))
-    partes.push(`<a href="${esc('https://www.instagram.com/' + ig + '/')}" target="_blank" rel="noopener">Instagram @${esc(ig)}</a>`);
-  if(cita) partes.push('<span>Atención con cita previa</span>');
-  pie.hidden = !partes.length;
-  pie.innerHTML = partes.length
-    ? ['<b>Advance Tecno</b>', ...partes].join('<span class="sep" aria-hidden="true">·</span>') : '';
+    cols.push(columna('Instagram', '@' + ig, link('https://www.instagram.com/' + ig + '/', 'Ver Instagram', `Ver Instagram @${ig}`)));
+  pie.hidden = !cols.length && !cita;
+  pie.innerHTML = pie.hidden ? '' : `<div class="pie-marca">
+      <span class="pie-logo"><img src="assets/logo-mark.png" alt="" width="36" height="32"><b>Advance <span>Tecno</span></b></span>
+      ${cita ? `<span class="pie-cita"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Atención con cita previa</span>` : ''}
+    </div>${cols.join('')}`;
 }
 pintarPie();
 

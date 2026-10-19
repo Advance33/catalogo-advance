@@ -92,7 +92,7 @@ const UW_FILAS = [
                               'https://advapp.invalid/tecno-productos/skus/usado-0006-b.jpg',
                               'https://advapp.invalid/tecno-productos/skus/usado-0006-c.jpg'] }] }),
   // [12] La foto ilustrativa (14/10/2026). Como los carga ADVAPP desde la lista
-  // de LUCAS IMPORT: ID propio, madre del nuevo con la U y el numero, el color
+  // del proveedor de los usados: ID propio, madre del nuevo con la U y el numero, el color
   // con el nombre oficial, sin codigo AT y sin fotos.
   // El 16 Pro Max de 1TB Black Titanium: el nuevo no tiene 1TB (la foto es la
   // misma) y es el mas caro de los usados (el mundo prefiere una foto propia)

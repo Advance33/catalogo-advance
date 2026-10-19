@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-AR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Catálogo Advance Tecno — Los precios de hoy</title>
-<meta name="description" content="Catálogo con stock y precios actualizados en tiempo real. Consultá por WhatsApp desde cualquier producto.">
+<meta name="description" content="Catálogo con stock y precios actualizados durante el día. Consultá por WhatsApp desde cualquier producto.">
 <!-- La portada es una sola para Google: /index.html y las vistas con ?cat= no son
      otras páginas (auditoría 06/10). Cada modelo tiene la suya en producto/. -->
 <link rel="canonical" href="https://catalogo.advancetecno.com.ar/">
@@ -48,12 +48,12 @@
 <meta property="og:site_name" content="Advance Tecno">
 <meta property="og:locale" content="es_AR">
 <meta property="og:title" content="Catálogo Advance Tecno — Los precios de hoy">
-<meta property="og:description" content="Sin listas viejas: los precios y el stock se actualizan solos durante el día. Tocá un producto y el WhatsApp se abre con el modelo y el color ya escritos.">
+<meta property="og:description" content="Sin listas viejas: los precios y el stock se actualizan solos durante el día. Elegí un producto y consultá por WhatsApp: el mensaje sale con el modelo y el color ya escritos.">
 <meta property="og:image" content="https://catalogo.advancetecno.com.ar/assets/preview.png">          <!-- ← direccion publica del catalogo (dominio propio desde el 05/10) -->
 <meta property="og:url" content="https://catalogo.advancetecno.com.ar/">                            <!-- ← direccion publica del catalogo (dominio propio desde el 05/10) -->
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Catálogo Advance Tecno: stock y precios en tiempo real">
+<meta property="og:image:alt" content="Catálogo Advance Tecno: stock y precios actualizados durante el día">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Catálogo Advance Tecno — Los precios de hoy">
 <meta name="twitter:description" content="Sin listas viejas: los precios y el stock se actualizan solos durante el día.">
@@ -2637,7 +2637,10 @@ window.ADVAPP_TEMPRANO = (() => {
   }
 
   /* Lista del pedido */
-  #pedido .caja{width:min(520px,100%);max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow:auto}   /* dvh: ver #ficha .caja */
+  #pedido .caja{width:min(520px,100%);max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow:auto;position:relative}
+  /* La X de cerrar el pedido (19/10/2026, U-06), la misma de la ficha, más chica */
+  #pedido .pd-cerrar{top:12px;right:12px;width:32px;height:32px;font-size:18px}
+  #pedido .caja > h3{padding-right:44px}   /* dvh: ver #ficha .caja */
   .pd-item{display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
   .pd-item:first-of-type{border-top:0}
   .pd-foto{width:46px;height:46px;flex:none;border-radius:9px;background:var(--foto-bg);
@@ -3451,7 +3454,7 @@ window.ADVAPP_TEMPRANO = (() => {
     .rc-marcas{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:1px 16px 3px;scrollbar-width:none}
     .rc-marcas::-webkit-scrollbar,.rf-marcas::-webkit-scrollbar{display:none}
     .marca-chip{padding:9px 13px;font-size:13px}
-    /* Con "Agrupado por rubro" u "Orden de la planilla", Ordenar y Filtrar no
+    /* Con "Agrupado por rubro" u "Orden del catálogo", Ordenar y Filtrar no
        entran en 320 px (iPhone con zoom de pantalla): Filtrar se salía de la
        pantalla. Si no entran, Filtrar baja de renglón. */
     .rc-acc{margin-left:0;justify-content:space-between;flex-wrap:wrap;row-gap:8px}
@@ -3552,6 +3555,9 @@ window.ADVAPP_TEMPRANO = (() => {
                             transition:background .2s ease, width .2s ease}
     .of-dots button[aria-current="true"]{width:32px;background:none;border-radius:99px}
     .of-dots button[aria-current="true"]::before{width:24px;border-radius:99px;background:#F0D98C}
+    /* Los rubros de la portada medían 26 px de alto, en filas separadas por 6
+       (auditoría 19/10/2026, U-08): es el camino principal y se tocaba el de al lado. */
+    .rubro{min-height:40px}
   }
 
   /* Las fotos propias vienen SIN FONDO desde el 05/10/2026, la chica y la
@@ -5620,8 +5626,13 @@ function filtrar(){
   });
   /* Con un filtro de versión, el orden y el "primero lo que hay" van por lo
      que muestra la tarjeta (2.1 B): con 1TB, "Menor precio" ordena por el
-     precio del 1TB, y un modelo con el 1TB agotado va con los agotados. */
-  const vista = versionOK ? new Map(out.map(p => [p, vistaFiltrada(p, versionOK)])) : null;
+     precio del 1TB, y un modelo con el 1TB agotado va con los agotados.
+     Y con la versión que elige la búsqueda (auditoría 19/10/2026, DP-13):
+     "teclado español" ponía primero el MacBook Neo en "Sin stock" (sus dos filas en
+     español, agotadas), antes del MacBook Pro M5 español con stock. */
+  const deLaBusqueda = palabras.length ? versionDeLaBusqueda() : null;
+  const vista = versionOK || deLaBusqueda
+    ? new Map(out.map(p => [p, vistaDeLaGrilla(p, versionOK, deLaBusqueda)])) : null;
   const V = p => vista ? vista.get(p) : p;
 
   const porNombre = (a,b) => a.desc.localeCompare(b.desc,'es');
@@ -5843,13 +5854,16 @@ function puntajeDeBusqueda(txt, candidatos){
 function listaDeLaGrilla(){
   const versionOK = versionPedida();
   const deLaBusqueda = versionDeLaBusqueda();
-  return filtrar().map(p => {
-    if(deLaBusqueda){
-      const ambas = versionOK ? (v => versionOK(v) && deLaBusqueda(v)) : deLaBusqueda;
-      if((p.variantes || []).some(ambas)) return vistaFiltrada(p, ambas);
-    }
-    return versionOK ? vistaFiltrada(p, versionOK) : p;
-  });
+  return filtrar().map(p => vistaDeLaGrilla(p, versionOK, deLaBusqueda));
+}
+// La versión de un modelo que muestra la tarjeta: la del filtro y, si la búsqueda
+// nombra una versión, ésa. La usan la grilla y el orden de filtrar().
+function vistaDeLaGrilla(p, versionOK, deLaBusqueda){
+  if(deLaBusqueda){
+    const ambas = versionOK ? (v => versionOK(v) && deLaBusqueda(v)) : deLaBusqueda;
+    if((p.variantes || []).some(ambas)) return vistaFiltrada(p, ambas);
+  }
+  return versionOK ? vistaFiltrada(p, versionOK) : p;
 }
 
 /* La búsqueda también elige la versión (06/10/2026). "playstation fisica"
@@ -6270,10 +6284,20 @@ function preguntaCuotas(){
    EL-5" salía "Canon Flash Canon Speedlite EL-5", y lo mismo "Drone DJI Neo 2"
    o "Volante Logitech G29" (31 filas de ADVAPP). Tiene que estar como palabra
    entera: una marca metida adentro de otra palabra no cuenta como dicha. */
+/* Y escrita de otra forma (auditoría 19/10/2026, T-06): ADVAPP pone "Go Pro",
+   "Rayban", "Insta 360" y "Fuji" en el nombre, y salía "GoPro Go Pro Hero 13
+   Black" o "Ray-Ban Rayban Meta…" en 19 mensajes y 11 títulos de Google. Se
+   compara sin espacios ni guiones, en una palabra o dos seguidas, y con los
+   nombres cortos de MARCA_CORTA. */
+const MARCA_CORTA = { fujifilm: ['fuji'] };
 const nombreConMarca = p => {
   const m = norm(p.marca), d = norm(p.desc || '');
   if(!m || d.startsWith(m)) return p.desc;
-  return new RegExp('(^|[^a-z0-9])' + escRe(m) + '($|[^a-z0-9])').test(d) ? p.desc : `${p.marca} ${p.desc}`;
+  if(new RegExp('(^|[^a-z0-9])' + escRe(m) + '($|[^a-z0-9])').test(d)) return p.desc;
+  const mc = compactar(m), ws = d.split(/\s+/).map(compactar);
+  const igual = w => w === mc || (MARCA_CORTA[mc] || []).includes(w);
+  if(ws.some((w, i) => igual(w) || (i + 1 < ws.length && igual(w + ws[i + 1])))) return p.desc;
+  return `${p.marca} ${p.desc}`;
 };
 
 /* Todo el texto por el que se puede encontrar un producto. Lo usan el filtro
@@ -6359,7 +6383,16 @@ function prepararBusqueda(q){
     }
     const cod = /^at-?(\d{1,4}(?:-\d{1,2})?)$/.exec(w);
     const comp = compactar(w);
-    return { w, codigo: cod ? 'at-' + cod[1] : '',
+    /* Una palabra con números tiene que empezar palabra (o tramo, después de
+       "-" o "/"), y un "ii" o "iii" tiene que ser la palabra entera
+       (auditoría 19/10/2026, DP-04): "lente 50mm" traía el 18-150mm y el
+       70-350mm, con el 18-150 como primera sugerencia; "a36" traía las
+       Insta360 y "canon r6 mark ii" también el Mark III. */
+    const romano = /^(?:ii|iii|iv|vi|vii)$/.test(w);
+    const borde = romano ? new RegExp('(?:^|[^a-z0-9])' + escRe(w) + '(?![a-z0-9])')
+                // la apertura escrita sin barra también vale: "1.8" encuentra "F1.8"
+                : /\d/.test(w) ? new RegExp('(?:^|[^a-z0-9])f?' + escRe(w)) : null;
+    return { w, borde, codigo: cod ? 'at-' + cod[1] : '',
              raices: raices.filter(r => /[a-z]$/.test(r)).map(r => new RegExp(escRe(r) + '(?![a-z0-9])')),
              comp: comp.length >= 4 ? comp : '' };
   });
@@ -6373,7 +6406,7 @@ function coincide(p, palabras){
   // El ID, solo entero o desde el comienzo de un tramo (ver ids en buscableDe)
   return palabras.every(x =>
     (x.codigo ? b.codigos.some(c => c.startsWith(x.codigo)) : false) ||
-    b.sinId.includes(x.w) ||
+    (x.borde ? x.borde.test(b.sinId) : b.sinId.includes(x.w)) ||
     b.ids.some(id => id.startsWith(x.w) || id.includes('-' + x.w)) ||
     x.raices.some(re => re.test(b.sinId)) ||
     (!!x.comp && b.comp.includes(' ' + x.comp)));
@@ -6420,6 +6453,11 @@ function partesMensaje(p, color){
      el mismo que lleva cada renglón del pedido y con el que se lo busca (y se
      lo da de baja) en ADVAPP. Sólo en los usados: lo nuevo sigue sin código. */
   const unidad = vs.length === 1 && esUsado(vs[0]) && vs[0].id ? String(vs[0].id).trim() : '';
+  /* La caja blanca, que es otra condición y otro precio (auditoría 19/10/2026,
+     T-13): el RF-S 55-210mm y el FE 28-70mm de caja blanca mandaban el mismo
+     mensaje que los de caja. Como el teclado, sólo si todas las versiones lo
+     dicen igual y el nombre no lo dice. */
+  if(/caja blanca/i.test(comun('condicion')) && !/caja blanca/i.test(nombre)) nombre += ' (caja blanca)';
   return {
     nombre, unidad,
     sim: sim && !diceSim(nombre) ? sim : '',
@@ -6435,9 +6473,25 @@ const textoMensaje = x => x.nombre + (x.sim ? ' ' + x.sim : '') +
 // ", código USADO-0001": cuál de los usados es (partesMensaje, 14/10/2026)
 const queUnidad = x => x.unidad ? `, código ${x.unidad}` : '';
 
+/* El artículo del mensaje, con lo primero que nombra (la marca puede ir antes)
+   (auditoría 19/10/2026, T-08): salía "Me interesa el Apple Batería MagSafe",
+   "el DJI Hélices" y "El Batería Sony NP-FZ100 figura sin stock". Sin una palabra
+   de la lista, "el", como siempre. */
+const ARTICULO_DE = new Map([
+  ...['bateria', 'memoria', 'tarjeta', 'funda', 'camara', 'base', 'correa', 'malla', 'carcasa', 'mochila',
+      'bolsa', 'fuente', 'lampara', 'luz', 'antena', 'pantalla', 'mica', 'lamina', 'caja', 'consola'].map(w => [w, 'la']),
+  ...['baterias', 'helices', 'gafas', 'tarjetas', 'fundas', 'correas', 'mallas'].map(w => [w, 'las']),
+  ...['auriculares', 'lentes', 'anteojos', 'parlantes', 'cables'].map(w => [w, 'los']),
+]);
+const articuloDe = texto => {
+  const ws = norm(texto).split(/\s+/);
+  return ARTICULO_DE.get(ws[0]) || ARTICULO_DE.get(ws[1]) || 'el';
+};
+const mayuscula = s => s.charAt(0).toUpperCase() + s.slice(1);
+
 function mensajeWA(p, color){
   const x = partesMensaje(p, color);
-  return `Hola! Me interesa el ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)}. ¿Me pasás info?`;
+  return `Hola! Me interesa ${articuloDe(x.nombre)} ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)}. ¿Me pasás info?`;
 }
 
 /* Sin stock el boton de siempre no sirve: el cliente pregunta por algo que no
@@ -6445,7 +6499,9 @@ function mensajeWA(p, color){
    cuando entre. */
 function mensajeAviso(p, color){
   const x = partesMensaje(p, color);
-  return `Hola! El ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)}${x.unidad ? ',' : ''} figura sin stock. `
+  const art = articuloDe(x.nombre);
+  return `Hola! ${mayuscula(art)} ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)}${x.unidad ? ',' : ''} `
+       + `${art.endsWith('s') ? 'figuran' : 'figura'} sin stock. `
        + `¿Me avisan cuando entre?`;
 }
 /* Un emoji cortado por un tope de largo (medio par de UTF-16) hacia tirar
@@ -6471,10 +6527,19 @@ const linkWA = texto => WHATSAPP ? `https://wa.me/${WHATSAPP}?text=${codificarWA
    Se devuelven normalizados y con su valor en GB, para poder ordenar 128 antes
    que 1TB sin que el orden alfabetico ponga "1TB" primero. */
 
+/* La RAM y el disco separados por un espacio, sin barra: "16GB 512GB",
+   "24GB 1TB" (auditoría 19/10/2026, DP-03). Así llegan de ADVAPP el iMac 24
+   M4, los Mac Mini M5 Pro y M6, el Dell 15 y el Moto G17 Power, y la web leía
+   la RAM como capacidad: el filtro ofrecía "16GB" y "24GB" de disco y con
+   "512GB" no salían. Grupos como en specs: 1 = RAM, 2 = disco en GB, 3 = en TB. */
+const RE_RAM_DISCO_ESPACIO = /\b(\d{1,2})\s*GB\s+(?:(\d{3,4})\s*GB|(\d(?:[.,]\d)?)\s*TB)\b/i;
+
 function capacidadDe(p){
   const txt = [p.desc, p.modelo].filter(Boolean).join(' ');
   const dual = /(\d{1,2})\s*(?:GB)?\s*\/\s*(\d{3,4})\s*GB\b/i.exec(txt);
   if(dual) return dual[2] + 'GB';
+  const espacio = RE_RAM_DISCO_ESPACIO.exec(txt);
+  if(espacio) return espacio[2] ? espacio[2] + 'GB' : espacio[3].replace(',', '.') + 'TB';
   const tb = /(\d(?:[.,]\d)?)\s*TB\b/i.exec(txt);
   if(tb) return tb[1].replace(',', '.') + 'TB';
   const gb = /(?:^|[\s(/])(\d{2,4})\s*GB\b/i.exec(txt);
@@ -6488,7 +6553,8 @@ function ramDe(p){
   // (Galaxy S25/S26 Ultra de 1TB, MacBook Air y Pro M4/M5) quedaban sin RAM.
   // El panel de MacBook ofrecia 8/16/24GB y los nombres dicen hasta 48, y
   // con 16GB en Celulares no salia ninguno.
-  const dual = /(\d{1,2})\s*(?:GB)?\s*\/\s*(?:\d{3,4}\s*GB|\d(?:[.,]\d)?\s*TB)\b/i.exec(txt);
+  const dual = /(\d{1,2})\s*(?:GB)?\s*\/\s*(?:\d{3,4}\s*GB|\d(?:[.,]\d)?\s*TB)\b/i.exec(txt)
+            || RE_RAM_DISCO_ESPACIO.exec(txt);
   if(dual) return dual[1] + 'GB';
   // "16ram", "24 RAM": como lo escribe la planilla en notebooks
   const suelta = /\b(\d{1,2})\s*ram\b/i.exec(txt);
@@ -6528,7 +6594,8 @@ function specs(p){
   // Y el disco puede venir en TB, "16GB/1TB" (29/09): la ficha del Galaxy S26
   // Ultra 16GB/1TB no decía en ningún lado los 16GB. Grupos separados para
   // GB y TB, así la unidad no queda adentro del número ("1TBGB").
-  const dual = /(\d{1,2})\s*(?:GB)?\s*\/\s*(?:(\d{3,4})\s*GB|(\d(?:[.,]\d)?)\s*TB)\b/i.exec(txt);
+  const dual = /(\d{1,2})\s*(?:GB)?\s*\/\s*(?:(\d{3,4})\s*GB|(\d(?:[.,]\d)?)\s*TB)\b/i.exec(txt)
+            || RE_RAM_DISCO_ESPACIO.exec(txt);
   if(dual){ add(dual[1] + 'GB RAM'); add(dual[2] ? dual[2] + 'GB' : dual[3].replace(',', '.') + 'TB'); }
   else{
     const tb = /(\d(?:[.,]\d)?)\s*TB\b/i.exec(txt);
@@ -7825,7 +7892,7 @@ function fotoDelColorEn(filas, c){
 /* ---------- La foto ilustrativa de un usado (Benja, 14/10/2026) ----------
    "Mientras un usado no tenga foto propia, que muestre la foto del mismo
    modelo nuevo, del mismo color, con un cartel 'Foto ilustrativa'." ADVAPP
-   carga cada equipo de LUCAS IMPORT con su ID (USADO-0001), su madre propia
+   carga cada equipo del proveedor de los usados con su ID (USADO-0001), su madre propia
    (la del nuevo con la U y el número: CEL-APL-13U0001), el color con el
    nombre oficial y, casi siempre, sin fotos. Sin esto la tarjeta decía "sin
    imagen" teniendo el catálogo la foto de ese mismo iPhone y ese color.
@@ -9099,7 +9166,7 @@ function pintarSugeridos(){
 
 const OPCIONES_ORDEN = [
   ['modelo', 'Marca y modelo'], ['asc', 'Menor precio'], ['desc', 'Mayor precio'],
-  ['az', 'Nombre A-Z'], ['cat', 'Agrupado por rubro'], ['sheet', 'Orden de la planilla'],
+  ['az', 'Nombre A-Z'], ['cat', 'Agrupado por rubro'], ['sheet', 'Orden del catálogo'],
 ];
 const TEXTO_APERTURA = { luminoso: 'Luminoso · f/2.8 o menos', cerrado: 'Estándar · más de f/2.8' };
 // Cuatro cuadrados: el mosaico de rubros de la portada, que es adonde lleva
@@ -9123,7 +9190,7 @@ function filtrosActivos(conMarca){
   if(conMarca && filtros.marca) a.push(['marca', filtros.marca]);
   if(filtros.rango)     a.push(['rango', (RANGOS.find(r => r[0] === filtros.rango) || [0, filtros.rango])[1]]);
   if(filtros.capacidad) a.push(['capacidad', filtros.capacidad]);
-  if(filtros.ram)       a.push(['ram', filtros.ram + ' de memoria']);
+  if(filtros.ram)       a.push(['ram', filtros.ram + ' de RAM']);
   if(filtros.montura)   a.push(['montura', filtros.montura]);
   if(filtros.apertura)  a.push(['apertura', TEXTO_APERTURA[filtros.apertura] || filtros.apertura]);
   FILTROS_RUBRO.forEach(f => { if(filtros[f.campo]) a.push([f.campo, textoPropio(f.campo, filtros[f.campo])]); });
@@ -9287,8 +9354,11 @@ function listaCon(cambios){
 function gruposDeFiltros(){
   const grupos = [{ campo: 'rango', titulo: 'Precio', opciones: RANGOS.map(([v, t]) => ({ v, t })) }];
   const cap = valoresDe('capacidad'), ram = valoresDe('ram');
-  if(cap.length) grupos.push({ campo: 'capacidad', titulo: 'Capacidad', opciones: cap.map(v => ({ v, t: v })) });
-  if(ram.length) grupos.push({ campo: 'ram', titulo: 'Memoria', opciones: ram.map(v => ({ v, t: v })) });
+  /* "Memoria" es el almacenamiento, como en la pestaña de la ficha y en el
+     cotizador, y la RAM se llama RAM, como el chip "12GB RAM" (auditoría
+     19/10/2026, T-03): acá decía "Capacidad" y "Memoria" era la RAM. */
+  if(cap.length) grupos.push({ campo: 'capacidad', titulo: 'Memoria', opciones: cap.map(v => ({ v, t: v })) });
+  if(ram.length) grupos.push({ campo: 'ram', titulo: 'RAM', opciones: ram.map(v => ({ v, t: v })) });
   if(norm(filtros.cat) === 'objetivo'){
     const monturas = [...new Set(MODELOS.filter(m => m.cat === filtros.cat)
                        .flatMap(m => (m.variantes || [m]).map(v => v.montura)).filter(Boolean))]
@@ -9302,6 +9372,18 @@ function gruposDeFiltros(){
     grupos.push({ campo: f.campo, titulo: f.titulo, opciones: f.opciones.map(([v, t]) => ({ v, t })) }));
   return grupos;
 }
+
+/* Filtrar y el Atrás (auditoría 19/10/2026, U-01). En el celular, el Atrás es
+   como se cierra una hoja que sube desde abajo, y no sumaba entrada: volvía la
+   página de abajo a la portada con el panel abierto ("Sin espejo 45"), y otro
+   Atrás sacaba del catálogo. Ahora abrir suma una entrada, como el pedido y el
+   visor. El Atrás lo cierra y deja lo elegido (el popstate escribe esa
+   dirección y no relee la vieja). Cerrar con la X, "Ver N productos", Escape
+   o tocando afuera no toca el historial: la entrada queda como un paso, y el
+   Atrás siguiente deshace el filtro. (Hacer "atrás" al cerrar, como el pedido,
+   llegaba tarde si enseguida se abría otra cosa y le pisaba la dirección.) */
+let filtrosEmpujado = false;   // ¿abrir Filtrar sumó una entrada al historial?
+let cerrarFiltrosDOM = null;   // saca el panel de la pantalla, sin tocar el historial
 
 function abrirFiltros(){
   if($('filtros-panel')) return;
@@ -9360,9 +9442,13 @@ function abrirFiltros(){
   // Al cerrar, montarModal devuelve el foco al botón "Filtrar" de antes; si se
   // cambió algo, ese botón ya no existe (el encabezado se rehizo) y el foco
   // caía en BODY: el Tab siguiente iba al logo (29/09). Se usa el nuevo.
-  cerrar = montarModal(d, () => {
+  try{ history.pushState({ filtros: true }, '', location.href); filtrosEmpujado = true; }
+  catch{ filtrosEmpujado = false; }
+  cerrar = cerrarFiltrosDOM = montarModal(d, () => {
+    cerrarFiltrosDOM = null;
     const a = document.activeElement;
     if(!a || a === document.body) enfocarEnCabecera('.filtrar-btn');
+    filtrosEmpujado = false;
   });
 }
 
@@ -9447,7 +9533,7 @@ function animarInicio(entera){
 
 function irAlInicio(){
   const st = history.state;
-  const ventana = !!(st && (st.pedido || st.visor || st.usado));
+  const ventana = !!(st && (st.pedido || st.visor || st.usado || st.filtros));
   // ¿Ya se estaba en el inicio, arriba de todo y sin nada abierto? (animarInicio)
   const yaEstaba = enPortada() && !FICHA && !ventana && scrollY < 80 && !document.querySelector('.modal');
   // Las ventanas se sacan sin tocar el historial (cada una tenía su history.back)
@@ -9456,7 +9542,8 @@ function irAlInicio(){
   if(FICHA) quitarFicha();
   if(cerrarPedidoDOM){ pedidoEmpujado = false; const c = cerrarPedidoDOM; cerrarPedidoDOM = null; c(); }
   if(cerrarYaNoEstaDOM){ const c = cerrarYaNoEstaDOM; cerrarYaNoEstaDOM = null; c(); }
-  // Filtrar y el panel del equipo se cierran como al tocar afuera
+  if(cerrarFiltrosDOM){ filtrosEmpujado = false; const c = cerrarFiltrosDOM; cerrarFiltrosDOM = null; c(); }
+  // El panel del equipo se cierra como al tocar afuera
   document.querySelectorAll('.modal').forEach(d => d.dispatchEvent(new MouseEvent('click', { bubbles: true })));
 
   const antes = JSON.stringify([filtros, verTodo]);
@@ -10878,7 +10965,7 @@ function pintarSeccion(cuenta){
    la portada. Lo que se ve al compartir el link (og:title) sigue en el HTML:
    WhatsApp no corre el script. */
 const TITULO_PORTADA = document.title;
-const TITULO_BASE = 'Catálogo Advance';
+const TITULO_BASE = 'Advance Tecno';   // auditoría 19/10/2026, T-12: decía "Catálogo Advance", sin Tecno
 /* Cómo se llama la ficha: marca + el nombre limpio (2.3 B). Lo usan la
    pestaña y el diálogo para el lector de pantalla (29/09, revisión): el
    diálogo se anunciaba con el texto crudo del proveedor ("Meta Gen 2 —
@@ -10994,7 +11081,7 @@ function fraseFiltro(c){
   const v = filtros[c];
   if(c === 'rango') return 'de ' + (RANGOS.find(r => r[0] === v) || [0, v])[1].replace(/^(Hasta|Más)/, x => x.toLowerCase());
   if(c === 'soloStock') return 'con stock';
-  if(c === 'ram') return 'de ' + v + ' de memoria';
+  if(c === 'ram') return 'de ' + v + ' de RAM';
   if(c === 'montura') return 'con montura ' + v;
   if(c === 'apertura'){
     const [a, b] = String(TEXTO_APERTURA[v] || v).split(' · ');
@@ -11013,8 +11100,8 @@ const mensajeBusco = q => 'Hola! Estoy buscando: ' + q + '\n¿Lo consiguen?';
    W3-12): "macbook air m4" decía "no está en el catálogo" con dos MacBook Air
    M5 con stock (el bot sí ofrecía el M5). Se prueba lo buscado con menos
    palabras, de lo que menos cambia a lo que más: sin los números ("m4",
-   "15", "r50": el chip o la generación), sin la primera palabra, sin la
-   última, y cada vez más corto desde el final. Va lo primero que encuentra
+   "15", "r50": el chip o la generación), sin la última palabra, sin la
+   primera, y cada vez más corto desde el final. Va lo primero que encuentra
    algo CON stock, en todo el catálogo y sin filtros, y se nombran hasta tres
    (los primeros de esa grilla). Con una sola palabra no hay nada que sacar. */
 function parecidoDe(q){
@@ -11023,7 +11110,11 @@ function parecidoDe(q){
   const pruebas = [];
   const sinNumeros = ws.filter(w => !/\d/.test(w));
   if(sinNumeros.length && sinNumeros.length < ws.length) pruebas.push(sinNumeros);
-  pruebas.push(ws.slice(1), ws.slice(0, -1));
+  /* Sin la última antes que sin la primera (auditoría 19/10/2026, DP-05): lo
+     que se busca suele ir primero ("cargador iphone", "funda iphone",
+     "iphone 17 pro max verde"). Al revés, "cargador iphone" decía "no está"
+     y ofrecía iPhones, con el Cargador 20W y el cable Lightning con stock. */
+  pruebas.push(ws.slice(0, -1), ws.slice(1));
   for(let k = ws.length - 2; k >= 1; k--) pruebas.push(ws.slice(0, k));
   const vistas = new Set();
   for(const p of pruebas){
@@ -11298,6 +11389,7 @@ function armarFiltros(){
       soltarPrecioSinResultados(val);   // 3.4 B: lo mismo con el precio, con aviso
       [...$('cats').querySelectorAll('.chip')].forEach(x => x.setAttribute('aria-pressed', String(x === b)));
       aplicarFiltro(true);
+      bajarALosResultados();   // U-02: con la cinta a la vista arriba, los productos quedaban abajo
       rendirCintaAuto();   // ya eligio: la cinta deja de pasearse sola
       // El chip elegido se centra en la fila
       b.scrollIntoView({ behavior: quieto ? 'auto' : 'smooth', block:'nearest', inline:'center' });
@@ -11840,6 +11932,21 @@ function bajarAlLinkFiltrado(){
   scrollTo({ top: Math.max(0, ancla.getBoundingClientRect().top + scrollY - cinta - 12), behavior: 'auto' });
 }
 
+/* Buscar con Enter o tocar un rubro de la cinta estando arriba (auditoría
+   19/10/2026, U-02): los resultados quedaban más de una pantalla más abajo
+   (la primera tarjeta en y=1458 con una pantalla de 844) y no se veía que
+   pasara nada. Si el encabezado del rubro quedó abajo de la mitad de la
+   pantalla, se baja hasta él, como con un link filtrado. No en cada letra:
+   lo llaman el Enter del buscador y el clic en la cinta. */
+function bajarALosResultados(){
+  if(enPortada()) return;
+  const cab = $('rubro-cab');
+  const ancla = cab && !cab.hidden ? cab : grid;
+  const top = ancla.getBoundingClientRect().top;
+  if(top > innerHeight * 0.5)
+    scrollTo({ top: Math.max(0, top + scrollY - altoCinta() - 12), behavior: 'auto' });   // de una, como bajarAlLinkFiltrado
+}
+
 /* Redibuja en un refresco sin perder el lugar (29/09). En la portada, los
    rubros se rehacen solo si cambió lo que muestran: rehacerlos volvía todas las
    fotos a la primera y soltaba la tarjeta que se miraba con el mouse. En la
@@ -12019,6 +12126,14 @@ function volverArriba(){
 function aplicarFiltro(push){ sincronizarLentes(); escribirURL(push); volverArriba(); pintar(); }
 
 addEventListener('popstate', () => {
+  // Filtrar abierto (U-01, ver abrirFiltros): el Atrás lo cierra y deja lo elegido
+  if(cerrarFiltrosDOM){
+    filtrosEmpujado = false;
+    const c = cerrarFiltrosDOM; cerrarFiltrosDOM = null;
+    c();
+    try{ history.replaceState(null, '', urlActual()); }catch{}
+    return;
+  }
   /* El visor de la foto (4.4 B, 29/09), igual que el pedido de abajo: el
      Atrás del celular lo cierra y deja la ficha abierta. Si se vuelve de su
      entrada, se saca sin tocar el historial; si con Adelante se cae en una
@@ -12818,8 +12933,13 @@ function htmlOpcionesFicha(m, v){
     const suyas = reales.filter(([op]) => memoriaDeOpcion(op) === mm);
     const todas = suyas.flatMap(([, g]) => g);
     // Cambiar de memoria no tiene por qué cambiar de versión: si esa memoria
-    // tiene la misma (Sim, teclado español), se va a ésa.
-    const igual = suyas.find(([op]) => restoDeOpcion(op) === restoAct);
+    // tiene la misma (Sim, teclado español), se va a ésa. Salvo que ésa esté
+    // agotada y otra de la misma memoria no (auditoría 19/10/2026, DP-01: el
+    // A56 «256GB · Desde USD 480» llevaba al 8GB/256GB agotado, con el de
+    // 12GB/256GB a 480 con stock): ahí va a la más barata con stock, que es
+    // la del precio que muestra la pestaña.
+    const hayEnMem = todas.some(x => x.stock);
+    const igual = suyas.find(([op, g]) => restoDeOpcion(op) === restoAct && (g.some(x => x.stock) || !hayEnMem));
     return pestana(mm, todas, igual ? igual[1] : todas, ` data-mem="${esc(mm)}"`);
   }).join('');
 
@@ -12933,13 +13053,20 @@ const BANDA_PARECIDO = 2;
 const dePrecioParecido = (m, lista) => m.precio > 0 && lista.every(x =>
   x.precio > 0 && x.precio <= m.precio * BANDA_PARECIDO && x.precio >= m.precio / BANDA_PARECIDO);
 
+/* El rubro adentro de una frase, en minúscula salvo las marcas (auditoría
+   19/10/2026, T-01): decía "Otros Cámaras de precio parecido" y "Otros
+   Consolas", en unas 95 fichas. "Más" sirve para los dos géneros. */
+const MARCAS_EN_RUBRO = new Set(['Apple', 'Watch', 'Dyson', 'Gaming']);
+const rubroEnFrase = cat => plural(cat).split(' ')
+  .map(w => /^[A-ZÁÉÍÓÚ][a-záéíóúñ]+$/.test(w) && !MARCAS_EN_RUBRO.has(w) ? w.toLowerCase() : w).join(' ');
+
 function htmlRelacionados(m){
   const lista = relacionados(m);
   if(!lista.length) return '';
   return `<section class="fi-rel" aria-label="También te puede interesar">
     <div class="fi-rel-cab">
       <h4>También te puede interesar</h4>
-      <span class="fi-rel-porque">Otros ${esc(plural(m.cat))}${dePrecioParecido(m, lista) ? ' de precio parecido' : ''}</span>
+      <span class="fi-rel-porque">Más ${esc(rubroEnFrase(m.cat))}${dePrecioParecido(m, lista) ? ' de precio parecido' : ''}</span>
     </div>
     <div class="fi-rel-tira">${lista.map(htmlSugerido).join('')}</div>
   </section>`;
@@ -13073,12 +13200,16 @@ function engancharFicha(d, m, v){
   d.querySelectorAll('.fi-op').forEach(b => b.onclick = () => {
     // Las filas de esa version: una, o varias si son colores de la misma. Si
     // ya estas en ella no hay nada que cambiar; si venis de otra, se mantiene
-    // el color que elegiste, siempre que esta version lo tenga.
+    // el color que elegiste, siempre que esta version lo tenga con stock (o
+    // que ningun color de ella tenga). Auditoria 19/10/2026, DP-01: el S26
+    // White tocaba «512GB · USD 920» y caia en el 512GB White agotado, con
+    // Black y Violet a 920 con stock.
     const grupo = b.dataset.op ? m.variantes.filter(x => x.opcion === b.dataset.op)
                                : m.variantes.filter(x => clave(x) === b.dataset.k);
     if(grupo.some(x => clave(x) === FICHA)) return;
     const c = norm(COLOR_FICHA);
-    const conColor = c && grupo.find(x => partirColores(x.color).some(y => norm(y) === c));
+    const hayStock = grupo.some(x => x.stock);
+    const conColor = c && grupo.find(x => partirColores(x.color).some(y => norm(y) === c) && (x.stock || !hayStock));
     const otra = conColor || m.variantes.find(x => clave(x) === b.dataset.k);
     if(otra && clave(otra) !== FICHA) elegirVariante(d, m, otra, conColor ? COLOR_FICHA : undefined);
   });
@@ -14101,7 +14232,9 @@ const USADO_KEY = 'advtecno.usado';
    y en la pregunta frecuente, y se cotiza por WhatsApp. Cuando llegue la
    lista de alguno, pasa a datos/usados.json y se saca de acá; vacío, no hay
    "Otro equipo". */
-const USADOS_OTROS = 'MacBook, Samsung y otros equipos de Apple';
+// (auditoría 19/10/2026, T-02) Decía "MacBook, Samsung y otros equipos de
+// Apple", como si Samsung fuera de Apple. Son los botones de USADOS_OTROS_TIPOS.
+const USADOS_OTROS = 'otros equipos de Apple (MacBook, iPad, Apple Watch) y Samsung';
 /* Los botones de "¿Qué es?" en "Otro equipo" y el ejemplo del modelo de cada
    uno (05/10). Lo demás lo escribe el cliente: modelo, memoria y cómo está. */
 const USADOS_OTROS_TIPOS = [['MacBook', 'MacBook Air M2 13"'], ['iPad', 'iPad Air M2 11"'],
@@ -14264,7 +14397,7 @@ function textoUsado(c){
   if(!c.fallan.length) partes.push('cumple todas las condiciones');
   let t = partes.join(', ');
   // Con "¿Qué tiene?" escrito en la web van los detalles; si no, los escribe en el chat
-  if(c.fallan.length) t += '. Marqué que no cumple: ' + c.fallan.map(x => x.texto.toLowerCase()).join(', ') +
+  if(c.fallan.length) t += '. Marqué que no cumple: ' + c.fallan.map(x => '«' + x.texto + '»').join(', ') +
     (c.det ? '. Detalles: ' + c.det : '. Te paso los detalles:');
   return t;
 }
@@ -14613,6 +14746,7 @@ function abrirPedido(){
        línea: por eso .pd-txt pasó de div a span (se ve igual, display:block). */
     d.innerHTML = `
       <div class="caja" role="dialog" aria-modal="true" aria-label="Tu pedido" tabindex="-1">
+        <button class="fi-cerrar pd-cerrar" type="button" aria-label="Cerrar el pedido">&times;</button>
         <h3>Tu pedido</h3>
         ${items.length ? items.map(({p, n, color}) => {
           // Quién es cada fila, para el lector de pantalla: el mismo modelo
@@ -14664,6 +14798,10 @@ function abrirPedido(){
       </div>`;
     { const c2 = d.querySelector('.caja'); if(c2 && yAntes) c2.scrollTop = yAntes; }
 
+    // La X de cerrar (auditoría 19/10/2026, U-06): en el celular la única × a la
+    // vista era la de quitar el producto, y el cliente la tocaba para cerrar
+    const x = d.querySelector('.pd-cerrar');
+    if(x) x.onclick = () => cerrarPedidoDOM?.();
     d.querySelectorAll('.pd-quitar').forEach(b => b.onclick = () => {
       togglePedido(b.closest('.pd-item').dataset.key);
       dibujar();
@@ -14799,7 +14937,7 @@ function pasosUsado(b){
 function mensajeUsado(c, prod, color){
   const x = prod ? partesMensaje(prod, color) : null;
   let t = x
-    ? `Hola! Me interesa el ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)} y quiero entregar mi usado como parte de pago.`
+    ? `Hola! Me interesa ${articuloDe(x.nombre)} ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)} y quiero entregar mi usado como parte de pago.`
     : 'Hola! Quiero entregar mi usado como parte de pago.';
   t += '\n\nMi usado: ' + textoUsado(c) + (c.valor !== null ? ': ' + textoValorUsado(c) : '');
   if(c.valor !== null && x && typeof prod.precio === 'number'){
@@ -14833,7 +14971,7 @@ function htmlEnviarUsado(msg, ids = ['us-wa', 'us-ig']){
 function mensajeFuera(prod, color, c){
   const x = prod ? partesMensaje(prod, color) : null;
   return (x
-    ? `Hola! Me interesa el ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)} y quiero entregar mi usado como parte de pago.`
+    ? `Hola! Me interesa ${articuloDe(x.nombre)} ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)} y quiero entregar mi usado como parte de pago.`
     : 'Hola! Quiero entregar mi usado como parte de pago.') +
     '\n\nMi usado (no está en el cotizador):' +
     `\nQué es: ${c.tipo}\nModelo: ${c.m.nombre}` + (c.memoria ? `\nMemoria: ${c.memoria}` : '') +
@@ -14864,7 +15002,7 @@ function abrirCotizador(desde = {}){
     const e = equipoUsado(b.e), m = e && modeloUsado(e, b.m);
     if(paso === 'equipo') return { preg: '¿Qué equipo entregás?',
       html: `<div class="us-ops us-ops-2">${USADOS.map(x => op('e', x.id, x.nombre, b.e === x.id)).join('')}</div>
-        ${USADOS_OTROS ? `<button type="button" class="us-op us-fuera" data-fuera="1" aria-pressed="${!!(USADO && USADO.e === 'otro') && !b.e}"><b>Otro equipo</b><small>${esc(USADOS_OTROS)}</small></button>` : ''}` };
+        ${USADOS_OTROS ? `<button type="button" class="us-op us-fuera" data-fuera="1" aria-pressed="${!!(USADO && USADO.e === 'otro') && !b.e}"><b>Otro equipo</b><small>${esc(USADOS_OTROS[0].toUpperCase() + USADOS_OTROS.slice(1))}</small></button>` : ''}` };
     /* "Otro equipo" (05/10): sin valor en el momento. El cliente completa qué
        es, el modelo, la memoria y cómo está, y eso arma el WhatsApp (Pedro:
        "que puedan poner los detalles en la landing y de ahí que envíen el
@@ -14957,7 +15095,7 @@ function abrirCotizador(desde = {}){
          detalles por WhatsApp. El mensaje termina en "Te paso los detalles:".
          Desde el pedido van en el mensaje del pedido. */
       html = `<div class="us-res rev"><small>El valor</small><b>Mandanos los detalles</b>
-          <span>Marcaste que no: ${esc(c.fallan.map(x => x.texto.toLowerCase()).join(', '))}. Con eso el valor cambia: ${delPedido
+          <span>Marcaste que no: ${esc(c.fallan.map(x => '«' + x.texto + '»').join(', '))}. Con eso el valor cambia: ${delPedido
             ? 'mandanos los detalles junto con el pedido, en el mismo WhatsApp, y te decimos cuánto vale.'
             : 'mandanos los detalles por WhatsApp o Instagram y te decimos cuánto vale.'}</span></div>
         <label class="pd-campo us-det"><span>¿Qué tiene? <i>opcional</i></span>
@@ -15360,13 +15498,18 @@ function moverSug(paso){
 /* ---------- Eventos ---------- */
 
 let t;
+/* Empezar a buscar suma una entrada al historial; las letras que siguen la
+   reemplazan (auditoría 19/10/2026, U-03): buscar desde la portada y apretar
+   Atrás sacaba del catálogo, y con varias búsquedas el Atrás caía muchas atrás. */
+let empiezaBusqueda = false;
 $('q').addEventListener('input', e => {
+  if(!filtros.q.trim() && e.target.value.trim()) empiezaBusqueda = true;
   filtros.q = e.target.value;
   $('clear').hidden = !e.target.value;
   // Easter egg escondido en el buscador: escribí "el primo"
   if(vaParaElPrimo(e.target.value)) precargarEgg('primo');   // camino al egg (29/09)
   if(['primo','el primo'].includes(norm(e.target.value))) abrirPrimo();
-  clearTimeout(t); t = setTimeout(() => { aplicarFiltro(false); pintarSug(); }, 120);
+  clearTimeout(t); t = setTimeout(() => { const push = empiezaBusqueda; empiezaBusqueda = false; aplicarFiltro(push); pintarSug(); }, 120);
 });
 // Flechas para elegir sin soltar el teclado; Enter abre lo marcado
 $('q').addEventListener('keydown', e => {
@@ -15383,7 +15526,16 @@ $('q').addEventListener('keydown', e => {
   if(e.key === 'Enter'){
     const m = $('q-sug').querySelector('.qs.marcada');
     if(m){ e.preventDefault(); m.click(); }
-    else cerrarSug();     // sin nada marcado, Enter es "filtra y sacame esto de encima"
+    else{
+      cerrarSug();     // sin nada marcado, Enter es "filtra y sacame esto de encima"
+      // ...y mostrame lo que encontró (U-02): se aplica ya y se baja hasta los
+      // resultados; en el celular, además, se baja el teclado
+      clearTimeout(t);
+      const push = empiezaBusqueda; empiezaBusqueda = false;
+      aplicarFiltro(push);
+      bajarALosResultados();
+      if(window.matchMedia && matchMedia('(pointer: coarse)').matches) $('q').blur();
+    }
   }
 });
 $('q').addEventListener('focus', pintarSug);

@@ -83,8 +83,8 @@ function correrPruebas(){
   cab().querySelector('.filtrar-btn').click();
   ok(!!panel(), 'Filtrar abre el panel');
   const titulos = () => [...panel().querySelectorAll('.mf-rot')].map(x => x.textContent);
-  ok(['Precio', 'Capacidad', 'Memoria', 'Stock'].every(t => titulos().includes(t)) && !titulos().includes('Montura'),
-     'en Celulares filtra precio, capacidad, memoria y stock', titulos().join(' / '));
+  ok(['Precio', 'Memoria', 'RAM', 'Stock'].every(t => titulos().includes(t)) && !titulos().includes('Montura'),
+     'en Celulares filtra precio, memoria, RAM y stock', titulos().join(' / '));
   const opsCap = [...panel().querySelectorAll('[data-campo="capacidad"]')];
   const capMal = opsCap.filter(b => Number(b.querySelector('i').textContent) !==
     cel.filter(m => m.variantes.some(v => capacidadDe(v) === b.dataset.v)).length);

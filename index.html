@@ -197,19 +197,22 @@ window.ADVAPP_TEMPRANO = (() => {
       #FFFFFF;
     border-bottom:1px solid var(--line);
   }
-  header > .wrap{padding-top:32px;padding-bottom:28px}
+  header > .wrap{padding-top:22px;padding-bottom:20px}
   header .eyebrow{color:var(--acento)}
   /* De 900px para arriba el titulo solo dejaba media pantalla vacia. Las tres
-     razones (19/10) van al costado, apoyadas abajo: llenan el aire sin
-     inventar contenido que no existe. */
+     razones (19/10) van al costado y llenan el aire sin inventar contenido.
+     Las dos columnas van centradas entre sí (Benja, 19/10: con el título
+     apoyado abajo y las razones arriba quedaba "super grande el banner y
+     super descolocado"): "Catálogo" y el título, pegados, a la altura del
+     medio de las razones. */
   @media (min-width:900px){
     header > .wrap{
-      display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);
-      grid-template-rows:1fr auto;column-gap:54px;align-items:end;
+      display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+      grid-template-rows:auto auto;column-gap:54px;align-content:center;
     }
-    header .eyebrow{grid-column:1;grid-row:1}
-    .titulo-h{grid-column:1;grid-row:2;margin-bottom:0}
-    .razones{grid-column:2;grid-row:1 / span 2;margin:0}
+    header .eyebrow{grid-column:1;grid-row:1;align-self:end}
+    .titulo-h{grid-column:1;grid-row:2;align-self:start;margin-bottom:0}
+    .razones{grid-column:2;grid-row:1 / span 2;align-self:center;margin:0}
   }
 
   /* ---------- Barra de arriba ---------- */
@@ -1103,24 +1106,23 @@ window.ADVAPP_TEMPRANO = (() => {
      la bajada con raya): tres renglones con ícono, el puntaje de Google, los
      precios de hoy y el WhatsApp. El primero es el sello (#sello-google): sin
      datos/resenas.json se esconde y quedan los otros dos. */
-  .razones{display:flex;flex-direction:column;margin:18px 0 0}
-  .razon{display:flex;align-items:center;gap:14px;margin:0;padding:12px 0;color:var(--ink);text-decoration:none}
+  .razones{display:flex;flex-direction:column;margin:16px 0 0}
+  .razon{display:flex;align-items:center;gap:12px;margin:0;padding:7px 0;color:var(--ink);text-decoration:none}
   .razon[hidden]{display:none}
   .razones > .razon:not([hidden]) ~ .razon{border-top:1px solid var(--line)}
-  .rz-ico{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#EDE4FD;color:var(--acento)}
-  .rz-ico svg{width:20px;height:20px;display:block}
-  .rz-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
-  .rz-txt b{font:700 16px/1.25 var(--sans)}
-  .rz-txt > span{font-size:14px;line-height:1.4;color:var(--muted)}
+  .rz-ico{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:#EDE4FD;color:var(--acento)}
+  .rz-ico svg{width:18px;height:18px;display:block}
+  .rz-txt{display:flex;flex-direction:column;gap:1px;min-width:0}
+  .rz-txt b{font:700 15px/1.25 var(--sans)}
+  .rz-txt > span{font-size:13.5px;line-height:1.35;color:var(--muted)}
   a.razon{border-radius:12px}
   a.razon:hover b{color:var(--acento)}
   a.razon:hover .rz-ico{background:var(--acento);color:#fff}
   a.razon:focus-visible{outline:2px solid var(--acento);outline-offset:4px}
   @media (max-width:560px){
-    .razon{gap:12px;padding:10px 0}
-    .rz-ico{width:36px;height:36px;border-radius:12px}
-    .rz-ico svg{width:18px;height:18px}
-    .rz-txt b{font-size:15px}
+    .razon{padding:6px 0}
+    .rz-ico{width:34px;height:34px}
+    .rz-txt b{font-size:14.5px}
     .rz-txt > span{font-size:13px}
   }
   /* El bloque de la portada (Benja, 19/10/2026, ronda 3 del muestrario):

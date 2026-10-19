@@ -257,6 +257,11 @@ function correrPruebas(){
     .map(x => x[1].trim())
     .filter(t => { const l = pintas(t); return !(l.length && l.every(c => c.hex)); });
 
+  /* 19/10/2026: cada pedazo empieza con el ID de la fila, y la lista con el
+     total ("2: ID: ... | ID: ..."). Sin el ID, herramientas/fallas-conocidas.py
+     no sabia que fila era ("No dice que filas: se arregla, no se anota") y un
+     dato que ya se pidio -el color Slipstream del Edge 60 Fusion- frenaba cada
+     PUBLICAR y la revision de las 14:00 como si fuera nuevo. */
   const perdidos = [];
   MODELOS.filter(m => m.multi).forEach(m => {
     m.variantes.forEach(v => {
@@ -264,13 +269,13 @@ function correrPruebas(){
         const comun = m.variantes.every(o => parentesis(o).includes(t));
         if(comun) return;                      // va en el nombre del modelo
         if(!norm(v.etiqueta).includes(norm(t).split(/\s+/)[0]))
-          perdidos.push(`${m.desc}: "${t}" no quedo en "${v.etiqueta}"`);
+          perdidos.push(`${clave(v)}: ${m.desc}: "${t}" no quedo en "${v.etiqueta}"`);
       });
     });
   });
   ok(perdidos.length === 0,
      'lo que distingue una version de otra sobrevive en su etiqueta',
-     perdidos.join(' | ') || 'nada se pierde');
+     perdidos.length ? perdidos.length + ': ' + perdidos.join(' | ') : 'nada se pierde');
   ok(MODELOS.every(m => m.stock === m.variantes.some(v => v.stock)),
      'el modelo figura con stock si al menos una variante lo tiene');
 
@@ -340,8 +345,13 @@ function correrPruebas(){
     return a && m.variantes.every(v => sinPar(v.desc).endsWith(sinPar(a[0]))) ? m.desc.slice(0, -a[0].length) : m.desc;
   };
   const malNombre = multi.filter(m => !m.variantes.every(v => empiezaCon(v, nombreSinAgregado(m))));
+  /* 19/10/2026: las filas que no empiezan con el nombre, cada una con su ID y
+     con el total adelante (antes decia solo el primer modelo: "Mi 17 Ultra
+     16/512GB", sin fila, y no se podia anotar como pedido). */
+  const malFilas = malNombre.flatMap(m => m.variantes.filter(v => !empiezaCon(v, nombreSinAgregado(m)))
+    .map(v => `${clave(v)}: ${m.desc} <- "${v.desc}"`));
   ok(malNombre.length === 0, 'el nombre del grupo es el comienzo comun de todas sus variantes',
-     malNombre.map(m=>m.desc)[0] || 'todos bien');
+     malFilas.length ? malFilas.length + ': ' + malFilas.join(' | ') : (malNombre.map(m => m.desc)[0] || 'todos bien'));
   // Y nunca es el nombre entero de una fila con capacidad o color: eso es rendirse
   // 01/10/2026: salvo que esa fila sea la version "Base" del modelo (la que no
   // agrega nada: "Drone DJI Mini 5 Pro" al lado de sus combos). Eso no es

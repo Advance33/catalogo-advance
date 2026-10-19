@@ -92,7 +92,9 @@ function correrPruebas(){
         const ks = new Set([...d.querySelectorAll('.fi-tono')].map(x => x.dataset.k));
         llega = grupo.some(v => ks.has(clave(v)));
       }
-      if(!llega) sueltas.push(m.desc + ' / ' + op);
+      /* 19/10/2026: una por fila, con su ID adelante (antes "Instax Mini 12 /
+         Estandar", sin fila: no se podia anotar como pedido a ADVAPP). */
+      if(!llega) (grupo.length ? grupo : [m.rep]).forEach(v => sueltas.push(clave(v) + ': ' + m.desc + ' / ' + op));
       cerrarFicha();
     }
     abrirFicha(clave(m.rep), null);
@@ -104,7 +106,7 @@ function correrPruebas(){
     cerrarFicha();
   });
   ok(!sueltas.length, 'a todas las versiones se llega: por pestaña o por la tira de colores',
-     sueltas.slice(0, 3).join(' | ') || multi.length + ' fichas');
+     sueltas.length ? sueltas.length + ': ' + sueltas.slice(0, 3).join(' | ') : multi.length + ' fichas');
   ok(!repetidos.length, 'ninguna pestaña dice lo mismo que otra del mismo eje',
      repetidos.slice(0, 3).join(' | ') || 'ninguna');
 

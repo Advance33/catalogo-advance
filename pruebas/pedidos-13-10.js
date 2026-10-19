@@ -268,7 +268,8 @@ function correrPruebas(){
          '[6] una reseña larga se abre entera con "Leer completa"');
     }else info('[6] hoy ninguna reseña pasa de ' + RESENA_LARGA + ' letras: no hay "Leer completa" que mirar');
     const sello = $('sello-google');
-    ok(!sello.hidden && sello.textContent.includes(nota) && sello.textContent.includes(plata(archivo.cantidad) + ' reseñas en Google'),
+    // Desde el 19/10 es el primer renglón de las tres razones (2D): "4,9 en Google" / "469 reseñas de clientes"
+    ok(!sello.hidden && sello.textContent.includes(nota + ' en Google') && sello.textContent.includes(plata(archivo.cantidad) + ' reseñas'),
        '[6] el sello del encabezado dice el puntaje y cuantas son', sello.textContent.replace(/\s+/g, ' ').trim());
     entrarAlRubro('Celular');
     p13Clic(sello);
@@ -283,8 +284,12 @@ function correrPruebas(){
      validarResenas({ ...base, ver: 'javascript:alert(1)' }) === null,
      '[6] sin formato, con puntaje fuera de 1 a 5, sin cantidad o con un link que no es de Google: no se muestra nada');
   const filtradas = validarResenas({ ...base, resenas: [{ autor: '', estrellas: 5, texto: 'x' }, { autor: 'B', estrellas: 9, texto: 'x' },
-                                                       { autor: 'C', estrellas: 4, texto: '' }, { autor: 'D', estrellas: 4, texto: 'ok' }] });
+                                                       { autor: 'C', estrellas: 5, texto: '' }, { autor: 'D', estrellas: 5, texto: 'ok' }] });
   ok(filtradas.resenas.length === 1 && filtradas.resenas[0].autor === 'D', '[6] una reseña sin autor, sin texto o con estrellas raras se saltea');
+  // Benja, 19/10: "¿también se pueden evitar las malas?" Solo salen las de 5
+  const malas = validarResenas({ ...base, resenas: [{ autor: 'E', estrellas: 4, texto: 'bien' }, { autor: 'F', estrellas: 1, texto: 'mal' },
+                                                    { autor: 'G', estrellas: 5, texto: 'excelente' }] });
+  ok(malas.resenas.map(r => r.autor).join() === 'G', '[6] solo se muestran las de 5 estrellas (19/10)', malas.resenas.map(r => r.autor + ':' + r.estrellas).join(', '));
   const guardada = RESENAS;
   RESENAS = null; FIRMA_EXTRAS = ''; pintarExtras(); pintarSelloGoogle();
   ok(!$('resenas') && $('sello-google').hidden && !!$('ayuda'), '[6] sin el archivo no hay bloque ni sello, y la portada sigue entera');

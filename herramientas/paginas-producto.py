@@ -28,6 +28,17 @@ LO QUE NO CAMBIA NUNCA SOLO
 - Las paginas no se borran. La de un modelo que hoy no esta queda, marcada sin
   stock en los datos para Google; al abrirla, el script trae los precios del
   momento de ADVAPP y dice que hoy no hay.
+- Salvo que ese modelo siga a la venta con OTRA direccion (19/10/2026,
+  chequeo de la web): ADVAPP le cambio el SKU madre o el grupo antes de que
+  existiera la herencia de asignar_slugs (W3-05, 13/10), y quedaron dos
+  paginas del mismo producto. "apple-iphone-17-pro-2" decia "Hoy sin stock" al
+  lado de la de verdad, con stock, y "sony-joystick-ps5" competia con
+  "sony-joystick-ps5-2" con una foto que ya no existe. Si alguna version de la
+  pagina vieja (su ID o su SKU) esta hoy en un modelo, o su SKU empieza con el
+  SKU madre de un modelo de hoy, y es uno solo, la vieja pasa a ser un desvio
+  a esa (destino_de_la_vieja): canonica a la nueva, refresh 0 (Google lo toma
+  como redireccion) y afuera del sitemap. La direccion vieja sigue andando
+  para quien la tenga guardada.
 
 EL PRECIO (13/10/2026, auditoria W3-06)
 Hasta el 13/10 el HTML llevaba el precio y el stock del dia en que se armo, y
@@ -469,8 +480,13 @@ def armar_pagina(m, s, publica, general):
     # orden en que vinieron (con stock y mas barata primero, el dia que se armo).
     versiones = [{k: x.get(k) or '' for k in ('version', 'color', 'clave', 'sku', 'foto', 'wa', 'aviso')}
                  for x in m['versiones']]
+    # El dolar del dia en que se armo NO va (19/10/2026): el script no lo usa
+    # (los pesos salen de dolarapi al abrir; sin eso no hay pesos), y como
+    # cambia todos los dias cada PUBLICAR reescribia todas las paginas y les
+    # ponia la fecha de hoy en el sitemap aunque nada mas hubiera cambiado.
+    cotiz = {k: v for k, v in (general.get('cotizacion') or {}).items() if k != 'valor'}
     datos = {'versiones': versiones, 'advapp': general.get('advapp') or '', 'cuotas': cuotas,
-             'cotizacion': general.get('cotizacion') or {}, 'oferta': oferta_sin_precio(m, url)}
+             'cotizacion': cotiz, 'oferta': oferta_sin_precio(m, url)}
     filas = ''.join('<tr><td>%s</td><td>%s</td><td class="num">Consultar</td><td>—</td></tr>' % (
         e(x['version'] or '—'), e(x['color'] or '—'))
         for x in sorted(m['versiones'], key=lambda y: (y['version'], y['color'])))
@@ -628,10 +644,122 @@ def sin_stock_en_pagina(ruta):
     return escribir_si_cambio(ruta, nuevo) if nuevo != t else False
 
 
-def texto_sitemap(publica, indice):
+# --------------------------------------------------------------------------
+# La pagina vieja de un modelo que sigue a la venta con otra direccion
+# (19/10/2026, ver LO QUE NO CAMBIA NUNCA SOLO)
+# --------------------------------------------------------------------------
+
+RE_DESVIO = re.compile(r'<meta name="advance-desvio" content="([a-z0-9-]+)">')
+
+
+def leer_pagina(ruta):
+    try:
+        with io.open(ruta, encoding='utf-8') as fh:
+            return fh.read()
+    except OSError:
+        return None
+
+
+def desvio_de(texto):
+    """A que direccion lleva una pagina que ya es un desvio, o None."""
+    m = RE_DESVIO.search(texto or '')
+    return m.group(1) if m else None
+
+
+def ids_de_la_pagina(texto):
+    """Los ID y SKU de las versiones que guarda una pagina (sus datos para el
+    script), en mayusculas. Una pagina sin esos datos no dice ninguno."""
+    m = re.search(r'<script id="datos" type="application/json">(.*?)</script>', texto or '', re.S)
+    if not m:
+        return set()
+    try:
+        d = json.loads(m.group(1).replace('<\\/', '</'))
+    except ValueError:
+        return set()
+    ids = set()
+    for v in (d.get('versiones') or []) if isinstance(d, dict) else []:
+        for k in ('clave', 'sku'):
+            x = str((v or {}).get(k) or '').strip().upper()
+            if x:
+                ids.add(x)
+    return ids
+
+
+def destino_de_la_vieja(texto, modelos, slugs):
+    """La direccion de HOY del mismo producto que muestra una pagina vieja, o
+    None si no hay una sola que lo sea.
+
+    1. Alguna version de la vieja (su ID o su SKU) esta hoy en un modelo: la
+       misma fila, en otra familia (el Joystick PS5: ACC-SON-001).
+    2. Si ninguna esta, una version cuyo ID o SKU empieza con el SKU madre de
+       un modelo de hoy y un guion: la misma familia de ADVAPP con otra fila
+       (el iPhone 17 Pro: CEL-APL-17P-512-BLU-SIM y la familia M:CEL-APL-17P).
+       Con el guion, CEL-APL-17P no toma al 17 Pro Max (CEL-APL-17PM-...).
+    Si da mas de un modelo, no se adivina: queda como estaba (sin stock)."""
+    ids = ids_de_la_pagina(texto)
+    if not ids:
+        return None
+    por_id = {}
+    madres = {}
+    for m in modelos:
+        s = slugs.get(m.get('familia'))
+        if not s:
+            continue
+        for v in m.get('versiones') or []:
+            for k in ('clave', 'sku'):
+                x = str(v.get(k) or '').strip().upper()
+                if x:
+                    por_id.setdefault(x, set()).add(s)
+        f = str(m.get('familia') or '')
+        if f.startswith('M:') and len(f) > 2:
+            madres.setdefault(f[2:].upper(), set()).add(s)
+    hay = set()
+    for i in ids:
+        hay |= por_id.get(i, set())
+    if not hay:
+        for madre, ss in madres.items():
+            if any(i.startswith(madre + '-') for i in ids):
+                hay |= ss
+    return next(iter(hay)) if len(hay) == 1 else None
+
+
+def pagina_desvio(titulo, destino, publica):
+    """La pagina vieja hecha desvio: lleva a la nueva con el ?... y el #... que
+    traiga, y le dice a Google que la que vale es la nueva."""
+    nueva = '%sproducto/%s/' % (publica, destino)
+    rel = '../%s/' % destino
+    return '''<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- La direccion vieja de un modelo que hoy tiene otra (19/10/2026). La arma
+     herramientas/paginas-producto.py: no editar a mano. -->
+<title>{titulo} | Advance Tecno</title>
+<meta name="advance-desvio" content="{destino}">
+<link rel="canonical" href="{nueva}">
+<meta http-equiv="refresh" content="0; url={rel}">
+<script>location.replace({rel_js} + location.search + location.hash);</script>
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/icono-32.png">
+<style>body{{margin:0;min-height:100vh;display:grid;place-items:center;background:#F4EFFD;color:#170F28;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}}a{{color:#7C3AED;font-weight:600}}</style>
+</head>
+<body>
+<p>Este producto ahora está en <a href="{rel}">{titulo}</a>.</p>
+</body>
+</html>
+'''.format(titulo=e(titulo), destino=e(destino), nueva=e(nueva), rel=e(rel), rel_js=json.dumps(rel))
+
+
+def titulo_de_la_pagina(texto, por_defecto):
+    m = re.search(r'<meta property="og:title" content="([^"]*)">', texto or '')
+    return html.unescape(m.group(1)).strip() if m and m.group(1).strip() else por_defecto
+
+
+def texto_sitemap(publica, indice, fuera=()):
+    """fuera: las direcciones que hoy son un desvio (no se le listan a Google)."""
     hoy = datetime.date.today().isoformat()
     urls = ['  <url><loc>%s</loc><changefreq>daily</changefreq></url>' % e(publica)]
-    for s in sorted(set(indice['slugs'].values())):
+    for s in sorted(set(indice['slugs'].values()) - set(fuera)):
         urls.append('  <url><loc>%sproducto/%s/</loc><lastmod>%s</lastmod></url>' % (e(publica), e(s), indice['lastmod'].get(s, hoy)))
     return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s\n</urlset>\n' % '\n'.join(urls)
 
@@ -642,7 +770,7 @@ def aplicar(datos, publica, carpeta=CARPETA, raiz=RAIZ):
     modelos = datos.get('modelos') or []
     slugs = asignar_slugs(modelos, indice)
     hoy = datetime.date.today().isoformat()
-    res = {'nuevas': 0, 'cambiadas': 0, 'iguales': 0, 'sin_stock': 0}
+    res = {'nuevas': 0, 'cambiadas': 0, 'iguales': 0, 'sin_stock': 0, 'desvios': 0, 'desvios_nuevos': 0}
     presentes = set()
     for m in modelos:
         s = slugs[m['familia']]
@@ -654,14 +782,33 @@ def aplicar(datos, publica, carpeta=CARPETA, raiz=RAIZ):
             indice['lastmod'][s] = hoy
         else:
             res['iguales'] += 1
+    fuera = set()
     for f, s in slugs.items():
-        if s not in presentes and sin_stock_en_pagina(os.path.join(carpeta, s, 'index.html')):
+        if s in presentes:
+            continue
+        ruta = os.path.join(carpeta, s, 'index.html')
+        texto = leer_pagina(ruta)
+        # Ya es un desvio: queda como esta (si el modelo vuelve con esta
+        # familia, el for de arriba la rearma entera)
+        if desvio_de(texto):
+            fuera.add(s)
+            res['desvios'] += 1
+            continue
+        destino = destino_de_la_vieja(texto, modelos, slugs)
+        if destino and destino != s and destino in presentes:
+            escribir_si_cambio(ruta, pagina_desvio(titulo_de_la_pagina(texto, s), destino, publica))
+            fuera.add(s)
+            res['desvios'] += 1
+            res['desvios_nuevos'] += 1
+            indice['lastmod'][s] = hoy
+        elif sin_stock_en_pagina(ruta):
             res['sin_stock'] += 1
             indice['lastmod'][s] = hoy
     escribir_si_cambio(os.path.join(carpeta, 'indice.json'),
                        json.dumps({'slugs': dict(sorted(slugs.items())), 'lastmod': dict(sorted(indice['lastmod'].items()))},
                                   ensure_ascii=False, indent=1) + '\n')
-    res['sitemap'] = escribir_si_cambio(os.path.join(raiz, 'sitemap.xml'), texto_sitemap(publica, {'slugs': slugs, 'lastmod': indice['lastmod']}))
+    res['sitemap'] = escribir_si_cambio(os.path.join(raiz, 'sitemap.xml'),
+                                        texto_sitemap(publica, {'slugs': slugs, 'lastmod': indice['lastmod']}, fuera))
     return res
 
 
@@ -695,6 +842,9 @@ def main(argv):
     print('  %d modelos: %d nuevas, %d cambiadas, %d sin cambios; %d de modelos que hoy no estan, pasadas a sin stock.%s'
           % (len(datos['modelos']), res['nuevas'], res['cambiadas'], res['iguales'], res['sin_stock'],
              ' sitemap.xml actualizado.' if res['sitemap'] else ''))
+    if res['desvios']:
+        print('  %d direccion(es) vieja(s) llevan a la de hoy del mismo modelo (%d nueva(s) en esta pasada); no van al sitemap.'
+              % (res['desvios'], res['desvios_nuevos']))
     return 0
 
 
@@ -799,6 +949,72 @@ def probar():
     ok(len(d1) <= 160, 'la descripcion no pasa los 160 caracteres')
     sm = texto_sitemap('https://catalogo.advancetecno.com.ar/', {'slugs': {'a': 'apple-iphone-17-pro'}, 'lastmod': {'apple-iphone-17-pro': '2026-10-05'}})
     ok('<loc>https://catalogo.advancetecno.com.ar/producto/apple-iphone-17-pro/</loc><lastmod>2026-10-05</lastmod>' in sm, 'el sitemap lista la pagina')
+    # (19/10/2026) El dolar del dia no queda en la pagina
+    hj = armar_pagina(m, 'x', 'https://catalogo.advancetecno.com.ar/',
+                      {'cuotas': 12, 'cotizacion': {'tipo': 'blue', 'recargo': 0, 'recargoFijo': 20, 'valor': 1580}})
+    ok('"valor"' not in hj and '"tipo": "blue"' in hj and '"recargoFijo": 20' in hj,
+       'el dolar del dia no queda en la pagina (el script no lo usa, y cambiaba todas las paginas cada PUBLICAR)')
+    # (19/10/2026) La pagina vieja de un modelo que sigue a la venta con otra direccion
+    def vieja_con(*claves):
+        d = {'versiones': [{'version': '', 'color': '', 'clave': c, 'sku': ''} for c in claves]}
+        return ('<meta property="og:title" content="Sony Joystick PS5">'
+                '<script id="datos" type="application/json">%s</script>' % json.dumps(d))
+    de_hoy = [{'familia': 'M:ACG-SON-JOYPS5', 'versiones': [{'clave': 'ACC-SON-001', 'sku': 'ACG-SON-JOYPS5-000-BLK-000'}]},
+              {'familia': 'M:CEL-APL-17P', 'versiones': [{'clave': 'CEL-APP-068', 'sku': 'CEL-APL-17P-256-ORG-ESIM'}]},
+              {'familia': 'M:CEL-APL-17PM', 'versiones': [{'clave': 'CEL-APP-078', 'sku': 'CEL-APL-17PM-256-ORG-ESIM'}]}]
+    sl = {'M:ACG-SON-JOYPS5': 'sony-joystick-ps5-2', 'M:CEL-APL-17P': 'apple-iphone-17-pro', 'M:CEL-APL-17PM': 'apple-iphone-17-pro-max'}
+    ok(destino_de_la_vieja(vieja_con('ACC-SON-001'), de_hoy, sl) == 'sony-joystick-ps5-2',
+       'la vieja del Joystick PS5 (la misma fila, hoy en otra familia) lleva a la de hoy')
+    ok(destino_de_la_vieja(vieja_con('CEL-APL-17P-512-BLU-SIM'), de_hoy, sl) == 'apple-iphone-17-pro',
+       'la vieja del iPhone 17 Pro (una fila que ya no esta, del mismo SKU madre) lleva a la de hoy')
+    ok(destino_de_la_vieja(vieja_con('CEL-APL-17PM-512-BLU-ESIM'), de_hoy, sl) == 'apple-iphone-17-pro-max',
+       'y la del 17 Pro Max no cae en el 17 Pro (el SKU madre se compara con su guion)')
+    ok(destino_de_la_vieja(vieja_con('ACC-SON-001', 'CEL-APP-068'), de_hoy, sl) is None,
+       'si sus versiones estan hoy en dos modelos, no se adivina')
+    ok(destino_de_la_vieja(vieja_con('DYS-DYS-V15FLUFFYASPIRADORA-000-000-000'), de_hoy, sl) is None
+       and destino_de_la_vieja('<p>sin datos</p>', de_hoy, sl) is None,
+       'un modelo que de verdad no esta (o una pagina sin datos) queda sin stock, como siempre')
+    dv = pagina_desvio('Sony Joystick PS5 <b>', 'sony-joystick-ps5-2', 'https://catalogo.advancetecno.com.ar/')
+    ok('<link rel="canonical" href="https://catalogo.advancetecno.com.ar/producto/sony-joystick-ps5-2/">' in dv
+       and '<meta http-equiv="refresh" content="0; url=../sony-joystick-ps5-2/">' in dv
+       and 'location.replace("../sony-joystick-ps5-2/" + location.search + location.hash)' in dv,
+       'el desvio: canonica a la nueva, refresh 0, y lleva el ?... y el #... que traiga')
+    ok(desvio_de(dv) == 'sony-joystick-ps5-2' and 'noindex' not in dv and '<b>' not in dv and 'Sony Joystick PS5 &lt;b&gt;' in dv,
+       'se reconoce como desvio y el nombre va escapado')
+    sm2 = texto_sitemap('https://catalogo.advancetecno.com.ar/',
+                        {'slugs': {'G:x': 'sony-joystick-ps5', 'M:y': 'sony-joystick-ps5-2'}, 'lastmod': {}}, {'sony-joystick-ps5'})
+    ok('/producto/sony-joystick-ps5-2/' in sm2 and '/producto/sony-joystick-ps5/' not in sm2, 'el desvio no va al sitemap')
+    # De punta a punta, en una carpeta aparte
+    import shutil
+    import tempfile
+    global INDICE
+    antes = INDICE
+    tmp = tempfile.mkdtemp(prefix='pp-probar-')
+    try:
+        car = os.path.join(tmp, 'producto')
+        os.makedirs(os.path.join(car, 'sony-joystick-ps5'))
+        INDICE = os.path.join(car, 'indice.json')
+        with io.open(INDICE, 'w', encoding='utf-8') as fh:
+            fh.write(json.dumps({'slugs': {'G:viejo': 'sony-joystick-ps5', 'M:ACG-SON-JOYPS5': 'sony-joystick-ps5-2'}, 'lastmod': {}}))
+        with io.open(os.path.join(car, 'sony-joystick-ps5', 'index.html'), 'w', encoding='utf-8') as fh:
+            fh.write(vieja_con('ACC-SON-001'))
+        mj = dict(m, familia='M:ACG-SON-JOYPS5', titulo='Sony Joystick PS5',
+                  versiones=[dict(m['versiones'][0], clave='ACC-SON-001', sku='ACG-SON-JOYPS5-000-BLK-000')])
+        pasada = lambda: aplicar({'modelos': [mj], 'cuotas': 12}, 'https://catalogo.advancetecno.com.ar/', carpeta=car, raiz=tmp)
+        leer = lambda *r: io.open(os.path.join(*r), encoding='utf-8').read()
+        r1 = pasada()
+        t1, sm3, ind3 = leer(car, 'sony-joystick-ps5', 'index.html'), leer(tmp, 'sitemap.xml'), json.loads(leer(INDICE))
+        ok(r1['desvios_nuevos'] == 1 and desvio_de(t1) == 'sony-joystick-ps5-2'
+           and '/producto/sony-joystick-ps5/' not in sm3 and '/producto/sony-joystick-ps5-2/' in sm3
+           and ind3['slugs'].get('G:viejo') == 'sony-joystick-ps5',
+           'de punta a punta: la vieja pasa a desvio, sale del sitemap y su direccion sigue guardada')
+        r2 = pasada()
+        ok(r2['desvios'] == 1 and r2['desvios_nuevos'] == 0 and leer(car, 'sony-joystick-ps5', 'index.html') == t1
+           and r2['cambiadas'] == 0 and r2['iguales'] == 1,
+           'y en la pasada siguiente queda igual (ni el desvio ni la de hoy se reescriben)')
+    finally:
+        INDICE = antes
+        shutil.rmtree(tmp, ignore_errors=True)
     print('\n%d falla(s)' % len(fallas) if fallas else '\nTODO OK')
     return 1 if fallas else 0
 

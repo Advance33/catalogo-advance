@@ -67,6 +67,7 @@ c26faf62d775abf0f3e8fef663e38d2d  AT-0051-05.jpg                     # mirada
 59a991dcf52ce895a5acf7243168f40b  AT-0052-02.jpg                     # mirada
 bf1bd7166a0e07b844807224b1727249  AT-0052-03.jpg                     # mirada
 23bfba56fe7e935591c4a2053cd1fca8  AT-0052-04.jpg                     # mirada
+fe7dc048bcc47547d9601231a61b9ef1  AT-0052-05.jpg                     # mirada (oficial de PlayStation, The Last of Us Limited Edition, 19/10/2026)
 7503673d202d9041b4e13ac06263da84  AT-0053.jpg                        # mirada
 44b64d03732316abf29594a9efdd6713  AT-0054.jpg                        # mirada
 ea0d201952521eaf8dd2e67fdedc3bbf  AT-0055.jpg                        # mirada

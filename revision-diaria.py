@@ -682,6 +682,43 @@ def correr(exe, args, env, timeout=None):
                           creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
 
 
+def copia_atrasada(raiz=None, traer=True):
+    """Cuantos commits de origin/main le faltan a la copia donde corre esta
+    revision, o None si no se puede saber (no es un repo, no hay git).
+
+    (19/10/2026) El aviso del 18/10 traia 47 fallas "nuevas" en la pagina, 9
+    usados como graves y 24 columnas de ADVAPP que no cerraban, y casi todo ya
+    estaba arreglado en lo publicado: la revision corre con validar.py, las
+    fotos y las pruebas de ESTA carpeta, que se habia quedado en el 13/10 (48
+    commits atras). La web se publica desde GitHub, no desde aca. Sin red se
+    compara con lo ultimo que se trajo: puede quedarse corto, nunca inventa."""
+    raiz = raiz or AQUI
+    entorno = dict(os.environ, GIT_TERMINAL_PROMPT='0')
+
+    def git(*args):
+        return subprocess.run(['git', '-C', raiz] + list(args), capture_output=True, text=True,
+                              timeout=60, env=entorno,
+                              creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+    try:
+        if traer:
+            git('fetch', '--quiet', 'origin', 'main')
+        r = git('rev-list', '--count', 'HEAD..origin/main')
+    except (OSError, subprocess.SubprocessError):
+        return None
+    n = (r.stdout or '').strip()
+    return int(n) if r.returncode == 0 and n.isdigit() else None
+
+
+def aviso_copia_atrasada(n, raiz=None):
+    """La linea del aviso para una copia con `n` commits de atraso (o nada)."""
+    if not n:
+        return []
+    return ['[herramienta] esta revision corrio con la copia de %s, %d commit(s) atras de lo '
+            'publicado: lo de abajo puede estar ya arreglado y las pruebas nuevas no corrieron. '
+            'Actualizarla (git pull --ff-only en esa carpeta) y volver a correr la revision'
+            % (raiz or AQUI, n)]
+
+
 def main():
     preparar_salida()
 
@@ -733,6 +770,14 @@ def main():
     graves, respaldo, fallo_validar = analizar_validar(salida, r.returncode)
     sin_internet = r.returncode == 2
     herramienta_mal = [x for x in (fallo_validar,) if x]
+    # (19/10/2026) Lo que se reviso es lo de esta carpeta: si quedo atras de
+    # lo publicado, el aviso entero puede ser viejo (ver copia_atrasada)
+    atraso = copia_atrasada()
+    herramienta_mal += aviso_copia_atrasada(atraso)
+    with open(log, 'a', encoding='utf-8') as f:
+        f.write('\nCopia de la Mac contra lo publicado (origin/main): %s\n'
+                % ('no se pudo comparar' if atraso is None else
+                   'al dia' if not atraso else '%d commit(s) atras' % atraso))
 
     # ADVAPP no contesto y Google si (validar uso la planilla de respaldo): la
     # web esta mostrando precios y stock del 22/09 con el sello de su fecha, y
@@ -1174,6 +1219,42 @@ def probar():
        'sin copia de ADVAPP no se avisa nada')
     import shutil
     shutil.rmtree(tmp2, ignore_errors=True)
+
+    # (19/10/2026) La copia atrasada: un "GitHub" de mentira en una carpeta
+    # temporal, una copia, y dos commits que la copia no tiene
+    tmp3 = tempfile.mkdtemp(prefix='rev-git-')
+    origen, copia = os.path.join(tmp3, 'origen'), os.path.join(tmp3, 'copia')
+
+    def g(*args, cwd=None):
+        return subprocess.run(['git', '-c', 'user.name=prueba', '-c', 'user.email=prueba@x',
+                               '-c', 'commit.gpgsign=false'] + list(args),
+                              cwd=cwd, capture_output=True, text=True, timeout=60)
+    try:
+        hay_git = g('--version').returncode == 0
+    except OSError:
+        hay_git = False
+    if hay_git:
+        os.makedirs(origen)
+        g('init', '-q', '-b', 'main', cwd=origen)
+        g('commit', '-q', '--allow-empty', '-m', 'uno', cwd=origen)
+        g('clone', '-q', origen, copia)
+        ok(copia_atrasada(copia) == 0 and aviso_copia_atrasada(0) == [],
+           'una copia al dia no avisa nada')
+        g('commit', '-q', '--allow-empty', '-m', 'dos', cwd=origen)
+        g('commit', '-q', '--allow-empty', '-m', 'tres', cwd=origen)
+        ok(copia_atrasada(copia, traer=False) == 0, 'sin traer, compara con lo ultimo que se trajo')
+        n = copia_atrasada(copia)
+        linea = aviso_copia_atrasada(n, copia)
+        ok(n == 2 and len(linea) == 1 and linea[0].startswith('[herramienta] ') and '2 commit(s) atras' in linea[0]
+           and copia in linea[0], 'una copia con 2 commits de atraso lo dice en el aviso, con la carpeta')
+        ok(separar_avisos(linea) == (linea, []), 'y es un error del aviso, no un aviso suelto')
+        g('pull', '-q', '--ff-only', cwd=copia)
+        ok(copia_atrasada(copia) == 0, 'despues del pull, al dia')
+    else:
+        print('  --  sin git: no se prueba la copia atrasada')
+    ok(copia_atrasada(os.path.join(tmp3, 'no-es-un-repo')) is None and aviso_copia_atrasada(None) == [],
+       'si no es un repo no se sabe, y no se inventa un aviso')
+    shutil.rmtree(tmp3, ignore_errors=True)
     print()
     print('RESULTADO: %s' % ('%d FALLA(S)' % len(fallas) if fallas else 'pasa todo'))
     return 1 if fallas else 0

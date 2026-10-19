@@ -464,6 +464,15 @@ async function correrUW(){
   ok(!/Batería/.test(linea('UW-USADO-5')), '[11] "Batería entre 85 y 90 %" no pone nada', linea('UW-USADO-5') || '(sin linea)');
   const conBat = MODELOS.filter(noEsUsado).filter(m => bateriaDe(m) || /Batería \d/.test(uwTexto(tarjeta(m).querySelector('.tecnica'))));
   ok(!conBat.length, '[11] ninguna tarjeta nueva lleva bateria', conBat.slice(0, 3).map(m => m.desc).join(' | '));
+  /* (19/10/2026) Y la memoria del equipo, en la misma linea: un usado no
+     tiene memoria para elegir en la ficha, y USADO-0003 (16 Pro 128GB) y
+     USADO-0004 (16 Pro 256GB), Black Titanium los dos, se veian iguales salvo
+     la bateria y el precio. */
+  ok(/^Batería 91% · 128GB( ·|$)/.test(linea('UW-USADO-1')) && /^Batería 90% · 1TB( ·|$)/.test(linea('UW-USADO-7')),
+     '[11] despues de la bateria va la memoria del equipo, como la dice el nombre', linea('UW-USADO-1') + ' | ' + linea('UW-USADO-7'));
+  ok(/^128GB( ·|$)/.test(linea('UW-USADO-5')), '[11] sin bateria, la memoria va primera', linea('UW-USADO-5') || '(sin linea)');
+  const conMem = MODELOS.filter(noEsUsado).filter(m => memoriaDelUsado(m));
+  ok(!conMem.length, '[11] en lo nuevo la tarjeta sigue sin la memoria (se elige en la ficha)', conMem.slice(0, 3).map(m => m.desc).join(' | '));
   const c4 = tarjeta(buscarModelo('UW-USADO-1'));
   ok(c4.querySelector('.nombre').nextElementSibling === c4.querySelector('.tecnica'), '[11] va debajo del nombre');
 

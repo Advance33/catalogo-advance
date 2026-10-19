@@ -314,6 +314,15 @@ function sinFotoGeneralConColor(){
     const validos = new Set(nombresDeFoto(p, cols, true));
     for(const x of hermanasB2(m, p)) for(const n of nombresDeFoto(x, [cols[0]], true)) validos.add(n);
     const n = archivoB2(p.imagenGrande);
+    /* (19/10/2026) La foto ilustrativa de un usado (Benja, 14/10, PR #21) es
+       la del mismo modelo nuevo: el usado no tiene codigo AT y su archivo es
+       el de otro codigo. Vale si el catalogo le da ESE archivo al color del
+       usado dentro de ese codigo (AT-0067-04 es el White del iPhone 16): asi
+       se sigue frenando una ilustrativa de otro color. */
+    if(p.fotoIlustrativa){
+      const cod = n.replace(/-\d{2}$/, '');
+      if(cols.length === 1 && archivoDeVariante(cod, cols[0]) === n) continue;
+    }
     if(!validos.has(n)) ajenas.push(p.id + ' [' + p.color + '] -> ' + n);
   }
   ok(ajenas.length === 0, '[43] ninguna fila con color tiene de portada una foto que no es de su color',

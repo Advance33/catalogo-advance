@@ -137,8 +137,14 @@ async function correrPruebas(){
   const sinLinea = hoyTodo.vistas.filter(x => !x.linea).length;
   info(sinLinea + ' filas sin linea: el titulo ya dice todo (objetivos, accesorios); no llevan og:description');
 
-  /* ---- 3. La foto es la que muestra la ficha ---- */
-  const distinta = [], fueraDelIndice = [];
+  /* ---- 3. La foto es la que muestra la ficha ----
+     Salvo la foto ilustrativa de un usado (Benja, 14/10/2026, PR #21): la
+     ficha la muestra con el cartel "Foto ilustrativa", pero WhatsApp muestra
+     la imagen sola y el que recibe el link veria un iPhone nuevo como si
+     fuera ese equipo. Ahi la vista previa va con la tarjeta general, a
+     proposito. (19/10: esta tanda no lo sabia y los usados de la vitrina
+     con foto ilustrativa daban FALLA.) */
+  const distinta = [], fueraDelIndice = [], ilustrativas = [];
   let miradas = 0, i = 0;
   for(const x of hoyTodo.vistas){
     if(x.foto && !INDICE_FOTOS.has(x.foto.slice(CARPETA_FOTOS.length))) fueraDelIndice.push(x.id + ': ' + x.foto);
@@ -147,11 +153,15 @@ async function correrPruebas(){
     abrirFicha(x.destino, null);
     const img = document.querySelector('#ficha .fi-foto img');
     const ve = vpFotoPropia(img ? img.getAttribute('src') : '');
-    if(FICHA !== x.destino || ve !== x.foto) distinta.push(x.id + ': ficha ' + (ve || 'sin propia') + ', vista ' + (x.foto || 'general'));
+    const ilustrativa = !!document.querySelector('#ficha .fi-marco > .foto-ilus');
+    if(ilustrativa) ilustrativas.push(x.id);
+    if(FICHA !== x.destino || (ilustrativa ? x.foto !== '' : ve !== x.foto))
+      distinta.push(x.id + ': ficha ' + (ve || 'sin propia') + (ilustrativa ? ' (ilustrativa)' : '') + ', vista ' + (x.foto || 'general'));
     miradas++;
     quitarFicha();
   }
   ok(!distinta.length, 'la foto de la vista previa es la que muestra la ficha al abrirse', ejemplos(distinta) || miradas + ' fichas abiertas');
+  if(ilustrativas.length) info(ilustrativas.length + ' usado(s) con foto ilustrativa en la ficha, con la tarjeta general en WhatsApp: ' + ejemplos(ilustrativas, 8));
   ok(!fueraDelIndice.length, 'y esta en fotos/indice.json (se publica)', ejemplos(fueraDelIndice));
   const generales = hoyTodo.vistas.filter(x => !x.foto).map(x => x.id);
   info(generales.length + ' filas sin foto propia en la ficha (van con la tarjeta general, nunca con la de otro color)' +

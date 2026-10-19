@@ -729,10 +729,16 @@ async function anuncio(){
   ok(a && a.getAttribute('role') === 'status' && a.getAttribute('aria-live') === 'polite' && !a.closest('.seccion,#rubro-cab'),
      '[134] hay una region viva fija, afuera de lo que se rehace');
   /* (29/09, revision de la 3.1) Sin resultados se anuncia lo mismo que se
-     ve en la grilla vacia (el titulo y la frase), no "No encontramos nada" */
+     ve en la grilla vacia (el titulo y la frase), no "No encontramos nada".
+     (19/10/2026) Y "Lo mas parecido que tenemos: …" si lo hay (W3-12, 13/10:
+     anuncioVacio lo suma). Se leia solo el primer parrafo, y desde que los
+     usados entraron "zzqxw dos" encuentra parecidos (el "dos" de "usados") y
+     el anuncio, que estaba bien, no coincidia. */
   const vacioVisto = () => {
     const v = grid.querySelector('.msg.vacio'), t = e => e ? e.textContent.replace(/\s+/g, ' ').trim() : '';
-    return v ? t(v.querySelector('h2')) + '.' + (v.querySelector('p') ? ' ' + t(v.querySelector('p')) : '') : '(sin vacio)';
+    if(!v) return '(sin vacio)';
+    const p = v.querySelector('p:not(.v-parecido)'), par = v.querySelector('p.v-parecido');
+    return t(v.querySelector('h2')) + '.' + (p ? ' ' + t(p) : '') + (par ? ' ' + t(par) : '');
   };
   $('q').value = 'zzqxw no existe'; filtros.q = $('q').value; sincronizarControles(); aplicarFiltro(false);
   await dormirB3(750);

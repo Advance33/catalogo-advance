@@ -6645,7 +6645,13 @@ const COLORES = {
      menta (AT-0511-02) y el "Trap Dark Love" del Blayzer es el armazon oliva
      oscuro (AT-0529-01). "Mid" es Midnight cortado (Watch SE 3). */
   lime:'#E0EFD9', lima:'#E0EFD9', pistachio:'#B8C99D', lavanda:'#C3B2E8',
-  mid:'#1E2434', 'trap dark love':'#312F20'
+  mid:'#1E2434', 'trap dark love':'#312F20',
+  /* 19/10/2026, los del iPhone 18 Pro y Pro Max, medidos igual
+     (herramientas/colores-nuevos.py) en nuestra foto revisada y mirados: el
+     dorso bordó de AT-0547-04 y el celeste glaciar de AT-0547-03. Sin ellos
+     salían sin puntito en 11 filas, y en el Pro Max de 1TB, que hoy viene solo
+     en Glacier, la pestaña decía "1TB E-Sim" y el color no figuraba. */
+  'burgundy':'#45262B', 'glacier':'#BAC6D9'
 };
 
 // El tono de un nombre suelto, o null si no lo sabemos pintar. Si el nombre
@@ -8178,8 +8184,24 @@ function ponerTitulos(ms){
        conserva agregadoComun y va a la linea tecnica). */
     const choca = juntos.some(x => x !== m && x.desc !== m.desc);
     m.titulo = titulo;
-    m.tecnica = [tecnica, choca && !tecnica ? colores : ''].filter(Boolean).join(' · ');
+    m.tecnica = [memoriaDelUsado(m), tecnica, choca && !tecnica ? colores : ''].filter(Boolean).join(' · ');
   });
+}
+
+/* La memoria de un usado, en la línea de su tarjeta (19/10/2026). El título
+   la saca porque en lo nuevo se elige en la ficha; un usado es UN equipo, no
+   tiene nada que elegir, y sin ella dos iPhone 16 Pro Black Titanium (uno de
+   128GB y otro de 256GB, USADO-0003 y USADO-0004) se veían iguales salvo la
+   batería y el precio. Va tal cual la dice el nombre ("128GB", "8/256GB"):
+   si no la dice, o dice dos, nada. Después de la batería (htmlTecnicaTarjeta)
+   y antes del color, que es lo que se corta en el celular. */
+function memoriaDelUsado(m){
+  const vs = (m && (m.variantes || [m])) || [];
+  if(vs.length !== 1 || !esUsado(vs[0])) return '';
+  const t = String(vs[0].desc || '').replace(RE_PAREN, ' ');
+  const dual = t.match(RE_DUAL_NOMBRE) || [], sueltas = t.match(RE_CAP) || [];
+  const dicha = dual.length ? (dual.length === 1 ? dual[0] : '') : (sueltas.length === 1 ? sueltas[0] : '');
+  return dicha.replace(/\s+/g, '').toUpperCase();
 }
 
 /* El nombre de ADVAPP partido en dos: el modelo, para el titulo, y lo demas,

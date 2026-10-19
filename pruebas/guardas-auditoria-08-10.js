@@ -162,8 +162,20 @@ function links(){
   } finally { try{ history.replaceState(history.state, '', location.pathname + location.search + antes); }catch(e){} }
 
   // Una fila de hoy con forma de SKU y un "color que ya no esta": cae en el mismo modelo y la misma memoria
+  /* Los usados no (19/10/2026): claveDelMismoModelo no cae nunca en un usado
+     a proposito (14/10, seccion Usados). Cada uno es un equipo, y el link de
+     uno que se vendio no es "el mismo modelo en otra version": da "Ya no
+     esta". Eso se mira aparte, abajo. */
   const visibles = MODELOS.flatMap(m => m.variantes.map(v => [m, v]))
-    .filter(([m, v]) => String(v.skuVariante || '').split('-').length >= 6);
+    .filter(([m, v]) => String(v.skuVariante || '').split('-').length >= 6 && !esUsado(v));
+  const usadosConSku = MODELOS.flatMap(m => m.variantes)
+    .filter(v => esUsado(v) && String(v.skuVariante || '').split('-').length >= 6);
+  const usadoQueCae = usadosConSku.filter(v => {
+    const b = String(v.skuVariante).toUpperCase().split('-');
+    return claveDelMismoModelo([...b.slice(0, 4), 'ZZQ', ...b.slice(5)].join('-')) !== '';
+  });
+  ok(!usadoQueCae.length, '[W3-05] el SKU de un usado que ya no esta no cae en otro equipo ("Ya no esta")',
+     a8Ej(usadoQueCae.map(v => v.id)) || usadosConSku.length + ' usados');
   const mal = [], vistos = [];
   for(const [m, v] of visibles){
     const b = String(v.skuVariante).toUpperCase().split('-');
@@ -291,8 +303,10 @@ function busqueda(){
       mirados.push(q);
       if(esAccesorioA8(g[0])) malGrilla.push(q + ': ' + (g[0].titulo || g[0].desc));
       if(sug.length && esAccesorioA8(sug[0])) malSug.push(q + ': ' + (sug[0].titulo || sug[0].desc));
-      // ningun accesorio antes de un equipo (con stock)
-      const primerAcc = g.findIndex(esAccesorioA8), ultimoEq = g.map(m => !esAccesorioA8(m)).lastIndexOf(true);
+      // ningun accesorio antes de un equipo (con stock). Un equipo usado no
+      // cuenta (19/10/2026): los usados van siempre al final, tambien en la
+      // busqueda, despues de los accesorios nuevos (Benja, 13-14/10, ordenar)
+      const primerAcc = g.findIndex(esAccesorioA8), ultimoEq = g.map(m => !esAccesorioA8(m) && !esUsadoModelo(m)).lastIndexOf(true);
       if(primerAcc < ultimoEq && puntajeDeBusqueda(q, g)(g[ultimoEq]) > puntajeDeBusqueda(q, g)(g[primerAcc])) malGrilla.push(q + ': orden');
     }
   }
@@ -480,7 +494,13 @@ function cuotasPedido(){
 /* ---- [D14] [D16] Textos ---- */
 function textos(){
   const n = PREGUNTAS.find(x => /nuevos/i.test(x.p));
-  ok(!!n && n.r.join(' ') === 'Sí, nuevos. Los de caja blanca vienen sin la caja original y lo dice la ficha.',
+  /* (19/10/2026) Con la seccion Usados a la vista va el texto que Benja
+     aprobo para ella el 14/10 (con la aclaracion de la caja blanca de D14 A);
+     sin usados con stock, el de D14 A. Los dos los mira tambien usados-web.js. */
+  const d14 = haySeccionUsados()
+    ? 'Sí, todo es nuevo y sellado, salvo los de la sección Usados, que lo dicen en su tarjeta y en su ficha. Los de caja blanca vienen sin la caja original y también lo dice la ficha.'
+    : 'Sí, nuevos. Los de caja blanca vienen sin la caja original y lo dice la ficha.';
+  ok(!!n && n.r.join(' ') === d14,
      '[D14] "¿Los productos son nuevos?" dice lo que eligio Benja', n && n.r.join(' '));
   const pie = document.getElementById('pie-id');
   const ig = pie && [...pie.querySelectorAll('a')].find(a => /instagram\.com\/advancetecno/.test(a.href));

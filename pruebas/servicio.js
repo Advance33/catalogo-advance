@@ -68,7 +68,20 @@ function correrPruebas(){
      El 21/09 el envio se mudo de la lista a la franja oscura que cruza la
      ficha: se ve sin bajar y no se dice dos veces. Retiro y garantia siguen
      debajo del boton, que es donde el cliente los busca al decidir. */
-  const sinGar = MODELOS.find(m => elegible(m) && !m.rep.garantia);
+  /* (19/10/2026) ADVAPP manda la Garantia en todas las filas nuevas ("Garantia
+     oficial del fabricante") y la tanda encontraba un modelo sin ella solo
+     mientras habia un usado sin la suya: sin usados, sinGar era undefined y
+     reventaba ("reading 'rep'", aviso del 18/10). Si no hay ninguno, el caso
+     se arma con uno de verdad, sin su garantia mientras se mira, y se le
+     devuelve. */
+  let sinGar = MODELOS.find(m => elegible(m) && !m.rep.garantia), devolverGar = null;
+  if(!sinGar){
+    sinGar = MODELOS.find(elegible);
+    const g0 = sinGar.rep.garantia;
+    sinGar.rep.garantia = '';
+    devolverGar = () => { sinGar.rep.garantia = g0; };
+    R.push('  --   hoy todas las filas traen su garantia: se prueba con ' + sinGar.rep.id + ' sin la suya');
+  }
   abrirFicha(clave(sinGar.rep));
   const franja = $('ficha').querySelector('.fi-envio');
   ok(!!franja && franja.textContent.includes(SERVICIO.envio[0]),
@@ -92,6 +105,7 @@ function correrPruebas(){
      'sin garantia propia en la planilla, dice la regla general', lineaGar && lineaGar.textContent);
   ok(serv && !PLAZO_FIJO.test(serv.textContent), 'y no inventa un plazo');
   quitarFicha();
+  if(devolverGar) devolverGar();
 
   /* Si la planilla trae la garantia de ese producto, se muestra esa, y una
      sola vez: antes vivia en la tabla de datos y ahora se mudo al bloque. */

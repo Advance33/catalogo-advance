@@ -150,6 +150,7 @@
 "AT-0087-02.jpg",
 "AT-0088-01.jpg",
 "AT-0089-01.jpg",
+"AT-0089-02.jpg",
 "AT-0090-01.jpg",
 "AT-0090-02.jpg",
 "AT-0090-03.jpg",
@@ -2963,6 +2964,7 @@
 "CEL-SAM-A56-12G256-OLV-000": "AT-0086",
 "CEL-SAM-A56-8G256-OLV-000": "AT-0087",
 "CEL-SAM-A57-8G128-DBL-000": "AT-0088",
+"CEL-SAM-A57-8G256-BLU-000": "AT-0089",
 "CEL-SAM-S25FE-256-WHT-000": "AT-0090",
 "CEL-SAM-S25ULT-12G1TB-BLK-000": "AT-0094",
 "CEL-SAM-S25ULT-12G512-BLK-000": "AT-0093",
@@ -3648,6 +3650,7 @@
 "celular~samsung~a37-galaxy~8gb-256gb": "AT-0085",
 "celular~samsung~a56-galaxy~12gb-256gb": "AT-0086",
 "celular~samsung~a56-galaxy~8gb-256gb": "AT-0087",
+"celular~samsung~a57-galaxy~8g256": "AT-0089",
 "celular~samsung~a57-galaxy~8gb-128gb-5g": "AT-0088",
 "celular~samsung~a57-galaxy~8gb-256gb": "AT-0089",
 "celular~samsung~fe-galaxy-s25~256gb": "AT-0090",
@@ -4608,6 +4611,7 @@
 },
 "AT-0089": {
 "dark blue": "AT-0089-01",
+"icyblue": "AT-0089-02",
 "navy": "AT-0089-01"
 },
 "AT-0090": {
@@ -6663,5 +6667,5 @@
 }
 }
 },
-"generado": "2026-10-17T14:08:05"
+"generado": "2026-10-19T10:34:57"
 }

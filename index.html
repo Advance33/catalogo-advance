@@ -12352,7 +12352,10 @@ function htmlDatosFicha(m, v){
   // del botón, que es donde el cliente la busca antes de decidir.
   const filas = [
     ['Condición',   v.condicion],
-    ['Teclado',     idiomaTeclado(v.teclado)]
+    // En una cámara el SKU dice el idioma del menú, no un teclado (auditoría
+    // 19/10/2026, DP-10: el Z6 II y el Z7 II decían "Teclado · Inglés"). El mismo
+    // criterio que el buscador y el mensaje (TECLADO_SI).
+    [TECLADO_SI.includes(v.cat) || /keyboard|teclado/i.test(v.desc || '') ? 'Teclado' : 'Idioma del menú', idiomaTeclado(v.teclado)]
   ].filter(([,x]) => x);
 
   /* Los chips de specs repetían lo que ya dicen las pestañas: el iPhone 17 Pro

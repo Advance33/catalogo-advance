@@ -14,6 +14,7 @@
 //   T-06  la marca no se repite escrita de otra forma ("GoPro Go Pro")
 //   T-08  el articulo del mensaje concuerda ("la Batería", "las Hélices")
 //   T-12  la pestaña dice Advance Tecno
+//   DP-10 en una camara el idioma del menu no se llama "Teclado"
 //   T-13  el mensaje de un objetivo de caja blanca lo dice
 //   U-01  con Filtrar abierto, el Atras cierra el panel y deja el rubro y lo
 //         elegido
@@ -156,6 +157,14 @@ async function a19Pruebas(){
                'T-08 la consulta y el aviso de una batería', mensajeWA(bat).slice(0, 60));
   }
   ok(TITULO_BASE === 'Advance Tecno', 'T-12 la pestaña dice Advance Tecno', TITULO_BASE);
+  {
+    const cam = MODELOS.flatMap(m => m.variantes || [m]).find(v => v.teclado && !TECLADO_SI.includes(v.cat) && !/keyboard|teclado/i.test(v.desc || ''));
+    const mac = MODELOS.flatMap(m => m.variantes || [m]).find(v => v.teclado && TECLADO_SI.includes(v.cat));
+    if(cam){ const h = htmlDatosFicha(buscarModelo(clave(cam)) || cam, cam);
+      ok(/Idioma del menú/.test(h) && !/>Teclado</.test(h), 'DP-10 en una cámara el renglón dice "Idioma del menú": ' + cam.desc); }
+    if(mac){ const h = htmlDatosFicha(buscarModelo(clave(mac)) || mac, mac);
+      ok(/Teclado/.test(h) && !/Idioma del menú/.test(h), 'DP-10 y en una Mac sigue diciendo "Teclado": ' + mac.desc); }
+  }
   {
     const cb = MODELOS.flatMap(m => m.variantes || [m]).find(v => /caja blanca/i.test(v.condicion || '') && !/caja blanca/i.test(v.desc));
     if(cb) ok(/\(caja blanca\)/.test(mensajeWA(cb)), 'T-13 la consulta de un objetivo de caja blanca lo dice', mensajeWA(cb).slice(0, 90));

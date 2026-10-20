@@ -95,7 +95,7 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
       <div class="eje" id="versiones"><small>Versión</small><div class="fila" id="fila-versiones"></div></div>
       <div class="eje" id="colores"><small>Color</small><div class="fila" id="fila-colores"></div></div>
       <div class="precio sin" id="precio"><b>Consultá el precio</b><i>El precio y el stock del día, por WhatsApp</i></div>
-      <a class="wa" href="https://wa.me/5491124751466?text=Hola!%20Me%20interesa%20el%20Apple%20Bater%C3%ADa%20MagSafe%20iPhone%20Air.%20%C2%BFMe%20pas%C3%A1s%20info%3F" target="_blank" rel="noopener">Consultar por WhatsApp</a>
+      <a class="wa" href="https://wa.me/5491124751466?text=Hola!%20Me%20interesa%20la%20Apple%20Bater%C3%ADa%20MagSafe%20iPhone%20Air.%20%C2%BFMe%20pas%C3%A1s%20info%3F" target="_blank" rel="noopener">Consultar por WhatsApp</a>
       <a class="ver" id="ver" href="../../#p=ACA-APL-BATERIAMAGSAFEIPHONEAIR-000-000-000">Ver en el catálogo</a>
     </div>
   </div>
@@ -113,7 +113,7 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
   <span><a href="https://wa.me/5491124751466" target="_blank" rel="noopener">WhatsApp +54 9 11 2475-1466</a> · <a href="https://maps.app.goo.gl/kzwGpTwUNLkTEwWRA" target="_blank" rel="noopener">Ver en el mapa</a></span>
   <span>Precios sujetos a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</span>
 </footer>
-<script id="datos" type="application/json">{"versiones": [{"version": "Estándar", "color": "", "clave": "ACA-APL-BATERIAMAGSAFEIPHONEAIR-000-000-000", "sku": "ACA-APL-BATERIAMAGSAFEIPHONEAIR-000-000-000", "foto": "fotos/sinfondo/AT-0570.webp", "wa": "https://wa.me/5491124751466?text=Hola!%20Me%20interesa%20el%20Apple%20Bater%C3%ADa%20MagSafe%20iPhone%20Air.%20%C2%BFMe%20pas%C3%A1s%20info%3F", "aviso": "https://wa.me/5491124751466?text=Hola!%20El%20Apple%20Bater%C3%ADa%20MagSafe%20iPhone%20Air%20figura%20sin%20stock.%20%C2%BFMe%20avisan%20cuando%20entre%3F"}], "advapp": "https://advapp-blond.vercel.app/api/catalog?resource=tecno-web", "cuotas": 12, "cotizacion": {"tipo": "blue", "recargo": 0, "recargoFijo": 20}, "oferta": {"@type": "AggregateOffer", "priceCurrency": "USD", "url": "https://catalogo.advancetecno.com.ar/producto/apple-bateria-magsafe-iphone-air/", "seller": {"@type": "Organization", "name": "Advance Tecno"}, "itemCondition": "https://schema.org/NewCondition"}}</script>
+<script id="datos" type="application/json">{"versiones": [{"version": "Estándar", "color": "", "clave": "ACA-APL-BATERIAMAGSAFEIPHONEAIR-000-000-000", "sku": "ACA-APL-BATERIAMAGSAFEIPHONEAIR-000-000-000", "foto": "fotos/sinfondo/AT-0570.webp", "wa": "https://wa.me/5491124751466?text=Hola!%20Me%20interesa%20la%20Apple%20Bater%C3%ADa%20MagSafe%20iPhone%20Air.%20%C2%BFMe%20pas%C3%A1s%20info%3F", "aviso": "https://wa.me/5491124751466?text=Hola!%20La%20Apple%20Bater%C3%ADa%20MagSafe%20iPhone%20Air%20figura%20sin%20stock.%20%C2%BFMe%20avisan%20cuando%20entre%3F"}], "advapp": "https://advapp-blond.vercel.app/api/catalog?resource=tecno-web", "cuotas": 12, "cotizacion": {"tipo": "blue", "recargo": 0, "recargoFijo": 20}, "oferta": {"@type": "AggregateOffer", "priceCurrency": "USD", "url": "https://catalogo.advancetecno.com.ar/producto/apple-bateria-magsafe-iphone-air/", "seller": {"@type": "Organization", "name": "Advance Tecno"}, "itemCondition": "https://schema.org/NewCondition"}}</script>
 <script>
 (() => {
   const D = JSON.parse(document.getElementById('datos').textContent);
@@ -133,10 +133,11 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
     version = x.version; color = x.color;
     const vs = versiones();
     $('versiones').hidden = vs.length < 2 || !vs.some(Boolean);
-    $('fila-versiones').innerHTML = vs.map((v) => `<button type="button" class="chip" data-v="${v}" aria-pressed="${v === version}">${v || 'Única'}</button>`).join('');
+    // Con esc (auditoría 19/10/2026, T-01): un 13" cortaba el atributo y el botón no elegía nada
+    $('fila-versiones').innerHTML = vs.map((v) => `<button type="button" class="chip" data-v="${esc(v)}" aria-pressed="${v === version}">${esc(v || 'Única')}</button>`).join('');
     const colores = D.versiones.filter((y) => y.version === version && y.color);
     $('colores').hidden = !colores.length;
-    $('fila-colores').innerHTML = colores.map((y) => `<button type="button" class="chip" data-c="${y.color}" aria-pressed="${y.color === color}">${y.color}</button>`).join('');
+    $('fila-colores').innerHTML = colores.map((y) => `<button type="button" class="chip" data-c="${esc(y.color)}" aria-pressed="${y.color === color}">${esc(y.color)}</button>`).join('');
     if(x.foto) $('foto').src = (/^https?:/.test(x.foto) ? '' : '../../') + x.foto;
     // Con el SKU de respaldo: si mañana ADVAPP le cambia el ID, la web encuentra el modelo (W3-03)
     $('ver').href = '../../#p=' + encodeURIComponent(x.clave) + (x.sku && x.sku !== x.clave ? '&s=' + encodeURIComponent(x.sku) : '');

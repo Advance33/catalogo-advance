@@ -972,7 +972,7 @@
 "canon|accesorio camara|5d:1,6d:1,e6p:1,r5:1,r5c:1,r5ii:1,r6m2:1,r7:1"
 ],
 "AT-0019": [
-"canon|accesorio camara|2:1,5d:1,6d:1,7d:1,90d:1,e6nh:1,kit:1,r5:1,r6:1"
+"smallrig|accesorio camara|2:1,5d:1,6d:1,7d:1,90d:1,e6nh:1,kit:1,r5:1,r6:1"
 ],
 "AT-0020": [
 "canon|accesorio camara|5:1"
@@ -1018,10 +1018,10 @@
 "sony|accesorio camara|qz1:1"
 ],
 "AT-0034": [
-"sony|accesorio camara|2:1,50:1"
+"smallrig|accesorio camara|2:1,50:1"
 ],
 "AT-0035": [
-"sony|accesorio camara|100:1"
+"smallrig|accesorio camara|100:1"
 ],
 "AT-0036": [
 "sony|accesorio camara|fz100:1"
@@ -2499,7 +2499,7 @@
 "ray-ban|lentes inteligentes|gen2:1"
 ],
 "AT-0508": [
-"sony|accesorio camara|100:1"
+"smallrig|accesorio camara|100:1"
 ],
 "AT-0510": [
 "apple|celular|128:1,16e:1"
@@ -3300,6 +3300,7 @@
 "CEL-SAM-S26FE-8G128-PIS-000": "AT-0097",
 "CEL-SAM-S26PLUS-512-WHT-000": "AT-0101",
 "CEL-SAM-S26ULT-12G512-BLU-000": "AT-0581",
+"CEL-SAM-S26ULT-512-SKY-000": "AT-0581",
 "CEL-SAM-ZFLIP8-12G256-CRM-000": "AT-0580",
 "CEL-SAM-ZFLIP8-12G256-GPH-000": "AT-0580",
 "CEL-SAM-ZFOLD8-12G256-CRM-000": "AT-0105",
@@ -4084,7 +4085,6 @@
 "celular~samsung~galaxy-s25-ultra~1tb": "AT-0094",
 "celular~samsung~galaxy-s26-ultra~16gb-1tb-5g": "AT-0102",
 "celular~samsung~galaxy-s26-ultra~256gb-5g": "AT-0103",
-"celular~samsung~galaxy-s26-ultra~512gb-5g": "AT-0512",
 "celular~samsung~galaxy-s26~12g256": "AT-0096",
 "celular~samsung~galaxy-s26~12gb-512gb": "AT-0095",
 "celular~samsung~galaxy-s26~256gb": "AT-0096",
@@ -7355,5 +7355,5 @@
 }
 }
 },
-"generado": "2026-10-20T13:04:04"
+"generado": "2026-10-21T13:19:08"
 }

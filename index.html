@@ -3922,7 +3922,7 @@ const CARPETA_MINIS = CARPETA_FOTOS + 'mini/';
    igual en todos lados (el multiply queda: sobre transparencia no cambia
    nada). La arma herramientas/miniaturas.py junto con la chica, al publicar.
    La grande sigue en .jpg: se ve en la ficha, de fondo casi blanco, y es la
-   que usan WhatsApp (p/), Pancho y fotos/indice.json. */
+   que usan WhatsApp (p/), el bot y fotos/indice.json. */
 const CARPETA_SIN_FONDO = CARPETA_MINIS + 'sinfondo/';
 const EXT_SIN_FONDO = '.webp';
 function fotoChica(u){
@@ -3947,7 +3947,7 @@ const EXT_FOTOS = '.jpg';
    que lo borraba hacía desaparecer la foto al bajar dentro de la ficha. Toda
    foto propia sale de urlFotoPropia(), que ya da la sin fondo; fotoChica() la
    pasa a su chica. El .jpg sigue siendo el original: fotos/indice.json lo
-   lista, WhatsApp (p/) y Pancho lo usan, y vpFotoPropia() vuelve a él. */
+   lista, WhatsApp (p/) y el bot lo usan, y vpFotoPropia() vuelve a él. */
 const SUB_SIN_FONDO = 'sinfondo/';
 const urlFotoPropia = n => urlFoto(CARPETA_FOTOS + SUB_SIN_FONDO + encodeURIComponent(n) + EXT_SIN_FONDO);
 
@@ -3984,7 +3984,7 @@ let ANALITICA_URL = '';
 
 const DIRECCION = 'Av. de los Incas 5150, 1A, CABA';
 /* Instagram (13/10/2026, decisión D16 A de Benja, auditoría W3-16): la cuenta
-   que atiende Pancho. Va en el pie ("Instagram @advancetecno", al perfil) y en
+   que atiende el bot. Va en el pie ("Instagram @advancetecno", al perfil) y en
    la ayuda ("o por Instagram", al chat: ig.me/m/), además del cotizador de
    usados (Enviar por Instagram, 06/10). Vacía, no aparece en ningún lado. */
 const INSTAGRAM_TECNO = 'advancetecno';     // @advancetecno
@@ -4096,7 +4096,6 @@ const NOSOTROS = {
   local: '',
   equipo: [
     { nombre: 'Benja',     rol: 'Encargado de Tecno', foto: '' },
-    { nombre: 'Francisco', rol: 'Vendedor',           foto: '' },
   ],
 };
 
@@ -14958,7 +14957,7 @@ function mensajeUsado(c, prod, color){
 /* Los dos botones para mandar los detalles (Pedro, 06/10): WhatsApp con el
    mensaje escrito e Instagram. Instagram no deja escribir un mensaje por link
    como WhatsApp, así que su botón copia el mensaje y abre el chat de la
-   cuenta (la que atiende Pancho), y el cliente lo pega. Sin href no se pueden
+   cuenta (la que atiende el bot), y el cliente lo pega. Sin href no se pueden
    tocar: así quedan apagados mientras al formulario le falta algo. */
 // INSTAGRAM_TECNO y linkIG() están arriba, con la configuración (13/10/2026: los usan el pie y la ayuda)
 function htmlEnviarUsado(msg, ids = ['us-wa', 'us-ig']){

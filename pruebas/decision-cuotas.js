@@ -74,7 +74,7 @@ async function correrPruebas(){
 }
 
 /* ---- datos/cuotas.json: lo que lee el bot (06/10/2026) ----
-   Pedro eligio que Pancho diga la cuota igual que la web. El bot no puede
+   Pedro eligio que el bot diga la cuota igual que la web. El bot no puede
    leer index.html, asi que los planes y el dolar estan tambien en
    datos/cuotas.json: si alguien cambia uno y no el otro, esto falla. */
 async function probarElArchivoDelBot(){

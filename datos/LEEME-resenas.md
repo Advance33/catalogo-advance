@@ -17,12 +17,15 @@ Sale de la ficha del negocio en Google Maps (Advance Tecno, Av. de los Incas
 3. **El puntaje y la cantidad son los de la ficha** el día que se leyó
    (`leido`). No se redondean para arriba.
 4. **Cuáles se muestran lo decide Benja.** El 13/10 se cargaron las cinco que
-   Google muestra primero. Para cambiar una, se saca del archivo y se pone otra
-   de la ficha, completa.
+   Google muestra primero; el 20/10 se sacó una y quedaron cuatro. Para cambiar
+   una, se saca del archivo y se pone otra de la ficha, completa.
 5. **Solo se muestran las de 5 estrellas** (Benja, 19/10/2026: "¿también se
    pueden evitar las malas?"). La web saltea sola una de 4 o menos aunque
    esté en el archivo. El puntaje y la cantidad de arriba siguen siendo los
    de la ficha de Google, con todas las reseñas.
+6. **No va una reseña que nombra a alguien que ya no atiende en Advance**
+   (20/10/2026), aunque sea de 5 estrellas: al cambiar o sumar reseñas, leer
+   el texto entero antes de copiarla.
 
 ## Formato (`resenas/1`)
 

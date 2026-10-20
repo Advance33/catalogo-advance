@@ -374,10 +374,11 @@ SCRIPT = r'''
     version = x.version; color = x.color;
     const vs = versiones();
     $('versiones').hidden = vs.length < 2 || !vs.some(Boolean);
-    $('fila-versiones').innerHTML = vs.map((v) => `<button type="button" class="chip" data-v="${v}" aria-pressed="${v === version}">${v || 'Única'}</button>`).join('');
+    // Con esc (auditoría 19/10/2026, T-01): un 13" cortaba el atributo y el botón no elegía nada
+    $('fila-versiones').innerHTML = vs.map((v) => `<button type="button" class="chip" data-v="${esc(v)}" aria-pressed="${v === version}">${esc(v || 'Única')}</button>`).join('');
     const colores = D.versiones.filter((y) => y.version === version && y.color);
     $('colores').hidden = !colores.length;
-    $('fila-colores').innerHTML = colores.map((y) => `<button type="button" class="chip" data-c="${y.color}" aria-pressed="${y.color === color}">${y.color}</button>`).join('');
+    $('fila-colores').innerHTML = colores.map((y) => `<button type="button" class="chip" data-c="${esc(y.color)}" aria-pressed="${y.color === color}">${esc(y.color)}</button>`).join('');
     if(x.foto) $('foto').src = (/^https?:/.test(x.foto) ? '' : '../../') + x.foto;
     // Con el SKU de respaldo: si mañana ADVAPP le cambia el ID, la web encuentra el modelo (W3-03)
     $('ver').href = '../../#p=' + encodeURIComponent(x.clave) + (x.sku && x.sku !== x.clave ? '&s=' + encodeURIComponent(x.sku) : '');
@@ -627,6 +628,25 @@ def sin_precio_viejo(t):
                '<div class="precio sin" id="precio"><b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entre</i></div>', t)
     t = re.sub(r'<td class="num">u\$[\d.]+</td><td>Sí</td>', '<td class="num">—</td><td>Sin stock</td>', t)
     t = re.sub(r'<td class="num">u\$[\d.]+</td>', '<td class="num">—</td>', t)
+
+    # Y los datos del script de la pagina (auditoria 19/10/2026, G-01): la del
+    # Dyson HD16, de antes del W3-06, guardaba "precio": 770, "stock": true, y
+    # su script viejo pintaba "USD 770 · hasta 12 cuotas" hasta que contestaba
+    # ADVAPP, y para siempre si ADVAPP no contestaba.
+    def sin_precio_en_datos(x):
+        try:
+            d = json.loads(x.group(2).replace('<\\/', '</'))
+        except ValueError:
+            return x.group(0)
+        vs = d.get('versiones') if isinstance(d, dict) else None
+        if not isinstance(vs, list) or not any(isinstance(v, dict) and ('precio' in v or v.get('stock')) for v in vs):
+            return x.group(0)
+        for v in vs:
+            if isinstance(v, dict):
+                v.pop('precio', None)
+                v['stock'] = False
+        return x.group(1) + json.dumps(d, ensure_ascii=False).replace('</', '<\\/') + x.group(3)
+    t = re.sub(r'(<script id="datos" type="application/json">)(.*?)(</script>)', sin_precio_en_datos, t, flags=re.S)
     return t
 
 
@@ -945,6 +965,17 @@ def probar():
        and 'DJI Neo 2: hoy sin stock' in limpia and '<b>Hoy sin stock</b>' in limpia and '<td>Sin stock</td>' in limpia,
        'W3-06: a la pagina vieja de un modelo que hoy no esta se le saca el precio viejo')
     ok(sin_precio_viejo(limpia) == limpia and sin_precio_viejo(h) == h, 'y no toca lo que ya esta bien (ni las paginas nuevas)')
+    # (auditoria 19/10/2026, G-01) Y el precio que guardaban los datos del script viejo
+    con_datos = ('<script id="datos" type="application/json">{"versiones": [{"version": "Pink", "color": "Pink", '
+                 '"precio": 770, "stock": true, "clave": "DYS-X"}], "cuotas": 12}</script>')
+    sd = sin_precio_viejo(con_datos)
+    dd = json.loads(re.search(r'<script id="datos" type="application/json">(.*?)</script>', sd, re.S).group(1))
+    ok('770' not in sd and dd['versiones'][0]['stock'] is False and dd['versiones'][0]['clave'] == 'DYS-X' and dd['cuotas'] == 12,
+       'G-01: los datos del script viejo pierden el precio y quedan sin stock (el Dyson HD16 decia USD 770)')
+    ok(sin_precio_viejo(sd) == sd, 'y una segunda pasada no los vuelve a tocar')
+    # (auditoria 19/10/2026, T-01) Las versiones y los colores van escapados en los botones
+    ok('data-v="${esc(v)}"' in SCRIPT and '${esc(v || \'Única\')}' in SCRIPT and 'data-c="${esc(y.color)}"' in SCRIPT,
+       'T-01: una version con comillas (13" 1TB) no corta el atributo del boton')
     d1 = descripcion_corta(dict(m, descripcion={'venta': ['x' * 400]}), 12)
     ok(len(d1) <= 160, 'la descripcion no pasa los 160 caracteres')
     sm = texto_sitemap('https://catalogo.advancetecno.com.ar/', {'slugs': {'a': 'apple-iphone-17-pro'}, 'lastmod': {'apple-iphone-17-pro': '2026-10-05'}})

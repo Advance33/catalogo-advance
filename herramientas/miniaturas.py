@@ -57,7 +57,7 @@ ese color queda transparente del todo; lo demas, tanto mas opaco cuanto mas
 lejos.
 Es lo mismo que hacia multiply: un producto blanco (AirPods, Pencil, la Xbox
 Series S) conserva sus sombras y contornos y deja ver el lila en lo blanco.
-Los .jpg siguen siendo los originales: los usan WhatsApp (p/), Pancho y
+Los .jpg siguen siendo los originales: los usan WhatsApp (p/), el bot y
 fotos/indice.json, y estas copias se rehacen con su chica cuando cambia la
 grande (misma huella).
 

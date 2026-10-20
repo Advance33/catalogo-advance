@@ -144,6 +144,18 @@ async function correrPruebas(){
        'y separa el rechazo de GitHub de la falta de conexion');
     ok(/--ignore-cr-at-eol/.test(pub),
        'y avisa cuando un archivo cambio todos sus finales de linea (170)');
+    /* (20/10/2026) En otra rama decia "LISTO" sin subir nada (el push de main
+       contestaba "Everything up-to-date"), y atrasada armaba todo con lo viejo
+       para que GitHub lo rechazara al final: frena ANTES de revisar nada. */
+    const sinComent = pub.split('\n').filter(l => !/^\s*#/.test(l)).join('\n');
+    const iRama = sinComent.indexOf('git symbolic-ref --quiet --short HEAD');
+    const iAtras = sinComent.indexOf('rev-list --count HEAD..origin/main');
+    const iValidar = sinComent.indexOf('$PY validar.py');
+    ok(iRama !== -1 && iAtras !== -1 && iValidar !== -1 && iRama < iValidar && iAtras < iValidar
+       && /if \[ "\$RAMA" != "main" \]; then[\s\S]*?pausa; exit 1/.test(sinComent)
+       && /if \[ "\$ATRAS" != "0" \]; then[\s\S]*?pausa; exit 1/.test(sinComent),
+       'PUBLICAR.command frena si la copia no esta en main o esta atrasada, antes de revisar nada',
+       [iRama, iAtras, iValidar].join(' / '));
   }
 
   /* ---- 4. Los textos ya no mandan a la planilla (172) ---- */

@@ -39,6 +39,12 @@ LO QUE NO CAMBIA NUNCA SOLO
   a esa (destino_de_la_vieja): canonica a la nueva, refresh 0 (Google lo toma
   como redireccion) y afuera del sitemap. La direccion vieja sigue andando
   para quien la tenga guardada.
+- La unica direccion que se corrigio sola (20/10/2026, auditoria G-08): la
+  que nacio cuando slug() borraba el "+". "Samsung Galaxy Tab A11+" se llevo
+  "samsung-galaxy-tab-a11", la del A11, y el A11 quedo en "-2". Desde ese dia
+  el "+" pegado a una palabra se escribe "plus"; el A11+ pasa a
+  "samsung-galaxy-tab-a11-plus" y la vieja es un desvio a esa, con el mismo
+  mecanismo de arriba (asignar_slugs y aplicar). El A11 se queda en la suya.
 
 EL PRECIO (13/10/2026, auditoria W3-06)
 Hasta el 13/10 el HTML llevaba el precio y el stock del dia en que se armo, y
@@ -164,12 +170,26 @@ def calcular_en_la_web(VP, crudo, puerto=0):
 # La direccion de cada modelo
 # --------------------------------------------------------------------------
 
-def slug(texto):
+def slug(texto, con_plus=True):
+    """El nombre hecho direccion. con_plus=False: como era hasta el 20/10/2026
+    (lo usa asignar_slugs para reconocer las direcciones que nacieron asi)."""
     t = html.unescape(str(texto or '')).lower()
     for a, b in (('á', 'a'), ('é', 'e'), ('í', 'i'), ('ó', 'o'), ('ú', 'u'), ('ü', 'u'), ('ñ', 'n'), ('"', ' pulgadas')):
         t = t.replace(a, b)
+    # (20/10/2026, auditoria G-08) El "+" pegado al final de una palabra es
+    # "plus": se perdia, el Galaxy Tab A11+ se llevo "samsung-galaxy-tab-a11",
+    # la direccion del A11, y el A11 quedo en "-2". El "+" suelto ("Neo 2 +
+    # Fly More Combo", "+Pencil") o entre dos palabras ("Denim+Milky") es un
+    # "y", y sigue siendo un guion: esas direcciones no cambian.
+    if con_plus:
+        t = re.sub(r'(?<=[a-z0-9])\+(?![a-z0-9])', ' plus ', t)
     t = re.sub(r'[^a-z0-9]+', '-', t).strip('-')
     return t[:80].strip('-') or 'producto'
+
+
+# La direccion que tenia un modelo antes de corregirla (G-08): queda en el
+# indice como "antes:<familia>" y aplicar() la hace desvio a la de hoy.
+ANTES = 'antes:'
 
 
 def leer_indice():
@@ -191,29 +211,48 @@ def asignar_slugs(modelos, indice):
     SKU madre o el grupo ("G:accesorio-gaming~sony~consultar-estandar-joystick-
     ps5" pasa a "M:ACG-SON-JOYPS5"). Hereda esa direccion, la que ya conoce
     Google: si no, la vieja quedaba "sin stock" y salia una nueva
-    "sony-joystick-ps5-2" con el mismo producto."""
+    "sony-joystick-ps5-2" con el mismo producto.
+
+    Y la unica vez que una direccion asignada cambia (20/10/2026, G-08): la
+    que nacio con el "+" perdido. Si el nombre del modelo tiene un "+" pegado
+    ("Galaxy Tab A11+") y su direccion es la que le daba el slug de antes
+    ("samsung-galaxy-tab-a11", o con su "-2"), pasa a la del nombre con "plus"
+    ("samsung-galaxy-tab-a11-plus") y la vieja queda guardada como
+    "antes:<familia>": aplicar() la hace desvio a la nueva, asi la direccion
+    que ya conoce Google sigue llevando al mismo producto. Pasa una sola vez:
+    la nueva ya no es la del slug de antes. Una direccion guardada antes no se
+    hereda (no entra en `libres`): es la de otro producto que sigue a la venta."""
     slugs = indice['slugs']
     hoy = {m['familia'] for m in modelos}
     libres = {}
     for f, s in slugs.items():
-        if f not in hoy and s not in libres:
+        if f not in hoy and not f.startswith(ANTES) and s not in libres:
             libres[s] = f
     usados = set(slugs.values())
+
+    def sin_usar(base):
+        s, n = base, 2
+        while s in usados:
+            s = '%s-%d' % (base, n)
+            n += 1
+        usados.add(s)
+        return s
+
     for m in modelos:
         f = m['familia']
         if f in slugs:
+            vieja, nueva = slug(m['titulo'], con_plus=False), slug(m['titulo'])
+            if (nueva != vieja and ANTES + f not in slugs
+                    and re.fullmatch(re.escape(vieja) + r'(?:-\d+)?', slugs[f])):
+                slugs[ANTES + f] = slugs[f]
+                slugs[f] = sin_usar(nueva)
             continue
         base = slug(m['titulo'])
         if base in libres:
             del slugs[libres.pop(base)]
             slugs[f] = base
             continue
-        s, n = base, 2
-        while s in usados:
-            s = '%s-%d' % (base, n)
-            n += 1
-        slugs[f] = s
-        usados.add(s)
+        slugs[f] = sin_usar(base)
     return slugs
 
 
@@ -815,6 +854,10 @@ def aplicar(datos, publica, carpeta=CARPETA, raiz=RAIZ):
             res['desvios'] += 1
             continue
         destino = destino_de_la_vieja(texto, modelos, slugs)
+        # La que se corrigio por el "+" (G-08) sabe a donde va: a la de hoy
+        # de su familia, sin adivinar por las versiones
+        if f.startswith(ANTES):
+            destino = slugs.get(f[len(ANTES):]) or destino
         if destino and destino != s and destino in presentes:
             escribir_si_cambio(ruta, pagina_desvio(titulo_de_la_pagina(texto, s), destino, publica))
             fuera.add(s)
@@ -879,6 +922,34 @@ def probar():
     ok(slug('Apple iPhone 17 Pro') == 'apple-iphone-17-pro', 'el nombre a direccion')
     ok(slug('MacBook Air M5 13.6"') == 'macbook-air-m5-13-6-pulgadas', 'las pulgadas se escriben')
     ok(slug('Cámara Sony α7 IV') == 'camara-sony-7-iv', 'sin tildes ni simbolos')
+    # (20/10/2026, G-08) El "+" pegado es "plus"; el suelto o entre palabras, un guion como siempre
+    ok(slug('Samsung Galaxy Tab A11+') == 'samsung-galaxy-tab-a11-plus' != slug('Samsung Galaxy Tab A11'),
+       'G-08: el A11+ y el A11 tienen direcciones distintas')
+    ok(slug('Xiaomi Redmi Note 15 Pro+ 5G') == 'xiaomi-redmi-note-15-pro-plus-5g' and slug('Galaxy A11&#43;') == 'galaxy-a11-plus',
+       'G-08: "plus" tambien en el medio del nombre y escrito como entidad')
+    ok(slug('Drone DJI Neo 2 + Fly More Combo') == 'drone-dji-neo-2-fly-more-combo'
+       and slug('Galaxy Tab S10 FE (SM X520) +Pencil') == 'galaxy-tab-s10-fe-sm-x520-pencil'
+       and slug('Calling Watch Kr 3 Denim+Milky') == 'calling-watch-kr-3-denim-milky',
+       'G-08: el "+" que es un "y" sigue siendo un guion (esas direcciones no cambian)')
+    ok(slug('Samsung Galaxy Tab A11+', con_plus=False) == 'samsung-galaxy-tab-a11', 'G-08: el slug de antes, para reconocer las viejas')
+    ind = {'slugs': {'M:TAB-SAM-TABA11PLUS': 'samsung-galaxy-tab-a11', 'M:TAB-SAM-TABA11': 'samsung-galaxy-tab-a11-2',
+                     'M:CEL-APL-17P': 'apple-iphone-17-pro'}, 'lastmod': {}}
+    tabs = [{'familia': 'M:TAB-SAM-TABA11PLUS', 'titulo': 'Samsung Galaxy Tab A11+'},
+            {'familia': 'M:TAB-SAM-TABA11', 'titulo': 'Samsung Galaxy Tab A11'},
+            {'familia': 'M:CEL-APL-17P', 'titulo': 'Apple iPhone 17 Pro'}]
+    s = asignar_slugs(tabs, ind)
+    ok(s == {'M:TAB-SAM-TABA11PLUS': 'samsung-galaxy-tab-a11-plus', 'M:TAB-SAM-TABA11': 'samsung-galaxy-tab-a11-2',
+             'antes:M:TAB-SAM-TABA11PLUS': 'samsung-galaxy-tab-a11', 'M:CEL-APL-17P': 'apple-iphone-17-pro'},
+       'G-08: el A11+ pasa a "-plus", la vieja queda guardada como antes:, y el A11 y los demas no cambian')
+    ok(asignar_slugs(tabs, {'slugs': dict(s), 'lastmod': {}}) == s, 'G-08: y en la pasada siguiente queda igual')
+    s = asignar_slugs([{'familia': 'M:TAB-SAM-TABA11PLUS', 'titulo': 'Samsung Galaxy Tab A11+'}],
+                      {'slugs': {'M:TAB-SAM-TABA11PLUS': 'tablet-a11-plus-samsung'}, 'lastmod': {}})
+    ok(s == {'M:TAB-SAM-TABA11PLUS': 'tablet-a11-plus-samsung'}, 'G-08: una direccion que no salio del slug de antes no se toca')
+    s = asignar_slugs([{'familia': 'M:NUEVA', 'titulo': 'Samsung Galaxy Tab A11'}],
+                      {'slugs': {'M:TAB-SAM-TABA11PLUS': 'samsung-galaxy-tab-a11-plus',
+                                 'antes:M:TAB-SAM-TABA11PLUS': 'samsung-galaxy-tab-a11'}, 'lastmod': {}})
+    ok(s.get('M:NUEVA') == 'samsung-galaxy-tab-a11-2' and s.get('antes:M:TAB-SAM-TABA11PLUS') == 'samsung-galaxy-tab-a11',
+       'G-08: la direccion vieja del A11+ no la hereda otro modelo (sigue llevando al A11+)')
     ind = {'slugs': {'M:CEL-APL-17P': 'apple-iphone-17-pro'}, 'lastmod': {}}
     s = asignar_slugs([{'familia': 'M:CEL-APL-17P', 'titulo': 'Apple iPhone 17 Pro (nuevo nombre)'},
                        {'familia': 'M:OTRO', 'titulo': 'Apple iPhone 17 Pro'}], ind)
@@ -1043,6 +1114,39 @@ def probar():
         ok(r2['desvios'] == 1 and r2['desvios_nuevos'] == 0 and leer(car, 'sony-joystick-ps5', 'index.html') == t1
            and r2['cambiadas'] == 0 and r2['iguales'] == 1,
            'y en la pasada siguiente queda igual (ni el desvio ni la de hoy se reescriben)')
+        # (20/10/2026, G-08) El A11+ con la direccion del A11, de punta a punta
+        shutil.rmtree(car)
+        os.makedirs(car)
+        a11p = dict(m, familia='M:TAB-SAM-TABA11PLUS', titulo='Samsung Galaxy Tab A11+',
+                    versiones=[dict(m['versiones'][0], clave='TAB-SAM-TABA11PLUS-6G128-GRY-WIFI', sku='TAB-SAM-TABA11PLUS-6G128-GRY-WIFI')])
+        a11 = dict(m, familia='M:TAB-SAM-TABA11', titulo='Samsung Galaxy Tab A11',
+                   versiones=[dict(m['versiones'][0], clave='TAB-SAM-040', sku='TAB-SAM-TABA11-4G64-GRY-CELL')])
+        with io.open(INDICE, 'w', encoding='utf-8') as fh:
+            fh.write(json.dumps({'slugs': {'M:TAB-SAM-TABA11PLUS': 'samsung-galaxy-tab-a11',
+                                           'M:TAB-SAM-TABA11': 'samsung-galaxy-tab-a11-2'}, 'lastmod': {}}))
+        pub = 'https://catalogo.advancetecno.com.ar/'
+        for sl, mo in (('samsung-galaxy-tab-a11', a11p), ('samsung-galaxy-tab-a11-2', a11)):
+            os.makedirs(os.path.join(car, sl))
+            with io.open(os.path.join(car, sl, 'index.html'), 'w', encoding='utf-8') as fh:
+                fh.write(armar_pagina(mo, sl, pub, {'cuotas': 12}))
+        t_a11 = leer(car, 'samsung-galaxy-tab-a11-2', 'index.html')
+        pasada = lambda: aplicar({'modelos': [a11p, a11], 'cuotas': 12}, pub, carpeta=car, raiz=tmp)
+        r1 = pasada()
+        vieja = leer(car, 'samsung-galaxy-tab-a11', 'index.html')
+        nueva = leer(car, 'samsung-galaxy-tab-a11-plus', 'index.html')
+        sm4, ind4 = leer(tmp, 'sitemap.xml'), json.loads(leer(INDICE))
+        ok(desvio_de(vieja) == 'samsung-galaxy-tab-a11-plus' and '<title>Samsung Galaxy Tab A11+ | Advance Tecno</title>' in vieja
+           and '<link rel="canonical" href="https://catalogo.advancetecno.com.ar/producto/samsung-galaxy-tab-a11-plus/">' in nueva
+           and '<title>Samsung Galaxy Tab A11+ | Advance Tecno</title>' in nueva and r1['desvios_nuevos'] == 1,
+           'G-08 de punta a punta: la direccion vieja del A11+ lleva a la nueva "-plus", que es la pagina del A11+')
+        ok('/producto/samsung-galaxy-tab-a11-plus/' in sm4 and '/producto/samsung-galaxy-tab-a11/' not in sm4
+           and '/producto/samsung-galaxy-tab-a11-2/' in sm4 and leer(car, 'samsung-galaxy-tab-a11-2', 'index.html') == t_a11
+           and ind4['slugs'].get('antes:M:TAB-SAM-TABA11PLUS') == 'samsung-galaxy-tab-a11',
+           'G-08: el sitemap lleva la nueva y no la vieja, el A11 queda igual y la vieja sigue guardada en el indice')
+        r2 = pasada()
+        ok(r2['desvios'] == 1 and r2['desvios_nuevos'] == 0 and r2['nuevas'] == 0 and r2['cambiadas'] == 0
+           and leer(car, 'samsung-galaxy-tab-a11', 'index.html') == vieja,
+           'G-08: y en la pasada siguiente no se mueve nada')
     finally:
         INDICE = antes
         shutil.rmtree(tmp, ignore_errors=True)

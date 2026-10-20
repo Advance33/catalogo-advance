@@ -58,3 +58,6 @@ e1492d0242c08404aae96697f8a5d6e1  2   # MAC MINI M6 16GB/256GB | 16GB/512GB: la 
 8080544902d5a6754d642fdc0715650e  2   #  | SAMSUNG S25 ULTRA (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)
 4343a7d1402b4ec24bfb1aeda4e8bcc1  2   #  | SAMSUNG S25 ULTRA (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)
 0a3db0129bd049b91fe294b259abeb2b  2   #  | MACBOOK AIR M5 13.6" (aceptada el 14/10/2026) · misma foto en otra memoria del mismo modelo (regla de Pedro 26/09)
+a56682cce0744f88a99611cec34b033b  2   # INSTA360 X5 ESSENTIAL BUNDLE | X5 BUNDLE (STICK + 2 BATERIAS + TAPA LENTE): la misma camara X5, la foto muestra solo la camara. 20/10/2026 (tanda de codigos)
+e341093a8a7b83ed6a32eaad7ffe7eae  2   # IPHONE 15 SIM 128/256/512GB (Blue): la misma foto, otra memoria (no se ve). 20/10/2026 (tanda de codigos)
+af9bdc437f646b9c7982675fd5f182ae  2   # POCO X8 PRO 5G 8/256, 8/512 y 12/512GB (Green): la misma foto, otra memoria (no se ve). 20/10/2026 (tanda de codigos)

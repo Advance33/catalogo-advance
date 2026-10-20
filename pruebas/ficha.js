@@ -338,9 +338,15 @@ function correrPruebas(){
         for(const mm of mems){
           if(mm === memoriaDeOpcion(op)) continue;
           const alla = reales.filter(([o]) => memoriaDeOpcion(o) === mm);
-          if(!alla.some(([o]) => restoDeOpcion(o) === resto)) continue;
           const filas = alla.flatMap(([, gg]) => gg);
           const conStock = filas.filter(x => x.stock);
+          /* La misma version tiene que ser la que elige la web: si esta
+             agotada y otra de esa memoria tiene stock, la web va a la mas
+             barata con stock (DP-01, auditoria 19/10) y el caso no prueba
+             lo que dice. Paso el 20/10 con el Poco X8 Pro: 8/512GB agotado
+             y 12/512GB con stock. */
+          if(!alla.some(([o, gg]) => restoDeOpcion(o) === resto &&
+                                    (gg.some(x => x.stock) || !conStock.length))) continue;
           const sola = [...(conStock.length ? conStock : filas)].sort(porPrecio)[0];
           if(restoDeOpcion(sola.opcion || sola.etiqueta) === resto) continue;
           return { m, desde: g[0], mem: mm, resto, op };

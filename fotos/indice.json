@@ -147,6 +147,7 @@
 "AT-0086-01.jpg",
 "AT-0086-02.jpg",
 "AT-0086-03.jpg",
+"AT-0086-04.jpg",
 "AT-0087-01.jpg",
 "AT-0087-02.jpg",
 "AT-0088-01.jpg",
@@ -220,6 +221,7 @@
 "AT-0117-02.jpg",
 "AT-0117-03.jpg",
 "AT-0118-01.jpg",
+"AT-0118-02.jpg",
 "AT-0119-01.jpg",
 "AT-0119-02.jpg",
 "AT-0120-01.jpg",
@@ -807,6 +809,7 @@
 "AT-0564-01.jpg",
 "AT-0565.jpg",
 "AT-0566-01.jpg",
+"AT-0566-02.jpg",
 "AT-0567.jpg",
 "AT-0568.jpg",
 "AT-0569.jpg",
@@ -826,7 +829,84 @@
 "AT-0582-01.jpg",
 "AT-0583-01.jpg",
 "AT-0584.jpg",
-"AT-0585.jpg"
+"AT-0585.jpg",
+"AT-0586.jpg",
+"AT-0588.jpg",
+"AT-0589.jpg",
+"AT-0590.jpg",
+"AT-0591.jpg",
+"AT-0592.jpg",
+"AT-0593.jpg",
+"AT-0594.jpg",
+"AT-0595.jpg",
+"AT-0596.jpg",
+"AT-0597.jpg",
+"AT-0598.jpg",
+"AT-0600-01.jpg",
+"AT-0601-01.jpg",
+"AT-0602-01.jpg",
+"AT-0603-01.jpg",
+"AT-0604-01.jpg",
+"AT-0606-01.jpg",
+"AT-0606-02.jpg",
+"AT-0606-03.jpg",
+"AT-0607-01.jpg",
+"AT-0608-01.jpg",
+"AT-0609-01.jpg",
+"AT-0610-01.jpg",
+"AT-0610-02.jpg",
+"AT-0612-01.jpg",
+"AT-0613-01.jpg",
+"AT-0615-01.jpg",
+"AT-0616-01.jpg",
+"AT-0617-01.jpg",
+"AT-0618-01.jpg",
+"AT-0619-01.jpg",
+"AT-0621-01.jpg",
+"AT-0621-02.jpg",
+"AT-0622-01.jpg",
+"AT-0622-02.jpg",
+"AT-0623-01.jpg",
+"AT-0624-01.jpg",
+"AT-0624-02.jpg",
+"AT-0625-01.jpg",
+"AT-0626-01.jpg",
+"AT-0626-02.jpg",
+"AT-0626-03.jpg",
+"AT-0627-01.jpg",
+"AT-0627-02.jpg",
+"AT-0627-03.jpg",
+"AT-0628-01.jpg",
+"AT-0629-01.jpg",
+"AT-0630-01.jpg",
+"AT-0631-01.jpg",
+"AT-0631-02.jpg",
+"AT-0632-01.jpg",
+"AT-0633-01.jpg",
+"AT-0634-01.jpg",
+"AT-0634-02.jpg",
+"AT-0634-03.jpg",
+"AT-0635-01.jpg",
+"AT-0636-01.jpg",
+"AT-0637-01.jpg",
+"AT-0638-01.jpg",
+"AT-0639-01.jpg",
+"AT-0640-01.jpg",
+"AT-0640-02.jpg",
+"AT-0641-01.jpg",
+"AT-0642.jpg",
+"AT-0643.jpg",
+"AT-0644.jpg",
+"AT-0645.jpg",
+"AT-0646.jpg",
+"AT-0647-01.jpg",
+"AT-0648-01.jpg",
+"AT-0649-01.jpg",
+"AT-0650-01.jpg",
+"AT-0651-01.jpg",
+"AT-0651-02.jpg",
+"AT-0652-01.jpg",
+"AT-0653-01.jpg"
 ],
 "catalogo": {
 "firmas": {
@@ -1121,6 +1201,7 @@
 "samsung|celular|12:1,512:1,s25:1,ultra:1"
 ],
 "AT-0094": [
+"samsung|celular|12:1,1tb:1,s25:1,ultra:1",
 "samsung|celular|1tb:1,s25:1,ultra:1"
 ],
 "AT-0095": [
@@ -1472,6 +1553,7 @@
 "dji|drone|4:1,512:1,pro:1"
 ],
 "AT-0208": [
+"dji|drone|4:1,5:1,mini:1,pro:1",
 "dji|drone|5:1,mini:1,pro:1"
 ],
 "AT-0209": [
@@ -2651,11 +2733,221 @@
 ],
 "AT-0585": [
 "apple|desktop|16:1,512:1,m6:1,mini:1"
+],
+"AT-0586": [
+"apple|accesorio apple|1m:1,60w:1"
+],
+"AT-0587": [
+"apple|accesorio apple|"
+],
+"AT-0588": [
+"apple|accesorio apple|4k:1,64:1"
+],
+"AT-0589": [
+"apple|accesorio apple|128:1,4k:1"
+],
+"AT-0590": [
+"apple|auriculares|5:1"
+],
+"AT-0591": [
+"apple|auriculares|5:1"
+],
+"AT-0592": [
+"apple|auriculares|2:1,pro:1"
+],
+"AT-0593": [
+"insta360|camara de accion|insta360:1"
+],
+"AT-0594": [
+"canon|camara|18:1,2000d:1,55:1,kit:1"
+],
+"AT-0595": [
+"canon|camara|18:1,45:1,kit:1,r10:1"
+],
+"AT-0596": [
+"canon|camara|105:1,24:1,kit:1,r5:1"
+],
+"AT-0597": [
+"canon|camara|body:1,r7:1"
+],
+"AT-0598": [
+"canon|camara|24:1,3:1,4:1,5:1,50:1,6:1,kit:1,r8:1"
+],
+"AT-0599": [
+"sony|camara|28:1,60:1,7c:1,kit:1"
+],
+"AT-0600": [
+"sony|camara|16:1,50:1,e10:1,kit:1"
+],
+"AT-0601": [
+"apple|celular|15:1,256:1"
+],
+"AT-0602": [
+"apple|celular|15:1,512:1"
+],
+"AT-0603": [
+"apple|celular|16:1,512:1"
+],
+"AT-0604": [
+"motorola|celular|256:1,60:1,8:1,pro:1"
+],
+"AT-0605": [
+"motorola|celular|12:1,256:1,70:1"
+],
+"AT-0606": [
+"motorola|celular|256:1,70:1,8:1",
+"motorola|celular|256:1,70:1,8:1,air:1"
+],
+"AT-0607": [
+"motorola|celular|256:1,4:1,g06:1"
+],
+"AT-0608": [
+"motorola|celular|12:1,256:1,g56:1"
+],
+"AT-0609": [
+"motorola|celular|256:1,4:1,g67:1"
+],
+"AT-0610": [
+"motorola|celular|256:1,8:1,g77:1"
+],
+"AT-0611": [
+"motorola|celular|256:1,8:1,g86:1"
+],
+"AT-0612": [
+"motorola|celular|256:1,60:1,8:1"
+],
+"AT-0613": [
+"samsung|celular|128:1,4:1,a07:1"
+],
+"AT-0614": [
+"samsung|celular|12:1,128:1,plus:1,s20:1"
+],
+"AT-0615": [
+"samsung|celular|12:1,256:1,s25:1"
+],
+"AT-0616": [
+"xiaomi|celular|12:1,17:1,512:1"
+],
+"AT-0617": [
+"xiaomi|celular|128:1,17:1,4:1"
+],
+"AT-0618": [
+"xiaomi|celular|12:1,17t:1,256:1"
+],
+"AT-0619": [
+"xiaomi|celular|12:1,17t:1,512:1"
+],
+"AT-0620": [
+"xiaomi|celular|12:1,17t:1,1tb:1,pro:1"
+],
+"AT-0621": [
+"xiaomi|celular|12:1,17t:1,512:1,pro:1"
+],
+"AT-0622": [
+"xiaomi|celular|16:1,17:1,512:1,ultra:1"
+],
+"AT-0623": [
+"xiaomi|celular|12:1,15t:1,512:1,pro:1"
+],
+"AT-0624": [
+"xiaomi|celular|128:1,17:1,4:1"
+],
+"AT-0625": [
+"xiaomi|celular|17:1,256:1,6:1"
+],
+"AT-0626": [
+"xiaomi|celular|17:1,256:1,8:1"
+],
+"AT-0627": [
+"xiaomi|celular|256:1,8:1,c85:1"
+],
+"AT-0628": [
+"xiaomi|celular|12:1,256:1,f8:1,pro:1"
+],
+"AT-0629": [
+"xiaomi|celular|12:1,512:1,f8:1,pro:1"
+],
+"AT-0630": [
+"xiaomi|celular|12:1,256:1,f8:1,ultra:1"
+],
+"AT-0631": [
+"xiaomi|celular|16:1,512:1,f8:1,ultra:1"
+],
+"AT-0632": [
+"xiaomi|celular|12:1,256:1,f9:1,ultra:1"
+],
+"AT-0633": [
+"xiaomi|celular|16:1,512:1,f9:1,ultra:1"
+],
+"AT-0634": [
+"xiaomi|celular|12:1,512:1,m8:1,pro:1"
+],
+"AT-0635": [
+"xiaomi|celular|12:1,512:1,pro:1,x7:1"
+],
+"AT-0636": [
+"xiaomi|celular|256:1,8:1,pro:1,x7:1"
+],
+"AT-0637": [
+"xiaomi|celular|12:1,512:1,pro:1,x8:1"
+],
+"AT-0638": [
+"xiaomi|celular|15c:1,256:1,8:1"
+],
+"AT-0639": [
+"xiaomi|celular|15:1,256:1,8:1,pro:1"
+],
+"AT-0640": [
+"xiaomi|celular|15:1,512:1,8:1,pro:1"
+],
+"AT-0641": [
+"apple|desktop|24:2,4:1,512:1,5k:1,m4:1",
+"apple|desktop|24:2,512:1,m4:1"
+],
+"AT-0642": [
+"apple|desktop|24:1,512:1,m5:1,mini:1,pro:1"
+],
+"AT-0643": [
+"canon|lente|50mm:1,8:1,f1:1"
+],
+"AT-0644": [
+"canon|lente|105mm:1,24:1,8:1,f2:1"
+],
+"AT-0645": [
+"sigma|lente|150:1,3:1,5:1,6:1,600mm:1"
+],
+"AT-0646": [
+"sigma|lente|2:1,24:1,70mm:1,8:1"
+],
+"AT-0647": [
+"dell|notebook|1355u:1,15:1,16:1,512:1,dc15250:1,i7:1"
+],
+"AT-0648": [
+"apple|smartwatch|12:1,42mm:1"
+],
+"AT-0649": [
+"apple|smartwatch|12:1,46mm:1"
+],
+"AT-0650": [
+"apple|tablet|13:1,256:1,cellular:1,m5:1,pro:1"
+],
+"AT-0651": [
+"xiaomi|tablet|11:1,2:1,256:1,4:1"
+],
+"AT-0652": [
+"apple|desktop|16:1,24:1,4:1,512:1,5k:1,m4:1",
+"apple|desktop|16:1,24:1,512:1,m4:1"
+],
+"AT-0653": [
+"apple|desktop|1tb:1,24:2,4:1,5k:1,m4:1",
+"apple|desktop|1tb:1,24:2,m4:1"
 ]
 },
 "ids": {
 "ACA-APL-BATERIAMAGSAFEIPHONEAIR-000-000-000": "AT-0570",
+"ACA-APL-CABLE-000-000-USBC60W1M": "AT-0586",
 "ACA-APL-CABLE-000-000-USBCLIGHT": "AT-0571",
+"ACA-APL-CABLE-000-000-USBCUSBC": "AT-0587",
 "ACA-APL-CARGADOR40WUSBC-000-000-000": "AT-0569",
 "ACA-APL-MAGICTRACKPAD2-000-WHT-000": "AT-0012",
 "ACA-APL-MKTOUCHIDNUM-000-BLK-EN": "AT-0003",
@@ -2687,6 +2979,8 @@
 "ACC-APP-075": "AT-0006",
 "ACC-APP-076": "AT-0010",
 "ACC-APP-077": "AT-0008",
+"ACC-APP-078": "AT-0588",
+"ACC-APP-079": "AT-0589",
 "ACC-CAN-001": "AT-0019",
 "ACC-CAN-002": "AT-0022",
 "ACC-CAN-004": "AT-0017",
@@ -2750,11 +3044,15 @@
 "AUD-JBL-002": "AT-0448",
 "AUD-KIE-001": "AT-0062",
 "AUD-SAM-001": "AT-0063",
+"AUR-APL-AIRPODS5-000-000-000": "AT-0590",
+"AUR-APL-AIRPODS5-000-000-ANC": "AT-0591",
 "AUR-APL-AIRPODSMAX2-000-BLU-USBC": "AT-0056",
 "AUR-APL-AIRPODSMAX2-000-MID-USBC": "AT-0056",
 "AUR-APL-AIRPODSMAX2-000-ORG-USBC": "AT-0056",
 "AUR-APL-AIRPODSMAX2-000-PUR-USBC": "AT-0056",
 "AUR-APL-AIRPODSMAX2-000-STL-USBC": "AT-0056",
+"AUR-APL-AIRPODSPRO2-000-000-000": "AT-0592",
+"CAC-INS-X5ESSENTIALBUNDLE-000-000-000": "AT-0593",
 "CAM-CAN-003": "AT-0156",
 "CAM-CAN-004": "AT-0144",
 "CAM-CAN-006": "AT-0138",
@@ -2777,10 +3075,15 @@
 "CAM-CAN-036": "AT-0150",
 "CAM-CAN-037": "AT-0153",
 "CAM-CAN-038": "AT-0154",
+"CAM-CAN-EOS2000D-000-000-K1855II": "AT-0594",
+"CAM-CAN-EOSR10-000-000-K1845": "AT-0595",
 "CAM-CAN-EOSR50-000-BLK-K1845": "AT-0558",
 "CAM-CAN-EOSR50-000-WHT-K1845": "AT-0558",
 "CAM-CAN-EOSR50V-000-000-K1430": "AT-0559",
+"CAM-CAN-EOSR5M2-000-000-K24105": "AT-0596",
 "CAM-CAN-EOSR6M2-000-000-BODY": "AT-0560",
+"CAM-CAN-EOSR7-000-000-BODY": "AT-0597",
+"CAM-CAN-EOSR8-000-000-K2450": "AT-0598",
 "CAM-DJI-002": "AT-0194",
 "CAM-DJI-003": "AT-0195",
 "CAM-DJI-005": "AT-0193",
@@ -2813,6 +3116,7 @@
 "CAM-NIK-020": "AT-0164",
 "CAM-NIK-Z9-000-000-BODY": "AT-0565",
 "CAM-NIK-ZF-000-BLK-BODY": "AT-0566",
+"CAM-NIK-ZF-000-SLV-BODY": "AT-0566",
 "CAM-SON-003": "AT-0192",
 "CAM-SON-005": "AT-0179",
 "CAM-SON-006": "AT-0174",
@@ -2835,13 +3139,18 @@
 "CAM-SON-024": "AT-0187",
 "CAM-SON-027": "AT-0175",
 "CAM-SON-032": "AT-0172",
+"CAM-SON-A7CII-000-000-K2860": "AT-0599",
 "CAM-SON-A7IV-000-000-BODY": "AT-0567",
 "CAM-SON-ZVE10II-000-BLK-BODY": "AT-0192",
+"CAM-SON-ZVE10II-000-BLK-K1650": "AT-0600",
 "CEL-APL-15-128-BLK-SIM": "AT-0065",
 "CEL-APL-15-128-PNK-SIM": "AT-0065",
+"CEL-APL-15-256-BLU-SIM": "AT-0601",
+"CEL-APL-15-512-BLU-SIM": "AT-0602",
 "CEL-APL-16-128-BLK-000": "AT-0067",
 "CEL-APL-16-128-PNK-000": "AT-0067",
 "CEL-APL-16-128-TLX-000": "AT-0067",
+"CEL-APL-16-512-TLX-000": "AT-0603",
 "CEL-APL-16E-256-WHT-000": "AT-0548",
 "CEL-APL-16PM-256-BLK-000": "AT-0068",
 "CEL-APL-17-256-LVN-ESIM": "AT-0070",
@@ -2921,7 +3230,19 @@
 "CEL-MOT-071": "AT-0081",
 "CEL-MOT-075": "AT-0078",
 "CEL-MOT-077": "AT-0513",
+"CEL-MOT-EDGE60PRO-8G256-SHD-5G": "AT-0604",
+"CEL-MOT-EDGE70FUSION-12G256-BLU-5G": "AT-0605",
+"CEL-MOT-EDGE70FUSION-8G256-BLU-5G": "AT-0606",
+"CEL-MOT-EDGE70FUSION-8G256-GRN-5G": "AT-0606",
+"CEL-MOT-EDGE70FUSION-8G256-SKY-5G": "AT-0606",
+"CEL-MOT-G06-4G256-GRN-000": "AT-0607",
 "CEL-MOT-G06POWER-4G64-BLU-000": "AT-0079",
+"CEL-MOT-G56-12G256-BLK-000": "AT-0608",
+"CEL-MOT-G67-4G256-GRY-000": "AT-0609",
+"CEL-MOT-G77-8G256-BLK-000": "AT-0610",
+"CEL-MOT-G77-8G256-GRN-000": "AT-0610",
+"CEL-MOT-G86POWER-8G256-000-5G": "AT-0611",
+"CEL-MOT-MOTOEDGE60FUSION-8G256-SLP-000": "AT-0612",
 "CEL-SAM-003": "AT-0083",
 "CEL-SAM-025": "AT-0082",
 "CEL-SAM-036": "AT-0084",
@@ -2960,13 +3281,17 @@
 "CEL-SAM-098": "AT-0511",
 "CEL-SAM-099": "AT-0093",
 "CEL-SAM-100": "AT-0512",
+"CEL-SAM-A07-4G128-BLK-000": "AT-0613",
 "CEL-SAM-A36-6G128-BLU-000": "AT-0511",
 "CEL-SAM-A36-8G256-LAV-000": "AT-0504",
 "CEL-SAM-A37-12G256-CHR-000": "AT-0583",
+"CEL-SAM-A56-12G256-GRY-000": "AT-0086",
 "CEL-SAM-A56-12G256-OLV-000": "AT-0086",
 "CEL-SAM-A56-8G256-OLV-000": "AT-0087",
 "CEL-SAM-A57-8G128-DBL-000": "AT-0088",
 "CEL-SAM-A57-8G256-BLU-000": "AT-0089",
+"CEL-SAM-S20PLUS-12G128-000-000": "AT-0614",
+"CEL-SAM-S25-12G256-MNT-000": "AT-0615",
 "CEL-SAM-S25FE-256-WHT-000": "AT-0090",
 "CEL-SAM-S25ULT-12G1TB-BLK-000": "AT-0094",
 "CEL-SAM-S25ULT-12G512-BLK-000": "AT-0093",
@@ -3000,7 +3325,44 @@
 "CEL-XIA-105": "AT-0110",
 "CEL-XIA-106": "AT-0111",
 "CEL-XIA-107": "AT-0121",
+"CEL-XIA-17-12G512-BLK-000": "AT-0616",
+"CEL-XIA-17-4G128-BLK-000": "AT-0617",
+"CEL-XIA-17T-12G256-BLK-000": "AT-0618",
+"CEL-XIA-17T-12G512-VIO-000": "AT-0619",
+"CEL-XIA-17TPRO-12G1TB-000-000": "AT-0620",
+"CEL-XIA-17TPRO-12G512-BLK-000": "AT-0621",
+"CEL-XIA-17TPRO-12G512-VIO-000": "AT-0621",
+"CEL-XIA-17ULTRA-16G512-BLK-000": "AT-0622",
+"CEL-XIA-17ULTRA-16G512-WHT-000": "AT-0622",
+"CEL-XIA-MI15TPRO-12G512-000-000": "AT-0623",
+"CEL-XIA-NOTE17-4G128-BLK-000": "AT-0624",
+"CEL-XIA-NOTE17-4G128-SKY-000": "AT-0624",
+"CEL-XIA-NOTE17-6G256-BLK-000": "AT-0625",
+"CEL-XIA-NOTE17-8G256-BLK-000": "AT-0626",
+"CEL-XIA-NOTE17-8G256-PUR-000": "AT-0626",
+"CEL-XIA-NOTE17-8G256-SKY-000": "AT-0626",
+"CEL-XIA-POCOC85-8G256-BLK-000": "AT-0627",
+"CEL-XIA-POCOC85-8G256-GRN-000": "AT-0627",
+"CEL-XIA-POCOC85-8G256-PUR-000": "AT-0627",
+"CEL-XIA-POCOF8PRO-12G256-BLK-000": "AT-0628",
+"CEL-XIA-POCOF8PRO-12G512-BLU-000": "AT-0629",
+"CEL-XIA-POCOF8ULTRA-12G256-BLK-000": "AT-0630",
+"CEL-XIA-POCOF8ULTRA-16G512-BLK-000": "AT-0631",
+"CEL-XIA-POCOF8ULTRA-16G512-BLU-000": "AT-0631",
+"CEL-XIA-POCOF9ULTRA-12G256-BLK-000": "AT-0632",
+"CEL-XIA-POCOF9ULTRA-16G512-BLK-000": "AT-0633",
+"CEL-XIA-POCOM8PRO-12G512-000-000": "AT-0634",
+"CEL-XIA-POCOM8PRO-12G512-BLK-000": "AT-0634",
+"CEL-XIA-POCOM8PRO-12G512-SLV-000": "AT-0634",
+"CEL-XIA-POCOX7PRO-12G512-GRN-000": "AT-0635",
+"CEL-XIA-POCOX7PRO-8G256-GRN-000": "AT-0636",
+"CEL-XIA-POCOX8PRO-12G512-GRN-000": "AT-0637",
 "CEL-XIA-POCOX8PROMAX-12G256-BLU-000": "AT-0114",
+"CEL-XIA-REDMI15C-8G256-BLU-000": "AT-0638",
+"CEL-XIA-REDMINOTE15-8G256-BLU-000": "AT-0118",
+"CEL-XIA-REDMINOTE15PRO-8G256-BLU-5G": "AT-0639",
+"CEL-XIA-REDMINOTE15PRO-8G512-BLK-5G": "AT-0640",
+"CEL-XIA-REDMINOTE15PRO-8G512-BLU-5G": "AT-0640",
 "CON-MET-001": "AT-0126",
 "CON-MET-002": "AT-0123",
 "CON-MET-006": "AT-0124",
@@ -3024,6 +3386,10 @@
 "DRO-DJI-010": "AT-0209",
 "DRO-DJI-011": "AT-0210",
 "DRO-DJI-012": "AT-0207",
+"DSK-APL-IMAC24M4-16G512-BLU-000-EN": "AT-0652",
+"DSK-APL-IMAC24M4-24G1TB-BLU-000-EN": "AT-0653",
+"DSK-APL-IMAC24M4-24G512-BLU-000-EN": "AT-0641",
+"DSK-APL-MACMINIM5PRO-24G512-000-000": "AT-0642",
 "DSK-APL-MACMINIM6-16G256-000-000": "AT-0584",
 "DSK-APL-MACMINIM6-16G512-000-000": "AT-0585",
 "DYS-DYS-AIRWRAPCOANDA2XHS09-000-PNK-000": "AT-0550",
@@ -3124,7 +3490,9 @@
 "LEN-CAN-056": "AT-0227",
 "LEN-CAN-057": "AT-0249",
 "LEN-CAN-058": "AT-0236",
+"LEN-CAN-50F18STM-000-000-CANEF": "AT-0643",
 "LEN-CAN-RF14MMF14LVCM-000-000-000": "AT-0572",
+"LEN-CAN-RF24105MMF28ISUSMZ-000-000-000": "AT-0644",
 "LEN-NIK-001": "AT-0268",
 "LEN-NIK-002": "AT-0269",
 "LEN-NIK-003": "AT-0285",
@@ -3205,6 +3573,8 @@
 "LEN-SIG-050": "AT-0339",
 "LEN-SIG-054": "AT-0317",
 "LEN-SIG-057": "AT-0308",
+"LEN-SIG-150600MMF563DGOSHSMCONTEMPORARYNIKON-000-000-000": "AT-0645",
+"LEN-SIG-2470MMF28IIDGDNARTSONY-000-000-SONYE": "AT-0646",
 "LEN-SON-002": "AT-0374",
 "LEN-SON-004": "AT-0364",
 "LEN-SON-005": "AT-0365",
@@ -3341,6 +3711,7 @@
 "NBK-APL-NEO13-8G256-BLS-ES": "AT-0433",
 "NBK-APL-NEO13-8G256-IND-ES": "AT-0433",
 "NBK-APL-NEO13-8G256-SLV-EN": "AT-0432",
+"NBK-DEL-DC15250-16G512-CRB-EN": "AT-0647",
 "PC-APP-001": "AT-0202",
 "PC-APP-002": "AT-0203",
 "PC-APP-004": "AT-0204",
@@ -3380,6 +3751,9 @@
 "SW-KIE-002": "AT-0463",
 "SW-KIE-003": "AT-0464",
 "SW-KIE-004": "AT-0461",
+"SWT-APL-WATCHSERIES1242MMGPS-000-BLK-000": "AT-0648",
+"SWT-APL-WATCHSERIES1246MM-000-BLC-000": "AT-0649",
+"SWT-APL-WS11-000-RGD-46-GPS-ML": "AT-0454",
 "TAB-APL-IPAD11A16-128-SLV-CELL": "AT-0576",
 "TAB-APL-IPAD11A16-128-YEL-WIFI": "AT-0466",
 "TAB-APL-IPAD11A16-256-SLV-CELL": "AT-0577",
@@ -3390,6 +3764,7 @@
 "TAB-APL-IPADMINI7-256-PUR-WIFI": "AT-0475",
 "TAB-APL-IPADMINI7-256-STL-WIFI": "AT-0475",
 "TAB-APL-IPADPRO11M5-256-SBK-CELL": "AT-0540",
+"TAB-APL-IPADPRO13M5-256-BLK-CELL": "AT-0650",
 "TAB-APL-IPADPRO13M5-512-SLV-WIFI": "AT-0484",
 "TAB-APP-001": "AT-0466",
 "TAB-APP-002": "AT-0467",
@@ -3443,11 +3818,17 @@
 "TAB-SAM-TABS12PLUSWIFI-12G256-GRY-000": "AT-0582",
 "TAB-XIA-007": "AT-0499",
 "TAB-XIA-008": "AT-0525",
-"TAB-XIA-009": "AT-0526"
+"TAB-XIA-009": "AT-0526",
+"TAB-XIA-REDMIPAD2-4G256-GRN-WIFI": "AT-0651",
+"TAB-XIA-REDMIPAD2-4G256-GRY-WIFI": "AT-0651"
 },
 "skus": {
+"accesorio-apple~apple~1m-60w-apple-c-cable-usb~usbc60w1m": "AT-0586",
 "accesorio-apple~apple~2-magic-mouse": "AT-0011",
 "accesorio-apple~apple~2-magic-trackpad": "AT-0012",
+"accesorio-apple~apple~4k-apple-tv~128-ethernet": "AT-0589",
+"accesorio-apple~apple~4k-apple-tv~64-wifi": "AT-0588",
+"accesorio-apple~apple~a-apple-c-c-cable-usb-usb~usbcusbc": "AT-0587",
 "accesorio-apple~apple~air-folio-ipad-keyboard-pro-smart": "AT-0015",
 "accesorio-apple~apple~air-ipad-keyboard-m3-m4-magic~11in-tecladoen": "AT-0005",
 "accesorio-apple~apple~air-ipad-keyboard-m3-m4-magic~13in-tecladoen": "AT-0006",
@@ -3458,6 +3839,7 @@
 "accesorio-apple~apple~folio-ipad-keyboard-magic~gen10-tecladoen": "AT-0004",
 "accesorio-apple~apple~id-keyboard-magic-numeric-pad-touch": "AT-0003",
 "accesorio-apple~apple~id-keyboard-magic-numeric-pad-touch-with": "AT-0003",
+"accesorio-apple~apple~id-keyboard-magic-numeric-pad-touch-with~en": "AT-0003",
 "accesorio-apple~apple~ipad-keyboard-m1-m2-magic-pro~12in": "AT-0008",
 "accesorio-apple~apple~ipad-keyboard-m1-m2-magic-pro~12in-tecladoes": "AT-0008",
 "accesorio-apple~apple~ipad-keyboard-m2-magic-pro~11in-tecladoen": "AT-0007",
@@ -3515,8 +3897,11 @@
 "accesorio-gaming~sony~consultar-joystick-ps5": "AT-0051",
 "accesorio-gaming~sony~edicion-especial-joystick-ps5": "AT-0052",
 "accesorio-gaming~sony~ps5-vr2": "AT-0053",
+"auriculares~apple~2-airpods-apple-pro": "AT-0592",
 "auriculares~apple~4-airpods": "AT-0054",
 "auriculares~apple~4-airpods-anc-cancelacion-ruido": "AT-0055",
+"auriculares~apple~5-airpods-apple-c-usb": "AT-0590",
+"auriculares~apple~5-airpods-apple-c-usb~anc": "AT-0591",
 "auriculares~apple~airpods-max-usb-c": "AT-0057",
 "auriculares~apple~airpods-max-usb-c~gen2": "AT-0056",
 "auriculares~apple~airpods-pro~gen3": "AT-0058",
@@ -3537,9 +3922,13 @@
 "camara-de-accion~gopro~13-go-hero-pro": "AT-0197",
 "camara-de-accion~insta360~2-360-bater-bundle-insta-lente-stick-tapa-x5": "AT-0200",
 "camara-de-accion~insta360~360-ace-insta-pro": "AT-0199",
+"camara-de-accion~insta360~bundle-essential-insta360-x5": "AT-0593",
+"camara~canon~18-150-eor-r7~body": "AT-0597",
 "camara~canon~18-150-eor-r7~kit": "AT-0138",
+"camara~canon~18-150-eos-r10~k1845": "AT-0595",
 "camara~canon~18-150-eos-r10~kit": "AT-0143",
 "camara~canon~18-45-55-210-eos-r100~kit": "AT-0145",
+"camara~canon~18-55-2000d-eos-iii-t7~k1855ii": "AT-0594",
 "camara~canon~18-55-2000d-eos-iii-t7~kit": "AT-0139",
 "camara~canon~18-55-4000d-eos-iii~kit": "AT-0140",
 "camara~canon~20-50-4-eos-f-pz-r6-usm-v-video~kit": "AT-0154",
@@ -3548,8 +3937,10 @@
 "camara~canon~24-105-4-eos-f-iii-l-mark-r6-usm": "AT-0150",
 "camara~canon~24-105-eos-f4-7.1-iii-is-mark-r6-stm~kit": "AT-0152",
 "camara~canon~5d-eos-iv-mark~body": "AT-0141",
+"camara~canon~body-canon-eos-r8~k2450": "AT-0598",
 "camara~canon~c-cinema-eos-r5": "AT-0148",
 "camara~canon~eos-ii-mark-r5~body": "AT-0149",
+"camara~canon~eos-ii-mark-r5~k24105": "AT-0596",
 "camara~canon~eos-iii-mark-r6~body": "AT-0151",
 "camara~canon~eos-r10~body": "AT-0144",
 "camara~canon~eos-r1~body": "AT-0142",
@@ -3571,6 +3962,7 @@
 "camara~nikon~ii-z7~body-tecladoes": "AT-0167",
 "camara~nikon~iii-z6~body-tecladoen": "AT-0165",
 "camara~nikon~iii-z6~body-tecladoes": "AT-0164",
+"camara~nikon~nikon-zf~body": "AT-0566",
 "camara~nikon~z8~body": "AT-0168",
 "camara~sony~1-alfa-ii~body": "AT-0171",
 "camara~sony~16-50-6400-alfa-ii~kit": "AT-0172",
@@ -3578,6 +3970,7 @@
 "camara~sony~28-70-7-alfa-iv~kit": "AT-0176",
 "camara~sony~28-70-7-alfa-v~kit": "AT-0178",
 "camara~sony~7-alfa-cii~body": "AT-0173",
+"camara~sony~7-alfa-cii~k2860": "AT-0599",
 "camara~sony~7-alfa-iii~body": "AT-0174",
 "camara~sony~7-alfa-v~body": "AT-0177",
 "camara~sony~7c-alfa~body": "AT-0179",
@@ -3594,14 +3987,21 @@
 "camara~sony~fx3~body": "AT-0189",
 "camara~sony~fx6-v": "AT-0191",
 "camara~sony~ii-zv-e10~body": "AT-0192",
+"camara~sony~ii-zv-e10~k1650": "AT-0600",
 "celular~apple~14-iphone~128gb": "AT-0064",
 "celular~apple~15-iphone-plus~128gb": "AT-0066",
+"celular~apple~15-iphone-sim~128-sim": "AT-0065",
+"celular~apple~15-iphone-sim~256-sim": "AT-0601",
+"celular~apple~15-iphone-sim~512-sim": "AT-0602",
 "celular~apple~15-iphone~128gb": "AT-0065",
+"celular~apple~16-apple-iphone-plus~128": "AT-0549",
 "celular~apple~16-iphone-max-pro~256gb": "AT-0068",
 "celular~apple~16-iphone-max-pro~512gb": "AT-0069",
 "celular~apple~16-iphone-plus~128gb": "AT-0549",
 "celular~apple~16-iphone~128gb": "AT-0067",
+"celular~apple~16-iphone~512": "AT-0603",
 "celular~apple~16e-iphone~128gb": "AT-0510",
+"celular~apple~16e-iphone~256": "AT-0548",
 "celular~apple~16e-iphone~256gb": "AT-0548",
 "celular~apple~17-iphone-max-pro~1tb-esim": "AT-0074",
 "celular~apple~17-iphone-max-pro~256gb-esim": "AT-0075",
@@ -3616,6 +4016,7 @@
 "celular~apple~17-iphone-pro~512gb": "AT-0073",
 "celular~apple~17-iphone-pro~512gb-esim": "AT-0073",
 "celular~apple~17-iphone-pro~512gb-sim": "AT-0536",
+"celular~apple~17-iphone~256-esim": "AT-0070",
 "celular~apple~17-iphone~256gb": "AT-0070",
 "celular~apple~17e-iphone~256gb": "AT-0076",
 "celular~apple~17e-iphone~512gb": "AT-0530",
@@ -3623,21 +4024,32 @@
 "celular~apple~18-apple-iphone-max-pro~256-esim": "AT-0543",
 "celular~apple~18-apple-iphone-max-pro~2tb-esim": "AT-0546",
 "celular~apple~18-apple-iphone-max-pro~512-esim": "AT-0544",
+"celular~apple~18-apple-iphone-pro~1tb": "AT-0547",
 "celular~apple~18-apple-iphone-pro~1tb-esim": "AT-0547",
 "celular~apple~18-apple-iphone-pro~256-esim": "AT-0541",
 "celular~apple~18-apple-iphone-pro~512-esim": "AT-0542",
 "celular~apple~air-iphone~1tb": "AT-0077",
+"celular~motorola~5g-60-edge-fusion-moto-motorola~8g256": "AT-0612",
+"celular~motorola~5g-60-edge-motorola-pro~8g256-5g": "AT-0604",
+"celular~motorola~5g-70-edge-fusion-motorola~12g256-5g": "AT-0605",
+"celular~motorola~5g-70-edge-fusion-motorola~8g256-5g": "AT-0606",
+"celular~motorola~5g-g56-motorola~12g256": "AT-0608",
 "celular~motorola~60-edge-fusion~5g": "AT-0513",
+"celular~motorola~g06-motorola~4g256": "AT-0607",
 "celular~motorola~g06-power~4gb-256gb-concargador": "AT-0078",
 "celular~motorola~g06-power~4gb-64gb": "AT-0079",
 "celular~motorola~g06-power~4gb-64gb-sincargador": "AT-0079",
 "celular~motorola~g17~4gb-256gb-sincargador": "AT-0080",
 "celular~motorola~g57~8gb-256gb-5g-sincargador": "AT-0081",
+"celular~motorola~g67-motorola~4g256": "AT-0609",
+"celular~motorola~g77-motorola~8g256": "AT-0610",
+"celular~motorola~g86-motorola-power~8g256-5g": "AT-0611",
 "celular~samsung~8-flip-galaxy-z~512gb": "AT-0104",
 "celular~samsung~8-fold-galaxy-ultra-z~256gb": "AT-0107",
 "celular~samsung~8-fold-galaxy-ultra-z~512gb": "AT-0108",
 "celular~samsung~8-fold-galaxy-z~256gb": "AT-0105",
 "celular~samsung~8-fold-galaxy-z~512gb": "AT-0106",
+"celular~samsung~a07-galaxy-samsung~4g128": "AT-0613",
 "celular~samsung~a16-galaxy~4gb-128gb-4g": "AT-0502",
 "celular~samsung~a17-galaxy-u-x5~4gb-128gb": "AT-0082",
 "celular~samsung~a17-galaxy~4gb-128gb": "AT-0082",
@@ -3650,6 +4062,7 @@
 "celular~samsung~a36-galaxy~8gb-256gb": "AT-0504",
 "celular~samsung~a36-galaxy~8gb-256gb-5g": "AT-0504",
 "celular~samsung~a37-galaxy~8gb-256gb": "AT-0085",
+"celular~samsung~a56-galaxy~12g256": "AT-0086",
 "celular~samsung~a56-galaxy~12gb-256gb": "AT-0086",
 "celular~samsung~a56-galaxy~8gb-256gb": "AT-0087",
 "celular~samsung~a57-galaxy~8g256": "AT-0089",
@@ -3660,8 +4073,12 @@
 "celular~samsung~fe-galaxy-s26~8gb-128gb": "AT-0097",
 "celular~samsung~fe-galaxy-s26~8gb-256gb": "AT-0098",
 "celular~samsung~fe-galaxy-s26~8gb-512gb": "AT-0099",
+"celular~samsung~galaxy-plus-s20-samsung~12g128": "AT-0614",
 "celular~samsung~galaxy-plus-s26~256gb-5g": "AT-0100",
 "celular~samsung~galaxy-plus-s26~512gb-5g": "AT-0101",
+"celular~samsung~galaxy-s25-samsung~12g256": "AT-0615",
+"celular~samsung~galaxy-s25-ultra~12g1tb": "AT-0094",
+"celular~samsung~galaxy-s25-ultra~12g512": "AT-0093",
 "celular~samsung~galaxy-s25-ultra~12gb-256gb-5g": "AT-0092",
 "celular~samsung~galaxy-s25-ultra~12gb-512gb-5g": "AT-0093",
 "celular~samsung~galaxy-s25-ultra~1tb": "AT-0094",
@@ -3676,14 +4093,40 @@
 "celular~xiaomi~15-note-plus-pro-redmi~8gb-256gb-5g": "AT-0122",
 "celular~xiaomi~15-note-pro-redmi~12gb-512gb": "AT-0119",
 "celular~xiaomi~15-note-pro-redmi~12gb-512gb-5g": "AT-0514",
+"celular~xiaomi~15-note-pro-redmi~8g256-5g": "AT-0639",
+"celular~xiaomi~15-note-pro-redmi~8g512-5g": "AT-0640",
 "celular~xiaomi~15-note-pro-redmi~8gb-256gb": "AT-0120",
+"celular~xiaomi~15-note-redmi~8g256": "AT-0118",
 "celular~xiaomi~15-note-redmi~8gb-256gb": "AT-0118",
 "celular~xiaomi~15c-redmi~4gb-128gb": "AT-0116",
+"celular~xiaomi~15c-redmi~8g256": "AT-0638",
+"celular~xiaomi~15t-mi-pro-xiaomi~12g512": "AT-0623",
+"celular~xiaomi~17-4g-note-redmi-xiaomi~4g128": "AT-0624",
+"celular~xiaomi~17-4g-note-redmi-xiaomi~6g256": "AT-0625",
+"celular~xiaomi~17-4g-note-redmi-xiaomi~8g256": "AT-0626",
+"celular~xiaomi~17-mi-xiaomi~12g512": "AT-0616",
+"celular~xiaomi~17-mi-xiaomi~4g128": "AT-0617",
+"celular~xiaomi~17-ultra-xiaomi~16g512": "AT-0622",
+"celular~xiaomi~17t-mi-pro-xiaomi~12g1tb": "AT-0620",
+"celular~xiaomi~17t-mi-pro-xiaomi~12g512": "AT-0621",
+"celular~xiaomi~17t-mi-xiaomi~12g256": "AT-0618",
+"celular~xiaomi~17t-mi-xiaomi~12g512": "AT-0619",
+"celular~xiaomi~5g-poco-pro-x7-xiaomi~12g512": "AT-0635",
+"celular~xiaomi~5g-poco-pro-x7-xiaomi~8g256": "AT-0636",
 "celular~xiaomi~c81-poco-pro~4gb-128gb": "AT-0109",
+"celular~xiaomi~c85-poco-xiaomi~8g256": "AT-0627",
 "celular~xiaomi~f6-poco-pro~12gb-256gb": "AT-0111",
 "celular~xiaomi~f6-poco~8gb-256gb": "AT-0110",
+"celular~xiaomi~f8-poco-pro-xiaomi~12g256": "AT-0628",
+"celular~xiaomi~f8-poco-pro-xiaomi~12g512": "AT-0629",
+"celular~xiaomi~f8-poco-ultra-xiaomi~12g256": "AT-0630",
+"celular~xiaomi~f8-poco-ultra-xiaomi~16g512": "AT-0631",
+"celular~xiaomi~f9-poco-ultra-xiaomi~12g256": "AT-0632",
+"celular~xiaomi~f9-poco-ultra-xiaomi~16g512": "AT-0633",
+"celular~xiaomi~m8-poco-pro-xiaomi~12g512": "AT-0634",
 "celular~xiaomi~max-poco-pro-x8~12gb-256gb-5g": "AT-0114",
 "celular~xiaomi~max-poco-pro-x8~12gb-512gb-5g": "AT-0115",
+"celular~xiaomi~poco-pro-x8~12g512": "AT-0637",
 "celular~xiaomi~poco-pro-x8~8gb-256gb-5g": "AT-0112",
 "celular~xiaomi~poco-pro-x8~8gb-512gb-5g": "AT-0113",
 "consola~meta~3-quest~512gb": "AT-0123",
@@ -3703,6 +4146,10 @@
 "consola~sony~5-fisica-playstation~1tb": "AT-0136",
 "consola~sony~5-playstation-pro~2tb": "AT-0137",
 "desktop~apple~4.5k-imac-m4-retina~24in-16gb-256gb": "AT-0201",
+"desktop~apple~4.5k-imac-m4-retina~24in~16g512-en": "AT-0652",
+"desktop~apple~4.5k-imac-m4-retina~24in~24g1tb-en": "AT-0653",
+"desktop~apple~4.5k-imac-m4-retina~24in~24g512-en": "AT-0641",
+"desktop~apple~apple-m5-mac-mini-pro~24g512": "AT-0642",
 "desktop~apple~m4-mac-mini~16gb-256gb": "AT-0202",
 "desktop~apple~m4-mac-mini~16gb-512gb": "AT-0203",
 "desktop~apple~m4pro-mac-mini~24gb-512gb": "AT-0204",
@@ -3746,6 +4193,7 @@
 "lentes-inteligentes~ray-ban~gen2-headliner-meta-rayban": "AT-0507",
 "lentes-inteligentes~ray-ban~meta-s52-skyler-t155": "AT-0415",
 "lente~canon~1.4x-extender-rf": "AT-0229",
+"lente~canon~105mm-24-canon-f2.8-is-rf-usm-z": "AT-0644",
 "lente~canon~11l-f-rf~600-is-stm": "AT-0255",
 "lente~canon~2.0x-extender-rf": "AT-0239",
 "lente~canon~3-dual-fisheye-rf-s~9-f3.5-stm": "AT-0264",
@@ -3788,6 +4236,7 @@
 "lente~canon~rf~28-f2.8": "AT-0250",
 "lente~canon~rf~45-f1.2": "AT-0252",
 "lente~canon~rf~50-f1.8-stm": "AT-0254",
+"lente~canon~rf~50-f1.8-stm~canef": "AT-0643",
 "lente~canon~rf~800-f11-is-stm": "AT-0260",
 "lente~nikon~4s-f-z~24-70": "AT-0280",
 "lente~nikon~5.6-dx-pz-z~12-28-f3.5-vr": "AT-0270",
@@ -3822,6 +4271,8 @@
 "lente~nikon~z~50-f1.4": "AT-0291",
 "lente~nikon~z~70-180-f2.8": "AT-0293",
 "lente~nikon~z~85-f1.2": "AT-0295",
+"lente~sigma~150-5-6.3-600mm-contemporary-dg-f-hsm-nikon-os-sigma": "AT-0645",
+"lente~sigma~2.8-24-70mm-art-dg-dn-f-ii-sigma-sony~sonye": "AT-0646",
 "lente~sigma~28-105-f2.8-art-dg-dn": "AT-0324",
 "lente~sigma~6.3-contemporary-dg-sony~100-400-f5-hsm": "AT-0302",
 "lente~sigma~6.3-contemporary~20-200-f3.5-fe": "AT-0321",
@@ -3983,11 +4434,15 @@
 "notebook~apple~m5pro-macbook-pro~14in-48gb-1tb-tecladoen": "AT-0523",
 "notebook~apple~m5pro-macbook-pro~16in-24gb-1tb-tecladoen": "AT-0446",
 "notebook~apple~m5pro-macbook-pro~16in-48gb-1tb-tecladoen": "AT-0447",
+"notebook~dell~1355u-15-dc15250-dell-i7~16g512-en": "AT-0647",
 "parlante~jbl~6-charge": "AT-0448",
 "smartwatch~apple~11-series-watch~42mm-s-gps": "AT-0453",
 "smartwatch~apple~11-series-watch~42mm-sm-gps": "AT-0453",
 "smartwatch~apple~11-series-watch~46mm-ml-gps": "AT-0454",
 "smartwatch~apple~11-series-watch~46mm-ml-gps-46-gps-ml": "AT-0454",
+"smartwatch~apple~11-series-watch~46mm~46-gps-ml-46-gps-ml": "AT-0454",
+"smartwatch~apple~12-42mm-apple-gps-series-watch": "AT-0648",
+"smartwatch~apple~12-46mm-apple-series-watch": "AT-0649",
 "smartwatch~apple~3-se-watch~40mm-s-gps": "AT-0451",
 "smartwatch~apple~3-se-watch~40mm-sm-gps": "AT-0451",
 "smartwatch~apple~3-se-watch~44mm-m-gps": "AT-0452",
@@ -4045,6 +4500,7 @@
 "tablet~apple~ipad-m5-pro~13in-1tb": "AT-0506",
 "tablet~apple~ipad-m5-pro~13in-256gb": "AT-0483",
 "tablet~apple~ipad-m5-pro~13in-512gb": "AT-0484",
+"tablet~apple~ipad-m5-pro~13in~256-cell": "AT-0650",
 "tablet~apple~ipad-mini~gen7-128gb": "AT-0474",
 "tablet~apple~ipad-mini~gen7-256gb": "AT-0475",
 "tablet~samsung~a11-galaxy-plus-tab~6gb-128gb": "AT-0488",
@@ -4081,7 +4537,8 @@
 "tablet~samsung~galaxy-pencil-s11-tab-ultra~256gb": "AT-0496",
 "tablet~samsung~galaxy-pencil-s11-tab~12gb-128gb": "AT-0498",
 "tablet~samsung~galaxy-s11-tab-ultra~256gb": "AT-0496",
-"tablet~xiaomi~2-pad-pro-redmi~12in-6gb-128gb": "AT-0499"
+"tablet~xiaomi~2-pad-pro-redmi~12in-6gb-128gb": "AT-0499",
+"tablet~xiaomi~2-pad-redmi~11in~4g256-wifi": "AT-0651"
 },
 "vars": {
 "AT-0001": {
@@ -4590,6 +5047,7 @@
 "black keys": "AT-0086-01",
 "gre": "AT-0086-02",
 "green": "AT-0086-02",
+"light gray": "AT-0086-04",
 "negro": "AT-0086-01",
 "olive": "AT-0086-02",
 "pin": "AT-0086-03",
@@ -4859,6 +5317,7 @@
 "bla": "AT-0118-01",
 "black": "AT-0118-01",
 "black keys": "AT-0118-01",
+"blue": "AT-0118-02",
 "negro": "AT-0118-01",
 "teclas negras": "AT-0118-01"
 },
@@ -5965,7 +6424,8 @@
 "AT-0440": {
 "midnight": "AT-0440-02",
 "sil": "AT-0440-01",
-"silver": "AT-0440-01"
+"silver": "AT-0440-01",
+"space black": "AT-0440-02"
 },
 "AT-0441": {
 "sil": "AT-0441-01",
@@ -6374,7 +6834,8 @@
 "midnight": "AT-0515-01"
 },
 "AT-0516": {
-"mid": "AT-0516-01"
+"mid": "AT-0516-01",
+"midnight": "AT-0516-01"
 },
 "AT-0517": {
 "": "AT-0517"
@@ -6393,6 +6854,7 @@
 "blanco": "AT-0521-03",
 "cloud white": "AT-0521-03",
 "negro": "AT-0521-02",
+"sky blue": "AT-0521-01",
 "skyblue": "AT-0521-01",
 "space black": "AT-0521-02",
 "white": "AT-0521-03"
@@ -6598,7 +7060,8 @@
 },
 "AT-0566": {
 "black": "AT-0566-01",
-"negro": "AT-0566-01"
+"negro": "AT-0566-01",
+"silver": "AT-0566-02"
 },
 "AT-0567": {
 "": "AT-0567"
@@ -6669,8 +7132,228 @@
 },
 "AT-0585": {
 "": "AT-0585"
+},
+"AT-0586": {
+"": "AT-0586"
+},
+"AT-0587": {
+"": "AT-0587"
+},
+"AT-0588": {
+"": "AT-0588"
+},
+"AT-0589": {
+"": "AT-0589"
+},
+"AT-0590": {
+"": "AT-0590"
+},
+"AT-0591": {
+"": "AT-0591"
+},
+"AT-0592": {
+"": "AT-0592"
+},
+"AT-0593": {
+"": "AT-0593"
+},
+"AT-0594": {
+"": "AT-0594"
+},
+"AT-0595": {
+"": "AT-0595"
+},
+"AT-0596": {
+"": "AT-0596"
+},
+"AT-0597": {
+"": "AT-0597"
+},
+"AT-0598": {
+"": "AT-0598"
+},
+"AT-0599": {
+"": "AT-0599"
+},
+"AT-0600": {
+"black": "AT-0600-01"
+},
+"AT-0601": {
+"blue": "AT-0601-01"
+},
+"AT-0602": {
+"blue": "AT-0602-01"
+},
+"AT-0603": {
+"teal": "AT-0603-01"
+},
+"AT-0604": {
+"shadow": "AT-0604-01"
+},
+"AT-0605": {
+"": "AT-0605"
+},
+"AT-0606": {
+"country air": "AT-0606-03",
+"orient blue": "AT-0606-01",
+"sporting green": "AT-0606-02"
+},
+"AT-0607": {
+"green": "AT-0607-01"
+},
+"AT-0608": {
+"black": "AT-0608-01"
+},
+"AT-0609": {
+"gray": "AT-0609-01"
+},
+"AT-0610": {
+"black": "AT-0610-01",
+"green": "AT-0610-02"
+},
+"AT-0611": {
+"": "AT-0611"
+},
+"AT-0612": {
+"slipstream": "AT-0612-01"
+},
+"AT-0613": {
+"black": "AT-0613-01"
+},
+"AT-0614": {
+"": "AT-0614"
+},
+"AT-0615": {
+"mint": "AT-0615-01"
+},
+"AT-0616": {
+"black": "AT-0616-01"
+},
+"AT-0617": {
+"black": "AT-0617-01"
+},
+"AT-0618": {
+"black": "AT-0618-01"
+},
+"AT-0619": {
+"violet": "AT-0619-01"
+},
+"AT-0620": {
+"": "AT-0620"
+},
+"AT-0621": {
+"black": "AT-0621-01",
+"violet": "AT-0621-02"
+},
+"AT-0622": {
+"black": "AT-0622-01",
+"white": "AT-0622-02"
+},
+"AT-0623": {
+"black": "AT-0623-01"
+},
+"AT-0624": {
+"black": "AT-0624-01",
+"sky teal": "AT-0624-02"
+},
+"AT-0625": {
+"black": "AT-0625-01"
+},
+"AT-0626": {
+"black": "AT-0626-01",
+"purple": "AT-0626-02",
+"sky teal": "AT-0626-03"
+},
+"AT-0627": {
+"black": "AT-0627-01",
+"green": "AT-0627-02",
+"purple": "AT-0627-03"
+},
+"AT-0628": {
+"black": "AT-0628-01"
+},
+"AT-0629": {
+"blue": "AT-0629-01"
+},
+"AT-0630": {
+"black": "AT-0630-01"
+},
+"AT-0631": {
+"black": "AT-0631-01",
+"blue": "AT-0631-02"
+},
+"AT-0632": {
+"black": "AT-0632-01"
+},
+"AT-0633": {
+"black": "AT-0633-01"
+},
+"AT-0634": {
+"black": "AT-0634-03",
+"green": "AT-0634-01",
+"silver": "AT-0634-02"
+},
+"AT-0635": {
+"green": "AT-0635-01"
+},
+"AT-0636": {
+"green": "AT-0636-01"
+},
+"AT-0637": {
+"green": "AT-0637-01"
+},
+"AT-0638": {
+"blue": "AT-0638-01"
+},
+"AT-0639": {
+"blue": "AT-0639-01"
+},
+"AT-0640": {
+"black": "AT-0640-01",
+"blue": "AT-0640-02"
+},
+"AT-0641": {
+"blue": "AT-0641-01"
+},
+"AT-0642": {
+"": "AT-0642"
+},
+"AT-0643": {
+"": "AT-0643"
+},
+"AT-0644": {
+"": "AT-0644"
+},
+"AT-0645": {
+"": "AT-0645"
+},
+"AT-0646": {
+"": "AT-0646"
+},
+"AT-0647": {
+"carbon black": "AT-0647-01"
+},
+"AT-0648": {
+"black": "AT-0648-01"
+},
+"AT-0649": {
+"black sb": "AT-0649-01"
+},
+"AT-0650": {
+"black": "AT-0650-01",
+"space black": "AT-0650-01"
+},
+"AT-0651": {
+"gray": "AT-0651-02",
+"green": "AT-0651-01"
+},
+"AT-0652": {
+"blue": "AT-0652-01"
+},
+"AT-0653": {
+"blue": "AT-0653-01"
 }
 }
 },
-"generado": "2026-10-19T15:00:44"
+"generado": "2026-10-20T13:04:04"
 }

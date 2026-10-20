@@ -829,3 +829,83 @@ d2c99849db2a86d9bb4190d5562faae8  AT-0578-01.jpg                     # mirada
 e1492d0242c08404aae96697f8a5d6e1  AT-0584.jpg                        # mirada
 e1492d0242c08404aae96697f8a5d6e1  AT-0585.jpg                        # mirada
 cf38bf2af9bdb940e43e2e5dcf765c65  AT-0089-02.jpg                     # mirada: A57 Icyblue, foto oficial de samsung.com (galería del SM-A576U Icyblue), misma toma que el Navy AT-0089-01 (17/10)
+ea5c2237367172d328d35d7807c75977  AT-0586.jpg                        # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para ACA-APL-CABLE-000-000-USBC60W1M
+16c6cf6ac7850b12dbeb5890b8257515  AT-0588.jpg                        # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para ACA-APL-APPLETV4K-64-000-WIFI
+16c6cf6ac7850b12dbeb5890b8257515  AT-0589.jpg                        # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para ACA-APL-APPLETV4K-128-000-ETHERNET
+57e02f2cc5059ca855d3c2b1c76fd563  AT-0590.jpg                        # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para AUR-APL-AIRPODS5-000-000-000
+fdd34dfebc732826b1b5de77ae37e96e  AT-0591.jpg                        # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para AUR-APL-AIRPODS5-000-000-ANC
+3ba830a2e7605aaa540d8e91e9f3df90  AT-0592.jpg                        # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para AUR-APL-AIRPODSPRO2-000-000-000
+a56682cce0744f88a99611cec34b033b  AT-0593.jpg                        # mirada 20/10: copia de AT-0200.jpg (la camara X5, como la foto del otro bundle X5 (AT-0200))
+059ff5c567ca0f09bd65bbb055974807  AT-0594.jpg                        # mirada 20/10: oficial del fabricante (via firstcall-photographic.co.uk), la misma que ADVAPP tiene para CAM-CAN-EOS2000D-000-000-K1855II
+b4cede9a0cf79e35796b119de7f07d38  AT-0595.jpg                        # mirada 20/10: oficial del fabricante (via www.wexphotovideo.com), la misma que ADVAPP tiene para CAM-CAN-EOSR10-000-000-K1845
+fddea26b39154b7b76e4183b818572f5  AT-0596.jpg                        # mirada 20/10: oficial del fabricante (via www.wexphotovideo.com), la misma que ADVAPP tiene para CAM-CAN-EOSR5M2-000-000-K24105
+5d083326c0612361df043fcdc861640b  AT-0597.jpg                        # mirada 20/10: oficial del fabricante (via www.wexphotovideo.com), la misma que ADVAPP tiene para CAM-CAN-EOSR7-000-000-BODY
+50cdcf9cdc940feabd342a86eb303d0e  AT-0598.jpg                        # mirada 20/10: oficial del fabricante (via www.wexphotovideo.com), la misma que ADVAPP tiene para CAM-CAN-EOSR8-000-000-K2450
+bac621b3d19a53553024c070bd22be30  AT-0566-02.jpg                     # mirada 20/10: oficial del fabricante (via www.nikon.co.uk), la misma que ADVAPP tiene para CAM-NIK-ZF-000-SLV-BODY
+8ceb6ac9ec13dc2f5898fcff55d523f0  AT-0600-01.jpg                     # mirada 20/10: oficial del fabricante (via www.wexphotovideo.com), la misma que ADVAPP tiene para CAM-SON-ZVE10II-000-BLK-K1650
+e341093a8a7b83ed6a32eaad7ffe7eae  AT-0601-01.jpg                     # mirada 20/10: copia de AT-0065-02.jpg (otra memoria del iPhone 15 Sim Blue)
+e341093a8a7b83ed6a32eaad7ffe7eae  AT-0602-01.jpg                     # mirada 20/10: copia de AT-0065-02.jpg (otra memoria del iPhone 15 Sim Blue)
+a1ff01a9cb7ca9545b023c95d2e91d6d  AT-0603-01.jpg                     # mirada 20/10: copia de AT-0067-03.jpg (la fila vino sin color y el SKU dice TLX (Teal, como la 128GB CEL-APL-16-128-TLX-000))
+e9ffa471fb7bc2c47104e269ac48631a  AT-0604-01.jpg                     # mirada 20/10: oficial del fabricante (via armoto.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-EDGE60PRO-8G256-SHD-5G
+608314f1f145667fe4eae3694e30bdb9  AT-0606-01.jpg                     # mirada 20/10: oficial del fabricante (via p1-ofp.static.pub), la misma que ADVAPP tiene para CEL-MOT-EDGE70FUSION-8G256-BLU-5G
+673084ba7cec5d17ec0d70932071d25a  AT-0606-02.jpg                     # mirada 20/10: oficial del fabricante (via motorolauy.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-EDGE70FUSION-8G256-GRN-5G
+02706a181080ce3101a9895b50f67377  AT-0606-03.jpg                     # mirada 20/10: oficial del fabricante (via armoto.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-EDGE70FUSION-8G256-SKY-5G
+d84222aa74d05543ae39a7277850e8b9  AT-0607-01.jpg                     # mirada 20/10: oficial del fabricante (via armoto.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-G06-4G256-GRN-000
+a654880830ca8d8df6e24e2d24008842  AT-0608-01.jpg                     # mirada 20/10: oficial del fabricante (via armoto.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-G56-12G256-BLK-000
+2615eca429f4064869710f17acd08afa  AT-0609-01.jpg                     # mirada 20/10: oficial del fabricante (via armoto.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-G67-4G256-GRY-000
+8800bc2a359192e47834f182a84b2327  AT-0610-01.jpg                     # mirada 20/10: oficial del fabricante (via armoto.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-G77-8G256-BLK-000
+1f2e94f9ce2c30121763b53a44585c08  AT-0610-02.jpg                     # mirada 20/10: oficial del fabricante (via armoto.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-G77-8G256-GRN-000
+87e4d10329bfe370b72dc53644f58432  AT-0612-01.jpg                     # mirada 20/10: oficial del fabricante (via armoto.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-EDGE60FUSION-8G256-SLP-000
+03c5983f82a08db5402c09438ad90410  AT-0613-01.jpg                     # mirada 20/10: oficial del fabricante (via images.samsung.com), la misma que ADVAPP tiene para CEL-SAM-A07-4G128-BLK-000
+4bcdcaffb2c71f2de0698d0d03578695  AT-0086-04.jpg                     # mirada 20/10: oficial del fabricante (via images.samsung.com), la misma que ADVAPP tiene para CEL-SAM-A56-12G256-GRY-000
+95ed9e99765cee869fb2d880212eb283  AT-0615-01.jpg                     # mirada 20/10: oficial del fabricante (via images.samsung.com), la misma que ADVAPP tiene para CEL-SAM-S25-12G256-MNT-000
+646074a36d1cbebd687b09d2b2ca9960  AT-0616-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17-12G512-BLK-000
+67bafb514118184041e86594587ffc2e  AT-0617-01.jpg                     # mirada 20/10: oficial del fabricante (via i02.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17-4G128-BLK-000
+eea924be072cb9bf344b6726cf7c0ce6  AT-0618-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17T-12G256-BLK-000
+211645481b02e29e6ad861db44568e2a  AT-0619-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17T-12G512-VIO-000
+3ffe1303ac7deb3091693e45a08d7dbf  AT-0621-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17TPRO-12G512-BLK-000
+028226e909e62ad802966394a3b3f5db  AT-0621-02.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17TPRO-12G512-VIO-000
+2d3ddbe16aa5cf3a9febe1ad7cee47eb  AT-0622-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17ULTRA-16G512-BLK-000
+80de5164f35aa0a229111aae7404baae  AT-0622-02.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17ULTRA-16G512-WHT-000
+6fe2c7a428b9fa854e6b3d704f9afe0c  AT-0623-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-MI15TPRO-12G512-BLK-000
+9ade4d84408fe0ec243a485f4b5c2068  AT-0624-01.jpg                     # mirada 20/10: oficial del fabricante (via i02.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-NOTE17-4G128-BLK-000
+ff0d2ed5eac9900cff2dee7db723f2fc  AT-0624-02.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-NOTE17-4G128-SKY-000
+9ade4d84408fe0ec243a485f4b5c2068  AT-0625-01.jpg                     # mirada 20/10: oficial del fabricante (via i02.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-NOTE17-6G256-BLK-000
+dfa02dd07e9f8ff380510f50373c39cf  AT-0626-01.jpg                     # mirada 20/10: oficial del fabricante (via i02.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-NOTE17-8G256-BLK-000
+5a04ed0e689791d5440459bba280c830  AT-0626-02.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-NOTE17-8G256-PUR-000
+4684a6e6bfceecc3a40169bd4860f536  AT-0626-03.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-NOTE17-8G256-SKY-000
+097217b3a11a1b24649a94c6ca6a69c5  AT-0627-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOC85-8G256-BLK-000
+28adc4517c259814f285bbfc303d6141  AT-0627-02.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOC85-8G256-GRN-000
+3f80890f8acb37fd55379b5b665344d5  AT-0627-03.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOC85-8G256-PUR-000
+addfc2a84f38e4c6ac4c573022afa0c6  AT-0628-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOF8PRO-12G256-BLK-000
+cdef1c0be104451ba4d669d18f3bbf1f  AT-0629-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOF8PRO-12G512-BLU-000
+f274e5ab36427134c6a123c4c2bae254  AT-0630-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOF8ULTRA-12G256-BLK-000
+f274e5ab36427134c6a123c4c2bae254  AT-0631-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOF8ULTRA-16G512-BLK-000
+a4c4042fd8c1ec91e42571c86302f813  AT-0631-02.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOF8ULTRA-16G512-BLU-000
+f2a102703dfdff840c911b90a44dc0df  AT-0632-01.jpg                     # mirada 20/10: oficial del fabricante (via i02.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOF9ULTRA-12G256-BLK-000
+f2a102703dfdff840c911b90a44dc0df  AT-0633-01.jpg                     # mirada 20/10: oficial del fabricante (via i02.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOF9ULTRA-16G512-BLK-000
+284ba852290c2032e436b9c84ef12635  AT-0634-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOM8PRO-12G512-GRN-000
+d2ca037ccfca915a80e5cfa3d7b14eb7  AT-0634-03.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOM8PRO-12G512-BLK-000
+9ff310e9eb40a8d4273b4688d1a0fee2  AT-0634-02.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOM8PRO-12G512-SLV-000
+0877ab21d9651ca9adfb877372ff6712  AT-0635-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOX7PRO-12G512-GRN-000
+0877ab21d9651ca9adfb877372ff6712  AT-0636-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-POCOX7PRO-8G256-GRN-000
+af9bdc437f646b9c7982675fd5f182ae  AT-0637-01.jpg                     # mirada 20/10: copia de AT-0112-01.jpg (otra memoria del Poco X8 Pro Green)
+7759dcb3bc5bb5fecfcac1de19531aa4  AT-0638-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-REDMI15C-8G256-BLU-000
+7cf63b1e6b36df92a9acf127f93f80e3  AT-0118-02.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-REDMINOTE15-8G256-BLU-000
+46a4a47125ab29d2753cb1cf891fe976  AT-0639-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-REDMINOTE15PRO-8G256-BLU-5G
+7fb29669b0f2749b37a293bb23ea946f  AT-0640-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-REDMINOTE15PRO-8G512-BLK-5G
+46a4a47125ab29d2753cb1cf891fe976  AT-0640-02.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-REDMINOTE15PRO-8G512-BLU-5G
+27eb18ffc0df1042b2d423b930740883  AT-0641-01.jpg                     # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para DSK-APL-IMAC24M4-24G512-BLU-000-EN
+e1492d0242c08404aae96697f8a5d6e1  AT-0642.jpg                        # mirada 20/10: copia de AT-0584.jpg (el Mac mini es igual por fuera (plata, unico color))
+d0fe76948a8d0b9109ffa3b772cf362c  AT-0643.jpg                        # mirada 20/10: oficial del fabricante (via i1.adis.ws), la misma que ADVAPP tiene para LEN-CAN-50F18STM-000-000-CANEF
+71ef97173898a150dfa04af70e61e10e  AT-0644.jpg                        # mirada 20/10: oficial del fabricante (via cdn.media.amplience.net), la misma que ADVAPP tiene para LEN-CAN-RF24105MMF28ISUSMZ-000-000-000
+78ac2bd052e92baa90dbe8ce6f62531f  AT-0645.jpg                        # mirada 20/10: oficial del fabricante (via www.sigmaphoto.com), la misma que ADVAPP tiene para LEN-SIG-150600MMF563DGOSHSMCONTEMPORARYNIKON-000-000-000
+9b7ea28299a56c29b5c23e49b1ec5137  AT-0646.jpg                        # mirada 20/10: oficial del fabricante (via www.wexphotovideo.com), la misma que ADVAPP tiene para LEN-SIG-2470MMF28IIDGDNARTSONY-000-000-SONYE
+60d5397f2cce3cad521a3c417c97fe60  AT-0647-01.jpg                     # mirada 20/10: oficial del fabricante (via i.dell.com), la misma que ADVAPP tiene para NBK-DEL-DC15250-16G512-CRB-EN
+4fe3fd0239b87b51ebf3e06ebb45c00c  AT-0648-01.jpg                     # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para SWT-APL-WATCHSERIES1242MMGPS-000-BLK-000
+c9330fde1d29891aa45d98021dd435f7  AT-0649-01.jpg                     # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para SWT-APL-WATCHSERIES1246MM-000-BLC-000
+34a7a9c314ff6686c981b4beda60731d  AT-0650-01.jpg                     # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para TAB-APL-IPADPRO13M5-256-BLK-CELL
+3737b9b8c12b1d287b0e74d46014b00b  AT-0651-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para TAB-XIA-REDMIPAD2-4G256-GRN-WIFI
+8e49b0bf84527114aa9ec3ea6e8542a7  AT-0651-02.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para TAB-XIA-REDMIPAD2-4G256-GRY-WIFI
+27eb18ffc0df1042b2d423b930740883  AT-0652-01.jpg                     # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para DSK-APL-IMAC24M4-24G512-BLU-000-EN
+27eb18ffc0df1042b2d423b930740883  AT-0653-01.jpg                     # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para DSK-APL-IMAC24M4-24G512-BLU-000-EN

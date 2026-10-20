@@ -182,7 +182,16 @@ function colorYMarcaUnaVez(){
   const marcaDos = PRODUCTOS.filter(p => p.marca && vecesB5(mensajeWA(p), p.marca) > 1);
   ok(!marcaDos.length, '[89] ninguna consulta nombra la marca dos veces',
      marcaDos.slice(0, 2).map(p => mensajeWA(p)).join(' · ') || 'bien');
-  const sinMarca = PRODUCTOS.filter(p => p.marca && !vecesB5(mensajeWA(p), p.marca));
+  /* La marca escrita de otra forma tambien la nombra (auditoria 19/10/2026,
+     T-06): "Go Pro" por GoPro, "Rayban" por Ray-Ban, "Fuji" por Fujifilm. Es
+     la misma comparacion de nombreConMarca, que ya no la repite. */
+  const nombraMarcaB5 = (t, marca) => {
+    if(vecesB5(t, marca)) return true;
+    const mc = compactar(norm(marca)), ws = norm(t).split(/\s+/).map(compactar);
+    const igual = w => w === mc || (MARCA_CORTA[mc] || []).includes(w);
+    return ws.some((w, i) => igual(w) || (i + 1 < ws.length && igual(w + ws[i + 1])));
+  };
+  const sinMarca = PRODUCTOS.filter(p => p.marca && !nombraMarcaB5(mensajeWA(p), p.marca));
   ok(!sinMarca.length, '[89] y todas la nombran (el vendedor tiene que saber de que marca es)',
      sinMarca.slice(0, 2).map(p => mensajeWA(p)).join(' · ') || 'bien');
 

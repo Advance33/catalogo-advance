@@ -153,6 +153,18 @@ si alguna falta).
                   eligio en el muestrario ese dia: los links de la barra de
                   arriba (NAV) y su "Más", el bloque "Quiénes somos"
                   (NOSOTROS) y el boton "Dejá tu reseña".
+  auditoria-19-10.js
+                  La auditoria de toda la web del 19/10 (pedido de Benja):
+                  cada pestaña de memoria con precio lleva a una fila con
+                  stock; "16GB 512GB" se lee como RAM y disco; un numero
+                  buscado empieza palabra ("50mm" no trae el 18-150mm);
+                  "cargador iphone" ofrece cargadores; con una busqueda lo
+                  sin stock va al final; "Más cámaras de precio parecido";
+                  Memoria y RAM en Filtrar; la marca no se repite ("GoPro Go
+                  Pro"); el articulo del mensaje concuerda ("la Batería"); la
+                  pestaña dice Advance Tecno; la caja blanca va en el
+                  mensaje; el Atras cierra Filtrar y deja lo elegido; buscar
+                  con Enter baja a los resultados; y el pedido tiene X.
   decision-colores.js
                   Como se elige el color en la ficha (Pedro, 30/09: la C,
                   "Vitrina de fotos", de muestras/colores): debajo de la

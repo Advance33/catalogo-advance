@@ -212,7 +212,7 @@ async function probarLaPregunta(){
   ok(!!uzCot() && !FICHA && uzPreg() === '¿Qué equipo entregás?', '[FAQ] abre el cotizador sin producto, en el primer paso');
   // "Otro equipo": sin valor, los detalles por WhatsApp, y no se guarda nada
   const fuera = uzCot().querySelector('.us-op[data-fuera]');
-  ok(!USADOS_OTROS || (fuera && uzTxt(fuera.querySelector('b')) === 'Otro equipo' && uzTxt(fuera.querySelector('small')) === USADOS_OTROS),
+  ok(!USADOS_OTROS || (fuera && uzTxt(fuera.querySelector('b')) === 'Otro equipo' && uzTxt(fuera.querySelector('small')) === USADOS_OTROS[0].toUpperCase() + USADOS_OTROS.slice(1)),
      '[otro] el primer paso ofrece «Otro equipo» con lo que se toma sin lista');
   if(fuera){
     fuera.click();
@@ -389,7 +389,7 @@ async function probarLaFicha(){
   ok(uzTxt(uzCot().querySelector('.botones a.pri')) === 'Enviar por WhatsApp' && uzTxt(uzCot().querySelector('#us-ig')) === 'Enviar por Instagram' &&
      /mandanos los detalles por WhatsApp o Instagram/.test(uzTxt(rev)),
      '[3A] con «Enviar por WhatsApp» y «Enviar por Instagram»');
-  ok(msjRev.includes('Marqué que no cumple: pantalla y vidrios sin roturas. Te paso los detalles:') && msjRev.endsWith('Te paso los detalles:') &&
+  ok(msjRev.includes('Marqué que no cumple: «Pantalla y vidrios sin roturas». Te paso los detalles:') && msjRev.endsWith('Te paso los detalles:') &&
      !/USD \d/.test(msjRev.split('\n\n')[1] || ''),
      '[3A] y el mensaje dice lo que no cumple y termina en «Te paso los detalles:», sin valor', (msjRev.split('\n\n')[1] || '').slice(0, 120));
   // "¿Qué tiene?" (05/10): lo que escribe va en el mensaje y queda guardado
@@ -397,7 +397,7 @@ async function probarLaFicha(){
      '[det] lo que no cumple trae «¿Qué tiene?» para escribir los detalles');
   uzEscribir('#us-det', 'la pantalla tiene una rayita');
   const msjDet = uzWA(uzCot().querySelector('.botones a.pri'));
-  ok(msjDet.endsWith('Marqué que no cumple: pantalla y vidrios sin roturas. Detalles: la pantalla tiene una rayita') &&
+  ok(msjDet.endsWith('Marqué que no cumple: «Pantalla y vidrios sin roturas». Detalles: la pantalla tiene una rayita') &&
      USADO && USADO.det === 'la pantalla tiene una rayita' && JSON.parse(localStorage.getItem(USADO_KEY) || '{}').det === 'la pantalla tiene una rayita',
      '[det] lo que escribe va en el mensaje y queda guardado', (msjDet.split('\n\n')[1] || '').slice(-80));
 
@@ -525,7 +525,7 @@ async function probarElPedido(){
        '[5A] un usado que no cumple todo no resta: el total lo aclara y el valor sale por WhatsApp');
     const msjR = mensajePedido();
     ok(msjR.includes('Total: USD ' + uzPlata(p1.precio)) &&
-       msjR.endsWith(`\n\nMi usado: iPhone 13 128GB, batería ${BAT.umbral} % o más. Marqué que no cumple: ${equipoUsado('iphone').condiciones.find(c => c.id === 'faceid').texto.toLowerCase()}. Te paso los detalles:`),
+       msjR.endsWith(`\n\nMi usado: iPhone 13 128GB, batería ${BAT.umbral} % o más. Marqué que no cumple: «${equipoUsado('iphone').condiciones.find(c => c.id === 'faceid').texto}». Te paso los detalles:`),
        '[5A] y el mensaje lo dice al final, sin valor, terminando en «Te paso los detalles:»', msjR.split('\n\n').pop().slice(0, 110));
     // "Otro equipo" en el pedido (05/10): no resta y va al final del mensaje
     USADO = { e: 'otro', tipo: 'Samsung', modelo: 'Galaxy S23', memoria: '', estado: 'anda perfecto, con un rayón atrás' };

@@ -735,8 +735,11 @@ async function probarVaciar(P){
       for(const shiftKey of [false, true]){
         const ev = new KeyboardEvent('keydown', { key: 'Tab', shiftKey, bubbles: true, cancelable: true });
         document.activeElement.dispatchEvent(ev);
-        ok(ev.defaultPrevented && document.activeElement === document.getElementById('pd-deshacer'),
-           `[5.4] con «Vaciaste el pedido» a la vista, el ${shiftKey ? 'Shift+Tab' : 'Tab'} no se escapa: queda en «Deshacer»`,
+        // Desde el 19/10/2026 (auditoría, U-06) el pedido tiene su X de cerrar: el Tab va de
+        // «Deshacer» a la X y vuelve, sin salir de la ventana
+        ok(ev.defaultPrevented && !!document.activeElement && d.contains(document.activeElement)
+           && ['pd-deshacer', 'pd-cerrar'].some(k => document.activeElement.id === k || document.activeElement.classList.contains(k)),
+           `[5.4] con «Vaciaste el pedido» a la vista, el ${shiftKey ? 'Shift+Tab' : 'Tab'} no se escapa: queda en «Deshacer» o en la X`,
            (ev.defaultPrevented ? 'frenado' : 'se escapa') + ' · ' + (document.activeElement && (document.activeElement.id || document.activeElement.tagName)));
       }
       // No se va solo

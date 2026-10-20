@@ -273,14 +273,14 @@ c0ee4a5fc9a8b35301b24b09bf4a770a  AT-0159-04.jpg                     # mirada
 fd3ea84441f6dee5bb179ae4cc4e45e0  AT-0160.jpg                        # mirada
 76781181e1d4603b231dcb7ac0088803  AT-0161.jpg                        # mirada
 555a37e16252fa3afaee2d7fad1c5dc8  AT-0162.jpg                        # mirada
-5e66f4f210884e658fdb5f32ebe81b37  AT-0163.jpg                        # mirada
+d8f277cbf6d6b17b89ee4f5146a63777  AT-0163.jpg                        # mirada (oficial de Nikon, Z6II solo el cuerpo y sin lente, 19/10/2026)
 6ae039635a1488b19e9abe97797a98ad  AT-0164.jpg                        # mirada
 8bd22bbcc88cb71b32a12d7556638143  AT-0165.jpg                        # mirada
 a0d57e68f178c4824aa916953a12cb6f  AT-0166.jpg                        # mirada
 7120e329b3e594b6990e9ecae53010d0  AT-0167.jpg                        # mirada
 76d60d9dd2a421e36370e91d561e35d9  AT-0168-01.jpg                     # mirada
 b1a0ccd0d5d2a2de58e4c170b1501b7e  AT-0169.jpg                        # mirada
-857c16d95af9970737ffa9659f52d3e2  AT-0170.jpg                        # mirada
+4dea32a02ec7b1ec27e371299fb07109  AT-0170.jpg                        # mirada (oficial de Nikon, ZR solo el cuerpo, 19/10/2026)
 c973f66d3cc66d5d3717ac0efd690dbd  AT-0171.jpg                        # mirada
 0a55dc783124899c901c627f1446a154  AT-0172.jpg                        # mirada
 2fe4625f1b765f738a3bef857bac31c0  AT-0173.jpg                        # mirada
@@ -317,7 +317,7 @@ a56682cce0744f88a99611cec34b033b  AT-0200.jpg                        # mirada
 0643f19065528feec343f77052bb6e0d  AT-0203.jpg                        # mirada
 0643f19065528feec343f77052bb6e0d  AT-0204.jpg                        # mirada
 0d1d06bff49e94c0bfb79c41c7fac99b  AT-0205.jpg                        # mirada
-2934c2aa081d741770b95c7de128fca2  AT-0206.jpg                        # mirada
+15a14f3d1025df77a6ace68c1e076b60  AT-0206.jpg                        # mirada (oficial de DJI, Avata solo el drone, 19/10/2026)
 e5b2c09ce39952bf5598e116fa53157a  AT-0207.jpg                        # mirada
 e910d2410926723346afe07726bae4af  AT-0208.jpg                        # mirada
 e910d2410926723346afe07726bae4af  AT-0209.jpg                        # mirada
@@ -367,7 +367,7 @@ ab1f9ecaa2082f4ca27739f408f2fbb6  AT-0252.jpg                        # mirada
 872d281f03174ee1ee9b672c682e8bd2  AT-0254.jpg                        # mirada
 d67bba82472596c1d54c1361ae10bc27  AT-0255.jpg                        # mirada
 aa7b0b4ae8da673600edc2f4e9aba252  AT-0256.jpg                        # mirada
-add7cecf143ec89f3c9a9fa4f37962c5  AT-0257-01.jpg                     # mirada
+783eb2de894c2c074a0217e908665aec  AT-0257-01.jpg                     # mirada (oficial de Canon, RF70-200 F2.8 L IS USM Z negro, 19/10/2026)
 76505958bac33fed8fda3ba1d2ac85ac  AT-0258.jpg                        # mirada
 1d16db6c2383a8a2e66cfa23f2419dec  AT-0259.jpg                        # mirada
 723814ef4529946772bb347e5d9007c5  AT-0260.jpg                        # mirada
@@ -454,7 +454,7 @@ bd1637c85765868a3658236c00744bb1  AT-0340.jpg                        # mirada
 00d0c33aa8dac70f86a539e0e37b44b6  AT-0341.jpg                        # mirada
 fbccd48a4d15295a02d1f51050b0c734  AT-0342.jpg                        # mirada
 57c0c6fb1294cf0b905a33d430f1be74  AT-0343.jpg                        # mirada
-991e3c29197de6e1ac72dfa082a3519f  AT-0344.jpg                        # mirada
+da51132e330e4a7bbad16a33934f0a35  AT-0344.jpg                        # mirada (Sigma 85 F1.4 EX DG HSM Nikon, de Amazon sin marca de agua: la de Sigma mide 320 px, 19/10/2026)
 51434b669853d1f25d7f732f2def6bf6  AT-0345.jpg                        # mirada
 59e26aebdf20ae3a5a0eba45f44c0d86  AT-0346.jpg                        # mirada
 05b9183f836f3537a38ca5c614b4385e  AT-0347.jpg                        # mirada
@@ -491,7 +491,7 @@ c1733a5b9809ddd8d224297034d08aa4  AT-0377.jpg                        # mirada
 8be39a6e4395a1c9941e7c10cdb780c2  AT-0378.jpg                        # mirada
 9b4a07cc4092dfd92d7096aeef78f107  AT-0379.jpg                        # mirada
 5f2de238454bcc77eb6ef40875b882d8  AT-0380.jpg                        # mirada
-778de2f08d42926b1ecac709b1e8e5b4  AT-0381.jpg                        # mirada
+70f6777373976342450e1a84afc4e666  AT-0381.jpg                        # mirada (oficial de Sony, FE PZ 16-35 F4 G, 19/10/2026)
 224083cc17a8379c8cf7a361e9579372  AT-0382.jpg                        # mirada
 b015d89fad82ca1d9bf07b7df15b1207  AT-0383.jpg                        # mirada
 46a1c43fdf2efc765a932c85c756fb60  AT-0384.jpg                        # mirada

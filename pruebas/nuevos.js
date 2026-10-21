@@ -105,7 +105,13 @@ function correrPruebas(){
 
   /* ---- 5. Agregar al pedido ---- */
   irNuevo(0);
-  const t0 = sec.querySelector('.nv-pila[data-paso="0"] > .activa');
+  /* (21/10/2026, 5 A de Benja) El + de un modelo con 2 o mas colores abre la
+     ficha para elegir el color (decisiones-21-10.js): aca se mira el que
+     carga, la primera novedad de un modelo de un color. */
+  const t0 = [...sec.querySelectorAll('.nv-pila[data-paso="0"] > .nv-tarj, .nv-pila[data-paso="0"] > .activa')]
+    .find(t => t.querySelector('.mas') && !masAbreFicha(buscarModelo(t.dataset.key)))
+    || [...sec.querySelectorAll('.nv-tarj')].find(t => t.querySelector('.mas') && !masAbreFicha(buscarModelo(t.dataset.key)))
+    || sec.querySelector('.nv-pila[data-paso="0"] > .activa');
   const m0 = buscarModelo(t0.dataset.key);
   const antes = enPedidoModelo(m0);
   t0.querySelector('.mas').click();

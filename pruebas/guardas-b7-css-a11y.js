@@ -358,7 +358,12 @@ async function saltarAlCatalogo(){
 async function tituloDeLaPestana(){
   aLaPortadaB7();
   const og = document.querySelector('meta[property="og:title"]').content;
-  ok(document.title === 'Catálogo Advance Tecno — Los precios de hoy', '[204] en la portada, el titulo de siempre', document.title);
+  /* El de la portada cambio el 21/10/2026 (8 A de Benja, auditoria del 19/10,
+     G-03): era "Catálogo Advance Tecno — Los precios de hoy" y ahora dice el
+     rubro y el lugar (lo mira decisiones-21-10.js). Aca se sigue mirando que
+     la portada diga siempre el mismo. */
+  const PORTADA = 'Advance Tecno · Celulares, cámaras y MacBook en Parque Chas, CABA';
+  ok(document.title === PORTADA, '[204] en la portada, el titulo de siempre', document.title);
   const cat = document.querySelector('#mosaico .rubro')?.dataset.cat;
   if(!cat){ nota('[204] no hay rubros en el mosaico'); return; }
   entrarAlRubro(cat);
@@ -387,6 +392,6 @@ async function tituloDeLaPestana(){
   filtros.q = 'iphone'; pintar();
   ok(/“iphone”/.test(document.title), '[204] con una busqueda, lo buscado', document.title);
   filtros.q = ''; aLaPortadaB7();
-  ok(document.title === 'Catálogo Advance Tecno — Los precios de hoy', '[204] y de vuelta en la portada, el de siempre', document.title);
+  ok(document.title === PORTADA, '[204] y de vuelta en la portada, el de siempre', document.title);
   ok(document.querySelector('meta[property="og:title"]').content === og, '[204] lo que se ve al compartir el link (og:title) no se toca', og);
 }

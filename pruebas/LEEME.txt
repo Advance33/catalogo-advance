@@ -165,6 +165,15 @@ si alguna falta).
                   pestaña dice Advance Tecno; la caja blanca va en el
                   mensaje; el Atras cierra Filtrar y deja lo elegido; buscar
                   con Enter baja a los resultados; y el pedido tiene X.
+  decisiones-21-10.js
+                  Lo que Benja decidio el 21/10 sobre esa auditoria: en un
+                  modelo con 2 o mas colores el + de la tarjeta abre la ficha
+                  para elegir el color (5 A); la cuota elegida en la ficha va
+                  en su WhatsApp y pasa al pedido (6 A); la portada dice
+                  rubro y lugar en el title, la descripcion y el h1, con el
+                  JSON-LD de la tienda (8 A); y el producto nuevo que ADVAPP
+                  manda con la garantia vacia no tiene renglon de garantia
+                  (en un usado sigue el texto de siempre).
   decision-colores.js
                   Como se elige el color en la ficha (Pedro, 30/09: la C,
                   "Vitrina de fotos", de muestras/colores): debajo de la

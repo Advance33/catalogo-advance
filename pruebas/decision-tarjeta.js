@@ -5,7 +5,11 @@
 //          tarjeta muestra el precio de las versiones que lo cumplen, "desde"
 //          solo si entre ellas hay precios distintos; data-key, la foto y el +
 //          son los de la mas barata con stock entre esas; la cabecera se
-//          recalcula
+//          recalcula. (21/10/2026) Benja cambio el + en un caso (5 A de la
+//          auditoria del 19/10, U-05): si el modelo tiene 2 o mas colores, el +
+//          abre la ficha en esa misma version para elegir el color y no carga
+//          nada; con un color, carga esa version como antes. La regla entera
+//          se prueba en decisiones-21-10.js.
 //   2.2 B  los pesos con "≈" y el title "Referencia con la cotizacion del dia"
 //          en la tarjeta, la ficha, la vidriera y el total del pedido; en la
 //          barra del pedido del celular, sin marca
@@ -196,13 +200,23 @@ function probarFiltroDeVersion(){
       ok(FICHA === clave(pm) && !!d && dtTxt(d.querySelector('#fi-elegido')).includes(CAP),
          '[2.1] tocarla abre la ficha en el ' + CAP, FICHA + ' · ' + dtTxt(d && d.querySelector('#fi-elegido')));
       quitarFicha();
-      // El + carga esa misma
+      // El + carga esa misma. (21/10/2026, 5 A de Benja) Con 2 o mas colores
+      // en el modelo, abre la ficha en esa misma version y no carga nada: el
+      // color lo elige el cliente. Hasta el 21/10 cargaba la version con el
+      // color de su fila (el 17 Pro Max de 1TB salia "(Silver)" sin elegirlo).
       const antes = PEDIDO.slice();
       PEDIDO = []; guardarPedido();
+      const variosColores = coloresDelModelo(buscarModelo(clave(pm))) > 1;
       card.querySelector('.mas')?.click();
-      ok(PEDIDO.length === 1 && PEDIDO[0].k === clave(pm), '[2.1] el + carga esa misma version', JSON.stringify(PEDIDO));
-      card.querySelector('.mas')?.click();
-      ok(PEDIDO.length === 0, '[2.1] y el + la vuelve a sacar');
+      if(variosColores){
+        ok(PEDIDO.length === 0 && FICHA === clave(pm) && !!document.getElementById('ficha'),
+           '[2.1 · 5 A] con varios colores, el + abre la ficha en esa misma version (no carga nada)', JSON.stringify(PEDIDO) + ' · ' + FICHA);
+        quitarFicha();
+      } else {
+        ok(PEDIDO.length === 1 && PEDIDO[0].k === clave(pm), '[2.1] el + carga esa misma version', JSON.stringify(PEDIDO));
+        card.querySelector('.mas')?.click();
+        ok(PEDIDO.length === 0, '[2.1] y el + la vuelve a sacar');
+      }
       PEDIDO = antes; guardarPedido(); pintarPedido();
     }
   }

@@ -279,6 +279,65 @@ ADVAPP_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web'
 INTENTOS  = 3          # antes de decir "ADVAPP no contesta"
 ESPERA    = 10         # segundos entre intento e intento
 
+# Los feriados que Tecno trata como domingo (Benja, 19/10/2026: ADVAPP PR #136,
+# tabla tecno_feriados, sql/224). Un feriado sin confirmar o con "Cerramos" es
+# un domingo: no sale la lista de las 11 y la web muestra el stock de la ultima
+# lista habil. Ese dia verificado_hoy = false no es "la carga no corrio", y
+# avisarlo seria una falsa alarma (como lo seria un domingo).
+# El feed tecno-web no dice si hoy es uno (20/10/2026). El dia que traiga
+# "hoy_como_domingo" (el nombre del feriado, o null si hoy se trabaja) manda
+# eso; hasta entonces, estas fechas: las nacionales que carga sql/224 (de la
+# fuente oficial; copiadas el 20/10/2026). Lo que solo sabe ADVAPP -un dia
+# propio, como un cierre por inventario, o un feriado con "Abrimos"- se ve
+# recien con el campo del feed. Los turisticos de 2027 todavia no salieron.
+FERIADOS = {
+    '2026-11-09': 'Visita de Su Santidad el Papa León XIV',
+    '2026-11-23': 'Día de la Soberanía Nacional',
+    '2026-12-07': 'Día no laborable con fines turísticos',
+    '2026-12-08': 'Inmaculada Concepción de María',
+    '2026-12-25': 'Navidad',
+    '2027-01-01': 'Año Nuevo',
+    '2027-02-08': 'Carnaval',
+    '2027-02-09': 'Carnaval',
+    '2027-03-24': 'Día Nacional de la Memoria por la Verdad y la Justicia',
+    '2027-03-25': 'Jueves Santo',
+    '2027-03-26': 'Viernes Santo',
+    '2027-04-02': 'Día del Veterano y de los Caídos en la Guerra de Malvinas',
+    '2027-05-01': 'Día del Trabajador',
+    '2027-05-25': 'Día de la Revolución de Mayo',
+    '2027-06-20': 'Paso a la Inmortalidad del Gral. Manuel Belgrano',
+    '2027-06-21': 'Paso a la Inmortalidad del Gral. Martín Miguel de Güemes',
+    '2027-07-09': 'Día de la Independencia',
+    '2027-08-16': 'Paso a la Inmortalidad del Gral. José de San Martín',
+    '2027-10-11': 'Día del Respeto a la Diversidad Cultural',
+    '2027-11-20': 'Día de la Soberanía Nacional',
+    '2027-12-08': 'Inmaculada Concepción de María',
+    '2027-12-25': 'Navidad',
+}
+
+
+def feriado_cerrado(d, dia=None):
+    """Si `dia` (hoy, si no se dice) es un feriado que Tecno trata como
+    domingo: el texto que lo dice, o None. `d` es la respuesta de ADVAPP.
+
+    Manda el feed si trae "hoy_como_domingo" (lo que se le propuso a ADVAPP el
+    20/10/2026): con el nombre del feriado (o del dia propio) es un feriado
+    cerrado; con null, hoy se trabaja aunque sea feriado (contestaron
+    "Abrimos"). Sin ese campo, el calendario FERIADOS de arriba."""
+    dia = dia or datetime.date.today()
+    if isinstance(d, dict) and 'hoy_como_domingo' in d:
+        x = d.get('hoy_como_domingo')
+        if isinstance(x, dict):
+            x = x.get('nombre') or x.get('fecha') or True
+        if not x:
+            return None
+        return 'feriado cerrado segun ADVAPP%s' % ((' (%s)' % x) if isinstance(x, str) else '')
+    nombre = FERIADOS.get(dia.isoformat())
+    if not nombre:
+        return None
+    return ('feriado (%s; del calendario de la web: si ese dia se abrio, el feed de ADVAPP '
+            'todavia no lo dice)' % nombre)
+
 
 def estado_advapp(hoy, intentos=INTENTOS, espera=ESPERA, url=None):
     """Baja ADVAPP UNA vez para toda la revision y dice como esta.
@@ -291,6 +350,8 @@ def estado_advapp(hoy, intentos=INTENTOS, espera=ESPERA, url=None):
     paso a leer ADVAPP: habria avisado "la carga no corre" todos los dias.
     ADVAPP publica `verificado_hoy`, que es true cuando hay algun costo cargado
     en el dia. Sabado y domingo no se carga, asi que esos dias no se avisa.
+    (20/10/2026) Un feriado cerrado tampoco: ADVAPP lo trata como domingo
+    (feriado_cerrado; queda en 'feriado' para el log).
 
     'caido': no contesto despues de varios intentos, o vino cortado. Hasta el
     29/09 esta funcion se tragaba el error y el fin de semana ni lo miraba: con
@@ -302,7 +363,11 @@ def estado_advapp(hoy, intentos=INTENTOS, espera=ESPERA, url=None):
     validar, verificar-fotos y pedido-advapp para mirar el MISMO dato (29/09: la
     falla del 28 no se pudo reconstruir porque cada una bajo el suyo)."""
     import json, time, urllib.request
-    salida = {'vieja': None, 'caido': None, 'copia': None, 'dato': ''}
+    salida = {'vieja': None, 'caido': None, 'copia': None, 'dato': '', 'feriado': None}
+    try:
+        dia = datetime.date.fromisoformat(hoy)
+    except (TypeError, ValueError):
+        dia = datetime.date.today()
     error = ''
     for i in range(intentos):
         if i:
@@ -332,7 +397,8 @@ def estado_advapp(hoy, intentos=INTENTOS, espera=ESPERA, url=None):
             salida['copia'] = copia
         except OSError:
             pass                      # sin copia cada herramienta baja la suya
-        if datetime.date.today().weekday() < 5 and d.get('verificado_hoy') is False:
+        salida['feriado'] = feriado_cerrado(d, dia) if dia.weekday() < 5 else None
+        if dia.weekday() < 5 and not salida['feriado'] and d.get('verificado_hoy') is False:
             salida['vieja'] = ('ADVAPP dice que hoy no se verifico ningun precio '
                                '(verificado_hoy = false): la web muestra los de la ultima carga')
         return salida
@@ -801,9 +867,13 @@ def main():
     # Si ADVAPP no cargo precios hoy, el sitio sigue mostrando los viejos con
     # toda naturalidad: esta es la unica forma de enterarse sin abrir ADVAPP.
     vieja = advapp['vieja']
+    # (20/10/2026) Un feriado cerrado es un domingo: sin carga no se avisa, y
+    # el log dice por que (y de donde lo sabe: el feed o el calendario)
+    carga = vieja or ('no se pudo leer' if advapp['caido'] else
+                      'no se mira, hoy es como domingo: ' + advapp['feriado'] if advapp.get('feriado') else
+                      'al dia')
     with open(log, 'a', encoding='utf-8') as f:
-        f.write('\n\nCarga de precios en ADVAPP: %s\n' % (vieja or ('no se pudo leer' if advapp['caido']
-                                                                   else 'al dia')))
+        f.write('\n\nCarga de precios en ADVAPP: %s\n' % carga)
         f.write('Rubros que quedaron sin nada para vender: %s\n' % ('\n  '.join([''] + vaciados) if vaciados
                                                                  else 'ninguno'))
         f.write('Vistas previas para WhatsApp (p/): %s\n' % ('\n  '.join([''] + sin_vista) if sin_vista
@@ -1170,8 +1240,41 @@ def probar():
         e = estado_advapp(nuevo, intentos=1, espera=0, url='file://' + os.path.join(tmp, 'bien.json'))
         ok(not e['caido'] and e['copia'] and os.path.exists(e['copia']) and 'generado_en g' in e['dato'],
            'la carga buena se guarda en logs/ y anota generado_en')
+        # (20/10/2026) Un feriado cerrado es un domingo: sin carga ese dia no se avisa
+        sin_carga = os.path.join(tmp, 'sin-carga.json')
+        with open(sin_carga, 'w') as fh:
+            fh.write('{"filas": 1, "generado_en": "g", "verificado_hoy": false, "productos": [{"ID": "A"}]}')
+        u = 'file://' + sin_carga
+        e = estado_advapp('2026-12-09', intentos=1, espera=0, url=u)
+        ok(e['vieja'] and not e['feriado'], 'un miercoles comun sin carga se avisa (verificado_hoy = false)')
+        e = estado_advapp('2026-12-08', intentos=1, espera=0, url=u)
+        ok(not e['vieja'] and 'Inmaculada' in (e['feriado'] or ''),
+           'un feriado (martes 08/12) sin carga no se avisa, como un domingo, y el log dice cual')
+        e = estado_advapp('2026-12-06', intentos=1, espera=0, url=u)
+        ok(not e['vieja'] and not e['feriado'], 'el domingo, como siempre, no se avisa')
+        ok(not estado_advapp('2026-11-23', intentos=1, espera=0, url=u)['vieja']
+           and not estado_advapp('2027-02-09', intentos=1, espera=0, url=u)['vieja'],
+           'tampoco el lunes de la Soberania ni el martes de Carnaval')
+        # Lo que diga el feed manda sobre el calendario
+        con_campo = os.path.join(tmp, 'con-campo.json')
+        with open(con_campo, 'w') as fh:
+            fh.write('{"filas": 1, "verificado_hoy": false, "hoy_como_domingo": "Cierre por inventario", '
+                     '"productos": [{"ID": "A"}]}')
+        e = estado_advapp('2026-12-09', intentos=1, espera=0, url='file://' + con_campo)
+        ok(not e['vieja'] and 'Cierre por inventario' in (e['feriado'] or ''),
+           'un dia propio que ADVAPP dice cerrado (hoy_como_domingo) no se avisa, aunque no sea feriado nacional')
+        with open(con_campo, 'w') as fh:
+            fh.write('{"filas": 1, "verificado_hoy": false, "hoy_como_domingo": null, "productos": [{"ID": "A"}]}')
+        e = estado_advapp('2026-12-08', intentos=1, espera=0, url='file://' + con_campo)
+        ok(e['vieja'] and not e['feriado'],
+           'y un feriado con "Abrimos" (el feed trae hoy_como_domingo = null) sin carga se avisa')
     finally:
         LOGS = viejo_logs
+    ok(feriado_cerrado({}, datetime.date(2026, 12, 25)) and feriado_cerrado({}, datetime.date(2026, 12, 24)) is None
+       and feriado_cerrado({'hoy_como_domingo': {'nombre': 'Navidad'}}, datetime.date(2026, 12, 25)) == 'feriado cerrado segun ADVAPP (Navidad)',
+       'el calendario de la web y el campo del feed (texto u objeto con nombre)')
+    ok(all(re.fullmatch(r'20\d\d-\d\d-\d\d', k) and datetime.date.fromisoformat(k) and v.strip() for k, v in FERIADOS.items()),
+       'las %d fechas del calendario se leen bien' % len(FERIADOS))
 
     # Un rubro entero fuera de venta de un dia para el otro (el 28/09, los Objetivos)
     tmp2 = tempfile.mkdtemp(prefix='revision-rubros-')

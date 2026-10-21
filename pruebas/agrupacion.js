@@ -518,14 +518,28 @@ function correrPruebas(){
     const dd = document.getElementById('ficha');
     const antes = dd.querySelector('.fi-precio .usd').textContent;
     /* Cuando la version ES el color no hay pestañas: se elige en la tira, que
-       es justamente el cambio del 21/09. Vale cualquiera de los dos caminos. */
-    const otroColor = [...dd.querySelectorAll('.fi-tono')].find(b => b.dataset.k && b.dataset.k !== clave(porColor.rep));
-    const otraOp = [...dd.querySelectorAll('.fi-op')].find(b => b.dataset.k !== clave(porColor.rep));
-    ok(!!(otroColor || otraOp), 'hay como pasar al otro color', porColor.desc);
-    (otroColor || otraOp).click();
-    ok(document.getElementById('ficha').querySelector('.fi-precio .usd').textContent !== antes,
-       'elegir la version de otro color cambia el precio',
-       porColor.desc + ': ' + porColor.variantes.map(v=>v.etiqueta+' USD '+v.precio).join(' | '));
+       es justamente el cambio del 21/09. Vale cualquiera de los dos caminos.
+       (20/10/2026) Y a una version de OTRO precio que la abierta: el Cable
+       USB-C trae "60W 1m" y "a Lightning" a USD 60 y "a USB-C" a USD 65; se
+       abria "a Lightning" y se tocaba el primer boton que no era ese, "60W 1m",
+       del mismo precio. La ficha pasaba bien a esa version (FICHA y el boton
+       marcado) y el precio, como corresponde, seguia en USD 60: fallaba la
+       prueba, no la pagina. */
+    const abierta = porColor.variantes.find(v => clave(v) === FICHA) || porColor.rep;
+    const precioDe = b => (porColor.variantes.find(v => clave(v) === b.dataset.k) || {}).precio;
+    const aOtroPrecio = b => b.dataset.k && b.dataset.k !== clave(abierta) && precioDe(b) > 0 && precioDe(b) !== abierta.precio;
+    const otroColor = [...dd.querySelectorAll('.fi-tono')].find(aOtroPrecio);
+    const otraOp = [...dd.querySelectorAll('.fi-op')].find(aOtroPrecio);
+    const boton = otroColor || otraOp;
+    ok(!!boton, 'hay como pasar al otro color', porColor.desc);
+    if(boton){
+      boton.click();
+      const ahora = document.getElementById('ficha').querySelector('.fi-precio .usd').textContent;
+      ok(ahora !== antes && ahora.includes(plata(precioDe(boton))),
+         'elegir la version de otro color cambia el precio',
+         porColor.desc + ': ' + porColor.variantes.map(v=>v.etiqueta+' USD '+v.precio).join(' | ')
+         + ' (de ' + clave(abierta) + ' a ' + boton.dataset.k + ': ' + antes.trim() + ' -> ' + ahora.trim() + ')');
+    }
     cerrarFicha();
   } else {
     R.push('  --   (hoy la planilla no tiene modelos que varien solo por color)');

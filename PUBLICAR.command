@@ -43,6 +43,57 @@ if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   pausa; exit 1
 fi
 
+# ---- La rama: se publica main, y main al dia (20/10/2026) -----------------
+#  Publicar es subir la rama main a GitHub. Si la copia quedo en otra rama
+#  (una prueba, un arreglo a medias), el commit de abajo caia en esa rama, el
+#  "git push origin main" contestaba "Everything up-to-date" y aca se leia
+#  "LISTO" sin haber subido nada. Y si main quedo atras de GitHub (se mergeo
+#  un PR y esta copia no lo trajo), todo lo de abajo se arma con el
+#  index.html viejo y GitHub rechaza el envio al final, despues de 10
+#  minutos de revisiones. Las dos cosas se miran ANTES de empezar. Sin
+#  internet no se puede comparar: se sigue, y el envio dira lo suyo.
+RAMA=$(git symbolic-ref --quiet --short HEAD 2>/dev/null)
+if [ "$RAMA" != "main" ]; then
+  echo "   ------------------------------------------------------------"
+  echo "     NO SE PUEDE PUBLICAR DESDE ESTA COPIA"
+  echo
+  if [ -z "$RAMA" ]; then
+    echo "     La copia no esta en ninguna rama (git dice \"detached HEAD\")."
+  else
+    echo "     La copia esta en la rama \"$RAMA\", no en main."
+  fi
+  echo "     Lo que se publica es main: desde aca no se subiria nada"
+  echo "     y al final diria LISTO igual. No se reviso ni se subio nada."
+  echo
+  echo "     No la cambies de rama a mano (puede haber trabajo a medias):"
+  echo "     pasale a Claude lo que dice aca arriba."
+  echo "   ------------------------------------------------------------"
+  pausa; exit 1
+fi
+if GIT_TERMINAL_PROMPT=0 git fetch --quiet origin main 2>/dev/null; then
+  ATRAS=$(git rev-list --count HEAD..origin/main 2>/dev/null || echo 0)
+  if [ "$ATRAS" != "0" ]; then
+    echo "   ------------------------------------------------------------"
+    echo "     ESTA COPIA ESTA ATRASADA"
+    echo
+    echo "     GitHub tiene $ATRAS cambio(s) que esta compu no tiene:"
+    git log --oneline -n 10 HEAD..origin/main | sed 's/^/        /'
+    echo
+    echo "     Publicando desde aca se armaria todo con lo viejo y GitHub"
+    echo "     lo rechazaria al final. No se reviso ni se subio nada."
+    echo
+    echo "     No lo arregles a mano (un \"git pull\" puede dejar un"
+    echo "     conflicto en index.html): pasale a Claude lo que dice aca"
+    echo "     arriba."
+    echo "   ------------------------------------------------------------"
+    pausa; exit 1
+  fi
+else
+  echo "   AVISO: no se pudo mirar GitHub (suele ser falta de internet)."
+  echo "   No se sabe si esta copia esta al dia; se sigue igual."
+  echo
+fi
+
 # ---- Revision de los datos ---------------------------------------------
 #  validar.py baja los productos de ADVAPP (la planilla quedo congelada el
 #  22/09 y es solo el respaldo) y controla lo que el catalogo necesita para

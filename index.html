@@ -3,11 +3,53 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Catálogo Advance Tecno — Los precios de hoy</title>
-<meta name="description" content="Catálogo con stock y precios actualizados durante el día. Consultá por WhatsApp desde cualquier producto.">
+<!-- El título y la descripción dicen qué se vende y dónde (21/10/2026, Benja,
+     8 A de la auditoría del 19/10, G-03): decían "Los precios de hoy" y
+     Google no sabía que es una tienda de tecnología en CABA. Los rubros son
+     los que más tiene la web (celulares, cámaras con sus objetivos, MacBook e
+     iPad) y el barrio es el de la dirección (DIRECCION y el link MAPA). Lo
+     que se ve al compartir el link (og:title, más abajo) no cambió. -->
+<title>Advance Tecno · Celulares, cámaras y MacBook en Parque Chas, CABA</title>
+<meta name="description" content="iPhone, Samsung y Xiaomi, cámaras y objetivos, MacBook e iPad, con stock y precios del día. Retiro con cita previa en Parque Chas, CABA. Envíos a todo el país.">
 <!-- La portada es una sola para Google: /index.html y las vistas con ?cat= no son
      otras páginas (auditoría 06/10). Cada modelo tiene la suya en producto/. -->
 <link rel="canonical" href="https://catalogo.advancetecno.com.ar/">
+<!-- La tienda para Google (21/10/2026, 8 A, G-03): nombre, dirección, mapa,
+     WhatsApp e Instagram, los mismos que dicen DIRECCION, MAPA, WHATSAPP e
+     INSTAGRAM_TECNO en el script (la tanda decisiones-21-10 avisa si dejan de
+     coincidir). Las coordenadas son las del link de Maps. Sin horario a
+     propósito: se atiende con cita previa. Si cambia el número de WhatsApp,
+     cambiar también "telephone". -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "@id": "https://catalogo.advancetecno.com.ar/#tienda",
+  "name": "Advance Tecno",
+  "description": "Celulares, cámaras y objetivos, MacBook, iPad y más tecnología, con stock y precios del día. Retiro con cita previa en Parque Chas, CABA, y envíos a todo el país.",
+  "url": "https://catalogo.advancetecno.com.ar/",
+  "logo": "https://catalogo.advancetecno.com.ar/assets/icono-192.png",
+  "image": "https://catalogo.advancetecno.com.ar/assets/preview.png",
+  "telephone": "+54 9 11 2520-5232",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Av. de los Incas 5150, 1A",
+    "addressLocality": "Parque Chas, Ciudad Autónoma de Buenos Aires",
+    "addressRegion": "CABA",
+    "addressCountry": "AR"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -34.5866172,
+    "longitude": -58.481116
+  },
+  "hasMap": "https://maps.app.goo.gl/kzwGpTwUNLkTEwWRA",
+  "sameAs": [
+    "https://www.instagram.com/advancetecno/",
+    "https://maps.app.goo.gl/kzwGpTwUNLkTEwWRA"
+  ]
+}
+</script>
 <!-- El ícono (29/09, muestra 6.1 B): el mismo triángulo del logo en blanco
      sobre el grafito #151220 de la barra de arriba. El PNG del logo tal cual
      era una línea finita sin fondo, y en la pestaña oscura casi no se veía.
@@ -199,6 +241,9 @@ window.ADVAPP_TEMPRANO = (() => {
   }
   header > .wrap{padding-top:22px;padding-bottom:20px}
   header .eyebrow{color:var(--acento)}
+  /* Desde el 21/10 (8 A) ese renglón es el h1 y puede ocupar dos renglones
+     en el celular: sin el margen del h1 y con aire entre los renglones */
+  header h1.eyebrow{margin:0;line-height:1.45}
   /* De 900px para arriba el titulo solo dejaba media pantalla vacia. Las tres
      razones (19/10) van al costado y llenan el aire sin inventar contenido.
      Las dos columnas van centradas entre sí (Benja, 19/10: con el título
@@ -3658,8 +3703,12 @@ window.ADVAPP_TEMPRANO = (() => {
 
 <header>
   <div class="wrap">
-    <span class="eyebrow">Catálogo</span>
-    <h1 class="titulo-h">Los precios de hoy.<br><span>Hoy.</span></h1>
+    <!-- El h1 dice qué se vende y dónde (21/10/2026, Benja, 8 A, G-03). Es el
+         renglón chiquito de arriba, que decía "Catálogo"; el título grande
+         sigue igual, como párrafo: para Google "Los precios de hoy. Hoy." no
+         dice de qué es la página. -->
+    <h1 class="eyebrow">Celulares, cámaras y MacBook en Parque Chas, CABA</h1>
+    <p class="titulo-h">Los precios de hoy.<br><span>Hoy.</span></p>
     <!-- Las tres razones (Benja, 19/10/2026, 2D del muestrario), en lugar de la
          bajada con raya y las estrellas sueltas. La primera es el puntaje de
          Google (13/10): la llena pintarSelloGoogle() con datos/resenas.json y
@@ -5495,6 +5544,10 @@ function armarCarga(datos){
         incluye:val(f,C.incluye),
         detalle:  val(f,C.detalle),
         garantia: val(f,C.garantia),
+        /* La columna está y ESTA fila la trae vacía: en un nuevo, ADVAPP dice
+           que no se menciona garantía (21/10/2026; ver htmlServicio). Sin la
+           columna, la ficha sigue con el texto de siempre. */
+        sinGarantia: C.garantia !== -1 && !val(f,C.garantia),
         condicion:val(f,C.condicion),
         // El teclado, primero del SKU ("...-tecladoes") y recien si no lo dice,
         // de la columna. Las dos vienen de ADVAPP, pero la columna quedo
@@ -10157,7 +10210,7 @@ function montarNuevos(sec){
     if(punto){ irNuevo(Number(punto.dataset.ir)); return; }
     const t = e.target.closest('.nv-tarj');
     if(!t) return;
-    if(e.target.closest('.mas')){ togglePedidoModelo(t.dataset.key); return; }
+    if(e.target.closest('.mas')){ masDeLaTarjeta(t.dataset.key); return; }   // 5 A (21/10)
     if(e.target.closest('a')) return;          // Consultar abre WhatsApp solo
     abrirFicha(t.dataset.key);
   });
@@ -12409,7 +12462,7 @@ function htmlDatosFicha(m, v){
     ${htmlElegido(m, v, COLOR_FICHA)}
     <div class="botones fi-botones">
       ${WHATSAPP ? (v.stock
-        ? `<a class="pri cta" href="${linkWA(mensajeWA(v, COLOR_FICHA))}" target="_blank" rel="noopener">${ICONO_WA}Consultar por WhatsApp</a>`
+        ? `<a class="pri cta" href="${linkWA(mensajeWAFicha(v, COLOR_FICHA))}" target="_blank" rel="noopener">${ICONO_WA}Consultar por WhatsApp</a>`
         : `<a class="pri cta cta-aviso" href="${linkWA(mensajeAviso(v, COLOR_FICHA))}" target="_blank" rel="noopener">${ICONO_WA}Avisame cuando entre</a>`) : ''}
       <div id="fi-pedido-caja">${htmlPedidoFicha(clave(v))}</div>
     </div>
@@ -12449,6 +12502,35 @@ function elegirCuotaFicha(d, v, n){
   d.querySelectorAll('.fi-cuota').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.cuotas) === CUOTA_FICHA)));
   const res = d.querySelector('.fi-cuotas-res');
   if(res) res.innerHTML = textoCuotasFicha(v);
+  // El WhatsApp de la ficha dice el plan elegido (6 A, 21/10/2026)
+  const wa = d.querySelector('.fi-botones .cta:not(.cta-aviso)');
+  if(wa && v.stock) wa.href = linkWA(mensajeWAFicha(v, COLOR_FICHA));
+}
+
+/* La cuota elegida en la ficha llega al WhatsApp de la ficha y al pedido
+   (21/10/2026, Benja, 6 A de la auditoría del 19/10, U-04). El cliente tocaba
+   "6 cuotas", veía "6 cuotas de $ …" y el mensaje seguía "¿Me pasás info?"
+   sin el plan: creía que ya había avisado y el vendedor no se enteraba. Ahora
+   el mensaje suma el mismo renglón que el pedido ("Lo pago con tarjeta en 6
+   cuotas: aprox. $ … c/u."), con la misma cuenta que se ve en la ficha y sin
+   el total en cuotas (D13 A, 13/10). Sólo en la consulta de algo con cuotas:
+   el "Avisame cuando entre" no lleva plan. */
+function mensajeWAFicha(v, color){
+  const texto = mensajeWA(v, color);
+  const c = planCuotas(CUOTA_FICHA);
+  if(!c || !conCuotas(v)) return texto;
+  return texto + '\n\n' + renglonDelPlan(c, cuentaCuotas(v.precio, c.cuotas));
+}
+/* Y al cargarlo al pedido desde la ficha, ese plan pasa a ser el del pedido
+   (CUOTAS_PEDIDO): el pedido abría con "¿Pagás con tarjeta?" sin nada
+   marcado. Es el último plan que el cliente tocó, así que manda sobre el que
+   el pedido tuviera. Sin plan en la ficha, el del pedido no se toca. */
+function pasarCuotaFichaAlPedido(v){
+  if(!CUOTA_FICHA || !conCuotas(v) || !planCuotas(CUOTA_FICHA) || CUOTAS_PEDIDO === CUOTA_FICHA) return;
+  CUOTAS_PEDIDO = CUOTA_FICHA;
+  guardarCuotasPedido();
+  pintarPedido();
+  redibujarPedido?.();     // si el pedido quedó abierto atrás de la ficha
 }
 
 /* ---------- La descripción del producto (30/09) ----------
@@ -12715,6 +12797,16 @@ function htmlServicio(v){
     if(k === 'pago') return htmlPagoFicha();
     const t = SERVICIO[k];
     if(!t || !t[0]) return '';
+    /* Sin renglón de garantía cuando ADVAPP la manda vacía para esta fila
+       (21/10/2026, auditoría del 19/10, T-04 y X-01): las baterías SmallRig,
+       el Dyson versión China y los objetivos de caja blanca decían "Garantía
+       oficial del fabricante", y con la garantía vacía la ficha ponía "Con
+       garantía · Cada producto tiene la suya", que también la promete. Qué
+       filas son lo decide ADVAPP, no la web (sql/233 de ADVAPP): un NUEVO
+       siempre llega con texto (D12) salvo que esté anotado sin garantía. En
+       un usado, vacía quiere decir que el proveedor no la dijo: ahí sigue
+       el texto de siempre, sin plazo. */
+    if(k === 'garantia' && v.sinGarantia && !v.garantia && !esUsado(v)) return '';
     // Si la planilla trae la garantía de ESTE producto, manda sobre el texto
     // general: es el dato real, el otro es solo la regla de la casa.
     const detalle = (k === 'garantia' && v.garantia) ? v.garantia : t[1];
@@ -13457,10 +13549,11 @@ function engancharPedidoFicha(d, p){
   if(!USADOS) cargarUsados();      // si no había llegado, se prueba de nuevo (06/10)
   acomodarAvisoPedido(d);        // antes de buscar los botones: pueden mudarse
   const b = d.querySelector('#fi-pedido');
-  // Al agregar se lleva el color que el cliente haya elegido recién
-  if(b) b.onclick = () => togglePedido(k, COLOR_FICHA);
+  // Al agregar se lleva el color que el cliente haya elegido recién, y el
+  // plan de cuotas que haya tocado (6 A, 21/10/2026: pasarCuotaFichaAlPedido)
+  if(b) b.onclick = () => { togglePedido(k, COLOR_FICHA); if(enPedido(k)) pasarCuotaFichaAlPedido(p); };
   const cambiar = d.querySelector('#fi-cambiar');
-  if(cambiar) cambiar.onclick = () => cambiarPorEsta(k, COLOR_FICHA);
+  if(cambiar) cambiar.onclick = () => { cambiarPorEsta(k, COLOR_FICHA); if(enPedido(k)) pasarCuotaFichaAlPedido(p); };
   // "Entregar mi usado" (1B): el cotizador encima de la ficha, con lo que se mira
   const usado = d.querySelector('#fi-usado');
   if(usado) usado.onclick = () => abrirCotizador({ k: FICHA || k, color: COLOR_FICHA });
@@ -13640,7 +13733,7 @@ function elegirColorFicha(d, p, color){
     // El color puede ser de otra fila, con otro stock: el boton tiene que
     // seguirlo, o queda ofreciendo aviso de algo que si hay (o al reves).
     const hay = p.stock;
-    wa.href = linkWA(hay ? mensajeWA(p, color) : mensajeAviso(p, color));
+    wa.href = linkWA(hay ? mensajeWAFicha(p, color) : mensajeAviso(p, color));
     wa.classList.toggle('cta-aviso', !hay);
     wa.innerHTML = ICONO_WA + (hay ? 'Consultar por WhatsApp' : 'Avisame cuando entre');
   }
@@ -14191,7 +14284,11 @@ function cuentaCuotasPedido(){
 function renglonCuotas(){
   const c = planCuotas(CUOTAS_PEDIDO);
   if(!c || soloSinStockPedido() || pagaTodoConUsado()) return '';
-  const x = cuentaCuotasPedido();
+  return renglonDelPlan(c, cuentaCuotasPedido());
+}
+/* El renglón de un plan con su cuenta ({ total, cuota } o null sin montos).
+   El mismo para el pedido y para el WhatsApp de la ficha (6 A, 21/10/2026). */
+function renglonDelPlan(c, x){
   if(!x) return `Lo pago con tarjeta en ${nombreCuotas(c.cuotas)}.`;
   return c.cuotas === 1
     ? `Lo pago con tarjeta en 1 pago: aprox. $ ${plata(x.total)}.`
@@ -14580,6 +14677,27 @@ function togglePedidoModelo(k){
   const cargadas = m.variantes.filter(v => enPedido(clave(v)));
   if(!cargadas.length) return togglePedido(m.variantes.some(v => clave(v) === k) ? k : clave(m.rep));
   cargadas.forEach(v => togglePedido(clave(v)));
+}
+
+/* El + de la tarjeta en un modelo con dos o más colores abre la ficha para
+   elegir el color (21/10/2026, Benja, 5 A de la auditoría del 19/10, U-05).
+   Cargaba la fila más barata con el color de esa fila sin que el cliente lo
+   eligiera: en el iPhone 17 Pro el mensaje decía "(Orange)" y el vendedor lo
+   leía como pedido del cliente. Pasaba en 83 modelos. Esto cambia la 2.1 B
+   del 29/09 sólo en ese caso: la ficha abre en la versión de la tarjeta (con
+   un filtro puesto, la de ese filtro), así que la versión es la misma que
+   cargaba el +. Con un color o ninguno, el + carga como siempre. Si ya hay
+   una versión del modelo en el pedido, el + la saca, como siempre: sacar no
+   elige nada por el cliente. Cuentan todos los colores del modelo, también
+   los agotados: el cliente puede querer justo el que no hay, y la ficha se
+   lo dice. Lo usan la grilla y Recién llegados. */
+const coloresDelModelo = m =>
+  new Set(((m && m.variantes) || []).flatMap(v => pintas(v.color || '').map(c => norm(c.nombre)))).size;
+const masAbreFicha = m => !!m && coloresDelModelo(m) > 1 && !enPedidoModelo(m);
+function masDeLaTarjeta(k){
+  const m = buscarModelo(k);
+  if(!masAbreFicha(m)) return togglePedidoModelo(k);
+  abrirFicha(m.variantes.some(v => clave(v) === k) ? k : clave(m.rep));
 }
 
 function mensajePedido(){
@@ -15623,7 +15741,7 @@ grid.addEventListener('click', e => {
   if(e.target.closest('[data-cotizar]')){ abrirCotizador({}); return; }
   const card = e.target.closest('.card');
   if(!card) return;
-  if(e.target.closest('.mas')){ togglePedidoModelo(card.dataset.key); return; }
+  if(e.target.closest('.mas')){ masDeLaTarjeta(card.dataset.key); return; }   // 5 A (21/10)
   if(e.target.closest('a')) return;          // el botón Consultar hace lo suyo
   abrirFicha(card.dataset.key);
 });

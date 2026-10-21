@@ -247,12 +247,19 @@ function correrPruebas(){
   // Quieta, sin mouse encima, no se ven (con el dedo el CSS los deja fijos)
   ok(matchMedia('(hover:none)').matches || estilo(acc, 'opacity') === '0', 'sin el mouse encima están escondidos', estilo(acc, 'opacity'));
   const m0 = buscarModelo(c0.dataset.key);
-  const antes = enPedidoModelo(m0);
-  acc.querySelector('.mas').click();
-  ok(enPedidoModelo(m0) !== antes && cards()[0].querySelector('.mas').getAttribute('aria-pressed') === String(!antes),
-     'agregar lo suma al pedido y queda marcado');
-  cards()[0].querySelector('.mas').click();
-  ok(enPedidoModelo(m0) === antes, 'y tocarlo de nuevo lo saca');
+  /* (21/10/2026, 5 A de Benja) En un modelo con 2 o mas colores el + abre la
+     ficha para elegir el color: el "suma y queda marcado" se mira en la
+     primera tarjeta de un modelo de un color (la regla, en decisiones-21-10.js). */
+  const iu = cs.findIndex(c => c.querySelector('.foto .acciones .mas') && !masAbreFicha(buscarModelo(c.dataset.key)));
+  if(iu !== -1){
+    const mu = buscarModelo(cs[iu].dataset.key);
+    const antes = enPedidoModelo(mu);
+    cs[iu].querySelector('.foto .acciones .mas').click();
+    ok(enPedidoModelo(mu) !== antes && cards()[iu].querySelector('.mas').getAttribute('aria-pressed') === String(!antes),
+       'agregar lo suma al pedido y queda marcado', mu.titulo || mu.desc);
+    cards()[iu].querySelector('.mas').click();
+    ok(enPedidoModelo(mu) === antes, 'y tocarlo de nuevo lo saca');
+  } else R.push('  --  hoy la primera tanda de tarjetas no tiene un modelo de un solo color');
   const wa = c0.querySelector('.foto .wa');
   /* El nombre ENTERO con el que la pagina arma el mensaje (nombreConMarca), no
      solo su primera palabra: "FE", "RF" y "Z" empiezan decenas de modelos y

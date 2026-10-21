@@ -43,7 +43,7 @@
     {"ID": "NBK-APL-MBP14M5MAX-36G2TB-MID-EN", "nombre": "MacBook Pro M5 Max 14\" 36GB/2TB (Midnight)"}
    ],
    "pregunta": "El MacBook Pro no viene en Midnight (ese es un color del MacBook Air): viene en Space Black y Silver, y la foto de AT-0440-02 es la Space Black. Es la Space Black? Si es asi: Color \"Space Black\" y SKU_VARIANTE ...-SBK-EN, manteniendo CODIGO_VAR AT-0440-02. No lo cambiamos nosotros en la web: seria inventar un color.",
-   "respondida": ""
+   "respondida": "2026-10-20: ADVAPP ya la escribe Space Black (Color \"Space Black\", CODIGO_VAR AT-0440-02); el maestro anoto \"Space Black\" como escritura de AT-0440-02. Solo queda el SKU_VARIANTE ...-MID-EN, que no cambia la foto."
   },
   {
    "id": "P-04",

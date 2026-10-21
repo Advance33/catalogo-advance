@@ -74,14 +74,17 @@ function correrPruebas(){
      reventaba ("reading 'rep'", aviso del 18/10). Si no hay ninguno, el caso
      se arma con uno de verdad, sin su garantia mientras se mira, y se le
      devuelve. */
-  let sinGar = MODELOS.find(m => elegible(m) && !m.rep.garantia), devolverGar = null;
-  if(!sinGar){
-    sinGar = MODELOS.find(elegible);
-    const g0 = sinGar.rep.garantia;
-    sinGar.rep.garantia = '';
-    devolverGar = () => { sinGar.rep.garantia = g0; };
-    R.push('  --   hoy todas las filas traen su garantia: se prueba con ' + sinGar.rep.id + ' sin la suya');
-  }
+  /* (21/10/2026) Desde el sql/233 + ADVAPP #151 (decision de Benja), algunos
+     productos nuevos llegan con la Garantia VACIA a proposito y no muestran
+     ningun renglon (web #41): esos se miran en el caso de abajo. La regla
+     general es para una fila que no trae garantia sin que ADVAPP lo haya
+     decidido (sinGarantia en false), asi que siempre se arma con uno que si la
+     trae, sin la suya mientras se mira, y se le devuelve. */
+  const sinGar = MODELOS.find(m => elegible(m) && m.rep.garantia && !m.rep.sinGarantia) || MODELOS.find(elegible);
+  const g0 = sinGar.rep.garantia, s0 = sinGar.rep.sinGarantia;
+  sinGar.rep.garantia = '';
+  sinGar.rep.sinGarantia = false;
+  const devolverGar = () => { sinGar.rep.garantia = g0; sinGar.rep.sinGarantia = s0; };
   abrirFicha(clave(sinGar.rep));
   const franja = $('ficha').querySelector('.fi-envio');
   ok(!!franja && franja.textContent.includes(SERVICIO.envio[0]),
@@ -105,7 +108,22 @@ function correrPruebas(){
      'sin garantia propia en la planilla, dice la regla general', lineaGar && lineaGar.textContent);
   ok(serv && !PLAZO_FIJO.test(serv.textContent), 'y no inventa un plazo');
   quitarFicha();
-  if(devolverGar) devolverGar();
+  devolverGar();
+
+  /* Un producto nuevo que ADVAPP manda SIN garantia a proposito (sql/233: las
+     baterias SmallRig, los Dyson version China, los objetivos de caja blanca)
+     no muestra ningun renglon de garantia, pero si el retiro. */
+  const vacia = MODELOS.find(m => elegible(m) && m.rep.sinGarantia && !m.rep.garantia && !esUsado(m.rep));
+  if(!vacia){
+    R.push('  --   hoy ningun producto nuevo viene sin garantia');
+  }else{
+    abrirFicha(clave(vacia.rep));
+    const s2 = $('ficha').querySelector('.fi-servicio');
+    ok(!!s2 && !s2.querySelector('[data-servicio="garantia"]'),
+       'sin garantia en ADVAPP (decision del 21/10), no muestra ningun renglon de garantia', vacia.rep.id);
+    ok(!!s2 && !!s2.querySelector('[data-servicio="retiro"]'), 'y el retiro sigue');
+    quitarFicha();
+  }
 
   /* Si la planilla trae la garantia de ese producto, se muestra esa, y una
      sola vez: antes vivia en la tabla de datos y ahora se mudo al bloque. */

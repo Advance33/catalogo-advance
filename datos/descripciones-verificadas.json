@@ -2,6 +2,36 @@
  "formato": "verificadas/1",
  "leeme": "Huellas de las descripciones que pasaron el verificador. Lo escribe herramientas/verificar-descripciones.py; no se edita a mano.",
  "verificadas": {
+  "2cbba24e95f86bedfaa17da0eec04de6c70c5fddcef2f932282d596f2993bc03": {
+   "modelo": "Adaptador de corriente USB-C de 20 W",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D09.json",
+   "fuentes": [
+    "https://www.apple.com/mx/shop/product/mwvv3am/a/adaptador-de-corriente-usb-c-de-20-w",
+    "https://www.apple.com/shop/iphone/accessories/chargers-adapters"
+   ]
+  },
+  "2ccc08b7101e46512b4a3df159649759933033b77f72b1e7cab065df01b3901e": {
+   "modelo": "Adaptador de corriente dinámico de 40 W (máx. 60 W)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D09.json",
+   "fuentes": [
+    "https://www.apple.com/mx/shop/product/mgkn4am/a/adaptador-de-corriente-din%C3%A1mico-de-40-w-m%C3%A1x-60-w",
+    "https://www.apple.com/shop/iphone/accessories/chargers-adapters"
+   ]
+  },
+  "1c0b34c522980a65c2d19358759bc732a19908bb0b86b50fc83a53a0db2d1755": {
+   "modelo": "Adaptador de montura Nikon FTZ II",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D04b-r2.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/accessory/camera/ftz_2/",
+    "https://www.nikon.es/es_ES/product/accessories/camera-accessories/mount-adapter-ftz-ii"
+   ]
+  },
   "9b3f183d0c66c6889efa391900bac02f1153530817c4b653a1f14a16781ebcad": {
    "modelo": "AirPods 4",
    "fecha": "2026-10-01",
@@ -20,6 +50,19 @@
     "https://support.apple.com/es-la/121204"
    ]
   },
+  "9a9bdb0c3033189307a6ed8fed381cd46b4b18aa82983dca5ebc72e9f841ee93": {
+   "modelo": "AirPods 5 con Estuche de Carga Inalámbrica",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D07b-r2.json",
+   "fuentes": [
+    "https://www.apple.com/la/airpods-5/specs/",
+    "https://www.apple.com/la/airpods-5/",
+    "https://support.apple.com/es-la/148759",
+    "https://support.apple.com/es-la/148760",
+    "https://support.apple.com/es-la/109525"
+   ]
+  },
   "428bb15674adbe3e50c4c0bd76dbbd050176717e2c75976ed8330126bd4e6aad": {
    "modelo": "AirPods Max 2",
    "fecha": "2026-10-01",
@@ -29,6 +72,17 @@
     "https://www.apple.com/la/airpods-max/specs/",
     "https://www.apple.com/la/airpods-max/",
     "https://support.apple.com/es-lamr/123185"
+   ]
+  },
+  "50b238df260d0ecb8251cabddaebdee64e797b582829865e53a044e14a30f931": {
+   "modelo": "AirPods Pro 2",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D07b.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/111834",
+    "https://support.apple.com/es-la/111851",
+    "https://support.apple.com/es-la/109525"
    ]
   },
   "ef2682f1055181b44f6f59fc2f61e39bf9d6d279a03d59d7b769f39101eafec6": {
@@ -41,6 +95,17 @@
     "https://www.apple.com/la/airpods-pro/"
    ]
   },
+  "90ec02243ee2143acb7cf8a9003c5cd5507d6ef90decb6d78b1f81a79be677a9": {
+   "modelo": "AirTag",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D07b.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/126203",
+    "https://support.apple.com/es-la/111847",
+    "https://www.apple.com/la/airtag/"
+   ]
+  },
   "0a0c29c3d805ddb487d409536da7d008bd301556da173810b9b2ce2a7dc95c11": {
    "modelo": "Antigravity A1 (Paquete Explorador)",
    "fecha": "2026-10-14",
@@ -51,6 +116,29 @@
     "https://www.antigravity.tech/mx/drone/antigravity-a1/specs",
     "https://www.antigravity.tech/mx/drone/antigravity-a1",
     "https://www.antigravity.tech/mx/drone/antigravity-a1/buy (Paquete Explorador: «1× dron A1, 1× Las Gafas Vision, 1× controlador Grip, 3× baterías de vuelo, 1× hub de carga, 1× estuche de transporte para dron A1, 1× bandolera, 8× hélices de repuesto»; rotulado «249g Nivel Avanzado», baterías estándar)"
+   ]
+  },
+  "b57d678a6a892025b1e99ea5e2833ac6aba7892eaa3437f4d3001d9db439a69b": {
+   "modelo": "Apple Pencil (USB-C)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D09-r2.json",
+   "fuentes": [
+    "https://www.apple.com/mx/shop/product/muwa3am/a/apple-pencil-usb-c",
+    "https://www.apple.com/mx/apple-pencil/",
+    "https://support.apple.com/es-lamr/108937",
+    "https://www.apple.com/shop/product/MUWA3AM/A/apple-pencil-usb-c"
+   ]
+  },
+  "18d5d77b9d167d75d07714d300d64d662e9f78530b9993d982e64d2e73390994": {
+   "modelo": "Apple Pencil Pro",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D09.json",
+   "fuentes": [
+    "https://www.apple.com/mx/shop/product/mx2d3am/a/apple-pencil-pro",
+    "https://www.apple.com/mx/apple-pencil/",
+    "https://support.apple.com/es-lamr/108937"
    ]
   },
   "857a7496171f74e0906313186e211d1bae9f3a6db8e0dbf1ff93633b40a31e75": {
@@ -86,6 +174,19 @@
     "https://www.apple.com/la/watchos/feature-availability/"
    ]
   },
+  "e5c13af374171de28b731448023a7d521be50fadfea7ec7b8ffd60f2f2e23cc8": {
+   "modelo": "Apple Watch Series 12",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D07b.json",
+   "fuentes": [
+    "https://www.apple.com/la/apple-watch-series-12/specs/",
+    "https://www.apple.com/la/apple-watch-series-12/",
+    "https://support.apple.com/es-la/108056",
+    "https://www.apple.com/la/watchos/feature-availability/",
+    "https://www.apple.com/la/watch/compare/"
+   ]
+  },
   "ce0527a4fcc56f4351c635568bd0865b08587c169d932d617e7908be4d0ef78b": {
    "modelo": "Apple Watch Ultra 3 49 mm",
    "fecha": "2026-10-13",
@@ -95,6 +196,76 @@
     "https://support.apple.com/es-la/125095",
     "https://support.apple.com/es-es/125095",
     "https://support.apple.com/en-us/125095"
+   ]
+  },
+  "29422a6d020b29a52f53e82e61a58f3c2c977f039ad5dec32baae28b961415e9": {
+   "modelo": "Batería MagSafe para el iPhone Air",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D07b-r2.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/125312",
+    "https://support.apple.com/en-us/125312",
+    "https://www.apple.com/la/iphone/"
+   ]
+  },
+  "321007684b8abc6fb0c9829c7ad11686621b5b45bb7e96cde3e1783adb392f13": {
+   "modelo": "Batería Nikon EN-EL18d (3300 mAh)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D04b.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/accessories/camera-accessories/rechargeable-li-ion-battery-en-el18d",
+    "https://www.nikonusa.com/p/en-el18d-rechargeable-lithium-ion-battery/27221/overview",
+    "https://www.nikon.es/es_ES/product/cameras/mirrorless/z-9-uk",
+    "https://www.nikonusa.com/p/z-9/1669/overview"
+   ]
+  },
+  "0298c07722dea0486e66df95a63e3a40945d606ffaaacefc1d03055cc8b03a25": {
+   "modelo": "Batería Nikon EN-EL20a",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D04b.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/accessories/camera-accessories/en-el20a-rechargeable-li-ion-battery-VFB11601",
+    "https://www.nikonusa.com/p/en-el20a-rechargeable-li-ion-battery/3767/overview",
+    "https://www.nikon.es/es_ES/product/cameras/compact/coolpix-p1100"
+   ]
+  },
+  "12b32245f08eb3abeb46264e82816ea7b9547b9f0a2c8b421952ca38cb9a833d": {
+   "modelo": "Cable Apple USB-C a Lightning",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D09-r4.json",
+   "fuentes": [
+    "https://www.apple.com/mx/shop/product/muq93am/a/cable-de-usb-c-a-lightning-1-m",
+    "https://www.apple.com/mx/shop/product/mw2r3am/a/cable-de-usb-c-a-lightning-2-m",
+    "https://www.apple.com/shop/product/MUQ93AM/A/usb-c-to-lightning-cable-1-m"
+   ]
+  },
+  "725dd9f9c2489068affe143cc148bb67b2f18736adf7674d27632b275b270527": {
+   "modelo": "Canon Adaptador de zapata multifunción AD-E1",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D02b.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/shoe-adapter-ad-e1/ (Chrome headless)",
+    "https://www.canon.es/cameras/shoe-adapter-ad-e1/specifications/ (Chrome headless)",
+    "https://www.canon.es/store/canon-adaptador-de-zapata-multifuncion-ad-e1-de-canon/4943C001/ (Chrome headless)",
+    "https://www.usa.canon.com/shop/p/multi-function-shoe-adapter-ad-e1 (Chrome headless)"
+   ]
+  },
+  "024e55a46e468a1a82116507ee971c55e42f2b2203bdb4f269391af206105255": {
+   "modelo": "Canon Batería LP-E6P",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D02b-r2.json",
+   "fuentes": [
+    "https://www.canon.es/store/canon-bateria-canon-lp-e6p/6537C001/ (Chrome headless)",
+    "copia del redactor: https://www.canon.es/store/canon-bateria-canon-lp-e6p/6537C001/ (sólo para la respuesta del soporte sobre la EOS 5DS, que mi descarga no trajo)",
+    "https://asia.canon/en/consumer/battery-pack-lp-e6p/main/product",
+    "https://www.canon.com.au/accessories-supplies/lp-e6p (Chrome headless)",
+    "https://www.canon.es/cameras/eos-r5-mark-ii/specifications/ (Chrome headless)"
    ]
   },
   "5b6bdb98eee8da1f84bf6e843e30cb252865fc86054b043dba4fcb207a14c388": {
@@ -130,6 +301,17 @@
     "copia de trabajo-a-T01-1 (bajada hoy 13:06-13:22, canonical comprobado): https://global.canon/en/c-museum/product/ef318.html"
    ]
   },
+  "69d75faea7a0c2d5fafaeef4952bb4bfa883695225bbd78e0073d195f3483a42": {
+   "modelo": "Canon EF 50mm f/1.8 STM",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D02a.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/ef-50mm-f-1-8-stm-lens/ (Chrome headless)",
+    "https://www.canon.es/lenses/ef-50mm-f-1-8-stm-lens/specification.html (Chrome headless)",
+    "https://asia.canon/en/consumer/ef50mm-f-1-8-stm/main/product"
+   ]
+  },
   "1b248368700b61dee4b3248983512726d3b727646f282608ecbb431f7cc4f71b": {
    "modelo": "Canon EF-S 10-18mm f/4.5-5.6 IS STM",
    "fecha": "2026-10-02",
@@ -163,16 +345,16 @@
     "https://global.canon/en/c-museum/product/ef434.html"
    ]
   },
-  "d7a9d19496bcd9936dc1d10a87fe2a4534ec0e1f63fc885578813b774d9339ad": {
-   "modelo": "Canon EOS 2000D (EOS Rebel T7) con lente 18-55 III",
-   "fecha": "2026-10-14",
-   "por": "prueba-mecanica",
-   "desde": "e221b6ac5659386b8ba0984f3f377d44429f6de7b70a312e3a27308a35748ef9",
-   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
+  "9be746f9f2b90f91336a8ac5d00e6ae06cb1159779f852a02a94a2213f902fe1": {
+   "modelo": "Canon EOS 2000D (EOS Rebel T7) con lente 18-55 III o 18-55 II",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D01a.json",
    "fuentes": [
-    "copia de trabajo-r1-T10-1 (bajada hoy 13:32-13:33, canonical comprobado): https://www.canon.es/cameras/eos-2000d/specifications/",
-    "copia de trabajo-r1-T10-1 (bajada hoy 13:32-13:33, canonical comprobado): https://www.cla.canon.com/es/p/eos-rebel-t7",
-    "copia de trabajo-r1-T10-1 (bajada hoy 13:32-13:33, canonical comprobado): https://global.canon/en/c-museum/product/dslr873.html"
+    "https://www.canon.es/cameras/eos-2000d/specifications/",
+    "https://www.cla.canon.com/es/p/eos-rebel-t7 (curl daba 403; leída con Chrome headless)",
+    "https://global.canon/en/c-museum/product/dslr873.html",
+    "https://global.canon/en/c-museum/product/ef384.html (no está en fuentes; confirma que existe el EF-S18-55mm f/3.5-5.6 II, sin IS)"
    ]
   },
   "20c22f58945e253d229a403c575cd91cc2ead9446620d9898f0c817fe63987a8": {
@@ -206,16 +388,17 @@
     "bajada de nuevo hoy 13:33: https://www.canon.es/cameras/eos-r1/"
    ]
   },
-  "64a490bc2825d58c8663f2c47d8254a5ec199cdc0bc75181009fc9cd0c056286": {
-   "modelo": "Canon EOS R10 (cuerpo y kit RF-S 18-150mm F3.5-6.3 IS STM)",
-   "fecha": "2026-10-14",
-   "por": "prueba-mecanica",
-   "desde": "ee71231041d805a0c72ab250153279abf6d9209e966879b90f534e3cf8c26f96",
-   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
+  "e7757621d928195fef0658d361d5d0b355cb2e91adb3b96d59503d4a0232d390": {
+   "modelo": "Canon EOS R10 (cuerpo, kit RF-S 18-150mm F3.5-6.3 IS STM y kit RF-S 18-45mm F4.5-6.3 IS STM)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D01a.json",
    "fuentes": [
-    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r10/specifications/",
-    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r10/",
-    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/store/canon-camara-mirrorless-eos-r10-objetivo-rf-s-18-150mm-f3-5-6-3-is-stm-de-canon/5331C017/"
+    "https://www.canon.es/cameras/eos-r10/specifications/",
+    "https://www.canon.es/cameras/eos-r10/",
+    "https://www.canon.es/store/canon-camara-mirrorless-eos-r10-objetivo-rf-s-18-150mm-f3-5-6-3-is-stm-de-canon/5331C017/",
+    "https://www.canon.es/store/canon-camara-mirrorless-eos-r10-objetivo-rf-s-18-45mm-f4-5-6-3-is-stm-de-canon/5331C010/",
+    "https://www.canon.es/lenses/rf-lenses/ (no está en fuentes; listado de objetivos, la página arma el resto con JavaScript)"
    ]
   },
   "111470d0e0ace0f1345c30a59e2e9aa512b20195fe4a490a310290719dee4dba": {
@@ -259,14 +442,48 @@
     "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r5c/"
    ]
   },
-  "e48ecd5abfc5acdb43de9b0c3a1ada8dcc96f77ebe14f3af926a240f4cb2a8a6": {
-   "modelo": "Canon EOS R5 Mark II (cuerpo)",
-   "fecha": "2026-10-02",
+  "c83be486f47ef1e36cf4288958d7cac5b4d1249592c29689d9eeddcd6fcdf15d": {
+   "modelo": "Canon EOS R5 Mark II (cuerpo y kit con lente 24-105)",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-r1-T10-1.json",
+   "informe": "informe-D01a.json",
    "fuentes": [
-    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r5-mark-ii/specifications/",
-    "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r5-mark-ii/"
+    "https://www.canon.es/cameras/eos-r5-mark-ii/specifications/",
+    "https://www.canon.es/cameras/eos-r5-mark-ii/",
+    "https://www.canon.es/store/canon-cuerpo-de-la-camara-mirrorless-canon-eos-r5-mark-ii/6536C004/ (no está en fuentes; sólo para ver las opciones de kit)"
+   ]
+  },
+  "f6f9327905fbce52a976e54518f4b7ae369eabf1adbe2aa1faec91b0f130efec": {
+   "modelo": "Canon EOS R50 + RF-S 18-45mm F4.5-6.3 IS STM",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D01b.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/eos-r50/specifications/",
+    "https://www.canon.es/cameras/eos-r50/",
+    "https://www.canon.es/store/canon-camara-mirrorless-canon-eos-r50-en-blanco-objetivo-rf-s-18-45mm-f4-5-6-3-is-stm/5812C013/"
+   ]
+  },
+  "a7ad2515cc6a67e0ad50079d78fc64bf23a91bba5370649a9f6b1c28caf1e5c3": {
+   "modelo": "Canon EOS R50 V + RF-S 14-30mm F4-6.3 IS STM PZ",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D01b.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/eos-r50v/specifications/",
+    "https://www.canon.es/cameras/eos-r50v/",
+    "https://www.canon.co.uk/store/canon-eos-r50-v-mirrorless-camera-rf-s-14-30mm-f4-6-3-is-stm-pz-lens/6895C020/"
+   ]
+  },
+  "1fbdea8f1ff7c93d89f15faddd843924d8eb9ec2408605febd74f7def40fbcdb": {
+   "modelo": "Canon EOS R6 Mark II",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D01b.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/eos-r6-mark-ii/specifications/",
+    "https://www.canon.es/cameras/eos-r6-mark-ii/",
+    "https://www.canon.es/store/canon-cuerpo-de-la-camara-mirrorless-canon-eos-r6-mark-ii/5666C004/"
    ]
   },
   "e72c1939398a08a73f6fadf0532de17c75bb0e3ad626e886e3555b98ac1fe070": {
@@ -291,15 +508,27 @@
     "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/store/canon-camara-mirrorless-canon-eos-r6-v-objetivo-rf-20-50mm-f4l-is-usm-pz/7250C012/"
    ]
   },
-  "893f9974cfc0fe373905e219641f2c8b8c2fdc75dc27608cd411d4f07d661cf3": {
-   "modelo": "Canon EOS R7 + RF-S 18-150mm F3.5-6.3 IS STM",
-   "fecha": "2026-10-02",
+  "b69c7a74412b8684362c61d949634300500133ba0b0b530f39a0e51ce06d4f57": {
+   "modelo": "Canon EOS R7 (cuerpo y kit RF-S 18-150mm F3.5-6.3 IS STM)",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-r1-T10-2.json",
+   "informe": "informe-D01a.json",
    "fuentes": [
     "https://www.canon.es/cameras/eos-r7/specifications/",
     "https://www.canon.es/cameras/eos-r7/",
-    "https://www.canon.es/store/canon-camara-mirrorless-eos-r7-objetivo-rf-s-18-150mm-f3-5-6-3-is-stm-de-canon/5137C010/"
+    "https://www.canon.es/store/canon-camara-mirrorless-eos-r7-objetivo-rf-s-18-150mm-f3-5-6-3-is-stm-de-canon/5137C010/",
+    "https://www.canon.es/store/canon-cuerpo-de-la-camara-mirrorless-eos-r7-de-canon/5137C003/"
+   ]
+  },
+  "464131d585fd547b3e3129df0ef2a885604b743cd2e96aa4a6d3140a2b5f3e89": {
+   "modelo": "Canon EOS R8 + RF 24-50mm F4.5-6.3 IS STM",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D01b.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/eos-r8/specifications/",
+    "https://www.canon.es/cameras/eos-r8/",
+    "https://www.canon.es/store/canon-camara-mirrorless-canon-eos-r8-objetivo-rf-24-50mm-f4-5-6-3-is-stm/5803C013/"
    ]
   },
   "b4d8959ec3e0a94cc999caf2bb99915b67e7c5050b8e567e0d8a4c59c3470b8f": {
@@ -312,6 +541,19 @@
     "https://www.canon.es/cameras/eos-rp/specifications/",
     "https://www.canon.es/cameras/eos-rp/",
     "https://www.canon.es/store/canon-camara-canon-eos-rp-objetivo-rf-24-105mm-f4-7-1-is-stm/3380C133/"
+   ]
+  },
+  "08792f4cea3abf6a998c7740167ca6b1a8b2f0737321863476979c06980c0a6c": {
+   "modelo": "Canon Empuñadura de batería BG-R20",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D02b-r2.json",
+   "fuentes": [
+    "https://www.canon.es/store/canon-empunadura-bateria-bg-r20-de-canon/6762C001/ (Chrome headless)",
+    "https://www.canon.com.au/accessories-supplies/bg-r20 (Chrome headless)",
+    "https://asia.canon/en/consumer/battery-grip-bg-r20/main/product",
+    "https://www.canon.es/cameras/eos-r6-mark-iii/specifications/ (Chrome headless)",
+    "https://www.canon.es/cameras/eos-r5-mark-ii/specifications/ (Chrome headless)"
    ]
   },
   "f9c5300f3f7a6da19214f6f76064b9d3449f298b2d7ea50a4a3431e0c8db4f4d": {
@@ -339,6 +581,17 @@
     "https://global.canon/en/c-museum/product/rf495.html",
     "https://www.canon.es/lenses/rf-100-400-f5-6-8-is-usm/specifications/",
     "https://www.canon.es/lenses/rf-200-800mm-f6-3-9-is-usm/specifications/"
+   ]
+  },
+  "95b9f8971b2feb41bf81fb159727f6de71e76f2eb225dafad04155a53b55bffc": {
+   "modelo": "Canon Mount Adapter EF-EOS R",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D02b.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/eos-r-adapters/mount-adapter-ef-eos-r/ (Chrome headless)",
+    "https://www.canon.es/lenses/eos-r-adapters/ (Chrome headless)",
+    "https://www.canon.es/store/canon-adaptador-de-montura-ef-eos-r-de-canon/2971C005/ (Chrome headless)"
    ]
   },
   "1cbf6a2965e8e5d9fdbf0b23cf859786bb04ab27e7e399aed2228ae3ea71fab5": {
@@ -416,6 +669,17 @@
     "copia de trabajo-a-T01-2 (bajada hoy 13:24, canonical comprobado): https://global.canon/en/c-museum/product/rf509.html"
    ]
   },
+  "d3d16f2eea30b12c4a1595d4c999a73474f5f912fb10a4abb8e325e98fddd7d8": {
+   "modelo": "Canon RF 14mm F1.4 L VCM",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D02a.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-14mm-f1-4l-vcm/ (Chrome headless)",
+    "https://www.canon.es/lenses/rf-14mm-f1-4l-vcm/specifications/ (Chrome headless)",
+    "https://asia.canon/en/consumer/rf14mm-f-1-4l-vcm/specification (para contrastar)"
+   ]
+  },
   "7d2afc3a4ddb13474dca41cdaac9c537d5a95c8bfb4f72076c3ed944553961a6": {
    "modelo": "Canon RF 15-30mm F4.5-6.3 IS STM",
    "fecha": "2026-10-02",
@@ -476,6 +740,19 @@
    "fuentes": [
     "https://www.canon.es/lenses/rf-20mm-f1-4l-vcm/specifications/",
     "https://global.canon/en/c-museum/product/rf548.html"
+   ]
+  },
+  "a4858cfce9b8b70fb61fa7a3987a2064f5aa1e0449283d90e9633d6e329f6f4c": {
+   "modelo": "Canon RF 24-105mm F2.8 L IS USM Z",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D02a.json",
+   "fuentes": [
+    "https://www.canon.es/lenses/rf-24-105mm-f2-8l-is-usm-z/ (Chrome headless)",
+    "https://www.canon.es/lenses/rf-24-105mm-f2-8l-is-usm-z/specifications/ (Chrome headless)",
+    "https://asia.canon/en/consumer/rf24-105mm-f-2-8l-is-usm-z/specification",
+    "https://in.canon/en/campaign/rf-lens-world/the-advantages-of-rf-lenses/rf24-105mm-f-2-8l-is-usm-z",
+    "https://www.usa.canon.com/shop/p/rf24-105mm-f2-8-l-is-usm-z (Chrome headless, solo para contrastar)"
    ]
   },
   "d51886700447cfc24d8047def314cbf821547494e2eaa6e13769215fa57e240a": {
@@ -779,6 +1056,19 @@
     "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://faq.canon.jp/app/answers/detail/a_id/104930/"
    ]
   },
+  "831f9e63092bfa066364f8303b2a4db9d85fab2c97564f7766ad03962c4d4fa2": {
+   "modelo": "Canon Speedlite EL-5",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D02b-r2.json",
+   "fuentes": [
+    "https://www.canon.es/cameras/speedlite-flash-el-5/ (Chrome headless)",
+    "https://www.canon.es/cameras/speedlite-flash-el-5/specifications/ (Chrome headless)",
+    "https://www.canon.es/cameras/speedlite-flash-el-5-v2/ (Chrome headless)",
+    "https://www.canon.es/cameras/speedlite-flash-el-5-v2/specifications/ (Chrome headless)",
+    "https://www.canon.es/video-cameras/eos-c50/specifications/ (Chrome headless)"
+   ]
+  },
   "6fc67a41b0fe56a2bc485acdde185a81ebe325de138f88958f305a2286b5e996": {
    "modelo": "Canon VIXIA HF G70",
    "fecha": "2026-10-14",
@@ -787,6 +1077,49 @@
    "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://gdlp01.c-wss.com/gds/1/0300044581/03/hfg70-im4-n-en.pdf (págs. 3-4, 29, 35, 43, 58-60, 73-77, 131-134)"
+   ]
+  },
+  "4502af467281cfc300ffe4a39fad295d50cb3121768fa291751dfa55f7db09aa": {
+   "modelo": "Control inalámbrico DualSense (PS5)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D16a.json",
+   "fuentes": [
+    "https://www.playstation.com/es-ar/accessories/dualsense-wireless-controller/ (accionadores dobles, gatillos adaptativos 'en juegos de PS5 seleccionados', micrófono + 3,5 mm + botón silenciador, botón Crear con nota 3 internet y cuenta, batería integrada USB Type-C con nota 4 'Cable no incluido… cable USB incluido en la consola PS5', altavoz 'una selección de juegos', acelerómetro y giroscopio, PC/Mac/Android/iOS por USB-C o Bluetooth, nota 5 macOS 11.3/iOS 14.5/iPadOS 14.5/tvOS 14.5, nota 8 USB para háptica y gatillos en PC)",
+    "https://www.playstation.com/es-ar/accessories/dualsense-edge-wireless-controller/ (para descartar el Edge: trae cable trenzado incluido y no tiene estos colores)"
+   ]
+  },
+  "eeca159fb34e6cb2c54b5350879667ad25c25a8f0085fb9ec4e75488b114605a": {
+   "modelo": "Control inalámbrico DualSense (PS5) – ediciones especiales",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D16a.json",
+   "fuentes": [
+    "https://www.playstation.com/es-ar/accessories/dualsense-wireless-controller/ (Techno Red, Remix Green y Rhythm Blue 'Que sea HYPERPOP' entre los colores del DualSense; JSON-LD del video: 'HYPERPOP Collection… Striking DualSense® wireless controllers and PS5® console covers'; 'ASTRO BOT™ Joyful Edición Limitada' entre los 'Controles inalámbricos DualSense de edición limitada'; resto de la ficha, como en la entrada del DualSense común)",
+    "https://blog.playstation.com/?p=402444 (= blog.playstation.com/2025/03/06/first-look-at-the-dualsense-wireless-controller-the-last-of-us-limited-edition/: 'DualSense wireless controller – The Last of Us Limited Edition', 'trophy icons printed in black gloss', 'The Last of Us Part I and The Last of Us Part II')",
+    "https://blog.playstation.com/2024/07/29/first-look-astro-bot-limited-edition-dualsense-wireless-controller/ ('DualSense wireless controller – Astro Bot Limited Edition')",
+    "https://www.playstation.com/es-ar/accessories/dualsense-edge-wireless-controller/ (ninguna de estas ediciones está en la página del Edge)"
+   ]
+  },
+  "276c777038e23bf29424ea9ae1e4e78b5b3a16d3f6f38a0f81ad58a0d50a654f": {
+   "modelo": "Control inalámbrico Xbox (Series X|S)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D16a.json",
+   "fuentes": [
+    "https://www.xbox.com/es-AR/accessories/controllers/xbox-wireless-controller (tecnología inalámbrica de Xbox + Bluetooth a Windows 10/11, tabletas, iOS y Android; botón Compartir; pad direccional híbrido; agarre texturizado en gatillos, botones y funda trasera; 3,5 mm; 'Pilas AA para tener hasta 40 horas de autonomía' con la nota de pruebas de Microsoft; app Accesorios de Xbox, 'la app para Windows 10/11 requiere un cable USB-C compatible (se vende por separado)')",
+    "https://www.microsoft.com/en-us/d/xbox-wireless-controller-usb-c-cable/8t8kcnb1xs3d ('XBOX Wireless Controller + USB-C® Cable', 'Play wirelessly or use the included 9’ USB-C cable')",
+    "https://www.microsoft.com/en-gb/d/xbox-wireless-controller-usb-c-cable/8t8kcnb1xs3d ('included 2.7 m USB-C cable', 'Controller features a USB-C port', 'Testing conducted by Microsoft using standard AA batteries')"
+   ]
+  },
+  "769aee35e46467150ad289017a7e8b97af601eeab02a35430f1ad019e3d62f14": {
+   "modelo": "Control remoto Nikon ML-L7 (Bluetooth)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D04b.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/accessories/camera-accessories/bluetooth-remote-control-ml-l7-VAJ57201",
+    "https://www.nikonusa.com/p/ml-l7-bluetooth-remote-control/25952/overview"
    ]
   },
   "ec541b728910425db6de35dc4c1a7b0a882bb4cc69ead310e36657a842bdff96": {
@@ -799,6 +1132,30 @@
     "https://www.dji.com/mx/air-3s",
     "https://store.dji.com/es/product/dji-air-3s?set_region=ES",
     "https://store.dji.com/es/product/dji-air-3s-fly-more-combo-rc-2?set_region=ES"
+   ]
+  },
+  "d88b3be48ddc22a947e08d456415fcccfd09dc3d9c1c1c606f914667c98dc4ee": {
+   "modelo": "DJI Goggles 2",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D15-r3.json",
+   "fuentes": [
+    "https://www.dji.com/mx/support/product/goggles-2 (curl -b 'region=MX; lang=es'; __NEXT_DATA__: specs y FAQ)",
+    "https://store.dji.com/es/product/dji-goggles-2?set_region=ES (__PRELOADED_STATE__: structuredOverview, structedFaq, coreSellingPoints, inTheBoxes; FAQ del Mini 3 Pro embebida)",
+    "https://store.dji.com/product/dji-goggles-2?set_region=US (caja, compatibilidad y dioptrías: iguales que en /es)",
+    "https://terra-1-g.djicdn.com/6189933d30024fc1b331bffe4fe41837/avata-2/RN/DJI_Avata_2_Release_Notes_EN.pdf",
+    "https://www.dji.com/mx/avata-2/downloads (enlaza ese PDF)",
+    "https://www.dji.com/mx/support/product/avata-2 (FAQ: gafas y controles compatibles)",
+    "https://www.dji.com/mx/support/product/avata (FAQ sobre las Goggles 2)",
+    "https://www.dji.com/mx/support/product/dji-fpv",
+    "https://www.dji.com/mx/support/product/air-3",
+    "https://www.dji.com/mx/support/product/mini-4-pro",
+    "https://www.dji.com/mx/support/product/mini-3-pro",
+    "https://www.dji.com/mx/support/product/mavic-3-pro (FAQ: serie Mavic 3 con Goggles 2, Goggles Integra y RC Motion 2)",
+    "https://www.dji.com/mx/support/product/mavic-3-classic",
+    "https://www.dji.com/mx/support/product/mavic-3",
+    "https://www.dji.com/mx/support/product/o3-air-unit (DJI Goggles compatibles)",
+    "https://www.dji.com/mx/support/product/o4-air-unit (gafas y controles compatibles)"
    ]
   },
   "cbc2d1866eb280b93fefa51d78185db4d6dd5f255039e694af0dd6499472d782": {
@@ -877,6 +1234,18 @@
     "https://store.dji.com/uk/product/osmo-action-6?set_region=GB (misma caja del Standard Combo)"
    ]
   },
+  "cf4758800eac405cb998ae26320abfbee4cf4c70401bbe55d153ed9c962065b9": {
+   "modelo": "DJI Osmo Mobile 8P Pack para Creadores",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D15.json",
+   "fuentes": [
+    "https://www.dji.com/mx/osmo-mobile-8p (curl -b 'region=MX; lang=es'; textos y notas 1 a 17)",
+    "https://www.dji.com/mx/osmo-mobile-8p/specs (tech_specs)",
+    "https://store.dji.com/es/product/osmo-mobile-8p?set_region=ES (inTheBoxes de los dos packs para creadores)",
+    "https://store.dji.com/uk/product/osmo-mobile-8p?set_region=GB (nombres de los packs e inTheBoxes: iguales que en /es)"
+   ]
+  },
   "9b5ea23fad626a5262cd853a6f37fedee0526e2b55b152c3c06401b59047852e": {
    "modelo": "DJI Osmo Nano (64 GB y Standard Combo de 128 GB)",
    "fecha": "2026-10-13",
@@ -911,6 +1280,70 @@
     "https://www.dji.com/mx/osmo-pocket-4p",
     "https://store.dji.com/es/product/osmo-pocket-4p?set_region=ES",
     "https://store.dji.com/hk/product/osmo-pocket-4p?set_region=HK (el Pack Estándar también trae la luz de relleno)"
+   ]
+  },
+  "09b6aeae37b11c2c44223907c2ad8bf1a3dae43c6c7c04468ddc65d3c7450a66": {
+   "modelo": "DJI RC Motion 2",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D15-r3.json",
+   "fuentes": [
+    "https://www.dji.com/mx/rc-motion-2 (curl -b 'region=MX; lang=es'; textos v4.rm220.*, new-desc y note1)",
+    "https://www.dji.com/mx/rc-motion-2/specs",
+    "https://www.dji.com/mx/support/product/rc-motion-2 (specs y FAQ)",
+    "https://store.dji.com/es/product/dji-rc-motion-2?set_region=ES (Descripción General, Contenido del embalaje, Compatibilidad)",
+    "https://store.dji.com/product/dji-rc-motion-2?set_region=US (caja y compatibilidad: iguales que en /es)",
+    "https://www.dji.com/mx/support/product/avata-2 (FAQ: controles compatibles)",
+    "https://terra-1-g.djicdn.com/6189933d30024fc1b331bffe4fe41837/avata-2/RN/DJI_Avata_2_Release_Notes_EN.pdf",
+    "https://www.dji.com/mx/support/product/mavic-3-pro (FAQ: serie Mavic 3 con RC Motion 2)",
+    "https://www.dji.com/mx/support/product/avata",
+    "https://www.dji.com/mx/support/product/air-3",
+    "https://www.dji.com/mx/support/product/mini-4-pro",
+    "https://www.dji.com/mx/support/product/mini-3-pro",
+    "https://www.dji.com/mx/support/product/mavic-3-classic",
+    "https://www.dji.com/mx/support/product/mavic-3"
+   ]
+  },
+  "424fe91d571879921287d365819e177528a6ea48d91b2fc4414c42a95f6b6fe6": {
+   "modelo": "Dell 15 (DC15250) con Intel Core i7-1355U, 16 GB y 512 GB, Carbon Black",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D14a-r2.json",
+   "fuentes": [
+    "https://dl.dell.com/content/manual23417902-dell-15-dc15250-manual-del-propietario.pdf?language=es-mx (Rev. A07, agosto 2026; págs. 7-29: vistas, tablas 3 a 24)",
+    "https://www.dell.com/es-es/shop/port%C3%A1tiles-de-dell/port%C3%A1til-dell-15/spd/dell-dc15250-laptop (redirige a /es-es/shop/port%c3%a1tiles-de-dell/spd/dell15laptopdc15250; lista de especificaciones + JSON embebido de «Funciones» y notas al pie)",
+    "https://www.dell.com/en-us/shop/dell-laptops/dell-15-laptop/spd/dell-dc15250-laptop (redirige a /en-us/shop/dell-laptops/spd/dell15laptopdc15250; lista de especificaciones, configuraciones y notas al pie)"
+   ]
+  },
+  "4838327e909875195aa740cb1df85f3132f187efe24eeb467b986a7a54752ae2": {
+   "modelo": "Dell Pro 24 Plus (P2425H)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D14a.json",
+   "fuentes": [
+    "https://www.dell.com/en-ca/shop/dell-pro-24-plus-monitor-p2425h/apd/210-bmgh/monitors-monitor-accessories",
+    "https://www.dell.com/en-us/shop/dell-pro-24-plus-monitor-p2425h-without-stand/apd/210-bmgj/monitors-monitor-accessories"
+   ]
+  },
+  "046288961fffc3e372d4ca2c649c7909b887e145a3f85c4c15a5da821700ec12": {
+   "modelo": "Dell Pro 24 Plus con hub USB-C (P2425HE)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D14a.json",
+   "fuentes": [
+    "https://www.dell.com/en-au/shop/dell-pro-24-plus-usb-c-hub-monitor-p2425he/apd/210-bmmv/monitors-monitor-accessories",
+    "https://www.dell.com/en-us/shop/dell-pro-24-plus-usb-c-hub-monitor-p2425he-without-stand/apd/210-bmkn/monitors-monitor-accessories (redirige a /en-us/shop/monitors/apd/dell-pro-24-plus-usbc-hub-monitor-p2425he-without-stand/p2425he_withoutstand/-)"
+   ]
+  },
+  "03406566ebff496d78f8d805e6b7d491a1780a37d39ff3d4e5d29db6e3b169d3": {
+   "modelo": "Dell Pro 27 Plus (P2725H)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D14a-r2.json",
+   "fuentes": [
+    "https://www.dell.com/en-ca/shop/dell-pro-27-plus-monitor-p2725h/apd/210-bmfj/monitors-monitor-accessories",
+    "https://www.dell.com/en-us/shop/dell-pro-27-plus-monitor-p2725h/apd/210-bmfj/monitors-monitor-accessories",
+    "https://www.dell.com/en-us/shop/p/APD/210-BMGW/ (título «Dell Pro 27 Plus Monitor - P2725H without stand», Dell part 210-BMGW; abre la ficha sin redirigir)"
    ]
   },
   "05931f4d058a1937ea0e9fbc010b280dd539499c09d1644b55080fe563b24330": {
@@ -1033,6 +1466,49 @@
     "https://www.fujifilm.com/ar/es/consumer/instax/cameras/mini12"
    ]
   },
+  "21831a07c230d95434b090d5f84c924e5589009f7f6d3a18a9cebea8295d0ef0": {
+   "modelo": "Fujifilm X-T5 kit XF16-50mmF2.8-4.8 R LM WR",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D05-r2.json",
+   "fuentes": [
+    "https://www.fujifilm-x.com/es-es/products/cameras/x-t5/specifications/",
+    "https://www.fujifilm-x.com/es-es/products/cameras/x-t5/",
+    "https://eshop.fujifilm-x.com/es/fujifilm-x-t5-kit-xf16-50mmf2-8-4-8-r-lm-wr.html",
+    "https://eshop.fujifilm-x.com/uk/fujifilm-x-t5-kit-xf16-50mmf2-8-4-8-r-lm-wr.html",
+    "https://www.fujifilm-x.com/es-es/products/lenses/xf16-50mmf28-48-r-lm-wr/specifications/",
+    "https://www.fujifilm-x.com/es-es/products/lenses/xf16-50mmf28-48-r-lm-wr/",
+    "https://www.fujifilm-x.com/global/products/cameras/"
+   ]
+  },
+  "4c54c40991a10fc84927c762d1f5d36681d6feb809ae8793285de0bb52fbb546": {
+   "modelo": "Fujifilm X-T50 kit XF16-50mmF2.8-4.8 R LM WR",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D05-r2.json",
+   "fuentes": [
+    "https://www.fujifilm-x.com/es-es/products/cameras/x-t50/specifications/",
+    "https://www.fujifilm-x.com/es-es/products/cameras/x-t50/",
+    "https://eshop.fujifilm-x.com/es/fujifilm-x-t50-kit-xf16-50mmf2-8-4-8-r-lm-wr.html",
+    "https://eshop.fujifilm-x.com/uk/fujifilm-x-t50-kit-xf16-50mmf2-8-4-8-r-lm-wr.html",
+    "https://www.fujifilm-x.com/es-es/products/lenses/xf16-50mmf28-48-r-lm-wr/specifications/",
+    "https://www.fujifilm-x.com/es-es/products/lenses/xf16-50mmf28-48-r-lm-wr/",
+    "https://www.fujifilm-x.com/global/products/cameras/",
+    "https://www.fujifilm-x.com/global/products/cameras/x-t50-ii/ (404)"
+   ]
+  },
+  "d5dec18e5ab1e28d24c132f12426d66ebfefe5588e928c2f7d216b66ad9cf389": {
+   "modelo": "Galaxy A07 (4G o 5G: sólo datos comunes)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D10-r2.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a07-black-128gb-sm-a075mzkwaro/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-A075MZKWARO&specAnnotationYN=Y",
+    "https://www.samsung.com/in/smartphones/galaxy-a/galaxy-a07-5g-black-128gb-sm-a076bzkbins/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=in&modelList=SM-A076BZKBINS&specAnnotationYN=Y"
+   ]
+  },
   "0d8a4359877b7442a0fd5befaf269c61fd685d2b0a3fdb2fa23048992b0fe4f5": {
    "modelo": "Galaxy A16 4G",
    "fecha": "2026-10-14",
@@ -1079,14 +1555,20 @@
     "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=latin&modelList=SM-A366ELGBGTO&specAnnotationYN=Y"
    ]
   },
-  "470e2c656d073266f33f5516fd7eef89f8357a0931766f41f1b0fc3d7bd0fb2d": {
+  "fa23b85f782ecd0897c4621f3907bd57ad89398f10d7ce36065b773d09f18f05": {
    "modelo": "Galaxy A37 5G",
-   "fecha": "2026-10-14",
-   "por": "prueba-mecanica",
-   "desde": "e9dee9a7f541ee57bca92b0143c0698bd91b87a2cbbf92490cfd735963f16f70",
-   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D10a.json",
    "fuentes": [
-    "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a37-5g-awesome-charcoal-256gb-sm-a376bzafaro/"
+    "https://www.samsung.com/ar/smartphones/galaxy-a/galaxy-a37-5g-awesome-charcoal-256gb-sm-a376bzafaro/ (8 GB; «La memoria LPDDR5X mejorada»; Gorilla Glass Victus+ adelante y atrás; IP68 1,5 m 30 min; 60 % en 30 minutos; One UI 8.5)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-A376BZAFARO&specAnnotationYN=Y (Memory 8, Storage 256)",
+    "https://www.samsung.com/levant/smartphones/galaxy-a/galaxy-a37-5g-awesome-charcoal-256gb-sm-a376bzawmea/ (12GB RAM; «The upgraded LPDDR5X memory»; «four storage options: 256 GB with 12 GB of memory and 256 GB or 128 GB with 8 GB memory and 128 GB with 6 GB memory»; 6.7\"/6.5\"; 2 días; 60% en 30 min; IP68; 6x OS + 6 años; One UI 8.5)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=levant&modelList=SM-A376BZAWMEA&specAnnotationYN=Y (Memory 12, Storage 256; resto igual al argentino)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=levant&modelList=SM-A376BZAVMEA&specAnnotationYN=Y (Levante 8/256: igual al de 12 salvo la memoria)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=in&modelList=SM-A376EZAHINS&specAnnotationYN=Y (India 12/256 SM-A376E: mismos datos que la entrada)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=hk_en&modelList=SM-A3760ZAGTGY&specAnnotationYN=Y (Hong Kong 8/256 SM-A3760: mismos datos)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=ar, https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=levant, https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=in, https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=es, https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=uk, https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=mx, https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=br, https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=vn, https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=ph, https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=ae, https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=hk_en, https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=tw"
    ]
   },
   "4f50815bca2fbc34e6b007cac78a3211e2c97a28a85950f3f521cfd5aaaeba43": {
@@ -1113,6 +1595,19 @@
     "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-A576BLBNARO&specAnnotationYN=Y",
     "https://www.samsung.com/cl/smartphones/galaxy-a/galaxy-a57-5g-awesome-navy-128gb-sm-a576bdbeltl/",
     "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=cl&modelList=SM-A576BDBELTL&specAnnotationYN=Y"
+   ]
+  },
+  "7d62e1e168dfea7be6f6b16996997e1fe3e8035ccfb64dc8bf132cbce647fb36": {
+   "modelo": "Galaxy S25",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D10b.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/smartphones/galaxy-s25/specs/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S931BLGMARO&specAnnotationYN=Y",
+    "https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=ar&start=1&num=100&sort=newest&onlyFilterInfoYN=N&keySummaryYN=Y",
+    "https://www.samsung.com/ar/smartphones/galaxy-s25/",
+    "https://news.samsung.com/global/samsung-galaxy-s25-series-sets-the-standard-of-ai-phone-as-a-true-ai-companion"
    ]
   },
   "2a855f356c92c1d8ad25ccb9c67aeee5d51e5f14a615548da76ef20c9556df62": {
@@ -1178,18 +1673,19 @@
     "https://www.samsung.com/hk_en/smartphones/galaxy-s26/"
    ]
   },
-  "2d2ee828a2633be6929c428ae257109ec6d301bb98584a8eb21ced84a4749d32": {
+  "bee34210a4a45a85aefc2e09f43c0080f8392c752e3ecd9a873adccd75c7117c": {
    "modelo": "Galaxy S26 Ultra",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-02.json",
+   "informe": "informe-D10a.json",
    "fuentes": [
     "https://www.samsung.com/ar/smartphones/galaxy-s26-ultra/specs/",
-    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S948BZVLARO&specAnnotationYN=Y",
-    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S948BZVMARO&specAnnotationYN=Y",
-    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S948BZVVARO&specAnnotationYN=Y",
-    "https://www.samsung.com/ar/smartphones/galaxy-s26-ultra/",
-    "https://news.samsung.com/global/samsung-unveils-galaxy-s26-series-the-most-intuitive-galaxy-ai-phone-yet"
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S948BZVMARO&specAnnotationYN=Y (512GB: Memoria 12, Almacenamiento 512)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-S948BZKLARO&specAnnotationYN=Y (256GB; comparada con la de 512GB: sólo cambia el almacenamiento)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-S948BLBMLTM&specAnnotationYN=Y (Sky Blue 512GB oficial: Memoria 12, 214 g, 5000 mAh)",
+    "https://www.samsung.com/ar/smartphones/galaxy-s26-ultra/ («el aumento de potencia de 45 W a 60 W te permite cargar tu dispositivo hasta un 75% en unos 30 minutos»)",
+    "https://news.samsung.com/global/samsung-unveils-galaxy-s26-series-the-most-intuitive-galaxy-ai-phone-yet («16GB + 1TB / 12 + 512GB / 12 + 256GB»)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=ar / https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=mx / https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=br"
    ]
   },
   "ba0057a7050546337a1294c587896534a802bb64a668f015be79fa3fdd7d0c77": {
@@ -1280,45 +1776,57 @@
     "https://news.samsung.com/global/meet-samsung-galaxy-tab-s11-series-packing-everything-you-expect-from-a-premium-tablet"
    ]
   },
-  "6176a49a922116ac32d986da6bfd4e7f419e5d740c4f8b50904b3bc50f6a2e0b": {
+  "0f1e73683a6a37d015997fe973ec339348af94f28ae051cb54feabadd21b9a9e": {
+   "modelo": "Galaxy Tab S12+ Wi-Fi 12GB/256GB",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D10-r2.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/tablets/galaxy-tab-s/galaxy-tab-s12-plus-gray-256gb-sm-x840nzadarn/ («El adaptador de viaje de 45 W se vende por separado»; «El cargador del dispositivo no está incluido»)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=SM-X840NZADARN&specAnnotationYN=Y («Power Required for Charging (Min ~ Max, W): 20 | 45»)",
+    "https://news.samsung.com/co/samsung-presenta-la-serie-galaxy-tab-s12-la-maxima-potencia-para-la-productividad-disenada-para-impulsar-el-crecimiento («0 % a 100 % en aproximadamente 95 minutos con el adaptador de 45 W»; «10.600 mAh / 45W»)"
+   ]
+  },
+  "927c3f88840e20a725ddad69522c2019a2fa81e12b51c27fca9c5882de2a9ca9": {
    "modelo": "Galaxy Z Flip8",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-01.json",
+   "informe": "informe-D10-r2.json",
    "fuentes": [
+    "https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living («Up to 55% charge in around 30 min. with 25W Adapter and 3A USB-C cable»; «25W power adapter sold separately»; Bluetooth v5.4)",
+    "https://www.samsung.com/mx/smartphones/galaxy-z-flip8/ (no nombra potencia ni porcentaje de carga; 2600 nits; Armor Aluminum; Gorilla Glass Victus 2 al frente; hasta 7 generaciones)",
     "https://www.samsung.com/mx/smartphones/galaxy-z-flip8/specs/",
-    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F776BLIKLTM&specAnnotationYN=Y (API pública de la misma página de specs; la tabla se arma con JavaScript)",
-    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F776BZKKLTM&specAnnotationYN=Y",
-    "https://www.samsung.com/mx/smartphones/galaxy-z-flip8/",
-    "https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living",
-    "https://www.samsung.com/hk_en/smartphones/galaxy-z-flip8/",
-    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=hk_en&modelList=SM-F7760LIPTGY&specAnnotationYN=Y (control: Octa-core 4,74 GHz = Snapdragon)"
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F776BLIJLTM&specAnnotationYN=Y (256GB; sin dato de potencia de carga)",
+    "https://www.samsung.com/hk_en/smartphones/galaxy-z-flip8/ (Snapdragon 8 Elite Gen 5 for Galaxy; no nombra potencia de carga)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=hk_en&modelList=SM-F7760ZKOTGY&specAnnotationYN=Y (descarga de trabajo-v-D10a: 4.74GHz/3.6GHz, Memory 12, Storage 256)"
    ]
   },
-  "2528194a307f2afec62d1d404e7f9846d7abd4fb49f0cb24a36012b71607f979": {
+  "b7aaffbb19ec39523773ce48787e42cea53bd778d636964b65b9d9a6baf0d1da": {
    "modelo": "Galaxy Z Fold8",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-02.json",
+   "informe": "informe-D10a.json",
    "fuentes": [
-    "https://www.samsung.com/mx/smartphones/galaxy-z-fold8/specs/",
-    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F971BLVLLTM&specAnnotationYN=Y",
-    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F971BLVMLTM&specAnnotationYN=Y",
-    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F971BLVVLTM&specAnnotationYN=Y",
+    "https://www.samsung.com/mx/smartphones/galaxy-z-fold8/specs/ (pestañas: SM-F971BLVLLTM = «(256GB)», SM-F971BLVMLTM = «(512GB)», SM-F971BLVVLTM = «(1TB)»)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F971BLVLLTM&specAnnotationYN=Y (256GB: Memoria 12)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F971BLVMLTM&specAnnotationYN=Y (512GB: Memoria 12, Almacenamiento 512; comparada campo por campo con la de 256GB: sólo cambian «Almacenamiento» y «Almacenamiento disponible»)",
     "https://www.samsung.com/mx/smartphones/galaxy-z-fold8/",
-    "https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living"
+    "https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living («12 GB Memory with 512 GB internal storage»; carga «Up to 63% ... with 45W Adapter»)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=mx / https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=uk / https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=br"
    ]
   },
-  "03cbab9404f927a528642bbe8ab8d58b2a36293f314ed7836b442a31a8141f13": {
+  "f153c2a3855cab102f2f508351abd9da1e1ba2674c4948158038aa596a7e8600": {
    "modelo": "Galaxy Z Fold8 Ultra",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-03.json",
+   "informe": "informe-D10a.json",
    "fuentes": [
-    "https://www.samsung.com/mx/smartphones/galaxy-z-fold8-ultra/specs/",
-    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F976BZVLLTM&specAnnotationYN=Y (API de la misma página de specs)",
+    "https://www.samsung.com/mx/smartphones/galaxy-z-fold8-ultra/specs/ (pestañas: SM-F976BZVLLTM = «(256GB)», SM-F976BZVMLTM = «(512GB)», SM-F976BZVVLTM = «(1TB)»)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F976BZVLLTM&specAnnotationYN=Y (256GB: Memoria 12, Almacenamiento 256)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=mx&modelList=SM-F976BZVMLTM&specAnnotationYN=Y (512GB: Memoria 12, Almacenamiento 512; comparada campo por campo con la de 256GB: sólo cambian «Almacenamiento» y «Almacenamiento disponible»)",
     "https://www.samsung.com/mx/smartphones/galaxy-z-fold8-ultra/",
-    "https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living"
+    "https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living («12 GB Memory with 512 GB internal storage»; «with 45W fast charging»)",
+    "https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=mx y https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=uk / https://searchapi.samsung.com/v6/front/b2c/product/finder/global?type=01010000&siteCode=br (sólo existe «Galaxy Z Fold8 Ultra» SM-F976B; colores Graphite, Cream, Violet Shadow, Green Shadow)"
    ]
   },
   "46db39ad7fe88e8a8318316584d51c0be7c6055f996bbe2f195e9e4884804acc": {
@@ -1387,6 +1895,18 @@
     "https://gopro.com/en/us/shop/cameras/buy/hero13black/CHDHX-131-master.html (caja de la cámara sola, para ver que no cambia por país)"
    ]
   },
+  "3dc6a76d0620c49862fd2bd6f64a429046c2a71441becdaadab3f98fbe552df1": {
+   "modelo": "Hélices DJI Mini 4 Pro/Mini 3 Pro",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D15.json",
+   "fuentes": [
+    "https://store.dji.com/es/product/dji-mini-3-pro-propellers?set_region=ES (Descripción General, Consejos, Contenido, Especificaciones, Compatibilidad)",
+    "https://store.dji.com/product/dji-mini-3-pro-propellers?set_region=US («Diameter × Thread Pitch: 6.0 × 3.0 inch»: «paso» está bien)",
+    "https://www.dji.com/mx/support/product/mini-3-pro (FAQ: tornillos, sin liberación rápida, con marca y sin marca, cambiar el par)",
+    "https://store.dji.com/es/product/dji-mini-3-propellers?set_region=ES (compatibles con Mini 3 y Lito)"
+   ]
+  },
   "331b6ed742d836d0b03282ee22c06db2531f6362049baceaf31dfd2dab5ab0e4": {
    "modelo": "Insta360 X5 (pack del proveedor: palo selfie, 2 baterías y tapa de lente)",
    "fecha": "2026-10-14",
@@ -1396,6 +1916,30 @@
    "fuentes": [
     "https://www.insta360.com/es/product/insta360-x5 (Chrome headless; tabla de especificaciones completa y «Efecto selfie stick invisible»: el aviso de venta 2 quedó bien aplicado)",
     "https://store.insta360.com/es/product/x5 (Chrome headless; ningún paquete se llama como la fila: queda bien como dato del proveedor)"
+   ]
+  },
+  "302ded206ef4a9e597b3ac013c542852b488be2e5d55cfe0b44e4f2da31bfefe": {
+   "modelo": "Insta360 X5 Paquete básico (Essentials Bundle)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D15.json",
+   "fuentes": [
+    "https://www.insta360.com/es/product/insta360-x5 (Chrome headless; página y tabla de especificaciones)",
+    "https://store.insta360.com/es/product/x5 (Chrome headless; «Paquete básico: Incluye 1x Insta360 X5, 1x Selfie stick invisible de 114 cm, 1x Estuche de carga rápida, 1x Protectores de lente estándar, 2x Baterías, 1x Capuchón de lente y 1x Estuche de transporte»)",
+    "https://store.insta360.com/gb/product/x5 (Chrome headless; «Essentials Bundle», mismo contenido)",
+    "https://store.insta360.com/mx/product/x5 (Chrome headless; «Paquete básico», mismo contenido)"
+   ]
+  },
+  "9ad98988ed2a218721b543485289cf7a81ec4d04826e266f6614415790a11f4f": {
+   "modelo": "JBL Charge 6",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D17-r2.json",
+   "fuentes": [
+    "https://www.jbl.com.ar/parlantes-portatiles-bluetooth/CHARGE-6.html",
+    "https://www.jbl.com.ar/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw89f61e22/pdfs/JBL_Charge_6_Specsheet_EN.pdf",
+    "https://www.jbl.com.ar/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw4c23e974/pdfs/JBL_Charge_6_Specsheet_ES.pdf",
+    "https://www.jbl.com.sg/bluetooth-portables/JBLCHARGE6SQUAD.html"
    ]
   },
   "842ffa297908cf376c2e5c668b9e286b46e43110c163e24f75090437b14280e0": {
@@ -1468,11 +2012,129 @@
     "https://us.kieslect.com/cdn/shop/files/kieslect-Elfin-woman-smartwatch_1.jpg … _9.jpg (galería de la tienda oficial de EE. UU., leída en la pasada anterior de hoy)"
    ]
   },
-  "949acf0af2451a41eb9a4f0456907e0543b468321bf1abc9f95645ffe0b5305b": {
-   "modelo": "MacBook Air 13\" con chip M5 (13,6\")",
-   "fecha": "2026-10-01",
+  "f40c4dbd4426d5067ea58227a4520db776a8a46f2e2ff3f9f09385c4ed1ba821": {
+   "modelo": "Kindle (11.ª generación, 2024) 16 GB",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-07.json",
+   "informe": "informe-D17.json",
+   "fuentes": [
+    "https://www.amazon.com/dp/B0CNV9F72P",
+    "https://www.amazon.com/-/es/dp/B0CNV9F72P"
+   ]
+  },
+  "f735dedf5cfbd01a78503549b472221708da1de02872f6eb1e810fa7dbab2846": {
+   "modelo": "Kindle Paperwhite (12.ª generación, 2024) 16 GB",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D17.json",
+   "fuentes": [
+    "https://www.amazon.com/dp/B0CFPJYX7P",
+    "https://www.amazon.com/-/es/dp/B0CFPJYX7P"
+   ]
+  },
+  "8b9c95dd2ac2a1c115db9f12c50c952283a9402a022946bc4bb65993842d04bf": {
+   "modelo": "Logitech G29 Driving Force (PS5, PS4 y PC)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D16a.json",
+   "fuentes": [
+    "https://www.logitechg.com/es-ar/shop/p/driving-force-racing-wheel ('Los G29 son para PS5, PS4, PS3 y PC'; force feedback de dos motores con derrapadas, subvirajes, sobrevirajes y terreno; cojinetes de acero; engranajes helicoidales antiholgura y sensor de efecto hall; controles montados en el volante con LED de cambio, dial de 24 puntos y botones +/-; 900° = dos giros y medio; acelerador, freno y clutch; freno no lineal y talón-puntera; pies de goma y sistema antideslizante retráctil patentado; requisitos G29: PlayStation 5/4/3, puerto USB con alimentación, Windows 11/10/8.1/8/7; inRiverTechSpecs: sobrecalentamiento, calibración automática, materiales con palancas y superficies de pedales de acero inoxidable bruñido; medidas y pesos; caja con adaptador de alimentación y la aclaración de la ficha argentina)",
+    "https://www.logitechg.com/en-us/shop/p/driving-force-racing-wheel ('Hall-effect steering sensor', 'Patented carpet grip system', 'Pedal faces: Brushed stainless steel', 'Wheel-Mounted Controls… D-Pad… LED indicator lights… 24-point selection dial and the +/- buttons')"
+   ]
+  },
+  "348fa8fab2429f3c2e4b58675d718f30032a8d4c2a115acb4faecb2c2ea94ae5": {
+   "modelo": "Logitech G923 TRUEFORCE (versión Xbox / PC)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D16a.json",
+   "fuentes": [
+    "https://www.logitechg.com/es-ar/shop/p/g923-trueforce-sim-racing-wheel (variante 941-000157 'XBOX Series X|S /XBOX One/PC' con subtítulo '2.3 Nm con el Sistema TRUEFORCE Racing'; 'CONTROLES DE JUEGO EN EL VOLANTE: Todos los controles completos de Xbox Series X|S, Xbox One, PS5 o PS4'; bucle cerrado; pedal de freno progresivo y talón-puntera; G HUB; requisitos Xbox y PC (Windows 11 o 10, 150 MB, USB 2.0); especificaciones del volante y pedales; materiales; medidas y pesos sin cables; caja con fuente de alimentación y la aclaración de la ficha normalizada argentina)",
+    "https://www.logitechg.com/en-us/shop/p/g923-trueforce-sim-racing-wheel ('Hall-effect steering sensor', 'Patented carpet grip system', 'Self-calibrating', mismas medidas y pesos, 'ON-WHEEL GAME CONTROLS')"
+   ]
+  },
+  "613996b7accee0128dd2e82db09aaa48e4bfee934de3505dfb571b413ac02d93": {
+   "modelo": "MSI MAG 272F",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D14b.json",
+   "fuentes": [
+    "https://latam.msi.com/Monitor/MAG-272F (Chrome headless)",
+    "https://latam.msi.com/Monitor/MAG-272F/Specification (Chrome headless)",
+    "https://www.msi.com/Monitor/MAG-272F/Specification (Chrome headless)",
+    "https://storage-asset.msi.com/specSheet/latam/monitor/MAG%20272F.pdf",
+    "https://storage-asset.msi.com/datasheet/monitor/es/MAG-272F.pdf",
+    "https://storage-asset.msi.com/global/picture/image/feature/monitor/MAG/mag-272f/io/msi-mag272f-connectivity.png",
+    "https://www.msi.com/Monitor/MAG-272F/support (Chrome headless)",
+    "https://download.msi.com/archive/mnu_exe/monitor/MAG242F_272Fv1.0_Spanish.pdf"
+   ]
+  },
+  "ac11042ab7463672d4136227bb9a2d3adcb20154f8b328c28cfd2a455dc9f532": {
+   "modelo": "MSI MAG 274QF X24",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D14b.json",
+   "fuentes": [
+    "https://latam.msi.com/Monitor/MAG-274QF-X24 (Chrome headless)",
+    "https://latam.msi.com/Monitor/MAG-274QF-X24/Specification (Chrome headless)",
+    "https://www.msi.com/Monitor/MAG-274QF-X24/Specification (Chrome headless)",
+    "https://storage-asset.msi.com/specSheet/latam/monitor/MAG%20274QF%20X24.pdf"
+   ]
+  },
+  "170a8ed77cec5e57e0c7f57e3371b2f8c3a42261bb1047fdd9610457f27a26b1": {
+   "modelo": "MSI MAG 276CXF",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D14b.json",
+   "fuentes": [
+    "https://latam.msi.com/Monitor/MAG-276CXF (Chrome headless)",
+    "https://latam.msi.com/Monitor/MAG-276CXF/Specification (Chrome headless)",
+    "https://www.msi.com/Monitor/MAG-276CXF/Specification (Chrome headless)",
+    "https://storage-asset.msi.com/specSheet/latam/monitor/MAG%20276CXF.pdf"
+   ]
+  },
+  "d2921b7985c6ed51ef8bc537d65e9d9e2ab07673a20e4a21cc5fe7cf8c84fa58": {
+   "modelo": "Mac mini con chip M4 (2024), 16GB/256GB y 16GB/512GB",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D06a-r2.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/121555"
+   ]
+  },
+  "08110f5c610f39033e06889a9a566dab1910520cfa5df1eed8becc6ccaffde09": {
+   "modelo": "Mac mini con chip M4 Pro (2024), 24GB/512GB",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D06a-r2.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/121555"
+   ]
+  },
+  "b0f166138dac4a34b09de5f5737114d2ba2f434e251f4c86d48a01c0709ebb1f": {
+   "modelo": "Mac mini con chip M5 Pro (2026), 24GB/512GB",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D06a-r2.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/128108",
+    "https://www.apple.com/la/mac-mini/specs/"
+   ]
+  },
+  "ac04ee4a5f4a99336099a6c2b886c4d4d845a80f45f6da86732c05dde9e228fe": {
+   "modelo": "Mac mini con chip M6 (2026), 16GB/256GB y 16GB/512GB",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D06a-r2.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/128108",
+    "https://www.apple.com/la/mac-mini/specs/"
+   ]
+  },
+  "01a594a6bef36b344dbb875755ddaada1c533053a8fd354a60438dda3ac74b39": {
+   "modelo": "MacBook Air 13\" con chip M5 (13,6\")",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D06b.json",
    "fuentes": [
     "https://support.apple.com/es-la/126320",
     "https://www.apple.com/la/macbook-air/specs/"
@@ -1578,6 +2240,144 @@
    "fuentes": [
     "https://support.apple.com/es-la/126319",
     "https://support.apple.com/es-es/126319"
+   ]
+  },
+  "125c3fba49d649e21293b6a797142e46713003cfba687956b60d9e72ca6bb4d2": {
+   "modelo": "Magic Keyboard Folio para iPad (10.ª generación y A16)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D08.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/111845",
+    "https://support.apple.com/en-us/111845",
+    "https://support.apple.com/en-us/docs/ipad/300900",
+    "https://support.apple.com/en-us/docs/ipad",
+    "https://www.apple.com/mx/shop/product/MQDP3LA/A (redirige a «Magic Keyboard Folio para el iPad (A16) - Español (Latinoamérica)», compatibilidad iPad (A16) e iPad (10.ª generación))"
+   ]
+  },
+  "11bdf7c574af0dc5aa249665b9b8dd24df96fc2aedec714636cf86a5c47a299b": {
+   "modelo": "Magic Keyboard con Touch ID y teclado numérico (Lightning o USB-C)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D09.json",
+   "fuentes": [
+    "https://support.apple.com/es-lamr/121953",
+    "https://support.apple.com/en-us/docs/accessories/pp157",
+    "https://cdsassets.apple.com/live/6GJYWVAV/user/ma2009_magic-keyboard-touchid-numeric-keypad-ug.pdf",
+    "https://support.apple.com/es-lamr/guide/security/secf60513daa/web",
+    "https://support.apple.com/es-lamr/102292",
+    "https://support.apple.com/es-lamr/119917"
+   ]
+  },
+  "e8f3ca23bd11a6b7878b487f62f5e0abefa150c77d1805498e98ba9ae3f58e91": {
+   "modelo": "Magic Keyboard para iPad 11\" (iPad Pro 11\" M2)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D08.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/111910",
+    "https://support.apple.com/en-us/111910",
+    "https://support.apple.com/en-us/docs/ipad/300173",
+    "https://support.apple.com/en-us/docs/ipad/300345",
+    "https://support.apple.com/en-us/docs/ipad",
+    "https://www.apple.com/shop/product/MXQT2LL/A",
+    "https://www.apple.com/shop/product/MJQJ3LL/A"
+   ]
+  },
+  "a91f81be45f06d2d4ecec40aea8cfaa3505269a40aab4d4808cfc5e19cb5531c": {
+   "modelo": "Magic Keyboard para iPad Air 11\" (M3/M4)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D08.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/122272",
+    "https://support.apple.com/en-us/122272",
+    "https://support.apple.com/en-us/docs/ipad/301077",
+    "https://support.apple.com/en-us/docs/ipad/301275",
+    "https://support.apple.com/en-us/docs/ipad",
+    "https://www.apple.com/mx/shop/product/MDFV4LA/A (redirige a «Magic Keyboard para el iPad Air de 11 pulgadas (M4) – Español (América Latina) – Blanco», compatibilidad Air 11\" M4, M3, M2, 5.ª y 4.ª gen.)"
+   ]
+  },
+  "e4660d39f9f71e258e4e1b922cb315176a874be0e74ae1bf71aa537045ec218d": {
+   "modelo": "Magic Keyboard para iPad Air 13\" (M3/M4)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D08.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/122273",
+    "https://support.apple.com/en-us/122273",
+    "https://support.apple.com/en-us/docs/ipad/301078",
+    "https://support.apple.com/en-us/docs/ipad/301276",
+    "https://support.apple.com/en-us/docs/ipad",
+    "https://www.apple.com/mx/shop/product/MGYY4LA/A (redirige a «Magic Keyboard para el iPad Air de 13 pulgadas (M4) – Español (América Latina) – Negro», compatibilidad Air 13\" M4, M3 y M2)"
+   ]
+  },
+  "bdd9eb8aa2b08bd7c63cbed07226570756f813c05557846357da4930a712f99a": {
+   "modelo": "Magic Keyboard para iPad Pro 11\" (M4 y M5)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D08.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/120125",
+    "https://support.apple.com/en-us/120125",
+    "https://support.apple.com/en-us/docs/ipad/301036",
+    "https://support.apple.com/en-us/docs/ipad",
+    "https://www.apple.com/mx/shop/product/MWR03LA/A (redirige a «Magic Keyboard para el iPad Pro de 11 pulgadas (M5) - Español (América Latina) - Blanco», compatibilidad M5 y M4)"
+   ]
+  },
+  "2b42bf3301441a9425a7a9266103b6ee245077390c31428e1fe31666742d348e": {
+   "modelo": "Magic Keyboard para iPad Pro 12,9\" (2021)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D08.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/111937",
+    "https://support.apple.com/en-us/111937",
+    "https://support.apple.com/en-us/docs/ipad/300344",
+    "https://support.apple.com/es-la/111936",
+    "https://support.apple.com/en-us/docs/ipad/300174",
+    "https://support.apple.com/en-us/docs/ipad",
+    "https://www.apple.com/mx/shop/product/MJQL3E/A",
+    "https://www.apple.com/shop/product/MJQL3LL/A",
+    "https://www.apple.com/shop/product/MJQK3LL/A",
+    "https://www.apple.com/shop/product/MXQU2LL/A"
+   ]
+  },
+  "36e3ecb5c344b5996ea49d1d8c7f0eac43fb47d60fd49384bd7b6dd8a2c64abb": {
+   "modelo": "Magic Keyboard para iPad Pro 13\" (M4 y M5)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D08.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/120136",
+    "https://support.apple.com/en-us/120136",
+    "https://support.apple.com/en-us/docs/ipad/301037",
+    "https://support.apple.com/en-us/docs/ipad",
+    "https://www.apple.com/mx/shop/product/MWR53LA/A (redirige a «Magic Keyboard para el iPad Pro de 13 pulgadas (M5) - Español (América Latina) - Negro», compatibilidad M5 y M4)"
+   ]
+  },
+  "b5d7714bd78465ca09fbaf5a136f9c8b1df40f6d02477fec9078614c37939f0f": {
+   "modelo": "Magic Mouse (Lightning o USB-C)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D09.json",
+   "fuentes": [
+    "https://support.apple.com/es-lamr/121931",
+    "https://support.apple.com/es-lamr/111885",
+    "https://support.apple.com/es-lamr/102292",
+    "https://support.apple.com/es-lamr/119917"
+   ]
+  },
+  "d29744b012dd534b36cb3e87772777ece21cc7bf543ab63f60478e801b4738e9": {
+   "modelo": "Magic Trackpad (Lightning o USB-C)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D09.json",
+   "fuentes": [
+    "https://support.apple.com/es-lamr/121932",
+    "https://support.apple.com/es-lamr/111884",
+    "https://support.apple.com/es-lamr/102292",
+    "https://support.apple.com/es-lamr/119917"
    ]
   },
   "16e31d3597ec5658d6e08dc3dae0d664a62b3da84223aaf2ba32235fc6e3f731": {
@@ -1710,6 +2510,17 @@
     "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-180-600mm-f5.6-6.3-vr (JSON embebido con la ficha completa)",
     "https://www.nikon.com.ar/lentes/mirrorless/nikkor-z-180-600mm-f56-63-vr",
     "https://www.nikonusa.com/p/nikkor-z-180-600mm-f56-63-vr/20117/overview (cruce)"
+   ]
+  },
+  "170e0058a9f0d2569b0b28a6faa1ca316783cf6eeaa1b941a52f9ebcf71ec6e2": {
+   "modelo": "Nikon NIKKOR Z 20mm f/1.8 S",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D04a.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/z_20mmf18s/",
+    "https://www.nikon.es/es_ES/product/lenses/mirrorless/nikkor-z-20mm-f1.8-s",
+    "https://imaging.nikon.com/imaging/lineup/lens/z-mount/"
    ]
   },
   "dc14d17ce347a0e7d98f493a2241ad6c468f26421b3b5625f01b6fd7df01f858": {
@@ -2070,6 +2881,17 @@
     "https://onlinemanual.nikonimglib.com/z8/es/specifications_384.html"
    ]
   },
+  "1e4abf4c684462c15c3cd6bf39ee034cf34df86941639b62ea0026e31101b041": {
+   "modelo": "Nikon Z9",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D04a.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/cameras/mirrorless/z-9-uk",
+    "https://imaging.nikon.com/imaging/lineup/mirrorless/z_9/",
+    "https://www.nikonusa.com/p/z-9/1669/overview"
+   ]
+  },
   "ca0c1a1bfa38f41b5fd851861c980be29187f9d3ab75a3463150356aff953943": {
    "modelo": "Nikon ZR (cámara de cine 6K, sólo cuerpo)",
    "fecha": "2026-10-14",
@@ -2079,6 +2901,17 @@
    "fuentes": [
     "https://www.nikon.com.mx/p/zr/2006/overview (JSON __NEXT_DATA__: tabla «Cinema Tech Specs», textos de presentación, notas 1 y 7, cuadro comparativo; única variante 2006, sin kits)",
     "https://imaging.nikon.com/imaging/lineup/z_cinema/z_r/"
+   ]
+  },
+  "38cb949a26a0bdefec1836a1da83b784655d60c04781b8210b5b6e484ff56511": {
+   "modelo": "Nikon Zf",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D04a.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/cameras/mirrorless/z-f",
+    "https://imaging.nikon.com/imaging/lineup/mirrorless/z_f/",
+    "https://www.nikon.es/es_ES/product/cameras/mirrorless/z-f-sl-VOA123AE"
    ]
   },
   "4b10640bfef157c9db36068bd01b3b466e659851fc99ff64b1f2a0244505e83a": {
@@ -2132,6 +2965,22 @@
     "https://www.mi.com/es/product/poco-c81-pro/specs/"
    ]
   },
+  "5b55f110fe628da9829a878b575fb66f88c57f1d5719ead4380e3c611d04f267": {
+   "modelo": "POCO C85 8/256GB",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D12a-r2.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/poco-c85/specs/",
+    "https://www.mi.com/global/product/poco-c85/specs/",
+    "https://www.po.co/global/product/poco-c85/specs/",
+    "https://www.mi.com/es/product/poco-c85/specs/",
+    "https://www.po.co/global/list/",
+    "https://www.poco.in/ (POCO India oficial; fichas «C85» y «C85x» en /assets/index-BoRe6Ea3.js)",
+    "https://www.mi.com/global/product/poco-c85-5g/specs/ (404)",
+    "https://www.mi.com/in/product/poco-c85-5g/ (404)"
+   ]
+  },
   "29c54bf3f789fe26a8cfd32f8436c84a4ffac6424c85bb535f6cdc20f643ee15": {
    "modelo": "POCO F6 8/256GB",
    "fecha": "2026-10-01",
@@ -2152,6 +3001,63 @@
     "https://www.mi.com/es/product/poco-f6-pro/specs/ (sólo para comparar el tipo de SIM)"
    ]
   },
+  "e24296e260d4a3a759fa4af4beee1ea2dd97e9a087ce443a59f9e63a621f41de": {
+   "modelo": "POCO F8 Pro",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D11b.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/poco-f8-pro/specs/",
+    "https://www.po.co/global/product/poco-f8-pro/specs/",
+    "https://www.mi.com/global/product/poco-f8-pro/specs/",
+    "https://www.mi.com/es/product/poco-f8-pro/specs/",
+    "https://www.mi.com/uk/product/poco-f8-pro/specs/",
+    "https://www.mi.com/mx/product/poco-f8-pro/"
+   ]
+  },
+  "4eb26768925de0ff58c2a10364359938f4becc207abea0f147e646c60ba7e114": {
+   "modelo": "POCO F8 Ultra",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D11b.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/poco-f8-ultra/specs/",
+    "https://www.po.co/global/product/poco-f8-ultra/specs/",
+    "https://www.mi.com/global/product/poco-f8-ultra/specs/",
+    "https://www.mi.com/es/product/poco-f8-ultra/specs/",
+    "https://www.mi.com/uk/product/poco-f8-ultra/specs/",
+    "https://www.mi.com/mx/product/poco-f8-ultra/"
+   ]
+  },
+  "03f2e6b8479aa2da78aba50dd9d829a63c798c14aec146dc73a99a9bd9f3628c": {
+   "modelo": "POCO F9 Ultra",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D11b.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/poco-f9-ultra/specs/",
+    "https://www.po.co/global/product/poco-f9-ultra/specs/",
+    "https://www.mi.com/global/product/poco-f9-ultra/specs/",
+    "https://www.mi.com/es/product/poco-f9-ultra/specs/",
+    "https://www.mi.com/uk/product/poco-f9-ultra/specs/",
+    "https://www.mi.com/mx/product/poco-f9-ultra/"
+   ]
+  },
+  "c5de45ed8f2511509a730028e65335814d49379e7bf6038e64ff3eb39695efc4": {
+   "modelo": "POCO M8 Pro 5G 12/512GB",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D12a.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/poco-m8-pro-5g/specs/",
+    "https://www.mi.com/es/product/poco-m8-pro-5g/specs/",
+    "https://www.po.co/global/product/poco-m8-pro-5g/specs/",
+    "https://www.po.co/global/list/",
+    "https://www.mi.com/in/product/poco-m8-pro-5g/ (404)",
+    "https://www.mi.com/in/product/poco-m8-pro/ (404)",
+    "https://www.poco.in/ (POCO India oficial, con su JS /assets/index-BoRe6Ea3.js: lista de modelos)"
+   ]
+  },
   "ca119bba3ccbe821f5bb56b01db0e39aa11010651f17e300201830809a2cfe07": {
    "modelo": "POCO Pad X1 8GB/512GB",
    "fecha": "2026-10-01",
@@ -2163,15 +3069,34 @@
     "https://www.po.co/global/product/poco-pad-x1/specs/"
    ]
   },
-  "512443f4c375bffa08ebe64e2d5d0d3f3ebb881fc4809a2b0ef5fb958845f0b4": {
-   "modelo": "POCO X8 Pro 5G",
-   "fecha": "2026-10-01",
+  "3e30886bb0791a2d2705d8b64142339b97c21003c130ba9f1ac9d9739db75727": {
+   "modelo": "POCO X7 Pro 5G",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-02.json",
+   "informe": "informe-D11b.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/poco-x7-pro/specs/",
+    "https://www.mi.com/global/product/poco-x7-pro/specs/",
+    "https://www.mi.com/global/support/faq/details/KA-528010/",
+    "https://www.po.co/global/product/poco-x7-pro/specs/",
+    "https://www.mi.com/es/product/poco-x7-pro/specs/",
+    "https://www.mi.com/uk/product/poco-x7-pro/specs/",
+    "https://www.mi.com/my/product/poco-x7-pro/specs/",
+    "https://www.mi.com/mx/product/poco-x7-pro/",
+    "https://www.po.co/in/product/poco-x7-pro/specs/ (404)",
+    "https://www.mi.com/in/product/poco-x7-pro/specs/ (404)"
+   ]
+  },
+  "4631ee1cfbcc1a9b19e456d07e23df826be78383d1e537c8fa76a15f948a2b72": {
+   "modelo": "POCO X8 Pro 5G",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D12a.json",
    "fuentes": [
     "https://www.mi.com/mx/product/poco-x8-pro/specs/",
-    "https://www.mi.com/global/product/poco-x8-pro/specs/",
-    "https://www.mi.com/es/product/poco-x8-pro/specs/"
+    "https://www.po.co/global/product/poco-x8-pro/specs/",
+    "https://www.po.co/global/list/",
+    "https://www.poco.in/ (POCO India oficial; JS /assets/index-BoRe6Ea3.js y las 27 imágenes móviles y 68 de escritorio de product-details/X8Pro)"
    ]
   },
   "9e6c3dc786864f4cbb7c408eb8e1ae5a863833d96ac6f78225bddf77c1f12851": {
@@ -2243,6 +3168,17 @@
     "https://news.panasonic.com/global/press/en250122-2 (no está en fuentes; para el nombre del modelo en Europa)"
    ]
   },
+  "46dfdf674088091bcbb2d72f23e9701df5579e7ee9f509d26ef1bb586c2cd34e": {
+   "modelo": "Película Fujifilm INSTAX mini (pack doble, 2 x 10 fotos)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D05.json",
+   "fuentes": [
+    "https://eshop.fujifilm-x.com/es/pelicula-instax-mini-pack-doble.html",
+    "https://www.instax.com/film/",
+    "https://www.fujifilm.com/ar/es/consumer/instax/cameras/mini12/specifications"
+   ]
+  },
   "67d5caa743ade675e9a58c0aa88df0c1c31a065489c86e54c6e0ffe0bf6765c6": {
    "modelo": "PlayStation 5 Digital 825GB (slim)",
    "fecha": "2026-10-01",
@@ -2280,6 +3216,17 @@
     "~/catalogo-advance-trabajo/descripciones-tanda1/respuestas-pedro-01-10.md (punto 19)"
    ]
   },
+  "d9f43f0a3b52c05844a9b19031b2d995a7e0e447514537d35d40fbdee5756007": {
+   "modelo": "PlayStation VR2",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D16a.json",
+   "fuentes": [
+    "https://www.playstation.com/es-ar/ps-vr2/ (curl y Chrome headless: 4K HDR a hasta 120 fps con nota 1 'juegos compatibles', seguimiento ocular, representación foveada, lente Fresnel ajustable, 110°, Tempest 3D AudioTech con nota 2 'auriculares estéreo analógicos / USB', vibración del casco, cuatro cámaras sin cámara externa, un solo cable USB, contenido de la caja, menores de 12, no compatible con PS4 ni PS VR, adaptador para PC)",
+    "https://www.playstation.com/es-ar/ps-vr2/ps-vr2-tech-specs/ (OLED 2000 x 2040 por ojo, 90/120 Hz, separación ajustable, aprox. 110°, sensores, 4 cámaras + IR por ojo, USB tipo C, micrófono, conector de auriculares, botones, sensor capacitivo, LED IR, efecto de gatillo R2/L2, actuador único, Bluetooth 5.1, batería de ion de litio, requisitos de configuración)",
+    "https://www.playstation.com/es-ar/ps-vr2/ps-vr2-features/ (1 x 1 m sentado o de pie, 2 x 2 m a escala de habitación, auriculares incluidos, visión exterior con el botón del visor, modo cinemático HDR 1920x1080 a 24/60/120 Hz)"
+   ]
+  },
   "97b58688762807cde06272cd91fafd87385fc52c092356a1501093d6ad2b6d3a": {
    "modelo": "REDMI Note 15 (4G) 8/256GB",
    "fecha": "2026-10-01",
@@ -2290,16 +3237,30 @@
     "https://www.mi.com/global/product/redmi-note-15/specs/"
    ]
   },
-  "7fe4d247fe5db375769d22c2eecd6b42e9f30b6f42ac91d6a83aeca8402b394d": {
+  "30958bc25daec39f921d638d56a20b1e4af5f9d4cf697fd2b4ba74ccaf8f70f8": {
    "modelo": "REDMI Note 15 Pro (4G) y REDMI Note 15 Pro 5G",
-   "fecha": "2026-10-13",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-lote-01.json",
+   "informe": "informe-D12b-r3.json",
    "fuentes": [
     "https://www.mi.com/ar/product/redmi-note-15-pro/specs/",
     "https://www.mi.com/global/product/redmi-note-15-pro/specs/",
     "https://www.mi.com/ar/product/redmi-note-15-pro-5g/specs/",
-    "https://www.mi.com/global/product/redmi-note-15-pro-5g/specs/"
+    "https://www.mi.com/global/product/redmi-note-15-pro-5g/specs/",
+    "https://www.mi.com/jp/product/redmi-note-15-pro-5g/specs/",
+    "https://www.mi.com/global/select-location/",
+    "REDMI Note 15 Pro 5G (bajadas hoy): https://www.mi.com/{at,au,be-fr,be-nl,bg,br,hr,hu,iq,kh-en,kz-kk,latin-es,om,qa,rs,sa-en,se,sg,ae-ar,ma-ar}/product/redmi-note-15-pro-5g/specs/",
+    "REDMI Note 15 Pro 5G en kr, ru, africa-en y africa-fr: 404",
+    "REDMI Note 15 Pro (4G) (bajadas hoy): https://www.mi.com/{at,be-fr,be-nl,bg,hr,hu,iq,kh-en,kz-kk,latin-es,rs,se,ae-ar,ma-ar}/product/redmi-note-15-pro/specs/",
+    "REDMI Note 15 Pro (4G) en au, br, kr, om, qa, ru, sa-en y sg: 404",
+    "copia de r2: https://www.mi.com/es/product/redmi-note-15-pro-5g/specs/",
+    "copia de r2: https://www.mi.com/mx/product/redmi-note-15-pro-5g/specs/",
+    "copia de r2: https://www.mi.com/in/product/redmi-note-15-pro-5g/specs/",
+    "copia de r2: https://www.mi.com/{ae-en,cl,co,cz,de,eg,fr,gr,hk,it,kz-ru,ma-fr,my,nl,np,pe,ph,pl,ro,sa-ar,th,tr,tw,ua,uk,vn}/product/redmi-note-15-pro-5g/specs/ y https://www.mi.co.id/id/product/redmi-note-15-pro-5g/specs/",
+    "copia de r2: https://www.mi.com/es/product/redmi-note-15-pro/specs/ y https://www.mi.com/mx/product/redmi-note-15-pro/specs/",
+    "copia de r2: https://www.mi.com/{ae-en,co,cz,de,fr,gr,it,ke,kz-ru,ma-fr,ng,nl,pe,ph,pl,ro,tr,ua,uk,vn,za}/product/redmi-note-15-pro/specs/",
+    "copia de r2 (Chrome headless): https://www.mi.com/shop/buy/detail?product_id=21659",
+    "copia de r2 (Chrome headless): https://www.mi.com/prod/redmi-note-15-pro/specs"
    ]
   },
   "4820e8506d69e58011469fc33c133bb1c87977652906b0ea771a17ad7f98234e": {
@@ -2313,14 +3274,103 @@
     "https://www.mi.com/es/product/redmi-note-15-pro-plus-5g/specs/ (control: versión europea IP66 e IP68, IP68 también hasta 2 m durante 30 minutos; 8+256 y 12+512 LPDDR4X + UFS 2.2)"
    ]
   },
-  "2f550bb95a19a68a113a9762a54162056a29998e5d4d2c933da66837b1a3fab1": {
-   "modelo": "Redmi 15C 4/128GB (sólo lo común al 15C y al 15C 5G)",
-   "fecha": "2026-10-01",
+  "02fb4b11f4252dd8547f0237921b0ed729db31002d1e93b8bc2d4ed0d418b561": {
+   "modelo": "REDMI Note 17 (4G; las filas que no dicen 4G, sólo lo común)",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-09.json",
+   "informe": "informe-D12b.json",
+   "fuentes": [
+    "https://www.mi.com/global/product/redmi-note-17/specs/",
+    "https://www.mi.com/es/product/redmi-note-17/specs/",
+    "https://www.mi.com/mx/product/redmi-note-17/specs/",
+    "https://www.mi.com/global/product/redmi-note-17-5g/specs/",
+    "https://www.mi.com/es/product/redmi-note-17-5g/specs/",
+    "https://www.mi.com/mx/product/redmi-note-17-5g/specs/ (404)",
+    "https://www.mi.com/ar/product/redmi-note-17/specs/ (no existe: va a la portada)",
+    "https://www.mi.com/ar/product/redmi-note-17-5g/specs/ (no existe: va a la portada)",
+    "https://www.mi.com/in/product/redmi-note-17-5g/specs/",
+    "https://www.mi.com/in/product/redmi-note-17/specs/ (404)",
+    "https://www.mi.com/prod/redmi-note-17/specs (Chrome headless)",
+    "https://www.mi.com/prod/redmi-note-17 (Chrome headless)"
+   ]
+  },
+  "5d6e7f2b1fbfbb4cc784f21fd19c308b0be81521a9e91b79376e1f487842c7a0": {
+   "modelo": "Ray-Ban Meta Blayzer Optics (Gen 2)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D16b-r2.json",
+   "fuentes": [
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-blayzer-optics-gen-2/",
+    "https://www.meta.com/es/ai-glasses/ray-ban-meta-blayzer-optics-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-blayzer-matte-black-clear-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-blayzer-shiny-black-clear-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-blayzer-shiny-olive-clear-gen-2/",
+    "https://www.meta.com/ai-glasses/ray-ban-meta-blayzer-optics-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/compare/ (contraste, no está en fuentes)"
+   ]
+  },
+  "b3b93cc10ae29fcf8a26255071d9b40fc5837ba4b521a5a6cc4544d5b5380f37": {
+   "modelo": "Ray-Ban Meta Headliner (Gen 2)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D16b-r2.json",
+   "fuentes": [
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-headliner-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-headliner-shiny-black-green-transitions-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-headliner-shiny-black-sapphire-transitions-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/compare/ (contraste, no está en fuentes)"
+   ]
+  },
+  "cc8498ce4a34039fce346a1e48496968d40640bc67e7d3f9235c8c27fde02471": {
+   "modelo": "Ray-Ban Meta Skyler (Gen 2)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D16b-r2.json",
+   "fuentes": [
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-skyler-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-skyler-shiny-black-green-transitions-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-skyler-shiny-black-amethyst-transitions-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-skyler-shiny-black-polarized-black-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-skyler-shiny-chalky-gray-sapphire-transitions-gen-2/",
+    "https://www.meta.com/ai-glasses/ray-ban-meta-skyler-gen-2/ (contraste)",
+    "https://www.meta.com/mx/ai-glasses/compare/ (contraste, no está en fuentes)"
+   ]
+  },
+  "155ea7a8db5755b0fac768849c75f38d5a8abeab0719857a3ea5ad3f4e19933c": {
+   "modelo": "Ray-Ban Meta Wayfarer (Gen 2)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D16b-r2.json",
+   "fuentes": [
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-matte-black-grey-transitions-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-matte-black-polarized-graphite-gradient-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-shiny-black-green-gen-2/",
+    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-shiny-black-green-transitions-gen-2/",
+    "https://www.meta.com/ai-glasses/ray-ban-meta-wayfarer-gen-2/ (contraste)",
+    "https://www.meta.com/mx/ai-glasses/compare/ (contraste, no está en fuentes)"
+   ]
+  },
+  "b15070e1d16fec6f4aeb878dce9229777de56950691e887f59d2820c0c7d8a3b": {
+   "modelo": "Redmi 15C (sólo lo común al 15C y al 15C 5G)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D12b.json",
    "fuentes": [
     "https://www.mi.com/mx/product/redmi-15c/specs/",
-    "https://www.mi.com/es/product/redmi-15c-5g/specs/"
+    "https://www.mi.com/es/product/redmi-15c/specs/",
+    "https://www.mi.com/global/product/redmi-15c/specs/",
+    "https://www.mi.com/es/product/redmi-15c-5g/specs/",
+    "https://www.mi.com/global/product/redmi-15c-5g/specs/",
+    "https://www.mi.com/mx/product/redmi-15c-5g/specs/ (404)",
+    "https://www.mi.com/in/product/redmi-15c-5g/specs/",
+    "https://www.mi.com/in/product/redmi-15c/specs/ (404)",
+    "https://www.mi.com/ar/product/redmi-15c/specs/ (no existe: va a la portada)",
+    "https://www.mi.com/ar/product/redmi-15c-5g/specs/ (no existe: va a la portada)"
    ]
   },
   "e723be27ed4250636932cf32dc911e6b6f5b97b07e9d2b6c2781479a478fbe66": {
@@ -2370,6 +3420,25 @@
    "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.samsung.com/mx/audio-sound/galaxy-buds/galaxy-buds3-white-sm-r530nzwamxo/"
+   ]
+  },
+  "0f282ca6b81bc4050f39786697e473f256f1952a62db58f720f69b7ebde7d576": {
+   "modelo": "Samsung Odyssey G5 27\" curvo 165 Hz (lo común a G55A y G55C)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D14b.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/monitors/gaming/odyssey-g5-g55a-27-inch-165hz-1ms-ls27ag550elxzb/",
+    "https://www.samsung.com/mx/monitors/gaming/odyssey-g5-g55c-27-inch-165hz-curved-qhd-ls27cg552elxzx/",
+    "https://www.samsung.com/ca/monitors/gaming/odyssey-g5-g55c-27-inch-165hz-curved-qhd-ls27cg550enxza/",
+    "https://www.samsung.com/us/monitors/gaming/27-inch-odyssey-g55c-qhd-165hz-1ms-mprt-curved-gaming-monitor-sku-ls27cg552enxza/ (Chrome headless)",
+    "https://www.samsung.com/es/monitors/gaming/odyssey-g5-g55c-27-inch-165hz-curved-qhd-ls27cg554euxen/",
+    "https://www.samsung.com/dk/monitors/gaming/odyssey-g5-g55a-27-inch-165hz-1ms-ls27ag550epxen/",
+    "https://www.samsung.com/at/monitors/gaming/odyssey-g5-27-inch-144hz-1ms-curved-lc27g55tqbuxen/",
+    "https://www.samsung.com/levant/monitors/gaming/odyssey-g5-g51c-27-inch-165hz-freesync-qhd-ls27cg510emxue/",
+    "https://www.samsung.com/ar/monitors/all-monitors/ (Chrome headless)",
+    "https://www.samsung.com/uk/monitors/all-monitors/ (Chrome headless)",
+    "https://www.samsung.com/us/computing/monitors/gaming/ (Chrome headless)"
    ]
   },
   "dfa2d094ec654cd9f61268e94f3c21c5b68ab9146eba4252ebcf59b617528a1a": {
@@ -2440,6 +3509,19 @@
    "fuentes": [
     "https://www.sigma-global.com/en/lenses/s021_150_600_5_63/",
     "https://www.sigma-global.com/en/support/firmware/s021_150_600_5_63/?mount=sony-e-566-before"
+   ]
+  },
+  "1c1a784dd8fbaeb14dbe16c5953ed8867f2ca895a3e05a6f69c92826b130f120": {
+   "modelo": "Sigma 150-600mm F5-6.3 DG OS HSM | Contemporary (Nikon F)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D05.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/c015_150_600_5_63/",
+    "https://www.sigma-global.com/en/support/camera-compatibility/",
+    "https://www.sigma-global.com/en/accessories/tc1401tc2001/",
+    "https://www.sigma-global.com/en/support/accessories-compatibility/",
+    "https://www.sigma-global.com/en/support/download/tele_converter_tc_1401_tc_2001_en.pdf"
    ]
   },
   "28124293bb46375cb2691bde857c9b20159ca056160152fc3638dd580c2a88eb": {
@@ -2681,6 +3763,42 @@
     "https://www.sigma-global.com/en/discontinued/"
    ]
   },
+  "a04ff9ba303bed8b56f82c62d9ca233eca867c910d764ba33261f0c0662ac4f5": {
+   "modelo": "Sigma EF-630 (flash para Nikon)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D05.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/accessories/ef-630/",
+    "https://www.sigma-global.com/en/support/download/EF-630_NA_FW_Ver.1.03_2.pdf",
+    "https://www.sigma-global.com/en/support/firmware/ef-630/?mount=nikon-f"
+   ]
+  },
+  "3fdcfa3c2b999ffcb16b015dc8003f086c392fcb16bbd921b9c1856f34937ea2": {
+   "modelo": "Sigma EF-630 (versión para Canon o Nikon sin confirmar)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D05-r2.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/accessories/ef-630/"
+   ]
+  },
+  "bedd57555f8e9470ede2c4668f88c29934e4654e034fc426598615e745ce59eb": {
+   "modelo": "Sony BC-QZ1 (cargador para la batería NP-FZ100)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D03b.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/baterias-cargadores-camaras-lentes-intercambiables/bc-qz1?sku=bc-qz1.all (Chrome headless; curl da 403)",
+    "https://www.sony.es/electronics/baterias-cargadores-camaras-lentes-intercambiables/bc-qz1 (Chrome headless)",
+    "https://www.sony.com.ar/electronics/baterias-cargadores-camaras-lentes-intercambiables/np-fz100?sku=np-fz100 (Chrome headless)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/?mdl=BC-QZ1&area=gwt&lang=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=BC-QZ1&cat=3&loc=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=BC-QZ1&cat=1&loc=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=BC-QZ1&cat=18&loc=es_AR",
+    "https://www.sony.jp/ichigan/products/ACC-QZ1K/ (en mantenimiento el 21/10/2026: no se pudo leer)"
+   ]
+  },
   "7c9bf0e2476ff38184591a3222ec9effd10ed7dad890265e54a267517793b292": {
    "modelo": "Sony Distagon T* FE 35 mm F1.4 ZA (SEL35F14Z)",
    "fecha": "2026-10-13",
@@ -2699,6 +3817,31 @@
    "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
    "fuentes": [
     "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel70350g/specifications (hoy dio «Page Not Found» o vacía; leí la misma ficha por su dirección canónica https://www.sony.com.ar/electronics/lentes-camara/sel70350g/specifications y la comparé con la copia de la dirección citada que bajó el verificador anterior, trabajo-a-T07-1/sel70350g-spec.html: texto idéntico)"
+   ]
+  },
+  "811f8de1eaf8384e15f91879f97f452e319b7c00e0a0c33934ef0f1570390068": {
+   "modelo": "Sony ECM-B10 (micrófono de cañón para zapata Multi Interface)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D03b.json",
+   "fuentes": [
+    "https://www.sony.es/camera-accessories/products/ecm-b10",
+    "https://www.sony.es/camera-accessories/products/ecm-b10/feature5",
+    "https://www.sony.es/camera-accessories/products/ecm-b10/feature4",
+    "https://helpguide.sony.net/ilc/2120/v1/es/index.html",
+    "https://helpguide.sony.net/ilc/2120/v1/es/contents/TP1000520230.html",
+    "https://helpguide.sony.net/ilc/2120/v1/es/contents/TP1000520223.html (con la ilustración image/B10_part02.png: ATT 0dB/10dB/20dB, FILTER NC/LC/OFF)",
+    "https://helpguide.sony.net/ilc/2120/v1/es/contents/TP1000520232.html",
+    "https://www.sony.net/dics/b10/ (redirige a support.d-imaging.sony.co.jp, ECM-B10)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/?mdl=ECM-B10&area=gwt&lang=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=ECM-B10&cat=3&loc=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=ECM-B10&cat=2&loc=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=ECM-B10&cat=1&loc=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=ECM-B10&cat=4&loc=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=ECM-B10&cat=18&loc=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=ECM-B10&cat=65&loc=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/detail.php?value1=ECM-B10&value2=ILCE-7M3&area=gb&lang=es&loc=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/detail.php?value1=ECM-B10&value2=ZV-E10M2&area=gb&lang=es&loc=es_AR"
    ]
   },
   "11c3a2f41ddbca159fd580d4dc3be2f702918d80a9c56acbc0ea4e842924e749": {
@@ -3086,6 +4229,21 @@
     "https://helpguide.sony.net/pro/z200nx800/v1/es/contents/network.html"
    ]
   },
+  "73b5bb8eb949370492658d97e877a64db421237f63d0ec2b9dae4858e611bdd5": {
+   "modelo": "Sony NP-FZ100 (batería recargable serie Z)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D03b.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/baterias-cargadores-camaras-lentes-intercambiables/np-fz100?sku=np-fz100 (Chrome headless; curl da 403)",
+    "https://www.sony.es/electronics/baterias-cargadores-camaras-lentes-intercambiables/np-fz100 (Chrome headless)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/?mdl=NP-FZ100&area=gwt&lang=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=NP-FZ100&cat=3&loc=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=NP-FZ100&cat=1&loc=es_AR",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=NP-FZ100&cat=18&loc=es_AR",
+    "https://www.sony.com.ar/electronics/baterias-cargadores-camaras-lentes-intercambiables/bc-qz1?sku=bc-qz1.all"
+   ]
+  },
   "94d62984c7057d23d1e229dc0bfcc643dc3e4bac08d6534a63b9976ec6314cbe": {
    "modelo": "Sony PXW-Z200",
    "fecha": "2026-10-14",
@@ -3128,6 +4286,21 @@
     "https://www.sony.com.ar/electronics/lentes-camara/sel55f18z/specifications"
    ]
   },
+  "1d3fbd5884b05330d32bb631c17117bcad0cb56bbf1ef5c7dcedb0728301bd85": {
+   "modelo": "Sony VCT-SGR1 (empuñadura de grabación)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D03b-r2.json",
+   "fuentes": [
+    "https://www.sony.com/electronics/support/res/manuals/4742/97bb246ed0c2b2d9970ec9230bb02745/47429910M.pdf (bajado por mí con curl y cabeceras de navegador completas: 535.758 bytes, igual byte a byte al del verificador anterior; partes en español e inglés)",
+    "https://www.sony-latin.com/es/electronics/support/camera-camcorder-accessories-tripods-grips/vct-sgr1 («VCT-SGR1 Empuñadura de grabación», enlaza al manual 47429910M.pdf)",
+    "https://sony.mediaroom.com/2018-06-05-Sony-Introduces-New-VCT-SGR1-Shooting-Grip-for-RX0-and-RX100-Series-Cameras",
+    "https://www.sony.net/dics/sgr1/ (redirige a support.d-imaging.sony.co.jp, VCT-SGR1)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/?mdl=VCT-SGR1&area=gwt&lang=es_AR (una sola categoría: Cuerpo / Cámaras compactas)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=es&mdl=VCT-SGR1&cat=1&loc=es_AR (23 cámaras, las 23 con «Compatible with restrictions»)",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/detail.php?value1=VCT-SGR1&value2=<cada una de las 23: ZV-1A, ZV-1, DSC-RX100M7A, DSC-RX100M7, DSC-RX100M6, DSC-RX100M5A, DSC-RX100M5, DSC-RX100M4, DSC-RX100M3, DSC-RX100M2, DSC-RX0M2, DSC-RX0, DSC-HX99, DSC-HX95, DSC-HX90V, DSC-HX80, DSC-HX60V, DSC-HX60, DSC-HX50V, DSC-HX50, DSC-WX800, DSC-WX700, DSC-WX500>&area=gb&lang=es&loc=es_AR (bajadas por mí, de a una con 5 s)"
+   ]
+  },
   "f18305a4c766d2289b4d75f73d50bba505fe0f3c556dbf41a401fc2f9f9bc769": {
    "modelo": "Sony Vario-Tessar T* FE 24-70 mm F4 ZA OSS (SEL2470Z)",
    "fecha": "2026-10-02",
@@ -3138,15 +4311,17 @@
     "https://www.sony.com.ar/electronics/lentes-camara/sel2470z/specifications"
    ]
   },
-  "de4dff5610d3f53062bec215d6819ec897fef968d96688c2bcc840c80a3794ed": {
-   "modelo": "Sony ZV-E10 II (ZV-E10M2), cuerpo",
-   "fecha": "2026-10-14",
-   "por": "prueba-mecanica",
-   "desde": "c755b48df27a98f084a5ff1a426d8c7cbc75b43c4f97e3ea8fece57725e8f8ce",
-   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
+  "0aa0e8e615a999e41c5e1b68e0546d14d7758126a8b938dd094f317b266eefb2": {
+   "modelo": "Sony ZV-E10 II (ZV-E10M2): cuerpo y kit 16-50 (ZV-E10M2K)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D03a.json",
    "fuentes": [
-    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/zv-e10m2/specifications",
-    "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/zv-e10m2"
+    "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/zv-e10m2/specifications",
+    "https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/zv-e10m2",
+    "https://www.sony.co.uk/electronics/interchangeable-lens-cameras/zv-e10m2/specifications",
+    "https://www.sony.com.ar/lenses/e-mount",
+    "https://www.sony.jp/ichigan/products/ZV-E10M2/ (en mantenimiento el 21/10, no se pudo leer)"
    ]
   },
   "9a5df89550bb098ed0b1cc5964a4559abd971d6d5962eecf029dfeeffea98cd6": {
@@ -3183,15 +4358,18 @@
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m3-body-kit/feature1 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
    ]
   },
-  "6156ddf8622d563905e3cfb627dd3f9957e4b10ae3dd52d98d8bebc10faf9211": {
-   "modelo": "Sony α7 IV (ILCE-7M4) kit 28-70",
-   "fecha": "2026-10-14",
-   "por": "prueba-mecanica",
-   "desde": "bb0b5e96ed797329ed984c7883acda4e4fc5d0eec38090112dc8eff43295dc41",
-   "informe": "solo formato desde la verificada en origin/main (2026-10-02)",
+  "3a4a3293e8ada8f65101e97be088bb713f2b0c6d449b6bd1b7274538c6c6411e": {
+   "modelo": "Sony α7 IV (ILCE-7M4) y kit 28-70",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D03a-r2.json",
    "fuentes": [
-    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m4/spec (bajada hoy con Chrome headless, trabajo-r10-T11-1/)",
-    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m4/feature61 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m4/spec (Chrome headless: curl da 403)",
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m4/feature61 (Chrome headless)",
+    "https://www.sony.com.mx/interchangeable-lens-cameras/products/ilce-7m4/spec (Chrome headless; sólo para ver la columna ILCE-7M4M)",
+    "https://www.sony-latin.com/es/electronics/support/e-mount-body-ilce-7-series/ilce-7m4m/manuals (Chrome headless)",
+    "https://helpguide.sony.net/ilc/2110/v1/es/index.html",
+    "https://helpguide.sony.net/ilc/2110/v1/es/contents/TP1000660843.html"
    ]
   },
   "5a38d2fbab3daa5d848dfcb74d07890fd3377a815c362b657280d982d5aa99b4": {
@@ -3216,15 +4394,16 @@
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7c/feature6 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
    ]
   },
-  "e540212bbbb2a49d6936ac4ce0f6a57b4840c5fcafab6adb64351db871b939d4": {
-   "modelo": "Sony α7C II (ILCE-7CM2), cuerpo",
-   "fecha": "2026-10-13",
+  "8fe0aab7ddb4ccf2bcc319e4a420278452a14f82687afb81132c4e5c55e18521": {
+   "modelo": "Sony α7C II (ILCE-7CM2): cuerpo y kit 28-60 (ILCE-7CM2L)",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-03.json",
+   "informe": "informe-D03a.json",
    "fuentes": [
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7cm2/spec",
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7cm2/feature-list",
-    "https://www.sony.com.ar/bin/footnotes.json?fnid=CameraNF1277e-mountILCE-7CM2,CameraNF1278e-mountILCE-7CM2,CameraNF1279e-mountILCE-7CM2,CameraNF1280e-mountILCE-7CM2,CameraNF1281e-mountILCE-7CM2,CameraNF1282e-mountILCE-7CM2,CameraNF1283e-mountILCE-7CM2,CameraNF1284e-mountILCE-7CM2,CameraNF1287e-mountILCE-7CM2,CameraNF1289e-mountILCE-7CM2,CameraNF1290e-mountILCE-7CM2,CameraNF1291e-mountILCE-7CM2,CameraNF1292e-mountILCE-7CM2,CameraNF1293e-mountILCE-7CM2,CameraNF1294e-mountILCE-7CM2,CameraNF1295e-mountILCE-7CM2,CameraNF1296e-mountILCE-7CM2,CameraNF1299e-mountILCE-7CM2,CameraNF1300e-mountILCE-7CM2&contentPath=/content/sony/sola/ar/es-ar/general/cameras/interchangeable-lens-cameras/products/ilce-7cm2/feature-list"
+    "https://www.sony.co.uk/interchangeable-lens-cameras/products/ilce-7cm2/spec",
+    "https://www.sony.com.ar/lenses/e-mount"
    ]
   },
   "7c79bb38814306fc6372664da0cdcddc431cdb159816edcb9bf2f3f1a4880161": {
@@ -3304,6 +4483,18 @@
    "fuentes": [
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-9m3/spec",
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-9m3"
+   ]
+  },
+  "2df662637436a564c0d5010715c402d3663369fc7f6e3df558b9ae0471cd1850": {
+   "modelo": "Studio Display 27\" (vidrio estándar, base con inclinación y altura ajustables)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D06a.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/111890",
+    "https://support.apple.com/es-la/126324",
+    "https://www.apple.com/la/studio-display/specs/",
+    "https://www.apple.com/la/studio-display-xdr/specs/"
    ]
   },
   "217df8e4cee59cc575a030967038cdd3a87f693d1fae0f6426827ec98c7bbdaa": {
@@ -3405,6 +4596,16 @@
     "https://www.tamron.com/global/consumer/lenses/sony_e/",
     "https://www.tamron.com/global/consumer/lenses/nikon_z/",
     "https://www.tamron.com/global/consumer/lenses/discontinued/"
+   ]
+  },
+  "c9d689221c4cccc12f550e8da579a49444c5b6418f4489c0e0b8a0bc11cbd612": {
+   "modelo": "Tamron 25-200mm F2.8-5.6 Di III VXD G2 (A075) Sony E",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D05.json",
+   "fuentes": [
+    "https://www.tamron.com/global/consumer/lenses/a075/",
+    "https://www.tamron.com/global/consumer/lenses/a075/spec.html"
    ]
   },
   "541220f10c22e71d1f58b2e56408b51fc739be6ef6b3a7f184268bcbcf881794": {
@@ -3554,6 +4755,17 @@
     "https://www.tamron.com/global/consumer/lenses/ (lineup Sony E / Nikon Z / Canon RF / discontinued, para confirmar que el producto es uno solo)"
    ]
   },
+  "d1a8c4662fdc20328c10709a4d0e3435e1184688cbc9c6ee1e5aa5f4e1de0006": {
+   "modelo": "Tarjeta de memoria Nikon XQD de 64 GB (MC-XQ64G)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D04b.json",
+   "fuentes": [
+    "https://www.nikon.es/es_ES/product/accessories/camera-accessories/nikon-64gb-xqd-memory-card",
+    "https://nij.nikon.com/products/lineup/accessory/other/120808052/",
+    "https://nij.nikon.com/products/accessory/discontinue_camera_other (lista de XQD de Nikon)"
+   ]
+  },
   "6641af56697195d64338d50fb1dfb881edbea1fd58026d5737f4afc3283c8c63": {
    "modelo": "Xbox Series S",
    "fecha": "2026-10-01",
@@ -3583,21 +4795,93 @@
     "https://www.xbox.com/es-AR/consoles/xbox-series-x"
    ]
   },
-  "7c66934580057f4a2d924c59aa3ee536489e63cbeedc0ab89daf044aba94f6b7": {
-   "modelo": "iPad 11\" (A16)",
-   "fecha": "2026-10-01",
+  "83b7d5794f7f0099dd6bb2da9c5419fd8c7a0ec12406a6709fd3f497a969daf5": {
+   "modelo": "Xiaomi 17 12/512GB",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-02.json",
+   "informe": "informe-D11a-r3.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/xiaomi-17/specs/",
+    "https://www.mi.com/global/product/xiaomi-17/specs/",
+    "https://www.mi.com/prod/xiaomi-17/specs (Chrome headless)",
+    "https://www.mi.com/in/product/xiaomi-17/specs/",
+    "copia del verificador anterior (trabajo-v-D11a): https://www.mi.com/prod/xiaomi-17/"
+   ]
+  },
+  "c05d3b4a32ea8d88f7896cb24e595321bcd130ad1f8122fdc37906a978ffd03c": {
+   "modelo": "Xiaomi 17 Ultra 16/512GB",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D11a-r5.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/xiaomi-17-ultra/specs/ (curl, hoy: trabajo-v-D11a-r5/mx-17-ultra-specs.html)",
+    "https://www.mi.com/global/product/xiaomi-17-ultra/specs/ (curl, hoy: trabajo-v-D11a-r5/global-17-ultra-specs.html)",
+    "https://www.mi.com/prod/xiaomi-17-ultra/specs (Chrome headless, hoy: trabajo-v-D11a-r5/cn-17-ultra-specs.html)",
+    "https://www.mi.com/prod/xiaomi-17-ultra/ (Chrome headless, hoy, presentación china: trabajo-v-D11a-r5/cn-17-ultra-prod.html)",
+    "https://www.mi.com/global/support/faq/details/KA-667490/ (curl, hoy: FAQ global, edición Leica)",
+    "https://www.mi.com/prod/xiaomi-17-ultra-byleica/specs (Chrome headless, hoy: hoja china de la edición Leica)",
+    "copia cruda del verificador anterior (trabajo-v-D11a-r3/in-xiaomi-17-ultra.html): https://www.mi.com/in/product/xiaomi-17-ultra/specs/",
+    "copia cruda del verificador anterior (trabajo-v-D11a/jp-xiaomi-17-ultra.html): https://www.mi.com/jp/product/xiaomi-17-ultra/specs/"
+   ]
+  },
+  "17a811c8f3ee9bc48cf1cdf22dd6d9a56fe7d3477a3559b33a4bb4e1e16bc401": {
+   "modelo": "Xiaomi 17T",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D11a-r3.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/xiaomi-17t/specs/",
+    "https://www.mi.com/global/product/xiaomi-17t/specs/",
+    "https://www.mi.com/prod/xiaomi-17t/specs (Chrome headless)",
+    "https://www.mi.com/in/product/xiaomi-17t/specs/",
+    "copia del verificador anterior (trabajo-v-D11a-r2): https://www.mi.com/prod/xiaomi-17t/",
+    "copia del verificador anterior (trabajo-v-D11a): https://www.mi.com/jp/product/xiaomi-17t/specs/"
+   ]
+  },
+  "c012cb672b9429e8cdd13eec5d076c1b99ef1fcec619d2f9e45a8b22deb01687": {
+   "modelo": "Xiaomi 17T Pro",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D11a-r3.json",
+   "fuentes": [
+    "https://www.mi.com/mx/product/xiaomi-17t-pro/specs/",
+    "https://www.mi.com/global/product/xiaomi-17t-pro/specs/",
+    "https://www.mi.com/prod/xiaomi-17t-pro/specs (Chrome headless)",
+    "copia del verificador anterior (trabajo-v-D11a-r2): https://www.mi.com/prod/xiaomi-17t-pro/",
+    "copia del verificador anterior (trabajo-v-D11a): https://www.mi.com/jp/product/xiaomi-17t-pro/specs/"
+   ]
+  },
+  "46b560e1e331c908692ab2245410ce327d659b44defdfbec108de4c411975b21": {
+   "modelo": "iMac de 24\" con chip M4 (2024), 16GB/256GB",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D06a-r4.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/121556",
+    "https://support.apple.com/es-la/121557",
+    "https://www.apple.com/la/imac/specs/",
+    "https://www.apple.com/es/imac/specs/",
+    "https://www.apple.com/imac/specs/",
+    "https://www.apple.com/v/imac/specs/b/images/specs/size_weight__dcuq6dov8hyu_large.jpg",
+    "https://www.apple.com/mx/shop/buy-mac/imac (HTML y configurador manejado en Chrome: azul 8-8 y azul 10-10)",
+    "https://www.apple.com/us/shop/goto/imac_vesa (redirige a apple.com/shop/buy-mac/imac)"
+   ]
+  },
+  "a4356618472aa30c44b69812e6a2b4026507ecf5d81d9ed556cc075f27dfff9a": {
+   "modelo": "iPad 11\" (A16)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D06b.json",
    "fuentes": [
     "https://support.apple.com/es-la/122240",
     "https://www.apple.com/la/ipad-11/specs/"
    ]
   },
-  "b882119e112336ef570e3e0d44bebfbc4e912980d76be93caa87c21fdb1ebbe8": {
+  "2902a63283ce8cd87fe47b4bfbd6cf1e5aa2874407f2a4568115eba73263f882": {
    "modelo": "iPad Air 11\" (M4)",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-03.json",
+   "informe": "informe-D06b.json",
    "fuentes": [
     "https://support.apple.com/es-la/126471"
    ]
@@ -3651,12 +4935,11 @@
     "https://support.apple.com/es-la/119891"
    ]
   },
-  "7f8690f97563711367f5ffea358ef14103c483054150b19bf2035595d3d7f530": {
+  "dc730e01c51f4d5936f0b28e33dcd69c7db50a983118cfc61bbb43b1253be594": {
    "modelo": "iPad Pro 13\" (M5)",
-   "fecha": "2026-10-14",
-   "por": "prueba-mecanica",
-   "desde": "195065083db6ac342ea51ac0e5c7b012a39c3e671ac7bd20f8ca987065315132",
-   "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D06b.json",
    "fuentes": [
     "https://support.apple.com/es-la/125407",
     "https://www.apple.com/la/ipad-pro/specs/"
@@ -3680,13 +4963,15 @@
     "https://support.apple.com/es-la/111850"
    ]
   },
-  "47246fbfafd0b35d0d50a0fa2501fde5e6d9ab1260e7aa08826a9130344d0bf6": {
+  "bbaa81a36f72470d3998057482e581adb135bbac2ceccf8f388386e2a0dc5618": {
    "modelo": "iPhone 15",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-05.json",
+   "informe": "informe-D07a.json",
    "fuentes": [
-    "https://support.apple.com/es-la/111831"
+    "https://support.apple.com/es-la/111831",
+    "https://support.apple.com/es-es/111831",
+    "https://support.apple.com/en-us/111831"
    ]
   },
   "a3ebbd68bec5059506ef0090571e405d22041ca54605cbd4d12da2f123b8993a": {
@@ -3698,14 +4983,27 @@
     "https://support.apple.com/es-la/111830"
    ]
   },
-  "0b28d82431f6ff53a6abbbb13492caa692e90138add5aba7e185eb0fb59e9ea2": {
+  "0b7f41e70e431292a1a8cedfc21b7a31952b7a0080ecf8875dfdae1736c1e553": {
    "modelo": "iPhone 16",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-07.json",
+   "informe": "informe-D07a-r2.json",
    "fuentes": [
     "https://support.apple.com/es-la/121029",
-    "https://www.apple.com/la/iphone-16/specs/",
+    "https://support.apple.com/en-us/121029",
+    "https://support.apple.com/es-es/121029",
+    "https://www.apple.com/la/newsroom/2024/09/apple-introduces-iphone-16-and-iphone-16-plus/"
+   ]
+  },
+  "1e1124eff5b7bb62e41764ba9408f112fd365a6251a7e2217c7a8eeed9a6b0bc": {
+   "modelo": "iPhone 16 Plus",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D07a-r2.json",
+   "fuentes": [
+    "https://support.apple.com/es-la/121030",
+    "https://support.apple.com/en-us/121030",
+    "https://support.apple.com/es-es/121030",
     "https://www.apple.com/la/newsroom/2024/09/apple-introduces-iphone-16-and-iphone-16-plus/"
    ]
   },
@@ -3718,13 +5016,15 @@
     "https://support.apple.com/es-la/121032"
    ]
   },
-  "8a48fffdcf5f5b145dbff9ceb47d7a6c56fa53555d44cd9eaef6668045522432": {
+  "9bdc3bec540030ff53fb6a61d68797bd39853d6ac9872530ad5faf740971aac1": {
    "modelo": "iPhone 16e",
-   "fecha": "2026-10-01",
+   "fecha": "2026-10-21",
    "por": "verificador-descripciones",
-   "informe": "informe-10.json",
+   "informe": "informe-D07a.json",
    "fuentes": [
-    "https://support.apple.com/es-la/122208"
+    "https://support.apple.com/es-la/122208",
+    "https://support.apple.com/es-es/122208",
+    "https://support.apple.com/en-us/122208"
    ]
   },
   "6ff60717a4e32622d3507bd4a984dbf6df0f7a7bd602a4b0ca046402058a20f8": {
@@ -3803,6 +5103,17 @@
     "https://support.apple.com/es-la/125092"
    ]
   },
+  "bc9b9ebe90f50dec3df2ef71137bf26ccd30742ce7c3cd47d973966794f528d2": {
+   "modelo": "moto g06 (4 GB + 256 GB)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D13.json",
+   "fuentes": [
+    "https://www.motorola.com/gb/en/p/phones/moto-g/moto-g06/pmipmhy42mh (HTML con la ficha embebida y los SKU 4/256 GB PB980021GB, PB980003GB y PB980018GB; renderizada)",
+    "https://www.motorola.com.ar/moto-g06-128gb/p (HTML y renderizada con Chrome headless)",
+    "https://www.motorola.com.ar/api/catalog_system/pub/products/search/moto-g06-128gb/p"
+   ]
+  },
   "2a9fa93a7d743982896b3c5a65e0a63cc794c02191bbc2ddd3125072a157c3f0": {
    "modelo": "moto g06 power",
    "fecha": "2026-10-14",
@@ -3834,6 +5145,72 @@
    "informe": "solo formato desde la verificada en origin/main (2026-10-01)",
    "fuentes": [
     "https://www.motorola.com/au/en/p/phones/moto-g/57-5g/pmipmjf43mj (tabla de specs y notas 1 a 22 desde el JSON de la página)"
+   ]
+  },
+  "104aa1dbd08774d3cc36809bd090e244316dd3c8d3317005990a129672edf337": {
+   "modelo": "moto g67 (4 GB + 256 GB)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D13.json",
+   "fuentes": [
+    "https://www.motorola.com.ar/moto-g67/p (HTML y renderizada con Chrome headless)",
+    "https://www.motorola.com.ar/api/catalog_system/pub/products/search/moto-g67/p",
+    "https://www.motorola.com/es/es/p/phones/moto-g/67/pmipmjh43mu (HTML con la ficha embebida y renderizada)",
+    "https://www.motorola.com/ie/en/p/phones/moto-g/67/pmipmjh43mu (control del procesador)",
+    "https://www.motorola.com/ve/es/p/phones/moto-g/moto-g67/pmipmjh43mu (control del procesador)"
+   ]
+  },
+  "7572a82b37f6f7baed2a085c8b9bf7a6c763c83aaea3a7fb8cc0d7970bfec4bd": {
+   "modelo": "moto g77 (8 GB + 256 GB)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D13.json",
+   "fuentes": [
+    "https://www.motorola.com.ar/moto-g77/p (HTML y renderizada con Chrome headless)",
+    "https://www.motorola.com.ar/api/catalog_system/pub/products/search/moto-g77/p",
+    "https://www.motorola.com/co/es/p/phones/moto-g/xt2621-3/pmipmjh43mv (HTML con la ficha embebida y renderizada)",
+    "https://www.motorola.com/es/es/p/phones/moto-g/77/pmipmjh43mw (HTML con la ficha embebida y renderizada)"
+   ]
+  },
+  "1aa2ca4aaa637f1bb85bb4423267b423f525315dda3483292f0b2aedfc05b3a0": {
+   "modelo": "moto g86 power 5G (8 GB + 256 GB)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D13.json",
+   "fuentes": [
+    "https://www.motorola.com/ve/es/p/phones/moto-g/86-power-5g/pmipmhs42m7 (HTML con la ficha embebida y renderizada)",
+    "https://www.motorola.com/es/es/p/phones/moto-g/moto-g-power-5g/2025/pmipmhs42m7 (HTML con la ficha embebida y renderizada)"
+   ]
+  },
+  "44be2da47246978c0cecb45afc762158eb51b6380d0ad8a7d003094bd015e359": {
+   "modelo": "motorola edge 60 pro (8 GB + 256 GB)",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D13.json",
+   "fuentes": [
+    "https://www.motorola.in/smartphones-motorola-edge-60-pro/p (HTML y renderizada con Chrome headless)",
+    "https://www.motorola.in/api/catalog_system/pub/products/search/smartphones-motorola-edge-60-pro/p",
+    "https://www.motorola.com/es/es/p/phones/motorola-edge/60-pro/pmipmht41mf (HTML con la ficha embebida y renderizada)",
+    "https://www.motorola.com.ar/motorola-edge-60-pro/p (HTML y renderizada)",
+    "https://www.motorola.com.ar/api/catalog_system/pub/products/search/motorola-edge-60-pro/p",
+    "https://www.motorola.com/jp/ja/p/phones/motorola-edge/60-pro/pmipmht41mf (HTML con la ficha embebida y renderizada)"
+   ]
+  },
+  "516b7d86a0c05c8fa31cc790ef54757568f695036a7577d204e463ab34de45e5": {
+   "modelo": "motorola edge 70 fusion",
+   "fecha": "2026-10-21",
+   "por": "verificador-descripciones",
+   "informe": "informe-D13-r2.json",
+   "fuentes": [
+    "https://www.motorola.com.ar/motorola-edge-70-fusion/p (HTML y renderizada con Chrome headless)",
+    "https://www.motorola.com.ar/motorola-edge-70-fusion-12gb/p (HTML y renderizada con Chrome headless)",
+    "https://www.motorola.com.ar/api/catalog_system/pub/products/search/motorola-edge-70-fusion/p",
+    "https://www.motorola.com.ar/api/catalog_system/pub/products/search/motorola-edge-70-fusion-12gb/p",
+    "https://www.motorola.com/es/es/p/phones/motorola-edge/70-fusion/pmipmjm44md (HTML con la ficha embebida, versión de 7.000 mAh)",
+    "https://www.motorola.com/gt/es/p/phones/motorola-edge/edge-70-fusion/motorolaedge70fusion (HTML)",
+    "https://www.motorola.com/es/es/p/phones/motorola-edge/motorola-edge-70-fusion/pmipmjm44mc (HTML con la ficha embebida, versión de 5.200 mAh; control)",
+    "https://www.motorola.com/au/en/p/phones/motorola-edge/70-fusion/pmipmjm44md (ficha embebida; control de la de 7.000 mAh)",
+    "https://www.motorola.com/de/de/p/phones/motorola-edge/pmipmjm44md/pmipmjm44md (ficha embebida; control de la de 7.000 mAh)"
    ]
   }
  }

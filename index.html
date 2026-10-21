@@ -3838,7 +3838,7 @@ const SHEET_ID  = '18xxslIKTBnVMrLixCGlQBJGje3vKBYQHXy0qvVp8tpQ';
 const SHEET_GID = '482985525';
 
 // Tu WhatsApp con código de país, solo números
-const WHATSAPP = '5491125604799';   // +54 9 11 2560-4799 (Benja, 21/10; antes 2475-1466 y 2262-0770)
+const WHATSAPP = '5491125205232';   // +54 9 11 2520-5232 (Benja, 21/10 tarde: de momento; el 2560-4799 y el 2475-1466 quedaron restringidos)
 
 // La dirección pública del catálogo, la que ven los clientes. El botón
 // Compartir de la ficha manda SIEMPRE esta, aunque se abra el catálogo desde
@@ -16070,7 +16070,7 @@ if(WHATSAPP){
    el retiro de SERVICIO lo dice. Lo que quede vacío no se muestra, y sin nada
    el pie queda solo con la cotización. Horario y razón social los tiene que
    pasar Benja. */
-// 5491125604799 → "+54 9 11 2560-4799". Un número con otra forma va con el + y nada más.
+// 5491125205232 → "+54 9 11 2520-5232". Un número con otra forma va con el + y nada más.
 const telefonoLegible = n => {
   const r = /^549(11)(\d{4})(\d{4})$/.exec(String(n || ''));
   return r ? `+54 9 ${r[1]} ${r[2]}-${r[3]}` : '+' + n;

@@ -105,33 +105,172 @@ async function correrPruebas(){
   };
   const total = real.productos.length;
 
-  /* ---- 6. Una carga corta de ADVAPP ----
+  /* ---- 6. Una carga corta de ADVAPP: la ultima lista completa hasta que otra respuesta la confirme ----
      Hasta el 29/09 esto exigia que "con el 85 % de las filas de la planilla
      siga usando ADVAPP" (496 de 583): era cuando ADVAPP traia MENOS filas que
-     la planilla a proposito. Hoy es al reves (758 contra una planilla
-     congelada en 583), y esa comprobacion fijaba justo el hueco del hallazgo
-     181: una carga con el 65 % de los productos de hoy se usa como completa,
-     porque la hoja Meta congelada la rescata. Que hacer ante una carga corta
-     -mostrar lo que vino de ADVAPP y avisar, o volver a la planilla del
-     16/09- lo decide Pedro; hasta entonces aca se informa lo que hace la
-     pagina, sin darlo por bueno ni por malo. */
+     la planilla a proposito. Despues fue al reves (758, y 881 el 19/10, contra
+     una planilla congelada en 583), y esa comprobacion fijaba justo el hueco
+     del hallazgo 181: una carga con el 65 % de los productos de hoy se usaba
+     como completa, porque la hoja Meta congelada la rescataba. Hasta el 21/10
+     aca solo se informaba lo que hacia la pagina: "que hacer ante una carga
+     corta lo decide Pedro (hallazgo 181)".
+     YA ESTA DECIDIDO: decision 4 A de Benja, 21/10 (Benja es el "Pedro" de
+     las notas viejas; T-07 de la auditoria web del 19/10). La web sigue
+     mostrando la ultima lista completa -la copia guardada en este navegador,
+     con su hora y la franja, como sin conexion- hasta que OTRA respuesta de
+     ADVAPP, con otro generado_en, confirme la baja; ahi se acepta. La hoja
+     Meta ya no se consulta. Sin copia que valga se muestra lo que llego (son
+     filas de ADVAPP de ahora), sin bajar la vara; y en la primera visita no
+     hay con que comparar. */
   {
-    const n = Math.ceil(total * 0.65);
-    const d = await conVara(() => conAdvapp(() => respuesta({ ...real, filas: n, productos: real.productos.slice(0, n) }), bajarDatos));
-    R.push('  --  con ' + n + ' de los ' + total + ' productos de hoy (65 %) la pagina usa ' + d.fuente +
-           (d.motivo ? ' (' + d.motivo + ')' : '') + ': que hacer ante una carga corta lo decide Pedro (hallazgo 181)');
-    const nueva = await conVara(() => conAdvapp(() => respuesta({ ...real, filas: 100, productos: real.productos.slice(0, 100) }), bajarDatos),
-                                [null, null]);
-    R.push('  --  un visitante nuevo (sin carga anterior en su navegador) con 100 de ' + total + ' usa ' + nueva.fuente +
-           (nueva.fuente === 'advapp' ? ': sin vara, no hay control de tamaño (hallazgo 181)' : ''));
+    const n = Math.ceil(total * 0.65), m = Math.ceil(total * 0.4);
+    const ahora = Date.now();
+    const g1 = new Date(ahora - 60000).toISOString(), g2 = new Date(ahora).toISOString();
+    // ADVAPP verificado y de hoy: lo que antes salia "Actualizado hoy"
+    const corto = (gen, cant = n, extra = {}) => respuesta({ ...real, ...extra, filas: cant, generado_en: gen,
+                                                            verificado_hoy: true, productos: real.productos.slice(0, cant) });
+    const copia0 = leerCopia();
+    const nCopia = copia0 ? copia0.filas.length - 1 : 0;
+    const esLaCopia0 = d => !!copia0 && d.fuente === 'copia' && d.hora === copia0.hora && cantidad(d) === nCopia;
+    const desdeHoy = [String(total), null];      // la vara de hoy, sin ninguna baja pendiente
+    const pend = p => p ? p.n + ' · ' + p.generado_en : 'sin pendiente';
+    const sinLaCopia = async hacer => {
+      const c = localStorage.getItem(COPIA_KEY), h = localStorage.getItem(COPIA_HORA_KEY);
+      borrarCopia();
+      try{ return await hacer(); }
+      finally{ try{ if(c !== null) localStorage.setItem(COPIA_KEY, c); if(h !== null) localStorage.setItem(COPIA_HORA_KEY, h); }catch(e){} }
+    };
+    let aGoogle = 0;
+    const contandoGoogle = async hacer => {
+      const f = window.fetch;
+      window.fetch = (u, o) => { if(/docs\.google/.test(String(u))) aGoogle++; return f(u, o); };
+      try{ return await hacer(); } finally { window.fetch = f; }
+    };
+    ok(!!copia0 && Math.abs(nCopia - total) <= total * 0.02, '[4 A] hay copia guardada de la carga de hoy para comparar', nCopia + ' filas · hoy ' + total);
+
+    const a = await conVara(async () => {
+      aGoogle = 0;
+      const d1 = await contandoGoogle(() => conAdvapp(() => corto(g1), bajarDatos));
+      const r1 = { d1, v1: filasDeAyer(), p1: leerPendiente(), google: aGoogle };
+      const d2 = await conAdvapp(() => corto(g1), bajarDatos);            // la misma, del cache
+      const d3 = await conAdvapp(() => corto(g2, n - 3), bajarDatos);     // otra, casi la misma cantidad
+      return { ...r1, d2, d3, v3: filasDeAyer(), p3: leerPendiente() };
+    }, desdeHoy);
+    ok(esLaCopia0(a.d1), '[4 A] con ' + n + ' de los ' + total + ' productos de hoy (65 %) y copia guardada, se usa la copia entera, no la corta',
+       a.d1.fuente + ' · ' + cantidad(a.d1) + ' filas · ' + (a.d1.motivo || 'sin motivo'));
+    ok(a.v1 === total && a.p1 && a.p1.n === n && a.p1.generado_en === g1,
+       '[4 A] la carga corta no baja la vara y queda anotada como pendiente, con su generado_en',
+       'vara ' + a.v1 + ' · ' + pend(a.p1));
+    ok(a.google === 0, '[4 A] y no se le pregunta a la hoja Meta (congelada en 583 desde el 16/09)', a.google + ' pedidos a Google');
+    ok(esLaCopia0(a.d2), '[4 A] la misma respuesta otra vez (mismo generado_en, la del cache) no confirma la baja: sigue la copia',
+       a.d2.fuente + ' · ' + cantidad(a.d2) + ' filas');
+    ok(a.d3.fuente === 'advapp' && !a.d3.motivo && cantidad(a.d3) === n - 3 && a.v3 === n - 3 && a.p3 === null,
+       '[4 A] otra respuesta con otro generado_en y casi la misma cantidad confirma la baja: se acepta y pasa a ser la vara',
+       a.d3.fuente + ' · ' + cantidad(a.d3) + ' filas · vara ' + a.v3 + ' · ' + pend(a.p3));
+
+    const otra = await conVara(async () => {
+      await conAdvapp(() => corto(g1), bajarDatos);
+      const d = await conAdvapp(() => corto(g2, m), bajarDatos);
+      return { d, v: filasDeAyer(), p: leerPendiente() };
+    }, desdeHoy);
+    ok(esLaCopia0(otra.d) && otra.v === total && otra.p && otra.p.n === m && otra.p.generado_en === g2,
+       '[4 A] otra respuesta corta pero con otra cantidad (' + m + ', 40 %) no confirma: sigue la copia y queda ella de pendiente',
+       otra.d.fuente + ' · vara ' + otra.v + ' · ' + pend(otra.p));
+
+    const vuelve = await conVara(async () => {
+      await conAdvapp(() => corto(g1), bajarDatos);
+      const d = await conAdvapp(() => respuesta({ ...real, generado_en: g2 }), bajarDatos);
+      return { d, v: filasDeAyer(), p: leerPendiente() };
+    }, desdeHoy);
+    ok(vuelve.d.fuente === 'advapp' && !vuelve.d.motivo && cantidad(vuelve.d) === total && vuelve.v === total && vuelve.p === null,
+       '[4 A] si la respuesta siguiente viene entera, se usa y la baja pendiente se olvida',
+       vuelve.d.fuente + ' · ' + cantidad(vuelve.d) + ' filas · ' + pend(vuelve.p));
+
+    const sinCopia = await sinLaCopia(() => conVara(async () => {
+      const d = await conAdvapp(() => corto(g1), bajarDatos);
+      return { d, v: filasDeAyer(), p: leerPendiente() };
+    }, desdeHoy));
+    ok(sinCopia.d.fuente === 'advapp' && cantidad(sinCopia.d) === n && /sin copia/.test(sinCopia.d.motivo || '')
+       && sinCopia.v === total && sinCopia.p && sinCopia.p.n === n,
+       '[4 A] sin copia que valga (vencida o sin guardar) se muestra lo que llego, con su motivo y sin bajar la vara',
+       sinCopia.d.fuente + ' · ' + cantidad(sinCopia.d) + ' filas · vara ' + sinCopia.v + ' · ' + (sinCopia.d.motivo || 'sin motivo'));
+
+    const nueva = await sinLaCopia(() => conVara(async () => {
+      const d = await conAdvapp(() => corto(g1, 100), bajarDatos);
+      return { d, v: filasDeAyer() };
+    }, [null, null]));
+    ok(nueva.d.fuente === 'advapp' && !nueva.d.motivo && cantidad(nueva.d) === 100 && nueva.v === 100,
+       '[4 A] primera visita (sin vara ni copia): no hay con que comparar y se muestra lo que llegue',
+       nueva.d.fuente + ' · ' + cantidad(nueva.d) + ' de ' + total + ' · vara ' + nueva.v);
+
+    // ADVAPP manda desde el 20/10 hoy_como_domingo en el sobre (el feriado cerrado)
+    const feriado = await conVara(async () => {
+      const d1 = await conAdvapp(() => corto(g1, n, { hoy_como_domingo: 'Feriado de prueba' }), bajarDatos);
+      const d2 = await conAdvapp(() => respuesta({ ...real, hoy_como_domingo: 'Feriado de prueba', generado_en: g2 }), bajarDatos);
+      return { d1, d2 };
+    }, desdeHoy);
+    ok(esLaCopia0(feriado.d1) && feriado.d2.fuente === 'advapp' && !feriado.d2.motivo && cantidad(feriado.d2) === total,
+       '[4 A] con hoy_como_domingo en el sobre todo sigue igual: la corta va a la copia y la entera se usa',
+       feriado.d1.fuente + ' · ' + feriado.d2.fuente + ' ' + cantidad(feriado.d2));
+
+    /* Lo que ve el cliente: actualizar(), como en el refresco de cada
+       REFRESCO_MIN. Se deja todo como estaba: la vara (conVara), la copia, el
+       pedido (limpiarPedido lo poda contra la lista corta) y la pantalla. */
+    if(copia0){
+      const crudo = [localStorage.getItem(COPIA_KEY), localStorage.getItem(COPIA_HORA_KEY)];
+      const pedido0 = localStorage.getItem(PEDIDO_KEY), PEDIDO0 = JSON.stringify(PEDIDO);
+      const nAntes = PRODUCTOS.length, h = hhmm(copia0.hora);
+      const sello = () => document.getElementById('stamp').textContent.trim();
+      const franja = () => !document.getElementById('franja').hidden;
+      const franjaTxt = () => document.getElementById('franja-txt').textContent.replace(/\s+/g, ' ').trim();
+      const devolverCopia = () => {
+        try{
+          if(crudo[0] === null) localStorage.removeItem(COPIA_KEY); else localStorage.setItem(COPIA_KEY, crudo[0]);
+          if(crudo[1] === null) localStorage.removeItem(COPIA_HORA_KEY); else localStorage.setItem(COPIA_HORA_KEY, crudo[1]);
+        }catch(e){}
+      };
+      try{
+        await conVara(async () => {
+          await conAdvapp(() => corto(g1), () => actualizar(false));
+          const c1 = leerCopia();
+          ok(FUENTE.fuente === 'copia' && PRODUCTOS.length === nAntes,
+             '[4 A] en pantalla queda la ultima lista completa (la copia), no la corta',
+             FUENTE.fuente + ' · ' + PRODUCTOS.length + ' de ' + nAntes + ' productos');
+          ok(sello() === 'Precios de las ' + h && franja() && franjaTxt() === 'Estás viendo los precios de las ' + h + '. No pudimos actualizarlos.',
+             '[4 A] con el sello y la franja de la copia, como sin conexion: nunca "Actualizado hoy"',
+             sello() + ' · ' + (franja() ? franjaTxt() : 'sin franja'));
+          ok(!!c1 && c1.hora === copia0.hora && c1.filas.length - 1 === nCopia,
+             '[4 A] la copia buena de este navegador no se pisa con la corta',
+             c1 ? (c1.filas.length - 1) + ' filas de las ' + hhmm(c1.hora) : 'sin copia');
+
+          await conAdvapp(() => corto(g2, n - 3), () => actualizar(false));
+          const c2 = leerCopia();
+          ok(FUENTE.fuente === 'advapp' && !FUENTE.motivo && PRODUCTOS.length === n - 3 && sello() === 'Actualizado hoy' && !franja(),
+             '[4 A] la segunda respuesta, con otro generado_en, confirma la baja: se ve la lista nueva, de hoy y sin franja',
+             FUENTE.fuente + ' · ' + PRODUCTOS.length + ' productos · ' + sello() + (franja() ? ' · con franja' : ''));
+          ok(!!c2 && c2.filas.length - 1 === n - 3,
+             '[4 A] y pasa a ser la copia de este navegador', c2 ? (c2.filas.length - 1) + ' filas' : 'sin copia');
+        }, desdeHoy);
+      }finally{
+        PEDIDO = JSON.parse(PEDIDO0);
+        try{ if(pedido0 === null) localStorage.removeItem(PEDIDO_KEY); else localStorage.setItem(PEDIDO_KEY, pedido0); }catch(e){}
+        devolverCopia();
+        await actualizar(false);         // la lista de verdad, como al empezar
+        devolverCopia();
+        pintarPedido();
+      }
+      ok(FUENTE.fuente === 'advapp' && PRODUCTOS.length === nAntes, 'despues de las simulaciones la pagina vuelve a la lista de hoy',
+         FUENTE.fuente + ' · ' + PRODUCTOS.length);
+    }
   }
 
   /* ---- 6. Cada caso en que ADVAPP no sirve usa la copia, nunca la planilla ----
      29/09 (decision 1.3 A de Pedro): cada caso exigia "usa la planilla
      entera". Ahora exige la copia de la ultima respuesta buena de ADVAPP que
      este navegador guardo al cargar la pagina, entera y con su hora, sin
-     pedirle la planilla a Google. La hoja Meta si se puede pedir: cuenta
-     filas cuando ADVAPP viene corto, y no son los datos de la planilla. */
+     pedirle la planilla a Google. (Hasta el 21/10 la hoja Meta si se pedia,
+     para contar filas cuando ADVAPP venia corto; desde la decision 4 A ya no:
+     ver la seccion 6 de arriba.) */
   const copia = leerCopia();
   ok(!!copia && copia.filas.length - 1 >= PRODUCTOS.length && Date.now() - copia.hora < 10 * 60000,
      'la carga de ADVAPP quedo guardada como copia en este navegador, con su hora',
@@ -152,7 +291,8 @@ async function correrPruebas(){
   ];
   /* Contra los productos de HOY y no contra las filas de la hoja Meta
      (29/09, hallazgo 181): la hoja quedo congelada en 583 y ADVAPP trae 758.
-     Con la mitad, cualquiera sea la decision de arriba, no es un catalogo. */
+     Con la mitad no es un catalogo (y desde la 4 A, 21/10, tampoco con el 65 %:
+     seccion 6). */
   {
     const n = Math.floor(total * 0.5);
     casos.push(['si trae la mitad de los productos de la ultima carga',

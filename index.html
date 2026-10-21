@@ -3835,20 +3835,22 @@ window.ADVAPP_TEMPRANO = (() => {
 // ADVAPP, el sistema interno: devuelve las mismas columnas que la planilla,
 // con los mismos nombres, en JSON. Si ADVAPP da error, tarda más de
 // ADVAPP_ESPERA_MS, viene sin productos, trae menos de los que declara o trae
-// menos de ADVAPP_MINIMO de las filas que dice la hoja Meta de la planilla, se
+// menos de ADVAPP_MINIMO de las filas de la última lista buena (hasta que otra
+// respuesta lo confirme, decisión 4 A de Benja del 21/10), se
 // muestra la COPIA de la última respuesta buena que guardó este navegador,
 // con su hora, si tiene menos de COPIA_VIGENCIA_MS; y si no hay copia, un
 // aviso de no disponible con Reintentar y WhatsApp.
 // La planilla ya NO es respaldo con ADVAPP puesta: Pedro eligió el 29/09
 // (muestra 1.3 A) no mostrar nada antes que la lista congelada del 16/09, que
-// daba con stock 94 productos que ADVAPP daba sin stock. La hoja Meta se
-// sigue leyendo, solo para contar filas cuando ADVAPP viene corto.
+// daba con stock 94 productos que ADVAPP daba sin stock. Desde el 21/10 la
+// hoja Meta tampoco se lee con ADVAPP puesta: quedó congelada en 583 filas el
+// 16/09 y ya no sirve para contar (ver bajarDatos).
 // Con ADVAPP_URL vacío la web vuelve a leer solo la planilla, como antes.
 const ADVAPP_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web';
 const ADVAPP_ESPERA_MS = 8000;
-// ADVAPP trae menos filas que la planilla a propósito: saca los repetidos y lo
-// destildado. Por eso no se le exige el total de Meta, solo que no quede muy
-// por debajo, que es lo que se ve cuando una respuesta llega cortada.
+// Cuánto puede bajar una lista de ADVAPP contra la última buena de este
+// navegador sin que se la tome por cortada: hasta un 20 %. Más que eso, se
+// sigue mostrando la copia hasta que otra respuesta confirme la baja.
 const ADVAPP_MINIMO = 0.8;
 /* Los topes de los demás pedidos (29/09). La primera pantalla espera a la
    cotización y al catálogo juntos, y solo ADVAPP tenía el suyo: con dolarapi
@@ -5000,11 +5002,13 @@ async function bajarMeta(){
   }catch(e){ return null; }
 }
 
-/* Meta la pueden pedir dos en la misma carga: bajarDatos, para ver si ADVAPP
-   vino corto, y bajarCSV, para contar las filas de la planilla. Dentro de una
-   misma vuelta de refresco se pide una sola vez. El sello ya no la pide por
-   su cuenta (29/09): usa el manifiesto que trajo la fuente (FUENTE.manifiesto),
-   así que con ADVAPP andando no sale ningún pedido a Google. */
+/* Meta la pueden pedir dos en la misma carga, las dos solo con ADVAPP_URL
+   vacío: bajarCSV, para contar las filas de la planilla, y bajarDatos, que la
+   lleva como manifiesto de la planilla. Dentro de una misma vuelta de
+   refresco se pide una sola vez. El sello ya no la pide por su cuenta (29/09):
+   usa el manifiesto que trajo la fuente (FUENTE.manifiesto). Y bajarDatos ya
+   no le pregunta si ADVAPP vino corto (21/10, decisión 4 A): con ADVAPP
+   puesta no sale ningún pedido a Google, ni cuando algo no cierra. */
 let metaPromesa = null, metaHora = 0;
 function metaDelCiclo(){
   if(!metaPromesa || Date.now() - metaHora > 20000){
@@ -5155,24 +5159,19 @@ let FUENTE = null;
 /* Primero ADVAPP; si no sirve, la copia de este navegador (ver guardarCopia),
    y la planilla con sus dos caminos (bajarCSV) solo con ADVAPP_URL vacío.
    El control de filas de ADVAPP es contra lo que el mismo JSON dice haber
-   escrito, y contra la planilla solo con margen: comparado exacto contra
-   Meta, la web creeria que vino cortado (trae menos a proposito) y volveria
-   siempre a la planilla. */
+   escrito y contra la última lista buena de este navegador, con margen
+   (ADVAPP_MINIMO): nunca contra la hoja Meta (21/10, ver bajarDatos). */
 /* Cuantas filas trajo la ultima carga buena. Es la vara para darse cuenta de
-   que ADVAPP vino cortado sin tener que preguntarle a la planilla en cada
-   visita: la hoja Meta es un pedido a Google que tarda y casi siempre
-   confirma lo que ya sabemos. Solo se la consulta cuando algo no cierra. */
+   que ADVAPP vino cortado. Solo se escribe cuando ADVAPP se acepta. */
 const ULTIMAS_FILAS = 'advtecno.filas';
 const filasDeAyer = () => { try{ return Number(localStorage.getItem(ULTIMAS_FILAS)) || 0; }catch(e){ return 0; } };
 const guardarFilas = n => { try{ localStorage.setItem(ULTIMAS_FILAS, String(n)); }catch(e){} };
-/* La baja que el control de tamaño rechazó, para reconocerla si se repite
-   (29/09). La cuenta de arriba solo se escribe cuando ADVAPP se acepta, y la
-   hoja Meta quedó congelada en 583: si ADVAPP bajaba de verdad de 467 filas,
-   el navegador que ya había venido (el de Pedro y el equipo) quedaba pegado a
-   la planilla para siempre, mientras un visitante nuevo veía ADVAPP. Ahora,
-   si OTRA respuesta -otro generado_en, no la misma copia del cache- trae
-   casi la misma cantidad (±2 %), la baja es real: se acepta y pasa a ser la
-   nueva vara. A dónde se cae mientras tanto no cambia. */
+/* La baja que el control de tamaño todavía no creyó, para reconocerla si se
+   repite: { n, generado_en } de la respuesta corta (29/09). Si OTRA respuesta
+   -otro generado_en, no la misma del cache- trae casi la misma cantidad
+   (±2 %), la baja es real: se acepta y pasa a ser la nueva vara. Así un
+   navegador que ya había venido no queda pegado a la copia cuando ADVAPP baja
+   de verdad (decisión 4 A de Benja, 21/10: ver bajarDatos). */
 const FILAS_PENDIENTES = 'advtecno.filas.pendiente';
 const leerPendiente = () => { try{ return JSON.parse(localStorage.getItem(FILAS_PENDIENTES) || 'null'); }catch(e){ return null; } };
 const guardarPendiente = x => {
@@ -5239,11 +5238,9 @@ function usarIndiceDeLaCopia(ix){
 }
 
 async function bajarDatos(){
-  let metaP = null;                   // se pide recien cuando hace falta
-  const meta = () => (metaP = metaP || metaDelCiclo());
   let motivo = '';
-  /* La carga corta que Meta no pudo aprobar ni rechazar (29/09): va de último
-     recurso si Google tampoco contesta, sin tocar la vara (ver abajo). */
+  /* La carga corta que todavía nadie confirmó (21/10): va de último recurso
+     si no hay copia, sin tocar la vara (ver abajo). */
   let corta = null;
   if(ADVAPP_URL){
     try{
@@ -5251,31 +5248,34 @@ async function bajarDatos(){
       const n = a.filas.length - 1;
       if(a.manifiesto.filas && n < a.manifiesto.filas)
         throw new Error(`trajo ${n} de las ${a.manifiesto.filas} filas que declara`);
-      /* Contra la planilla, y solo si trae menos que la ultima vez: ahi si
-         vale la pena preguntarle a Meta cuantas filas hay de verdad. */
+      /* Una lista mucho más corta que la última buena (decisión 4 A de Benja,
+         21/10; T-07 de la auditoría web del 19/10, hallazgo 181 del 29/09).
+         Hasta el 21/10 se le preguntaba a la hoja Meta de la planilla cuántas
+         filas había "de verdad", y la hoja quedó congelada en 583 el 16/09:
+         con 881 la última vez, ADVAPP podía mandar 550 (le faltaba un rubro
+         entero) y la web lo mostraba como "Actualizado hoy", pisaba la copia
+         buena de este navegador y bajaba la vara a 550. Solo frenaba por
+         debajo de 467. Meta ya no sirve para esto y no se le pregunta más.
+         Ahora una baja de más del 20 % no se cree de entrada: se anota como
+         pendiente y se sigue mostrando la última lista completa (la copia,
+         con su hora y la franja, igual que sin conexión) hasta que OTRA
+         respuesta de ADVAPP, con otro generado_en, traiga casi la misma
+         cantidad: ahí la baja es real, se acepta y pasa a ser la vara. La
+         misma respuesta repetida por el cache (mismo generado_en) no
+         confirma nada. ADVAPP rearma el JSON cada 60 a 90 s, así que el
+         refresco siguiente (REFRESCO_MIN) o la próxima visita ya la confirma:
+         no queda pegada a la copia. Sin vara (primera visita) no hay con qué
+         comparar y se usa lo que llegue. */
       const antes = filasDeAyer();
       if(antes && n < antes * ADVAPP_MINIMO){
         const p = leerPendiente(), hecho = a.manifiesto.generado_en;
-        const repetida = p && p.generado_en && hecho && p.generado_en !== hecho
-                         && Math.abs(n - Number(p.n)) <= Number(p.n) * 0.02;
-        /* Una Meta que no contestó no aprueba una carga corta (29/09). Con el
-           tope de META_ESPERA_MS, una Meta lenta daba planilla = 0 y se
-           aceptaba el ADVAPP corto, bajando la vara: justo en una red lenta,
-           que es cuando ADVAPP también viene mal. Queda como pendiente, así
-           una baja de verdad se confirma sola con la próxima respuesta que
-           traiga otro generado_en, igual que cuando Meta la rechaza. */
-        if(!repetida){
-          const planilla = Number((await meta())?.filas) || 0;
-          if(!planilla || n < planilla * ADVAPP_MINIMO){
-            guardarPendiente({ n, generado_en: hecho });
-            if(!planilla){
-              corta = a;
-              throw new Error(`trajo ${n} filas, menos de ${Math.ceil(ADVAPP_MINIMO * antes)} ` +
-                              `de las ${antes} de la última vez, y la hoja Meta no contestó`);
-            }
-            throw new Error(`trajo ${n} filas y la planilla tiene ${planilla} ` +
-                            `(menos de ${Math.ceil(ADVAPP_MINIMO * planilla)})`);
-          }
+        const confirmada = p && p.generado_en && hecho && p.generado_en !== hecho
+                           && Math.abs(n - Number(p.n)) <= Number(p.n) * 0.02;
+        if(!confirmada){
+          guardarPendiente({ n, generado_en: hecho });
+          corta = a;
+          throw new Error(`trajo ${n} filas, menos de ${Math.ceil(ADVAPP_MINIMO * antes)} de las ${antes} ` +
+                          'de la última lista buena; falta que otra respuesta lo confirme');
         }
       }
       guardarFilas(n);
@@ -5291,18 +5291,19 @@ async function bajarDatos(){
     const copia = leerCopia();
     if(copia) return { fuente: 'copia', manifiesto: null, motivo, hora: copia.hora,
                        filas: copia.filas, indice: copia.indice };
-    /* Sin copia, la carga corta que Meta no pudo juzgar se muestra antes que el
+    /* Sin copia que valga (venció a las COPIA_VIGENCIA_MS, o no se pudo
+       guardar), la carga corta todavía sin confirmar se muestra antes que el
        aviso (29/09), sin guardarFilas y sin guardarla como copia (lleva
-       motivo): la vara no baja por una carga que nadie aprobó. Son filas de
+       motivo): la vara no baja por una carga que nadie confirmó. Son filas de
        ADVAPP de ahora, no una lista vieja. */
     if(corta) return { ...corta, motivo: `${motivo} · sin copia guardada` };
     /* El error dice por qué no sirvió ADVAPP, que es lo que hay que ir a mirar
        (queda en ULTIMO_FALLO para la medición), y que no había copia. */
     throw new Error(`ADVAPP: ${motivo} · sin copia guardada que valga`);
   }
-  // Sin ADVAPP_URL: la planilla, como antes del 17/09
+  // Sin ADVAPP_URL: la planilla, como antes del 17/09, con la hoja Meta de manifiesto
   const txt = await bajarCSV();
-  return { fuente: 'planilla', manifiesto: await meta(), motivo, filas: parseCSV(txt) };
+  return { fuente: 'planilla', manifiesto: await metaDelCiclo(), motivo, filas: parseCSV(txt) };
 }
 
 /* Notas de carga que se cuelan en el nombre del producto. El cliente las lee

@@ -210,13 +210,15 @@ async function correrPruebas(){
   }
 
   /* ---- [8] Una baja real de ADVAPP no deja pegado al respaldo ----
-     (29/09: el respaldo pasó de la planilla a la copia de este navegador) */
+     (29/09: el respaldo pasó de la planilla a la copia de este navegador)
+     21/10 (decision 4 A de Benja, T-07): la carga corta se medía con el 70 %
+     de la hoja Meta, congelada en 583 desde el 16/09. Ahora la hoja no cuenta:
+     se prueba con el 65 % de los productos de hoy, justo lo que Meta dejaba
+     pasar como completo. */
   {
     const filas0 = localStorage.getItem('advtecno.filas'), pend0 = localStorage.getItem('advtecno.filas.pendiente');
-    metaHora = 0;
-    const filasMeta = Number((await metaDelCiclo())?.filas) || 0;
-    const n = Math.floor(filasMeta * 0.7);
-    if(filasMeta && n < nHoy * ADVAPP_MINIMO){
+    const n = Math.floor(nHoy * 0.65);
+    {
       localStorage.setItem('advtecno.filas', String(nHoy));
       localStorage.removeItem('advtecno.filas.pendiente');
       const corto = gen => b1Json({ ...hoy, filas: n, generado_en: gen, productos: hoy.productos.slice(0, n) });
@@ -228,8 +230,6 @@ async function correrPruebas(){
       ok(d3.fuente === 'advapp' && filasDeAyer() === n,
          'otra respuesta con la misma cantidad es una baja real: se acepta y pasa a ser la vara',
          d3.fuente + ' · ' + filasDeAyer());
-    }else{
-      R.push('  --   la hoja Meta no dice cuantas filas tiene: no se prueba la baja real');
     }
     try{
       if(filas0 === null) localStorage.removeItem('advtecno.filas'); else localStorage.setItem('advtecno.filas', filas0);
@@ -245,7 +245,11 @@ async function correrPruebas(){
      29/09 (decision 1.3 A): con ADVAPP caido ya no se lee la planilla, asi
      que lo de la planilla entera se prueba directo sobre bajarCSV(), que es
      el camino con ADVAPP_URL vacio; el ADVAPP corto rechazado va a la copia,
-     y el ADVAPP corto de ultimo recurso se prueba sin copia (va despues). */
+     y el ADVAPP corto de ultimo recurso se prueba sin copia (va despues).
+     21/10 (decision 4 A de Benja, T-07): bajarDatos ya no le pregunta nada a
+     Meta (congelada en 583 desde el 16/09). Lo de Meta lenta sigue valiendo
+     para bajarCSV; el ADVAPP corto se sigue probando con Meta lenta o caida,
+     para ver que no cambia nada y que ni se la pide. */
   {
     const filas0 = localStorage.getItem('advtecno.filas'), pend0 = localStorage.getItem('advtecno.filas.pendiente');
     const esMeta = u => u.startsWith(META_URL);
@@ -273,23 +277,24 @@ async function correrPruebas(){
            '[3] y con la hoja Meta en error, lo mismo',
            nFilas(conError) + ' de ' + filasMeta);
 
-        const n = Math.floor(filasMeta * 0.7);
-        if(n < nHoy * ADVAPP_MINIMO){
+        const n = Math.floor(nHoy * 0.65);
+        {
           const corto = gen => b1Json({ ...hoy, filas: n, generado_en: gen, productos: hoy.productos.slice(0, n) });
           localStorage.setItem('advtecno.filas', String(nHoy));
           localStorage.removeItem('advtecno.filas.pendiente');
           metaPromesa = null;
+          let aMeta = 0;
           const d1 = await b1Fetch((u, o, f) => esAdvapp(u) ? corto('2026-09-29T11:00:00Z')
-                                             : esMeta(u) ? metaLenta(u, o, f) : f(u, o), bajarDatos);
-          ok(d1.fuente === 'copia' && filasDeAyer() === nHoy,
-             '[3] un ADVAPP corto con la hoja Meta lenta no se acepta ni baja la vara: va la copia',
-             d1.fuente + ' · vara ' + filasDeAyer() + ' (era ' + nHoy + ')');
+                                             : esMeta(u) ? (aMeta++, metaLenta(u, o, f)) : f(u, o), bajarDatos);
+          ok(d1.fuente === 'copia' && filasDeAyer() === nHoy && aMeta === 0,
+             '[3] un ADVAPP corto con la hoja Meta lenta no se acepta ni baja la vara, y Meta ni se pide: va la copia',
+             d1.fuente + ' · vara ' + filasDeAyer() + ' (era ' + nHoy + ') · ' + aMeta + ' pedidos a Meta');
 
           localStorage.removeItem('advtecno.filas.pendiente');
           metaPromesa = null;
           const d2 = await b1SinCopia(() => b1Fetch((u, o, f) => esAdvapp(u) ? corto('2026-09-29T11:00:00Z')
                                              : esGoogle(u) ? b1Cae() : f(u, o), bajarDatos));
-          ok(d2.fuente === 'advapp' && nFilas(d2.filas) === n && filasDeAyer() === nHoy && /Meta no contestó/.test(d2.motivo || ''),
+          ok(d2.fuente === 'advapp' && nFilas(d2.filas) === n && filasDeAyer() === nHoy && /sin copia/.test(d2.motivo || ''),
              '[3] sin copia y con Google caido, se muestra el ADVAPP corto de ultimo recurso, sin bajar la vara',
              d2.fuente + ' · ' + nFilas(d2.filas) + ' filas · vara ' + filasDeAyer() + ' · ' + d2.motivo);
 
@@ -300,8 +305,6 @@ async function correrPruebas(){
           ok(d3.fuente === 'advapp' && filasDeAyer() === n,
              '[3] otra respuesta con la misma cantidad confirma la baja aunque Meta no conteste',
              d3.fuente + ' · vara ' + filasDeAyer());
-        }else{
-          R.push('  --   [3] con los datos de hoy un 70 % de Meta no es una carga corta: no se prueba el ADVAPP corto');
         }
       }finally{
         metaPromesa = null;

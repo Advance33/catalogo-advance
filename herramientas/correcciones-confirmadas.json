@@ -298,6 +298,7 @@
   {"id": "GAF-RAY-038", "cambios": {"nombre": "Rayban Meta GEN2 Wayfarer (Matte Black · Polarized Gradient Graphite)", "color": "Matte Black · Polarized Gradient Graphite"}, "motivo": "Correcciones 21/10 (descripciones del 21/10): Meta tiene una sola Wayfarer Gen 2 polarizada en grafito degradado y es negro mate", "fecha": "2026-10-21"},
   {"id": "ACC-DJI-004", "cambios": {"nombre": "DJI RC Motion 2"}, "motivo": "Correcciones 21/10 (descripciones del 21/10): DJI lo da para más drones que el Avata", "fecha": "2026-10-21"},
   {"id": "CEL-XIA-POCOF8PRO-12G256-BLK-000", "cambios": {"nombre": "Xiaomi Poco F8 Pro 5G 12/256GB (Black)"}, "motivo": "Correcciones 21/10 (descripciones del 21/10): como su hermana de 12/512 (hay un solo F8 Pro y es 5G)", "fecha": "2026-10-21"},
-  {"id": "CEL-XIA-POCOM8PRO-12G512-000-000", "cambios": {"nombre": "Xiaomi Poco M8 Pro 5G 12/512GB"}, "motivo": "Correcciones 21/10 (descripciones del 21/10): hay un solo POCO M8 Pro y es 5G", "fecha": "2026-10-21"}
+  {"id": "CEL-XIA-POCOM8PRO-12G512-000-000", "cambios": {"nombre": "Xiaomi Poco M8 Pro 5G 12/512GB"}, "motivo": "Correcciones 21/10 (descripciones del 21/10): hay un solo POCO M8 Pro y es 5G", "fecha": "2026-10-21"},
+  {"id": "AUD-JBL-002", "cambios": {"color": "Squad", "nombre": "Charge 6 (Squad)"}, "motivo": "Benja 22/10 (decisión 2 A): JBL llama Squad al camuflado del Charge 6 (JBLCHARGE6SQUAD); la fila decía Camo", "fecha": "2026-10-22"}
  ]
 }

@@ -176,6 +176,13 @@ si alguna falta).
                   JSON-LD de la tienda (8 A); y el producto nuevo que ADVAPP
                   manda con la garantia vacia no tiene renglon de garantia
                   (en un usado sigue el texto de siempre).
+  fotos-smallrig.js
+                  Las cuatro baterias y cargadores SmallRig (AT-0019,
+                  AT-0034, AT-0035, AT-0508) quedan sin foto hasta que el
+                  proveedor diga el numero de la caja (Benja, 22/10, 1 A):
+                  que ninguna de las cuatro fotos equivocadas vuelva, ni como
+                  archivo de un producto SmallRig ni desde ADVAPP, y que sin
+                  foto la tarjeta y la ficha muestren el cartel de siempre.
   decision-colores.js
                   Como se elige el color en la ficha (Pedro, 30/09: la C,
                   "Vitrina de fotos", de muestras/colores): debajo de la

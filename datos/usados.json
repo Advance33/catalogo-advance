@@ -1,6 +1,6 @@
 {
   "formato": "usados/1",
-  "actualizado": "2026-10-05",
+  "actualizado": "2026-10-22",
   "equipos": [
     {
       "id": "iphone",
@@ -93,7 +93,7 @@
       "grupos": [
         { "nombre": "PlayStation 4", "modelos": [
           { "id": "ps4", "nombre": "PS4", "opciones": [
-            { "nombre": "Con caja", "usd": 120 }, { "nombre": "Sin caja", "usd": 120 } ] },
+            { "nombre": "Con caja", "usd": 120 }, { "nombre": "Sin caja", "usd": 100 } ] },
           { "id": "ps4-pro", "nombre": "PS4 Pro", "opciones": [
             { "nombre": "Con caja", "usd": 150 }, { "nombre": "Sin caja", "usd": 130 } ] }
         ] }

@@ -909,3 +909,6 @@ c9330fde1d29891aa45d98021dd435f7  AT-0649-01.jpg                     # mirada 20
 8e49b0bf84527114aa9ec3ea6e8542a7  AT-0651-02.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para TAB-XIA-REDMIPAD2-4G256-GRY-WIFI
 27eb18ffc0df1042b2d423b930740883  AT-0652-01.jpg                     # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para DSK-APL-IMAC24M4-24G512-BLU-000-EN
 27eb18ffc0df1042b2d423b930740883  AT-0653-01.jpg                     # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para DSK-APL-IMAC24M4-24G512-BLU-000-EN
+b6bbc6111b0a5ea1d42a7ab610e921df  AT-0654.jpg                        # mirada 22/10: oficial de Apple, Thunderbolt 3 (USB-C) 0,8 m (MQ4H2), la misma que ADVAPP tiene para ACA-APL-CABLE-000-000-TB308M (fuentes.tsv)
+60d5397f2cce3cad521a3c417c97fe60  AT-0655-01.jpg                     # mirada 22/10: copia de AT-0647-01, la misma notebook Dell 15 DC15250 Carbon Black con otra memoria (no se ve)
+5957c59ec081d16e5919d29b74a39435  AT-0466-04.jpg                     # mirada 22/10: copia de AT-0467-04, el mismo iPad 11 A16 Pink con otra memoria (no se ve)

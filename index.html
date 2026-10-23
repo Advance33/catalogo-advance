@@ -2202,6 +2202,39 @@ window.ADVAPP_TEMPRANO = (() => {
   .fi-cuotas-res .nada{font:400 12.5px/1.4 var(--sans);color:#C4B5FD}
   .fi-cuotas-nota{margin:-4px 0 0;font:400 11.5px/1.45 var(--sans);color:var(--faint)}
 
+  /* ---------- Las dos promos de la ficha (Benja, 23/10/2026) ----------
+     La B de "Usado y cuotas: sugerencias, sin bloquear WhatsApp": antes de
+     escribir, el cliente ve que puede entregar un usado y pagar en cuotas.
+     Es una sugerencia, no un paso: el botón de WhatsApp sigue igual (Benja:
+     "no quiero que sea un bloqueo, si no, no contestan"). La amarilla es la
+     de "Cotizá tu usado" de la barra; la lila, la de los controles. */
+  .fi-promos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .fi-promo{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-height:118px;padding:13px 14px;
+            border-radius:16px;cursor:pointer;text-align:left;font:inherit;animation:fi-promo-entrar .5s ease-out both}
+  .fi-promo svg{width:24px;height:24px;margin-bottom:2px;flex:none}
+  .fi-promo b{font:700 15.5px/1.2 var(--sans)}
+  .fi-promo span{font:400 13px/1.3 var(--sans)}
+  .fi-promo .fi-promo-ir{margin-top:auto;padding-top:4px;font-weight:700;font-size:14px}
+  .fi-promo .fi-promo-ir i{display:inline-block;font-style:normal;animation:fi-promo-empuje 1.6s ease-in-out infinite}
+  .fi-promo-usado{position:relative;overflow:hidden;border:0;color:#3B2000;
+                  background:linear-gradient(135deg,#FFE9A8,#F0C24A);animation-delay:.15s}
+  /* El brillo que la cruza cada tanto: lo que llama la atención sin tapar nada */
+  .fi-promo-usado::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.65) 50%,transparent 65%);
+    background-size:250% 100%;background-position:160% 0;animation:fi-promo-brillo 3.4s ease-in-out 1s infinite}
+  .fi-promo-cuotas{border:1px solid var(--line);color:#3B1C7A;background:var(--surface-2);animation-delay:.3s}
+  .fi-promo:hover{box-shadow:0 0 0 2px var(--acento)}
+  .fi-promo:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  /* La lila lleva a la etiqueta del precio y la hace latir una vez */
+  .fi-cuotas.fi-cuotas-mira{border-radius:10px;animation:fi-promo-toque .9s ease-out}
+  @keyframes fi-promo-entrar{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes fi-promo-brillo{0%{background-position:160% 0}55%,100%{background-position:-60% 0}}
+  @keyframes fi-promo-empuje{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+  @keyframes fi-promo-toque{0%{box-shadow:0 0 0 0 rgba(124,58,237,.6)}100%{box-shadow:0 0 0 16px rgba(124,58,237,0)}}
+  @media (prefers-reduced-motion: reduce){
+    .fi-promo,.fi-promo-usado::after,.fi-promo .fi-promo-ir i,.fi-cuotas.fi-cuotas-mira{animation:none}
+  }
+
   .fi-nota{font-size:11px;color:var(--faint);margin:0}
   /* Lo que el cliente esta eligiendo, escrito de corrido, justo arriba del
      boton. La ficha ya lo dice, pero en pedazos: el modelo en el titulo, la
@@ -12468,6 +12501,7 @@ function htmlDatosFicha(m, v){
       ${htmlCuotasFicha(v)}
     </div>
     ${conCuotas(v) ? `<p class="fi-cuotas-nota">${esc(LETRA_CHICA_CUOTAS)}</p>` : ''}
+    ${htmlPromosFicha(v)}
     ${ejes}
     ${htmlTodasFicha(m, v)}
     ${v.incluye ? `<div class="incluye">${esc(textoIncluye(v.incluye))}</div>` : ''}
@@ -13292,6 +13326,22 @@ function engancharFicha(d, m, v){
   engancharDescripcion(d);     // el acordeón y su lugar (celular o compu)
   // Los planes de la etiqueta del precio (2B, 30/09)
   d.querySelectorAll('.fi-cuota').forEach(b => b.onclick = () => elegirCuotaFicha(d, v, Number(b.dataset.cuotas)));
+  /* Las promos (23/10/2026): la amarilla abre el cotizador como "Entregar mi
+     usado"; la lila, si no había plan, elige el más largo (el WhatsApp de la
+     ficha lo dice, como cualquier plan tocado) y lleva la vista a la etiqueta. */
+  const promoUsado = d.querySelector('#fi-promo-usado');
+  if(promoUsado) promoUsado.onclick = () => abrirCotizador({ k: FICHA || clave(v), color: COLOR_FICHA });
+  const promoCuotas = d.querySelector('#fi-promo-cuotas');
+  if(promoCuotas) promoCuotas.onclick = () => {
+    if(!CUOTA_FICHA) elegirCuotaFicha(d, v, maxCuotas());
+    const etiqueta = d.querySelector('.fi-cuotas');
+    if(!etiqueta) return;
+    const quieto = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    etiqueta.scrollIntoView({ behavior: quieto ? 'auto' : 'smooth', block: 'center' });
+    etiqueta.classList.remove('fi-cuotas-mira');
+    void etiqueta.offsetWidth;           // para que el latido arranque de nuevo
+    etiqueta.classList.add('fi-cuotas-mira');
+  };
   // "Ver formas de pago" abre y cierra la respuesta de PREGUNTAS (2.5 B)
   const desplegar = d.querySelector('.fi-desplegar');
   if(desplegar) desplegar.onclick = () => {
@@ -13490,6 +13540,30 @@ function htmlPedidoFicha(k){
 }
 function htmlBotonUsado(){
   return USADOS && WHATSAPP ? '<button type="button" class="sec" id="fi-usado">🔁 Entregar <span class="fi-usado-mi">mi </span>usado</button>' : '';
+}
+/* Las dos promos de la ficha (Benja, 23/10/2026; estilos en .fi-promos). La
+   amarilla sale con lo mismo que "Entregar mi usado" (la lista de valores y
+   WhatsApp) y abre el mismo cotizador; la lila, con lo mismo que los planes
+   de la etiqueta del precio, y dice el plan más largo que hay en CUOTAS. Sin
+   stock no va ninguna, como los botones del pedido: ahí sólo queda "Avisame
+   cuando entre". Si la lista de usados llega tarde, refrescarFicha() redibuja
+   los datos y la amarilla aparece sola. */
+function htmlPromosFicha(v){
+  if(!v || v.stock === false) return '';
+  const usado = !!(USADOS && WHATSAPP);
+  const cuotas = conCuotas(v) && maxCuotas() > 1;
+  if(!usado && !cuotas) return '';
+  // La flecha va pegada a la última palabra: a 390 px "Ver cuánto queda" corta
+  // en dos renglones y la flecha quedaba sola en el de abajo
+  const ir = t => `<span class="fi-promo-ir">${t}&nbsp;<i aria-hidden="true">→</i></span>`;
+  return `<div class="fi-promos">
+    ${usado ? `<button type="button" class="fi-promo fi-promo-usado" id="fi-promo-usado">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>
+      <b>¿Tenés un usado?</b><span>Te lo tomamos como parte de pago</span>${ir('Cotizalo')}</button>` : ''}
+    ${cuotas ? `<button type="button" class="fi-promo fi-promo-cuotas" id="fi-promo-cuotas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg>
+      <b>Hasta ${maxCuotas()} cuotas</b><span>Con tarjeta</span>${ir('Ver cuánto queda')}</button>` : ''}
+  </div>`;
 }
 function htmlPedidoFichaSolo(k){
   const n = cantDe(k);

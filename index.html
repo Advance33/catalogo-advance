@@ -1327,6 +1327,24 @@ window.ADVAPP_TEMPRANO = (() => {
   .ay-r a{justify-self:start;color:#C4B5FD;text-decoration:none;padding:4px 0;
           font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
   .ay-r a::after{content:" →"}
+  /* El envío en moto (23/10/2026, decisión 3 de Benja): la tabla de lo que
+     cuesta cada zona y, cerrado, "¿En qué cordón estoy?" con las localidades */
+  .ay-tabla{justify-self:start;width:min(100%,340px);border-collapse:collapse;font-size:14px;line-height:1.35}
+  .ay-tabla th,.ay-tabla td{padding:7px 0;border-bottom:1px solid rgba(244,239,253,.1);text-align:left;font-weight:500}
+  .ay-tabla th{color:#F4EFFD}
+  .ay-tabla td{padding-left:16px;text-align:right;color:#fff;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .ay-tabla tr:last-child th,.ay-tabla tr:last-child td{border-bottom:0}
+  .ay-zonas summary{display:inline-flex;align-items:center;gap:8px;padding:2px 0;cursor:pointer;list-style:none;
+                    color:#C4B5FD;font:600 13.5px/1.3 var(--sans)}
+  .ay-zonas summary::-webkit-details-marker{display:none}
+  .ay-zonas summary::after{content:"";width:6px;height:6px;border:1.6px solid currentColor;border-left:0;border-top:0;
+                           transform:translateY(-2px) rotate(45deg);transition:transform .2s ease}
+  .ay-zonas[open] summary::after{transform:translateY(1px) rotate(-135deg)}
+  .ay-zonas summary:focus-visible{outline:2px solid #C4B5FD;outline-offset:2px;border-radius:4px}
+  .ay-zonas dl{margin:8px 0 0;display:grid;gap:8px;font-size:13.5px;line-height:1.5}
+  .ay-zonas dt{color:#F4EFFD;font-weight:600}
+  .ay-zonas dd{margin:0;color:#C9BFE0}
+  .ay-zonas p{margin:8px 0 0;font-size:13.5px}
   /* "Cotizar mi usado" en la respuesta de usados (05/10), como el botón de
      "¿Buscás algo que no está?" */
   .ay-usados{display:grid;gap:10px}
@@ -4077,17 +4095,45 @@ const MAPA      = 'https://maps.app.goo.gl/kzwGpTwUNLkTEwWRA';
 
 // Las tres líneas debajo del botón de WhatsApp, en cada ficha: [título, detalle].
 // Si el producto trae su garantía en la planilla, se muestra esa en el detalle.
+// El detalle del envío (23/10/2026) dice lo mismo que la pregunta de envíos:
+// decía solo la paquetería, y en CABA y GBA se lleva en moto.
 const SERVICIO = {
-  envio:    ['Envíos a todo el país', 'Por la paquetería que elijas. Recomendamos Andreani.'],
+  envio:    ['Envíos a todo el país', 'En CABA y GBA, en moto en el día. Al resto del país, por la paquetería que elijas: recomendamos Andreani.'],
   retiro:   ['Retiro en CABA',        'Con cita previa: la coordinamos por WhatsApp.'],
   garantia: ['Con garantía',          'Cada producto tiene la suya.'],
 };
+
+/* El envío en moto en CABA y GBA (23/10/2026, decisión 3 de Benja): lo que
+   cuesta cada zona, tal cual lo pasó, y qué localidades caen en cada cordón.
+   Va en la respuesta de "¿Hacen envíos?": la tabla de precios y, en el
+   desplegable "¿En qué cordón estoy?", las localidades. José León Suárez
+   queda en el 2º hasta que Benja confirme. La que no está se consulta por
+   WhatsApp. Los precios son texto: la página no calcula nada con ellos. */
+const ENVIO_MOTO = [
+  { zona: 'CABA',       precio: '$12.000' },
+  { zona: '1er cordón', precio: '$15.000',
+    localidades: ['Olivos', 'Munro', 'Florida', 'Vicente López', 'San Martín', 'Caseros', 'La Tablada', 'Haedo',
+                  'Ramos Mejía', 'Avellaneda', 'Sarandí', 'Lanús', 'Valentín Alsina', 'Wilde'] },
+  { zona: '2do cordón', precio: '$25.000',
+    localidades: ['Martínez', 'San Isidro', 'José León Suárez', 'Villa Ballester', 'Martín Coronado', 'San Andrés',
+                  'Hurlingham', 'Ituzaingó', 'Castelar', 'Morón', 'San Justo', 'Temperley', 'Banfield', 'Quilmes',
+                  'Bernal', 'Villa Luzuriaga', 'Lomas de Zamora', 'Boulogne', 'Beccar', 'Aldo Bonzi'] },
+  { zona: '3er cordón', precio: '$45.000',
+    localidades: ['San Fernando', 'San Miguel', 'Tigre', 'Victoria', 'Benavídez', 'Ingeniero Maschwitz', 'Moreno',
+                  'Merlo', 'Ezeiza', 'Monte Grande', 'Florencio Varela', 'Adrogué', 'Guernica', 'Lavallol',
+                  'Berazategui', 'Burzaco', 'Nordelta', 'Claypole', 'Tortuguitas', 'Ricardo Rojas',
+                  'Isidro Casanova', 'Bella Vista', 'Los Polvorines', 'Loma Hermosa', 'Don Torcuato'] },
+  { zona: '4to cordón', precio: '$55.000',
+    localidades: ['Pilar', 'Escobar', 'General Rodríguez', 'Cañuelas', 'La Plata'] },
+];
 
 // Las preguntas del final de la portada, en este orden.
 //   p     → la pregunta
 //   r     → la respuesta, un párrafo por renglón
 //   lista → (opcional) viñetas debajo de la respuesta
 //   link  → (opcional) [texto del botón, dirección]
+//   envioMoto → (opcional) la tabla de ENVIO_MOTO, después de `r`
+//   despues   → (opcional) párrafos que van después de la tabla
 // Reescritas el 17/09: primero la respuesta, después el detalle. El precio en
 // pesos subió al segundo lugar porque es lo primero que se mira al entrar.
 // Ningún dato cambió: los recargos y la dirección son los de siempre.
@@ -4115,9 +4161,17 @@ const PREGUNTAS = [
     r: ['Sí, en cualquier producto. Lo cotizás acá: elegís tu equipo, contestás unas preguntas y en el momento sabés cuánto vale.'] },
   { p: '¿Por qué cambia el precio en pesos?',
     r: ['Todos los precios están en dólares. El valor en pesos que ves al lado es una referencia: se calcula con la cotización del día, así que se mueve con el dólar.'] },
+  /* (23/10/2026, decisión 3 de Benja) El texto del estándar, tal cual:
+     primero la moto de CABA y GBA con la tabla de ENVIO_MOTO en el medio, y
+     después el resto del país. Antes hablaba solo del resto del país. El
+     50 % de la lluvia es del envío y lo decidió Benja: la regla de no mostrar
+     porcentajes ni "recargo" (Pedro, 03/10) es para el interés de las
+     cuotas. La tanda ayuda.js fija este texto y la tabla. */
   { p: '¿Hacen envíos?',
-    r: ['Sí, a todo el país. Lo despachamos por la paquetería que elijas: el costo y la demora los pone cada empresa.',
-        'Si no tenés preferencia, te recomendamos Andreani.'] },
+    r: ['En CABA y GBA te lo llevamos en moto en el día:'],
+    envioMoto: true,
+    despues: ['Los días de lluvia, 50 % de recargo.',
+              'Al resto del país lo mandamos por la paquetería que elijas, recomendamos Andreani: el costo y la demora los pone la empresa.'] },
   /* El horario (23/10/2026, decisión 4A de Benja), con este texto en todos
      lados: «con cita previa, de lunes a viernes de 10 a 18 y sábados de 11:15
      a 14:45». El sábado ya no es "11 a 14". La tanda ayuda.js lo mira. */
@@ -10948,6 +11002,21 @@ let ayIndice = 0;
    producto nuevo) es h3. Eran h3 colgando de "Elegí un rubro", con sus
    productos al mismo nivel que el título del bloque. El CSS va por clase o
    por "h2/h3 de este bloque": se ve igual que antes. */
+/* La tabla del envío en moto y "¿En qué cordón estoy?" (23/10/2026, decisión
+   3 de Benja), en la respuesta de "¿Hacen envíos?". Salen de ENVIO_MOTO;
+   vacía, no va nada. Las localidades van en un desplegable cerrado, así la
+   respuesta no se hace larga, y sin viñetas (una línea por cordón). */
+function htmlEnvioMoto(){
+  const zonas = (Array.isArray(ENVIO_MOTO) ? ENVIO_MOTO : []).filter(z => z && z.zona && z.precio);
+  if(!zonas.length) return '';
+  const conLugares = zonas.filter(z => Array.isArray(z.localidades) && z.localidades.length);
+  return `<table class="ay-tabla" aria-label="Envío en moto: lo que cuesta cada zona"><tbody>${
+      zonas.map(z => `<tr><th scope="row">${esc(z.zona)}</th><td>${esc(z.precio)}</td></tr>`).join('')}</tbody></table>
+    ${conLugares.length ? `<details class="ay-zonas"><summary>¿En qué cordón estoy?</summary>
+      <dl>${conLugares.map(z => `<div><dt>${esc(z.zona)}</dt><dd>${z.localidades.map(esc).join(', ')}.</dd></div>`).join('')}</dl>
+      <p>Si tu localidad no está, consultanos por WhatsApp.</p></details>` : ''}`;
+}
+
 function htmlAyuda(){
   if(!PREGUNTAS.length) return '';
   if(ayIndice >= PREGUNTAS.length) ayIndice = 0;
@@ -10962,6 +11031,8 @@ function htmlAyuda(){
     <div class="ay-r${i === ayIndice ? ' ve' : ''}" data-ay="${i}" id="ay-r-${i}">
       <h3>${esc(q.p)}</h3>
       ${(q.r || []).map(t => `<p>${esc(t)}</p>`).join('')}
+      ${q.envioMoto ? htmlEnvioMoto() : ''}
+      ${(q.despues || []).map(t => `<p>${esc(t)}</p>`).join('')}
       ${q.lista ? `<ul>${q.lista.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
       ${q.link ? `<a href="${esc(q.link[1])}" target="_blank" rel="noopener">${esc(q.link[0])}</a>` : ''}
       ${q.usados ? `<div class="ay-usados">${htmlAyudaUsados()}</div>` : ''}

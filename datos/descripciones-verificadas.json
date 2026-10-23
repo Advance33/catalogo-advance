@@ -3844,6 +3844,19 @@
     "https://support.d-imaging.sony.co.jp/www/cscs/accessories/detail.php?value1=ECM-B10&value2=ZV-E10M2&area=gb&lang=es&loc=es_AR"
    ]
   },
+  "7846c6c7bc79ae66a0036ddc90dba2f325d78de3a97df49e545d7645d78a0e76": {
+   "modelo": "Sony FE 100 mm F2.8 STF GM OSS (SEL100F28GM) (la fila no dice «STF»)",
+   "fecha": "2026-10-23",
+   "por": "verificador-descripciones",
+   "informe": "informe-01.json",
+   "fuentes": [
+    "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel100f28gm/specifications",
+    "https://www.sony.com/electronics/camera-lenses/sel100f28gm/specifications",
+    "https://support.d-imaging.sony.co.jp/www/cscs/lens_body/?mdl=SEL14TC&area=gwt&lang=en",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=en&mdl=SEL14TC&cat=8",
+    "https://support.d-imaging.sony.co.jp/www/cscs/accessories/compatibility.php?area=gb&lang=en&mdl=SEL20TC&cat=8"
+   ]
+  },
   "11c3a2f41ddbca159fd580d4dc3be2f702918d80a9c56acbc0ea4e842924e749": {
    "modelo": "Sony FE 100-400 mm F4.5-5.6 GM OSS (SEL100400GM)",
    "fecha": "2026-10-14",

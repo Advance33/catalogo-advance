@@ -4,6 +4,8 @@
 // "Preguntas frecuentes", que eran dos piezas claras una encima de la otra.
 // Se prueba que diga lo que dice la configuración, que cambiar de pregunta no
 // haga saltar la página y que el casillero mande lo escrito por WhatsApp.
+// Desde el 23/10/2026, también el horario de la respuesta de retiro
+// (decisión 4A de Benja: con cita previa, sábados de 11:15 a 14:45).
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const $$ = s => document.querySelectorAll(s);
@@ -148,4 +150,19 @@ function correrPruebas(){
   [...$$('#cats .chip')].find(c => c.dataset.cat === '').click();
   ok(!$('extras').hidden && !!$('ayuda'), 'y al volver a la portada está de nuevo');
   ok(ayIndice === elegida && alAire() === elegida, 'con la misma pregunta abierta', ayIndice);
+
+  /* ---- 10. El horario (23/10/2026, decisión 4A de Benja) ----
+     El texto decidido, tal cual, en la respuesta de retiro: siempre con cita
+     previa, y el sábado de 11:15 a 14:45 (ya no "11 a 14"). Se escribe acá
+     a mano a propósito: si alguien lo cambia en PREGUNTAS sin que Benja lo
+     decida, esta prueba lo avisa. */
+  const HORARIO_4A = 'Atendemos solo con cita previa, de lunes a viernes de 10 a 18 y sábados de 11:15 a 14:45.';
+  const iDonde = PREGUNTAS.findIndex(q => q.nav === 'donde');
+  ok(iDonde >= 0 && respuestas()[iDonde].textContent.includes(HORARIO_4A),
+     '[4A] la respuesta de retiro dice el horario decidido, con cita previa',
+     iDonde >= 0 ? PREGUNTAS[iDonde].r.join(' ').slice(0, 120) : 'sin la pregunta de "Dónde estamos"');
+  const visible = [sec(), $('nosotros'), $('pie-id')].filter(Boolean).map(x => x.textContent).join(' ');
+  const viejo = /\b11\s*(a|-|–)\s*14\b/i.exec(visible);
+  ok(!viejo, '[4A] en las preguntas, "Quiénes somos" y el pie no queda el sábado viejo de 11 a 14',
+     viejo ? visible.slice(Math.max(0, viejo.index - 30), viejo.index + 12) : 'nada');
 }

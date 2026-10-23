@@ -4085,9 +4085,12 @@ const PREGUNTAS = [
   { p: '¿Hacen envíos?',
     r: ['Sí, a todo el país. Lo despachamos por la paquetería que elijas: el costo y la demora los pone cada empresa.',
         'Si no tenés preferencia, te recomendamos Andreani.'] },
+  /* El horario (23/10/2026, decisión 4A de Benja), con este texto en todos
+     lados: «con cita previa, de lunes a viernes de 10 a 18 y sábados de 11:15
+     a 14:45». El sábado ya no es "11 a 14". La tanda ayuda.js lo mira. */
   { p: '¿Puedo ir a verlos o retirar en persona?', nav: 'donde',
     r: [`Sí. Estamos en ${DIRECCION}.`,
-        'Atendemos solo con cita previa: escribinos por WhatsApp y coordinamos día y hora.'],
+        'Atendemos solo con cita previa, de lunes a viernes de 10 a 18 y sábados de 11:15 a 14:45. Escribinos por WhatsApp y coordinamos día y hora.'],
     link: ['Ver en Google Maps', MAPA] },
   /* (13/10/2026, decisión D14 A de Benja, auditoría DW-11 y W3-15) Decía "Sí,
      sin excepciones: todo lo que publicamos es nuevo y sellado", y hay
@@ -10700,8 +10703,13 @@ function irAResenas(){ irDesdeNav('resenas'); }
 
 /* ---------- Los links de la barra de arriba (Benja, 13/10/2026) ----------
    La lista es NAV, en la configuración. Cada link es un <a> de verdad a su
-   bloque (#nosotros, #resenas, #ayuda); el clic común lo hace irDesdeNav. */
-const ANCLA_NAV = { nosotros: 'nosotros', resenas: 'resenas' };   // los demás, a las preguntas
+   bloque (#nosotros, #resenas, #ayuda); el clic común lo hace irDesdeNav.
+   "Cotizá tu usado" lleva #cotizar-usado (23/10/2026): esa dirección abre el
+   cotizador al entrar (ver abrirCotizadorDelLink), así que "Copiar link" o
+   abrirlo en otra pestaña dan el link directo, el mismo que usan las
+   respuestas rápidas y el bot. */
+const ANCLA_USADO = 'cotizar-usado';
+const ANCLA_NAV = { nosotros: 'nosotros', resenas: 'resenas', usado: ANCLA_USADO };   // los demás, a las preguntas
 const anclaNav = id => ANCLA_NAV[id] || 'ayuda';
 const NAV_CEL = matchMedia('(max-width:720px)');
 
@@ -15052,6 +15060,19 @@ let cerrarUsadoDOM = null;    // saca el cotizador de la pantalla, sin tocar el 
 let irUsadoDesdeHistorial = null;   // el Atrás/Adelante entre pasos (06/10)
 let usadoEmpujado = false;    // ¿abrirlo sumó una entrada al historial?
 
+/* El link directo al cotizador (23/10/2026), para las respuestas rápidas y
+   el bot: https://catalogo.advancetecno.com.ar/#cotizar-usado abre "Cotizá tu
+   usado" apenas llega la lista de usados, sin tocar nada más. El
+   #cotizar-usado sale enseguida de la dirección: cerrar el cotizador deja la
+   portada limpia y recargar no lo vuelve a abrir. También anda si el link se
+   toca con la página ya abierta (hashchange). Sin la lista (no llegó, o no hay
+   usados) queda la portada de siempre. La tanda links.js lo mira. */
+function abrirCotizadorDelLink(){
+  if(String(location.hash).toLowerCase() !== '#' + ANCLA_USADO) return;
+  try{ history.replaceState(history.state, '', location.pathname + location.search); }catch{}
+  cargarUsados().then(l => { if(l && !document.getElementById('usado')) abrirCotizador(); });
+}
+
 function pasosUsado(b){
   const e = equipoUsado(b.e);
   const m = e && modeloUsado(e, b.m);
@@ -16647,6 +16668,8 @@ sincronizarControles();
 pintarPedido();          // el pedido guardado de la visita anterior
 actualizar(true);
 cargarUsados();          // los valores de toma de usados (datos/usados.json, 05/10)
+abrirCotizadorDelLink(); // si entraste con el link #cotizar-usado (23/10)
+addEventListener('hashchange', abrirCotizadorDelLink);
 cargarResenas();         // el puntaje y las reseñas de Google (datos/resenas.json, 13/10)
 document.querySelectorAll('#sello-google, #tb-sello').forEach(a => a.addEventListener('click', e => {
   if(e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;

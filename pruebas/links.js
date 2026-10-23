@@ -13,6 +13,9 @@
 //
 // Sin claves fijas: los productos rotan. La variante y la gemela se sacan
 // del catalogo de esta misma pagina, que es el mismo que bajan los iframes.
+//
+// Desde el 23/10/2026 tambien #cotizar-usado, el link directo al cotizador
+// de usados de las respuestas rapidas y el bot.
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 
@@ -178,6 +181,37 @@ async function lkCorrer(){
     }
   }finally{
     try{ if(cfg0 === null) localStorage.removeItem('advtecno.config'); else localStorage.setItem('advtecno.config', cfg0); }catch(e){}
+  }
+
+  /* ---- 6. El link directo al cotizador de usados (23/10/2026) ----
+     index.html#cotizar-usado abre "Cotizá tu usado" sin tocar nada: lo usan
+     las respuestas rapidas y el bot. El #cotizar-usado sale de la direccion
+     (cerrar o recargar no lo deja pegado), con la pagina ya abierta tocar ese
+     link tambien lo abre, y el boton de la barra lleva esa misma direccion.
+     Sin lista de usados no hay cotizador que abrir: se anota. */
+  if(!(await cargarUsados())){
+    R.push('  --  hoy no hay lista de usados: el link #cotizar-usado no se probo');
+    return;
+  }
+  const navUsado = document.querySelector('#tb-nav a[data-nav="usado"]');
+  ok(!!navUsado && navUsado.getAttribute('href') === '#cotizar-usado',
+     'el boton "Cotizá tu usado" de la barra lleva #cotizar-usado', navUsado ? navUsado.getAttribute('href') : 'sin boton');
+  const f6 = await lkAbrir('index.html#cotizar-usado');
+  ok(!!f6, 'el link #cotizar-usado carga el catalogo');
+  if(f6){
+    const w6 = f6.contentWindow;
+    const abierto = () => !!f6.contentDocument.getElementById('usado');
+    for(let i = 0; i < 40 && !abierto(); i++) await new Promise(r => setTimeout(r, 150));
+    ok(abierto() && !lkLeer(f6, 'FICHA'), '#cotizar-usado abre el cotizador, sin ninguna ficha',
+       abierto() ? f6.contentDocument.querySelector('#usado h3, #usado [role="dialog"]')?.textContent.replace(/\s+/g, ' ').trim().slice(0, 50) : 'no se abrio');
+    ok(w6.location.hash === '' && !/cotizar/.test(w6.location.href), 'y el #cotizar-usado sale de la direccion', w6.location.href);
+    // Se cierra sin tocar el historial y se toca el link con la pagina abierta
+    lkLeer(f6, 'if(cerrarUsadoDOM){ usadoEmpujado = 0; const c = cerrarUsadoDOM; cerrarUsadoDOM = null; c(); }');
+    const cerrado = !abierto();
+    w6.location.hash = 'cotizar-usado';
+    for(let i = 0; i < 40 && !abierto(); i++) await new Promise(r => setTimeout(r, 150));
+    ok(cerrado && abierto() && w6.location.hash === '', 'con la pagina ya abierta, tocar el link tambien lo abre', w6.location.href);
+    f6.remove();
   }
 }
 

@@ -35601,6 +35601,167 @@
       "notas": "La fila dice \"FE 100-400mm F/4.5-5.6 GM\" (sin OSS): es el único 100-400 GM de Sony (SEL100400GM)."
     },
     {
+      "modelo": "Sony FE 100 mm F2.8 STF GM OSS (SEL100F28GM) (la fila no dice «STF»)",
+      "codigos": [
+        "AT-0348"
+      ],
+      "venta": [
+        "Un teleobjetivo fijo G Master de 100 mm con óptica STF (Smooth Trans Focus), para cámaras Sony full frame: hecho para que el fondo y el primer plano desenfocados se vean suaves y naturales.",
+        "Tiene un elemento de apodización, diafragma circular de 11 hojas, estabilizador óptico y un anillo de macro para enfocar desde 0,57 m."
+      ],
+      "importante": [
+        {
+          "titulo": "Elemento de apodización",
+          "texto": "Un filtro que deja pasar menos luz hacia los bordes: el desenfoque sale suave y con el doble borde al mínimo."
+        },
+        {
+          "titulo": "F2.8, con la luz de T5.6",
+          "texto": "Abre a F2.8, pero por la apodización entra la luz de un F5.6 en una lente común. El efecto se logra entre T5.6 y T8."
+        },
+        {
+          "titulo": "Modo macro",
+          "texto": "Con el anillo de macro en 0,57-1,0 m enfoca desde 0,57 m (0,25x). En 0,85 m-∞, desde 0,85 m."
+        },
+        {
+          "titulo": "Estabilizador óptico",
+          "texto": "Optical SteadyShot en la lente: más nitidez con velocidades de obturación bajas."
+        },
+        {
+          "titulo": "Enfoque DDSSM",
+          "texto": "Motor piezoeléctrico: autofoco rápido, preciso y silencioso, para foto y video."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Óptica",
+          "datos": [
+            [
+              "Distancia focal",
+              "100 mm"
+            ],
+            [
+              "Formato",
+              "Full frame (35 mm)"
+            ],
+            [
+              "En cámaras APS-C",
+              "Equivale a 150 mm"
+            ],
+            [
+              "Apertura",
+              "F2.8 (T5.6); mínima F20 (T22)"
+            ],
+            [
+              "Construcción",
+              "13 elementos en 10 grupos, sin contar el de apodización; con cristal ED y elementos asféricos"
+            ],
+            [
+              "Elemento de apodización",
+              "Sí (APD); hace efecto entre T5.6 y T8"
+            ],
+            [
+              "Tratamiento",
+              "Nanorrevestimiento antirreflectante"
+            ],
+            [
+              "Ángulo de visión",
+              "24° (full frame); 16° en APS-C"
+            ],
+            [
+              "Diafragma",
+              "11 hojas, circular"
+            ],
+            [
+              "Enfoque mínimo",
+              "0,85 m (en 0,85 m-∞); 0,57 m (en 0,57-1,0 m)"
+            ],
+            [
+              "Ampliación máxima",
+              "0,14x (en 0,85 m-∞); 0,25x (en 0,57-1,0 m)"
+            ],
+            [
+              "Teleconversores",
+              "No es compatible"
+            ]
+          ]
+        },
+        {
+          "grupo": "Enfoque y estabilización",
+          "datos": [
+            [
+              "Motor de enfoque",
+              "DDSSM (motor piezoeléctrico)"
+            ],
+            [
+              "Autofoco",
+              "Compatible con detección de fase en el plano focal y por contraste"
+            ],
+            [
+              "Modo macro",
+              "Anillo de macro: 0,85 m-∞ o 0,57-1,0 m"
+            ],
+            [
+              "Estabilizador",
+              "Óptico (Optical SteadyShot)"
+            ],
+            [
+              "Controles",
+              "Anillo de apertura con clic desactivable, botón de fijación de enfoque, selector AF/MF y anillo de enfoque amplio"
+            ]
+          ]
+        },
+        {
+          "grupo": "Construcción",
+          "datos": [
+            [
+              "Montura",
+              "Sony E"
+            ],
+            [
+              "Resistencia",
+              "Polvo y humedad (no garantizada al 100%); anillo de goma en la montura"
+            ],
+            [
+              "Filtro",
+              "72 mm"
+            ],
+            [
+              "Parasol",
+              "Redondo, de bayoneta"
+            ],
+            [
+              "Medidas",
+              "85,2 x 118,1 mm (diámetro x largo)"
+            ],
+            [
+              "Peso",
+              "700 g"
+            ],
+            [
+              "En la caja",
+              "Parasol (ALC-SH147), tapa delantera (ALC-F72S), tapa trasera (ALC-R1EM) y funda"
+            ],
+            [
+              "Código de Sony",
+              "SEL100F28GM"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "sony.com.ar/es/electronics/lentes-camara-montura-e/sel100f28gm/specifications",
+          "url": "https://www.sony.com.ar/es/electronics/lentes-camara-montura-e/sel100f28gm/specifications"
+        },
+        {
+          "texto": "sony.com/electronics/camera-lenses/sel100f28gm/specifications",
+          "url": "https://www.sony.com/electronics/camera-lenses/sel100f28gm/specifications"
+        }
+      ],
+      "verificado": "2026-10-23",
+      "notas": "La fila LEN-SON-023 dice «FE 100mm F/2.8 GM OSS» (sin STF ni Macro). Benja confirmó el 23/10/2026 que es el FE 100mm F2.8 STF GM OSS (SEL100F28GM), no el FE 100mm F2.8 Macro GM OSS (SEL100M28GM): ningún dato es del Macro. sony.com.ar da todo (tabla y características); sony.com agrega el nombre «Smooth Trans Focus» de STF, «prime» (fijo) y confirma que ALC-SH147 es el parasol («Hood») y que las medidas son diámetro x largo. Las dos páginas le devuelven 403 a curl: se leyeron con Chrome sin ventana y agente de usuario de navegador."
+    },
+    {
       "modelo": "Sony FE 12-24 mm F2.8 GM (SEL1224GM)",
       "codigos": [
         "AT-0349"

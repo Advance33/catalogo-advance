@@ -284,6 +284,14 @@ si alguna falta).
                   "Enviar por WhatsApp" y "Enviar por Instagram" (copia el
                   mensaje y abre @advancetecno), y que tocar una opcion no
                   repita la entrada de la ventana. Tambien a 360 y 390 px.
+  nombres-sku.js  Que cada producto este escrito como corresponde (Benja,
+                  26/10/2026): [1] el nombre dice lo que dice el ultimo
+                  bloque de su SKU (Body, Wifi, Cellular, Digital, E-Sim,
+                  ANC); [2] ninguna version de un modelo con varias se llama
+                  "Base" ni queda vacia; [3] una misma foto
+                  (fotos/mini/huellas.json) no esta en dos modelos que se
+                  ven distintos, salvo los grupos de PERMITIDAS, que por
+                  fuera son iguales. Cada falla lleva el ID de ADVAPP.
 
 COMO SE CORREN
 --------------

@@ -208,13 +208,13 @@ function probarEnvios(){
      '[envíos] las localidades van en «¿En qué cordón estoy?», cerrado al entrar');
   if(zonas){
     const cordones = [...zonas.querySelectorAll('dt')].map(dt => [txt(dt), txt(dt.nextElementSibling).replace(/\.$/, '').split(', ')]);
-    ok(JSON.stringify(cordones.map(c => [c[0], c[1].length])) === JSON.stringify([['1er cordón', 14], ['2do cordón', 20], ['3er cordón', 25], ['4to cordón', 5]]),
-       '[envíos] los cuatro cordones, con sus 14, 20, 25 y 5 localidades', cordones.map(c => c[0] + ': ' + c[1].length).join(' · '));
+    ok(JSON.stringify(cordones.map(c => [c[0], c[1].length])) === JSON.stringify([['1er cordón', 14], ['2do cordón', 19], ['3er cordón', 26], ['4to cordón', 5]]),
+       '[envíos] los cuatro cordones, con sus 14, 19, 26 y 5 localidades', cordones.map(c => c[0] + ': ' + c[1].length).join(' · '));
     const todas = cordones.flatMap(c => c[1]);
     ok(new Set(todas).size === todas.length, '[envíos] ninguna localidad está en dos cordones', todas.length + ' localidades');
     const en = (n, l) => (cordones[n - 1] || [, []])[1].includes(l);
-    ok(en(1, 'Olivos') && en(1, 'Wilde') && en(2, 'José León Suárez') && en(2, 'Aldo Bonzi') && en(3, 'Nordelta') && en(3, 'Don Torcuato') && en(4, 'La Plata'),
-       '[envíos] cada localidad en su cordón (José León Suárez en el 2º hasta que Benja confirme)');
+    ok(en(1, 'Olivos') && en(1, 'Wilde') && en(3, 'José León Suárez') && en(2, 'Aldo Bonzi') && en(3, 'Nordelta') && en(3, 'Don Torcuato') && en(4, 'La Plata'),
+       '[envíos] cada localidad en su cordón (José León Suárez en el 3º, Benja 26/10)');
     ok(/Si tu localidad no está, consultanos por WhatsApp\./.test(txt(zonas)), '[envíos] la que no está se consulta por WhatsApp');
     ok(!zonas.querySelector('ul') && !zonas.querySelector('a'), '[envíos] sin viñetas ni links de más en la respuesta');
   }

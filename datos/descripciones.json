@@ -47315,14 +47315,14 @@
       "notas": "Sony Argentina tiene dos kits con un 28-70: ILCE-7M3K (con SEL2870, FE 28-70 mm F3.5-5.6 OSS) e ILCE-7M3M (con SEL28702). La fila dice sólo «Kit 28-70»: el lente va como dato del proveedor, sin afirmar cuál de los dos. El peso y las medidas son del cuerpo. Verificación (02/10): «lectura completa del sensor» pasó a «lectura completa de píxeles, sin agrupamiento» (como Sony); se sumó a fuentes la página feature1, que es la que da «ISO 100-51200 (ISO 50-204800 para fotografía)»; los 14 pasos, aclarado que son de S-Log3. Retoque (02/10): Sony dice \"sin agrupamiento\" sólo del full frame (verificador r6-T11-2)."
     },
     {
-      "modelo": "Sony α7 IV (ILCE-7M4) y kit 28-70",
+      "modelo": "Sony α7 IV (ILCE-7M4): cuerpo y kit 28-70",
       "codigos": [
         "AT-0176",
         "AT-0567"
       ],
       "versiones": [
         {
-          "nombre": "Alfa 7 IV",
+          "nombre": "Cuerpo",
           "codigos": [
             "AT-0567"
           ],
@@ -47371,7 +47371,7 @@
         {
           "titulo": {
             "segun": {
-              "Alfa 7 IV": "Montura E"
+              "Cuerpo": "Solo el cuerpo"
             },
             "proveedor": {
               "Kit 28-70": "Kit con lente 28-70 mm"
@@ -47379,7 +47379,7 @@
           },
           "texto": {
             "segun": {
-              "Alfa 7 IV": "Para lentes intercambiables de montura E. No está confirmado si trae lente."
+              "Cuerpo": "Montura E. No trae lente."
             },
             "proveedor": {
               "Kit 28-70": "Viene con un zoom 28-70 mm (dato del proveedor)."
@@ -47520,7 +47520,7 @@
               "Lente",
               {
                 "segun": {
-                  "Alfa 7 IV": "Sin confirmar si trae lente (montura E)"
+                  "Cuerpo": "No trae: es solo el cuerpo (montura E)"
                 },
                 "proveedor": {
                   "Kit 28-70": "Zoom 28-70 mm"
@@ -47545,7 +47545,7 @@
         "aviso": "que el kit trae un lente 28-70 mm es dato del proveedor; la versión exacta del lente no la dice"
       },
       "verificado": "2026-10-21",
-      "notas": "Sony Argentina tiene dos kits con un 28-70: ILCE-7M4K (con SEL2870, FE 28-70 mm F3.5-5.6 OSS) e ILCE-7M4M (con SEL28702). La fila dice sólo «Kit 28-70»: el lente va como dato del proveedor. La ficha argentina no trae la autonomía de la batería: no se puso. Wi-Fi 5 GHz: «en algunos países y regiones la comunicación de 5 GHz puede estar restringida» (nota 26) y «los modelos vendidos en algunos países/regiones sólo usan 2,4 GHz» (nota 6 de la ficha). Verificación (02/10): «ayuda de EA» pasó a «asistencia de enfoque automático», como la ficha de Sony («Asistencia de enfoque automático (películas)»); «EA» se leía como exposición automática. Wi-Fi reescrito con la propuesta del verificador (802.11a y ac son de 5 GHz: no se podía decir «a/b/g/n/ac en 2,4 GHz»). Retoque (02/10): los pasos son sólo de S-Log3 (verificador r6-T11-1). Retoque (02/10): el 4K 60p es sólo en modo Super 35 (verificador r6-T11-1). Ampliada el 21/10/2026: se sumó AT-0567, la fila «Sony Alfa 7 IV» (el nombre no dice Body ni Kit; Sony tiene ILCE-7M4 solo cuerpo, ILCE-7M4K e ILCE-7M4M: la versión se queda en lo común y el lente queda «Sin confirmar»). Versiones Alfa 7 IV (texto «alfa 7 iv» y sin «kit») y Kit 28-70 (texto «kit 28 70»); el punto 5 y «Lente» de la ficha pasaron a según versión, como en el α7 III. El kit sigue con el lente como dato del proveedor. El resto de la entrada no se tocó.\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D03a): la fila AT-0567 no dice si es el cuerpo solo o un kit (el «-BODY» del ID lo pone ADVAPP por regla), así que la versión pasa a llamarse «Alfa 7 IV», el punto 5 dice sólo la montura y «Lente» queda sin confirmar. Si Benja confirma que es el cuerpo, puede volver a «Solo el cuerpo»."
+      "notas": "Sony Argentina tiene dos kits con un 28-70: ILCE-7M4K (con SEL2870, FE 28-70 mm F3.5-5.6 OSS) e ILCE-7M4M (con SEL28702). La fila dice sólo «Kit 28-70»: el lente va como dato del proveedor. La ficha argentina no trae la autonomía de la batería: no se puso. Wi-Fi 5 GHz: «en algunos países y regiones la comunicación de 5 GHz puede estar restringida» (nota 26) y «los modelos vendidos en algunos países/regiones sólo usan 2,4 GHz» (nota 6 de la ficha). Verificación (02/10): «ayuda de EA» pasó a «asistencia de enfoque automático», como la ficha de Sony («Asistencia de enfoque automático (películas)»); «EA» se leía como exposición automática. Wi-Fi reescrito con la propuesta del verificador (802.11a y ac son de 5 GHz: no se podía decir «a/b/g/n/ac en 2,4 GHz»). Retoque (02/10): los pasos son sólo de S-Log3 (verificador r6-T11-1). Retoque (02/10): el 4K 60p es sólo en modo Super 35 (verificador r6-T11-1). Ampliada el 21/10/2026: se sumó AT-0567, la fila «Sony Alfa 7 IV» (el nombre no dice Body ni Kit; Sony tiene ILCE-7M4 solo cuerpo, ILCE-7M4K e ILCE-7M4M: la versión se queda en lo común y el lente queda «Sin confirmar»). Versiones Alfa 7 IV (texto «alfa 7 iv» y sin «kit») y Kit 28-70 (texto «kit 28 70»); el punto 5 y «Lente» de la ficha pasaron a según versión, como en el α7 III. El kit sigue con el lente como dato del proveedor. El resto de la entrada no se tocó.\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D03a): la fila AT-0567 no dice si es el cuerpo solo o un kit (el «-BODY» del ID lo pone ADVAPP por regla), así que la versión pasa a llamarse «Alfa 7 IV», el punto 5 dice sólo la montura y «Lente» queda sin confirmar. Si Benja confirma que es el cuerpo, puede volver a «Solo el cuerpo».\nVuelta a «Solo el cuerpo» el 26/10/2026: Benja confirma que AT-0567 es el cuerpo (todos los proveedores la venden como cuerpo) y renombra la fila a «Alfa 7 IV Body» con un SQL. La versión pasa a llamarse «Cuerpo», y el punto 5 y «Lente» dicen lo mismo que en el α7 III. El si sigue siendo «alfa 7 iv» sin «kit»: calza con el nombre de hoy («Sony Alfa 7 IV») y con el nuevo. El kit no se tocó."
     },
     {
       "modelo": "Sony α7 V (ILCE-7M5) kit 28-70",

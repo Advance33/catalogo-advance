@@ -4371,18 +4371,17 @@
     "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m3-body-kit/feature1 (bajada hoy con Chrome headless, trabajo-r10-T11-1/)"
    ]
   },
-  "3a4a3293e8ada8f65101e97be088bb713f2b0c6d449b6bd1b7274538c6c6411e": {
-   "modelo": "Sony α7 IV (ILCE-7M4) y kit 28-70",
-   "fecha": "2026-10-21",
+  "95fcae24214d3aa093699ffe78938fb480b8b63d2185ef727194d91d2e17a3bc": {
+   "modelo": "Sony α7 IV (ILCE-7M4): cuerpo y kit 28-70",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D03a-r2.json",
+   "informe": "informe-01.json",
    "fuentes": [
-    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m4/spec (Chrome headless: curl da 403)",
-    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m4/feature61 (Chrome headless)",
-    "https://www.sony.com.mx/interchangeable-lens-cameras/products/ilce-7m4/spec (Chrome headless; sólo para ver la columna ILCE-7M4M)",
-    "https://www.sony-latin.com/es/electronics/support/e-mount-body-ilce-7-series/ilce-7m4m/manuals (Chrome headless)",
-    "https://helpguide.sony.net/ilc/2110/v1/es/index.html",
-    "https://helpguide.sony.net/ilc/2110/v1/es/contents/TP1000660843.html"
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m4/spec (hoy 403 por curl, Chrome headless y WebFetch; leída la copia HTML entera del 21/10 en descripciones-21-10-trabajo/trabajo-v-D03a-r2/ar-ilce-7m4-spec.html)",
+    "https://www.sony.com.ar/interchangeable-lens-cameras/products/ilce-7m4/feature61 (hoy 403; leída la copia HTML entera del 21/10 en descripciones-21-10-trabajo/trabajo-v-D03a-r2/ar-ilce-7m4-feature61.html)",
+    "https://helpguide.sony.net/ilc/2110/v1/es/contents/TP1000657191.html (bajada hoy con curl)",
+    "https://helpguide.sony.net/ilc/2110/v1/es/contents/TP1000660843.html (bajada hoy con curl)",
+    "https://helpguide.sony.net/ilc/2110/v1/es/index.html (bajada hoy con curl)"
    ]
   },
   "5a38d2fbab3daa5d848dfcb74d07890fd3377a815c362b657280d982d5aa99b4": {

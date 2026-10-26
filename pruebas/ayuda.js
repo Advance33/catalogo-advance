@@ -5,7 +5,8 @@
 // Se prueba que diga lo que dice la configuración, que cambiar de pregunta no
 // haga saltar la página y que el casillero mande lo escrito por WhatsApp.
 // Desde el 23/10/2026, también el horario de la respuesta de retiro
-// (decisión 4A de Benja: con cita previa, sábados de 11:15 a 14:45).
+// (decisión 4A de Benja: con cita previa, sábados de 11:15 a 14:45), y la
+// respuesta de envíos con la moto por cordón (decisión 3 de Benja, 23/10).
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const $$ = s => document.querySelectorAll(s);
@@ -47,7 +48,8 @@ function correrPruebas(){
     const r = resp[i];
     // h3 desde el 29/09: el bloque es un h2 y cada pregunta cuelga de el
     if(!r.querySelector('h3') || !r.querySelector('h3').textContent.includes(q.p)) malR.push(q.p + ': sin título');
-    (q.r || []).forEach(t => { if(!r.textContent.includes(t)) malR.push(q.p + ': falta un párrafo'); });
+    // `despues` (23/10/2026): los párrafos que van después de la tabla del envío
+    [...(q.r || []), ...(q.despues || [])].forEach(t => { if(!r.textContent.includes(t)) malR.push(q.p + ': falta un párrafo'); });
     (q.lista || []).forEach(t => { if(!r.textContent.includes(t)) malR.push(q.p + ': falta "' + t + '"'); });
     if(!!q.lista !== !!r.querySelector('ul')) malR.push(q.p + ': la lista');
     if(!!q.link !== !!r.querySelector('a')) malR.push(q.p + ': el link');
@@ -165,4 +167,71 @@ function correrPruebas(){
   const viejo = /\b11\s*(a|-|–)\s*14\b/i.exec(visible);
   ok(!viejo, '[4A] en las preguntas, "Quiénes somos" y el pie no queda el sábado viejo de 11 a 14',
      viejo ? visible.slice(Math.max(0, viejo.index - 30), viejo.index + 12) : 'nada');
+
+  probarEnvios();
+}
+
+/* ---- 11. Los envíos (23/10/2026, decisión 3 de Benja) ----
+   El texto del estándar, tal cual, con la tabla de la moto en el medio: lo
+   que cuesta cada zona, en este orden. Se escribe acá a mano a propósito: si
+   alguien cambia un precio o el texto sin que Benja lo decida, esta prueba lo
+   avisa. Las localidades de cada cordón van en "¿En qué cordón estoy?",
+   cerrado al entrar. El "50 % de recargo" de la lluvia es del envío: la regla
+   de Pedro del 03/10 (ni % ni "recargo") es solo para el interés de las
+   cuotas, y la mira decision-cuotas.js sobre los textos de las cuotas. */
+function probarEnvios(){
+  const ANTES = 'En CABA y GBA te lo llevamos en moto en el día:';
+  const TABLA = [['CABA', '$12.000'], ['1er cordón', '$15.000'], ['2do cordón', '$25.000'],
+                 ['3er cordón', '$45.000'], ['4to cordón', '$55.000']];
+  const DESPUES = ['Los días de lluvia, 50 % de recargo.',
+                   'Al resto del país lo mandamos por la paquetería que elijas, recomendamos Andreani: el costo y la demora los pone la empresa.'];
+  const i = PREGUNTAS.findIndex(q => q.p === '¿Hacen envíos?');
+  ok(i >= 0, '[envíos] está la pregunta «¿Hacen envíos?»');
+  if(i < 0) return;
+  const r = respuestas()[i];
+  const txt = el => (el ? el.textContent : '').replace(/\s+/g, ' ').trim();
+  const ps = [...r.querySelectorAll(':scope > p')].map(txt);
+  ok(JSON.stringify(ps) === JSON.stringify([ANTES, ...DESPUES]),
+     '[envíos] dice el texto del estándar, tal cual: la moto, la lluvia y el resto del país', ps.join(' | ').slice(0, 160));
+  const tabla = r.querySelector('table.ay-tabla');
+  const filas = tabla ? [...tabla.querySelectorAll('tr')].map(tr => [txt(tr.querySelector('th')), txt(tr.querySelector('td'))]) : [];
+  ok(JSON.stringify(filas) === JSON.stringify(TABLA), '[envíos] la tabla de la moto: cada zona con su precio, en orden',
+     filas.map(f => f.join(' ')).join(' · '));
+  const pAntes = [...r.querySelectorAll(':scope > p')].find(p => txt(p) === ANTES);
+  const pLluvia = [...r.querySelectorAll(':scope > p')].find(p => txt(p) === DESPUES[0]);
+  const despues = (a, b) => !!a && !!b && !!(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+  ok(despues(pAntes, tabla) && despues(tabla, pLluvia), '[envíos] la tabla va entre «en el día:» y la lluvia');
+
+  // ¿En qué cordón estoy?
+  const zonas = r.querySelector('details.ay-zonas');
+  ok(!!zonas && txt(zonas.querySelector('summary')) === '¿En qué cordón estoy?' && !zonas.open,
+     '[envíos] las localidades van en «¿En qué cordón estoy?», cerrado al entrar');
+  if(zonas){
+    const cordones = [...zonas.querySelectorAll('dt')].map(dt => [txt(dt), txt(dt.nextElementSibling).replace(/\.$/, '').split(', ')]);
+    ok(JSON.stringify(cordones.map(c => [c[0], c[1].length])) === JSON.stringify([['1er cordón', 14], ['2do cordón', 19], ['3er cordón', 26], ['4to cordón', 5]]),
+       '[envíos] los cuatro cordones, con sus 14, 19, 26 y 5 localidades', cordones.map(c => c[0] + ': ' + c[1].length).join(' · '));
+    const todas = cordones.flatMap(c => c[1]);
+    ok(new Set(todas).size === todas.length, '[envíos] ninguna localidad está en dos cordones', todas.length + ' localidades');
+    const en = (n, l) => (cordones[n - 1] || [, []])[1].includes(l);
+    ok(en(1, 'Olivos') && en(1, 'Wilde') && en(3, 'José León Suárez') && en(2, 'Aldo Bonzi') && en(3, 'Nordelta') && en(3, 'Don Torcuato') && en(4, 'La Plata'),
+       '[envíos] cada localidad en su cordón (José León Suárez en el 3º, Benja 26/10)');
+    ok(/Si tu localidad no está, consultanos por WhatsApp\./.test(txt(zonas)), '[envíos] la que no está se consulta por WhatsApp');
+    ok(!zonas.querySelector('ul') && !zonas.querySelector('a'), '[envíos] sin viñetas ni links de más en la respuesta');
+  }
+
+  // Abierta, la tabla y las localidades entran en la respuesta, sin pasarse de ancho
+  const antes = ayIndice;
+  elegirPregunta(i);
+  if(zonas) zonas.open = true;
+  const ancho = r.getBoundingClientRect().right + 1;
+  const pasados = [tabla, zonas].filter(Boolean).filter(el => el.getBoundingClientRect().right > ancho || el.scrollWidth > el.clientWidth + 1);
+  ok(!pasados.length, '[envíos] la tabla y las localidades entran en el ancho de la respuesta', pasados.map(el => el.className).join(', ') || 'entran');
+  if(zonas) zonas.open = false;
+  elegirPregunta(antes);
+
+  // La ficha y el pedido dicen lo mismo: moto en CABA y GBA, paquetería para el resto
+  ok(/CABA y GBA/.test(SERVICIO.envio[1]) && /moto/.test(SERVICIO.envio[1]) && /paqueter/.test(SERVICIO.envio[1]),
+     '[envíos] el detalle de la ficha y del pedido (SERVICIO) nombra la moto y la paquetería', SERVICIO.envio[1]);
+  const todo = [sec().textContent, SERVICIO.envio.join(' '), $('pie-id') ? $('pie-id').textContent : ''].join(' ');
+  ok(!/v[ií]a ?cargo|\b\d+\s*a\s*\d+\s*d[ií]as\b/i.test(todo), '[envíos] nada promete otra empresa ni otra demora');
 }

@@ -703,7 +703,11 @@ async function probarCelular(){
          Math.round(cols.getBoundingClientRect().top - caja.getBoundingClientRect().top) + ' px');
       let rx = X.getBoundingClientRect(), rc = C.getBoundingClientRect(), rk = caja.getBoundingClientRect();
       ok(dfCerca(rc.top, rx.top) && dfCerca(rx.left - rc.right, 8) && dfCerca(rk.right - rx.right, 14, 3),
-         '[4.1] a la izquierda de la X, a la misma altura y con 8 px de aire', Math.round(rc.top - rx.top) + ' / ' + (rx.left - rc.right).toFixed(1));
+         '[4.1] a la izquierda de la X, a la misma altura y con 8 px de aire',
+         /* (26/10) el detalle dice tambien lo tercero que se mira: decia
+            "0 / 8.0" y fallaba por la X a 30 px del borde (ver el control de
+            la barra de desplazamiento en decision-tarjeta) */
+         Math.round(rc.top - rx.top) + ' / ' + (rx.left - rc.right).toFixed(1) + ' · la X a ' + Math.round(rk.right - rx.right) + ' px del borde (14)');
       caja.scrollTop = 560; await dfDormir(100);
       rx = X.getBoundingClientRect(); rc = C.getBoundingClientRect(); rk = caja.getBoundingClientRect();
       ok(caja.scrollTop > 400 && dfCerca(rc.top - rk.top, 14, 2) && dfCerca(rx.top, rc.top), '[4.1] bajando 560 px siguen los dos a la vista',

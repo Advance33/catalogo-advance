@@ -622,6 +622,16 @@ async function probarCelular(){
     if(!listo) return;
     const w = f.contentWindow, doc = f.contentDocument;
     try{ w.pararOfertas?.(); w.pararPaseos?.(); w.pararMundos?.(); }catch(e){}
+    /* (26/10/2026) En un telefono la barra de desplazamiento no ocupa lugar.
+       Si la del Chrome de las pruebas ocupa (la Mac la pone fija de 15 px con
+       un mouse conectado, y el 25/10 Steam sumo uno virtual), el celular de
+       390 mide 375 por dentro y fallan a la vez la X (2.8, 4.1), los botones de
+       las cuotas (2B), la cruz del pedido (2.6) y los pesos (2.2) sin que la
+       pagina haya cambiado. correr.py la apaga con --hide-scrollbars. */
+    const sb = (() => { const x = doc.createElement('div'); x.style.cssText = 'position:absolute;top:0;width:100px;height:50px;overflow:scroll';
+      doc.body.appendChild(x); const a = x.offsetWidth - x.clientWidth; x.remove(); return a; })();
+    ok(sb === 0, '[2.7/2.8] el celular de prueba no le reserva lugar a la barra de desplazamiento, como un telefono (si no, las medidas de celular no sirven)',
+       sb + ' px');
     await dtQuieto(doc.getElementById('ficha'));     // la ficha ya entro entera (cajaIn)
     const caja = doc.querySelector('#ficha .caja');
     const bots = doc.querySelector('#ficha .fi-botones');
@@ -708,9 +718,64 @@ async function probarCelular(){
       const alto = parseFloat(cs(bp).lineHeight) || parseFloat(cs(bp).fontSize);
       ok(bp.getBoundingClientRect().height <= alto * 1.6, '[2.2] y los pesos no bajan de renglon',
          Math.round(bp.getBoundingClientRect().height) + ' px');
+      await probarBarraAngosta(f, w, doc);
     } else info('[2.2] el celular no tiene cotizacion: no se mira la barra');
   } finally {
     f.remove();
     PEDIDO = antes; guardarPedido(); pintarPedido();
   }
+}
+
+/* (26/10/2026) La barra del pedido con otros totales y a 375 (iPhone SE y
+   mini). A 375 un pedido de USD 1.900 salia "USD / 1.900" y "$ / 3.011.500",
+   cada monto partido en dos renglones, y a 390 los pesos entraban justo hasta
+   ocho cifras. Ahora los montos no se parten nunca: si al lado de los botones
+   no entran, el total pasa a su propio renglon, como a 360 (.total-aparte).
+   Los totales se arman a proposito (siete y ocho cifras de pesos, la de nueve
+   a 390) con un producto de hoy; no dependen de cual sea. */
+async function probarBarraAngosta(f, w, doc){
+  const barra = doc.getElementById('barra-pedido'), bv = doc.getElementById('bp-ver'), be = doc.getElementById('bp-enviar');
+  const bu = doc.getElementById('bp-usd'), ba = doc.getElementById('bp-ars');
+  const unRenglon = el => { const r = doc.createRange(); r.selectNodeContents(el);
+    return new Set([...r.getClientRects()].filter(x => x.width > 0).map(x => Math.round(x.top))).size === 1; };
+  const pisan = (a, b) => { const x = a.getBoundingClientRect(), y = b.getBoundingClientRect();
+    return x.left < y.right - 0.5 && y.left < x.right - 0.5 && x.top < y.bottom - 0.5 && y.top < x.bottom - 0.5; };
+  const mirar = () => {
+    const malo = [];
+    if(!unRenglon(bu)) malo.push('"' + bu.textContent + '" partido');
+    if(!unRenglon(ba)) malo.push('"' + ba.textContent + '" partido');
+    for(const el of [bu, ba]) for(const b of [bv, be]) if(pisan(el, b)) malo.push(el.id + ' pisa ' + b.id);
+    if(Math.abs(bv.getBoundingClientRect().top - be.getBoundingClientRect().top) > 4) malo.push('botones en dos renglones');
+    if(barra.scrollWidth > barra.clientWidth + 1) malo.push('se sale de costado');
+    return malo;
+  };
+  // Un producto de hoy con stock y su precio en dolares: n unidades dan el total que se busca
+  const u = PRODUCTOS.find(p => p.stock && p.precio >= 1000 && p.precio < 2000 && buscarModelo(clave(p)))
+         || PRODUCTOS.find(p => p.stock && p.precio >= 100 && buscarModelo(clave(p)));
+  if(!u){ info('[2.2] hoy no hay un producto con stock para armar los totales'); return; }
+  const cifras = n => String(Math.round(u.precio * n * w.eval('TC'))).length;
+  const conCifras = c => { for(let n = 1; n < 5000; n++) if(cifras(n) === c) return n; return 0; };
+  const pintar = async (ancho, n) => {
+    f.style.width = ancho + 'px';
+    void f.offsetWidth;      // el iframe toma el ancho nuevo antes de pintar (el resize llega despues)
+    w.eval(`PEDIDO = [{ k: ${JSON.stringify(clave(u))}, n: ${n}, color: '' }]; pintarPedido();`);
+    await dtDormir(250);
+  };
+  try{
+    const n7 = conCifras(7), n8 = conCifras(8), n9 = conCifras(9);
+    if(n7){
+      await pintar(390, n7);
+      const malo = mirar();
+      ok(!malo.length && !barra.classList.contains('total-aparte'),
+         '[2.2 · 390] con un total de siete cifras de pesos la barra queda como siempre: un renglon, el total entre los botones',
+         (malo.join(', ') || 'bien') + ' · ' + bu.textContent + ' · ' + ba.textContent);
+    }
+    for(const [ancho, n] of [[375, n7], [375, n8], [390, n8], [390, n9]]){
+      if(!n) continue;
+      await pintar(ancho, n);
+      const malo = mirar();
+      ok(!malo.length, `[2.2 · ${ancho}] con ${cifras(n)} cifras de pesos los montos no se parten y no pisan los botones`,
+         (malo.join(', ') || (barra.classList.contains('total-aparte') ? 'el total en su renglon' : 'en un renglon')) + ' · ' + bu.textContent + ' · ' + ba.textContent);
+    }
+  } finally { f.style.width = '390px'; }
 }

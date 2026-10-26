@@ -356,10 +356,18 @@ def correr(chrome, probe, segundos=90):
     Chrome devolvia la copia cacheada de la tanda anterior: una tanda llegaba
     a informar el resultado de otra y los fallos parecian azarosos. Ahora cada
     tanda tiene su URL, pero el perfil nuevo se deja igual: no cuesta nada.
+
+    --hide-scrollbars (26/10/2026): las barras de desplazamiento no ocupan
+    lugar, como en un celular. Chrome sin ventana usa las de la Mac, y la Mac
+    las pone fijas, de 15 px, apenas ve un mouse conectado (con "Mostrar
+    barras: automaticamente", lo de fabrica). El 25/10 Steam sumo un mouse
+    virtual y desde ese momento los iframes de 360 y 390 px median 15 px
+    menos: cinco comprobaciones de celular fallaron sin que cambiara nada de
+    la pagina ni de los datos.
     """
     perfil = tempfile.mkdtemp(prefix='probe-')
     cmd = [chrome, '--headless', '--disable-gpu', '--window-size=1920,1080',
-           '--user-data-dir=' + perfil,
+           '--hide-scrollbars', '--user-data-dir=' + perfil,
            '--virtual-time-budget=%d' % (segundos * 1000), '--dump-dom',
            BASE + '/' + probe]
     try:

@@ -2201,6 +2201,37 @@ window.ADVAPP_TEMPRANO = (() => {
   .fi-cuotas-res span{font:500 11px/1.35 var(--mono);color:#A597C4}
   .fi-cuotas-res .nada{font:400 12.5px/1.4 var(--sans);color:#C4B5FD}
   .fi-cuotas-nota{margin:-4px 0 0;font:400 11.5px/1.45 var(--sans);color:var(--faint)}
+  /* Adelantar una parte (Benja, 26/10/2026, la A de "Adelanto + cuotas"):
+     adentro de la etiqueta, debajo de los planes y con sus colores */
+  .fi-adelanto{display:grid;gap:10px}
+  .fi-adelanto-abrir{justify-self:start;min-height:44px;padding:0 14px;border-radius:12px;cursor:pointer;text-align:left;
+                     border:1px dashed rgba(196,181,253,.55);background:transparent;color:#DDD3F5;font:600 13.5px/1.3 var(--sans)}
+  .fi-adelanto-abrir:hover{border-color:#C4B5FD;color:#fff}
+  .fi-adelanto-caja{display:grid;gap:10px;padding-top:12px;border-top:1px solid rgba(196,181,253,.22);
+                    animation:fi-adelanto-abre .3s ease-out both}
+  .fi-adelanto-cab{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .fi-adelanto-cab label{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A597C4}
+  .fi-adelanto-sin{min-height:32px;padding:0;border:0;background:none;color:#C4B5FD;font:500 12.5px/1 var(--sans);
+                   text-decoration:underline;cursor:pointer}
+  .fi-adelanto-fila{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+  .fi-adelanto-monto{display:flex;align-items:center;gap:6px;height:48px;padding:0 12px;border-radius:12px;
+                     background:rgba(255,255,255,.08);border:1px solid rgba(196,181,253,.35)}
+  .fi-adelanto-monto:focus-within{border-color:#C4B5FD}
+  .fi-adelanto-signo{color:#C4B5FD;font:700 15px/1 var(--sans)}
+  /* 18 px: con menos, el iPhone agranda la página al tocar el campo */
+  .fi-adelanto-monto input{flex:1;min-width:0;border:0;outline:none;background:transparent;color:#fff;font:700 18px/1 var(--sans)}
+  .fi-adelanto-monto input::placeholder{color:#8F84B0}
+  .fi-adelanto-moneda{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:4px;border-radius:12px;
+                      background:rgba(255,255,255,.08)}
+  .fi-adelanto-moneda button{min-width:44px;height:40px;border:0;border-radius:9px;background:transparent;color:#C4B5FD;
+                             font:700 14px/1 var(--sans);cursor:pointer}
+  .fi-adelanto-moneda button[aria-pressed="true"]{background:var(--acento);color:#fff}
+  .fi-adelanto-abrir:focus-visible,.fi-adelanto-sin:focus-visible,.fi-adelanto-moneda button:focus-visible{outline:2px solid #C4B5FD;outline-offset:2px}
+  .fi-adelanto-como{margin:0;font:400 12.5px/1.4 var(--sans);color:#C4B5FD}
+  .fi-adelanto-queda{margin:0;padding:10px 12px;border-radius:12px;background:rgba(124,58,237,.22);
+                     font:400 13px/1.4 var(--sans);color:#DDD3F5}
+  @keyframes fi-adelanto-abre{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){ .fi-adelanto-caja{animation:none} }
 
   /* ---------- Las dos promos de la ficha (Benja, 23/10/2026) ----------
      La B de "Usado y cuotas: sugerencias, sin bloquear WhatsApp": antes de
@@ -12535,26 +12566,131 @@ function htmlCuotasFicha(v){
       <span class="fi-cuotas-rot" id="fi-cuotas-rot">Con tarjeta, en cuotas</span>
       <div class="fi-cuotas-ops">${CUOTAS.map(c => `<button type="button" class="fi-cuota" data-cuotas="${c.cuotas}" aria-pressed="${c.cuotas === CUOTA_FICHA}">${c.cuotas} <small>${c.cuotas === 1 ? 'pago' : 'cuotas'}</small></button>`).join('')}</div>
       <div class="fi-cuotas-res" aria-live="polite">${textoCuotasFicha(v)}</div>
+      <div class="fi-adelanto">${htmlAdelantoFicha(v)}</div>
     </div>`;
 }
 function textoCuotasFicha(v){
+  const r = restoAdelanto(v);
+  if(r && r.paga) return '<b>Con ese adelanto pagás todo</b><span>no quedan cuotas</span>';
   const c = planCuotas(CUOTA_FICHA);
   if(!c) return '<span class="nada">Tocá un plan y ves cuánto es cada cuota.</span>';
-  const x = cuentaCuotas(v.precio, c.cuotas);
+  const x = cuentaFicha(v, c.cuotas);
   // Sin cotización no hay pesos: el plan, sin montos
   if(!x) return `<b>${esc(nombreCuotas(c.cuotas))}</b><span>el monto sale con el dólar del día</span>`;
-  return c.cuotas === 1
+  return (c.cuotas === 1
     ? `<b>1 pago de $ ${plata(x.total)}</b>`
-    : `<b>${c.cuotas} cuotas de $ ${plata(x.cuota)}</b>`;
+    : `<b>${c.cuotas} cuotas de $ ${plata(x.cuota)}</b>`) +
+    (r ? '<span>por lo que queda después del adelanto</span>' : '');
 }
 function elegirCuotaFicha(d, v, n){
   CUOTA_FICHA = CUOTA_FICHA === n ? 0 : n;
   d.querySelectorAll('.fi-cuota').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.cuotas) === CUOTA_FICHA)));
+  actualizarCuotasFicha(d, v);
+}
+// El resultado de la etiqueta y el WhatsApp de la ficha, que dice el plan
+// elegido (6 A, 21/10/2026) y el adelanto (26/10/2026), con la misma cuenta
+function actualizarCuotasFicha(d, v){
   const res = d.querySelector('.fi-cuotas-res');
   if(res) res.innerHTML = textoCuotasFicha(v);
-  // El WhatsApp de la ficha dice el plan elegido (6 A, 21/10/2026)
   const wa = d.querySelector('.fi-botones .cta:not(.cta-aviso)');
   if(wa && v.stock) wa.href = linkWA(mensajeWAFicha(v, COLOR_FICHA));
+}
+
+/* ---------- Adelantar una parte (Benja, 26/10/2026) ----------
+   La A de "Adelanto + cuotas": el cliente adelanta una parte (en dólares, en
+   efectivo; en pesos, en efectivo o transferencia: la transferencia en
+   dólares no existe) y el resto va con tarjeta en los planes de siempre. El
+   adelanto no lleva recargo; lo que queda, la misma cuenta que cuentaCuotas.
+   Los ejemplos de Benja: de $ 1.000.000 adelanta $ 300.000 y cuotifica
+   $ 700.000; de u$ 1.000 adelanta u$ 400 y cuotifica u$ 600. Vive adentro de
+   la etiqueta del precio, debajo de los planes, y vuelve a cero con cada
+   ficha nueva (abrirFicha), como el plan. Escribir no rehace nada: sólo el
+   resultado, el "quedan" y el WhatsApp. */
+let ADELANTO_FICHA = { abierto: false, moneda: 'usd', monto: 0 };
+// Lo que queda para la tarjeta: { monto, moneda, paga, usd?, ars } o null si
+// no hay adelanto. `paga`: el adelanto cubre todo. Sin cotización no hay
+// pesos: en dólares queda la cuenta sin montos y en pesos no se puede.
+function restoAdelanto(v){
+  const a = ADELANTO_FICHA;
+  const monto = a.abierto ? Number(a.monto) || 0 : 0;
+  if(!(monto > 0) || !v || !(v.precio > 0)) return null;
+  if(a.moneda === 'ars'){
+    if(!TC) return null;
+    const ars = Math.round(v.precio * TC) - monto;
+    return { monto, moneda: 'ars', paga: ars <= 0, ars: Math.max(0, ars) };
+  }
+  const usd = Math.max(0, v.precio - monto);
+  return { monto, moneda: 'usd', paga: v.precio - monto <= 0, usd, ars: TC ? Math.round(usd * TC) : null };
+}
+// La cuenta de cuentaCuotas, sobre pesos que ya están en pesos
+function cuentaCuotasARS(ars, n){
+  const c = planCuotas(n);
+  if(!c || !(ars > 0)) return null;
+  const total = Math.round(ars * (1 + c.recargo / 100));
+  return { total, cuota: Math.round(total / c.cuotas) };
+}
+// Las cuotas de la ficha: del precio, o de lo que queda después del adelanto
+function cuentaFicha(v, n){
+  const r = restoAdelanto(v);
+  if(!r) return cuentaCuotas(v.precio, n);
+  if(r.paga || r.ars === null) return null;
+  return cuentaCuotasARS(r.ars, n);
+}
+const textoAdelanto = r => (r.moneda === 'ars' ? '$ ' : 'u$ ') + plata(r.monto) +
+  (r.moneda === 'ars' ? ' en efectivo o transferencia' : ' en efectivo');
+function textoQuedaAdelanto(v){
+  const r = restoAdelanto(v);
+  if(!r) return 'Poné cuánto adelantás y te decimos cuánto queda en cuotas.';
+  const adelanto = (r.moneda === 'ars' ? '$ ' : 'u$ ') + plata(r.monto);
+  if(r.paga) return `Con ${adelanto} cubrís el precio entero.`;
+  return `Adelantás ${adelanto} y quedan ${r.moneda === 'ars' ? '$ ' + plata(r.ars) : 'u$ ' + plata(r.usd)} para pagar en cuotas.`;
+}
+function htmlAdelantoFicha(v){
+  const a = ADELANTO_FICHA;
+  if(!a.abierto) return '<button type="button" class="fi-adelanto-abrir">+ Adelantar una parte en efectivo o transferencia</button>';
+  const enPesos = a.moneda === 'ars';
+  return `<div class="fi-adelanto-caja">
+      <div class="fi-adelanto-cab"><label for="fi-adelanto-monto">¿Cuánto adelantás?</label>
+        <button type="button" class="fi-adelanto-sin">Sin adelanto</button></div>
+      <div class="fi-adelanto-fila">
+        <div class="fi-adelanto-monto"><span class="fi-adelanto-signo">${enPesos ? '$' : 'u$'}</span>
+          <input id="fi-adelanto-monto" type="text" inputmode="numeric" autocomplete="off" placeholder="0" value="${a.monto || ''}"></div>
+        ${TC ? `<div class="fi-adelanto-moneda" role="group" aria-label="Moneda del adelanto">
+          <button type="button" data-moneda="usd" aria-pressed="${!enPesos}" aria-label="En dólares">u$</button>
+          <button type="button" data-moneda="ars" aria-pressed="${enPesos}" aria-label="En pesos">$</button></div>` : ''}
+      </div>
+      <p class="fi-adelanto-como">${enPesos ? 'En pesos, en efectivo o transferencia.' : 'En dólares, en efectivo.'}</p>
+      <p class="fi-adelanto-queda" aria-live="polite">${esc(textoQuedaAdelanto(v))}</p>
+    </div>`;
+}
+function engancharAdelantoFicha(d, v){
+  const caja = d.querySelector('.fi-adelanto');
+  if(!caja) return;
+  const rehacer = foco => {
+    caja.innerHTML = htmlAdelantoFicha(v);
+    engancharAdelantoFicha(d, v);
+    actualizarCuotasFicha(d, v);
+    if(foco) caja.querySelector(foco)?.focus();
+  };
+  const abrir = caja.querySelector('.fi-adelanto-abrir');
+  if(abrir) abrir.onclick = () => { ADELANTO_FICHA.abierto = true; rehacer('#fi-adelanto-monto'); };
+  const sin = caja.querySelector('.fi-adelanto-sin');
+  if(sin) sin.onclick = () => { ADELANTO_FICHA.abierto = false; ADELANTO_FICHA.monto = 0; rehacer('.fi-adelanto-abrir'); };
+  caja.querySelectorAll('.fi-adelanto-moneda button').forEach(b => b.onclick = () => {
+    if(ADELANTO_FICHA.moneda === b.dataset.moneda) return;
+    ADELANTO_FICHA.moneda = b.dataset.moneda;
+    ADELANTO_FICHA.monto = 0;           // u$ 400 no son $ 400
+    rehacer('#fi-adelanto-monto');
+  });
+  const input = caja.querySelector('#fi-adelanto-monto');
+  if(input) input.oninput = () => {
+    const limpio = input.value.replace(/\D/g, '').replace(/^0+/, '').slice(0, 10);
+    if(input.value !== limpio) input.value = limpio;
+    ADELANTO_FICHA.monto = Number(limpio) || 0;
+    const queda = caja.querySelector('.fi-adelanto-queda');
+    if(queda) queda.textContent = textoQuedaAdelanto(v);
+    actualizarCuotasFicha(d, v);
+  };
 }
 
 /* La cuota elegida en la ficha llega al WhatsApp de la ficha y al pedido
@@ -12567,8 +12703,17 @@ function elegirCuotaFicha(d, v, n){
    el "Avisame cuando entre" no lleva plan. */
 function mensajeWAFicha(v, color){
   const texto = mensajeWA(v, color);
+  if(!conCuotas(v)) return texto;
   const c = planCuotas(CUOTA_FICHA);
-  if(!c || !conCuotas(v)) return texto;
+  // Con adelanto (26/10/2026): "Adelanto u$ 400 en efectivo y el resto lo pago
+  // con tarjeta en 6 cuotas: aprox. $ … c/u.", con la cuenta de la etiqueta
+  const r = restoAdelanto(v);
+  if(r){
+    if(r.paga) return texto + '\n\n' + `Pago todo con ${textoAdelanto(r)}.`;
+    const resto = c ? renglonDelPlan(c, cuentaFicha(v, c.cuotas)).replace(/^Lo pago/, 'lo pago') : 'lo pago con tarjeta.';
+    return texto + '\n\n' + `Adelanto ${textoAdelanto(r)} y el resto ${resto}`;
+  }
+  if(!c) return texto;
   return texto + '\n\n' + renglonDelPlan(c, cuentaCuotas(v.precio, c.cuotas));
 }
 /* Y al cargarlo al pedido desde la ficha, ese plan pasa a ser el del pedido
@@ -13255,6 +13400,7 @@ function abrirFicha(k, historia = true){
   TODAS_ABIERTA = false;     // "Ver las N versiones" arranca cerrada (4.3 C)
   DESC_ABIERTO = 'por';      // la descripción entra con "Por qué elegirlo" abierto (A2, 30/09)
   CUOTA_FICHA = 0;           // las cuotas entran sin plan marcado (2B, 30/09)
+  ADELANTO_FICHA = { abierto: false, moneda: 'usd', monto: 0 };   // y sin adelanto (26/10)
   if(historia !== null){ fichaEmpujada = historia === true; escribirURL(historia === true); }
 
   const d = document.createElement('div');
@@ -13326,14 +13472,23 @@ function engancharFicha(d, m, v){
   engancharDescripcion(d);     // el acordeón y su lugar (celular o compu)
   // Los planes de la etiqueta del precio (2B, 30/09)
   d.querySelectorAll('.fi-cuota').forEach(b => b.onclick = () => elegirCuotaFicha(d, v, Number(b.dataset.cuotas)));
+  engancharAdelantoFicha(d, v);  // "Adelantar una parte" (26/10)
   /* Las promos (23/10/2026): la amarilla abre el cotizador como "Entregar mi
      usado"; la lila, si no había plan, elige el más largo (el WhatsApp de la
-     ficha lo dice, como cualquier plan tocado) y lleva la vista a la etiqueta. */
+     ficha lo dice, como cualquier plan tocado), abre "Adelantar una parte"
+     (26/10, sin el teclado: el foco no va al monto) y lleva la vista a la
+     etiqueta. */
   const promoUsado = d.querySelector('#fi-promo-usado');
   if(promoUsado) promoUsado.onclick = () => abrirCotizador({ k: FICHA || clave(v), color: COLOR_FICHA });
   const promoCuotas = d.querySelector('#fi-promo-cuotas');
   if(promoCuotas) promoCuotas.onclick = () => {
     if(!CUOTA_FICHA) elegirCuotaFicha(d, v, maxCuotas());
+    const adelanto = d.querySelector('.fi-adelanto');
+    if(adelanto && !ADELANTO_FICHA.abierto){
+      ADELANTO_FICHA.abierto = true;
+      adelanto.innerHTML = htmlAdelantoFicha(v);
+      engancharAdelantoFicha(d, v);
+    }
     const etiqueta = d.querySelector('.fi-cuotas');
     if(!etiqueta) return;
     const quieto = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -13562,7 +13717,7 @@ function htmlPromosFicha(v){
       <b>¿Tenés un usado?</b><span>Te lo tomamos como parte de pago</span>${ir('Cotizalo')}</button>` : ''}
     ${cuotas ? `<button type="button" class="fi-promo fi-promo-cuotas" id="fi-promo-cuotas">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg>
-      <b>Hasta ${maxCuotas()} cuotas</b><span>Con tarjeta</span>${ir('Ver cuánto queda')}</button>` : ''}
+      <b>Hasta ${maxCuotas()} cuotas</b><span>Con tarjeta, o adelantá una parte y cuotificá el resto</span>${ir('Ver cuánto queda')}</button>` : ''}
   </div>`;
 }
 function htmlPedidoFichaSolo(k){

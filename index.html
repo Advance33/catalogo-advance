@@ -7880,12 +7880,11 @@ function completarSim(vs){
    borrar productos distintos. El arreglo que sobrevive va al parser de la
    planilla; esto es el parche mientras tanto. */
 const VERSION_MAL_ESCRITA = {
-  // Pedro, 21/09: el "A18 Pro" del MacBook Neo es el mismo A18 que la fila
-  // normal. Las dos filas ya comparten el código AT-0433, o sea el mismo
-  // producto, y sólo cambia el color. AT-0434 es la misma historia en el de
-  // 512GB, que también viene escrito "A18 Pro".
-  'AT-0433': [/\bpro\b/ig],
-  'AT-0434': [/\bpro\b/ig],
+  // Hasta el 26/10 estaba el MacBook Neo (AT-0433 y AT-0434): unas filas
+  // decían "A18 Pro" y otras "A18" (Pedro, 21/09: es el mismo chip), y acá se
+  // le borraba el "Pro". Benja, 26/10: el chip se llama A18 Pro, como dice
+  // Apple, y así se escribe en ADVAPP en las 12 filas. Ya no hay nada que
+  // emparejar.
 };
 
 function emparejarVersion(e, p, coloresDelModelo){

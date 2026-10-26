@@ -374,7 +374,11 @@ async function correrUW(){
 
   /* ---- [5] El WhatsApp ---- */
   const wa1 = mensajeWA(u1), wa2 = mensajeWA(u2), av4 = mensajeAviso(u4);
-  ok(/\busado\b/.test(wa1) && wa1.includes(', código UW-USADO-1.'), '[5] el mensaje dice "usado" y el codigo del equipo', wa1);
+  // Desde el 26/10/2026 el precio en dólares va después del código (Benja:
+  // "cualquier mensaje de un producto de la web, con su valor en USD")
+  ok(/\busado\b/.test(wa1) && /, código UW-USADO-1( \(USD [\d.]+\))?\./.test(wa1), '[5] el mensaje dice "usado" y el codigo del equipo', wa1);
+  ok(/\(USD [\d.]+\)\. ¿Me pasás info\?$/.test(wa1) && /\(USD [\d.]+\),? figura sin stock/.test(av4),
+     '[5] la consulta y el aviso dicen el precio en dolares', wa1 + ' · ' + av4);
   ok(wa1 !== wa2 && wa2.includes('UW-USADO-2'), '[5] dos equipos iguales mandan mensajes distintos', wa2);
   ok(/\busado\b/.test(av4) && av4.includes('UW-USADO-4'), '[5] el "Avisame cuando entre" tambien', av4);
   ok(!!nuevo && !/código|\(c[oó]digo/i.test(mensajeWA(nuevo.rep)) && !mensajeWA(nuevo.rep).includes(nuevo.rep.id), '[5] lo nuevo sigue sin codigo', nuevo && mensajeWA(nuevo.rep));

@@ -6609,9 +6609,21 @@ const articuloDe = texto => {
 };
 const mayuscula = s => s.charAt(0).toUpperCase() + s.slice(1);
 
+/* El precio en dólares, en toda consulta de un producto (Benja, 26/10/2026:
+   "quiero que cualquier mensaje que me envíen de un producto de la web figure
+   su valor en USD"; le llegaba "Me interesa el Sigma 150-600mm … Lo pago en 12
+   cuotas" y no sabía a cuánto lo había visto). El de la web: el de la versión,
+   o "desde" el más barato en la tarjeta de un modelo con versiones de distinto
+   precio, como dice la tarjeta. Sin precio (a consultar), nada. */
+const precioDelMensaje = p => {
+  if(!p || typeof p.precio !== 'number' || !(p.precio > 0)) return '';
+  const desde = !!p.multi && typeof p.precioMax === 'number' && p.precio !== p.precioMax;
+  return ` (${desde ? 'desde ' : ''}USD ${plata(p.precio)})`;
+};
+
 function mensajeWA(p, color){
   const x = partesMensaje(p, color);
-  return `Hola! Me interesa ${articuloDe(x.nombre)} ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)}. ¿Me pasás info?`;
+  return `Hola! Me interesa ${articuloDe(x.nombre)} ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)}${precioDelMensaje(p)}. ¿Me pasás info?`;
 }
 
 /* Sin stock el boton de siempre no sirve: el cliente pregunta por algo que no
@@ -6620,7 +6632,7 @@ function mensajeWA(p, color){
 function mensajeAviso(p, color){
   const x = partesMensaje(p, color);
   const art = articuloDe(x.nombre);
-  return `Hola! ${mayuscula(art)} ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)}${x.unidad ? ',' : ''} `
+  return `Hola! ${mayuscula(art)} ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)}${precioDelMensaje(p)}${x.unidad ? ',' : ''} `
        + `${art.endsWith('s') ? 'figuran' : 'figura'} sin stock. `
        + `¿Me avisan cuando entre?`;
 }
@@ -15320,8 +15332,9 @@ function pasosUsado(b){
    usado. */
 function mensajeUsado(c, prod, color){
   const x = prod ? partesMensaje(prod, color) : null;
+  // El precio va en la primera línea sólo si abajo no sale el renglón "…: USD …"
   let t = x
-    ? `Hola! Me interesa ${articuloDe(x.nombre)} ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)} y quiero entregar mi usado como parte de pago.`
+    ? `Hola! Me interesa ${articuloDe(x.nombre)} ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)}${c.valor === null ? precioDelMensaje(prod) : ''} y quiero entregar mi usado como parte de pago.`
     : 'Hola! Quiero entregar mi usado como parte de pago.';
   t += '\n\nMi usado: ' + textoUsado(c) + (c.valor !== null ? ': ' + textoValorUsado(c) : '');
   if(c.valor !== null && x && typeof prod.precio === 'number'){
@@ -15355,7 +15368,7 @@ function htmlEnviarUsado(msg, ids = ['us-wa', 'us-ig']){
 function mensajeFuera(prod, color, c){
   const x = prod ? partesMensaje(prod, color) : null;
   return (x
-    ? `Hola! Me interesa ${articuloDe(x.nombre)} ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)} y quiero entregar mi usado como parte de pago.`
+    ? `Hola! Me interesa ${articuloDe(x.nombre)} ${textoMensaje(x)}${x.color ? ` en ${x.color}` : ''}${queUnidad(x)}${precioDelMensaje(prod)} y quiero entregar mi usado como parte de pago.`
     : 'Hola! Quiero entregar mi usado como parte de pago.') +
     '\n\nMi usado (no está en el cotizador):' +
     `\nQué es: ${c.tipo}\nModelo: ${c.m.nombre}` + (c.memoria ? `\nMemoria: ${c.memoria}` : '') +

@@ -63,6 +63,23 @@ function ppDescripcion(v){
   return (venta.length || importante.length || ficha.length) ? { venta, importante, ficha } : null;
 }
 
+/* El precio en el mensaje de WhatsApp (26/10/2026). Desde el #56 el catálogo
+   escribe en cada consulta su precio, "(USD 990)" (Benja: "quiero que
+   cualquier mensaje que me envíen de un producto de la web figure su valor en
+   USD"). Pero esta página se arma de a días y no lleva precio (W3-06): con el
+   del día del PUBLICAR, el cliente mandaba un precio viejo. El mensaje se
+   guarda SIN precio y con el lugar donde va (pos); el script de la página lo
+   pone con el de ADVAPP del momento. Sin ADVAPP, sale sin precio. */
+function ppMensaje(armar, v, c){
+  const sin = armar({ ...v, precio: null }, c);
+  const con = armar({ ...v, precio: 1, multi: false }, c);
+  // Donde el mensaje con precio dice " (USD 1)" y el resto es igual al de sin
+  // precio (comparar letra por letra se corría un lugar: los dos siguen con espacio)
+  const marca = ' (USD 1)', i = con.indexOf(marca);
+  const pos = i >= 0 && con.slice(0, i) + con.slice(i + marca.length) === sin ? i : null;
+  return { link: linkWA(sin), pos };
+}
+
 async function paginasDeProducto(){
   try{ await cargarDescripciones(); }catch(e){ /* sin descripción, la página sale igual */ }
   const modelos = [];
@@ -95,11 +112,13 @@ async function paginasDeProducto(){
       for(const c of (colores.length ? colores : [''])){
         const foto = (c && fotosDeColor(v, c)[0]) || v.imagenGrande || v.imagen || '';
         // El WhatsApp de cada versión y color, el mismo de la ficha (06/10:
-        // la página mandaba siempre el de la versión del "desde")
+        // la página mandaba siempre el de la versión del "desde"), sin el
+        // precio: lo pone la página (ppMensaje)
+        const wa = ppMensaje(mensajeWA, v, c), aviso = ppMensaje(mensajeAviso, v, c);
         versiones.push({ version, color: c, precio: Math.round(Number(v.precio)),
                          stock: !!v.stock, clave: clave(v), sku: String(v.skuVariante || '').trim(),
                          foto: ppRuta(foto),
-                         wa: linkWA(mensajeWA(v, c)), aviso: linkWA(mensajeAviso(v, c)) });
+                         wa: wa.link, waPos: wa.pos, aviso: aviso.link, avisoPos: aviso.pos });
       }
     }
     const conStock = versiones.filter(x => x.stock);
@@ -132,7 +151,8 @@ async function paginasDeProducto(){
       foto: ppRuta(foto),
       foto_og: ilustrativa ? '' : vpFotoPropia(foto),
       ...(ilustrativa ? { ilustrativa: true } : {}),
-      wa: linkWA(mensajeWA(rep)),
+      // El botón del HTML, antes de que llegue ADVAPP: sin precio
+      wa: ppMensaje(mensajeWA, rep).link,
       // De la más barata a la más cara: la primera con stock es la del "desde"
       versiones: versiones.sort((a, b) => (b.stock - a.stock) || (a.precio - b.precio)),
       descripcion: ppDescripcion(rep),

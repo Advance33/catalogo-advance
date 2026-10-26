@@ -400,6 +400,17 @@ SCRIPT = r'''
   const $ = (id) => document.getElementById(id);
   const plata = (n) => Math.round(n).toLocaleString('es-AR');
   const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  // El precio de ahora adentro del mensaje, en el lugar que dejó
+  // paginas-producto.js (26/10/2026): "... en Black (USD 190). ¿Me pasás info?".
+  // Sin precio del momento, el mensaje va sin precio, nunca con uno viejo.
+  const conPrecio = (link, pos, precio) => {
+    const i = String(link || '').indexOf('?text=');
+    if(i < 0 || typeof pos !== 'number' || !(precio > 0)) return link;
+    try{
+      const t = decodeURIComponent(link.slice(i + 6));
+      return link.slice(0, i + 6) + encodeURIComponent(t.slice(0, pos) + ' (USD ' + plata(precio) + ')' + t.slice(pos));
+    }catch(e){ return link; }
+  };
   // vivo: ya llegó lo de ADVAPP; antes (o si no llega) no se dice precio ni stock
   let tc = null, version = null, color = null, vivo = false;
   // Arranca en la primera versión (vienen ordenadas: con stock y más barata primero, el día que se armó)
@@ -424,7 +435,8 @@ SCRIPT = r'''
     // El WhatsApp de la versión y el color elegidos (06/10), según el stock de ahora
     const wa = document.querySelector('a.wa');
     const sin = vivo && !x.stock;
-    if(wa && (x.wa || x.aviso)){ wa.href = (sin ? x.aviso : x.wa) || x.wa; wa.textContent = sin ? 'Avisame cuando entre' : 'Consultar por WhatsApp'; }
+    const precio = vivo ? x.precio : null;
+    if(wa && (x.wa || x.aviso)){ wa.href = (sin ? conPrecio(x.aviso, x.avisoPos, precio) : conPrecio(x.wa, x.waPos, precio)) || x.wa; wa.textContent = sin ? 'Avisame cuando entre' : 'Consultar por WhatsApp'; }
     const caja = $('precio');
     if(vivo && x.stock && x.precio){
       caja.className = 'precio';
@@ -518,7 +530,10 @@ def armar_pagina(m, s, publica, general):
     ld = datos_para_google(m, url, publica)
     # Sin precio ni stock (W3-06): los pone el script. Las versiones van en el
     # orden en que vinieron (con stock y mas barata primero, el dia que se armo).
-    versiones = [{k: x.get(k) or '' for k in ('version', 'color', 'clave', 'sku', 'foto', 'wa', 'aviso')}
+    # waPos y avisoPos: donde va el precio del momento dentro del mensaje
+    # (26/10/2026); sin el dato, null y el mensaje sale sin precio.
+    versiones = [dict({k: x.get(k) or '' for k in ('version', 'color', 'clave', 'sku', 'foto', 'wa', 'aviso')},
+                      **{k: x.get(k) if isinstance(x.get(k), int) else None for k in ('waPos', 'avisoPos')})
                  for x in m['versiones']]
     # El dolar del dia en que se armo NO va (19/10/2026): el script no lo usa
     # (los pesos salen de dolarapi al abrir; sin eso no hay pesos), y como
@@ -1007,7 +1022,12 @@ def probar():
                       {'cuotas': 12, 'whatsapp': '5491124751466', 'mapa': 'https://maps.app.goo.gl/x', 'direccion': 'Av. de los Incas 5150, 1A, CABA'})
     ok('?cat=Accesorio%20Apple' in h3 and '?cat=Accesorio Apple' not in h3, 'la direccion del rubro va codificada (migas y datos para Google)')
     ok('<tbody id="filas">' in h3 and 'tb.innerHTML' in h3 and 'lowPrice: Math.min(...ps)' in h3, 'al abrir se rehacen la tabla y los datos para Google')
-    ok('wa.href = (sin ? x.aviso : x.wa) || x.wa' in h3, 'el WhatsApp sigue a la version elegida y al stock del momento')
+    ok('wa.href = (sin ? conPrecio(x.aviso, x.avisoPos, precio) : conPrecio(x.wa, x.waPos, precio)) || x.wa' in h3,
+       'el WhatsApp sigue a la version elegida y al stock del momento')
+    ok('const precio = vivo ? x.precio : null;' in h3 and "' (USD ' + plata(precio) + ')'" in h3,
+       'el mensaje lleva el precio de ADVAPP del momento, nunca uno escrito al armar la pagina (26/10)')
+    ok('"waPos": null' in h3 and '%28USD' not in h3 and '(USD%20' not in h3,
+       'los datos de la pagina no traen un precio adentro del mensaje')
     h4 = armar_pagina(dict(m, usado=True), 'x', 'https://catalogo.advancetecno.com.ar/', {'cuotas': 12})
     ok('UsedCondition' in h4 and 'NewCondition' not in h4, 'W3-10: un usado es UsedCondition para Google')
     # La foto ilustrativa de un usado (Benja, 14/10/2026): asi la manda paginas-producto.js

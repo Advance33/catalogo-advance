@@ -11,7 +11,7 @@
 // Tres comprobaciones, cada una con el ID de ADVAPP de cada fila, para que lo
 // que ya se pidió se anote como conocido (herramientas/fallas-conocidas.py):
 //   1. El nombre dice lo que dice el último bloque de su SKU.
-//   2. Ninguna versión de un modelo con varias se llama "Base" o "Estándar".
+//   2. Ninguna versión de un modelo con varias se llama "Base" ni queda vacía.
 //   3. Una misma foto (fotos/mini/huellas.json) no está en dos modelos que se
 //      ven distintos. Los que por fuera son iguales van en PERMITIDAS.
 const R = [];
@@ -62,6 +62,8 @@ const TRAMOS = [
 const PERMITIDAS = [
   { motivo: 'MacBook Pro 14"/16": el mismo chasis con M4 Pro, M5, M5 Pro o M5 Max',
     codigos: ['AT-0435', 'AT-0438', 'AT-0440', 'AT-0442', 'AT-0443', 'AT-0444', 'AT-0445', 'AT-0446', 'AT-0447', 'AT-0523', 'AT-0532', 'AT-0538', 'AT-0539'] },
+  { motivo: 'iPhone 16 y 16 Plus: el mismo diseño, sólo cambia el tamaño, que en la foto no se ve',
+    codigos: ['AT-0067', 'AT-0549', 'AT-0603'] },
   { motivo: 'Mac mini: la misma caja con M4, M4 Pro, M5 Pro o M6',
     codigos: ['AT-0202', 'AT-0203', 'AT-0204', 'AT-0584', 'AT-0585', 'AT-0642'] },
   { motivo: 'iPad Pro 11": M4 y M5, Wifi y Cellular, son iguales por fuera',
@@ -97,8 +99,11 @@ async function correrPruebas(){
   ok(sinDecir.length === 0, '[1] el nombre dice lo que dice su SKU (Body, Wifi, Cellular, Digital, E-Sim, ANC)',
      sinDecir.length ? sinDecir.length + ': ' + sinDecir.join(' | ') : conTramo.length + ' filas bien');
 
-  /* ---- 2 ---- */
-  const POBRE = /^(base|est[aá]ndar|standard|b[aá]sic[oa]|normal)?$/i;
+  /* ---- 2 ----
+     "Base" la pone la web cuando a la versión no le queda nada que la
+     distinga; vacía, igual. "Estándar" no: si lo dice el nombre de ADVAPP
+     ("Joystick Xbox S/X Estándar" contra "+ USB-C") es una palabra elegida. */
+  const POBRE = /^(base)?$/i;
   const pobres = [];
   for(const m of MODELOS.filter(x => x.multi)){
     for(const v of m.variantes){
@@ -106,7 +111,7 @@ async function correrPruebas(){
       if(POBRE.test(String(v.etiqueta || '').trim())) pobres.push(`${v.id}: ${String(m.desc).replace(/\|/g, '/')} ofrece "${v.etiqueta || '(vacía)'}"`);
     }
   }
-  ok(pobres.length === 0, '[2] ninguna versión se llama "Base" ni "Estándar": dice qué la distingue',
+  ok(pobres.length === 0, '[2] ninguna versión se llama "Base": dice qué la distingue',
      pobres.length ? pobres.length + ': ' + pobres.join(' | ') : 'ninguna');
 
   /* ---- 3 ---- */

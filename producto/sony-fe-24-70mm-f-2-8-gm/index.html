@@ -113,13 +113,24 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
   <span><a href="https://wa.me/5491125205232" target="_blank" rel="noopener">WhatsApp +54 9 11 2520-5232</a> · <a href="https://maps.app.goo.gl/kzwGpTwUNLkTEwWRA" target="_blank" rel="noopener">Ver en el mapa</a></span>
   <span>Precios sujetos a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</span>
 </footer>
-<script id="datos" type="application/json">{"versiones": [{"version": "Estándar", "color": "", "clave": "LEN-SON-026", "sku": "LEN-SON-2470F28GM-000-000-SONYE", "foto": "fotos/sinfondo/AT-0360.webp", "wa": "https://wa.me/5491125205232?text=Hola!%20Me%20interesa%20el%20Sony%20FE%2024-70mm%20F%2F2.8%20GM.%20%C2%BFMe%20pas%C3%A1s%20info%3F", "aviso": "https://wa.me/5491125205232?text=Hola!%20El%20Sony%20FE%2024-70mm%20F%2F2.8%20GM%20figura%20sin%20stock.%20%C2%BFMe%20avisan%20cuando%20entre%3F"}], "advapp": "https://advapp-blond.vercel.app/api/catalog?resource=tecno-web", "cuotas": 12, "cotizacion": {"tipo": "blue", "recargo": 0, "recargoFijo": 20}, "oferta": {"@type": "AggregateOffer", "priceCurrency": "USD", "url": "https://catalogo.advancetecno.com.ar/producto/sony-fe-24-70mm-f-2-8-gm/", "seller": {"@type": "Organization", "name": "Advance Tecno"}, "itemCondition": "https://schema.org/NewCondition"}}</script>
+<script id="datos" type="application/json">{"versiones": [{"version": "Estándar", "color": "", "clave": "LEN-SON-026", "sku": "LEN-SON-2470F28GM-000-000-SONYE", "foto": "fotos/sinfondo/AT-0360.webp", "wa": "https://wa.me/5491125205232?text=Hola!%20Me%20interesa%20el%20Sony%20FE%2024-70mm%20F%2F2.8%20GM.%20%C2%BFMe%20pas%C3%A1s%20info%3F", "aviso": "https://wa.me/5491125205232?text=Hola!%20El%20Sony%20FE%2024-70mm%20F%2F2.8%20GM%20figura%20sin%20stock.%20%C2%BFMe%20avisan%20cuando%20entre%3F", "waPos": 45, "avisoPos": 33}], "advapp": "https://advapp-blond.vercel.app/api/catalog?resource=tecno-web", "cuotas": 12, "cotizacion": {"tipo": "blue", "recargo": 0, "recargoFijo": 20}, "oferta": {"@type": "AggregateOffer", "priceCurrency": "USD", "url": "https://catalogo.advancetecno.com.ar/producto/sony-fe-24-70mm-f-2-8-gm/", "seller": {"@type": "Organization", "name": "Advance Tecno"}, "itemCondition": "https://schema.org/NewCondition"}}</script>
 <script>
 (() => {
   const D = JSON.parse(document.getElementById('datos').textContent);
   const $ = (id) => document.getElementById(id);
   const plata = (n) => Math.round(n).toLocaleString('es-AR');
   const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  // El precio de ahora adentro del mensaje, en el lugar que dejó
+  // paginas-producto.js (26/10/2026): "... en Black (USD 190). ¿Me pasás info?".
+  // Sin precio del momento, el mensaje va sin precio, nunca con uno viejo.
+  const conPrecio = (link, pos, precio) => {
+    const i = String(link || '').indexOf('?text=');
+    if(i < 0 || typeof pos !== 'number' || !(precio > 0)) return link;
+    try{
+      const t = decodeURIComponent(link.slice(i + 6));
+      return link.slice(0, i + 6) + encodeURIComponent(t.slice(0, pos) + ' (USD ' + plata(precio) + ')' + t.slice(pos));
+    }catch(e){ return link; }
+  };
   // vivo: ya llegó lo de ADVAPP; antes (o si no llega) no se dice precio ni stock
   let tc = null, version = null, color = null, vivo = false;
   // Arranca en la primera versión (vienen ordenadas: con stock y más barata primero, el día que se armó)
@@ -144,7 +155,8 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
     // El WhatsApp de la versión y el color elegidos (06/10), según el stock de ahora
     const wa = document.querySelector('a.wa');
     const sin = vivo && !x.stock;
-    if(wa && (x.wa || x.aviso)){ wa.href = (sin ? x.aviso : x.wa) || x.wa; wa.textContent = sin ? 'Avisame cuando entre' : 'Consultar por WhatsApp'; }
+    const precio = vivo ? x.precio : null;
+    if(wa && (x.wa || x.aviso)){ wa.href = (sin ? conPrecio(x.aviso, x.avisoPos, precio) : conPrecio(x.wa, x.waPos, precio)) || x.wa; wa.textContent = sin ? 'Avisame cuando entre' : 'Consultar por WhatsApp'; }
     const caja = $('precio');
     if(vivo && x.stock && x.precio){
       caja.className = 'precio';

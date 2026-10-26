@@ -2730,6 +2730,15 @@ window.ADVAPP_TEMPRANO = (() => {
     .barra-pedido{flex-wrap:wrap;row-gap:8px}
     .bp-total{order:-1;flex:1 1 100%;flex-direction:row;align-items:baseline;gap:10px}
   }
+  /* (26/10/2026) Lo mismo arriba de 360 cuando el total no entra al lado de
+     los botones. A 375 (iPhone SE y mini) un pedido de USD 1.900 salía
+     "USD / 1.900" y "$ / 3.011.500", cada uno partido en dos renglones, y a
+     390 los pesos entran justo hasta ocho cifras. Los montos no se parten
+     nunca y acomodarBarraPedido() mide: si no entran, la barra pasa a la de
+     360 (el total en su renglón, en una línea); si entran, queda como siempre. */
+  #bp-usd,#bp-ars{white-space:nowrap}
+  .barra-pedido.total-aparte{flex-wrap:wrap;row-gap:8px}
+  .barra-pedido.total-aparte .bp-total{order:-1;flex:1 1 100%;flex-direction:row;align-items:baseline;gap:10px}
   /* El total con la hora (29/09): Pedro eligió que mientras se ve la copia la
      barra diga de qué hora son los precios (muestra 1.5 A). En el celular no
      entra al lado de los botones: el total pasa a su renglón, como a 360, y
@@ -15025,6 +15034,19 @@ function pintarPedido(){
   $('bp-aviso').hidden = !h;
   $('bp-aviso-txt').textContent = h ? `Precios de las ${hhmm(h)} · a confirmar` : '';
   $('bp-enviar').href = linkWA(mensajePedido());
+  acomodarBarraPedido();
+}
+
+/* El total de la barra en su renglón si al lado de los botones no entra en
+   una línea (26/10/2026, ver .total-aparte en el CSS). Se mide como la fila
+   de links de arriba (acomodarNav): con cada pedido pintado, cuando cambia el
+   ancho de la ventana (girar el celular) y cuando terminan de llegar las
+   fuentes. */
+function acomodarBarraPedido(){
+  const b = $('barra-pedido'), t = b && b.querySelector('.bp-total');
+  if(!t || b.hidden) return;
+  b.classList.remove('total-aparte');
+  if(t.scrollWidth > t.clientWidth + 1) b.classList.add('total-aparte');
 }
 
 let pedidoEmpujado = false;   // ¿abrir el pedido sumó una entrada al historial?
@@ -16895,6 +16917,8 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
 leerURL();               // por si entraste con un link ya filtrado
 sincronizarControles();
 pintarPedido();          // el pedido guardado de la visita anterior
+addEventListener('resize', acomodarBarraPedido);   // la barra va de lado a lado: su ancho es el de la ventana
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(acomodarBarraPedido);
 actualizar(true);
 cargarUsados();          // los valores de toma de usados (datos/usados.json, 05/10)
 abrirCotizadorDelLink(); // si entraste con el link #cotizar-usado (23/10)

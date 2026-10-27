@@ -50,30 +50,28 @@
     "https://support.apple.com/es-la/121204"
    ]
   },
-  "95d245ba8d36ddd95ba56278bfe95dc241d1c9f1cd2cea1f495300a1de354d4a": {
+  "bece556bc04fa6bfc8a136c37073a6960f48730e337d42fa7303102bcccc086e": {
    "modelo": "AirPods 5 (estuche de carga USB-C, sin carga inalámbrica)",
-   "fecha": "2026-10-26",
+   "fecha": "2026-10-27",
    "por": "verificador-descripciones",
-   "informe": "informe-R2a.json",
+   "informe": "informe-R2.json",
    "fuentes": [
     "https://www.apple.com/la/airpods-5/specs/",
     "https://www.apple.com/la/airpods-5/",
     "https://support.apple.com/es-la/148759",
-    "https://support.apple.com/es-la/109525",
-    "https://support.apple.com/en-us/148759 (para confirmar que «En la caja» no cambia con el país)"
+    "https://support.apple.com/es-la/109525"
    ]
   },
-  "9a9bdb0c3033189307a6ed8fed381cd46b4b18aa82983dca5ebc72e9f841ee93": {
+  "e4f57dcee8bf70d3c1702c40735937a5db17206087e9c9647bf4385885b1892f": {
    "modelo": "AirPods 5 con Estuche de Carga Inalámbrica",
-   "fecha": "2026-10-21",
+   "fecha": "2026-10-27",
    "por": "verificador-descripciones",
-   "informe": "informe-D07b-r2.json",
+   "informe": "informe-R2.json",
    "fuentes": [
     "https://www.apple.com/la/airpods-5/specs/",
     "https://www.apple.com/la/airpods-5/",
     "https://support.apple.com/es-la/148759",
-    "https://support.apple.com/es-la/148760",
-    "https://support.apple.com/es-la/109525"
+    "https://support.apple.com/es-la/148760"
    ]
   },
   "428bb15674adbe3e50c4c0bd76dbbd050176717e2c75976ed8330126bd4e6aad": {

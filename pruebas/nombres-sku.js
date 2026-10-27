@@ -48,6 +48,10 @@ const TRAMOS = [
   { tramo: /^CELL/, dice: /\b(cell|cellular|celular|5g|lte)\b/i, falta: 'Cellular' },
   { tramo: /^DIG$/, dice: /\bdigital\b/i, falta: 'Digital' },
   { tramo: /^ESIM$/, dice: /\be-?sim\b/i, falta: 'E-Sim' },
+  // AirPods 5: los dos modelos tienen cancelación de ruido, así que el «ANC»
+  // de este SKU es el del Estuche de Carga Inalámbrica, y así se llama la fila
+  // desde el 27/10 (Benja). Va antes que la regla general.
+  { tramo: /^ANC$/, sku: /-AIRPODS5-/, dice: /estuche de carga inal[aá]mbrica/i, falta: 'Estuche de Carga Inalámbrica' },
   { tramo: /^ANC$/, dice: /\banc\b/i, falta: 'ANC' },
 ];
 
@@ -89,7 +93,7 @@ async function correrPruebas(){
   const sinDecir = [];
   for(const p of conTramo){
     const tramo = String(p.skuVariante).split('-').pop().toUpperCase();
-    const t = TRAMOS.find(x => x.tramo.test(tramo));
+    const t = TRAMOS.find(x => x.tramo.test(tramo) && (!x.sku || x.sku.test(String(p.skuVariante).toUpperCase())));
     // Corto: el resumen ya muestra el nombre de cada fila, y con 60 filas el
     // detalle largo se cortaba y las últimas no se veían
     if(t && !t.dice.test(p.desc || '')) sinDecir.push(`${p.id}: falta ${t.falta}`);

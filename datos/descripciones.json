@@ -62642,16 +62642,16 @@
       ],
       "venta": [
         "Los AirPods 5 tienen hasta 1,5 veces más cancelación de ruido que los AirPods 4 con Cancelación Activa de Ruido, con chip H2 y Audio Espacial personalizado.",
-        "Arquitectura acústica rediseñada, Audio Adaptativo y modo Ambiente. Resisten el polvo, el agua y el sudor (IP57)."
+        "Arquitectura acústica rediseñada y modo Ambiente. Resisten el polvo, el agua y el sudor (IP57)."
       ],
       "importante": [
         {
           "titulo": "Hasta 1,5x más cancelación de ruido",
-          "texto": "Que los AirPods 4 con Cancelación Activa de Ruido. Con Audio Adaptativo, modo Ambiente y Reconocimiento de Conversación."
+          "texto": "Que los AirPods 4 con Cancelación Activa de Ruido. Con modo Ambiente."
         },
         {
           "titulo": "Chip H2",
-          "texto": "Audio Espacial personalizado con seguimiento dinámico de la cabeza, Ecualización Adaptativa y Aislamiento de Voz."
+          "texto": "Audio Espacial personalizado con seguimiento dinámico de la cabeza y Ecualización Adaptativa."
         },
         {
           "titulo": "Hasta 22 h con el estuche",
@@ -62659,7 +62659,7 @@
         },
         {
           "titulo": "Estuche con carga inalámbrica",
-          "texto": "Por USB-C, con el cargador del Apple Watch o con cargadores Qi. Tiene parlante para la app Encontrar."
+          "texto": "Por USB-C, con el cargador del Apple Watch o con cargadores Qi. Tiene parlante para la app Encontrar (requiere iOS 27 o posterior)."
         },
         {
           "titulo": "Resistentes al agua (IP57)",
@@ -62684,7 +62684,7 @@
             ],
             [
               "Modos",
-              "Audio Adaptativo, modo Ambiente y Reconocimiento de Conversación"
+              "Modo Ambiente; Audio Adaptativo y Reconocimiento de Conversación con un dispositivo Apple con la versión más reciente del sistema operativo"
             ],
             [
               "Audio Espacial",
@@ -62692,11 +62692,11 @@
             ],
             [
               "Funciones",
-              "Aislamiento de Voz, Ecualización Adaptativa y grabación de audio con calidad de estudio"
+              "Ecualización Adaptativa y grabación de audio con calidad de estudio; Aislamiento de Voz, con un dispositivo Apple con la versión más reciente del sistema operativo"
             ],
             [
               "Traducción en Vivo",
-              "Con un dispositivo Apple compatible con Apple Intelligence activado (en beta; según idioma y región)"
+              "Con un dispositivo Apple compatible con la versión más reciente del sistema operativo y Apple Intelligence activado (en beta; según idioma y región)"
             ]
           ]
         },
@@ -62764,7 +62764,7 @@
             ],
             [
               "Funcionan con",
-              "iPhone, iPad, Apple Watch, Mac y Apple TV con el último software. Con otros equipos Bluetooth, con funciones limitadas"
+              "iPhone, iPad, Apple Watch, Mac y Apple TV con el último software. Con otros equipos Bluetooth o con software anterior, las funciones pueden ser limitadas"
             ],
             [
               "En la caja",
@@ -62795,8 +62795,8 @@
           "url": "https://support.apple.com/es-la/148760"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Nueva el 21/10/2026. Apple tiene página oficial de los AirPods 5 (2026) con dos modelos: «AirPods 5» (Estuche de Carga USB-C; A3531, A3532, A3533) y «AirPods 5 con Estuche de Carga Inalámbrica» (A3439, A3440, A3441; en la documentación de Apple, «AirPods 5 (inalámbricos)»). Los dos tienen Cancelación Activa de Ruido y los dos estuches se cargan por USB-C. «WCC» de la fila AT-0591 es Wireless Charging Case, el nombre en inglés de Apple («with Wireless Charging Case»). Entre los dos modelos cambian: batería, sensor de fuerza con deslizamiento para el volumen, carga inalámbrica y parlante del estuche, peso del estuche y lo que trae la caja; acá van los del inalámbrico. Traducción en Vivo va sólo en la ficha, con la aclaración de Apple (beta, idioma y región). Fuera a propósito: Siri AI (Apple dice que llega en español más adelante y depende de la región), «la mejor Cancelación Activa de Ruido de la industria» (afirmación de la marca) y los colores. El ID ADVAPP de la fila WCC termina en «ANC», pero los dos modelos tienen cancelación de ruido.\nCorregida el 21/10/2026 con la propuesta del verificador (informe-D07b): «USB-C» no distingue entre los dos AirPods 5 (Apple dice que los dos estuches se cargan por USB-C), así que la fila AT-0590 «Apple AirPods 5 USB-C» sale de la entrada hasta que Benja diga cuál es. La entrada queda sólo para AT-0591 («WCC» = with Wireless Charging Case), sin versiones y con los valores del modelo con Estuche de Carga Inalámbrica; «En la caja» como lo dice Apple (support 148760)."
+      "verificado": "2026-10-27",
+      "notas": "Nueva el 21/10/2026. Apple tiene página oficial de los AirPods 5 (2026) con dos modelos: «AirPods 5» (Estuche de Carga USB-C; A3531, A3532, A3533) y «AirPods 5 con Estuche de Carga Inalámbrica» (A3439, A3440, A3441; en la documentación de Apple, «AirPods 5 (inalámbricos)»). Los dos tienen Cancelación Activa de Ruido y los dos estuches se cargan por USB-C. «WCC» de la fila AT-0591 es Wireless Charging Case, el nombre en inglés de Apple («with Wireless Charging Case»). Entre los dos modelos cambian: batería, sensor de fuerza con deslizamiento para el volumen, carga inalámbrica y parlante del estuche, peso del estuche y lo que trae la caja; acá van los del inalámbrico. Traducción en Vivo va sólo en la ficha, con la aclaración de Apple (beta, idioma y región). Fuera a propósito: Siri AI (Apple dice que llega en español más adelante y depende de la región), «la mejor Cancelación Activa de Ruido de la industria» (afirmación de la marca) y los colores. El ID ADVAPP de la fila WCC termina en «ANC», pero los dos modelos tienen cancelación de ruido.\nCorregida el 21/10/2026 con la propuesta del verificador (informe-D07b): «USB-C» no distingue entre los dos AirPods 5 (Apple dice que los dos estuches se cargan por USB-C), así que la fila AT-0590 «Apple AirPods 5 USB-C» sale de la entrada hasta que Benja diga cuál es. La entrada queda sólo para AT-0591 («WCC» = with Wireless Charging Case), sin versiones y con los valores del modelo con Estuche de Carga Inalámbrica; «En la caja» como lo dice Apple (support 148760).\nCorregida el 27/10/2026 con los mismos cambios que el verificador pidió para AT-0590 el 26/10 (informe-L1; el informe-R2a propuso hacer lo mismo acá): Audio Adaptativo, Reconocimiento de Conversación y Aislamiento de Voz requieren un dispositivo Apple con la versión más reciente del sistema operativo (nota 2 de Apple), así que salieron de «Por qué elegirlo» y «Lo más importante» y quedaron en la ficha con esa aclaración. Desde el 27/10 la fila de ADVAPP se llama «Apple AirPods 5 con Estuche de Carga Inalámbrica» (antes «AirPods 5 — ANC»).\nCorregida otra vez el 27/10/2026 con el informe-AT0591 del verificador: Traducción en Vivo también pide la versión más reciente del sistema operativo (nota 4 de Apple); y el parlante para Encontrar en «Lo más importante» lleva «requiere iOS 27 o posterior», como en la ficha; «Funciones» reescrita sin el «(este, con…)» y «Funcionan con» con el «pueden ser limitadas» de Apple (también con software anterior)."
     },
     {
       "modelo": "AirTag",
@@ -73148,11 +73148,11 @@
             ],
             [
               "Funciones",
-              "Ecualización Adaptativa, grabación de audio con calidad de estudio y Aislamiento de Voz (este, con un dispositivo Apple con la versión más reciente del sistema operativo)"
+              "Ecualización Adaptativa y grabación de audio con calidad de estudio; Aislamiento de Voz, con un dispositivo Apple con la versión más reciente del sistema operativo"
             ],
             [
               "Traducción en Vivo",
-              "Con un dispositivo Apple compatible con Apple Intelligence activado (en beta; según idioma y región)"
+              "Con un dispositivo Apple compatible con la versión más reciente del sistema operativo y Apple Intelligence activado (en beta; según idioma y región)"
             ]
           ]
         },
@@ -73228,7 +73228,7 @@
             ],
             [
               "Funcionan con",
-              "iPhone, iPad, Apple Watch, Mac y Apple TV con el último software. Con otros equipos Bluetooth, con funciones limitadas"
+              "iPhone, iPad, Apple Watch, Mac y Apple TV con el último software. Con otros equipos Bluetooth o con software anterior, las funciones pueden ser limitadas"
             ],
             [
               "En la caja",
@@ -73259,8 +73259,8 @@
           "url": "https://support.apple.com/es-la/109525"
         }
       ],
-      "verificado": "2026-10-26",
-      "notas": "Nueva el 26/10/2026. Benja contestó el 26/10 en la página de preguntas que la fila «Apple AirPods 5 USB-C» es el AirPods 5 con Estuche de Carga común, sin carga inalámbrica (auriculares A3531, A3532 y A3533; estuche A3530, según support 109525); coincide con el número de parte que trae la lista del proveedor. Misma estructura que la entrada del modelo con Estuche de Carga Inalámbrica (AT-0591), con los valores del estuche común de apple.com/la/airpods-5/specs y support 148759: 4 h / 6 h por carga, 20 h con el estuche, estuche de 32,3 g que se carga sólo por USB-C, sin deslizar para el volumen ni parlante, y la caja (AirPods 5, Estuche de Carga (USB-C) y documentación). Traducción en Vivo va sólo en la ficha, con la aclaración de Apple (beta, idioma y región). Fuera a propósito: Siri AI (Apple dice que llega en español más adelante y depende de la región), «la mejor Cancelación Activa de Ruido de la industria» (afirmación de la marca), el control remoto de la cámara, «Oye Siri» e Interacciones de Siri (como en AT-0591), accesibilidad y los colores. Para ADVAPP: la fila AT-0591 se llama «AirPods 5 — ANC», pero los dos AirPods 5 tienen Cancelación Activa de Ruido; lo que la distingue es el Estuche de Carga Inalámbrica.\nCorregida el 26/10/2026 con las propuestas del verificador (informe-L1): Audio Adaptativo, Reconocimiento de Conversación y Aislamiento de Voz requieren un dispositivo Apple con la versión más reciente del sistema operativo (nota 2 de Apple): salieron de «Por qué elegirlo» y «Lo más importante» y quedaron en la ficha con esa aclaración."
+      "verificado": "2026-10-27",
+      "notas": "Nueva el 26/10/2026. Benja contestó el 26/10 en la página de preguntas que la fila «Apple AirPods 5 USB-C» es el AirPods 5 con Estuche de Carga común, sin carga inalámbrica (auriculares A3531, A3532 y A3533; estuche A3530, según support 109525); coincide con el número de parte que trae la lista del proveedor. Misma estructura que la entrada del modelo con Estuche de Carga Inalámbrica (AT-0591), con los valores del estuche común de apple.com/la/airpods-5/specs y support 148759: 4 h / 6 h por carga, 20 h con el estuche, estuche de 32,3 g que se carga sólo por USB-C, sin deslizar para el volumen ni parlante, y la caja (AirPods 5, Estuche de Carga (USB-C) y documentación). Traducción en Vivo va sólo en la ficha, con la aclaración de Apple (beta, idioma y región). Fuera a propósito: Siri AI (Apple dice que llega en español más adelante y depende de la región), «la mejor Cancelación Activa de Ruido de la industria» (afirmación de la marca), el control remoto de la cámara, «Oye Siri» e Interacciones de Siri (como en AT-0591), accesibilidad y los colores. Para ADVAPP: la fila AT-0591 se llama «AirPods 5 — ANC», pero los dos AirPods 5 tienen Cancelación Activa de Ruido; lo que la distingue es el Estuche de Carga Inalámbrica.\nCorregida el 26/10/2026 con las propuestas del verificador (informe-L1): Audio Adaptativo, Reconocimiento de Conversación y Aislamiento de Voz requieren un dispositivo Apple con la versión más reciente del sistema operativo (nota 2 de Apple): salieron de «Por qué elegirlo» y «Lo más importante» y quedaron en la ficha con esa aclaración.\nCorregida otra vez el 27/10/2026 con el informe-AT0591 del verificador: Traducción en Vivo también pide la versión más reciente del sistema operativo (nota 4 de Apple); «Funciones» reescrita sin el «(este, con…)» y «Funcionan con» con el «pueden ser limitadas» de Apple (también con software anterior)."
     },
     {
       "modelo": "Sigma 24mm F1.4 DG DN | Art (Sony E)",

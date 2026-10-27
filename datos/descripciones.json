@@ -9024,7 +9024,7 @@
       "verificado": "2026-10-01"
     },
     {
-      "modelo": "Redmi 15C (sólo lo común al 15C y al 15C 5G)",
+      "modelo": "Redmi 15C (8/256 4G; 4/128 sin confirmar 4G o 5G)",
       "codigos": [
         "AT-0116",
         "AT-0638"
@@ -9104,6 +9104,20 @@
           ]
         },
         {
+          "grupo": "Rendimiento",
+          "datos": [
+            [
+              "Procesador",
+              {
+                "segun": {
+                  "4GB/128GB": "Según sea 4G o 5G",
+                  "8GB/256GB": "MediaTek Helio G81-Ultra, 8 núcleos (Cortex-A75 + Cortex-A55) de hasta 2,0 GHz; GPU Mali-G52 MC2"
+                }
+              }
+            ]
+          ]
+        },
+        {
           "grupo": "Memoria",
           "datos": [
             [
@@ -9160,6 +9174,24 @@
           "grupo": "Diseño",
           "datos": [
             [
+              "Medidas",
+              {
+                "segun": {
+                  "4GB/128GB": "Según sea 4G o 5G",
+                  "8GB/256GB": "171,56 x 79,47 x 7,99 mm"
+                }
+              }
+            ],
+            [
+              "Peso",
+              {
+                "segun": {
+                  "4GB/128GB": "Según sea 4G o 5G",
+                  "8GB/256GB": "205 g"
+                }
+              }
+            ],
+            [
               "Agua y polvo",
               "IP64: salpicaduras y polvo (no es sumergible)"
             ],
@@ -9172,6 +9204,15 @@
         {
           "grupo": "Conectividad y sistema",
           "datos": [
+            [
+              "Red",
+              {
+                "segun": {
+                  "4GB/128GB": "Según sea 4G o 5G",
+                  "8GB/256GB": "4G"
+                }
+              }
+            ],
             [
               "SIM",
               "Dual SIM más ranura microSD"
@@ -9203,14 +9244,10 @@
         {
           "texto": "Redmi 15C de 8 GB + 256 GB: mi.com/global/…/redmi-15c/specs",
           "url": "https://www.mi.com/global/product/redmi-15c/specs/"
-        },
-        {
-          "texto": "Redmi 15C 5G de 8 GB + 256 GB: mi.com/global/…/redmi-15c-5g/specs",
-          "url": "https://www.mi.com/global/product/redmi-15c-5g/specs/"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "La fila no dice si es el Redmi 15C (4G, Helio G81-Ultra) o el Redmi 15C 5G (Dimensity 6300): los dos existen en 4 GB + 128 GB, negro y verde. Va sólo lo que comparten; faltan procesador, red, medidas, peso y NFC hasta que Pedro confirme cuál es.\nAmpliada el 21/10/2026: se sumó AT-0638 (fila «Xiaomi Redmi 15C 8/256GB (Blue)»). Tampoco dice 4G ni 5G y los dos vienen en 8 GB + 256 GB (mi.com/global: el 15C en 4+128, 4+256, 6+128 y 8+256; el 15C 5G en 4+128, 4+256 y 8+256), así que sigue siendo «sólo lo común». Como cambian la RAM y el almacenamiento, hay dos versiones por memoria (memoria de la pestaña más «4 128gb» / «8 256gb» del nombre) y la ficha «Memoria» pasó a «según»; se sumaron las dos fichas globales a las fuentes (mi.com/mx del 15C y mi.com/es del 15C 5G no listan 8+256). El modelo ya no dice «4/128GB». Nada más cambió. Dato para Benja, que no se usó: en las fichas global, mx y es el azul sólo figura en el 15C (4G); el 15C 5G viene en negro, verde y morado."
+      "verificado": "2026-10-26",
+      "notas": "La fila 4/128 (negra y verde, AT-0116) no dice si es el Redmi 15C (4G, Helio G81-Ultra) o el Redmi 15C 5G (Dimensity 6300): los dos existen en 4 GB + 128 GB, negro y verde (y el 15C 5G de India también viene en 4/128). En esa versión va sólo lo que comparten; procesador, red, medidas y peso dicen «Según sea 4G o 5G» hasta que Benja confirme cuál es. Las dos versiones se reconocen por la memoria de la pestaña más «4 128gb» / «8 256gb» del nombre. NFC no va en ninguna: la ficha global y la de España dicen que su disponibilidad «puede variar» según el mercado, y la de México no lo nombra. Lo que trae la caja no va (la ficha global dice que el cargador depende del vendedor local).\nAmpliada el 21/10/2026: se sumó AT-0638 (fila «Xiaomi Redmi 15C 8/256GB (Blue)»), con la ficha «Memoria» «según» la versión.\nAmpliada el 26/10/2026: la revisión del 26/10 resolvió que la fila 8/256 azul (AT-0638) es el REDMI 15C (4G) global: el 15C 5G no viene en azul en ningún sitio oficial de Xiaomi, el de India (único 5G que nombra un azul) no viene en 8/256 y no hay 15C chino; el 15C global sí viene en Moonlight Blue y en 8+256. Para esa versión se sumaron, con «según», procesador (grupo nuevo «Rendimiento»), red 4G, medidas y peso de mi.com/global/product/redmi-15c/specs (mi.com/mx y mi.com/es del 15C dan las mismas medidas y el mismo peso). Se sacó la fuente global del 15C 5G, que ya no se usa (la 8/256 no es 5G). Cambió el modelo, que ya no dice «sólo lo común». Venta, Lo más importante y el resto de la ficha no cambiaron."
     },
     {
       "modelo": "Redmi Note 13 (4G) 6/128GB",
@@ -11623,6 +11660,15 @@
               }
             ],
             [
+              "SIM",
+              {
+                "segun": {
+                  "Sin confirmar": "Solo en el modelo Wi-Fi + Cellular: eSIM (no admite SIM física)",
+                  "Wi-Fi + Cellular": "Solo eSIM (no admite SIM física)"
+                }
+              }
+            ],
+            [
               "GPS",
               {
                 "segun": {
@@ -11660,8 +11706,8 @@
           "url": "https://www.apple.com/la/ipad-11/specs/"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Apple lo llama «iPad (A16)» o «iPad de 11 pulgadas (A16)». Verificación 1 (01/10): ninguna fila dice Wi-Fi ni Cellular, así que no se deduce: el peso va con los dos valores de Apple (477 g Wi-Fi · 481 g Wi-Fi + Cellular) y se sacó el renglón «Red celular». Si Pedro confirma que son Wi-Fi, puede volver como dato del proveedor. «éste» pasó a «este». Las aperturas quedan con punto (ƒ/1.8), como Apple. Ampliada el 21/10/2026: se sumaron AT-0576 y AT-0577 (filas «Apple iPad 11 A16 128GB Cellular (Silver)» y «… 256GB Cellular (Silver)»): dos versiones, «Sin confirmar» (las filas sin «cell» en el nombre: AT-0465, AT-0466, AT-0467) y «Wi-Fi + Cellular» (AT-0576, AT-0577). Para la Cellular, de support.apple.com/es-la/122240: peso 481 g, Red celular (5G sub-6 GHz y Gigabit LTE, solo datos; Apple no nombra el módem), GPS/GNSS y hasta 9 horas navegando con datos celulares; en «Sin confirmar» esos renglones dicen «solo en el modelo Wi-Fi + Cellular» y el peso sigue con los dos valores. No se pone el tipo de SIM: la fila no dice Sim ni eSIM (regla del 01/10), aunque Apple dice que este iPad usa sólo eSIM. La fila TAB-APL-IPAD11A16-128-PNK-WIFI (128GB) trae AT-0467, que en el maestro es 256GB: no cambia nada (la entrada no tiene versiones por memoria). Venta y Lo más importante no cambiaron."
+      "verificado": "2026-10-26",
+      "notas": "Apple lo llama «iPad (A16)» o «iPad de 11 pulgadas (A16)». Verificación 1 (01/10): ninguna fila dice Wi-Fi ni Cellular, así que no se deduce: el peso va con los dos valores de Apple (477 g Wi-Fi · 481 g Wi-Fi + Cellular) y se sacó el renglón «Red celular». Si Pedro confirma que son Wi-Fi, puede volver como dato del proveedor. «éste» pasó a «este». Las aperturas quedan con punto (ƒ/1.8), como Apple. Ampliada el 21/10/2026: se sumaron AT-0576 y AT-0577 (filas «Apple iPad 11 A16 128GB Cellular (Silver)» y «… 256GB Cellular (Silver)»): dos versiones, «Sin confirmar» (las filas sin «cell» en el nombre: AT-0465, AT-0466, AT-0467) y «Wi-Fi + Cellular» (AT-0576, AT-0577). Para la Cellular, de support.apple.com/es-la/122240: peso 481 g, Red celular (5G sub-6 GHz y Gigabit LTE, solo datos; Apple no nombra el módem), GPS/GNSS y hasta 9 horas navegando con datos celulares; en «Sin confirmar» esos renglones dicen «solo en el modelo Wi-Fi + Cellular» y el peso sigue con los dos valores. El 21/10 no se puso el tipo de SIM porque la fila no dice Sim ni eSIM (regla del 01/10). La fila TAB-APL-IPAD11A16-128-PNK-WIFI (128GB) trae AT-0467, que en el maestro es 256GB: no cambia nada (la entrada no tiene versiones por memoria). Venta y Lo más importante no cambiaron. Ampliada el 26/10/2026: se sumó en la ficha el renglón «SIM» (después de «Red celular»), como en el iPad Pro 11\" (M5): «Solo eSIM (no admite SIM física)» en «Wi-Fi + Cellular» (AT-0576, AT-0577) y «Solo en el modelo Wi-Fi + Cellular: eSIM (no admite SIM física)» en «Sin confirmar». Se resolvió en la revisión del 26/10: la ficha técnica de Apple (support.apple.com/es-la/122240, «Tarjeta SIM») dice que el iPad usa eSIM y «no es compatible con tarjetas SIM físicas», sin distinguir países (sólo cambia qué operadores admiten eSIM); por eso va aunque la fila no diga Sim ni eSIM (excepción decidida el 26/10 para los iPad Wi-Fi + Cellular). La versión «Sin confirmar» (y su pregunta) y lo demás no cambiaron."
     },
     {
       "modelo": "iPad Air 11\" (M4)",
@@ -11868,6 +11914,15 @@
               }
             ],
             [
+              "SIM",
+              {
+                "segun": {
+                  "Sin confirmar": "Solo en el modelo Wi-Fi + Cellular: eSIM (no admite SIM física)",
+                  "Wi-Fi + Cellular": "Solo eSIM (no admite SIM física)"
+                }
+              }
+            ],
+            [
               "GPS",
               {
                 "segun": {
@@ -11901,8 +11956,8 @@
           "url": "https://support.apple.com/es-la/126471"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Ninguna fila de hoy dice Wi-Fi ni Cellular en el nombre del proveedor (el -WIFI de los IDs lo pone el lector de ADVAPP; TAB-APP-011 y TAB-APP-062 ni eso): no se afirma la conectividad. Pregunta para Pedro: ¿todos los iPad Air 11\" M4 que se venden son Wi-Fi? Si dice que sí, se puede volver a poner «Red celular: No» y el peso de 464 g sólo. Si entra un Cellular (465 g, módem C1X, sólo eSIM), necesita código propio y una versión. Verificación 1 (01/10): saqué de «Por qué elegirlo» el peso (464 g es sólo el Wi-Fi) y Apple Intelligence (depende de la región); saqué Wi-Fi 7 de «Por qué elegirlo» y de «Lo más importante» (depende del país; el punto quedó «Bluetooth 6»); en la ficha el peso va con los dos valores (Wi-Fi y Wi-Fi + Cellular), Wi-Fi 7 con «(según el país)», Apple Intelligence con «(en beta; según idioma y región)», y saqué «Red celular» porque ninguna fila dice Wi-Fi o Cellular. Ampliada el 21/10/2026: entró un Cellular con código propio (AT-0578, fila «Apple iPad Air M4 11\" 128GB Cellular (Space Gray)»), como decía la nota: dos versiones, «Sin confirmar» (las filas sin «cell» en el nombre: AT-0468, AT-0469, AT-0470) y «Wi-Fi + Cellular» (AT-0578). Para la Cellular, de support.apple.com/es-la/126471: peso 465 g, Red celular (módem C1X, 5G sub-6 GHz y Gigabit LTE, solo datos), GPS/GNSS y hasta 9 horas navegando con datos celulares; en «Sin confirmar» esos renglones dicen «solo en el modelo Wi-Fi + Cellular» y el peso sigue con los dos valores, como en el iPad Pro 11\" (M5). No se pone el tipo de SIM: la fila no dice Sim ni eSIM (regla del 01/10), aunque Apple dice que el iPad Air usa sólo eSIM. Venta y Lo más importante no cambiaron."
+      "verificado": "2026-10-26",
+      "notas": "Ninguna fila de hoy dice Wi-Fi ni Cellular en el nombre del proveedor (el -WIFI de los IDs lo pone el lector de ADVAPP; TAB-APP-011 y TAB-APP-062 ni eso): no se afirma la conectividad. Pregunta para Pedro: ¿todos los iPad Air 11\" M4 que se venden son Wi-Fi? Si dice que sí, se puede volver a poner «Red celular: No» y el peso de 464 g sólo. Si entra un Cellular (465 g, módem C1X, sólo eSIM), necesita código propio y una versión. Verificación 1 (01/10): saqué de «Por qué elegirlo» el peso (464 g es sólo el Wi-Fi) y Apple Intelligence (depende de la región); saqué Wi-Fi 7 de «Por qué elegirlo» y de «Lo más importante» (depende del país; el punto quedó «Bluetooth 6»); en la ficha el peso va con los dos valores (Wi-Fi y Wi-Fi + Cellular), Wi-Fi 7 con «(según el país)», Apple Intelligence con «(en beta; según idioma y región)», y saqué «Red celular» porque ninguna fila dice Wi-Fi o Cellular. Ampliada el 21/10/2026: entró un Cellular con código propio (AT-0578, fila «Apple iPad Air M4 11\" 128GB Cellular (Space Gray)»), como decía la nota: dos versiones, «Sin confirmar» (las filas sin «cell» en el nombre: AT-0468, AT-0469, AT-0470) y «Wi-Fi + Cellular» (AT-0578). Para la Cellular, de support.apple.com/es-la/126471: peso 465 g, Red celular (módem C1X, 5G sub-6 GHz y Gigabit LTE, solo datos), GPS/GNSS y hasta 9 horas navegando con datos celulares; en «Sin confirmar» esos renglones dicen «solo en el modelo Wi-Fi + Cellular» y el peso sigue con los dos valores, como en el iPad Pro 11\" (M5). El 21/10 no se puso el tipo de SIM porque la fila no dice Sim ni eSIM (regla del 01/10). Venta y Lo más importante no cambiaron. Ampliada el 26/10/2026: se sumó en la ficha el renglón «SIM» (después de «Red celular»), como en el iPad Pro 11\" (M5): «Solo eSIM (no admite SIM física)» en «Wi-Fi + Cellular» (AT-0578) y «Solo en el modelo Wi-Fi + Cellular: eSIM (no admite SIM física)» en «Sin confirmar». Se resolvió en la revisión del 26/10: la ficha técnica de Apple (support.apple.com/es-la/126471, «Tarjeta SIM») dice que el iPad Air usa eSIM y «no es compatible con tarjetas SIM físicas», sin distinguir países (sólo cambia qué operadores admiten eSIM); por eso va aunque la fila no diga Sim ni eSIM (excepción decidida el 26/10 para los iPad Wi-Fi + Cellular). La versión «Sin confirmar» (y su pregunta) y lo demás no cambiaron."
     },
     {
       "modelo": "iPad Air 13\" (M3)",
@@ -13499,6 +13554,17 @@
               }
             ],
             [
+              "SIM",
+              {
+                "segun": {
+                  "256GB": "Solo en el modelo Wi-Fi + Cellular: eSIM (no admite SIM física)",
+                  "256GB Wi-Fi + Cellular": "Solo eSIM (no admite SIM física)",
+                  "512GB": "Solo en el modelo Wi-Fi + Cellular: eSIM (no admite SIM física)",
+                  "1TB": "Solo en el modelo Wi-Fi + Cellular: eSIM (no admite SIM física)"
+                }
+              }
+            ],
+            [
               "GPS",
               {
                 "segun": {
@@ -13538,8 +13604,8 @@
           "url": "https://www.apple.com/la/ipad-pro/specs/"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Según Apple, con 256 GB y 512 GB trae CPU de 9 núcleos y 12 GB; con 1 TB y 2 TB, CPU de 10 núcleos y 16 GB. En 1 TB Apple ofrece vidrio estándar o nanotexturizado: no se sabe cuál es el de las filas de 1 TB, por eso la ficha no dice el vidrio. Verificación 1 (01/10): los nombres de las filas no dicen Wi-Fi ni Cellular (TAB-APP-019 y TAB-APP-020 tampoco en el id), así que no se afirma: se sacó «Red celular» y el peso va con los dos valores (579 g Wi-Fi · 582 g Wi-Fi + Cellular); el punto 5 de Lo más importante dejó de nombrar Wi-Fi 7 (depende del país) y pasó a parlantes, micrófonos y LiDAR; en la ficha, Wi-Fi 7 «según el país» y Apple Intelligence «según el país y el idioma». Ampliada el 21/10/2026: se sumó AT-0650 (fila «iPad Pro M5 13\" 256GB Cellular (Space Black)») como versión «256GB Wi-Fi + Cellular» (si: memoria 256GB y «cell» en el nombre); la versión «256GB» ahora pide además que el nombre no diga «cell». La nueva versión lleva los mismos valores que «256GB» (CPU de 9 núcleos, 12 GB, ProRes 1080p) y, de support.apple.com/es-la/125407: peso 582 g, Red celular (módem C1X, 5G sub-6 GHz y Gigabit LTE, solo datos), GPS/GNSS y hasta 9 horas navegando con datos celulares. En las otras versiones esos renglones dicen «solo en el modelo Wi-Fi + Cellular», como en el iPad Pro 11\" (M5) publicado. No se pone el tipo de SIM: la fila no dice Sim ni eSIM (regla del 01/10), aunque Apple dice que el iPad Pro usa sólo eSIM. Venta y Lo más importante no cambiaron."
+      "verificado": "2026-10-26",
+      "notas": "Según Apple, con 256 GB y 512 GB trae CPU de 9 núcleos y 12 GB; con 1 TB y 2 TB, CPU de 10 núcleos y 16 GB. En 1 TB Apple ofrece vidrio estándar o nanotexturizado: no se sabe cuál es el de las filas de 1 TB, por eso la ficha no dice el vidrio. Verificación 1 (01/10): los nombres de las filas no dicen Wi-Fi ni Cellular (TAB-APP-019 y TAB-APP-020 tampoco en el id), así que no se afirma: se sacó «Red celular» y el peso va con los dos valores (579 g Wi-Fi · 582 g Wi-Fi + Cellular); el punto 5 de Lo más importante dejó de nombrar Wi-Fi 7 (depende del país) y pasó a parlantes, micrófonos y LiDAR; en la ficha, Wi-Fi 7 «según el país» y Apple Intelligence «según el país y el idioma». Ampliada el 21/10/2026: se sumó AT-0650 (fila «iPad Pro M5 13\" 256GB Cellular (Space Black)») como versión «256GB Wi-Fi + Cellular» (si: memoria 256GB y «cell» en el nombre); la versión «256GB» ahora pide además que el nombre no diga «cell». La nueva versión lleva los mismos valores que «256GB» (CPU de 9 núcleos, 12 GB, ProRes 1080p) y, de support.apple.com/es-la/125407: peso 582 g, Red celular (módem C1X, 5G sub-6 GHz y Gigabit LTE, solo datos), GPS/GNSS y hasta 9 horas navegando con datos celulares. En las otras versiones esos renglones dicen «solo en el modelo Wi-Fi + Cellular», como en el iPad Pro 11\" (M5) publicado. El 21/10 no se puso el tipo de SIM porque la fila no dice Sim ni eSIM (regla del 01/10). Venta y Lo más importante no cambiaron. Ampliada el 26/10/2026: se sumó en la ficha el renglón «SIM» (después de «Red celular»), como en el iPad Pro 11\" (M5): «Solo eSIM (no admite SIM física)» en «256GB Wi-Fi + Cellular» (AT-0650) y «Solo en el modelo Wi-Fi + Cellular: eSIM (no admite SIM física)» en «256GB», «512GB» y «1TB». Se resolvió en la revisión del 26/10: la ficha técnica de Apple (support.apple.com/es-la/125407, «Tarjeta SIM») dice que el iPad Pro usa eSIM y «no es compatible con tarjetas SIM físicas», sin distinguir países (sólo cambia qué operadores admiten eSIM); por eso va aunque la fila no diga Sim ni eSIM (excepción decidida el 26/10 para los iPad Wi-Fi + Cellular). Las versiones sin Cellular y lo demás no cambiaron."
     },
     {
       "modelo": "Galaxy Tab S10 FE (Wi-Fi y 5G)",
@@ -41593,12 +41659,33 @@
       "notas": "Model A074, sólo existe en Sony E. La fila dice '28-300mm F/4-7.1 III Sony'."
     },
     {
-      "modelo": "Tamron 28-75mm F2.8 Di III VXD G2 (A063) Nikon Z",
+      "modelo": "Tamron 28-75mm F2.8 Di III VXD G2 (A063)",
       "codigos": [
+        "AT-0398",
         "AT-0399"
       ],
+      "versiones": [
+        {
+          "nombre": "Sony E",
+          "codigos": [
+            "AT-0398"
+          ],
+          "si": {
+            "montura": "Sony E"
+          }
+        },
+        {
+          "nombre": "Nikon Z",
+          "codigos": [
+            "AT-0399"
+          ],
+          "si": {
+            "montura": "Nikon Z"
+          }
+        }
+      ],
       "venta": [
-        "Un zoom estándar F2.8 de 28 a 75 mm para mirrorless full frame Nikon Z: calle, retrato, paisaje y viajes.",
+        "Un zoom estándar F2.8 de 28 a 75 mm para mirrorless full frame: calle, retrato, paisaje y viajes.",
         "Es la segunda generación (G2): según Tamron, enfoca cerca del doble de rápido que la primera, y en 28 mm enfoca desde 18 cm."
       ],
       "importante": [
@@ -41615,8 +41702,18 @@
           "texto": "En 28 mm, con ampliación de 1:2,7. En 75 mm, desde 38 cm."
         },
         {
-          "titulo": "Pesa 550 g",
-          "texto": "Mide 119,8 mm de largo. Filtro de 67 mm."
+          "titulo": {
+            "segun": {
+              "Sony E": "Pesa 540 g",
+              "Nikon Z": "Pesa 550 g"
+            }
+          },
+          "texto": {
+            "segun": {
+              "Sony E": "Mide 117,6 mm de largo. Filtro de 67 mm.",
+              "Nikon Z": "Mide 119,8 mm de largo. Filtro de 67 mm."
+            }
+          }
         },
         {
           "titulo": "Resiste la humedad",
@@ -41674,7 +41771,12 @@
             ],
             [
               "Funciones de la cámara",
-              "AF híbrido, Eye AF, modo M/A y corrección de lente (según el modelo de cámara)"
+              {
+                "segun": {
+                  "Sony E": "AF híbrido rápido, Eye AF, enfoque manual directo (DMF), corrección de lente y AF Assist (según el modelo de cámara)",
+                  "Nikon Z": "AF híbrido, Eye AF, modo M/A y corrección de lente (según el modelo de cámara)"
+                }
+              }
             ]
           ]
         },
@@ -41691,15 +41793,30 @@
             ],
             [
               "Medidas",
-              "75,8 x 119,8 mm (diámetro x largo)"
+              {
+                "segun": {
+                  "Sony E": "75,8 x 117,6 mm (diámetro x largo)",
+                  "Nikon Z": "75,8 x 119,8 mm (diámetro x largo)"
+                }
+              }
             ],
             [
               "Peso",
-              "550 g"
+              {
+                "segun": {
+                  "Sony E": "540 g",
+                  "Nikon Z": "550 g"
+                }
+              }
             ],
             [
               "Montura",
-              "Nikon Z"
+              {
+                "segun": {
+                  "Sony E": "Sony E",
+                  "Nikon Z": "Nikon Z"
+                }
+              }
             ],
             [
               "Accesorios de Tamron",
@@ -41718,8 +41835,8 @@
           "url": "https://www.tamron.com/global/consumer/lenses/a063/spec.html"
         }
       ],
-      "verificado": "2026-10-02",
-      "notas": "Model A063 (G2), sólo la fila Nikon Z (AT-0399). AT-0398 (Sony) queda afuera: el maestro dice 'Di III RXD' (1ª generación, A036) y la fila de hoy dice 'Di III VXD' (motor de la G2) sin 'G2'. Falta que Pedro diga cuál es."
+      "verificado": "2026-10-26",
+      "notas": "Model A063 (G2), versiones por montura. AT-0399 (Nikon Z): la fila dice G2. AT-0398 (Sony E): el maestro decía «Di III RXD» (1ª generación, A036) y la fila dice «Di III VXD» sin «G2»; se resolvió en la revisión del 26/10: el único 28-75 de Tamron con motor VXD es el G2 (A063), y el RXD (A036) se dejó de fabricar en agosto de 2021. Benja: corregir el nombre en ADVAPP y en el maestro a «28-75mm F/2.8 Di III VXD G2 (A063) Sony».\nAmpliada el 26/10/2026: se sumó la fila Sony E (AT-0398) con versiones por montura; peso (540/550 g), largo (117,6/119,8 mm) y funciones de la cámara (la página de Tamron da una lista para Sony E y otra para Nikon Z) van según la montura, igual que «Montura»; venta 1 sin «Nikon Z»."
     },
     {
       "modelo": "Tamron 35-100mm F2.8 Di III VXD (A078)",
@@ -42840,7 +42957,7 @@
       "notas": "Model F072 (Di III = mirrorless; el SP 90mm F017 es para réflex). La fila dice '90mm F/2.8 III Macro Sony' y montura sony e."
     },
     {
-      "modelo": "Canon EOS R5 Mark II (cuerpo y kit con lente 24-105)",
+      "modelo": "Canon EOS R5 Mark II (cuerpo y kit RF 24-105mm F4L IS USM)",
       "codigos": [
         "AT-0149",
         "AT-0596"
@@ -42858,7 +42975,7 @@
           }
         },
         {
-          "nombre": "Kit 24-105",
+          "nombre": "Kit RF 24-105mm F4L IS USM",
           "codigos": [
             "AT-0596"
           ],
@@ -43058,10 +43175,8 @@
               "Objetivo",
               {
                 "segun": {
-                  "Cuerpo": "No trae: es el cuerpo solo"
-                },
-                "proveedor": {
-                  "Kit 24-105": "Lente 24-105"
+                  "Cuerpo": "No trae: es el cuerpo solo",
+                  "Kit RF 24-105mm F4L IS USM": "RF 24-105mm F4L IS USM: zoom de 24 a 105 mm, f/4, con estabilizador óptico de 5 pasos"
                 }
               }
             ]
@@ -43076,14 +43191,18 @@
         {
           "texto": "canon.es/cameras/eos-r5-mark-ii",
           "url": "https://www.canon.es/cameras/eos-r5-mark-ii/"
+        },
+        {
+          "texto": "kit: canon.es/store/…/6536C014",
+          "url": "https://www.canon.es/store/canon-camara-mirrorless-canon-eos-r5-mark-ii-objetivo-rf-24-105mm-f4l-is-usm/6536C014/"
+        },
+        {
+          "texto": "objetivo: canon.es/lenses/canon-rf-24-105mm-f-4l-is-usm-lens/specifications",
+          "url": "https://www.canon.es/lenses/canon-rf-24-105mm-f-4l-is-usm-lens/specifications/"
         }
       ],
-      "proveedor": {
-        "fuente": "Nombre de la fila en ADVAPP (proveedor), 21/10/2026: «Canon EOS R5 Mark II Kit 24-105».",
-        "aviso": "el lente del kit es dato del proveedor"
-      },
-      "verificado": "2026-10-21",
-      "notas": "Fila «EOS R5 Mark II Body»: cuerpo solo. Datos de Canon España (especificaciones). AF por control ocular, pantalla de ángulo variable y juntas contra polvo y humedad: página general de Canon España. Canon aclara que el Wi-Fi puede estar limitado según el país y que la banda de 6 GHz es sólo para modo infraestructura. No se usó el disparo previo (la redacción de Canon es ambigua).\nVerificación (02/10): ficha Fotos > Formatos ahora dice «JPEG de 8 bits y HEIF de 10 bits» (antes se podía leer JPEG de 10 bits; la ficha de Canon dice JPEG de 8 bits).\nAmpliada el 21/10/2026: se sumó AT-0596 («Canon EOS R5 Mark II Kit 24-105») como versión «Kit 24-105» («body» → Cuerpo, «24 105» → Kit) y el grupo «Qué trae». El lente queda como dato del proveedor: la fila no dice cuál de los RF 24-105 es (Canon tiene el RF 24-105mm F4L IS USM, el RF 24-105mm F4-7.1 IS STM y el RF 24-105mm F2.8L IS USM Z). El único kit oficial de la R5 Mark II en Canon España es con el RF 24-105mm F4L IS USM (canon.es/store/…/6536C004, «Opción de kit»), pero eso no alcanza para afirmarlo. El resto, sin cambios."
+      "verificado": "2026-10-26",
+      "notas": "Fila «EOS R5 Mark II Body»: cuerpo solo. Datos de Canon España (especificaciones). AF por control ocular, pantalla de ángulo variable y juntas contra polvo y humedad: página general de Canon España. Canon aclara que el Wi-Fi puede estar limitado según el país y que la banda de 6 GHz es sólo para modo infraestructura. No se usó el disparo previo (la redacción de Canon es ambigua).\nVerificación (02/10): ficha Fotos > Formatos ahora dice «JPEG de 8 bits y HEIF de 10 bits» (antes se podía leer JPEG de 10 bits; la ficha de Canon dice JPEG de 8 bits).\nAmpliada el 21/10/2026: se sumó AT-0596 («Canon EOS R5 Mark II Kit 24-105») como versión del kit («body» → Cuerpo, «24 105» → Kit) y el grupo «Qué trae».\nAmpliada el 26/10/2026: el objetivo del kit dejó de ser dato del proveedor. La revisión del 26/10 resolvió que es el kit oficial con el RF 24-105mm F4L IS USM: Canon arma la R5 Mark II sólo de cuerpo o con ese objetivo (Canon España 6536C014, «Contenido del embalaje»; Canon India, «Available in»: Body y RF24-105mm f/4L IS USM) y no tiene kit con el RF 24-105mm F4-7.1 IS STM ni con el F2.8L IS USM Z. Cambios: la versión «Kit 24-105» se llama ahora «Kit RF 24-105mm F4L IS USM» (el si no cambia); «Qué trae» con el nombre exacto y lo básico del objetivo (24-105 mm, f/4 y estabilizador óptico de 5 pasos, de la ficha del objetivo en Canon España); modelo; dos fuentes nuevas (el kit y el objetivo); se sacó proveedor. El resto, sin cambios."
     },
     {
       "modelo": "Canon EOS R5 (cuerpo)",
@@ -45356,7 +45475,7 @@
       "notas": "Dos filas: «Body» (AT-0156) y «24-105 F/4-7.1 IS STM Kit» (AT-0155). Kit oficial de Canon España 3380C133. Pantalla de ángulo variable y AF hasta -5 EV: tabla comparativa de la página general de Canon España (columna EOS RP). La ficha técnica trae el rango de AF con una errata («EV de -5 a -18»): no se usó. Wi-Fi: Canon dice que puede estar limitado según el país."
     },
     {
-      "modelo": "Canon EOS 2000D (EOS Rebel T7) con lente 18-55 III o 18-55 II",
+      "modelo": "Canon EOS 2000D (EOS Rebel T7), kit EF-S 18-55mm III y kit EF-S 18-55mm IS II",
       "codigos": [
         "AT-0139",
         "AT-0594"
@@ -45374,7 +45493,7 @@
           }
         },
         {
-          "nombre": "18-55 II",
+          "nombre": "18-55 IS II",
           "codigos": [
             "AT-0594"
           ],
@@ -45395,15 +45514,15 @@
       "importante": [
         {
           "titulo": {
-            "proveedor": {
-              "18-55 III": "Kit con lente 18-55 III",
-              "18-55 II": "Kit con lente 18-55 II"
+            "segun": {
+              "18-55 III": "Kit con EF-S 18-55mm III",
+              "18-55 IS II": "Kit con EF-S 18-55mm IS II"
             }
           },
           "texto": {
-            "proveedor": {
-              "18-55 III": "Viene con un lente 18-55 III (dato del proveedor).",
-              "18-55 II": "Viene con un lente 18-55 II (dato del proveedor)."
+            "segun": {
+              "18-55 III": "Viene con el zoom EF-S 18-55mm f/3.5-5.6 III.",
+              "18-55 IS II": "Viene con el zoom EF-S 18-55mm f/3.5-5.6 IS II (kit de Canon), con estabilizador de unos 4 pasos."
             }
           }
         },
@@ -45570,9 +45689,9 @@
             [
               "Objetivo",
               {
-                "proveedor": {
-                  "18-55 III": "Lente 18-55 III",
-                  "18-55 II": "Lente 18-55 II"
+                "segun": {
+                  "18-55 III": "EF-S 18-55mm f/3.5-5.6 III: zoom de 18 a 55 mm, f/3.5-5.6",
+                  "18-55 IS II": "EF-S 18-55mm f/3.5-5.6 IS II: zoom de 18 a 55 mm, f/3.5-5.6, con estabilizador de imagen de unos 4 pasos"
                 }
               }
             ]
@@ -45591,14 +45710,26 @@
         {
           "texto": "global.canon/en/c-museum/product/dslr873.html",
           "url": "https://global.canon/en/c-museum/product/dslr873.html"
+        },
+        {
+          "texto": "kit IS II: canon.es/store/…/2728C003",
+          "url": "https://www.canon.es/store/canon-camara-canon-eos-2000d-objetivo-ef-s-18-55mm-is-ii/2728C003/"
+        },
+        {
+          "texto": "kit III: canon.co.uk/store/…/2728C072",
+          "url": "https://www.canon.co.uk/store/canon-refurbished-canon-eos-2000d-camera-refurbished-ef-s-18-55mm-f3-5-5-6-dc-iii-lens/2728C072/"
+        },
+        {
+          "texto": "objetivo III: global.canon/en/c-museum/product/ef410.html",
+          "url": "https://global.canon/en/c-museum/product/ef410.html"
+        },
+        {
+          "texto": "objetivo IS II: global.canon/en/c-museum/product/ef411.html",
+          "url": "https://global.canon/en/c-museum/product/ef411.html"
         }
       ],
-      "proveedor": {
-        "fuente": "Nombres de las filas en ADVAPP (proveedor): 02/10/2026, «EOS 2000D KIT 18-55 III (T7)»; 21/10/2026, «Canon EOS 2000D Kit 18-55 II».",
-        "aviso": "el lente del kit es dato del proveedor"
-      },
-      "verificado": "2026-10-21",
-      "notas": "Fila «EOS 2000D Kit 18-55 III (T7)»: la EOS 2000D de Canon España es la EOS Rebel T7 de Canon Latinoamérica. El lente queda como dato del proveedor: Canon no tiene un kit oficial de la 2000D/T7 con «18-55 III» que se pueda confirmar (Canon España vende el kit con el EF-S 18-55mm IS II; Canon Latinoamérica también da el IS II para la T7; en reacondicionados aparecen el «EF-S 18-55mm III» y el «DC III», que no son lo mismo). Peso: Canon Latinoamérica (la ficha de Canon España no lo trae). Wi-Fi: Canon dice que puede estar limitado según el país.\nVerificación (02/10): se sumó a fuentes el Canon Camera Museum (global.canon/en/c-museum/product/dslr873.html: «EOS Kiss X90 / EOS Rebel T7 / EOS 2000D / EOS 1500D»), que es lo que sostiene la equivalencia 2000D = Rebel T7 de venta 2 y las medidas y el peso de la página de la T7. El texto no cambió. Retoque (02/10): video: sólo lo que dicen Canon España y Canon Latinoamérica (verificador r1-T10).\nAmpliada el 21/10/2026: se sumó AT-0594 («Canon EOS 2000D Kit 18-55 II») como versión «18-55 II» (si «18 55 ii» sin «18 55 iii», porque «18 55 ii» también está dentro de «18 55 iii»). El lente queda como dato del proveedor, igual que el «18-55 III»: Canon tuvo el EF-S 18-55mm f/3.5-5.6 II (sin IS, Canon Camera Museum ef384) y el EF-S 18-55mm f/3.5-5.6 IS II (ef411), y Canon España vende la 2000D con el EF-S 18-55mm IS II; la fila no dice IS, así que no se afirma cuál es. Cambian sólo importante 1, «Qué trae» y proveedor.fuente; el resto, sin cambios."
+      "verificado": "2026-10-26",
+      "notas": "Fila «EOS 2000D Kit 18-55 III (T7)»: la EOS 2000D de Canon España es la EOS Rebel T7 de Canon Latinoamérica. Peso: Canon Latinoamérica (la ficha de Canon España no lo trae). Wi-Fi: Canon dice que puede estar limitado según el país.\nVerificación (02/10): se sumó a fuentes el Canon Camera Museum (global.canon/en/c-museum/product/dslr873.html: «EOS Kiss X90 / EOS Rebel T7 / EOS 2000D / EOS 1500D»), que es lo que sostiene la equivalencia 2000D = Rebel T7 de venta 2 y las medidas y el peso de la página de la T7. Retoque (02/10): video: sólo lo que dicen Canon España y Canon Latinoamérica (verificador r1-T10).\nAmpliada el 21/10/2026: se sumó AT-0594 («Canon EOS 2000D Kit 18-55 II») como otra versión (si «18 55 ii» sin «18 55 iii», porque «18 55 ii» también está dentro de «18 55 iii»).\nAmpliada el 26/10/2026: el objetivo de cada fila dejó de ser dato del proveedor (la revisión del 26/10 resolvió cuál es cada uno). «Kit 18-55 II» (AT-0594) es el EF-S 18-55mm f/3.5-5.6 IS II: el II sin IS es de 2005 (Canon Camera Museum ef384) y lo reemplazaron en 2011 el III y el IS II; el kit de la 2000D que dice «II» es con el IS II (Canon España 2728C003, «Contenido del embalaje»; Canon Latinoamérica, caja de la Rebel T7). «Kit 18-55 III (T7)» (AT-0139) es el EF-S 18-55mm f/3.5-5.6 III: Canon UK vende el kit 2000D + EF-S 18-55mm f/3.5-5.6 III (2728C072, reacondicionado; «What's in the Box») y en la misma página lo llama también «DC III»; la lista del proveedor tiene aparte el kit con IS II. Cambios: la versión «18-55 II» se llama ahora «18-55 IS II» (el si no cambia); importante 1 y «Qué trae» pasan a dato de Canon, con el nombre exacto, focal y apertura, y en el IS II el estabilizador de unos 4 pasos (Camera Museum ef411: «approximately four shutter-speed stops»); modelo; fuentes (los dos kits y el Camera Museum ef410 y ef411); se sacó proveedor. En el III no se puso «sin estabilizador»: ninguna página oficial que se pudo leer lo dice con todas las letras (el nombre no lleva IS; Canon UK y Canon Australia no tienen ficha de ese objetivo). Al III no se le puso «(kit de Canon)» porque la única página de Canon de ese kit es de un reacondicionado. El resto, sin cambios."
     },
     {
       "modelo": "Canon EOS 4000D (EOS Rebel T100) con lente 18-55 III",
@@ -57643,7 +57774,7 @@
         }
       ],
       "verificado": "2026-10-21",
-      "notas": "Compatibilidad: canon.es (texto) y asia.canon dicen «EOS R5 Mark II, EOS R5, EOS R6 Mark II y EOS R6»; canon.com.au, más nueva, suma la EOS R6 Mark III (y el recuadro «Compatibilidad» de canon.es también la nombra). Se pusieron esas cinco. El recuadro de canon.es nombra además la EOS C50 y la EOS R5 C, pero ningún texto de Canon lo dice: no se pusieron (ver preguntas). La lista de baterías es la de asia.canon y canon.com.au (canon.es nombra LP-E6P, LP-E6NH y LP-E6N). canon.es no tiene página de producto aparte de la tienda (la dirección camera-accessories da «no encontrada»); de la tienda sólo se usaron datos del producto. Sin peso ni medidas: ninguna página oficial los da.\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D02b): la ficha de la EOS R6 Mark III dice que con ella tampoco se pueden usar la LP-E6, el DR-E6 ni el ACK-E6; se suma esa ficha a las fuentes."
+      "notas": "Compatibilidad: canon.es (texto) y asia.canon dicen «EOS R5 Mark II, EOS R5, EOS R6 Mark II y EOS R6»; canon.com.au, más nueva, suma la EOS R6 Mark III (y el recuadro «Compatibilidad» de canon.es también la nombra). Se pusieron esas cinco. El recuadro de canon.es nombra además la EOS C50 y la EOS R5 C, pero ningún texto de Canon lo dice: no se pusieron. La lista de baterías es la de asia.canon y canon.com.au (canon.es nombra LP-E6P, LP-E6NH y LP-E6N). canon.es no tiene página de producto aparte de la tienda (la dirección camera-accessories da «no encontrada»); de la tienda sólo se usaron datos del producto. Sin peso ni medidas: ninguna página oficial los da.\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D02b): la ficha de la EOS R6 Mark III dice que con ella tampoco se pueden usar la LP-E6, el DR-E6 ni el ACK-E6; se suma esa ficha a las fuentes.\nRevisión del 26/10/2026 (opción A): la EOS C50 y la EOS R5 C no se suman; sólo aparecen en el recuadro de productos relacionados de canon.es, y los textos de Canon Asia e India nombran cuatro cámaras (Canon Australia suma la R6 Mark III). Queda como está."
     },
     {
       "modelo": "Canon Speedlite EL-5",
@@ -57665,7 +57796,7 @@
         },
         {
           "titulo": "Flash por radio",
-          "texto": "Hasta 15 Speedlite en 5 grupos. Alcance de unos 30 m (en el EL-5 Ver. 2, unos 50 m)."
+          "texto": "Hasta 15 Speedlite en 5 grupos. Alcance de unos 30 m."
         },
         {
           "titulo": "Tres formas de manejarlo",
@@ -57673,7 +57804,7 @@
         },
         {
           "titulo": "Zapata multifunción",
-          "texto": "Necesita una cámara Canon con zapata multifunción y firmware compatible. No anda con la EOS R5 C (el Ver. 2, con ninguna EOS Cinema, como la EOS C50)."
+          "texto": "Necesita una cámara Canon con zapata multifunción y firmware compatible. No anda con la EOS R5 C."
         }
       ],
       "ficha": [
@@ -57743,7 +57874,7 @@
             ],
             [
               "Alcance",
-              "Unos 30 m (EL-5 Ver. 2: unos 50 m)"
+              "Unos 30 m"
             ]
           ]
         },
@@ -57801,7 +57932,7 @@
             ],
             [
               "Peso",
-              "Aprox. 491 g sin batería (EL-5 Ver. 2: 487 g)"
+              "Aprox. 491 g sin batería"
             ],
             [
               "En la caja",
@@ -57818,7 +57949,7 @@
             ],
             [
               "No compatibles",
-              "EOS R5 C y videocámaras con zapata multifunción; el EL-5 Ver. 2, además, ninguna cámara EOS Cinema (tampoco la EOS C50)"
+              "EOS R5 C y videocámaras con zapata multifunción"
             ]
           ]
         }
@@ -57831,18 +57962,10 @@
         {
           "texto": "canon.es/cameras/speedlite-flash-el-5/specifications",
           "url": "https://www.canon.es/cameras/speedlite-flash-el-5/specifications/"
-        },
-        {
-          "texto": "Ver. 2: canon.es/cameras/speedlite-flash-el-5-v2",
-          "url": "https://www.canon.es/cameras/speedlite-flash-el-5-v2/"
-        },
-        {
-          "texto": "Ver. 2: canon.es/cameras/speedlite-flash-el-5-v2/specifications",
-          "url": "https://www.canon.es/cameras/speedlite-flash-el-5-v2/specifications/"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Canon tiene dos: el Speedlite EL-5 (5654C004, canon.es muestra «Ver nuevo modelo») y el SPEEDLITE EL-5 (Ver. 2). La fila dice «EL-5» sin «Ver. 2», pero no se puede saber cuál entrega el proveedor: según canon.es cambian sólo el alcance por radio (30 m / 50 m) y el peso (491 g / 487 g), que van con los dos valores; lo demás es igual en las dos fichas. Tiempo de carga: la ficha del EL-5 dice 0,1-0,9 s y la página general (y la Ver. 2) 0,1-1,2 s: no se puso. La Ver. 2 dice además que no anda con ninguna EOS Cinema (también la C50): va como dato del Ver. 2. Peso «sin batería»: la tabla comparativa del EL-5 dice «Solo Speedlite, sin batería» (la ficha, «solo el cuerpo»).\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D02b): la ficha del EL-5 Ver. 2 excluye todas las EOS Cinema (también la EOS C50), no sólo la R5 C, y la fila no dice cuál de los dos es; los equipos del flash inalámbrico, como lo dice Canon sin que parezca una suma; el título del punto 4, que incluye el joystick y la app."
+      "verificado": "2026-10-26",
+      "notas": "Canon tiene dos: el Speedlite EL-5 (el original; canon.es muestra «Ver nuevo modelo») y el SPEEDLITE EL-5 (Ver. 2). Peso «sin batería»: la tabla comparativa del EL-5 dice «Solo Speedlite, sin batería» (la ficha, «solo el cuerpo»). Tiempo de carga: canon.es se contradice (la ficha del EL-5 dice 0,1-1,2 s arriba y 0,1-0,9 s en el detalle; la tabla comparativa, 0,1-1,2 s): no se puso.\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D02b): los equipos del flash inalámbrico, como lo dice Canon sin que parezca una suma; el título del punto 4, que incluye el joystick y la app.\nAmpliada el 26/10/2026: la revisión del 26/10 resolvió que la fila es el EL-5 original (SPEL-5, 5654C) y no el Ver. 2 (SPEL-5V2, 7327C), que Canon Japón pone a la venta recién el 29/10/2026. Pasa a un solo producto: alcance por radio de unos 30 m y peso de 491 g, del EL-5 (ficha y página general de canon.es). Se sacaron los valores del Ver. 2 (50 m y 487 g) en importante 3 y en la ficha, lo que era sólo del Ver. 2 (no anda con ninguna EOS Cinema, como la EOS C50) en importante 5 y en «No compatibles», y las dos fuentes del Ver. 2. El resto, sin cambios. Si el proveedor repone desde noviembre puede llegar el Ver. 2: se reconoce por la caja («Ver. 2», 7327C)."
     },
     {
       "modelo": "Canon Adaptador de zapata multifunción AD-E1",
@@ -59639,7 +59762,7 @@
         }
       ],
       "verificado": "2026-10-21",
-      "notas": "La fila dice «Memoria Nikon 64GB XQD»: Nikon tiene una tarjeta XQD de 64 GB con su marca, la MC-XQ64G (nikon.es, código de tienda VWC00101; Nikon Japón, lanzada el 28/09/2018 y hoy en «旧製品», productos anteriores). La lista de compatibles es la de Nikon Japón («対応製品»), tal cual: D6, D5 (sólo la versión XQD-Type), D850, D500, Z9, Z8, Z7II, Z7, Z6III, Z6II y Z6; nikon.es no trae lista. Nikon no da peso ni medidas en estas páginas."
+      "notas": "La fila dice «Memoria Nikon 64GB XQD»: Nikon tiene una tarjeta XQD de 64 GB con su marca, la MC-XQ64G (nikon.es, código de tienda VWC00101; Nikon Japón, lanzada el 28/09/2018 y hoy en «旧製品», productos anteriores). La lista de compatibles es la de Nikon Japón («対応製品»), tal cual: D6, D5 (sólo la versión XQD-Type), D850, D500, Z9, Z8, Z7II, Z7, Z6III, Z6II y Z6; nikon.es no trae lista. Nikon no da peso ni medidas en estas páginas.\nConfirmada el 26/10/2026 (revisión de preguntas): el proveedor la tiene entre sus accesorios Nikon como «MEMORIA NIKON 64GB XQD», y Nikon tiene una sola tarjeta XQD de 64 GB con su marca, la MC-XQ64G (VWC00101), que sigue en su tienda de Irlanda. Queda como está."
     },
     {
       "modelo": "Sigma 150-600mm F5-6.3 DG OS HSM | Contemporary (Nikon F)",
@@ -59983,18 +60106,18 @@
       "notas": "La fila dice «EF-630 Flash Nikon»: es la versión «Nikon F mount For Nikon» de la página de Sigma. Datos generales de la página del producto; i-TTL / i-TTL-BL, compensación, canales y grupos, modo Commander, apagado automático de 80 s, cámaras CLS y «not waterproof» del manual en inglés del EF-630 para Nikon (FW 1.03); Z7/Z6 y Z 7II/D6/D780 de la página de firmware (versión Nikon F). La página no dice qué viene en la caja: no se puso."
     },
     {
-      "modelo": "Sigma EF-630 (versión para Canon o Nikon sin confirmar)",
+      "modelo": "Sigma EF-630 (flash para Canon)",
       "codigos": [
         "AT-0021"
       ],
       "venta": [
-        "Flash de zapata de Sigma con número guía 63 (con el cabezal en 200 mm) y cabezal con zoom automático de 24 a 200 mm, que con el panel gran angular cubre un 17 mm.",
-        "Control TTL, cabezal que gira para rebotar la luz, sincronización de alta velocidad (FP), a la segunda cortina y flash inalámbrico."
+        "Flash de zapata de Sigma con número guía 63 (ISO 100, a 200 mm) y cabezal con zoom automático de 24 a 200 mm, que con el panel gran angular cubre un 17 mm.",
+        "Versión para Canon, con E-TTL II / E-TTL: cabezal que gira para rebotar la luz, sincronización de alta velocidad (FP), a la segunda cortina y flash inalámbrico."
       ],
       "importante": [
         {
           "titulo": "Número guía 63",
-          "texto": "Con el cabezal en 200 mm. Potencia manual de 1/1 a 1/128, en pasos de 1/3."
+          "texto": "A ISO 100 y con el cabezal en 200 mm. Potencia manual de 1/1 a 1/128, en pasos de 1/3."
         },
         {
           "titulo": "Zoom de 24 a 200 mm",
@@ -60009,8 +60132,8 @@
           "texto": "Con alcalinas, unos 120 destellos y 3 s de recarga; con Ni-MH, unos 185 y 1,8 s."
         },
         {
-          "titulo": "Versión para Canon o para Nikon",
-          "texto": "Sigma hace una versión para cada marca: preguntanos para cuál es esta."
+          "titulo": "E-TTL II e inalámbrico",
+          "texto": "E-TTL II / E-TTL. En inalámbrico hace de emisor o de receptor; como receptor, también lo controla el flash de cámaras con función de emisor."
         }
       ],
       "ficha": [
@@ -60019,7 +60142,7 @@
           "datos": [
             [
               "Número guía",
-              "63 (con el cabezal en 200 mm)"
+              "63 (ISO 100, en metros, con el cabezal en 200 mm)"
             ],
             [
               "Cobertura",
@@ -60043,8 +60166,16 @@
           "grupo": "Modos",
           "datos": [
             [
-              "Exposición",
-              "TTL automática"
+              "TTL",
+              "E-TTL II / E-TTL automático"
+            ],
+            [
+              "Compensación",
+              "Hasta ±3 pasos, de a 1/3 (de a 1/2 si la cámara está en medios pasos)"
+            ],
+            [
+              "Ahorquillado y bloqueo",
+              "Ahorquillado del flash (FEB) de 3 fotos y bloqueo FE"
             ],
             [
               "Sincronización",
@@ -60056,7 +60187,7 @@
             ],
             [
               "Inalámbrico",
-              "TTL inalámbrico: la cámara controla el flash a distancia; sirve con el EF-610 DG SUPER y con el flash de cámaras que tienen función de emisor. El modo Receive & Flash dispara a distancia con cualquier cámara, sin exposición automática"
+              "E-TTL II / E-TTL inalámbrico como emisor o receptor, 4 canales y grupos A, B y C; también con el EF-610 DG SUPER como receptor y con el flash de cámaras que tienen función de emisor. El modo Receive & Flash dispara a distancia con cualquier cámara, sin exposición automática"
             ],
             [
               "Luz de ayuda AF",
@@ -60102,16 +60233,24 @@
             ],
             [
               "Apagado automático",
-              "Se apaga solo después de un rato sin uso"
+              "A los 90 s sin uso, aprox. (no en los modos de recepción)"
             ]
           ]
         },
         {
-          "grupo": "Cuerpo",
+          "grupo": "Cuerpo y cámaras",
           "datos": [
             [
-              "Montura",
-              "Sin confirmar: Sigma lo hace para Canon y para Nikon (la versión para Sigma SA está discontinuada); preguntanos para cuál es esta."
+              "Versión",
+              "Para Canon (Sigma la llama «Canon EF mount»)"
+            ],
+            [
+              "Cámaras",
+              "En la zapata, solo Canon EOS: digitales con flash automático E-TTL II / E-TTL. Con el firmware 1.04 suma las EOS R y EOS RP"
+            ],
+            [
+              "Desde la cámara",
+              "Los menús de la cámara para el flash (funciones y C.Fn) no lo manejan: se ajusta desde el flash"
             ],
             [
               "Controles",
@@ -60124,6 +60263,10 @@
             [
               "Firmware",
               "Se actualiza con el FLASH USB DOCK FD-11 de Sigma (se vende aparte)"
+            ],
+            [
+              "Agua",
+              "No es resistente al agua"
             ],
             [
               "Medidas",
@@ -60140,10 +60283,18 @@
         {
           "texto": "sigma-global.com/en/accessories/ef-630",
           "url": "https://www.sigma-global.com/en/accessories/ef-630/"
+        },
+        {
+          "texto": "manual del EF-630 para Canon: sigma-global.com/en/support/download/EF-630_EO_FW_Ver.1.05_2.pdf",
+          "url": "https://www.sigma-global.com/en/support/download/EF-630_EO_FW_Ver.1.05_2.pdf"
+        },
+        {
+          "texto": "firmware (Canon EF): sigma-global.com/en/support/firmware/ef-630",
+          "url": "https://www.sigma-global.com/en/support/firmware/ef-630/?mount=canon-ef"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "La fila dice sólo «Flash EF-630 Electronic»: no dice para qué cámara. Sigma lo vende para Canon EF y Nikon F (y para Sigma SA, discontinuado). ADVAPP le pone marca Canon, pero eso no alcanza para saber la versión: van sólo los datos de la página general del producto, que son comunes a todas (la tabla de especificaciones es una sola). No se usó el manual de ninguna versión: los modos TTL con nombre (E-TTL, i-TTL) y las cámaras compatibles cambian según la marca. El número guía va sin «ISO 100» porque la página general dice «guide number 63 … when the focal length is 200mm» sin ISO. Si Benja confirma la marca, se puede ampliar como la de Nikon (AT-0032).\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D05): sin «la fila» en el texto que lee el cliente."
+      "verificado": "2026-10-26",
+      "notas": "La fila dice «Flash EF-630 Electronic»: la revisión del 26/10 resolvió que es la versión «Canon EF mount For Canon» (00-85126-93290-9 en la página de Sigma). La lista del proveedor la tiene en su sección de accesorios Canon y la versión Nikon en otro renglón (que es AT-0032); Sigma hace el EF-630 sólo para Canon y Nikon (el SA está discontinuado). Datos generales de la página del producto. E-TTL II / E-TTL, cámaras compatibles («E-TTL II / E-TTL auto flash system EOS digital camera»; «Do not use this flash unit on any camera other than the Canon EOS series cameras»), número guía a ISO 100, compensación, FEB, bloqueo FE, canales, grupos, EF-610 DG SUPER como receptor, apagado automático (1,5 minutos en inglés, 90 segundos en español), «not waterproof» y que los menús de flash de la cámara no se usan: manual del EF-630 FOR CANON (FW Ver.1.05~) de Sigma. EOS R y EOS RP con el firmware 1.04: página de firmware de Sigma (Canon EF mount); no se agregaron otras EOS R porque Sigma no las nombra. La página no dice qué viene en la caja: no se puso.\nAmpliada el 26/10/2026: pasó de «versión para Canon o Nikon sin confirmar» a la versión para Canon, como la de Nikon (AT-0032). Cambios: modelo; venta 1 y 2 (ISO 100 y E-TTL II / E-TTL); importante 1 (ISO 100) e importante 5 (en vez de «preguntanos para cuál es», E-TTL II e inalámbrico); ficha: número guía con ISO 100; en Modos, TTL, compensación, ahorquillado y bloqueo e inalámbrico con canales, grupos y EF-610 DG SUPER; apagado automático a los 90 s; el grupo «Cuerpo» pasa a «Cuerpo y cámaras», con versión, cámaras, menú de la cámara y agua en lugar de «Montura: sin confirmar»; dos fuentes nuevas (manual y firmware de la versión Canon). El resto, sin cambios.\nRetocada el 26/10/2026 por un aviso del verificador (informe-L4): «En la zapata, solo Canon EOS», para que no se lea como contradicción con el modo Receive & Flash."
     },
     {
       "modelo": "Tamron 25-200mm F2.8-5.6 Di III VXD G2 (A075) Sony E",
@@ -60864,7 +61015,7 @@
       "importante": [
         {
           "titulo": "Chip M5 Pro",
-          "texto": "CPU de 15 o 18 núcleos y GPU de 16 o 20 núcleos, según la configuración. Neural Engine de 16 núcleos."
+          "texto": "CPU de 15 núcleos y GPU de 16 núcleos. Neural Engine de 16 núcleos."
         },
         {
           "titulo": "24 GB de memoria unificada",
@@ -60893,11 +61044,11 @@
             ],
             [
               "CPU",
-              "15 núcleos (5 supernúcleos y 10 de rendimiento) o 18 núcleos, según la configuración"
+              "15 núcleos (5 supernúcleos y 10 de rendimiento)"
             ],
             [
               "GPU",
-              "16 o 20 núcleos según la configuración, con Neural Accelerators y trazado de rayos por hardware"
+              "16 núcleos, con Neural Accelerators y trazado de rayos por hardware"
             ],
             [
               "Neural Engine",
@@ -61000,8 +61151,8 @@
           "url": "https://www.apple.com/la/mac-mini/specs/"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Apple lo llama «Mac mini (M5 Pro)», 2026 (support.apple.com/es-la/102852). 24GB/512GB es la configuración de Apple con CPU de 15 y GPU de 16 núcleos (apple.com/la/mac-mini/specs, Modelo 4), pero Apple la deja configurar con el M5 Pro de CPU 18 / GPU 20 y la fila no dice cuál es: CPU y GPU van con los dos valores (como en la MacBook Pro 14\" M5 Pro publicada). La composición del CPU de 18 núcleos no está en la página de la Mac mini: no se pone. Ethernet de 10 Gb es opción de configuración: la fila tampoco lo dice. Wi-Fi 7 depende del país (nota 3 de Apple): sólo en la ficha, con «según el país». Apple Intelligence queda afuera (depende del idioma y la región). No se pone «En la caja».\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D06a): Apple deja configurarla con Ethernet de 10 Gb sin cambiar memoria ni SSD."
+      "verificado": "2026-10-26",
+      "notas": "Apple lo llama «Mac mini (M5 Pro)», 2026 (support.apple.com/es-la/102852). 24GB/512GB es la configuración que Apple arma con CPU de 15 y GPU de 16 núcleos (apple.com/la/mac-mini/specs, Modelo 4). La identidad se resolvió en la revisión del 26/10: con 24GB/512GB Apple arma solo el M5 Pro de 15/16 (número de parte MHQN4); el de CPU 18 / GPU 20 con esa memoria y ese SSD es solo a pedido, sin número de parte propio (102852 lista para la Mac mini (M5 Pro) solo MHQN4 y MHQU4). Ethernet de 10 Gb es opción de configuración: la fila no lo dice (van los dos valores). Wi-Fi 7 depende del país (nota 3 de Apple): sólo en la ficha, con «según el país». Apple Intelligence queda afuera (depende del idioma y la región). No se pone «En la caja».\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D06a): Apple deja configurarla con Ethernet de 10 Gb sin cambiar memoria ni SSD.\nAmpliada el 26/10/2026: CPU y GPU pasan de los dos valores a uno solo, en importante 1 y en la ficha: CPU de 15 núcleos (5 supernúcleos y 10 de rendimiento) y GPU de 16, la configuración armada de Apple. Lo demás no depende de la variante del chip y no se tocó."
     },
     {
       "modelo": "Mac mini con chip M4 Pro (2024), 24GB/512GB",
@@ -61015,7 +61166,7 @@
       "importante": [
         {
           "titulo": "Chip M4 Pro",
-          "texto": "CPU de 12 o 14 núcleos y GPU de 16 o 20 núcleos, según la configuración. Neural Engine de 16 núcleos."
+          "texto": "CPU de 12 núcleos y GPU de 16 núcleos. Neural Engine de 16 núcleos."
         },
         {
           "titulo": "24 GB de memoria unificada",
@@ -61044,11 +61195,11 @@
             ],
             [
               "CPU",
-              "12 núcleos (8 de rendimiento y 4 de eficiencia) o 14 núcleos, según la configuración"
+              "12 núcleos (8 de rendimiento y 4 de eficiencia)"
             ],
             [
               "GPU",
-              "16 o 20 núcleos según la configuración, con trazado de rayos por hardware"
+              "16 núcleos, con trazado de rayos por hardware"
             ],
             [
               "Neural Engine",
@@ -61147,8 +61298,8 @@
           "url": "https://support.apple.com/es-la/121555"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Apple lo llama «Mac mini (2024)» con chip M4 Pro (support.apple.com/es-la/121555); hoy apple.com/la vende la de M6 y M5 Pro. 24GB/512GB es la de Apple con CPU de 12 y GPU de 16 núcleos, configurable con el M4 Pro de CPU 14 / GPU 20: la fila no dice cuál, van los dos valores. La composición del CPU de 14 núcleos no está en esa página: no se pone. Wi-Fi 6E depende del país (nota de Apple): sólo en la ficha, con «según el país». Apple Intelligence queda afuera (beta, según región e idioma).\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D06a): Apple deja configurarla con Ethernet de 10 Gb sin cambiar memoria ni SSD."
+      "verificado": "2026-10-26",
+      "notas": "Apple lo llama «Mac mini (2024)» con chip M4 Pro (support.apple.com/es-la/121555); hoy apple.com/la vende la de M6 y M5 Pro. 24GB/512GB es la configuración de serie del M4 Pro en esa ficha: CPU de 12 y GPU de 16 núcleos. La identidad se resolvió en la revisión del 26/10: Apple armó el M4 Pro con 24GB/512GB solo con el chip de 12/16 (número de parte MCX44, que support.apple.com/es-la/102852 lista entre las Mac mini (2024)); el de CPU 14 / GPU 20 era una opción a pedido. Ethernet de 10 Gb es opción de configuración: la fila no lo dice (van los dos valores). Wi-Fi 6E depende del país (nota de Apple): sólo en la ficha, con «según el país». Apple Intelligence queda afuera (beta, según región e idioma).\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D06a): Apple deja configurarla con Ethernet de 10 Gb sin cambiar memoria ni SSD.\nAmpliada el 26/10/2026: CPU y GPU pasan de los dos valores a uno solo, en importante 1 y en la ficha: CPU de 12 núcleos (8 de rendimiento y 4 de eficiencia) y GPU de 16, la configuración armada de Apple. Lo demás no depende de la variante del chip y no se tocó."
     },
     {
       "modelo": "Mac mini con chip M6 (2026), 16GB/256GB y 16GB/512GB",
@@ -61696,7 +61847,7 @@
       "notas": "Apple vende el iMac M4 de 16GB/256GB en dos modelos (apple.com/la/imac/specs): el de dos puertos (support 121556: CPU 8 / GPU 8, Magic Keyboard sin Touch ID, Ethernet opcional, un monitor externo, 4,42 kg) y el Modelo 1 de cuatro puertos (support 121557: CPU 10 / GPU 10, Magic Keyboard con Touch ID, Gigabit Ethernet, dos monitores, 4,44 kg). La fila no dice cuál: esos datos van con los dos valores, cada uno con su modelo. El vidrio nanotexturizado es opción sólo del de cuatro puertos: no se dice el vidrio. «En la caja» es igual en apple.com/la y apple.com/es (no depende del país). «4.5K» de Apple LA va como «4,5K», como lo escribe apple.com/es. Wi-Fi 6E depende del país: sólo en la ficha. Apple Intelligence queda afuera. El maestro y la fila dicen «(Blue)»: el azul existe en los dos modelos.\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D06a): Apple deja configurar teclado (Touch ID y numérico) y mouse o trackpad.\nCorregida otra vez el 21/10/2026 con las propuestas del verificador (informe-D06a-r2): Apple también lo vende con adaptador de montaje VESA en lugar de la base y la fila no dice cuál; el peso, con la aclaración de Apple; el teclado, parejo para los dos modelos.\nCorregida otra vez el 21/10/2026 con la propuesta del verificador (informe-D06a-r3): los 46,1 cm de alto son con la base puesta (Apple no publica el alto de la versión con adaptador VESA)."
     },
     {
-      "modelo": "Studio Display 27\" (vidrio estándar, base con inclinación y altura ajustables)",
+      "modelo": "Studio Display 27\" (2022), vidrio estándar, base con inclinación y altura ajustables",
       "codigos": [
         "AT-0419"
       ],
@@ -61723,7 +61874,7 @@
         },
         {
           "titulo": "96 W de carga",
-          "texto": "Por el puerto Thunderbolt que va a la computadora."
+          "texto": "Por el puerto Thunderbolt 3 que va a la computadora. Además, tres puertos USB-C de hasta 10 Gb/s."
         }
       ],
       "ficha": [
@@ -61778,11 +61929,11 @@
           "datos": [
             [
               "Puertos",
-              "Según la generación: 1 Thunderbolt 3 a la computadora y 3 USB-C de hasta 10 Gb/s (2022), o 2 Thunderbolt 5 de hasta 120 Gb/s (uno a la computadora y otro para accesorios o monitores en cadena) y 2 USB-C de hasta 10 Gb/s (2026)"
+              "1 Thunderbolt 3 (USB-C) a la computadora y 3 USB-C de hasta 10 Gb/s para periféricos, almacenamiento y red"
             ],
             [
               "Carga a la computadora",
-              "96 W, por el puerto Thunderbolt que va a la computadora"
+              "96 W, por el puerto Thunderbolt 3 que va a la computadora"
             ]
           ]
         },
@@ -61799,7 +61950,24 @@
             ],
             [
               "Peso",
-              "7,7 kg (2022) o 7,6 kg (2026)"
+              "7,7 kg (con la base con inclinación y altura ajustables)"
+            ]
+          ]
+        },
+        {
+          "grupo": "Compatibilidad",
+          "datos": [
+            [
+              "Mac",
+              "Con macOS Monterey 12.3 o posterior: Mac Studio (2022 o posterior), MacBook Pro de 16\" (2019 o posterior), MacBook Pro de 14\" (2021 o posterior), MacBook Pro de 13\" y de 15\" (2016 o posterior), MacBook Air (2018 o posterior), Mac mini (2018 o posterior), Mac Pro (2019 o posterior), iMac de 24\" (2021 o posterior), iMac de 27\" y de 21,5\" (2017 o posterior) e iMac Pro (2017)"
+            ],
+            [
+              "iPad",
+              "Con iPadOS 15.4 o posterior: iPad Pro (M4), iPad Pro de 12,9\" (3.ª generación o posterior), iPad Pro de 11\" (1.ª generación o posterior), iPad Air (M3), iPad Air (M2) e iPad Air (5.ª generación)"
+            ],
+            [
+              "Con iPad",
+              "Las funciones de la cámara y las actualizaciones de firmware del monitor requieren una Mac. Con el iPad Pro de 12,9\" (3.ª y 4.ª generación), el iPad Pro de 11\" (1.ª y 2.ª generación) o el iPad Air (5.ª generación), los puertos USB-C del monitor transfieren datos a velocidad de USB 2"
             ]
           ]
         },
@@ -61807,12 +61975,16 @@
           "grupo": "Más",
           "datos": [
             [
-              "Generación",
-              "2022 o 2026 (sin confirmar)"
+              "Año de presentación",
+              "2022"
             ],
             [
               "Tensión",
               "100-240 V CA"
+            ],
+            [
+              "En la caja",
+              "Studio Display y cable Thunderbolt (1 m)"
             ]
           ]
         }
@@ -61823,12 +61995,12 @@
           "url": "https://support.apple.com/es-la/111890"
         },
         {
-          "texto": "support.apple.com/es-la/126324 (Studio Display, 2026)",
-          "url": "https://support.apple.com/es-la/126324"
+          "texto": "support.apple.com/es-la/126265 (identificar el monitor)",
+          "url": "https://support.apple.com/es-la/126265"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Apple tiene dos Studio Display de 27\" con el mismo nombre: el de 2022 (support 111890) y el de 2026 (support 126324; es el que vende hoy apple.com/la/studio-display/specs), además del Studio Display XDR, que es otro producto (la fila no dice XDR). Los dos tienen vidrio estándar y base con inclinación y altura ajustables como opción, y la fila no dice el año: van los datos que son iguales en las dos páginas, y puertos, peso y año con los dos valores. No se ponen la frecuencia de 60 Hz ni Vista del Escritorio (sólo los dice la página de 2026), la lista de computadoras compatibles (cambia con la generación) ni lo que trae la caja (cable Thunderbolt o Thunderbolt 5 Pro)."
+      "verificado": "2026-10-26",
+      "notas": "Es el Studio Display de 2022 (support.apple.com/es-la/111890). La identidad se resolvió en la revisión del 26/10: la lista del proveedor trae el número de parte MK0Q3LZ/A, y Apple lista MK0Q3 solo entre los Studio Display (2022) (support.apple.com/es-la/126265, con 1 Thunderbolt 3 y 3 USB); la misma configuración del Studio Display (2026) es MFEW4. El Studio Display (2026) y el Studio Display XDR son otros productos (la fila no dice XDR). Apple ya no vende el de 2022. Lo que trae la caja (Studio Display y cable Thunderbolt de 1 m) es igual en las fichas 111890 de América Latina, Estados Unidos, España y Reino Unido. La lista de compatibles es la de es-la (igual a la de en-us; la de es-es es más vieja y no nombra los iPad con M2, M3 ni M4).\nAmpliada el 26/10/2026: pasa a un solo producto, el de 2022. Puertos (1 Thunderbolt 3 con 96 W y 3 USB-C), peso (7,7 kg con esta base) y año (2022) con un solo valor; importante 5 nombra el Thunderbolt 3 y los tres USB-C; se suman la lista de compatibles y lo que trae la caja (antes afuera porque cambiaban con la generación). Sale de fuentes la ficha del de 2026 (126324) y entra la página que identifica el modelo (126265). modelo con «(2022)»."
     },
     {
       "modelo": "iPhone 16 Plus",
@@ -62023,7 +62195,7 @@
       "notas": "Nueva el 21/10/2026, con el estilo y los mismos renglones del «iPhone 16» publicado; cambian el tamaño y la resolución de la pantalla, la batería, las medidas y el peso (ficha de Apple es-la/121030). La fila no dice Sim ni eSIM: no se pone el tipo de SIM. Lo que trae de regalo la fila (cargador) es del vendedor y no va. Wi-Fi 7 y banda ultraancha con la aclaración de Apple (notas 10 y 11 de la ficha). Aperturas con punto (ƒ/1.6), como Apple.\nCorregida el 21/10/2026 con las propuestas del verificador (informe-D07a): sin la distancia focal del 2x (la ficha de Apple España no coincide); el macro de la ultra gran angular, con el newsroom de Apple."
     },
     {
-      "modelo": "Apple Watch Series 12",
+      "modelo": "Apple Watch Series 12 (aluminio, GPS)",
       "codigos": [
         "AT-0648",
         "AT-0649"
@@ -62047,7 +62219,7 @@
           }
         },
         {
-          "nombre": "46 mm",
+          "nombre": "46 mm GPS",
           "codigos": [
             "AT-0649"
           ],
@@ -62056,8 +62228,9 @@
               "46mm"
             ],
             "sin": [
-              "gps",
-              "cell"
+              "cell",
+              "titan",
+              "ceram"
             ]
           }
         }
@@ -62071,13 +62244,13 @@
           "titulo": {
             "segun": {
               "42 mm GPS": "Caja de 42 mm",
-              "46 mm": "Caja de 46 mm"
+              "46 mm GPS": "Caja de 46 mm"
             }
           },
           "texto": {
             "segun": {
               "42 mm GPS": "Pantalla siempre activa de 970 mm² (374 x 446 píxeles).",
-              "46 mm": "Pantalla siempre activa de 1.196 mm² (416 x 496 píxeles)."
+              "46 mm GPS": "Pantalla siempre activa de 1.196 mm² (416 x 496 píxeles)."
             }
           }
         },
@@ -62111,7 +62284,7 @@
               {
                 "segun": {
                   "42 mm GPS": "970 mm²",
-                  "46 mm": "1.196 mm²"
+                  "46 mm GPS": "1.196 mm²"
                 }
               }
             ],
@@ -62120,7 +62293,7 @@
               {
                 "segun": {
                   "42 mm GPS": "374 x 446 píxeles a 326 ppi",
-                  "46 mm": "416 x 496 píxeles a 326 ppi"
+                  "46 mm GPS": "416 x 496 píxeles a 326 ppi"
                 }
               }
             ],
@@ -62130,12 +62303,7 @@
             ],
             [
               "Vidrio",
-              {
-                "segun": {
-                  "42 mm GPS": "Ceramic Shield 2, un 60% más resistente que el vidrio Ion-X del Series 11",
-                  "46 mm": "Ceramic Shield 2 con caja de aluminio; cristal de zafiro con caja de titanio o de cerámica"
-                }
-              }
+              "Ceramic Shield 2, un 60% más resistente que el vidrio Ion-X del Series 11"
             ]
           ]
         },
@@ -62215,19 +62383,14 @@
           "datos": [
             [
               "Caja",
-              {
-                "segun": {
-                  "42 mm GPS": "Aluminio (Apple hace el Series 12 GPS sólo con caja de aluminio)",
-                  "46 mm": "Sin confirmar: aluminio, titanio o cerámica"
-                }
-              }
+              "Aluminio (Apple hace el Series 12 GPS solo con caja de aluminio)"
             ],
             [
               "Medidas",
               {
                 "segun": {
                   "42 mm GPS": "42 x 37 x 9,7 mm",
-                  "46 mm": "46 x 40 x 9,7 mm (aluminio y titanio) · 47 x 41 x 9,85 mm (cerámica)"
+                  "46 mm GPS": "46 x 40 x 9,7 mm"
                 }
               }
             ],
@@ -62236,7 +62399,7 @@
               {
                 "segun": {
                   "42 mm GPS": "32,2 g",
-                  "46 mm": "39,5 g (aluminio, GPS) · 38,6 g (aluminio, GPS + Cellular) · 44,9 g (titanio) · 51,3 g (cerámica blanco perla) · 52,9 g (cerámica azul noche)"
+                  "46 mm GPS": "39,5 g"
                 }
               }
             ],
@@ -62263,12 +62426,7 @@
           "datos": [
             [
               "Red celular",
-              {
-                "segun": {
-                  "42 mm GPS": "No tiene (versión GPS)",
-                  "46 mm": "Sin confirmar: sólo el modelo GPS + Cellular tiene LTE y 5G; requiere un plan de servicio móvil de un operador compatible (depende del país)"
-                }
-              }
+              "No tiene (versión GPS)"
             ],
             [
               "Ubicación",
@@ -62311,11 +62469,11 @@
           "url": "https://www.apple.com/la/watchos/feature-availability/"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Nueva el 21/10/2026: junta los dos modelos del sitio «Watch Series 12 42mm GPS (Black)» (AT-0648) y «Watch Series 12 46mm (black SB)» (AT-0649). Versiones por el nombre de la fila: «42mm» + «gps» (sin «cell», «titan» ni «ceram») y «46mm» sin «gps» ni «cell». La de 46 mm no dice GPS ni GPS + Cellular ni caja: no se deduce; red celular, caja, vidrio, medidas y peso van con todos los valores de Apple, cada uno con su variante («Sin confirmar» donde no hay otra forma). La de 42 mm dice GPS: support.apple.com/es-la/108056 (Identificar tu Apple Watch) dice que el Series 12 (GPS) sólo se hace en aluminio (A3581/A3584); titanio, cerámica y Hermès figuran sólo como GPS + Cellular (A3582/A3587, los mismos modelos que la ficha da para LTE). Por eso esa versión lleva aluminio, 32,2 g y Ceramic Shield 2: no sale de la fila, sale de Apple. Ojo: la tabla de apple.com/la/watch/compare pone las filas de Hermès (titanio plata y oro radiante) debajo de «GPS» sin título; no se usó como fuente. El «60% más resistente que el Ion-X del Series 11» es la nota 10 de apple.com/la/apple-watch-series-12 (caja de aluminio). Fuera a propósito: Apple Pay, Siri AI, Inteligencia de Audio y Apple Intelligence (dependen del idioma o de la región), «la detección de frecuencia cardíaca más precisa en un wearable» (afirmación de la marca), el rango de muñeca (depende de la correa), las correas y los colores. Apple no da el año de presentación en estas páginas: no va. La fila SWT-APL-WATCHSERIES1242MM-000-BLC-000 («42mm (black SB)») no tiene código en ADVAPP: no muestra descripción."
+      "verificado": "2026-10-26",
+      "notas": "Junta los dos modelos del sitio «Watch Series 12 42mm GPS (Black)» (AT-0648) y «Watch Series 12 46mm (black SB)» (AT-0649). Versiones por el nombre de la fila: «42mm» + «gps» y «46mm», las dos sin «cell», «titan» ni «ceram». Las dos son GPS con caja de aluminio. La de 42 mm dice GPS en el nombre, y support.apple.com/es-la/108056 (Identificar tu Apple Watch) dice que el Series 12 (GPS) solo se hace en aluminio (A3581/A3584); titanio, cerámica y Hermès figuran solo como GPS + Cellular (A3582/A3587, los mismos modelos que la ficha da para LTE). La de 46 mm no dice GPS ni caja: la revisión del 26/10 la resolvió como Series 12 GPS de 46 mm con caja de aluminio negra y Sport Band negra (MJEL4LS/A), porque lo que cuesta frente a la de 42 mm GPS solo calza con el GPS de aluminio y «Black» es un color de aluminio del Series 12. Ojo: una fila nueva de 46 mm que no diga «cell», «titan» ni «ceram» cae en la versión «46 mm GPS». El «60% más resistente que el Ion-X del Series 11» es la nota 10 de apple.com/la/apple-watch-series-12 (caja de aluminio). Ojo: la tabla de apple.com/la/watch/compare pone las filas de Hermès (titanio plata y oro radiante) debajo de «GPS» sin título; no se usó como fuente. Fuera a propósito: Apple Pay, Siri AI, Inteligencia de Audio y Apple Intelligence (dependen del idioma o de la región), «la detección de frecuencia cardíaca más precisa en un wearable» (afirmación de la marca), el rango de muñeca (depende de la correa), las correas y los colores. Apple no da el año de presentación en estas páginas: no va.\nAmpliada el 26/10/2026: la versión «46 mm» pasa a «46 mm GPS» (su si pide «46mm» sin «cell», «titan» ni «ceram», y la fila «46mm (black SB)» sigue calzando). Salen los «Sin confirmar» y los valores de titanio, cerámica y GPS + Cellular: red (no tiene), caja (aluminio), vidrio (Ceramic Shield 2), medidas (46 x 40 x 9,7 mm) y peso (39,5 g) del 46 mm GPS de aluminio. Caja, vidrio y red celular quedan con un solo valor para las dos versiones. modelo pasa a «Apple Watch Series 12 (aluminio, GPS)», como el Series 11. La fila «42mm (black SB)» sin código que había el 21/10 ya no está en el sitio."
     },
     {
-      "modelo": "AirPods Pro 2",
+      "modelo": "AirPods Pro 2 con estuche de carga MagSafe (USB-C)",
       "codigos": [
         "AT-0592"
       ],
@@ -62338,7 +62496,7 @@
         },
         {
           "titulo": "Estuche MagSafe con parlante",
-          "texto": "Se carga con MagSafe, cargadores Qi, el cargador del Apple Watch o por cable. Tiene enganche para correa."
+          "texto": "Se carga con MagSafe, cargadores Qi, el cargador del Apple Watch o por USB-C. Tiene enganche para correa."
         },
         {
           "titulo": "Salud auditiva",
@@ -62370,6 +62528,10 @@
               "Ecualización Adaptativa y ecualización de presión mediante un sistema de ventilación"
             ],
             [
+              "Más funciones",
+              "Audio Adaptativo, Reconocimiento de Conversación, Aislamiento de Voz y Volumen Personalizado, en equipos con iOS 18, iPadOS 18, macOS Sequoia o posterior y con el último firmware"
+            ],
+            [
               "Salud auditiva",
               "Reducción de Ruidos Altos, Amplificación de la Conversación y Sonidos de Fondo"
             ]
@@ -62388,7 +62550,11 @@
             ],
             [
               "Controles",
-              "1 presión: reproducir, pausar o atender · 2: avanzar · 3: retroceder · mantener: cambiar de modo de audio · deslizar: volumen"
+              "1 presión: reproducir, pausar o atender; en una llamada, silenciar o activar el micrófono · 2: avanzar o cortar · 3: retroceder · mantener: cambiar de modo de audio · deslizar: volumen"
+            ],
+            [
+              "Siri",
+              "«Oye Siri» (Siri puede no estar disponible en todos los idiomas y áreas) e Interacciones de Siri (con iOS 18 o posterior)"
             ]
           ]
         },
@@ -62409,7 +62575,7 @@
             ],
             [
               "Estuche",
-              "Cargador MagSafe, cargador del Apple Watch, cargadores Qi o cable: Lightning o USB-C, según la versión del estuche"
+              "Cargador MagSafe, cargador del Apple Watch, cargadores Qi o cable USB-C (puerto USB-C abajo)"
             ]
           ]
         },
@@ -62425,8 +62591,8 @@
               "45,2 x 60,6 x 21,7 mm, 50,8 g, con parlante y enganche para correa"
             ],
             [
-              "Agua y sudor",
-              "Auriculares y estuche: IPX4 (agua y sudor) con el estuche Lightning; IP54 (también polvo) con el estuche USB-C"
+              "Agua y polvo",
+              "IP54: auriculares y estuche resisten el polvo, el agua y el sudor (no para deportes acuáticos)"
             ],
             [
               "Almohadillas",
@@ -62447,27 +62613,27 @@
             ],
             [
               "En la caja",
-              "AirPods Pro 2, estuche de carga MagSafe con parlante y enganche para correa, almohadillas en cuatro tamaños, cable (de Lightning a USB-C o USB-C, según la versión) y documentación"
+              "AirPods Pro 2, estuche de carga MagSafe (USB-C) con parlante y enganche para correa, almohadillas en cuatro tamaños, cable de carga USB-C y documentación"
+            ],
+            [
+              "Presentación",
+              "2023"
             ]
           ]
         }
       ],
       "fuentes": [
         {
-          "texto": "estuche USB-C: support.apple.com/es-la/111834",
+          "texto": "support.apple.com/es-la/111834",
           "url": "https://support.apple.com/es-la/111834"
-        },
-        {
-          "texto": "estuche Lightning: support.apple.com/es-la/111851",
-          "url": "https://support.apple.com/es-la/111851"
         },
         {
           "texto": "support.apple.com/es-la/109525 (modelos de AirPods)",
           "url": "https://support.apple.com/es-la/109525"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Nueva el 21/10/2026, sólo con lo común. La fila dice «Apple AirPods Pro 2» y no dice el estuche: Apple vendió los AirPods Pro 2 con estuche de carga MagSafe (Lightning), de 2022 (A2931, A2699, A2698), y con estuche de carga MagSafe (USB-C), de 2023 (A3047, A3048, A3049). Lo que cambia entre los dos va con los dos valores: el conector del estuche, la resistencia (IPX4 el Lightning, IP54 el USB-C) y el cable de la caja. Quedaron afuera las funciones que la ficha de Apple sólo nombra en la versión USB-C (Audio Adaptativo, Reconocimiento de Conversación, Aislamiento de Voz, Volumen Personalizado, colgar con dos presiones, Interacciones de Siri) y los años de presentación. Si Benja confirma el estuche, se puede completar."
+      "verificado": "2026-10-26",
+      "notas": "Nueva el 21/10/2026. Benja contestó el 26/10 en la página de preguntas que el estuche es USB-C: es el AirPods Pro 2 con estuche de carga MagSafe (USB-C), de 2023 (auriculares A3047, A3048 y A3049; estuche A2968, según support 109525). Apple ya no lo vende nuevo. Fuera a propósito: las funciones de salud auditiva que Apple dice que no están en todas las regiones (Prueba de Audición, Asistencia Auditiva y Protección Auditiva, apple.com/la/airpods-pro/feature-availability; Protección Auditiva en los AirPods Pro 2 no figura para Argentina), que la ficha 111834 no nombra; la sección de accesibilidad de la ficha; y las compras o servicios.\nAmpliada el 26/10/2026: pasa a un solo producto con los datos de support 111834. Conector del estuche (USB-C, puerto abajo según 109525), resistencia (IP54, auriculares y estuche; antes iba con los dos valores), cable de la caja (cable de carga USB-C) y año (2023). Se suman, sólo en la ficha y con la aclaración de Apple, lo que antes quedó afuera por ser sólo de la ficha USB-C: Audio Adaptativo, Reconocimiento de Conversación, Aislamiento de Voz y Volumen Personalizado (iOS 18 o posterior), silenciar el micrófono y cortar con dos presiones, y Siri («Oye Siri» según idioma y área; Interacciones de Siri con iOS 18). Sale de fuentes la ficha del Lightning (111851). La fila de Salud auditiva queda como estaba: son las tres que nombra la ficha 111834, sin nota de país."
     },
     {
       "modelo": "AirPods 5 con Estuche de Carga Inalámbrica",
@@ -63323,6 +63489,10 @@
             [
               "Trackpad",
               "Integrado; gestos Multi-Touch y cursor de iPadOS"
+            ],
+            [
+              "Distribución del teclado",
+              "Español (España)"
             ]
           ]
         },
@@ -63373,10 +63543,18 @@
         {
           "texto": "support.apple.com/en-us/docs/ipad/300344",
           "url": "https://support.apple.com/en-us/docs/ipad/300344"
+        },
+        {
+          "texto": "apple.com/mx/shop/product/MJQL3E/A",
+          "url": "https://www.apple.com/mx/shop/product/MJQL3E/A"
+        },
+        {
+          "texto": "support.apple.com/es-la/102743",
+          "url": "https://support.apple.com/es-la/102743"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Fuente: ficha técnica de Apple «Magic Keyboard para iPad Pro de 12,9 pulgadas (2021)» (support.apple.com/es-la/111937); el año sale de su página de documentación (support.apple.com/en-us/docs/ipad/300344, «Year introduced: 2021»). Apple tuvo dos generaciones para el iPad Pro de 12,9\": la de 2020 (support.apple.com/es-la/111936, «4th generation», compatible sólo con 3.ª y 4.ª generación; con la 5.ª «puede que no cierre bien») y la de 2021. Por qué es la de 2021: la fila trae el número de parte MJQL3E/A y dice «(M1/M2)». En apple.com, MJQL3 (y MJQK3, el negro) redirigen a «Magic Keyboard for iPad Air 13-inch (M2)» (el nombre con que Apple vendió al final el de 2021, en blanco y negro), mientras que el de 2020 es MXQU2, que redirige a «Magic Keyboard for iPad Pro 12.9-inch (4th generation)», en un solo color. La compatibilidad va tal cual la ficha 111937: Apple no nombra ahí al iPad Air de 13\" (aunque la tienda lo vendió con ese nombre), así que no se agregó. Apple no traduce M1/M2 a generación en esa página: no se puso. El idioma (la fila dice Español; el redireccionamiento de apple.com/mx dice «Español (España)») no se nombra: la ficha ya lo muestra."
+      "verificado": "2026-10-26",
+      "notas": "Fuente: ficha técnica de Apple «Magic Keyboard para iPad Pro de 12,9 pulgadas (2021)» (support.apple.com/es-la/111937); el año sale de su página de documentación (support.apple.com/en-us/docs/ipad/300344, «Year introduced: 2021»). Apple tuvo dos generaciones para el iPad Pro de 12,9\": la de 2020 (support.apple.com/es-la/111936, «4th generation», compatible sólo con 3.ª y 4.ª generación; con la 5.ª «puede que no cierre bien») y la de 2021. Por qué es la de 2021: la fila trae el número de parte MJQL3E/A y dice «(M1/M2)». En apple.com, MJQL3 (y MJQK3, el negro) redirigen a «Magic Keyboard for iPad Air 13-inch (M2)» (el nombre con que Apple vendió al final el de 2021, en blanco y negro), mientras que el de 2020 es MXQU2, que redirige a «Magic Keyboard for iPad Pro 12.9-inch (4th generation)», en un solo color. La compatibilidad va tal cual la ficha 111937: Apple no nombra ahí al iPad Air de 13\" (aunque la tienda lo vendió con ese nombre), así que no se agregó. Apple no traduce M1/M2 a generación en esa página: no se puso. Hasta el 21/10 no se nombraba el idioma del teclado (la fila dice «Español» a secas). Ampliada el 26/10/2026: se sumó en la ficha («Teclado y trackpad») «Distribución del teclado: Español (España)», con dos fuentes nuevas. Se resolvió en la revisión del 26/10 por el número de parte de la fila (MJQL3E/A): apple.com/mx/shop/product/MJQL3E/A redirige a «Magic-Keyboard-para-el-iPad Air-de-13-pulgadas-M2-Español-España-Blanco» (la tienda de EE. UU. y la de España, a «…Spanish-Spain-White»), y el de Latinoamérica es otro número, MJQL3LA/A (apple.com/mx lo redirige a «…Español-América-Latina-Blanco»). support.apple.com/es-la/102743 muestra que «Español» y «Español (Latinoamérica)» son dos distribuciones distintas. La compatibilidad y lo demás no cambiaron."
     },
     {
       "modelo": "Magic Keyboard para iPad 11\" (iPad Pro 11\" M2)",
@@ -63561,13 +63739,13 @@
       "notas": "Fuente: ficha técnica de Apple «Magic Keyboard Folio para el iPad» (support.apple.com/es-la/111845, en inglés /en-us/111845). Apple tiene una sola generación (página de documentación support.apple.com/en-us/docs/ipad/300900, de 2022); hoy la tienda lo llama «Magic Keyboard Folio para el iPad (A16)». La fila dice «For iPad 10th Gen»: la ficha de Apple lo da compatible con el iPad (10.ª generación) y el iPad (A16), y así va. El requisito «iPadOS 18.3 o posterior» es el que Apple pone hoy en la ficha (también para el de 10.ª generación). No se dice retroiluminado: la ficha no lo dice. El idioma no se nombra (la fila dice Inglés; la ficha ya lo muestra)."
     },
     {
-      "modelo": "Magic Keyboard con Touch ID y teclado numérico (Lightning o USB-C)",
+      "modelo": "Magic Keyboard con Touch ID y teclado numérico (USB-C)",
       "codigos": [
         "AT-0003"
       ],
       "venta": [
         "El teclado inalámbrico de Apple con Touch ID: desbloqueás la Mac e iniciás sesión con el dedo, en cualquier Mac con chip de Apple.",
-        "Suma teclado numérico para planillas y cuentas. Tiene batería recargable y se enlaza solo con la Mac cuando lo conectás con el cable."
+        "Suma teclado numérico para planillas y cuentas. Con una carga funciona un mes o más y se enlaza solo con la Mac cuando lo conectás con el cable USB-C."
       ],
       "importante": [
         {
@@ -63580,11 +63758,11 @@
         },
         {
           "titulo": "Inalámbrico y recargable",
-          "texto": "Por Bluetooth, con batería integrada. Lo podés usar mientras se carga."
+          "texto": "Por Bluetooth. Con una carga funciona un mes o más y lo podés usar mientras se carga."
         },
         {
-          "titulo": "USB-C o Lightning",
-          "texto": "Según la versión: el modelo USB-C es de 2024 y el anterior tiene Lightning. El nombre del proveedor no dice cuál es."
+          "titulo": "Puerto USB-C",
+          "texto": "Trae un cable USB-C trenzado para enlazarlo y cargarlo desde el puerto USB-C de la Mac."
         },
         {
           "titulo": "Se enlaza solo",
@@ -63610,6 +63788,10 @@
             [
               "Teclas multimedia",
               "Sí"
+            ],
+            [
+              "Diseño",
+              "Ampliado, con controles de navegación de documentos y teclas de flecha de tamaño estándar"
             ]
           ]
         },
@@ -63629,12 +63811,16 @@
               "Recargable, integrada"
             ],
             [
+              "Duración",
+              "Un mes o más con una carga"
+            ],
+            [
               "Mientras carga",
               "Se puede usar"
             ],
             [
               "Puerto de carga",
-              "USB-C (modelo de 2024) o Lightning (modelo anterior): el nombre del proveedor no dice cuál es"
+              "USB-C"
             ],
             [
               "Ubicación del puerto",
@@ -63643,11 +63829,37 @@
           ]
         },
         {
+          "grupo": "Medidas",
+          "datos": [
+            [
+              "Medidas",
+              "0,41 a 1,09 x 41,87 x 11,49 cm (alto x ancho x profundidad)"
+            ],
+            [
+              "Peso",
+              "369 g"
+            ]
+          ]
+        },
+        {
           "grupo": "Requisitos",
           "datos": [
             [
               "Mac",
-              "Con chip de Apple (el modelo USB-C pide macOS 15.1 o posterior)"
+              "Con chip de Apple y macOS 15.1 o posterior"
+            ]
+          ]
+        },
+        {
+          "grupo": "General",
+          "datos": [
+            [
+              "En la caja",
+              "Magic Keyboard con Touch ID y teclado numérico, y cable de carga USB-C trenzado"
+            ],
+            [
+              "Presentación",
+              "2024"
             ]
           ]
         }
@@ -63658,12 +63870,8 @@
           "url": "https://support.apple.com/es-lamr/121953"
         },
         {
-          "texto": "support.apple.com/en-us/docs/accessories/pp157 (guía del modelo Lightning)",
-          "url": "https://support.apple.com/en-us/docs/accessories/pp157"
-        },
-        {
-          "texto": "cdsassets.apple.com/…/ma2009_magic-keyboard-touchid-numeric-keypad-ug.pdf",
-          "url": "https://cdsassets.apple.com/live/6GJYWVAV/user/ma2009_magic-keyboard-touchid-numeric-keypad-ug.pdf"
+          "texto": "support.apple.com/es-lamr/guide/mac-help/mchl16fbf90a (Touch ID en la Mac)",
+          "url": "https://support.apple.com/es-lamr/guide/mac-help/mchl16fbf90a/mac"
         },
         {
           "texto": "support.apple.com/es-lamr/guide/security/secf60513daa",
@@ -63678,17 +63886,17 @@
           "url": "https://support.apple.com/es-lamr/119917"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Apple lo vendió con Lightning (guía de 2021, cable USB-C a Lightning) y desde 2024 con USB-C; las dos filas (teclas negras y blancas) no dicen el conector, así que va sólo lo común y el puerto con los dos valores. Fuera a propósito: medidas, peso (369 g) y duración de la batería (un mes o más), porque son del modelo USB-C y Apple ya no publica la ficha técnica del de Lightning; también las compras con Touch ID (Apple Pay depende del país). En ADVAPP la fila de teclas blancas tiene en los términos de búsqueda «mxk73ll/a» (número del modelo USB-C) y el maestro anotó MXK83LL/A (USB-C) para la negra: si Benja confirma que las dos son USB-C, se puede ampliar con medidas, peso y batería."
+      "verificado": "2026-10-26",
+      "notas": "Las dos filas (teclas negras y blancas, inglés) no dicen el conector. Se resolvió en la revisión del 26/10: los números que ya estaban en ADVAPP (mxk73ll/a en los términos de la blanca y MXK83LL/A anotado en el maestro para la negra) son del modelo USB-C, inglés EE. UU., y el de Lightning no se vende desde el 29/10/2024. Fuera a propósito: las compras con Touch ID (Apple Pay depende del país) y la lista de compatibilidad de la ficha 121953, que además de las Mac nombra modelos de iPhone y de iPad (Touch ID es con Mac con chip de Apple).\nAmpliada el 26/10/2026: pasa a un solo producto con la ficha del USB-C (support 121953): puerto USB-C, medidas (0,41 a 1,09 x 41,87 x 11,49 cm), peso (369 g), batería de un mes o más, diseño ampliado, requisitos (Mac con chip de Apple y macOS 15.1 o posterior), lo que trae la caja (teclado y cable de carga USB-C; «trenzado» lo dice la descripción) y año (2024). Salen los valores dobles y las fuentes del modelo Lightning (guía pp157 y su PDF); «desbloqueás la Mac» ahora se respalda con la guía de uso de la Mac (Touch ID en la Mac), que lo dice para la Mac o el Magic Keyboard con Touch ID."
     },
     {
-      "modelo": "Magic Trackpad (Lightning o USB-C)",
+      "modelo": "Magic Trackpad (USB-C)",
       "codigos": [
         "AT-0012"
       ],
       "venta": [
         "El trackpad inalámbrico de Apple, con superficie de vidrio de borde a borde, todos los gestos Multi-Touch y Force Touch, que detecta con cuánta fuerza presionás.",
-        "Con una carga funciona un mes o más y se enlaza solo con la Mac. Según la versión, se carga por USB-C o por Lightning."
+        "Con una carga funciona un mes o más y se enlaza solo con la Mac. Tiene puerto USB-C y trae un cable de carga USB-C trenzado."
       ],
       "importante": [
         {
@@ -63704,8 +63912,8 @@
           "texto": "Se enlaza solo con la Mac al conectarlo con el cable."
         },
         {
-          "titulo": "USB-C o Lightning",
-          "texto": "Según la versión: el modelo de 2024 tiene USB-C y el anterior, Lightning. El nombre del proveedor no dice cuál es."
+          "titulo": "Puerto USB-C",
+          "texto": "Trae un cable USB-C trenzado para enlazarlo y cargarlo desde el puerto USB-C de la Mac."
         },
         {
           "titulo": "16 cm de ancho, 230 g",
@@ -63751,7 +63959,7 @@
             ],
             [
               "Puerto de carga",
-              "USB-C (modelo de 2024) o Lightning (modelo anterior): el nombre del proveedor no dice cuál es"
+              "USB-C"
             ],
             [
               "Ubicación del puerto",
@@ -63776,12 +63984,25 @@
           "grupo": "Requisitos",
           "datos": [
             [
-              "Modelo USB-C",
-              "Mac con macOS 15.1 o posterior, o iPad con iPadOS 18.1 o posterior"
+              "Mac",
+              "Con macOS 15.1 o posterior"
             ],
             [
-              "Modelo Lightning",
-              "Mac con Bluetooth y OS X 10.11 o posterior, o iPad con iPadOS 13.4 o posterior"
+              "iPad",
+              "Con iPadOS 18.1 o posterior"
+            ]
+          ]
+        },
+        {
+          "grupo": "General",
+          "datos": [
+            [
+              "En la caja",
+              "Magic Trackpad y cable de carga USB-C trenzado"
+            ],
+            [
+              "Presentación",
+              "2024"
             ]
           ]
         }
@@ -63792,10 +64013,6 @@
           "url": "https://support.apple.com/es-lamr/121932"
         },
         {
-          "texto": "support.apple.com/es-lamr/111884 (Magic Trackpad con Lightning)",
-          "url": "https://support.apple.com/es-lamr/111884"
-        },
-        {
           "texto": "support.apple.com/es-lamr/102292",
           "url": "https://support.apple.com/es-lamr/102292"
         },
@@ -63804,17 +64021,17 @@
           "url": "https://support.apple.com/es-lamr/119917"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Las filas dicen «Magic Trackpad 2» sin conector. Apple publica dos fichas: Magic Trackpad con Lightning (soporte lo lista como «Magic Trackpad 2», presentado en 2010 según la ficha, blanco y negro) y Magic Trackpad (USB-C) de 2024 (blanco y negro). Medidas, peso, batería, Multi-Touch y Force Touch son iguales en las dos; puerto y requisitos van con los dos valores. No se pone «en la caja» porque cambia con la versión (cable USB-C o USB-C a Lightning). El maestro lo llama «Magic Trackpad 2 (2024)», que sugiere USB-C, pero la fila no lo dice."
+      "verificado": "2026-10-26",
+      "notas": "Las filas dicen «Magic Trackpad 2» (blanco y negro) sin conector ni número. Se resolvió en la revisión del 26/10: Apple vende sólo el Magic Trackpad (USB-C) desde el 29/10/2024 (blanco MXK93AM/A, negro MXKA3AM/A) y la lista del proveedor le sigue diciendo «2» al modelo USB-C (lo mismo pasa con el Magic Mouse); el maestro ya lo llamaba «Magic Trackpad 2 (2024)». Apple lo llama hoy «Magic Trackpad (USB-C)», sin el «2». Si llega uno, se confirma mirando el puerto del borde de atrás (USB-C ovalado o Lightning chato) o el número de la caja. Fuera a propósito: la lista de compatibilidad de la ficha (iPad, Mac, monitores y Apple Vision Pro); quedan los requisitos.\nAmpliada el 26/10/2026: pasa a un solo producto con la ficha del USB-C (support 121932): puerto USB-C, requisitos (macOS 15.1 o iPadOS 18.1 o posterior), lo que trae la caja (Magic Trackpad y cable de carga USB-C; «trenzado» lo dice la descripción de la ficha) y año (2024). Salen los valores dobles y la ficha del Lightning (111884) de fuentes."
     },
     {
-      "modelo": "Magic Mouse (Lightning o USB-C)",
+      "modelo": "Magic Mouse (USB-C)",
       "codigos": [
         "AT-0011"
       ],
       "venta": [
         "El mouse inalámbrico de Apple, con superficie Multi-Touch: con gestos pasás de una página web a otra y te desplazás por los documentos.",
-        "Pesa 99 g, con una carga funciona un mes o más y se enlaza solo con la Mac. Según la versión, se carga por USB-C o por Lightning."
+        "Pesa 99 g, con una carga funciona un mes o más y se enlaza solo con la Mac. Tiene puerto USB-C y trae un cable de carga USB-C trenzado."
       ],
       "importante": [
         {
@@ -63830,8 +64047,8 @@
           "texto": "Se enlaza solo con la Mac al conectarlo con el cable."
         },
         {
-          "titulo": "USB-C o Lightning",
-          "texto": "Según la versión: el modelo de 2024 tiene USB-C y el anterior, Lightning. El nombre del proveedor no dice cuál es."
+          "titulo": "Puerto USB-C",
+          "texto": "Trae un cable USB-C trenzado para enlazarlo y cargarlo desde el puerto USB-C de la Mac."
         },
         {
           "titulo": "99 g",
@@ -63873,7 +64090,7 @@
             ],
             [
               "Puerto de carga",
-              "USB-C (modelo de 2024) o Lightning (modelo anterior): el nombre del proveedor no dice cuál es"
+              "USB-C"
             ],
             [
               "Ubicación del puerto",
@@ -63898,12 +64115,25 @@
           "grupo": "Requisitos",
           "datos": [
             [
-              "Modelo USB-C",
-              "Mac con macOS 15.1 o posterior, o iPad con iPadOS 18.1 o posterior"
+              "Mac",
+              "Con macOS 15.1 o posterior"
             ],
             [
-              "Modelo Lightning",
-              "Mac con Bluetooth y OS X 10.11 o posterior, o iPad con iPadOS 13.4 o posterior"
+              "iPad",
+              "Con iPadOS 18.1 o posterior"
+            ]
+          ]
+        },
+        {
+          "grupo": "General",
+          "datos": [
+            [
+              "En la caja",
+              "Magic Mouse y cable de carga USB-C trenzado"
+            ],
+            [
+              "Presentación",
+              "2024"
             ]
           ]
         }
@@ -63914,10 +64144,6 @@
           "url": "https://support.apple.com/es-lamr/121931"
         },
         {
-          "texto": "support.apple.com/es-lamr/111885 (Magic Mouse con Lightning)",
-          "url": "https://support.apple.com/es-lamr/111885"
-        },
-        {
           "texto": "support.apple.com/es-lamr/102292",
           "url": "https://support.apple.com/es-lamr/102292"
         },
@@ -63926,8 +64152,8 @@
           "url": "https://support.apple.com/es-lamr/119917"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Las filas dicen «Magic Mouse 2» (blanco y negro) sin conector. Apple publica dos fichas: Magic Mouse con Lightning (soporte lo lista como «Magic Mouse 2», presentado en 2015, blanco y negro) y Magic Mouse (USB-C) de 2024 (blanco y negro). Medidas, peso, batería y Multi-Touch son iguales; puerto y requisitos van con los dos valores. No se pone «en la caja» porque cambia con la versión."
+      "verificado": "2026-10-26",
+      "notas": "Las filas dicen «Magic Mouse 2» (blanco y negro) sin conector. Se resolvió en la revisión del 26/10: el blanco trae en la lista del proveedor el número MXK53AM/A, que en apple.com es el Magic Mouse (USB-C) blanco; el negro no trae número, pero Apple vende sólo el USB-C (MXK63AM/A el negro) desde el 29/10/2024. Apple lo llama hoy «Magic Mouse (USB-C)», sin el «2». Si llega uno, se confirma mirando el puerto de abajo (USB-C ovalado o Lightning chato). Fuera a propósito: la lista de compatibilidad de la ficha (iPad, Mac, monitores y Apple Vision Pro); quedan los requisitos.\nAmpliada el 26/10/2026: pasa a un solo producto con la ficha del USB-C (support 121931): puerto USB-C, requisitos (macOS 15.1 o iPadOS 18.1 o posterior), lo que trae la caja (Magic Mouse y cable de carga USB-C; «trenzado» lo dice la descripción de la ficha) y año (2024). Salen los valores dobles y la ficha del Lightning (111885) de fuentes."
     },
     {
       "modelo": "Apple Pencil Pro",
@@ -67715,17 +67941,25 @@
           "datos": [
             [
               "Batería",
-              "6.000 mAh (en la versión para Japón, 5.000 mAh)"
+              "6.000 mAh"
             ],
             [
               "Carga",
-              "TurboPower de 90 W (125 W en la versión para Japón) · inalámbrica de 15 W"
+              "TurboPower de 90 W · inalámbrica de 15 W · uso compartido de batería por cable de 5 W"
             ]
           ]
         },
         {
           "grupo": "Diseño",
           "datos": [
+            [
+              "Medidas",
+              "160,69 x 73,06 x 8,24 mm"
+            ],
+            [
+              "Peso",
+              "186 g"
+            ],
             [
               "Agua y polvo",
               "IP68 e IP69 y certificación MIL-STD-810H"
@@ -67795,14 +68029,10 @@
         {
           "texto": "motorola.com.ar/motorola-edge-60-pro",
           "url": "https://www.motorola.com.ar/motorola-edge-60-pro/p"
-        },
-        {
-          "texto": "motorola.com/jp/ja/…/60-pro (versión para Japón)",
-          "url": "https://www.motorola.com/jp/ja/p/phones/motorola-edge/60-pro/pmipmht41mf"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "La única página oficial con 8 GB + 256 GB es la de Motorola India (motorola.in, en inglés: «motorola edge 60 pro 8+256GB Pantone shadow»); Argentina, España, México, Bolivia, Irlanda, Emiratos y Australia lo venden en 12/512 y Japón en 12/256. El resto de los datos coincide entre India, España y Argentina. Japón trae otra batería (5.000 mAh) y otra carga (125 W): van los dos valores. Por la misma diferencia no se pusieron medidas ni peso (186 g y 160,69 x 73,06 x 8,24 mm en India y España; «約184g» y «約161 x 74 x 8,3 mm» en Japón), ni el uso compartido de batería (por cable en España e India, inalámbrico en Japón). Ultra gran angular sin apertura (f/2.0 en España e India, F2.05 en Argentina). SIM no va (India: dos nano SIM; España: nano SIM + eSIM). Lo que trae la caja no va (cargador de 90 W en India y Argentina; España no lo trae). Wi-Fi 6E con «(según el país)» por la banda de 6 GHz."
+      "verificado": "2026-10-26",
+      "notas": "La única página oficial con 8 GB + 256 GB es la de Motorola India (motorola.in, en inglés: «motorola edge 60 pro 8+256GB Pantone shadow», PB7T0000IN); Argentina, España, México, Bolivia, Irlanda, Emiratos y Australia lo venden en 12/512 y Japón en 12/256. El resto de los datos coincide entre India, España y Argentina. Ultra gran angular sin apertura (f/2.0 en España e India, F2.05 en Argentina). SIM no va (India: dos nano SIM; España: nano SIM + eSIM). Lo que trae la caja no va (cargador de 90 W en India y Argentina; España no lo trae). Wi-Fi 6E con «(según el país)» por la banda de 6 GHz. Ojo verificador: la tienda argentina trae las medidas mal cargadas («160.09 x 773.06 x 8.82 mm»); India y España dicen 160,69 x 73,06 x 8,24 mm, y eso es lo que va.\nAmpliada el 26/10/2026: la revisión del 26/10 resolvió que es la versión de India (la memoria decide: 8 GB + 256 GB sólo se vende ahí; Japón vende 12/256). Se sacaron los valores de Japón (5.000 mAh y 125 W) y su fuente, y se sumaron medidas (160,69 x 73,06 x 8,24 mm), peso (186 g) y el uso compartido de batería por cable de 5 W, que dan igual motorola.in (8+256) y motorola.com/es. Nada más cambió."
     },
     {
       "modelo": "moto g86 power 5G (8 GB + 256 GB)",
@@ -70126,7 +70356,7 @@
       ],
       "venta": [
         "Estabilizador de 3 ejes para el celular con un control remoto que se saca, el Osmo FrameTap: tiene pantalla táctil de 1,4\" y muestra la vista del teléfono, así encuadrás una selfie con la cámara de atrás.",
-        "El Pack para Creadores suma el módulo multifuncional 2, con seguimiento y luz de relleno, y un transmisor de micrófono DJI Mic Mini 2 o Mic Mini 2S, según la edición del pack. Hasta 10 horas de batería, y también carga el celular."
+        "El Pack para Creadores suma el módulo multifuncional 2, con seguimiento y luz de relleno, y un micrófono inalámbrico: transmisor DJI Mic Mini 2 y receptor móvil de la serie DJI Mic. Hasta 10 horas de batería, y también carga el celular."
       ],
       "importante": [
         {
@@ -70143,7 +70373,7 @@
         },
         {
           "titulo": "Micrófono inalámbrico",
-          "texto": "Transmisor DJI Mic Mini 2 o Mic Mini 2S, según la edición del pack."
+          "texto": "Transmisor DJI Mic Mini 2 y receptor móvil de la serie DJI Mic, con antiviento, clip magnético y funda."
         },
         {
           "titulo": "Hasta 10 h de batería",
@@ -70285,7 +70515,7 @@
           "datos": [
             [
               "En la caja",
-              "Osmo Mobile 8P, Osmo FrameTap, abrazadera magnética para teléfonos 5, módulo multifuncional 2, cable de alimentación USB-C (50 cm), cable de carga USB-C (15 cm), bolsa y un transmisor DJI Mic Mini 2 o Mic Mini 2S con antiviento, clip magnético, dos cubiertas frontales magnéticas, imán, cable de carga magnético y funda. La edición con Mic Mini 2 suma un receptor móvil de la serie DJI Mic"
+              "Osmo Mobile 8P, abrazadera magnética para teléfonos 5, un módulo multifuncional 2, Osmo FrameTap, cable de alimentación USB-C (50 cm), cable de carga USB-C (15 cm), bolsa de almacenamiento, receptor móvil de la serie DJI Mic y transmisor DJI Mic Mini 2 con antiviento, clip magnético, dos cubiertas frontales magnéticas, imán DJI Mic 3, cable de carga magnético y funda de transporte compacta"
             ]
           ]
         }
@@ -70308,8 +70538,8 @@
           "url": "https://store.dji.com/uk/product/osmo-mobile-8p?set_region=GB"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "DJI vende DOS packs con este nombre (store.dji.com, window.__PRELOADED_STATE__): «Osmo Mobile 8P Creator Combo» / «Pack para Creadores Osmo Mobile 8P» (transmisor DJI Mic Mini 2 + receptor móvil de la serie DJI Mic + 1 módulo multifuncional 2) y «Osmo Mobile 8P Creator Combo (DJI Mic Mini 2S Transmitter)» (transmisor Mic Mini 2S, sin receptor y, según la tienda en ES y UK, 2 módulos multifuncionales 2). La fila dice «Osmo Mobile 8P Creator Combo» sin aclarar: se puso sólo lo común y el micrófono con los dos valores; la cantidad de módulos no se puso. El nombre de la fila calza exacto con el de Mic Mini 2, pero no se dedujo. ActiveTrack 8.0: «solo está disponible en la aplicación DJI Mimo y actualmente solo es compatible con determinados modelos de iPhone» (nota 2 de la página). La autonomía de 10 h es con el estabilizador equilibrado y sólo el FrameTap (nota 5). dji.com/mx: curl con -b 'region=MX; lang=es'."
+      "verificado": "2026-10-26",
+      "notas": "DJI vende DOS packs con este nombre (store.dji.com, window.__PRELOADED_STATE__): «Osmo Mobile 8P Creator Combo» / «Pack para Creadores Osmo Mobile 8P» (producto osmo-mobile-8p-creator-combo: transmisor DJI Mic Mini 2 + receptor móvil de la serie DJI Mic + 1 módulo multifuncional 2) y «Osmo Mobile 8P Creator Combo (DJI Mic Mini 2S Transmitter)» (transmisor Mic Mini 2S, sin receptor y, según la tienda en ES y UK, 2 módulos multifuncionales 2). Identidad: la fila dice «Osmo Mobile 8P Creator Combo» sin aclarar el micrófono; la revisión del 26/10 resolvió que es el primero, porque el nombre calza exacto y la otra edición lleva «(DJI Mic Mini 2S Transmitter)» en el nombre. Si la caja dice «Mic Mini 2S», es la otra edición. ActiveTrack 8.0: «solo está disponible en la aplicación DJI Mimo y actualmente solo es compatible con determinados modelos de iPhone» (nota 2 de la página). La autonomía de 10 h es con el estabilizador equilibrado y sólo el FrameTap (nota 5). dji.com/mx: curl con -b 'region=MX; lang=es'.\nAmpliada el 26/10/2026: el micrófono pasó de «Mic Mini 2 o Mic Mini 2S, según la edición» a uno solo (transmisor DJI Mic Mini 2 + receptor móvil de la serie DJI Mic) en venta 2, importante 4 y «En la caja». «En la caja» es ahora la lista inTheBoxes del producto osmo-mobile-8p-creator-combo en store.dji.com/es (la de store.dji.com/uk dice lo mismo, en inglés), con la cantidad de módulos multifuncionales 2 (uno). El resto quedó igual; los datos del 21/10 se volvieron a encontrar en dji.com/mx/osmo-mobile-8p/specs el 26/10."
     },
     {
       "modelo": "Hélices DJI Mini 4 Pro/Mini 3 Pro",
@@ -70411,7 +70641,7 @@
         }
       ],
       "verificado": "2026-10-21",
-      "notas": "La fila dice «Hélices (Mini 3 Pro)»: DJI tiene un solo producto de hélices para el Mini 3 Pro, «Hélices DJI Mini 4 Pro/Mini 3 Pro» (store.dji.com, producto dji-mini-3-pro-propellers). El Mini 3 común usa «Hélices DJI Mini 3/Serie DJI Lito» (dji-mini-3-propellers). La tienda en español dice «Diámetro × Rosca: 6.0 × 3.0 pulgadas»; en inglés es «Diameter × Thread Pitch»: se tradujo «paso». Tornillos, liberación rápida y hélices con/sin marca: FAQ de dji.com/mx/support/product/mini-3-pro (dice Mini 3 Pro; por eso la ficha aclara «en el Mini 3 Pro»)."
+      "notas": "La fila dice «Hélices (Mini 3 Pro)»: DJI tiene un solo producto de hélices para el Mini 3 Pro, «Hélices DJI Mini 4 Pro/Mini 3 Pro» (store.dji.com, producto dji-mini-3-pro-propellers). El Mini 3 común usa «Hélices DJI Mini 3/Serie DJI Lito» (dji-mini-3-propellers). La tienda en español dice «Diámetro × Rosca: 6.0 × 3.0 pulgadas»; en inglés es «Diameter × Thread Pitch»: se tradujo «paso». Tornillos, liberación rápida y hélices con/sin marca: FAQ de dji.com/mx/support/product/mini-3-pro (dice Mini 3 Pro; por eso la ficha aclara «en el Mini 3 Pro»).\nConfirmada el 26/10/2026 (revisión de preguntas): es el único juego oficial de hélices de DJI para el Mini 3 Pro (2 pares y 12 tornillos) y el proveedor lo lista entre sus accesorios DJI. Queda como está."
     },
     {
       "modelo": "Insta360 X5 Paquete básico (Essentials Bundle)",
@@ -71203,7 +71433,7 @@
         }
       ],
       "verificado": "2026-10-21",
-      "notas": "«+ USB-C»: Microsoft vende como producto oficial el «Xbox Wireless Controller + USB-C Cable», con cable USB-C de 9 pies (2,7 m, según la tienda de Microsoft del Reino Unido), así que el cable se tomó como del fabricante y no del proveedor. A confirmar con la caja real que sea ese pack (y no un control suelto con un cable aparte). Puerto USB-C del control: tienda de Microsoft del Reino Unido («Controller features a USB-C port»). Microsoft no dice si las pilas AA vienen en la caja del control suelto: no se puso. Sin peso ni medidas (xbox.com no los da). La página de xbox.com/es-AR dice además «No todas las versiones de este controlador incluyen un puerto de expansión»: no se mencionó ese puerto."
+      "notas": "«+ USB-C»: Microsoft vende como producto oficial el «Xbox Wireless Controller + USB-C Cable», con cable USB-C de 9 pies (2,7 m, según la tienda de Microsoft del Reino Unido), así que el cable se tomó como del fabricante y no del proveedor. Puerto USB-C del control: tienda de Microsoft del Reino Unido («Controller features a USB-C port»). Microsoft no dice si las pilas AA vienen en la caja del control suelto: no se puso. Sin peso ni medidas (xbox.com no los da). La página de xbox.com/es-AR dice además «No todas las versiones de este controlador incluyen un puerto de expansión»: no se mencionó ese puerto.\nRevisión del 26/10/2026 (opción A): es el pack oficial «Xbox Wireless Controller + USB-C Cable» (Carbon Black), que Microsoft sigue vendiendo; el nombre del proveedor copia el del pack. Queda como está."
     },
     {
       "modelo": "Logitech G923 TRUEFORCE (versión Xbox / PC)",
@@ -71539,7 +71769,7 @@
       ],
       "venta": [
         "Los Ray-Ban Meta Wayfarer de segunda generación: una cámara de 12 MP en el armazón que saca fotos y graba video en 3K Ultra HD.",
-        "Hasta 8 horas de batería y 48 más con el estuche. Llamadas, mensajes y música sin sacar el celular, con parlantes que no te tapan los oídos."
+        "Hasta 8 horas de batería y hasta 40 más con el estuche. Llamadas y música sin sacar el celular, con parlantes que no te tapan los oídos."
       ],
       "importante": [
         {
@@ -71548,7 +71778,7 @@
         },
         {
           "titulo": "Hasta 8 h de batería",
-          "texto": "Y hasta 48 h más con el estuche de carga. Carga al 50 % en 20 minutos."
+          "texto": "Y hasta 40 h más con el estuche de carga. Carga al 50% en 20 minutos."
         },
         {
           "titulo": "Parlantes de oído abierto",
@@ -71564,9 +71794,9 @@
           },
           "texto": {
             "segun": {
-              "Transitions": "Se oscurecen afuera y se aclaran adentro. Bloquean el 100 % de los UVA y UVB.",
-              "Polarizadas": "De sol, degradadas, cortan reflejos y resplandor. 100 % de protección UVA y UVB.",
-              "De sol": "Verdes, con 100 % de protección contra rayos UVA y UVB."
+              "Transitions": "Se oscurecen afuera y se aclaran adentro. Bloquean el 100% de los UVA y UVB.",
+              "Polarizadas": "De sol, degradadas, cortan reflejos y resplandor. 100% de protección UVA y UVB.",
+              "De sol": "Verdes, con 100% de protección contra rayos UVA y UVB."
             }
           }
         },
@@ -71618,11 +71848,11 @@
             ],
             [
               "Volumen",
-              "76,1 dB(C): 50 % más volumen y el doble de graves que los Ray-Ban Stories"
+              "76,1 dB(C): 50% más volumen y el doble de graves que los Ray-Ban Stories"
             ],
             [
               "Llamadas",
-              "Llamadas, videollamadas y mensajes manos libres, con el 90 % del ruido de fondo bloqueado"
+              "Llamadas, videollamadas y mensajes manos libres, con el 90% del ruido de fondo bloqueado (los comandos de voz, según el país y el idioma)"
             ],
             [
               "Panel táctil",
@@ -71639,15 +71869,15 @@
             ],
             [
               "Estuche",
-              "Hasta 48 h más; el estuche se carga del todo en unas 3,5 h con cable USB-C"
+              "Hasta 40 h más (Meta dice hasta 48 h); el estuche se carga del todo en unas 3,5 h con cable USB-C"
             ],
             [
               "Carga",
-              "50 % en 20 minutos y completa en unos 75 minutos, en el estuche"
+              "50% en 20 minutos y completa en unos 75 minutos, en el estuche"
             ],
             [
               "Memoria",
-              "32 GB: más de 1.000 fotos y más de 100 videos de 30 s"
+              "32 GB: más de 500 fotos o más de 100 videos de 30 s"
             ]
           ]
         },
@@ -71695,9 +71925,9 @@
               "Lentes",
               {
                 "segun": {
-                  "Transitions": "Transitions®: pasan de transparentes o apenas tintadas adentro a más oscuras afuera. Bloquean el 100 % de los rayos UVA y UVB",
-                  "Polarizadas": "De sol, polarizadas y degradadas (más oscuras arriba): cortan reflejos y resplandor. 100 % de protección contra rayos UVA y UVB",
-                  "De sol": "De sol, verdes, con 100 % de protección contra rayos UVA y UVB"
+                  "Transitions": "Transitions®: pasan de transparentes o apenas tintadas adentro a más oscuras afuera. Bloquean el 100% de los rayos UVA y UVB",
+                  "Polarizadas": "De sol, polarizadas y degradadas (más oscuras arriba): cortan reflejos y resplandor. 100% de protección contra rayos UVA y UVB",
+                  "De sol": "De sol, verdes, con 100% de protección contra rayos UVA y UVB"
                 }
               }
             ],
@@ -71706,12 +71936,36 @@
               "Admite lentes graduadas de −12,00 a +6,00 de potencia total"
             ],
             [
+              "Tamaño",
+              {
+                "proveedor": {
+                  "Transitions": "Estándar",
+                  "Polarizadas": "Estándar"
+                },
+                "segun": {
+                  "De sol": "Estándar o grande (Meta lo vende en los dos)"
+                }
+              }
+            ],
+            [
               "Medidas",
-              "Tamaño estándar: lente de 50 x 41 mm, puente de 22 mm y patillas de 150 mm (131 mm de bisagra a bisagra). Grande: 53 x 44, 22 y 155 mm (137 mm)"
+              {
+                "segun": {
+                  "Transitions": "Lente de 50 x 41 mm, puente de 22 mm y patillas de 150 mm (131 mm de bisagra a bisagra)",
+                  "Polarizadas": "Lente de 50 x 41 mm, puente de 22 mm y patillas de 150 mm (131 mm de bisagra a bisagra)",
+                  "De sol": "Tamaño estándar: lente de 50 x 41 mm, puente de 22 mm y patillas de 150 mm (131 mm de bisagra a bisagra). Grande: 53 x 44, 22 y 155 mm (137 mm)"
+                }
+              }
             ],
             [
               "Peso",
-              "51 g en tamaño estándar o 53 g en grande; el estuche, 133 g"
+              {
+                "segun": {
+                  "Transitions": "51 g; el estuche, 133 g",
+                  "Polarizadas": "51 g; el estuche, 133 g",
+                  "De sol": "51 g en tamaño estándar o 53 g en grande; el estuche, 133 g"
+                }
+              }
             ],
             [
               "Edad",
@@ -71748,10 +72002,18 @@
         {
           "texto": "meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-shiny-black-green-transitions-gen-2",
           "url": "https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-shiny-black-green-transitions-gen-2/"
+        },
+        {
+          "texto": "ray-ban.com/usa (RW4012 601S1Z 50-22)",
+          "url": "https://www.ray-ban.com/usa/electronics/RW4012ray-ban%20meta%20wayfarer%20-%20gen%202-black/8056262721377"
         }
       ],
-      "verificado": "2026-10-21",
-      "notas": "Fuente: meta.com/mx (Meta México); las páginas de modelo y de cada color se arman con JavaScript (abrirlas con Chrome headless). Las cuatro filas dicen GEN2 y las cuatro combinaciones existen en Gen 2 en meta.com/mx: Matte Black + Grey Transitions, Matte Black + Polarized Gradient Graphite (la fila dice sólo «Black»), Shiny Black + G15 Green (Meta: «micas de sol verdes») y Shiny Black + Graphite Green Transitions (Meta: «Transitions® verde G15»). Ojo: ya existe el Wayfarer (Gen 3); las filas dicen Gen 2. Versiones por el tipo de lente (texto de la fila). Tamaño: Meta lo vende en estándar y grande (y ajuste de puente alto); la fila no dice cuál, así que medidas y peso van con los dos (el maestro tiene 601/1M50, 601S1Z50 y 601ST350, que parecen tamaño 50, pero no está en la fila). Meta AI y la traducción, sólo en la ficha y con «(según el país)»: la página general Gen 2 de Meta México dice «Algunas funciones de Meta AI solo están disponibles en determinados países e idiomas» y «Meta AI solo está disponible en algunos países». Batería de audio (5 h), carga en 75 min, estuche en 3,5 h, video de 3 min y luz LED: de las preguntas frecuentes de esa página general (Gen 2).\nCorregida el 21/10/2026 con la propuesta del verificador (informe-D16b): sin «algunas funciones requieren WhatsApp…», que sólo lo dice la página del Blayzer Optics."
+      "verificado": "2026-10-26",
+      "notas": "Fuente: meta.com/mx (Meta México); las páginas de modelo y de cada color se arman con JavaScript (abrirlas con Chrome headless). Las cuatro filas dicen GEN2 y las cuatro combinaciones existen en Gen 2 en meta.com/mx: Matte Black + Grey Transitions, Matte Black + Polarized Gradient Graphite (la fila dice sólo «Black»), Shiny Black + G15 Green (Meta: «micas de sol verdes») y Shiny Black + Graphite Green Transitions (Meta: «Transitions® verde G15»). Ojo: ya existe el Wayfarer (Gen 3); las filas dicen Gen 2. Versiones por el tipo de lente (texto de la fila). Tamaño: Meta lo vende en estándar y grande (y ajuste de puente alto). Las Transitions y las polarizadas son del tamaño estándar: lo decide el código Ray-Ban con el tamaño que traían los nombres con que el proveedor cargó esas filas (601S1Z50, 601/1M50 y 601ST350; revisión del 26/10). El «50» es el ancho de la mica del estándar (Meta: 50 mm el estándar, 53 mm el grande), y ray-ban.com/usa vende esas tres combinaciones como «RW4012 601S1Z 50-22», «RW4012 601/1M 50-22» y «RW4012 601ST3 50-22» (talle M). Como la fila de hoy no lo dice, el tamaño va como dato del proveedor; medidas y peso, con el valor del estándar. La de sol (G15, AT-0527) no trae código: sigue con los dos tamaños. Si vuelve, mirar la patilla por dentro (50□22 o 53□22). Meta AI y la traducción, sólo en la ficha y con «(según el país)»: la página general Gen 2 de Meta México dice «Algunas funciones de Meta AI solo están disponibles en determinados países e idiomas» y «Meta AI solo está disponible en algunos países». Batería de audio (5 h), carga en 75 min, estuche en 3,5 h, video de 3 min y luz LED: de las preguntas frecuentes de esa página general (Gen 2).\nCorregida el 21/10/2026 con la propuesta del verificador (informe-D16b): sin «algunas funciones requieren WhatsApp…», que sólo lo dice la página del Blayzer Optics.\nAmpliada el 26/10/2026: tamaño estándar (dato del proveedor) en Transitions y polarizadas, y medidas y peso con el valor del estándar en esas dos versiones (meta.com/mx); la de sol queda con los dos tamaños, como antes. Nada más cambió.\nRetocada el 26/10/2026 por avisos del verificador (informe-L7): la memoria va con el valor prudente, «más de 500 fotos», porque Meta México dice «más de 1.000» y ray-ban.com/usa «500+ Photos» (se sumó esa página a fuentes); el % va pegado al número (formato de la casa).\nCorregida el 26/10/2026 con las propuestas del verificador (informe-R2b): ray-ban.com/usa da para las tres combinaciones «Up to 8 hours on single charge plus up to additional 40 hours» y «500+ Photos Or 100+ 30s Videos», y Meta México 48 h y más de 1.000 fotos: van los valores prudentes (40 h, con la aclaración de Meta en la ficha; 500 fotos o 100 videos). «Mensajes» salió de Por qué elegirlo (los comandos de voz dependen del país, según Ray-Ban).\nCorregida el 26/10/2026 con la propuesta del verificador (informe-R3): ray-ban.com dice que los comandos de voz con que se hacen llamadas y mensajes manos libres están «available only in selected countries and languages».",
+      "proveedor": {
+        "fuente": "Nombres de las filas en ADVAPP (proveedor), vistos antes del 26/10/2026: «Ray-Ban Meta WAYFARER 601S1Z50 (Matte Black · Grey Transitions)», «Ray-Ban Meta WAYFARER 601/1M50 (Shiny Black · Graphite Green Transitions)» y «Ray-Ban Meta WAYFARER 601ST350 (Black · Polarized Gradient Graphite)».",
+        "aviso": "el tamaño de las Transitions y las polarizadas es dato del proveedor"
+      }
     },
     {
       "modelo": "Ray-Ban Meta Skyler (Gen 2)",
@@ -72828,6 +73090,1808 @@
       ],
       "verificado": "2026-10-21",
       "notas": "ADVAPP lo llama «Kindle Touch 2024 6\"» y el maestro «Kindle Gen 11 16GB»; Amazon lo llama «Kindle» a secas: «Kindle (11th Generation) - 2024 release» (el Kindle Touch es un modelo viejo, de 2011). La fila dice 2024, 6\" y 16GB, que es este; el Kindle de 2022 también es de 11.ª generación y 16 GB, por eso el año importa. No es el Kindle Kids. Amazon lo vende «Lockscreen Ad-Supported» o «Without Lockscreen Ads»; la fila no lo dice, así que no se nombra. Quedaron afuera la tienda Kindle y Kindle Unlimited (servicios) y «now 25% brighter at max setting», porque Amazon no dice contra qué modelo. No se dice nada de agua: Amazon no lo da como resistente al agua."
+    },
+    {
+      "modelo": "AirPods 5 (estuche de carga USB-C, sin carga inalámbrica)",
+      "codigos": [
+        "AT-0590"
+      ],
+      "venta": [
+        "Los AirPods 5 tienen hasta 1,5 veces más cancelación de ruido que los AirPods 4 con Cancelación Activa de Ruido, con chip H2 y Audio Espacial personalizado.",
+        "Arquitectura acústica rediseñada y modo Ambiente. Resisten el polvo, el agua y el sudor (IP57)."
+      ],
+      "importante": [
+        {
+          "titulo": "Hasta 1,5x más cancelación de ruido",
+          "texto": "Que los AirPods 4 con Cancelación Activa de Ruido. Con modo Ambiente."
+        },
+        {
+          "titulo": "Chip H2",
+          "texto": "Audio Espacial personalizado con seguimiento dinámico de la cabeza y Ecualización Adaptativa."
+        },
+        {
+          "titulo": "Hasta 20 h con el estuche",
+          "texto": "Con la cancelación activa. Hasta 4 h por carga; 5 minutos en el estuche dan alrededor de 1 hora."
+        },
+        {
+          "titulo": "Estuche de carga USB-C",
+          "texto": "Se carga con un cable USB-C. La carga inalámbrica y el parlante para Encontrar son del modelo con Estuche de Carga Inalámbrica."
+        },
+        {
+          "titulo": "Resistentes al agua (IP57)",
+          "texto": "Al polvo, al agua y al sudor, para hacer ejercicio o deportes que no sean acuáticos."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Audio",
+          "datos": [
+            [
+              "Chip",
+              "H2"
+            ],
+            [
+              "Sonido",
+              "Controlador de alta excursión diseñado por Apple y amplificador exclusivo con alto rango dinámico"
+            ],
+            [
+              "Cancelación de ruido",
+              "Activa: hasta 1,5 veces más que los AirPods 4 con Cancelación Activa de Ruido"
+            ],
+            [
+              "Modos",
+              "Modo Ambiente; Audio Adaptativo y Reconocimiento de Conversación con un dispositivo Apple con la versión más reciente del sistema operativo"
+            ],
+            [
+              "Audio Espacial",
+              "Personalizado, con seguimiento dinámico de la cabeza"
+            ],
+            [
+              "Funciones",
+              "Ecualización Adaptativa, grabación de audio con calidad de estudio y Aislamiento de Voz (este, con un dispositivo Apple con la versión más reciente del sistema operativo)"
+            ],
+            [
+              "Traducción en Vivo",
+              "Con un dispositivo Apple compatible con Apple Intelligence activado (en beta; según idioma y región)"
+            ]
+          ]
+        },
+        {
+          "grupo": "Sensores y controles",
+          "datos": [
+            [
+              "Micrófonos",
+              "Dos con beamforming y uno orientado hacia adentro"
+            ],
+            [
+              "Sensores",
+              "Óptico de detección de uso, acelerómetros de movimiento y de voz, y sensor de fuerza"
+            ],
+            [
+              "Controles",
+              "1 presión: reproducir, pausar o atender · 2: avanzar o cortar · 3: retroceder · mantener: cambiar de modo de audio"
+            ],
+            [
+              "Volumen por deslizamiento",
+              "No tiene (lo tienen los AirPods 5 con Estuche de Carga Inalámbrica)"
+            ]
+          ]
+        },
+        {
+          "grupo": "Batería",
+          "datos": [
+            [
+              "Por carga",
+              "Hasta 4 horas con cancelación activa · hasta 6 horas con el control de ruido apagado"
+            ],
+            [
+              "Con el estuche",
+              "Hasta 20 horas con cancelación activa"
+            ],
+            [
+              "Carga rápida",
+              "5 minutos en el estuche: alrededor de 1 hora de audio"
+            ],
+            [
+              "Estuche",
+              "Estuche de Carga (USB-C): se carga con un conector USB-C, por el puerto de abajo"
+            ],
+            [
+              "Carga inalámbrica y parlante",
+              "No los tiene: son del modelo con Estuche de Carga Inalámbrica (cargador del Apple Watch o Qi, y parlante para la app Encontrar)"
+            ]
+          ]
+        },
+        {
+          "grupo": "Diseño",
+          "datos": [
+            [
+              "Cada auricular",
+              "30,2 x 18,3 x 18,1 mm (alto x ancho x grosor), 4,3 g"
+            ],
+            [
+              "Estuche",
+              "46,2 x 50,1 x 21,2 mm, 32,3 g"
+            ],
+            [
+              "Agua y polvo",
+              "IP57: resistentes al polvo, al agua y al sudor (no para deportes acuáticos)"
+            ]
+          ]
+        },
+        {
+          "grupo": "Conectividad",
+          "datos": [
+            [
+              "Bluetooth",
+              "5.3"
+            ],
+            [
+              "Funcionan con",
+              "iPhone, iPad, Apple Watch, Mac y Apple TV con el último software. Con otros equipos Bluetooth, con funciones limitadas"
+            ],
+            [
+              "En la caja",
+              "AirPods 5, Estuche de Carga (USB-C) y documentación"
+            ],
+            [
+              "Presentación",
+              "2026"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "apple.com/la/airpods-5/specs",
+          "url": "https://www.apple.com/la/airpods-5/specs/"
+        },
+        {
+          "texto": "apple.com/la/airpods-5",
+          "url": "https://www.apple.com/la/airpods-5/"
+        },
+        {
+          "texto": "support.apple.com/es-la/148759",
+          "url": "https://support.apple.com/es-la/148759"
+        },
+        {
+          "texto": "support.apple.com/es-la/109525 (modelos de AirPods)",
+          "url": "https://support.apple.com/es-la/109525"
+        }
+      ],
+      "verificado": "2026-10-26",
+      "notas": "Nueva el 26/10/2026. Benja contestó el 26/10 en la página de preguntas que la fila «Apple AirPods 5 USB-C» es el AirPods 5 con Estuche de Carga común, sin carga inalámbrica (auriculares A3531, A3532 y A3533; estuche A3530, según support 109525); coincide con el número de parte que trae la lista del proveedor. Misma estructura que la entrada del modelo con Estuche de Carga Inalámbrica (AT-0591), con los valores del estuche común de apple.com/la/airpods-5/specs y support 148759: 4 h / 6 h por carga, 20 h con el estuche, estuche de 32,3 g que se carga sólo por USB-C, sin deslizar para el volumen ni parlante, y la caja (AirPods 5, Estuche de Carga (USB-C) y documentación). Traducción en Vivo va sólo en la ficha, con la aclaración de Apple (beta, idioma y región). Fuera a propósito: Siri AI (Apple dice que llega en español más adelante y depende de la región), «la mejor Cancelación Activa de Ruido de la industria» (afirmación de la marca), el control remoto de la cámara, «Oye Siri» e Interacciones de Siri (como en AT-0591), accesibilidad y los colores. Para ADVAPP: la fila AT-0591 se llama «AirPods 5 — ANC», pero los dos AirPods 5 tienen Cancelación Activa de Ruido; lo que la distingue es el Estuche de Carga Inalámbrica.\nCorregida el 26/10/2026 con las propuestas del verificador (informe-L1): Audio Adaptativo, Reconocimiento de Conversación y Aislamiento de Voz requieren un dispositivo Apple con la versión más reciente del sistema operativo (nota 2 de Apple): salieron de «Por qué elegirlo» y «Lo más importante» y quedaron en la ficha con esa aclaración."
+    },
+    {
+      "modelo": "Sigma 24mm F1.4 DG DN | Art (Sony E)",
+      "codigos": [
+        "AT-0322"
+      ],
+      "venta": [
+        "Un gran angular de 24 mm con F1.4 hecho para cámaras sin espejo full frame, de 510 g y 97,5 mm de largo: paisaje, arquitectura, viajes, calle y cielos estrellados.",
+        "Sigma redujo la coma sagital, que la cámara no puede corregir: los puntos de luz se ven limpios en todo el cuadro. Enfoca con un motor paso a paso rápido y silencioso."
+      ],
+      "importante": [
+        {
+          "titulo": "24 mm F1.4",
+          "texto": "Para poca luz y para desenfocar el fondo, con diafragma redondeado de 11 hojas."
+        },
+        {
+          "titulo": "Traba de enfoque MFL",
+          "texto": "Bloquea el anillo de enfoque para que el foco no se corra, por ejemplo al fotografiar estrellas."
+        },
+        {
+          "titulo": "Filtros adelante y atrás",
+          "texto": "Rosca de 72 mm adelante y portafiltro trasero, para combinar filtros."
+        },
+        {
+          "titulo": "Controles en el lente",
+          "texto": "Anillo de diafragma con traba y clic desactivable, selector de enfoque y botón AFL."
+        },
+        {
+          "titulo": "Resiste polvo y salpicaduras",
+          "texto": "Aguanta lluvia leve, no es a prueba de agua. El frente repele agua y aceite."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Óptica",
+          "datos": [
+            [
+              "Distancia focal",
+              "24 mm"
+            ],
+            [
+              "Formato",
+              "Full frame (DG), para cámaras sin espejo"
+            ],
+            [
+              "Apertura",
+              "F1.4; mínima F16"
+            ],
+            [
+              "Construcción",
+              "17 elementos en 14 grupos (2 FLD, 1 SLD y 4 asféricos)"
+            ],
+            [
+              "Ángulo de visión",
+              "84,1°"
+            ],
+            [
+              "Diafragma",
+              "11 hojas, redondeado"
+            ],
+            [
+              "Enfoque mínimo",
+              "25 cm"
+            ],
+            [
+              "Ampliación máxima",
+              "1:7,1"
+            ],
+            [
+              "Tratamientos",
+              "Super Multi-Layer Coating y Nano Porous Coating (NPC), para que rinda a contraluz"
+            ]
+          ]
+        },
+        {
+          "grupo": "Enfoque y controles",
+          "datos": [
+            [
+              "Motor de enfoque",
+              "Paso a paso"
+            ],
+            [
+              "Modos de enfoque",
+              "DMF y AF+MF"
+            ],
+            [
+              "Asistencia de AF",
+              "Compatible con el AF assist de Sony"
+            ],
+            [
+              "Traba de enfoque",
+              "Selector MFL: en «LOCK» desactiva el anillo de enfoque"
+            ],
+            [
+              "Anillo de diafragma",
+              "Con clic desactivable y traba"
+            ],
+            [
+              "Selector",
+              "Modo de enfoque"
+            ],
+            [
+              "Botón",
+              "AFL; lo que se le asigna depende de la cámara"
+            ]
+          ]
+        },
+        {
+          "grupo": "Construcción",
+          "datos": [
+            [
+              "Resistencia",
+              "Polvo y salpicaduras (aguanta lluvia leve, no es a prueba de agua); el frente tiene un recubrimiento que repele agua y aceite"
+            ],
+            [
+              "Filtros",
+              "Rosca de 72 mm adelante y portafiltro trasero"
+            ],
+            [
+              "Medidas (diámetro x largo)",
+              "75,7 x 97,5 mm"
+            ],
+            [
+              "Peso",
+              "510 g"
+            ],
+            [
+              "Montura",
+              "Sony E, de latón"
+            ],
+            [
+              "Monturas del modelo",
+              "L-Mount y Sony E"
+            ],
+            [
+              "Accesorios de Sigma",
+              "Estuche, parasol de pétalo LH782-01 con traba, tapa delantera, tapa trasera y placa guía GP-11"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "sigma-global.com/en/lenses/a022_24_14",
+          "url": "https://www.sigma-global.com/en/lenses/a022_24_14/"
+        }
+      ],
+      "verificado": "2026-10-26",
+      "notas": "Una sola fila, Sony E. La fila dice «24mm F/1.4 ART Sony», sin DG DN ni DG HSM. Se resolvió en la revisión del 26/10: el 24mm F1.4 DG HSM | Art (A015) está discontinuado en todas las monturas, Sony E incluida, y el DG DN (A022) es el que Sigma tiene hoy en Sony E; además, en la lista del proveedor los otros Art de ese tipo (28 y 35 F1.4) dicen «DG HSM» y este no. Medidas y peso son los de Sony E. Para confirmar en mano: el DG DN pesa unos 510 g, lleva filtro de 72 mm y tiene grabado «022». No se usó «beyond belief» ni «relentless, uncompromising pursuit of perfection»."
+    },
+    {
+      "modelo": "Sigma 100-400mm F5-6.3 DG DN OS | Contemporary (Sony E)",
+      "codigos": [
+        "AT-0302"
+      ],
+      "venta": [
+        "Un superteleobjetivo zoom de 100 a 400 mm hecho para cámaras sin espejo full frame, de la línea Contemporary de Sigma: compacto para llevarlo de paseo, de las fotos del día a día a la fotografía de campo.",
+        "Estabilizador OS de 4 pasos (CIPA), motor paso a paso para un autofoco rápido y suave, también en video, y zoom que se usa girando el anillo o tirando y empujando el parasol."
+      ],
+      "importante": [
+        {
+          "titulo": "100 a 400 mm",
+          "texto": "Ángulo de 24,4° a 6,2° en full frame. Enfoca desde 112 cm en 100 mm."
+        },
+        {
+          "titulo": "Estabilizador OS",
+          "texto": "4 pasos (CIPA, medido a 400 mm en full frame), con un modo para barridos."
+        },
+        {
+          "titulo": "Motor paso a paso",
+          "texto": "Optimizado para AF por fase y por contraste, suave en video y con el seguimiento de ojos."
+        },
+        {
+          "titulo": "Zoom a gusto",
+          "texto": "Girando el anillo o tirando y empujando el parasol (Dual Action Zoom). Traba en 100 mm para llevarlo."
+        },
+        {
+          "titulo": "Pesa 1.140 g",
+          "texto": "Con la cubierta protectora PT-31. Mide 86 x 199,2 mm. Filtro de 67 mm."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Óptica",
+          "datos": [
+            [
+              "Distancia focal",
+              "100-400 mm"
+            ],
+            [
+              "Formato",
+              "Full frame (DG), para cámaras sin espejo"
+            ],
+            [
+              "Apertura",
+              "F5-6.3; mínima F22-29"
+            ],
+            [
+              "Construcción",
+              "22 elementos en 16 grupos (1 FLD y 4 SLD)"
+            ],
+            [
+              "Ángulo de visión",
+              "24,4° a 6,2° en full frame; 16,2° a 4,1° en APS-C"
+            ],
+            [
+              "Diafragma",
+              "9 hojas, redondeado"
+            ],
+            [
+              "Enfoque mínimo",
+              "112 cm (100 mm) a 160 cm (400 mm)"
+            ],
+            [
+              "Ampliación máxima",
+              "1:4,1 (a 400 mm)"
+            ]
+          ]
+        },
+        {
+          "grupo": "Estabilización y enfoque",
+          "datos": [
+            [
+              "Estabilizador",
+              "OS de 4 pasos (CIPA, medido a 400 mm en full frame)"
+            ],
+            [
+              "Modos del estabilizador",
+              "Modo 1 para uso general; modo 2 para barridos (automovilismo y similares)"
+            ],
+            [
+              "Motor de enfoque",
+              "Paso a paso"
+            ],
+            [
+              "Limitador de enfoque",
+              "Sí"
+            ],
+            [
+              "Botón",
+              "AFL; lo que se le asigna depende de la cámara"
+            ],
+            [
+              "Zoom",
+              "Dual Action Zoom: girando el anillo o tirando y empujando el parasol; traba en 100 mm para que no se alargue al llevarlo"
+            ],
+            [
+              "Corrección de lente",
+              "Compatible con la corrección de aberraciones en la cámara (iluminación periférica, aberración cromática, distorsión y más), según el modelo de cámara"
+            ]
+          ]
+        },
+        {
+          "grupo": "Construcción",
+          "datos": [
+            [
+              "Resistencia",
+              "Montura con sellado contra polvo y salpicaduras"
+            ],
+            [
+              "Filtro",
+              "67 mm"
+            ],
+            [
+              "Medidas (diámetro x largo)",
+              "86 x 199,2 mm"
+            ],
+            [
+              "Peso",
+              "1.140 g, con la cubierta protectora PT-31"
+            ],
+            [
+              "Montura",
+              "Sony E, de latón"
+            ],
+            [
+              "Teleconversores Sigma",
+              "TC-1411 y TC-2011: solo para la versión L-Mount"
+            ],
+            [
+              "Monturas del modelo",
+              "L-Mount, FUJIFILM X y Sony E"
+            ],
+            [
+              "Accesorios de Sigma",
+              "Parasol LH770-05, cubierta protectora PT-31, tapa delantera y tapa trasera"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "sigma-global.com/en/lenses/c020_100_400_5_63",
+          "url": "https://www.sigma-global.com/en/lenses/c020_100_400_5_63/"
+        }
+      ],
+      "verificado": "2026-10-26",
+      "notas": "Una sola fila, Sony E. La fila dice «DG HSM»: es un error del proveedor. Se resolvió en la revisión del 26/10: no existe un 100-400 DG HSM para Sony E (el DG OS HSM, C017, fue solo para SA, Canon EF y Nikon F, las tres discontinuadas); el renglón está en la sección de Sigma para Sony de la lista del proveedor y termina en «SONY», y el único 100-400 de Sigma en Sony E es el DG DN OS (C020, código de barras 00-85126-75065-7). Medidas y peso son los de Sony E; Sigma da el peso con la cubierta PT-31 y el largo desde la rosca del filtro hasta la montura. El sellado que nombra Sigma es el de la montura: no se dice que el lente entero resista polvo y salpicaduras. El pie de trípode se vende aparte (no se menciona). No se usó «Handy Tele Master»."
+    },
+    {
+      "modelo": "Sony FE 16-35 mm F2.8 GM (SEL1635GM)",
+      "codigos": [
+        "AT-0353"
+      ],
+      "venta": [
+        "Un zoom gran angular G Master de 16 a 35 mm F2.8 para cámaras Sony full frame: paisajes, interiores y arquitectura, con nitidez de esquina a esquina.",
+        "Dos motores DDSSM para enfocar preciso y en silencio, diafragma circular de 11 hojas y frente con flúor, en 680 g."
+      ],
+      "importante": [
+        {
+          "titulo": "107° de ángulo",
+          "texto": "A 16 mm en full frame. En APS-C equivale a 24-52,5 mm."
+        },
+        {
+          "titulo": "Dos elementos XA",
+          "texto": "Asféricos extremos, junto con elementos asféricos y ED: menos distorsión y un bokeh suave."
+        },
+        {
+          "titulo": "Dos motores DDSSM",
+          "texto": "Mueven por separado dos grupos de enfoque (enfoque flotante): autofoco preciso y silencioso para foto y video."
+        },
+        {
+          "titulo": "Diafragma de 11 hojas",
+          "texto": "Circular, para un fondo desenfocado suave. Enfoca desde 0,28 m."
+        },
+        {
+          "titulo": "Resiste polvo y humedad",
+          "texto": "No garantizado al 100%. Frente con flúor que facilita limpiar polvo y huellas."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Óptica",
+          "datos": [
+            [
+              "Distancia focal",
+              "16-35 mm"
+            ],
+            [
+              "Formato",
+              "Full frame (35 mm)"
+            ],
+            [
+              "En cámaras APS-C",
+              "Equivale a 24-52,5 mm"
+            ],
+            [
+              "Apertura",
+              "F2.8; mínima F22"
+            ],
+            [
+              "Construcción",
+              "16 elementos en 13 grupos (2 XA, más elementos asféricos y ED)"
+            ],
+            [
+              "Tratamiento",
+              "Nanorrevestimiento antirreflectante"
+            ],
+            [
+              "Ángulo de visión",
+              "107° a 63° (full frame); 83° a 44° (APS-C)"
+            ],
+            [
+              "Diafragma",
+              "11 hojas, circular"
+            ],
+            [
+              "Enfoque mínimo",
+              "0,28 m"
+            ],
+            [
+              "Ampliación máxima",
+              "0,19x"
+            ],
+            [
+              "Estabilizador",
+              "No en la lente: depende del cuerpo de la cámara"
+            ]
+          ]
+        },
+        {
+          "grupo": "Enfoque y controles",
+          "datos": [
+            [
+              "Motor de enfoque",
+              "2 DDSSM (Direct Drive SSM), enfoque flotante"
+            ],
+            [
+              "Zoom",
+              "Manual"
+            ],
+            [
+              "Controles",
+              "Botón de fijación de enfoque personalizable, interruptor AF/MF y anillo de enfoque manual"
+            ]
+          ]
+        },
+        {
+          "grupo": "Construcción",
+          "datos": [
+            [
+              "Montura",
+              "Sony E"
+            ],
+            [
+              "Resistencia",
+              "Polvo y humedad (no garantizada al 100%)"
+            ],
+            [
+              "Frente",
+              "Revestimiento de flúor"
+            ],
+            [
+              "Filtro",
+              "82 mm"
+            ],
+            [
+              "Parasol",
+              "Tipo pétalo, de bayoneta"
+            ],
+            [
+              "Medidas",
+              "88,5 x 121,6 mm (diámetro x largo)"
+            ],
+            [
+              "Peso",
+              "680 g"
+            ],
+            [
+              "En la caja",
+              "Parasol, tapa delantera, tapa trasera y funda"
+            ],
+            [
+              "Código de Sony",
+              "SEL1635GM"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "sony.com.ar/electronics/lentes-camara/sel1635gm/specifications",
+          "url": "https://www.sony.com.ar/electronics/lentes-camara/sel1635gm/specifications"
+        }
+      ],
+      "verificado": "2026-10-26",
+      "notas": "Identidad (revisión del 26/10): la lista del proveedor tiene dos renglones, «FE 16-35 F/2,8 GM» y «FE 16-35 F/2,8 GM II»; la fila sale del renglón del GM (su nombre y su modelo copian ese renglón), así que es el primero (SEL1635GM, 680 g) y no el GM II (SEL1635GM2, 547 g), que tiene su entrada aparte. Todo sale de la ficha y las características de sony.com.ar (sony.es ya no tiene página del SEL1635GM: da «no hemos podido encontrar la página»). Sony nombra 2 elementos XA y dice que lleva elementos asféricos y ED, pero no cuántos: no se pusieron números. Sony dice que no es compatible con teleconversores (no se puso)."
+    },
+    {
+      "modelo": "Sony FE 24-70 mm F2.8 GM (SEL2470GM)",
+      "codigos": [
+        "AT-0360"
+      ],
+      "venta": [
+        "Un zoom estándar G Master de 24 a 70 mm con F2.8 constante, para cámaras Sony full frame: retratos, paisajes y fotos del día a día con la misma apertura en todo el zoom.",
+        "Elemento XA, cristales ED y Super ED, enfoque DDSSM silencioso y diafragma circular de 9 hojas. Pesa 886 g."
+      ],
+      "importante": [
+        {
+          "titulo": "F2.8 constante",
+          "texto": "La misma apertura de 24 a 70 mm: rinde con poca luz y mantiene la exposición al hacer zoom."
+        },
+        {
+          "titulo": "Elemento XA",
+          "texto": "Asférico extremo, más un ED y un Super ED: detalle en todo el zoom, colores naturales y bokeh suave."
+        },
+        {
+          "titulo": "Enfoque DDSSM",
+          "texto": "Direct Drive SSM: autofoco rápido, preciso y silencioso, para foto y video."
+        },
+        {
+          "titulo": "Traba de zoom",
+          "texto": "Evita que el zoom se abra con su peso al llevarlo. El parasol tiene traba y botón para sacarlo."
+        },
+        {
+          "titulo": "Polvo y humedad",
+          "texto": "Sellado contra polvo y humedad, para sacar fotos con lluvia ligera o viento."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Óptica",
+          "datos": [
+            [
+              "Distancia focal",
+              "24-70 mm"
+            ],
+            [
+              "Formato",
+              "Full frame (35 mm)"
+            ],
+            [
+              "En cámaras APS-C",
+              "Equivale a 36-105 mm"
+            ],
+            [
+              "Apertura",
+              "F2.8 constante; mínima F22"
+            ],
+            [
+              "Construcción",
+              "18 elementos en 13 grupos (entre ellos 1 XA, 1 ED y 1 Super ED)"
+            ],
+            [
+              "Tratamiento",
+              "Nanorrevestimiento antirreflectante"
+            ],
+            [
+              "Ángulo de visión",
+              "84° a 34° (full frame); 61° a 23° (APS-C)"
+            ],
+            [
+              "Diafragma",
+              "9 hojas, circular"
+            ],
+            [
+              "Enfoque mínimo",
+              "0,38 m"
+            ],
+            [
+              "Ampliación máxima",
+              "0,24x"
+            ]
+          ]
+        },
+        {
+          "grupo": "Enfoque y controles",
+          "datos": [
+            [
+              "Motor de enfoque",
+              "DDSSM (Direct Drive SSM)"
+            ],
+            [
+              "Controles",
+              "Interruptor AF/MF, botón de fijación de enfoque y traba de zoom"
+            ]
+          ]
+        },
+        {
+          "grupo": "Construcción",
+          "datos": [
+            [
+              "Montura",
+              "Sony E"
+            ],
+            [
+              "Resistencia",
+              "Sellado contra polvo y humedad"
+            ],
+            [
+              "Filtro",
+              "82 mm"
+            ],
+            [
+              "Parasol",
+              "Con traba y botón para sacarlo"
+            ],
+            [
+              "Medidas",
+              "87,6 x 136 mm (diámetro x largo)"
+            ],
+            [
+              "Peso",
+              "886 g"
+            ],
+            [
+              "En la caja",
+              "Parasol, tapa delantera, tapa trasera y funda"
+            ],
+            [
+              "Código de Sony",
+              "SEL2470GM"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "sony.com.ar/electronics/lentes-camara/sel2470gm/specifications",
+          "url": "https://www.sony.com.ar/electronics/lentes-camara/sel2470gm/specifications"
+        }
+      ],
+      "verificado": "2026-10-26",
+      "notas": "Identidad (revisión del 26/10): la lista del proveedor tiene dos renglones, «FE 24-70 F/2.8 GM» y «FE 24-70 F/2.8 GM II»; la fila sale del renglón del GM (su nombre y su modelo copian ese renglón), así que es el primero (SEL2470GM, 886 g) y no el GM II (SEL2470GM2, 695 g). Todo sale de la ficha y las características de sony.com.ar (sony.es no tiene página del SEL2470GM; la dirección vieja da 403 o no carga). La ficha de Sony Argentina de este lente no dice si tiene estabilizador ni el tipo de parasol ni nombra revestimiento de flúor: no se pusieron. Sony nombra 1 XA, 1 ED y 1 Super ED (por eso «entre ellos»), sin dar el total de asféricos."
+    },
+    {
+      "modelo": "Nikon AF-S DX NIKKOR 35mm f/1.8G",
+      "codigos": [
+        "AT-0268"
+      ],
+      "venta": [
+        "Un 35 mm f/1.8 para réflex Nikon de formato DX: en esas cámaras da un ángulo natural, equivalente a 52,5 mm, para fotos del día a día, retratos y poca luz.",
+        "Autofoco silencioso SWM con modo M/A, un elemento asférico y diafragma redondeado de 7 hojas, en unos 200 g."
+      ],
+      "importante": [
+        {
+          "titulo": "f/1.8",
+          "texto": "Apertura grande para poca luz y para desenfocar el fondo. Diafragma de 7 hojas, redondeado."
+        },
+        {
+          "titulo": "Lente DX",
+          "texto": "Montura Nikon F, para réflex de formato DX: equivale a 52,5 mm. En cámaras FX, en modo recorte DX."
+        },
+        {
+          "titulo": "Motor SWM",
+          "texto": "Autofoco silencioso y modo M/A: pasa a manual girando el anillo de enfoque."
+        },
+        {
+          "titulo": "Elemento asférico",
+          "texto": "8 elementos en 6 grupos, uno asférico, con Super Integrated Coating."
+        },
+        {
+          "titulo": "Compacto: 200 g",
+          "texto": "Aprox. 70 x 52,5 mm. Enfoca desde 0,3 m y el largo no cambia al enfocar."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Óptica",
+          "datos": [
+            [
+              "Distancia focal",
+              "35 mm (fija); equivale a 52,5 mm en formato FX"
+            ],
+            [
+              "Formato",
+              "DX; en cámaras FX, en modo recorte DX"
+            ],
+            [
+              "Apertura",
+              "f/1.8; mínima f/22"
+            ],
+            [
+              "Construcción",
+              "8 elementos en 6 grupos (1 asférico)"
+            ],
+            [
+              "Tratamiento",
+              "Super Integrated Coating de Nikon"
+            ],
+            [
+              "Ángulo de visión",
+              "44° (formato DX)"
+            ],
+            [
+              "Diafragma",
+              "7 hojas, redondeado"
+            ],
+            [
+              "Enfoque mínimo",
+              "0,3 m"
+            ],
+            [
+              "Ampliación máxima",
+              "0,16x"
+            ]
+          ]
+        },
+        {
+          "grupo": "Enfoque",
+          "datos": [
+            [
+              "Motor de enfoque",
+              "SWM (Silent Wave Motor), AF-S"
+            ],
+            [
+              "Sistema",
+              "Enfoque trasero (RF): el largo no cambia al enfocar"
+            ],
+            [
+              "Modos",
+              "M/A (autofoco con prioridad manual) y M (manual)"
+            ]
+          ]
+        },
+        {
+          "grupo": "Construcción",
+          "datos": [
+            [
+              "Montura",
+              "Nikon F (bayoneta), metálica"
+            ],
+            [
+              "Filtro",
+              "52 mm, de rosca"
+            ],
+            [
+              "Medidas",
+              "Aprox. 70 x 52,5 mm (diámetro x largo)"
+            ],
+            [
+              "Peso",
+              "Aprox. 200 g"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "imaging.nikon.com/imaging/lineup/lens/f-mount/singlefocal/normal/af-s_dx_35mmf_18g",
+          "url": "https://imaging.nikon.com/imaging/lineup/lens/f-mount/singlefocal/normal/af-s_dx_35mmf_18g/"
+        },
+        {
+          "texto": "nikon.com.ar/lentes/reflex/af-s-dx-nikkor-35mm-f18g",
+          "url": "https://www.nikon.com.ar/lentes/reflex/af-s-dx-nikkor-35mm-f18g"
+        }
+      ],
+      "verificado": "2026-10-26",
+      "notas": "Identidad (revisión del 26/10): la fila dice «AF-S 35mm F/1.8 G», sin «DX» ni «ED». Porque no dice «ED» (que es parte del nombre del FX), y con los datos del proveedor que miró la revisión, es el AF-S DX NIKKOR 35mm f/1.8G y no el FX AF-S NIKKOR 35mm f/1.8G ED (305 g). Ampliación máxima, modos M/A y M y montura metálica salen de la ficha global (imaging.nikon.com); el resto está en las dos fuentes. Lo que trae la caja no se puso: nikon.com.ar nombra dos tapas traseras distintas (LF-1 y LF-4) y la global solo la LF-1."
+    },
+    {
+      "modelo": "DJI Avata (solo el dron)",
+      "codigos": [
+        "AT-0206"
+      ],
+      "venta": [
+        "Un dron para volar en primera persona con gafas DJI: pesa unos 410 g, tiene protector de hélices integrado y graba video 4K a 60 fps con un campo de visión de 155°.",
+        "Estabilización RockSteady y HorizonSteady, 20 GB de memoria interna y unos 18 min de vuelo. Se usa con gafas y un control de DJI compatibles (la lista está en la ficha): sin gafas no se puede volar."
+      ],
+      "importante": [
+        {
+          "titulo": "4K a 60 fps y 155°",
+          "texto": "Sensor CMOS de 1/1,7\", lente f/2.8 y estabilización RockSteady y HorizonSteady."
+        },
+        {
+          "titulo": "Protector de hélices integrado",
+          "texto": "Según DJI, sigue volando con normalidad tras choques leves. Tiene sensores abajo para volar bajo."
+        },
+        {
+          "titulo": "Unos 18 min de vuelo",
+          "texto": "En vuelo estacionario sin viento. Batería de 2.420 mAh, que carga al 100% en unos 48 min con el cargador portátil DJI de 65 W."
+        },
+        {
+          "titulo": "20 GB de memoria interna",
+          "texto": "Más ranura microSD de hasta 256 GB. Video MP4 de hasta 150 Mb/s."
+        },
+        {
+          "titulo": "Gafas y control compatibles",
+          "texto": "DJI Goggles 2, Goggles Integra o FPV Goggles V2, con el RC Motion 2, el controlador de movimientos DJI o el control remoto 2 DJI FPV."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Cámara",
+          "datos": [
+            [
+              "Sensor",
+              "CMOS de 1/1,7\""
+            ],
+            [
+              "Lente",
+              "Campo de visión de 155°, 12,7 mm equivalente, f/2.8; foco fijo, de 0,6 m a infinito"
+            ],
+            [
+              "Video",
+              "4K a 50/60 fps · 2,7K y 1080p a 50/60/100 fps; con DJI FPV Goggles V2, también a 120 fps; MP4, hasta 150 Mb/s"
+            ],
+            [
+              "Fotos",
+              "4000 x 3000, JPEG (disparo único)"
+            ],
+            [
+              "ISO",
+              "100 a 6.400 (automático) · 100 a 25.600 (manual)"
+            ],
+            [
+              "Obturador",
+              "De 1/8000 a 1/50 s"
+            ],
+            [
+              "Color",
+              "Estándar y D-Cinelike"
+            ],
+            [
+              "Estabilización",
+              "Estabilizador de 1 eje (inclinación) y estabilización electrónica RockSteady y HorizonSteady"
+            ],
+            [
+              "Inclinación de la cámara",
+              "De −80° a +65° (rango controlable)"
+            ]
+          ]
+        },
+        {
+          "grupo": "Vuelo",
+          "datos": [
+            [
+              "Modelo",
+              "QF2W4K"
+            ],
+            [
+              "Peso",
+              "Aprox. 410 g (de despegue)"
+            ],
+            [
+              "Medidas",
+              "180 x 180 x 80 mm; 120 mm de diagonal"
+            ],
+            [
+              "Tiempo de vuelo",
+              "Aprox. 18 min (en vuelo estacionario, sin viento)"
+            ],
+            [
+              "Velocidad máxima",
+              "8 m/s (modo Normal) · 14 m/s (modo Sport) · 27 m/s (modo Manual), sujeta a las restricciones locales"
+            ],
+            [
+              "Ascenso y descenso",
+              "Hasta 6 m/s (modos Normal y Sport)"
+            ],
+            [
+              "Distancia máxima de vuelo",
+              "11,6 km"
+            ],
+            [
+              "Viento",
+              "Resiste hasta 10,7 m/s (nivel 5)"
+            ],
+            [
+              "Altitud máxima de despegue",
+              "5.000 m"
+            ],
+            [
+              "Posicionamiento",
+              "GPS + Galileo + BeiDou"
+            ],
+            [
+              "Sensores",
+              "Abajo: visión binocular y ToF (con el control remoto 2 DJI FPV o el controlador de movimientos DJI, en modo N o S). No tiene sistema anticolisión"
+            ],
+            [
+              "Funciones",
+              "Regreso al punto de origen (RPO) y AirSense (ADS-B)"
+            ],
+            [
+              "Agua",
+              "No es resistente al agua"
+            ],
+            [
+              "Temperatura",
+              "De −10 °C a 40 °C"
+            ]
+          ]
+        },
+        {
+          "grupo": "Transmisión y memoria",
+          "datos": [
+            [
+              "Alcance del video",
+              "10 km (FCC) · 2 km (CE)"
+            ],
+            [
+              "Latencia",
+              "Desde 30 ms con DJI Goggles 2 (1080p a 100 fps) · menos de 28 ms con DJI FPV Goggles V2 (810p a 120 fps)"
+            ],
+            [
+              "Tasa de bits de la transmisión",
+              "Hasta 50 Mb/s"
+            ],
+            [
+              "Frecuencias",
+              "2,4 GHz (solo recepción) y 5,8 GHz (la de 5,8 GHz, según el país)"
+            ],
+            [
+              "Memoria interna",
+              "20 GB"
+            ],
+            [
+              "Tarjeta",
+              "microSD de hasta 256 GB"
+            ]
+          ]
+        },
+        {
+          "grupo": "Batería",
+          "datos": [
+            [
+              "Batería",
+              "2.420 mAh, 14,76 V, 35,71 Wh; iones de litio; aprox. 162 g"
+            ],
+            [
+              "Carga",
+              "Fuera del dron, hasta 74 W. Con el cargador portátil DJI de 65 W: aprox. 37 min al 94% y 48 min al 100%"
+            ],
+            [
+              "Temperatura de carga",
+              "De 5 °C a 40 °C"
+            ]
+          ]
+        },
+        {
+          "grupo": "Compatibilidad",
+          "datos": [
+            [
+              "Gafas",
+              "DJI Goggles 2, DJI Goggles Integra y DJI FPV Goggles V2 (según la tienda de DJI)"
+            ],
+            [
+              "Controles",
+              "DJI RC Motion 2, controlador de movimientos DJI y control remoto 2 DJI FPV (según la tienda de DJI)"
+            ],
+            [
+              "Sin gafas",
+              "No se puede volar"
+            ],
+            [
+              "Otras marcas",
+              "No admite gafas ni controles de otros fabricantes"
+            ]
+          ]
+        },
+        {
+          "grupo": "Qué trae",
+          "datos": [
+            [
+              "Versión",
+              {
+                "proveedor": "Solo el dron, sin gafas ni control remoto"
+              }
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "dji.com/mx/support/product/avata",
+          "url": "https://www.dji.com/mx/support/product/avata"
+        },
+        {
+          "texto": "compatibilidad: store.dji.com/es",
+          "url": "https://store.dji.com/es/product/dji-avata-explorer-combo?set_region=ES"
+        }
+      ],
+      "proveedor": {
+        "fuente": "Nombre de la fila en ADVAPP (proveedor), 26/10/2026: «Drone DJI Avata Pro View (Solo Drone)».",
+        "aviso": "que es solo el dron, sin gafas ni control, es dato del proveedor"
+      },
+      "verificado": "2026-10-26",
+      "notas": "Identidad: la fila dice «Drone DJI Avata Pro View (Solo Drone)». La revisión del 26/10 resolvió que es el DJI Avata de 1.ª generación (modelo QF2W4K), el dron del Pack DJI Avata Pro-View vendido suelto: DJI usa «Pro-View» sólo en packs del Avata (el Avata 2 se vende como Drone Only, Fly Smart y Fly More). Que es solo el dron va como dato del proveedor (renglón «Versión», no «En la caja»: la fila no dice si trae batería, hélices de repuesto ni adaptador). No se puso lo que trae la caja: DJI vende «DJI Avata (sin control remoto)» con su caja (dron, batería, 3 pares de hélices, adaptador de corriente, protector del estabilizador, cable USB-C, destornillador y 4 tornillos; producto dji-avata-no-rc-goggles en store.dji.com/es), pero la fila dice que es el dron de un Pro-View, no ese producto. Especificaciones: tabla de dji.com/mx/support/product/avata (dji.com/mx/avata y /avata/specs redirigen ahí; curl con -b 'region=MX; lang=es'). Compatibilidad: FAQ del producto dji-avata-no-rc-goggles en store.dji.com/es (window.__PRELOADED_STATE__, structedFaq): «Puedes usar las DJI Goggles 2, DJI Goggles Integra, DJI FPV Goggles V2, el control remoto 2 DJI FPV, DJI RC Motion 2 o el controlador de movimientos DJI que ya tengas» (igual en la tienda de EE. UU.); otra FAQ de la misma página omite el RC Motion 2 y la FAQ de soporte (de cuando salió) nombra sólo Goggles 2 y FPV Goggles V2. «Sin gafas no se puede volar»: FAQ de la tienda («¿Se puede usar DJI Avata sin las gafas? No.»). «Otras marcas»: FAQ de soporte («¿Se pueden usar gafas y controles remotos de otros fabricantes con el DJI Avata? No.»). Choques leves y sensores abajo: structedFaq y coreSellingPoints de la tienda. Fotos sin megapíxeles: la tabla dice 12 MP efectivos y una FAQ de soporte dice 48 MP. Inclinación: sólo el rango controlable (el rango mecánico no coincide entre la tabla, −95° a 75°, y la FAQ, −90° a 70°). Sensores abajo: nota 3 de la tabla. Carga de 74 W, 37/48 min y «fuera del dron»: FAQ de soporte. No se puso la transmisión O3+ (la página del Avata no la nombra). Para confirmar en mano que es el Avata y no el Avata 2: la batería dice 2420 mAh (la del Avata 2, 2150).\nCorregida el 26/10/2026 con las propuestas del verificador (informe-L6): el video va como lo dice la FAQ de DJI (con Goggles 2, 4K a 50/60 y 2,7K/1080p a 50/60/100; 120 fps sólo con FPV Goggles V2), porque la tabla y la FAQ no coincidían; el ascenso de 6 m/s es de los modos Normal y Sport; «drone» pasó a «dron»; se sacó el renglón «Normas»."
+    },
+    {
+      "modelo": "DJI Juego de filtros ND (ND16/64/256) Serie DJI Mini 3",
+      "codigos": [
+        "AT-0040"
+      ],
+      "venta": [
+        "El juego de filtros ND de DJI para el Mini 3 Pro y el Mini 3: tres filtros, ND16, ND64 y ND256, para adaptarte a la luz intensa.",
+        "Sirven para tomas con exposición larga o frente a mucha luz, como un timelapse de exposición larga. Cada filtro pesa 0,75 g."
+      ],
+      "importante": [
+        {
+          "titulo": "Tres filtros ND",
+          "texto": "ND16, ND64 y ND256, uno de cada uno."
+        },
+        {
+          "titulo": "Exposiciones largas",
+          "texto": "Para tomas con exposición larga o frente a mucha luz, por ejemplo un timelapse."
+        },
+        {
+          "titulo": "Para Mini 3 Pro y Mini 3",
+          "texto": "Son los drones con los que DJI lo da como compatible."
+        },
+        {
+          "titulo": "Filtro intercambiable",
+          "texto": "Según DJI, el Mini 3 Pro admite cambiar el filtro ND. Cada filtro pesa 0,75 g."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Características",
+          "datos": [
+            [
+              "Filtros",
+              "ND16, ND64 y ND256"
+            ],
+            [
+              "Uso",
+              "Exposiciones largas y tomas frente a mucha luz, como un timelapse"
+            ],
+            [
+              "Peso",
+              "0,75 g cada uno"
+            ]
+          ]
+        },
+        {
+          "grupo": "Compatibilidad",
+          "datos": [
+            [
+              "Drones",
+              "DJI Mini 3 Pro y DJI Mini 3"
+            ]
+          ]
+        },
+        {
+          "grupo": "Qué trae",
+          "datos": [
+            [
+              "En la caja",
+              "Filtro ND16, filtro ND64 y filtro ND256"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "store.dji.com/product/dji-mini-3-pro-nd-filters-set-16-256",
+          "url": "https://store.dji.com/product/dji-mini-3-pro-nd-filters-set-16-256?set_region=US"
+        },
+        {
+          "texto": "dji.com/mx/support/product/mini-3-pro (FAQ)",
+          "url": "https://www.dji.com/mx/support/product/mini-3-pro"
+        }
+      ],
+      "verificado": "2026-10-26",
+      "notas": "La fila dice «Filtro Cámara (Mini 3 Pro)», en singular. Identidad: la revisión del 26/10 resolvió que es este juego de 3 filtros de DJI. DJI no vende filtros sueltos para el Mini 3 Pro: la FAQ de dji.com/mx/support/product/mini-3-pro nombra sólo el «Juego de filtros ND del DJI Mini 3 Pro (ND 16/64/256)» («¿El DJI Mini 3 Pro admite la sustitución del filtro ND? Sí. También se vende por separado en la DJI Store») y dice que el filtro UV no se vende; además, el proveedor le pone «ACC DJI» a los accesorios de DJI. Datos de store.dji.com en inglés (región US; window.__PRELOADED_STATE__, structuredOverview del producto dji-mini-3-pro-nd-filters-set-16-256: «Adapt to strong lighting conditions with ND16/64/256 filters», «shooting long exposure or against strong light, e.g. long exposure timelapse», «ND16 Filter × 1 / ND64 Filter × 1 / ND256 Filter × 1», «Weight: 0.75 g (each)», «Compatibility: DJI Mini 3 Pro, DJI Mini 3»). El 26/10 la tienda en español (store.dji.com/es, región ES) da 404 para este producto y la de México no lo tiene; el 21/10 la de España decía lo mismo. Nombre oficial en inglés: «DJI Mini 3 Series ND Filter Set (ND16/64/256)». Respecto de la del 21/10 (que el verificador sacó sólo por la identidad) cambió la fuente (la de España ya no anda) y el «Uso» quedó como lo dice la tienda en inglés («exposición larga o frente a mucha luz», en vez de «filmar»)."
+    },
+    {
+      "modelo": "GoPro Batería recargable Enduro (ADBAT-011)",
+      "codigos": [
+        "AT-0025"
+      ],
+      "venta": [
+        "La batería Enduro de GoPro: ion de litio, 1.720 mAh, compatible con HERO12 Black, HERO11 Black, HERO10 Black y HERO9 Black. Es la que viene con la HERO12 y la HERO11 Black, y sirve de repuesto o de batería extra.",
+        "Preparada para el frío: rinde mejor que las baterías GoPro estándar a temperaturas de hasta −10 °C y carga hasta un 13% más rápido. En la HERO10 Black alarga la grabación hasta un 40%, según GoPro."
+      ],
+      "importante": [
+        {
+          "titulo": "1.720 mAh",
+          "texto": "Batería de ion de litio, la misma que viene con la HERO12 y la HERO11 Black."
+        },
+        {
+          "titulo": "Para HERO9 a HERO12",
+          "texto": "Compatible con HERO12 Black, HERO11 Black, HERO10 Black y HERO9 Black, según GoPro."
+        },
+        {
+          "titulo": "Lista para el frío",
+          "texto": "Rinde mejor que las baterías GoPro estándar a temperaturas de hasta −10 °C."
+        },
+        {
+          "titulo": "Hasta 40% más de grabación",
+          "texto": "En la HERO10 Black, según una prueba de GoPro grabando video 4K120 a 25 °C."
+        },
+        {
+          "titulo": "Carga más rápida",
+          "texto": "Hasta un 13% más rápida que las baterías estándar de GoPro."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Batería",
+          "datos": [
+            [
+              "Tipo",
+              "Ion de litio, recargable"
+            ],
+            [
+              "Capacidad",
+              "1.720 mAh"
+            ],
+            [
+              "Con frío",
+              "Mejor rendimiento que las baterías GoPro estándar a temperaturas de hasta −10 °C"
+            ],
+            [
+              "Carga",
+              "Hasta un 13% más rápida que las baterías estándar de GoPro"
+            ]
+          ]
+        },
+        {
+          "grupo": "Compatibilidad",
+          "datos": [
+            [
+              "Compatible con (según GoPro)",
+              "HERO12 Black, HERO11 Black, HERO10 Black y HERO9 Black"
+            ],
+            [
+              "Viene en la caja de",
+              "HERO12 Black y HERO11 Black"
+            ]
+          ]
+        },
+        {
+          "grupo": "Con la HERO10 Black",
+          "datos": [
+            [
+              "Tiempo de grabación",
+              "Hasta un 40% más (prueba de GoPro grabando video 4K120 a 25 °C)"
+            ]
+          ]
+        },
+        {
+          "grupo": "Qué trae",
+          "datos": [
+            [
+              "En la caja",
+              "1 batería recargable Enduro"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "gopro.com/es/ar/shop/mounts-accessories/enduro-extended-cold-weather-battery/ADBAT-011.html",
+          "url": "https://gopro.com/es/ar/shop/mounts-accessories/enduro-extended-cold-weather-battery/ADBAT-011.html"
+        },
+        {
+          "texto": "en inglés: gopro.com/en/us/shop/mounts-accessories/enduro-extended-cold-weather-battery/ADBAT-011.html",
+          "url": "https://gopro.com/en/us/shop/mounts-accessories/enduro-extended-cold-weather-battery/ADBAT-011.html"
+        }
+      ],
+      "verificado": "2026-10-26",
+      "notas": "Identidad: la fila dice «Batería Recargable Go Pro 9/10/11/12», sin «Enduro». La revisión del 26/10 resolvió que es la Enduro (ADBAT-011): «9/10/11/12» es exactamente la lista de compatibilidad que GoPro da para la Enduro, y a la batería común (ADBAT-001, también de 1720 mAh) GoPro la da sólo para HERO10 y HERO9 (gopro.com/es/ar, 26/10). Datos de gopro.com/es/ar (igual en /es/mx y /es/es; en inglés, /en/us). La carga «hasta un 13% más rápida» es contra «las baterías estándar de GoPro» en español y contra la «HERO10 Black battery» en inglés: va como en español. El 40% es con la HERO10 Black grabando 4K120 a 25 °C (nota 1 de la página). El código ADBAT-011 está en la dirección de la página, no en el texto: no se puso en la ficha. GoPro no da tensión, peso ni medidas en esta página. No es la Enduro 2 (AGBAT-001), que según la revisión del 26/10 es para HERO13 y MISSION 1. Para confirmar a simple vista (revisión del 26/10): la Enduro tiene las tapas gris claro; la común, celestes."
+    },
+    {
+      "modelo": "moto g56 5G (12 GB + 256 GB)",
+      "codigos": [
+        "AT-0608"
+      ],
+      "venta": [
+        "Protección IP68 e IP69 contra polvo y agua, pruebas MIL-STD-810H y pantalla con Gorilla Glass 7i. Cámara de 50 MP con sensor Sony LYTIA 600 y frontal de 32 MP.",
+        "MediaTek Dimensity 7060 con 5G, 256 GB ampliables con microSD de hasta 2 TB y batería de 5.200 mAh con carga TurboPower de 30 W."
+      ],
+      "importante": [
+        {
+          "titulo": "IP68, IP69 y MIL-STD-810H",
+          "texto": "Hasta 1,5 m de agua dulce durante 30 minutos y caídas de hasta 1,2 m, en pruebas de laboratorio."
+        },
+        {
+          "titulo": "Sony LYTIA 600 de 50 MP",
+          "texto": "Principal f/1.8 con PDAF y ultra gran angular de 8 MP. Frontal de 32 MP."
+        },
+        {
+          "titulo": "MediaTek Dimensity 7060",
+          "texto": "Ocho núcleos de hasta 2,6 GHz, con 5G. 256 GB ampliables con microSD de hasta 2 TB."
+        },
+        {
+          "titulo": "5.200 mAh y carga de 30 W",
+          "texto": "Batería típica de 5.200 mAh con carga TurboPower de 30 W."
+        },
+        {
+          "titulo": "Pantalla de 6,72\" a 120 Hz",
+          "texto": "LCD Full HD+ (2400 x 1080) con Gorilla Glass 7i. Parlantes estéreo con Dolby Atmos."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Pantalla",
+          "datos": [
+            [
+              "Tamaño",
+              "6,72\""
+            ],
+            [
+              "Tipo",
+              "LCD"
+            ],
+            [
+              "Resolución",
+              "Full HD+ (2400 x 1080) a 391 ppi"
+            ],
+            [
+              "Frecuencia",
+              "Hasta 120 Hz"
+            ],
+            [
+              "Protección",
+              "Corning Gorilla Glass 7i"
+            ]
+          ]
+        },
+        {
+          "grupo": "Rendimiento",
+          "datos": [
+            [
+              "Procesador",
+              "MediaTek Dimensity 7060, 8 núcleos de hasta 2,6 GHz; GPU IMG BXM-8-256"
+            ],
+            [
+              "RAM",
+              {
+                "proveedor": "12 GB"
+              }
+            ],
+            [
+              "Almacenamiento",
+              "256 GB, ampliable con microSD de hasta 2 TB"
+            ]
+          ]
+        },
+        {
+          "grupo": "Cámaras",
+          "datos": [
+            [
+              "Principal",
+              "50 MP Sony LYTIA 600, f/1.8, PDAF, Quad Pixel"
+            ],
+            [
+              "Ultra gran angular",
+              "8 MP, f/2.2"
+            ],
+            [
+              "Sensor",
+              "De luz ambiental"
+            ],
+            [
+              "Frontal",
+              "32 MP, f/2.2, Quad Pixel"
+            ],
+            [
+              "Zoom",
+              "Digital de alta resolución hasta 8x"
+            ],
+            [
+              "Funciones",
+              "Night Vision, Auto Night Vision (en las versiones de 8 GB y 12 GB), Auto Smile Capture, retrato y modo Pro"
+            ]
+          ]
+        },
+        {
+          "grupo": "Batería y carga",
+          "datos": [
+            [
+              "Batería",
+              "5.200 mAh (típica)"
+            ],
+            [
+              "Carga",
+              "TurboPower de 30 W"
+            ]
+          ]
+        },
+        {
+          "grupo": "Diseño",
+          "datos": [
+            [
+              "Medidas",
+              "165,75 x 76,26 x 8,35 mm"
+            ],
+            [
+              "Peso",
+              "200 g"
+            ],
+            [
+              "Agua y polvo",
+              "IP68 e IP69: hasta 1,5 m de agua dulce durante 30 minutos, en laboratorio; no es para usar bajo el agua"
+            ],
+            [
+              "Resistencia",
+              "Pruebas MIL-STD-810H, con caídas de hasta 1,2 m"
+            ]
+          ]
+        },
+        {
+          "grupo": "Audio",
+          "datos": [
+            [
+              "Parlantes",
+              "Estéreo con Dolby Atmos"
+            ],
+            [
+              "Auriculares",
+              "Jack de 3,5 mm"
+            ]
+          ]
+        },
+        {
+          "grupo": "Conectividad y sistema",
+          "datos": [
+            [
+              "Red",
+              "5G"
+            ],
+            [
+              "Wi-Fi",
+              "802.11 a/b/g/n/ac, 2,4 y 5 GHz"
+            ],
+            [
+              "Bluetooth",
+              "5.3"
+            ],
+            [
+              "NFC",
+              "Según el país"
+            ],
+            [
+              "Ubicación",
+              "GPS, GLONASS, Galileo, QZSS y BeiDou"
+            ],
+            [
+              "Desbloqueo",
+              "Lector de huellas y desbloqueo facial"
+            ],
+            [
+              "Sistema",
+              "Android 15"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "motorola.com/we/en/…/56-5g (página global)",
+          "url": "https://www.motorola.com/we/en/p/phones/moto-g/56-5g/pmipmhu41mg"
+        },
+        {
+          "texto": "motorola.com/ae/en/…/56-5g (Emiratos)",
+          "url": "https://www.motorola.com/ae/en/p/phones/moto-g/56-5g/pmipmhu41mg"
+        },
+        {
+          "texto": "motorola.com/sa/en/…/56-5g (Arabia Saudita)",
+          "url": "https://www.motorola.com/sa/en/p/phones/moto-g/56-5g/pmipmhu41mg"
+        }
+      ],
+      "proveedor": {
+        "fuente": "Nombre de la fila en ADVAPP (proveedor), 26/10/2026: «Motorola G56 5G 12/256GB (Black)».",
+        "aviso": "la RAM es dato del proveedor; Motorola no la da en la ficha"
+      },
+      "verificado": "2026-10-26",
+      "notas": "Identidad (revisión del 26/10): la fila dice 12/256 y esa memoria existe: Motorola Emiratos y Arabia Saudita enlazan la compra de la «12GB RAM 256GB Middle East Version», y la ficha global dice «Auto Night Vision (for 8 GB/12 GB)». Es el g56 de Medio Oriente; la ficha sale de las páginas global, de Emiratos y de Arabia Saudita (bajadas el 26/10, dan lo mismo: sólo cambia el rótulo «Bluetooth Technology»/«Bluetooth»), no de la tienda argentina, que vende 8/256 y, según la revisión del 26/10, dice «Dimensity 930» y 178 g. Ninguna ficha oficial trae el campo de RAM: los 12 GB van como dato del proveedor (nombre de la fila). Tamaño 6,72\" es el de la ficha («6.72\" display»); el texto de la página redondea a 6.7\". NFC va «según el país» (la ficha dice «Region dependent»). SIM no va (la ficha dice «1 physical Nano SIM + eSIM»; la fila no dice Sim ni eSIM). Lo que trae la caja no va («Charger may be sold separately… In-box charger varies by market»). RAM Boost no va. Video y brillo en nits no van: la ficha no los da.\nRetocada el 26/10/2026 por un aviso del verificador (informe-L7): «de hasta 2,6 GHz», porque 2,6 GHz es la frecuencia máxima del Dimensity 7060."
+    },
+    {
+      "modelo": "MSI PRO MP225V",
+      "codigos": [
+        "AT-0533"
+      ],
+      "venta": [
+        "Monitor de 21,45\" Full HD con panel VA a 100 Hz, 1 ms (MPRT), 300 nits y contraste de 4000:1.",
+        "Antiparpadeo y menos luz azul con certificación TÜV, entradas HDMI y VGA, fuente interna y montaje VESA 100 x 100 mm."
+      ],
+      "importante": [
+        {
+          "titulo": "21,45\" Full HD, panel VA",
+          "texto": "1920 x 1080, plano y antirreflejo, 300 nits y contraste de 4000:1."
+        },
+        {
+          "titulo": "100 Hz y 1 ms (MPRT)",
+          "texto": "Con Adaptive-Sync: frecuencia variable de 48 a 100 Hz."
+        },
+        {
+          "titulo": "HDMI y VGA",
+          "texto": "1 HDMI 1.4b (hasta 100 Hz) y 1 D-Sub (VGA, hasta 60 Hz), a 1920 x 1080."
+        },
+        {
+          "titulo": "Cuidado de la vista",
+          "texto": "Antiparpadeo y menos luz azul con certificación TÜV, y Eye-Q Check para autoevaluar la vista."
+        },
+        {
+          "titulo": "Fuente interna y VESA 100",
+          "texto": "Fuente de alimentación interna (100 a 240 V) y montaje VESA 100 x 100 mm."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Pantalla",
+          "datos": [
+            [
+              "Tamaño",
+              "21,45\" (54,483 cm), plano"
+            ],
+            [
+              "Panel",
+              "VA, antirreflejo"
+            ],
+            [
+              "Resolución",
+              "1920 x 1080 (Full HD), 16:9"
+            ],
+            [
+              "Frecuencia",
+              "100 Hz (variable de 48 a 100 Hz con Adaptive-Sync)"
+            ],
+            [
+              "Tiempo de respuesta",
+              "1 ms (MPRT)"
+            ],
+            [
+              "Brillo y contraste",
+              "300 nits · 4000:1"
+            ],
+            [
+              "Color",
+              "1.070 millones de colores (10 bits: 8 bits + FRC) · 100% sRGB (CIE 1976)"
+            ],
+            [
+              "Ángulo de visión",
+              "178° horizontal y vertical"
+            ]
+          ]
+        },
+        {
+          "grupo": "Conexiones",
+          "datos": [
+            [
+              "Video",
+              "1 HDMI 1.4b (1920 x 1080 hasta 100 Hz) · 1 D-Sub (VGA, 1920 x 1080 hasta 60 Hz)"
+            ],
+            [
+              "Alimentación",
+              "Fuente interna, 100 a 240 V (50/60 Hz)"
+            ],
+            [
+              "Compatible con",
+              "PC, Mac, PS5, PS4, Xbox, celulares y notebooks"
+            ]
+          ]
+        },
+        {
+          "grupo": "Funciones",
+          "datos": [
+            [
+              "Vista",
+              "Antiparpadeo y menos luz azul con certificación TÜV · Eye-Q Check (autoevaluación de la vista y recordatorio de descansos)"
+            ],
+            [
+              "Software",
+              "MSI Display Kit: configuración del diseño, apagado automático, zoom y modo proyección"
+            ],
+            [
+              "Certificaciones",
+              "CB/CE · Energy Star"
+            ]
+          ]
+        },
+        {
+          "grupo": "Soporte y montaje",
+          "datos": [
+            [
+              "Ajuste",
+              "Inclinación de −5° a 20°"
+            ],
+            [
+              "Diseño",
+              "Base con ranura para accesorios · gestión de cables desmontable · diseño sin herramientas"
+            ],
+            [
+              "VESA",
+              "100 x 100 mm"
+            ],
+            [
+              "Seguridad",
+              "Ranura Kensington"
+            ]
+          ]
+        },
+        {
+          "grupo": "Medidas y peso",
+          "datos": [
+            [
+              "Medidas",
+              "492,9 x 182,4 x 377,8 mm (ancho x profundidad x alto)"
+            ],
+            [
+              "Peso",
+              "2,5 kg (neto)"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "latam.msi.com/Business-Productivity-Monitor/PRO-MP225V",
+          "url": "https://latam.msi.com/Business-Productivity-Monitor/PRO-MP225V"
+        },
+        {
+          "texto": "latam.msi.com/Business-Productivity-Monitor/PRO-MP225V/Specification",
+          "url": "https://latam.msi.com/Business-Productivity-Monitor/PRO-MP225V/Specification"
+        },
+        {
+          "texto": "msi.com/Business-Productivity-Monitor/PRO-MP225V/Specification",
+          "url": "https://www.msi.com/Business-Productivity-Monitor/PRO-MP225V/Specification"
+        }
+      ],
+      "verificado": "2026-10-26",
+      "notas": "Identidad (revisión del 26/10): la fila dice «Monitor 22 MSI Pro MP22v (100Hz)», al nombre le falta un dígito. En msi.com no existe un «PRO MP22V» (404) y, de los MSI PRO de 21,5–22\" a 100 Hz (MP225V, MP223, MP223 E2 y MP225), el único con «V» es el PRO MP225V. Para confirmarlo a simple vista: la caja tiene que decir «PRO MP225V», el cable de 220 va directo al monitor (fuente interna; los otros tres usan transformador) y tiene VGA. msi.com da 403 con curl: se bajó con Chrome headless (--dump-dom). Las generalidades de latam.msi.com están en español; su ficha técnica está en inglés y es corta (no trae VGA, VESA, inclinación, medidas ni peso): esos datos salen de la ficha global de msi.com. El tiempo GtG no va porque las dos fichas no coinciden (global: 4 ms; latam: 14 ms); tampoco el brillo HDR (530 nits, sólo en latam) ni el contraste dinámico. El rango de 48 a 100 Hz sale de la ficha de latam. MSI aclara que las especificaciones pueden variar según la zona: no se pone lo que trae la caja.\nRetocada el 26/10/2026 por un aviso del verificador (informe-L7): el rótulo «Base» juntaba tres cosas y MSI sólo le atribuye a la base la ranura para accesorios; pasó a «Diseño»."
+    },
+    {
+      "modelo": "Samsung Essential S3 S30GD de 24\" (LS24D300GALXZB)",
+      "codigos": [
+        "AT-0426"
+      ],
+      "venta": [
+        "Monitor de 24\" Full HD con panel IPS plano a 100 Hz, 250 cd/m² y 178° de ángulo de visión.",
+        "Entradas HDMI y D-Sub (VGA), modo de menos luz azul y pantalla sin parpadeo, con montaje VESA 100 x 100 mm."
+      ],
+      "importante": [
+        {
+          "titulo": "24\" Full HD IPS",
+          "texto": "23,8\" (clase 24\"), 1920 x 1080, plano, 250 cd/m² y contraste de 1000:1."
+        },
+        {
+          "titulo": "Hasta 100 Hz",
+          "texto": "Por HDMI, a 1920 x 1080; tiempo de respuesta de 5 ms (GTG)."
+        },
+        {
+          "titulo": "HDMI y D-Sub (VGA)",
+          "texto": "1 HDMI 1.4 (hasta 100 Hz) y 1 D-Sub (VGA, hasta 75 Hz)."
+        },
+        {
+          "titulo": "Eye Saver y Flicker Free",
+          "texto": "Modo de menos luz azul y pantalla sin parpadeo."
+        },
+        {
+          "titulo": "VESA 100 x 100 mm",
+          "texto": "Inclinación de −2° a 21° y 2,4 kg con la base."
+        }
+      ],
+      "ficha": [
+        {
+          "grupo": "Pantalla",
+          "datos": [
+            [
+              "Tamaño",
+              "Clase 24\": 23,8\" (60,4 cm), plano"
+            ],
+            [
+              "Panel",
+              "IPS"
+            ],
+            [
+              "Resolución",
+              "1920 x 1080 (Full HD), 16:9"
+            ],
+            [
+              "Frecuencia",
+              "Hasta 100 Hz"
+            ],
+            [
+              "Tiempo de respuesta",
+              "5 ms (GTG)"
+            ],
+            [
+              "Brillo y contraste",
+              "250 cd/m² (típico) · 1000:1 (estático, típico)"
+            ],
+            [
+              "Color",
+              "Hasta 16,7 millones de colores"
+            ],
+            [
+              "Ángulo de visión",
+              "178° horizontal y vertical"
+            ]
+          ]
+        },
+        {
+          "grupo": "Funciones",
+          "datos": [
+            [
+              "Vista",
+              "Eye Saver Mode (menos luz azul) · Flicker Free"
+            ],
+            [
+              "Juego",
+              "Modo Juego (Game Mode), para la PC o una consola. No tiene FreeSync ni G-Sync"
+            ],
+            [
+              "Otras",
+              "Eco Saving Plus · Off Timer Plus · Tamaño de imagen · Certificado para Windows 11"
+            ]
+          ]
+        },
+        {
+          "grupo": "Conexiones",
+          "datos": [
+            [
+              "Video",
+              "1 HDMI 1.4 (1920 x 1080 hasta 100 Hz) · 1 D-Sub (VGA, 1920 x 1080 hasta 75 Hz)"
+            ],
+            [
+              "Audio",
+              "No tiene parlantes ni salida de auriculares"
+            ],
+            [
+              "USB",
+              "No tiene"
+            ],
+            [
+              "Alimentación",
+              "Adaptador externo, 100 a 240 V"
+            ]
+          ]
+        },
+        {
+          "grupo": "Soporte y montaje",
+          "datos": [
+            [
+              "Ajuste",
+              "Inclinación de −2° a 21° (±2°)"
+            ],
+            [
+              "VESA",
+              "100 x 100 mm"
+            ]
+          ]
+        },
+        {
+          "grupo": "Medidas y peso",
+          "datos": [
+            [
+              "Con soporte",
+              "540,7 x 428,5 x 175,1 mm (ancho x alto x profundidad)"
+            ],
+            [
+              "Sin soporte",
+              "540,7 x 320,4 x 36,2 mm (ancho x alto x profundidad)"
+            ],
+            [
+              "Peso",
+              "2,4 kg con soporte · 2,0 kg sin soporte"
+            ]
+          ]
+        }
+      ],
+      "fuentes": [
+        {
+          "texto": "samsung.com/ar/support/model/LS24D300GALXZB",
+          "url": "https://www.samsung.com/ar/support/model/LS24D300GALXZB/"
+        },
+        {
+          "texto": "searchapi.samsung.com/…/spec/detail?siteCode=ar&modelList=LS24D300GALXZB (especificaciones de Samsung Argentina)",
+          "url": "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=LS24D300GALXZB&specAnnotationYN=Y"
+        },
+        {
+          "texto": "manual del usuario S30GD/S40GD (Samsung, descarga del soporte argentino, PDF en inglés)",
+          "url": "https://org.downloadcenter.samsung.com/downloadfile/ContentsFile.aspx?CDSite=UNI_AR&OriginYN=N&ModelType=N&ModelName=S24D300GAL&CttFileID=10264122&CDCttType=UM&VPath=UM%2F202504%2F20250413035150001%2FBN81-26708A-00_WUG_S30GD+S40GD_NA+LATIN_ENG_241101.0.pdf"
+        }
+      ],
+      "verificado": "2026-10-26",
+      "notas": "Identidad (revisión del 26/10): lo decide el número de parte que el mismo proveedor puso antes en esta fila (nombres vistos en ADVAPP: «LS24D300GALXZB | Samsung 24\" Essential — Panel 100Hz»); hoy la fila dice sólo «24\" Essential (100Hz)». Samsung Argentina lo identifica como «24\" Essential Monitor S3 S30GD Full HD 100 Hz», modelo S24D300GAL (la etiqueta de atrás tiene que decir S24D300GAL). La página de producto de samsung.com/ar del 24\" hoy redirige a la del 22\" (LS22D300GALXZB): las especificaciones salen de la API de la ficha de Samsung Argentina (la misma que arma la sección «Especificaciones» del soporte) y del manual del usuario que ofrece el soporte del modelo. El manual es común al S30GD y al S40GD de 22, 24 y 27\": de ahí sólo va lo que el manual marca para el S24D30*G o para los S30GD (23,8\" para la clase 24, HDMI hasta 100 Hz y D-Sub hasta 75 Hz, Modo Juego). No va el consumo (la ficha lo rotula «DPMS» con 25 W, no está claro qué mide) ni la gama de color (rótulo NTSC 1976 con «CIE 1931»). No se pone lo que trae la caja (Samsung aclara que una característica puede diferir de la ficha)."
     }
   ]
 }

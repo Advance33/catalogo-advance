@@ -50,6 +50,19 @@
     "https://support.apple.com/es-la/121204"
    ]
   },
+  "95d245ba8d36ddd95ba56278bfe95dc241d1c9f1cd2cea1f495300a1de354d4a": {
+   "modelo": "AirPods 5 (estuche de carga USB-C, sin carga inalámbrica)",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-R2a.json",
+   "fuentes": [
+    "https://www.apple.com/la/airpods-5/specs/",
+    "https://www.apple.com/la/airpods-5/",
+    "https://support.apple.com/es-la/148759",
+    "https://support.apple.com/es-la/109525",
+    "https://support.apple.com/en-us/148759 (para confirmar que «En la caja» no cambia con el país)"
+   ]
+  },
   "9a9bdb0c3033189307a6ed8fed381cd46b4b18aa82983dca5ebc72e9f841ee93": {
    "modelo": "AirPods 5 con Estuche de Carga Inalámbrica",
    "fecha": "2026-10-21",
@@ -74,15 +87,17 @@
     "https://support.apple.com/es-lamr/123185"
    ]
   },
-  "50b238df260d0ecb8251cabddaebdee64e797b582829865e53a044e14a30f931": {
-   "modelo": "AirPods Pro 2",
-   "fecha": "2026-10-21",
+  "e60bbd2f30da3dce8120ad81a3af50b4444446599e8e9a995d283a140b891ebe": {
+   "modelo": "AirPods Pro 2 con estuche de carga MagSafe (USB-C)",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D07b.json",
+   "informe": "informe-L1.json",
    "fuentes": [
     "https://support.apple.com/es-la/111834",
-    "https://support.apple.com/es-la/111851",
-    "https://support.apple.com/es-la/109525"
+    "https://support.apple.com/es-la/109525",
+    "https://support.apple.com/en-us/111834",
+    "https://www.apple.com/la/airpods-pro/feature-availability/",
+    "https://support.apple.com/es-la/120850"
    ]
   },
   "ef2682f1055181b44f6f59fc2f61e39bf9d6d279a03d59d7b769f39101eafec6": {
@@ -174,17 +189,18 @@
     "https://www.apple.com/la/watchos/feature-availability/"
    ]
   },
-  "e5c13af374171de28b731448023a7d521be50fadfea7ec7b8ffd60f2f2e23cc8": {
-   "modelo": "Apple Watch Series 12",
-   "fecha": "2026-10-21",
+  "a9f5d1aeb7fecddc77d77a188bf8707a44b014659c724bdea11e6fd3c83663bd": {
+   "modelo": "Apple Watch Series 12 (aluminio, GPS)",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D07b.json",
+   "informe": "informe-L2.json",
    "fuentes": [
     "https://www.apple.com/la/apple-watch-series-12/specs/",
     "https://www.apple.com/la/apple-watch-series-12/",
     "https://support.apple.com/es-la/108056",
     "https://www.apple.com/la/watchos/feature-availability/",
-    "https://www.apple.com/la/watch/compare/"
+    "https://www.apple.com/shop/buy-watch/apple-watch/46mm-gps-black-aluminum-black-sport-band-m-l (MJEL4LS/A; precios por caja: aluminio 42 GPS 399, 46 GPS 449, 42 GPS + Cellular 499, 46 GPS + Cellular 549; titanio y cerámica solo GPS + Cellular)",
+    "https://advapp-blond.vercel.app/api/catalog?resource=tecno-web (feed del sitio: AT-0648 465 y AT-0649 505, solo para chequear la identidad por precio)"
    ]
   },
   "ce0527a4fcc56f4351c635568bd0865b08587c169d932d617e7908be4d0ef78b": {
@@ -345,16 +361,21 @@
     "https://global.canon/en/c-museum/product/ef434.html"
    ]
   },
-  "9be746f9f2b90f91336a8ac5d00e6ae06cb1159779f852a02a94a2213f902fe1": {
-   "modelo": "Canon EOS 2000D (EOS Rebel T7) con lente 18-55 III o 18-55 II",
-   "fecha": "2026-10-21",
+  "a93b07956b93593681fa24c0ec36f6a297b34289b9ac115f5249580fd11b40e3": {
+   "modelo": "Canon EOS 2000D (EOS Rebel T7), kit EF-S 18-55mm III y kit EF-S 18-55mm IS II",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D01a.json",
+   "informe": "informe-L4.json",
    "fuentes": [
     "https://www.canon.es/cameras/eos-2000d/specifications/",
-    "https://www.cla.canon.com/es/p/eos-rebel-t7 (curl daba 403; leída con Chrome headless)",
+    "https://www.cla.canon.com/es/p/eos-rebel-t7",
     "https://global.canon/en/c-museum/product/dslr873.html",
-    "https://global.canon/en/c-museum/product/ef384.html (no está en fuentes; confirma que existe el EF-S18-55mm f/3.5-5.6 II, sin IS)"
+    "https://www.canon.es/store/canon-camara-canon-eos-2000d-objetivo-ef-s-18-55mm-is-ii/2728C003/",
+    "https://www.canon.co.uk/store/canon-refurbished-canon-eos-2000d-camera-refurbished-ef-s-18-55mm-f3-5-5-6-dc-iii-lens/2728C072/",
+    "https://global.canon/en/c-museum/product/ef410.html",
+    "https://global.canon/en/c-museum/product/ef411.html",
+    "https://global.canon/en/c-museum/product/ef384.html",
+    "https://global.canon/en/imaging/eosd/serial/ef/ef1855.html"
    ]
   },
   "20c22f58945e253d229a403c575cd91cc2ead9446620d9898f0c817fe63987a8": {
@@ -442,15 +463,18 @@
     "copia de trabajo-a-T10-1 (bajada hoy 13:06-13:13): https://www.canon.es/cameras/eos-r5c/"
    ]
   },
-  "c83be486f47ef1e36cf4288958d7cac5b4d1249592c29689d9eeddcd6fcdf15d": {
-   "modelo": "Canon EOS R5 Mark II (cuerpo y kit con lente 24-105)",
-   "fecha": "2026-10-21",
+  "2d04cecc41f0e24364111f10bcaf2321f60a931077e924a47beb4f67d1eb232b": {
+   "modelo": "Canon EOS R5 Mark II (cuerpo y kit RF 24-105mm F4L IS USM)",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D01a.json",
+   "informe": "informe-L4.json",
    "fuentes": [
     "https://www.canon.es/cameras/eos-r5-mark-ii/specifications/",
     "https://www.canon.es/cameras/eos-r5-mark-ii/",
-    "https://www.canon.es/store/canon-cuerpo-de-la-camara-mirrorless-canon-eos-r5-mark-ii/6536C004/ (no está en fuentes; sólo para ver las opciones de kit)"
+    "https://www.canon.es/store/canon-camara-mirrorless-canon-eos-r5-mark-ii-objetivo-rf-24-105mm-f4l-is-usm/6536C014/",
+    "https://www.canon.es/lenses/canon-rf-24-105mm-f-4l-is-usm-lens/specifications/",
+    "https://personal.canon.jp/product/camera/eos/r5mk2",
+    "https://in.canon/en/consumer/eos-r5-mark-ii/body/product"
    ]
   },
   "f6f9327905fbce52a976e54518f4b7ae369eabf1adbe2aa1faec91b0f130efec": {
@@ -1056,17 +1080,18 @@
     "copia del verificador r11-T02-1 (HTML crudo, 02/10): https://faq.canon.jp/app/answers/detail/a_id/104930/"
    ]
   },
-  "831f9e63092bfa066364f8303b2a4db9d85fab2c97564f7766ad03962c4d4fa2": {
+  "cfc609e5bf587b80c2ed75bd5efa0404b017bf7f58d6197af90472d6ac61d701": {
    "modelo": "Canon Speedlite EL-5",
-   "fecha": "2026-10-21",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D02b-r2.json",
+   "informe": "informe-L4.json",
    "fuentes": [
-    "https://www.canon.es/cameras/speedlite-flash-el-5/ (Chrome headless)",
-    "https://www.canon.es/cameras/speedlite-flash-el-5/specifications/ (Chrome headless)",
-    "https://www.canon.es/cameras/speedlite-flash-el-5-v2/ (Chrome headless)",
-    "https://www.canon.es/cameras/speedlite-flash-el-5-v2/specifications/ (Chrome headless)",
-    "https://www.canon.es/video-cameras/eos-c50/specifications/ (Chrome headless)"
+    "https://www.canon.es/cameras/speedlite-flash-el-5/",
+    "https://www.canon.es/cameras/speedlite-flash-el-5/specifications/",
+    "https://personal.canon.jp/product/camera/accessory/speedlite-el5v2",
+    "https://personal.canon.jp/product/camera/accessory/speedlite-el5",
+    "https://asia.canon/en/consumer/speedlite-el-5-ver-2/main/product",
+    "https://www.canon.es/store/canon-flash-canon-speedlite-el-5-ver-2/7327C003/"
    ]
   },
   "6fc67a41b0fe56a2bc485acdde185a81ebe325de138f88958f305a2286b5e996": {
@@ -1134,6 +1159,18 @@
     "https://store.dji.com/es/product/dji-air-3s-fly-more-combo-rc-2?set_region=ES"
    ]
   },
+  "d5b97c0db9455755b22c50fc47a2c169c1e44ea95a8f7098ef63bda3d9c99143": {
+   "modelo": "DJI Avata (solo el dron)",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-R2a.json",
+   "fuentes": [
+    "https://www.dji.com/mx/support/product/avata (curl -b 'region=MX; lang=es': tabla de especificaciones, notas 1 a 8 y FAQ entera)",
+    "https://www.dji.com/support/product/avata (en inglés: tabla de video y FAQ «Can I fly … without wearing the goggles?»)",
+    "https://store.dji.com/es/product/dji-avata-explorer-combo?set_region=ES (window.__PRELOADED_STATE__: producto dji-avata-no-rc-goggles con structedFaq, coreSellingPoints y notas al pie; packs Pro-View nuevo y Explorer con inTheBoxes)",
+    "https://store.dji.com/es/product/dji-avata-2?set_region=ES (identidad: las versiones del Avata 2 son solo el dron, Vuelo Inteligente, Explorer y Vuela Más; ninguna Pro-View)"
+   ]
+  },
   "d88b3be48ddc22a947e08d456415fcccfd09dc3d9c1c1c606f914667c98dc4ee": {
    "modelo": "DJI Goggles 2",
    "fecha": "2026-10-21",
@@ -1156,6 +1193,16 @@
     "https://www.dji.com/mx/support/product/mavic-3",
     "https://www.dji.com/mx/support/product/o3-air-unit (DJI Goggles compatibles)",
     "https://www.dji.com/mx/support/product/o4-air-unit (gafas y controles compatibles)"
+   ]
+  },
+  "2e668b030ed6a164d0962572543b5bc5c09c401bdba58c649ba7716b55d3f8c9": {
+   "modelo": "DJI Juego de filtros ND (ND16/64/256) Serie DJI Mini 3",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-L6.json",
+   "fuentes": [
+    "https://store.dji.com/product/dji-mini-3-pro-nd-filters-set-16-256?set_region=US (window.__PRELOADED_STATE__, structuredOverview: Overview, In The Box, Specifications, Compatibility)",
+    "https://www.dji.com/mx/support/product/mini-3-pro (curl -b 'region=MX; lang=es'; FAQ de filtros UV y ND)"
    ]
   },
   "cbc2d1866eb280b93fefa51d78185db4d6dd5f255039e694af0dd6499472d782": {
@@ -1234,16 +1281,16 @@
     "https://store.dji.com/uk/product/osmo-action-6?set_region=GB (misma caja del Standard Combo)"
    ]
   },
-  "cf4758800eac405cb998ae26320abfbee4cf4c70401bbe55d153ed9c962065b9": {
+  "c413610e480c491bdf4a013342c1883f2a6e62807dabec88d108ee85d73bde37": {
    "modelo": "DJI Osmo Mobile 8P Pack para Creadores",
-   "fecha": "2026-10-21",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D15.json",
+   "informe": "informe-L6.json",
    "fuentes": [
-    "https://www.dji.com/mx/osmo-mobile-8p (curl -b 'region=MX; lang=es'; textos y notas 1 a 17)",
-    "https://www.dji.com/mx/osmo-mobile-8p/specs (tech_specs)",
-    "https://store.dji.com/es/product/osmo-mobile-8p?set_region=ES (inTheBoxes de los dos packs para creadores)",
-    "https://store.dji.com/uk/product/osmo-mobile-8p?set_region=GB (nombres de los packs e inTheBoxes: iguales que en /es)"
+    "https://www.dji.com/mx/osmo-mobile-8p (curl -b 'region=MX; lang=es'; textos y notas en el JSON de la página)",
+    "https://www.dji.com/mx/osmo-mobile-8p/specs (tabla de especificaciones entera)",
+    "https://store.dji.com/es/product/osmo-mobile-8p?set_region=ES (window.__PRELOADED_STATE__: inTheBoxes de osmo-mobile-8p-creator-combo y de osmo-mobile-8p-creator-combo-dji-mic-mini-2s-transmitter)",
+    "https://store.dji.com/uk/product/osmo-mobile-8p?set_region=GB (nombres de los packs e inTheBoxes, iguales que en /es)"
    ]
   },
   "9b5ea23fad626a5262cd853a6f37fedee0526e2b55b152c3c06401b59047852e": {
@@ -1873,6 +1920,17 @@
     "https://www.garmin.com/es-ES/p/884088/pn/010-02804-11"
    ]
   },
+  "b9c9606e1583eaedd2a982cb419f3aa19b338e7e3c2686e23aa5d76bfd3b4d28": {
+   "modelo": "GoPro Batería recargable Enduro (ADBAT-011)",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-L6.json",
+   "fuentes": [
+    "https://gopro.com/es/ar/shop/mounts-accessories/enduro-extended-cold-weather-battery/ADBAT-011.html (compatibilidad, detalles del producto y nota 1)",
+    "https://gopro.com/en/us/shop/mounts-accessories/enduro-extended-cold-weather-battery/ADBAT-011.html",
+    "https://gopro.com/es/ar/shop/mounts-accessories/rechargeable-camera-battery/ADBAT-001.html (identidad: la común es compatible solo con HERO10 y HERO9)"
+   ]
+  },
   "75448cb93c946cea05138e4f81263f857ec7c4c4aeae4eff3b5ea3f3366a9c83": {
    "modelo": "GoPro HERO12 Black (Special Bundle)",
    "fecha": "2026-10-13",
@@ -2092,6 +2150,17 @@
     "https://storage-asset.msi.com/specSheet/latam/monitor/MAG%20276CXF.pdf"
    ]
   },
+  "13f1cc6935a0b07036bef587faa46b61f6b46584dad465dce69f288b9431d2e2": {
+   "modelo": "MSI PRO MP225V",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-R2b.json",
+   "fuentes": [
+    "https://latam.msi.com/Business-Productivity-Monitor/PRO-MP225V",
+    "https://latam.msi.com/Business-Productivity-Monitor/PRO-MP225V/Specification",
+    "https://www.msi.com/Business-Productivity-Monitor/PRO-MP225V/Specification"
+   ]
+  },
   "d2921b7985c6ed51ef8bc537d65e9d9e2ab07673a20e4a21cc5fe7cf8c84fa58": {
    "modelo": "Mac mini con chip M4 (2024), 16GB/256GB y 16GB/512GB",
    "fecha": "2026-10-21",
@@ -2101,23 +2170,32 @@
     "https://support.apple.com/es-la/121555"
    ]
   },
-  "08110f5c610f39033e06889a9a566dab1910520cfa5df1eed8becc6ccaffde09": {
+  "ccb695a14d25ae67b30d1c7743818a61f14f15f068320518e36561d5a46c4f56": {
    "modelo": "Mac mini con chip M4 Pro (2024), 24GB/512GB",
-   "fecha": "2026-10-21",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D06a-r2.json",
+   "informe": "informe-L2.json",
    "fuentes": [
-    "https://support.apple.com/es-la/121555"
+    "https://support.apple.com/es-la/121555",
+    "https://support.apple.com/es-la/102852",
+    "https://support.apple.com/en-us/102852",
+    "https://www.apple.com/shop/product/fcx44ll/a/Refurbished-Mac-mini-Apple-M4-Pro-Chip-with-12-Core-CPU-and-16-Core-GPU-Gigabit-Ethernet-",
+    "https://www.apple.com/shop/refurbished/mac/mac-mini",
+    "https://www.apple.com/shop/product/MDAP4LL/A (404; también MDAQ4LL/A y MDAY4LL/A)"
    ]
   },
-  "b0f166138dac4a34b09de5f5737114d2ba2f434e251f4c86d48a01c0709ebb1f": {
+  "3a8a43da76985c85668a0a90a72a05b9fecc937cc45e59388103c08d27150a4a": {
    "modelo": "Mac mini con chip M5 Pro (2026), 24GB/512GB",
-   "fecha": "2026-10-21",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D06a-r2.json",
+   "informe": "informe-L2.json",
    "fuentes": [
     "https://support.apple.com/es-la/128108",
-    "https://www.apple.com/la/mac-mini/specs/"
+    "https://support.apple.com/en-us/128108",
+    "https://www.apple.com/la/mac-mini/specs/",
+    "https://support.apple.com/es-la/102852",
+    "https://support.apple.com/en-us/102852",
+    "https://www.apple.com/shop/buy-mac/mac-mini/m5-pro-chip-15-core-cpu-16-core-gpu-24gb-memory-512gb-storage"
    ]
   },
   "ac04ee4a5f4a99336099a6c2b886c4d4d845a80f45f6da86732c05dde9e228fe": {
@@ -2255,18 +2333,21 @@
     "https://www.apple.com/mx/shop/product/MQDP3LA/A (redirige a «Magic Keyboard Folio para el iPad (A16) - Español (Latinoamérica)», compatibilidad iPad (A16) e iPad (10.ª generación))"
    ]
   },
-  "11bdf7c574af0dc5aa249665b9b8dd24df96fc2aedec714636cf86a5c47a299b": {
-   "modelo": "Magic Keyboard con Touch ID y teclado numérico (Lightning o USB-C)",
-   "fecha": "2026-10-21",
+  "2ed6d2c4cf9e3858ebfe2f15ff7c318e6c233ac1db0b51fec116e6c1e3517699": {
+   "modelo": "Magic Keyboard con Touch ID y teclado numérico (USB-C)",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D09.json",
+   "informe": "informe-L1.json",
    "fuentes": [
     "https://support.apple.com/es-lamr/121953",
-    "https://support.apple.com/en-us/docs/accessories/pp157",
-    "https://cdsassets.apple.com/live/6GJYWVAV/user/ma2009_magic-keyboard-touchid-numeric-keypad-ug.pdf",
+    "https://support.apple.com/es-lamr/guide/mac-help/mchl16fbf90a/mac",
     "https://support.apple.com/es-lamr/guide/security/secf60513daa/web",
     "https://support.apple.com/es-lamr/102292",
-    "https://support.apple.com/es-lamr/119917"
+    "https://support.apple.com/es-lamr/119917",
+    "https://www.apple.com/mx/shop/product/MXK73LL/A (redirige a «…USB-C Inglés EE.UU. Teclas blancas»)",
+    "https://www.apple.com/mx/shop/product/MXK83LL/A (redirige a «…USB-C Inglés EE.UU. Teclas negras»)",
+    "https://www.apple.com/shop/product/MK2C3LL/A (Lightning: redirige a una búsqueda, sin página de producto)",
+    "https://www.apple.com/shop/product/MMMR3LL/A (Lightning: redirige a una búsqueda, sin página de producto)"
    ]
   },
   "e8f3ca23bd11a6b7878b487f62f5e0abefa150c77d1805498e98ba9ae3f58e91": {
@@ -2325,22 +2406,23 @@
     "https://www.apple.com/mx/shop/product/MWR03LA/A (redirige a «Magic Keyboard para el iPad Pro de 11 pulgadas (M5) - Español (América Latina) - Blanco», compatibilidad M5 y M4)"
    ]
   },
-  "2b42bf3301441a9425a7a9266103b6ee245077390c31428e1fe31666742d348e": {
+  "3dafe2446b4364215c59aa439ed2efc4aeac579943890e3668f2c27c756b0eac": {
    "modelo": "Magic Keyboard para iPad Pro 12,9\" (2021)",
-   "fecha": "2026-10-21",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D08.json",
+   "informe": "informe-L3.json",
    "fuentes": [
     "https://support.apple.com/es-la/111937",
-    "https://support.apple.com/en-us/111937",
     "https://support.apple.com/en-us/docs/ipad/300344",
-    "https://support.apple.com/es-la/111936",
-    "https://support.apple.com/en-us/docs/ipad/300174",
-    "https://support.apple.com/en-us/docs/ipad",
-    "https://www.apple.com/mx/shop/product/MJQL3E/A",
-    "https://www.apple.com/shop/product/MJQL3LL/A",
-    "https://www.apple.com/shop/product/MJQK3LL/A",
-    "https://www.apple.com/shop/product/MXQU2LL/A"
+    "https://www.apple.com/mx/shop/product/MJQL3E/A (redirige a https://www.apple.com/mx/search/Magic-Keyboard-para-el-iPad%C2%A0Air-de-13-pulgadas-M2-Espa%C3%B1ol-Espa%C3%B1a-Blanco?rdt=redirectionFromProductPage&tab=accessories)",
+    "https://www.apple.com/mx/shop/product/MJQL3LA/A",
+    "https://www.apple.com/mx/shop/product/MJQL3Y/A",
+    "https://www.apple.com/shop/product/MJQL3E/A",
+    "https://www.apple.com/es/shop/product/MJQL3E/A",
+    "https://www.apple.com/es/shop/product/MJQL3Y/A",
+    "https://support.apple.com/es-la/102743",
+    "https://support.apple.com/en-us/102743",
+    "https://support.apple.com/es-la/111936"
    ]
   },
   "36e3ecb5c344b5996ea49d1d8c7f0eac43fb47d60fd49384bd7b6dd8a2c64abb": {
@@ -2356,28 +2438,34 @@
     "https://www.apple.com/mx/shop/product/MWR53LA/A (redirige a «Magic Keyboard para el iPad Pro de 13 pulgadas (M5) - Español (América Latina) - Negro», compatibilidad M5 y M4)"
    ]
   },
-  "b5d7714bd78465ca09fbaf5a136f9c8b1df40f6d02477fec9078614c37939f0f": {
-   "modelo": "Magic Mouse (Lightning o USB-C)",
-   "fecha": "2026-10-21",
+  "02255637d24382009ec6c234c4bd600b081b10108a7f3a63c8842c457723b2be": {
+   "modelo": "Magic Mouse (USB-C)",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D09.json",
+   "informe": "informe-L1.json",
    "fuentes": [
     "https://support.apple.com/es-lamr/121931",
-    "https://support.apple.com/es-lamr/111885",
     "https://support.apple.com/es-lamr/102292",
-    "https://support.apple.com/es-lamr/119917"
+    "https://support.apple.com/es-lamr/119917",
+    "https://www.apple.com/shop/product/MXK53AM/A (Magic Mouse (USB-C) - White Multi-Touch Surface)",
+    "https://www.apple.com/shop/product/MXK63AM/A (Magic Mouse (USB-C) - Black Multi-Touch Surface)",
+    "https://www.apple.com/shop/product/MK2E3AM/A (Lightning: redirige a una búsqueda, sin página de producto)",
+    "https://www.apple.com/shop/product/MMMQ3AM/A (Lightning: redirige a una búsqueda, sin página de producto)"
    ]
   },
-  "d29744b012dd534b36cb3e87772777ece21cc7bf543ab63f60478e801b4738e9": {
-   "modelo": "Magic Trackpad (Lightning o USB-C)",
-   "fecha": "2026-10-21",
+  "5ab1ba350b212be7336c56ce5dfb1575bbc528134df26ea6c24490fca873bb88": {
+   "modelo": "Magic Trackpad (USB-C)",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D09.json",
+   "informe": "informe-L1.json",
    "fuentes": [
     "https://support.apple.com/es-lamr/121932",
-    "https://support.apple.com/es-lamr/111884",
     "https://support.apple.com/es-lamr/102292",
-    "https://support.apple.com/es-lamr/119917"
+    "https://support.apple.com/es-lamr/119917",
+    "https://www.apple.com/shop/product/MXK93AM/A (Magic Trackpad (USB-C) - White Multi-Touch Surface)",
+    "https://www.apple.com/shop/product/MXKA3AM/A (Magic Trackpad (USB-C) - Black Multi-Touch Surface)",
+    "https://www.apple.com/shop/product/MK2D3AM/A (Lightning: redirige a una búsqueda, sin página de producto)",
+    "https://www.apple.com/shop/product/MMMP3AM/A (Lightning: redirige a una búsqueda, sin página de producto)"
    ]
   },
   "16e31d3597ec5658d6e08dc3dae0d664a62b3da84223aaf2ba32235fc6e3f731": {
@@ -2411,6 +2499,18 @@
     "https://www.meta.com/es/quest/quest-3s/ (renderizada con Chrome; con curl da error 400)",
     "https://www.meta.com/es/quest/compare/ (renderizada con Chrome)",
     "https://www.meta.com/gb/quest/quest-3s/ (sólo para el criterio del adaptador: «the included 18W power adapter»)"
+   ]
+  },
+  "bedf5b7e2f3fe5131ae53ffa8c4d95ee6165cc8a419f739519661db20329bfa3": {
+   "modelo": "Nikon AF-S DX NIKKOR 35mm f/1.8G",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-L5.json",
+   "fuentes": [
+    "https://imaging.nikon.com/imaging/lineup/lens/f-mount/singlefocal/normal/af-s_dx_35mmf_18g/",
+    "https://www.nikon.com.ar/lentes/reflex/af-s-dx-nikkor-35mm-f18g",
+    "https://www.nikonusa.com/p/af-s-dx-nikkor-35mm-f18g/2183/overview (identidad: US$199,95)",
+    "https://www.nikonusa.com/p/af-s-nikkor-35mm-f18g-ed/2215/overview (identidad: US$569,95)"
    ]
   },
   "52da48ef772ed1042a1557660c75ba9ca26998fbef19f5c07b60791752f8db16": {
@@ -3339,38 +3439,36 @@
     "https://www.meta.com/mx/ai-glasses/compare/ (contraste, no está en fuentes)"
    ]
   },
-  "155ea7a8db5755b0fac768849c75f38d5a8abeab0719857a3ea5ad3f4e19933c": {
+  "7f87a2198728a797f6a80ddfebf7433cd0ed6fc7b78917901772330b71404a60": {
    "modelo": "Ray-Ban Meta Wayfarer (Gen 2)",
-   "fecha": "2026-10-21",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D16b-r2.json",
+   "informe": "informe-R4.json",
    "fuentes": [
-    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-gen-2/",
-    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-gen-2/",
-    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-matte-black-grey-transitions-gen-2/",
-    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-matte-black-polarized-graphite-gradient-gen-2/",
-    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-shiny-black-green-gen-2/",
-    "https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-shiny-black-green-transitions-gen-2/",
-    "https://www.meta.com/ai-glasses/ray-ban-meta-wayfarer-gen-2/ (contraste)",
-    "https://www.meta.com/mx/ai-glasses/compare/ (contraste, no está en fuentes)"
+    "copia del verificador R3: https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-gen-2/ (trabajo-v-R3/meta-wayfarer-gen2-b.html y meta-wayfarer-gen2.html)",
+    "copia del verificador R3: https://www.meta.com/mx/ai-glasses/ray-ban-meta-gen-2/ (trabajo-v-R3/meta-gen2-general.html)",
+    "copia del verificador R3: https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-matte-black-grey-transitions-gen-2/ (trabajo-v-R3/meta-mb-grey-trans.html)",
+    "copia del verificador R3: https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-matte-black-polarized-graphite-gradient-gen-2/ (trabajo-v-R3/meta-mb-polarized.html)",
+    "copia del verificador R3: https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-shiny-black-green-gen-2/ (trabajo-v-R3/meta-sb-green.html)",
+    "copia del verificador R3: https://www.meta.com/mx/ai-glasses/ray-ban-meta-wayfarer-shiny-black-green-transitions-gen-2/ (trabajo-v-R3/meta-sb-green-trans.html)",
+    "copia del verificador R3: https://www.ray-ban.com/usa/electronics/RW4012ray-ban%20meta%20wayfarer%20-%20gen%202-black/8056262721377 (trabajo-v-R3/rayban-601S1Z-50-22.html)",
+    "copia del verificador R3: https://www.ray-ban.com/usa/electronics/RW4012ray-ban%20meta%20wayfarer%20-%20gen%202-black/8056262721292 (trabajo-v-R3/rayban-601-1M-50-22.html; para la identidad de AT-0416, no está en fuentes)",
+    "copia del verificador R3: https://www.ray-ban.com/usa/electronics/RW4012ray-ban%20meta%20wayfarer%20-%20gen%202-black/8056262721414 (trabajo-v-R3/rayban-601ST3-50-22.html; para la identidad de AT-0418, no está en fuentes)",
+    "~/catalogo-advance-trabajo/desc-26-10/lote-R3.json (comparación entrada por entrada)",
+    "~/catalogo-advance-trabajo/desc-26-10/salida-W9-monitores-rayban.json (la entrada es idéntica a la del lote R4)"
    ]
   },
-  "b15070e1d16fec6f4aeb878dce9229777de56950691e887f59d2820c0c7d8a3b": {
-   "modelo": "Redmi 15C (sólo lo común al 15C y al 15C 5G)",
-   "fecha": "2026-10-21",
+  "c5d7d31861d663415c7bb9986d124e0e7cb6ed75d429dc25a2bf893521317dee": {
+   "modelo": "Redmi 15C (8/256 4G; 4/128 sin confirmar 4G o 5G)",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D12b.json",
+   "informe": "informe-L7.json",
    "fuentes": [
-    "https://www.mi.com/mx/product/redmi-15c/specs/",
-    "https://www.mi.com/es/product/redmi-15c/specs/",
     "https://www.mi.com/global/product/redmi-15c/specs/",
+    "https://www.mi.com/mx/product/redmi-15c/specs/",
     "https://www.mi.com/es/product/redmi-15c-5g/specs/",
     "https://www.mi.com/global/product/redmi-15c-5g/specs/",
-    "https://www.mi.com/mx/product/redmi-15c-5g/specs/ (404)",
-    "https://www.mi.com/in/product/redmi-15c-5g/specs/",
-    "https://www.mi.com/in/product/redmi-15c/specs/ (404)",
-    "https://www.mi.com/ar/product/redmi-15c/specs/ (no existe: va a la portada)",
-    "https://www.mi.com/ar/product/redmi-15c-5g/specs/ (no existe: va a la portada)"
+    "https://www.mi.com/in/product/redmi-15c-5g/specs/"
    ]
   },
   "e723be27ed4250636932cf32dc911e6b6f5b97b07e9d2b6c2781479a478fbe66": {
@@ -3412,6 +3510,17 @@
     "https://www.mi.com/es/product/redmi-pad-2-pro-5g/"
    ]
   },
+  "913cec21aee152bf0454dfc10da40328d40ea6267a6860fa920e163872907b21": {
+   "modelo": "Samsung Essential S3 S30GD de 24\" (LS24D300GALXZB)",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-L7.json",
+   "fuentes": [
+    "https://www.samsung.com/ar/support/model/LS24D300GALXZB/",
+    "https://searchapi.samsung.com/v6/front/b2c/product/spec/detail?siteCode=ar&modelList=LS24D300GALXZB&specAnnotationYN=Y",
+    "https://org.downloadcenter.samsung.com/downloadfile/ContentsFile.aspx?CDSite=UNI_AR&OriginYN=N&ModelType=N&ModelName=S24D300GAL&CttFileID=10264122&CDCttType=UM&VPath=UM%2F202504%2F20250413035150001%2FBN81-26708A-00_WUG_S30GD+S40GD_NA+LATIN_ENG_241101.0.pdf"
+   ]
+  },
   "ada7cfa2f2ebc5cd98e0ecac6e5873a88aaddbb72173384bda81d34b4058388d": {
    "modelo": "Samsung Galaxy Buds3",
    "fecha": "2026-10-14",
@@ -3449,6 +3558,16 @@
    "fuentes": [
     "https://www.sigma-global.com/en/lenses/c023_10_18_28/",
     "https://www.sigma-global.com/en/lenses/ (catálogo, para confirmar la identidad: hay un solo 10-18)"
+   ]
+  },
+  "941f53e4cda601712b2413b446c0d784681d7292142c02331669e846a6f7fcac": {
+   "modelo": "Sigma 100-400mm F5-6.3 DG DN OS | Contemporary (Sony E)",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-L5.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/c020_100_400_5_63/",
+    "https://www.sigma-global.com/en/lenses/c017_100_400_5_63/ (identidad: sólo SA, Canon EF y Nikon F, discontinuado)"
    ]
   },
   "a834bd8525d55b4953e7dadb0a893646fc42457cbc8ea731d7526d18d188e1ac": {
@@ -3589,6 +3708,17 @@
    "informe": "informe-r1-T05-1.json",
    "fuentes": [
     "https://www.sigma-global.com/en/lenses/c025_20_200_35_63/"
+   ]
+  },
+  "5b6498d3ab19a12008bc0fa9516d4d1a862bab474663642f54e340d277def3f2": {
+   "modelo": "Sigma 24mm F1.4 DG DN | Art (Sony E)",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-L5.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/lenses/a022_24_14/",
+    "https://www.sigma-global.com/en/lenses/a015_24_14/ (identidad: DISCONTINUED en las cinco monturas, Sony E incluida)",
+    "https://sigmaphoto.com/24mm-f1-4-dg-dn-a (identidad: precio 879)"
    ]
   },
   "f2249f71df0c844fcdca144dad79390542bf08499435778f75e13373fcce1bf5": {
@@ -3763,6 +3893,17 @@
     "https://www.sigma-global.com/en/discontinued/"
    ]
   },
+  "d39602a80249a4cc7a5e4ba530607ec3aa8bd03a9d38639f42e872f2a9ea3520": {
+   "modelo": "Sigma EF-630 (flash para Canon)",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-R2b.json",
+   "fuentes": [
+    "https://www.sigma-global.com/en/accessories/ef-630/",
+    "https://www.sigma-global.com/en/support/download/EF-630_EO_FW_Ver.1.05_2.pdf",
+    "https://www.sigma-global.com/en/support/firmware/ef-630/?mount=canon-ef"
+   ]
+  },
   "a04ff9ba303bed8b56f82c62d9ca233eca867c910d764ba33261f0c0662ac4f5": {
    "modelo": "Sigma EF-630 (flash para Nikon)",
    "fecha": "2026-10-21",
@@ -3772,15 +3913,6 @@
     "https://www.sigma-global.com/en/accessories/ef-630/",
     "https://www.sigma-global.com/en/support/download/EF-630_NA_FW_Ver.1.03_2.pdf",
     "https://www.sigma-global.com/en/support/firmware/ef-630/?mount=nikon-f"
-   ]
-  },
-  "3fdcfa3c2b999ffcb16b015dc8003f086c392fcb16bbd921b9c1856f34937ea2": {
-   "modelo": "Sigma EF-630 (versión para Canon o Nikon sin confirmar)",
-   "fecha": "2026-10-21",
-   "por": "verificador-descripciones",
-   "informe": "informe-D05-r2.json",
-   "fuentes": [
-    "https://www.sigma-global.com/en/accessories/ef-630/"
    ]
   },
   "bedd57555f8e9470ede2c4668f88c29934e4654e034fc426598615e745ce59eb": {
@@ -3910,6 +4042,16 @@
     "https://www.sony.com.ar/electronics/lentes-camara/sel1625g"
    ]
   },
+  "41051747fefea6ae2b1986de0dd066dba397f3d39151d75befd5aae2dbe1be7f": {
+   "modelo": "Sony FE 16-35 mm F2.8 GM (SEL1635GM)",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-L5.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel1635gm/specifications (Chrome headless; ficha y características en la misma página)",
+    "https://www.sony.jp/ichigan/products/SEL1635GM/spec.html (cotejo: mismas medidas, peso, ángulos y lo que trae la caja)"
+   ]
+  },
   "20a80e30696ac47bd7e6b161d13bd3f725fbe3baf28cf833a87fbb7125141aac": {
    "modelo": "Sony FE 16-35 mm F2.8 GM II (SEL1635GM2)",
    "fecha": "2026-10-14",
@@ -4000,6 +4142,16 @@
    "fuentes": [
     "https://www.sony.com.ar/lenses/products/sel2450g/spec",
     "https://www.sony.com.ar/lenses/products/sel2450g/feature3"
+   ]
+  },
+  "5d136781b082508e821acb9a921d9c80630f60fd182cc4d927a404db6901f887": {
+   "modelo": "Sony FE 24-70 mm F2.8 GM (SEL2470GM)",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-L5.json",
+   "fuentes": [
+    "https://www.sony.com.ar/electronics/lentes-camara/sel2470gm/specifications (Chrome headless; ficha y características en la misma página)",
+    "https://www.sony.jp/ichigan/products/SEL2470GM/spec.html (cotejo: mismas medidas, peso, ángulos y lo que trae la caja)"
    ]
   },
   "158dc15e3534136651407d8a911da675d724aad2e946f0758d68481b098f5856": {
@@ -4497,16 +4649,20 @@
     "copia bajada hoy por el verificador d-T11-2 (trabajo-d-T11-2/): https://www.sony.com.ar/electronics/camaras-lentes-intercambiables/ilce-9m3"
    ]
   },
-  "2df662637436a564c0d5010715c402d3663369fc7f6e3df558b9ae0471cd1850": {
-   "modelo": "Studio Display 27\" (vidrio estándar, base con inclinación y altura ajustables)",
-   "fecha": "2026-10-21",
+  "c401f35ff57d9b8214af09d1cdfc05c8b9349d64d3203862b9b7396bd9891b37": {
+   "modelo": "Studio Display 27\" (2022), vidrio estándar, base con inclinación y altura ajustables",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D06a.json",
+   "informe": "informe-L2.json",
    "fuentes": [
     "https://support.apple.com/es-la/111890",
-    "https://support.apple.com/es-la/126324",
-    "https://www.apple.com/la/studio-display/specs/",
-    "https://www.apple.com/la/studio-display-xdr/specs/"
+    "https://support.apple.com/es-la/126265",
+    "https://support.apple.com/en-us/126265",
+    "https://support.apple.com/en-us/111890",
+    "https://support.apple.com/es-es/111890",
+    "https://support.apple.com/en-gb/111890",
+    "https://www.apple.com/shop/product/MK0Q3LL/A (redirige a «Studio Display Standard glass Tilt and height adjustable stand»; MK0U3 = base con inclinación, MMYQ3 = VESA)",
+    "https://advapp-blond.vercel.app/api/catalog?resource=tecno-web (feed del sitio, solo para ver la fila)"
    ]
   },
   "217df8e4cee59cc575a030967038cdd3a87f693d1fae0f6426827ec98c7bbdaa": {
@@ -4646,20 +4802,16 @@
     "https://www.tamron.com/global/consumer/soft/lensutility/data.js (compatibilidad por montura, para confirmar)"
    ]
   },
-  "0253f1dca4c166aef070441d6439fafaa1d50c69cd6c58b6a7843e0bf17abfaf": {
-   "modelo": "Tamron 28-75mm F2.8 Di III VXD G2 (A063) Nikon Z",
-   "fecha": "2026-10-02",
+  "4ecd060a1a520cd5edd069e156cfb88615b948cb4ec9659007137f8a509a8b6c": {
+   "modelo": "Tamron 28-75mm F2.8 Di III VXD G2 (A063)",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-a-T09-2.json",
+   "informe": "informe-L5.json",
    "fuentes": [
     "https://www.tamron.com/global/consumer/lenses/a063/",
     "https://www.tamron.com/global/consumer/lenses/a063/spec.html",
-    "https://tamron-americas.com/product/28-75mm-f-2-8-di-iii-vxd-g2/",
-    "https://www.tamron.com/global/consumer/soft/lensutility/",
-    "https://www.tamron.com/global/consumer/soft/lensutility/data.js",
-    "https://www.tamron.com/global/consumer/lenses/sony_e/",
-    "https://www.tamron.com/global/consumer/lenses/nikon_z/",
-    "https://www.tamron.com/global/consumer/lenses/discontinued/"
+    "https://www.tamron.com/global/consumer/lenses/discontinued/ (identidad: A036 RXD, Sony E, fin de producción 2021/8)",
+    "https://www.tamron.com/global/consumer/lenses/ (identidad: el único 28-75 actual es el VXD G2)"
    ]
   },
   "c158f42a640606a22c9860a881a447d81b7cd33a322d88c62fe0c4a79f43cd0a": {
@@ -4879,21 +5031,21 @@
     "https://www.apple.com/us/shop/goto/imac_vesa (redirige a apple.com/shop/buy-mac/imac)"
    ]
   },
-  "a4356618472aa30c44b69812e6a2b4026507ecf5d81d9ed556cc075f27dfff9a": {
+  "01f136ce9dbbf4268b3a0391eb7e31a922b0f09b2a284b0ebce812cec8f7f586": {
    "modelo": "iPad 11\" (A16)",
-   "fecha": "2026-10-21",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D06b.json",
+   "informe": "informe-L3.json",
    "fuentes": [
     "https://support.apple.com/es-la/122240",
     "https://www.apple.com/la/ipad-11/specs/"
    ]
   },
-  "2902a63283ce8cd87fe47b4bfbd6cf1e5aa2874407f2a4568115eba73263f882": {
+  "713443ada7ba70021840764393a4f34e519d6f8ba533a619b4ab3aea95ef51e7": {
    "modelo": "iPad Air 11\" (M4)",
-   "fecha": "2026-10-21",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D06b.json",
+   "informe": "informe-L3.json",
    "fuentes": [
     "https://support.apple.com/es-la/126471"
    ]
@@ -4947,11 +5099,11 @@
     "https://support.apple.com/es-la/119891"
    ]
   },
-  "dc730e01c51f4d5936f0b28e33dcd69c7db50a983118cfc61bbb43b1253be594": {
+  "4d52f105fb110f03e7733fd0ed8289b3a0354d6b48ce1b05f30cdff92b025c76": {
    "modelo": "iPad Pro 13\" (M5)",
-   "fecha": "2026-10-21",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D06b.json",
+   "informe": "informe-L3.json",
    "fuentes": [
     "https://support.apple.com/es-la/125407",
     "https://www.apple.com/la/ipad-pro/specs/"
@@ -5149,6 +5301,19 @@
     "https://www.motorola.com/hn/es/p/phones/moto-g/17/pmipmjn44mj (extra, para el color)"
    ]
   },
+  "400b6b2c3fa7afbd13887745a4ff95c0f9b1b1249d82d2fb4efdc095b8f51a74": {
+   "modelo": "moto g56 5G (12 GB + 256 GB)",
+   "fecha": "2026-10-26",
+   "por": "verificador-descripciones",
+   "informe": "informe-R2b.json",
+   "fuentes": [
+    "https://www.motorola.com/we/en/p/phones/moto-g/56-5g/pmipmhu41mg",
+    "https://www.motorola.com/ae/en/p/phones/moto-g/56-5g/pmipmhu41mg",
+    "https://www.motorola.com/sa/en/p/phones/moto-g/56-5g/pmipmhu41mg",
+    "https://www.motorola.com.pe/api/catalog_system/pub/products/search?ft=g56",
+    "https://www.motorola.com.ar/api/catalog_system/pub/products/search/moto-g56-5g/p"
+   ]
+  },
   "8511c7d5988a976551621e5e538cf659857243f3bf42117fe26d0d6c3aca33bc": {
    "modelo": "moto g57",
    "fecha": "2026-10-14",
@@ -5194,18 +5359,16 @@
     "https://www.motorola.com/es/es/p/phones/moto-g/moto-g-power-5g/2025/pmipmhs42m7 (HTML con la ficha embebida y renderizada)"
    ]
   },
-  "44be2da47246978c0cecb45afc762158eb51b6380d0ad8a7d003094bd015e359": {
+  "5fa7a1ebcb0a02b6fc46c2cef21ae4e81735227a2250241240d9ec1b90c50497": {
    "modelo": "motorola edge 60 pro (8 GB + 256 GB)",
-   "fecha": "2026-10-21",
+   "fecha": "2026-10-26",
    "por": "verificador-descripciones",
-   "informe": "informe-D13.json",
+   "informe": "informe-L7.json",
    "fuentes": [
-    "https://www.motorola.in/smartphones-motorola-edge-60-pro/p (HTML y renderizada con Chrome headless)",
+    "https://www.motorola.in/smartphones-motorola-edge-60-pro/p",
     "https://www.motorola.in/api/catalog_system/pub/products/search/smartphones-motorola-edge-60-pro/p",
-    "https://www.motorola.com/es/es/p/phones/motorola-edge/60-pro/pmipmht41mf (HTML con la ficha embebida y renderizada)",
-    "https://www.motorola.com.ar/motorola-edge-60-pro/p (HTML y renderizada)",
-    "https://www.motorola.com.ar/api/catalog_system/pub/products/search/motorola-edge-60-pro/p",
-    "https://www.motorola.com/jp/ja/p/phones/motorola-edge/60-pro/pmipmht41mf (HTML con la ficha embebida y renderizada)"
+    "https://www.motorola.com/es/es/p/phones/motorola-edge/60-pro/pmipmht41mf",
+    "https://www.motorola.com.ar/motorola-edge-60-pro/p"
    ]
   },
   "516b7d86a0c05c8fa31cc790ef54757568f695036a7577d204e463ab34de45e5": {

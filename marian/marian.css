@@ -1,0 +1,150 @@
+/* Marian, la guía de botones de la web (29/10/2026). Diseño B2 que eligió
+   Benja: bienvenida al entrar y un panel al costado, con pantallas de menú
+   (no un chat) y una animación en cada botón. Colores de la web; todo con
+   prefijo mr- para no pisar nada. Va con marian/marian.js. */
+.mr-raiz{
+  --mr-display:"Lilita One","Futura","Avenir Next",system-ui,sans-serif;
+  --mr-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mr-paper:#F4EFFD; --mr-surface:#FFFFFF; --mr-surface-2:#F1EAFD; --mr-line:#E0D4F7;
+  --mr-ink:#170F28; --mr-muted:#584D70; --mr-faint:#726496;
+  --mr-acento:#7C3AED; --mr-glow:#6D28D9; --mr-lila:#C4A6FF; --mr-grafito:#151220;
+  --mr-ok:#15803D;
+  font-family:var(--mr-sans);color:var(--mr-ink);
+}
+.mr-raiz *,.mr-raiz *::before,.mr-raiz *::after{box-sizing:border-box}
+.mr-raiz [hidden]{display:none!important}
+.mr-raiz button{font:inherit}
+.mr-raiz :focus-visible{outline:2px solid var(--mr-acento);outline-offset:2px}
+
+/* La onda que sale del dedo al tocar cualquier botón */
+.mr-op,.mr-btn,.mr-wa-pie,.mr-lanzar,.mr-atras{position:relative;overflow:hidden;
+  transition:transform .12s ease,background-color .15s ease,border-color .15s ease,color .15s ease,box-shadow .15s ease}
+.mr-op:active,.mr-btn:active,.mr-wa-pie:active,.mr-lanzar:active{transform:scale(.97)}
+.mr-onda{position:absolute;border-radius:50%;background:currentColor;opacity:.22;transform:scale(0);pointer-events:none;
+  animation:mr-onda .55s ease-out forwards}
+@keyframes mr-onda{to{transform:scale(1);opacity:0}}
+
+/* El botón que abre el panel, arriba del de WhatsApp */
+.mr-lanzar{position:fixed;right:20px;bottom:84px;z-index:550;display:flex;align-items:center;gap:8px;
+  padding:11px 16px 11px 13px;border-radius:999px;border:2px solid var(--mr-acento);background:#fff;
+  color:var(--mr-acento);font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 8px 24px rgba(124,58,237,.22);
+  animation:mr-aparece .35s ease-out}
+.mr-lanzar:hover{background:var(--mr-surface-2)}
+.mr-lanzar svg{width:18px;height:18px;flex:none}
+.mr-lanzar .mr-punto{width:9px;height:9px;border-radius:50%;background:var(--mr-acento);margin-left:2px}
+body.con-pedido .mr-lanzar{bottom:96px}
+
+/* La bienvenida (B) */
+.mr-velo{position:fixed;inset:0;z-index:945;background:rgba(21,18,32,.55);display:grid;place-items:center;padding:16px;
+  animation:mr-funde .25s ease-out}
+.mr-bienvenida{width:min(430px,100%);background:#fff;border-radius:20px;padding:24px 22px 20px;display:grid;gap:12px;
+  box-shadow:0 30px 60px rgba(21,18,32,.35);text-align:center;animation:mr-sube .35s cubic-bezier(.2,.8,.3,1)}
+.mr-icono{justify-self:center;width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#7C3AED,#A78BFA);
+  display:grid;place-items:center;color:#fff}
+.mr-icono svg{width:27px;height:27px}
+.mr-bienvenida h2{margin:0;font:400 27px/1.1 var(--mr-display);color:var(--mr-ink)}
+.mr-bienvenida p{margin:0;color:var(--mr-muted);font-size:15px;line-height:1.45}
+.mr-ejemplos{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.mr-ej{border:1px solid var(--mr-line);background:var(--mr-surface-2);color:var(--mr-ink);border-radius:999px;
+  padding:7px 12px;font-size:13px;cursor:pointer}
+.mr-ej:hover{border-color:var(--mr-lila)}
+.mr-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:2px}
+
+/* Los botones de acción (en la bienvenida y en las pantallas) */
+.mr-btn{border:0;border-radius:999px;padding:11px 18px;font-weight:700;font-size:14px;cursor:pointer;background:var(--mr-acento);
+  color:#fff;box-shadow:0 6px 16px rgba(124,58,237,.3)}
+.mr-btn:hover{background:var(--mr-glow)}
+.mr-btn.mr-sec{background:#fff;color:var(--mr-acento);box-shadow:none;border:1px solid var(--mr-line)}
+.mr-btn.mr-sec:hover{border-color:var(--mr-acento);background:#fff}
+
+/* El panel al costado (2) */
+.mr-panel{position:fixed;top:0;right:0;bottom:0;z-index:940;width:min(400px,100%);display:flex;flex-direction:column;
+  background:var(--mr-paper);border-left:1px solid var(--mr-line);box-shadow:-18px 0 50px rgba(24,18,38,.18);
+  animation:mr-panel-entra .28s cubic-bezier(.2,.8,.3,1)}
+.mr-panel.mr-saliendo{animation:mr-panel-sale .23s ease-in forwards}
+@keyframes mr-panel-entra{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes mr-panel-sale{to{transform:translateX(40px);opacity:0}}
+.mr-cab{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--mr-grafito);color:#fff}
+.mr-av{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:grid;place-items:center;
+  flex:none;font:400 20px/1 var(--mr-display);color:#fff}
+.mr-cab b{display:block;font:400 17px/1.1 var(--mr-display);letter-spacing:.02em}
+.mr-cab small{color:rgba(255,255,255,.68);font-size:12px}
+.mr-atras,.mr-cerrar{border:0;background:rgba(255,255,255,.12);color:#fff;width:32px;height:32px;border-radius:50%;
+  cursor:pointer;display:grid;place-items:center;flex:none}
+.mr-cerrar{margin-left:auto;font-size:18px;line-height:1}
+.mr-atras{animation:mr-aparece .2s ease-out}
+.mr-atras:hover,.mr-cerrar:hover{background:rgba(255,255,255,.22)}
+
+/* Una pantalla: ceja, título, texto, opciones y acciones */
+.mr-cuerpo{flex:1;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain}
+.mr-pantalla{padding:18px 16px 20px;display:flex;flex-direction:column;gap:12px}
+.mr-desde-der{animation:mr-desde-der .3s cubic-bezier(.2,.8,.3,1)}
+.mr-desde-izq{animation:mr-desde-izq .3s cubic-bezier(.2,.8,.3,1)}
+@keyframes mr-desde-der{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:none}}
+@keyframes mr-desde-izq{from{opacity:0;transform:translateX(-36px)}to{opacity:1;transform:none}}
+.mr-ceja{margin:0;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--mr-acento)}
+.mr-titulo{margin:0;font:400 23px/1.15 var(--mr-display);color:var(--mr-ink);display:flex;align-items:center;gap:10px}
+.mr-intro{margin:0;font-size:15px;line-height:1.45;color:var(--mr-muted)}
+.mr-tilde{width:32px;height:32px;border-radius:50%;background:var(--mr-ok);color:#fff;display:grid;place-items:center;
+  font:700 17px/1 var(--mr-sans);flex:none;animation:mr-tilde .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes mr-tilde{from{transform:scale(0) rotate(-30deg)}to{transform:none}}
+
+/* Las opciones: renglones que llevan a otra pantalla */
+.mr-ops{display:flex;flex-direction:column;gap:8px}
+.mr-op{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border-radius:14px;
+  border:1px solid var(--mr-line);background:#fff;color:var(--mr-ink);cursor:pointer;
+  animation:mr-sube .32s cubic-bezier(.2,.8,.3,1) both;animation-delay:calc(var(--i,0) * 35ms + 40ms)}
+.mr-op:hover{border-color:var(--mr-lila);box-shadow:0 4px 14px rgba(124,58,237,.12)}
+.mr-op-ic{width:38px;height:38px;border-radius:11px;background:var(--mr-surface-2);display:grid;place-items:center;
+  font-size:19px;flex:none}
+.mr-op-t{flex:1;min-width:0;font-size:15px;font-weight:700;line-height:1.25}
+.mr-op-t small{display:block;margin-top:2px;font-size:12.5px;font-weight:500;color:var(--mr-muted)}
+.mr-op-n{flex:none;min-width:28px;padding:2px 8px;border-radius:999px;background:var(--mr-surface-2);color:var(--mr-faint);
+  font-size:12px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
+.mr-op-fl{flex:none;color:var(--mr-faint);font-size:22px;line-height:1;transition:transform .15s ease}
+.mr-op:hover .mr-op-fl{transform:translateX(3px);color:var(--mr-acento)}
+/* El renglón elegido se marca un instante antes de pasar a la pantalla siguiente */
+.mr-op.mr-elegido{background:var(--mr-acento);border-color:var(--mr-acento);color:#fff}
+.mr-op.mr-elegido small,.mr-op.mr-elegido .mr-op-fl{color:rgba(255,255,255,.85)}
+.mr-op.mr-elegido .mr-op-ic,.mr-op.mr-elegido .mr-op-n{background:rgba(255,255,255,.18);color:#fff}
+.mr-op.mr-elegido .mr-op-fl{transform:translateX(5px)}
+.mr-btn.mr-elegido{transform:scale(.97)}
+
+.mr-acc{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.mr-acc .mr-btn{width:100%;animation:mr-sube .32s cubic-bezier(.2,.8,.3,1) both;animation-delay:calc(var(--i,0) * 45ms + 80ms)}
+
+/* El texto de una pregunta frecuente, tal cual la web */
+.mr-texto{background:#fff;border:1px solid var(--mr-line);border-radius:14px;padding:14px;font-size:14.5px;line-height:1.5;
+  color:var(--mr-ink);animation:mr-sube .32s cubic-bezier(.2,.8,.3,1) both;animation-delay:60ms}
+.mr-texto p{margin:0 0 8px}
+.mr-texto p:last-child{margin-bottom:0}
+.mr-texto ul{margin:0 0 8px;padding-left:18px}
+.mr-texto li{margin:3px 0}
+.mr-tabla{margin:4px 0 10px;border-top:1px solid var(--mr-line)}
+.mr-fila{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--mr-line)}
+.mr-fila b{font-variant-numeric:tabular-nums}
+.mr-cordon{margin:0 0 10px}
+.mr-cordon summary{cursor:pointer;color:var(--mr-acento);font-weight:700;padding:4px 0}
+.mr-cordon h4{margin:10px 0 2px;font-size:14px}
+.mr-cordon p{margin:0;color:var(--mr-muted);font-size:13.5px}
+.mr-suave{color:var(--mr-faint)!important;margin-top:10px!important}
+
+/* Abajo, un solo botón de WhatsApp */
+.mr-pie{padding:10px 14px 12px;border-top:1px solid var(--mr-line);background:#fff;display:grid;gap:6px}
+.mr-wa-pie{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:999px;padding:12px 16px;
+  background:var(--mr-acento);color:#fff;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 6px 16px rgba(124,58,237,.3)}
+.mr-wa-pie:hover{background:var(--mr-glow)}
+.mr-pie small{text-align:center;font-size:11.5px;color:var(--mr-faint)}
+
+@keyframes mr-sube{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes mr-funde{from{opacity:0}to{opacity:1}}
+@keyframes mr-aparece{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+
+@media (max-width:760px){
+  .mr-lanzar{right:14px;bottom:76px;padding:10px 14px 10px 11px;font-size:13px}
+  body.con-pedido .mr-lanzar{bottom:92px}
+  .mr-panel{width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  .mr-raiz *,.mr-raiz *::before,.mr-raiz *::after{animation-duration:.01ms!important;animation-delay:0s!important;transition:none!important}
+}

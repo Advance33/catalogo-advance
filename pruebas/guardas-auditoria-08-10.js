@@ -17,7 +17,7 @@
 //  [W3-10] los usados al final y diciendo que son.
 //  [W3-12] la busqueda sin resultados ofrece lo parecido y el cotizador.
 //  [W3-17] los productos se piden desde el <head>.
-//  [DW-09] la version 4G / 5G del Redmi Note 15 Pro.
+//  [DW-09] la descripcion del 4G del Redmi Note 15 Pro, solo en las filas que dicen 4G.
 //  [D13] el pedido dice solo la cuota, sin el total en cuotas.
 //  [D14] la pregunta "¿Los productos son nuevos?".
 //  [D15] lo agotado no muestra precio.
@@ -513,22 +513,25 @@ function textos(){
   ok(!!ig2 && /Instagram @advancetecno/.test(ig2.textContent), '[D16] y la ayuda ofrece escribir por Instagram ademas de WhatsApp', ay && ay.textContent.replace(/\s+/g, ' ').trim());
 }
 
-/* ---- [DW-09] El Redmi Note 15 Pro 4G / 5G ---- */
+/* ---- [DW-09] El Redmi Note 15 Pro 4G / 5G ----
+   Desde el 27/10 (Benja: una descripcion dice solo lo comun a las versiones
+   que pueden llegar) el 4G tiene su propia entrada, sin versiones, y AT-0514
+   quedo sin descripcion: su fila 8/256 no dice 5G y puede ser 4G. Lo que se
+   cuida es lo mismo de antes: una fila que dice 4G muestra la del 4G, y una
+   que no lo dice no la muestra nunca (sin mirar el color). */
 function descripcionRedmi(){
   if(typeof DESCRIPCIONES === 'undefined' || !DESCRIPCIONES){ info('[DW-09] las descripciones no cargaron todavia'); return; }
   const filas = PRODUCTOS.filter(p => ['AT-0119', 'AT-0120', 'AT-0514'].includes(String(p.codigo || '').toUpperCase()));
   const mal = [];
   for(const p of filas){
     const e = descripcionDe(p);
-    if(!e) continue;
     const t = normDesc([p.desc, p.modelo, p.incluye].filter(Boolean).join(' '));
-    const esperado = t.includes('note 15 pro 4g') && !t.includes('note 15 pro 5g') ? '4G'
-      : t.includes('xiaomi redmi note 15 pro 5g') && !t.includes('note 15 pro 4g') ? '5G'
-      : !t.includes('note 15 pro 4g') && !t.includes('xiaomi redmi note 15 pro 5g') ? 'Sin confirmar' : null;
-    if(versionDescripcion(e, p) !== esperado) mal.push(p.id + ': ' + versionDescripcion(e, p) + ' y no ' + esperado);
+    const dice4g = t.includes('note 15 pro 4g') && !t.includes('note 15 pro 5g');
+    const del4g = !!e && /\(4G\)/.test(e.modelo || '');
+    if(dice4g !== del4g) mal.push(p.id + ': ' + (e ? e.modelo : 'sin descripcion') + (dice4g ? ' y no la del 4G' : ', que es la del 4G'));
   }
-  if(filas.length) ok(!mal.length, '[DW-09] el Redmi Note 15 Pro: 4G si el nombre dice 4G, 5G si el Modelo del proveedor dice [5G], y si no "Sin confirmar" (sin mirar el color)',
-                      a8Ej(mal) || filas.map(p => p.id.slice(-12) + '=' + versionDescripcion(descripcionDe(p), p)).join(', '));
+  if(filas.length) ok(!mal.length, '[DW-09] el Redmi Note 15 Pro: la descripcion del 4G si el nombre dice 4G, y nunca si no lo dice (sin mirar el color)',
+                      a8Ej(mal) || filas.map(p => p.id.slice(-12) + '=' + ((descripcionDe(p) || {}).modelo || 'sin descripcion')).join(', '));
   else info('[DW-09] hoy no hay filas del Redmi Note 15 Pro');
 }
 

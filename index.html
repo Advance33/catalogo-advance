@@ -4108,12 +4108,14 @@ const REFRESCO_MIN = 5;
 // nuestros y se pueden cruzar con el catálogo. El formato está escrito en
 // MEDICION-ADVAPP.txt, al lado de este archivo.
 //
-// VACÍO = no se mide nada y no sale ningún pedido. Así queda hasta que el
-// endpoint exista; encenderlo es cambiar esta línea y publicar.
+// Encendida desde el 29/10/2026 (Benja: «armá el registro»): ADVAPP guarda
+// los eventos en eventos_web (sql/250) y da el resumen con el token puente.
+// VACÍO = no se mide nada y no sale ningún pedido; apagarla es vaciar esta
+// línea y publicar.
 // Las pruebas no mandan nada aunque esté encendida: pruebas/correr.py la
 // apaga en la copia de cada tanda (29/09). Por eso esta línea tiene que
 // seguir escrita así, en una sola línea y con comillas simples.
-let ANALITICA_URL = '';
+let ANALITICA_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=eventos-web';
 
 // ---------- ENVÍO, RETIRO Y PREGUNTAS FRECUENTES ----------
 //

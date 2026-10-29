@@ -181,8 +181,9 @@ function correrPruebas(){
    cuotas, y la mira decision-cuotas.js sobre los textos de las cuotas. */
 function probarEnvios(){
   const ANTES = 'En CABA y GBA te lo llevamos en moto en el día:';
-  const TABLA = [['CABA', '$12.000'], ['1er cordón', '$15.000'], ['2do cordón', '$25.000'],
-                 ['3er cordón', '$45.000'], ['4to cordón', '$55.000']];
+  // 29/10/2026, Benja: CABA $15.000, 1er y 2do cordón $5.000 más, y del 3er
+  // cordón en adelante no figura (se consulta por WhatsApp)
+  const TABLA = [['CABA', '$15.000'], ['1er cordón', '$20.000'], ['2do cordón', '$30.000']];
   const DESPUES = ['Los días de lluvia, 50 % de recargo.',
                    'Al resto del país lo mandamos por la paquetería que elijas, recomendamos Andreani: el costo y la demora los pone la empresa.'];
   const i = PREGUNTAS.findIndex(q => q.p === '¿Hacen envíos?');
@@ -208,13 +209,15 @@ function probarEnvios(){
      '[envíos] las localidades van en «¿En qué cordón estoy?», cerrado al entrar');
   if(zonas){
     const cordones = [...zonas.querySelectorAll('dt')].map(dt => [txt(dt), txt(dt.nextElementSibling).replace(/\.$/, '').split(', ')]);
-    ok(JSON.stringify(cordones.map(c => [c[0], c[1].length])) === JSON.stringify([['1er cordón', 14], ['2do cordón', 19], ['3er cordón', 26], ['4to cordón', 5]]),
-       '[envíos] los cuatro cordones, con sus 14, 19, 26 y 5 localidades', cordones.map(c => c[0] + ': ' + c[1].length).join(' · '));
+    ok(JSON.stringify(cordones.map(c => [c[0], c[1].length])) === JSON.stringify([['1er cordón', 14], ['2do cordón', 19]]),
+       '[envíos] el 1er y el 2do cordón, con sus 14 y 19 localidades (del 3º en adelante se consulta)', cordones.map(c => c[0] + ': ' + c[1].length).join(' · '));
     const todas = cordones.flatMap(c => c[1]);
     ok(new Set(todas).size === todas.length, '[envíos] ninguna localidad está en dos cordones', todas.length + ' localidades');
     const en = (n, l) => (cordones[n - 1] || [, []])[1].includes(l);
-    ok(en(1, 'Olivos') && en(1, 'Wilde') && en(3, 'José León Suárez') && en(2, 'Aldo Bonzi') && en(3, 'Nordelta') && en(3, 'Don Torcuato') && en(4, 'La Plata'),
-       '[envíos] cada localidad en su cordón (José León Suárez en el 3º, Benja 26/10)');
+    ok(en(1, 'Olivos') && en(1, 'Wilde') && en(2, 'Aldo Bonzi') && en(2, 'Quilmes'),
+       '[envíos] cada localidad en su cordón');
+    ok(!/José León Suárez|Nordelta|Pilar|La Plata|\$45\.000|\$55\.000/.test(txt(r)),
+       '[envíos] del 3er cordón en adelante no figura: ni sus localidades ni sus precios (Benja, 29/10)');
     ok(/Si tu localidad no está, consultanos por WhatsApp\./.test(txt(zonas)), '[envíos] la que no está se consulta por WhatsApp');
     ok(!zonas.querySelector('ul') && !zonas.querySelector('a'), '[envíos] sin viñetas ni links de más en la respuesta');
   }

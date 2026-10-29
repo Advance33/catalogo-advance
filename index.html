@@ -4146,26 +4146,22 @@ const SERVICIO = {
 /* El envío en moto en CABA y GBA (23/10/2026, decisión 3 de Benja): lo que
    cuesta cada zona, tal cual lo pasó, y qué localidades caen en cada cordón.
    Va en la respuesta de "¿Hacen envíos?": la tabla de precios y, en el
-   desplegable "¿En qué cordón estoy?", las localidades. José León Suárez
-   va en el 3º (Benja, 26/10/2026). La que no está se consulta por
-   WhatsApp. Los precios son texto: la página no calcula nada con ellos. */
+   desplegable "¿En qué cordón estoy?", las localidades. La que no está se
+   consulta por WhatsApp. Los precios son texto: la página no calcula nada
+   con ellos.
+   29/10/2026, Benja: CABA $15.000 y el 1er y el 2do cordón $5.000 más
+   ($20.000 y $30.000). Del 3er cordón en adelante no figura en la web: se
+   cotiza en cada consulta, así que esas localidades caen en "Si tu
+   localidad no está, consultanos por WhatsApp". */
 const ENVIO_MOTO = [
-  { zona: 'CABA',       precio: '$12.000' },
-  { zona: '1er cordón', precio: '$15.000',
+  { zona: 'CABA',       precio: '$15.000' },
+  { zona: '1er cordón', precio: '$20.000',
     localidades: ['Olivos', 'Munro', 'Florida', 'Vicente López', 'San Martín', 'Caseros', 'La Tablada', 'Haedo',
                   'Ramos Mejía', 'Avellaneda', 'Sarandí', 'Lanús', 'Valentín Alsina', 'Wilde'] },
-  { zona: '2do cordón', precio: '$25.000',
+  { zona: '2do cordón', precio: '$30.000',
     localidades: ['Martínez', 'San Isidro', 'Villa Ballester', 'Martín Coronado', 'San Andrés',
                   'Hurlingham', 'Ituzaingó', 'Castelar', 'Morón', 'San Justo', 'Temperley', 'Banfield', 'Quilmes',
                   'Bernal', 'Villa Luzuriaga', 'Lomas de Zamora', 'Boulogne', 'Beccar', 'Aldo Bonzi'] },
-  { zona: '3er cordón', precio: '$45.000',
-    localidades: ['San Fernando', 'San Miguel', 'Tigre', 'Victoria', 'Benavídez', 'Ingeniero Maschwitz', 'Moreno',
-                  'Merlo', 'Ezeiza', 'Monte Grande', 'Florencio Varela', 'Adrogué', 'Guernica', 'Lavallol',
-                  'Berazategui', 'Burzaco', 'Nordelta', 'Claypole', 'Tortuguitas', 'Ricardo Rojas',
-                  'Isidro Casanova', 'Bella Vista', 'Los Polvorines', 'Loma Hermosa', 'Don Torcuato',
-                  'José León Suárez'] },
-  { zona: '4to cordón', precio: '$55.000',
-    localidades: ['Pilar', 'Escobar', 'General Rodríguez', 'Cañuelas', 'La Plata'] },
 ];
 
 // Las preguntas del final de la portada, en este orden.

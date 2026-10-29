@@ -1,8 +1,14 @@
 MEDICIÓN DE LA WEB · lo que ADVAPP tiene que recibir (17/09/2026)
 
-La web ya manda los eventos; hoy está APAGADA porque falta el endpoint. Del
-lado del catálogo, encenderla es poner la dirección en ANALITICA_URL
-(index.html, bloque MEDICIÓN) y publicar. Nada más.
+ENCENDIDA desde el 29/10/2026. ADVAPP la recibe en resource=eventos-web
+(api/_lib/eventos-web-handler.js), la guarda en la tabla eventos_web
+(sql/250) y da el resumen con el token puente:
+GET .../api/catalog?resource=eventos-web&token=…&dias=7. Guarda sólo lo que
+viene de catalogo.advancetecno.com.ar, hasta 20.000 eventos por día, y borra
+lo de más de 90 días. Apagarla es vaciar ANALITICA_URL (index.html, bloque
+MEDICIÓN) y publicar.
+
+(Lo de abajo es lo que se le pidió a ADVAPP el 17/09; vale igual.)
 
 Las pruebas corren siempre con la medición apagada (29/09): pruebas/correr.py
 la apaga en su copia de la página, así que ni PUBLICAR ni la revisión diaria
@@ -15,11 +21,12 @@ no hay cookies ni cartel de consentimiento.
 
 1) EL ENDPOINT
 ------------------------------------------------------------
-   POST https://advapp-blond.vercel.app/api/eventos      (nombre a confirmar)
+   POST https://advapp-blond.vercel.app/api/catalog?resource=eventos-web   (29/10)
 
    Cabeceras de respuesta:
      Access-Control-Allow-Origin: https://catalogo.advancetecno.com.ar
-     (para probar en local, también http://localhost:8765)
+     (lo de una copia local, como http://localhost:8765, contesta 204 pero
+     no se guarda: no ensucia el registro)
 
    Respuesta: 204 sin cuerpo. La web no la lee ni reintenta: si falla, se
    pierden esos eventos y ya. Nunca puede frenar ni romper la página.

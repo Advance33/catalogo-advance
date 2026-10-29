@@ -109,6 +109,16 @@ no hay cookies ni cartel de consentimiento.
                     no está en el catálogo; q es lo que escribió en el
                     buscador (hasta 60 caracteres). Sin desde, vino del
                     casillero de la portada. (29/09)
+   marian           tocó un botón de Marian, la guía de botones (29/10/2026,
+                    marian/marian.js). boton: el texto del botón ("Busco un
+                    producto", "¿Hacen envíos?", "Bienvenida: Ahora no"...,
+                    hasta 60 caracteres); accion: "abrir" (abrió el panel),
+                    "paso" o "menu" (pasó a otra pantalla), "pregunta" (vio
+                    una pregunta frecuente), "buscar" (filtró la página),
+                    "seccion", "cotizar_usado", "mapa" o "bienvenida". Si el
+                    botón filtra, trae además rubro, marca y precio (la clave
+                    del tramo, como ?precio=). El WhatsApp de su panel llega
+                    como whatsapp con desde: "marian".
 
    Lo que NO se manda nunca: nada escrito por el cliente salvo la búsqueda y
    el casillero de "¿Buscás algo que no está?", ningún dato personal, ningún

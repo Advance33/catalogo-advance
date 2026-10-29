@@ -292,6 +292,15 @@ si alguna falta).
                   (fotos/mini/huellas.json) no esta en dos modelos que se
                   ven distintos, salvo los grupos de PERMITIDAS, que por
                   fuera son iguales. Cada falla lleva el ID de ADVAPP.
+  marian.js       Marian, la guia de botones (Benja, 29/10/2026,
+                  marian/): que cargue, que sea solo botones y no se
+                  presente como IA, que cada pregunta de su menu encuentre
+                  su respuesta en PREGUNTAS, que los envios sean los de
+                  ENVIO_MOTO (sin el 3er cordon), que cada boton y su
+                  WhatsApp queden en la medicion, que filtre la pagina y que
+                  la bienvenida salga una vez y no tape una ficha.
+                  correr.py marca la bienvenida como vista en todas las
+                  tandas (SIN_BIENVENIDA); esta la borra para probarla.
 
 COMO SE CORREN
 --------------

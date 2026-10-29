@@ -226,6 +226,18 @@ IFRAMES_A_LA_COPIA = '''<script>
 '''
 
 
+# La bienvenida de Marian (29/10/2026) sale una vez por navegador, al entrar,
+# y tapa la pagina con un velo. Cada tanda abre un Chrome con perfil nuevo, asi
+# que le saldria a todas: este script la marca como vista antes de que cargue
+# marian/marian.js (que va con defer, despues de todo lo de la pagina). Los
+# iframes son del mismo origen y leen la misma marca. La tanda marian.js la
+# borra para probarla.
+SIN_BIENVENIDA = '''<script>
+/* correr.py (29/10): la bienvenida de Marian ya se vio. */
+try{ localStorage.setItem('advtecno.marian', '1'); }catch(e){}
+</script>
+'''
+
 # Los nombres de las filas (29/09, muestra 7.1 C). El resumen nombra cada
 # fila nueva por su producto, y eso lo sabe la pagina, no la tanda: cuando la
 # tanda escribe su RESULTADO, este script anota aparte, en un <pre> escondido,
@@ -288,7 +300,7 @@ def armar_probe(js):
     """Escribe la copia de la pagina con la tanda adentro y devuelve su nombre."""
     src = pagina_sin_medir()
     tanda = io.open(js, encoding='utf-8').read()
-    salida = src.replace('</body>', IFRAMES_A_LA_COPIA % PAGINA_SIN_MEDIR + NOMBRES_FILAS +
+    salida = src.replace('</body>', SIN_BIENVENIDA + IFRAMES_A_LA_COPIA % PAGINA_SIN_MEDIR + NOMBRES_FILAS +
                          '<script>\n' + tanda + '\n</script>\n</body>', 1)
     nombre = PREFIJO_PROBE + os.path.basename(js)[:-3] + '.html'
     io.open(os.path.join(RAIZ, nombre), 'wb').write(salida.encode('utf-8'))

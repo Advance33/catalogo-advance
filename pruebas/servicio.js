@@ -24,8 +24,9 @@ const esperar = setInterval(() => {
   document.body.appendChild(pre);
 }, 150);
 
-/* Nunca un plazo fijo de garantia: cada producto tiene la suya. El texto de
-   formas de pago decia "garantia oficial de 1 año" y hubo que sacarlo. */
+/* Nunca un plazo de garantia para todo. El texto de formas de pago decia
+   "garantia oficial de 1 año" y hubo que sacarlo. Lo unico que puede decir
+   "1 año" es la regla por marca (GARANTIA_REGLA, Benja 27/10/2026). */
 const PLAZO_FIJO = /\b(1|un|uno)\s+a[ñn]o\b/i;
 const elegible = x => x.stock && x.imagen && x.precio > 0;
 
@@ -48,7 +49,7 @@ function correrPruebas(){
   // Una sola a la vista: las ocho abiertas serian un muro de texto
   ok(ayuda.querySelectorAll('.ay-r.ve').length === 1, 'se ve una sola respuesta por vez');
 
-  ok(!PLAZO_FIJO.test(ayuda.textContent), 'ninguna respuesta promete un plazo fijo de garantia');
+  ok(!PLAZO_FIJO.test(ayuda.textContent.split(GARANTIA_REGLA).join('')), 'ninguna respuesta promete un plazo de garantia para todo');
   ok(ayuda.textContent.includes(DIRECCION), 'la direccion es la de la configuracion');
   const mapa = [...ayuda.querySelectorAll('a')].find(a => a.getAttribute('href') === MAPA);
   ok(!!mapa, 'hay un link al mapa', MAPA);

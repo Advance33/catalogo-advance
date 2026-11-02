@@ -149,8 +149,8 @@ function probarLasPreguntas(){
   const ult = pagar && pagar.lista[pagar.lista.length - 1];
   ok(ult === renglonTarjetaPagos()[0] && /^Tarjeta por Mercado Pago: en 1 pago o en cuotas \(mirá «¿Puedo pagar en cuotas\?»\)$/.test(ult),
      '[4A] «¿Cómo puedo pagar?» suma la tarjeta al final de su lista', ult);
-  ok(pagar && pagar.lista.slice(0, 5).join('|') === 'Efectivo en dólares|Efectivo en pesos|Transferencia bancaria en pesos (sin recargo)|Criptomonedas (+2%)|PayPal, Payoneer o Prex (+10%)',
-     '[4A] las otras formas de pago, con su recargo (cripto y PayPal si se muestran, Pedro 03/10)');
+  ok(pagar && pagar.lista.slice(0, 6).join('|') === 'Efectivo en dólares|Efectivo en pesos|Transferencia bancaria en pesos (sin recargo)|Transferencia bancaria en dólares (+3%)|Criptomonedas (+2%)|PayPal, Payoneer o Prex (+10%)',
+     '[4A] las otras formas de pago, con su recargo (cripto y PayPal si se muestran, Pedro 03/10; transferencia en dolares +3%, Benja 02/11)');
   ok(cuotas && cuotas.p === '¿Puedo pagar en cuotas?', '[4A] justo despues, la pregunta nueva «¿Puedo pagar en cuotas?»', cuotas && cuotas.p);
   if(cuotas){
     ok(!cuotas.lista && /^Se paga en pesos, con el dólar del día que ves en la página\./.test(cuotas.r[1]) && /ves cuánto es cada cuota\.$/.test(cuotas.r[1]),

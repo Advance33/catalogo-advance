@@ -56,8 +56,10 @@ function correrPruebas(){
   });
   ok(!malR.length, 'cada respuesta dice lo de la configuración, con su lista y su link',
      malR.slice(0, 3).join(' | ') || 'todas bien');
-  // La garantía es por producto: prometer un plazo fijo es un problema con el cliente
-  ok(!/\b(1|un|uno)\s+a[ñn]o\b/i.test(sec().textContent), 'ninguna promete un plazo fijo de garantía');
+  // La garantía no es un plazo para todo: es la regla por marca (GARANTIA_REGLA, Benja 27/10/2026).
+  // Fuera de esa regla, un "1 año" suelto (el viejo "garantía oficial de 1 año") es un problema con el cliente.
+  ok(!/\b(1|un|uno)\s+a[ñn]o\b/i.test(sec().textContent.split(GARANTIA_REGLA).join('')), 'ninguna promete un plazo de garantía para todo');
+  ok(sec().textContent.includes(GARANTIA_REGLA), 'y la de garantía dice la regla entera');
   ok(!/últimas unidades|quedan pocas|stock limitado|por tiempo limitado/i.test(sec().textContent),
      'no inventa urgencias');
 

@@ -4123,8 +4123,11 @@ let ANALITICA_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=evento
 // cambian SOLO acá. La página no calcula ni completa nada de esto por su
 // cuenta. Para sacar una línea o una pregunta, borrala; para agregar, copiá una.
 //
-// OJO con la garantía: no poner un plazo fijo ("1 año"). Cada producto tiene
-// la suya, y prometer un plazo que no se cumple es un problema con el cliente.
+// OJO con la garantía: nunca un plazo para todo ("garantía oficial de 1 año"),
+// que es prometer lo que no se cumple. La regla es por marca y la decidió Benja
+// el 27/10/2026: es la misma de ADVAPP › LISTAS › ⚙️ Garantías, que manda la de
+// cada producto en su ficha. Si cambia allá, cambiarla también acá.
+const GARANTIA_REGLA = '1 año en Apple, celulares, tablets y PlayStation, y 3 meses en todo lo demás';
 
 const DIRECCION = 'Av. de los Incas 5150, 1A, CABA';
 /* Instagram (13/10/2026, decisión D16 A de Benja, auditoría W3-16): la cuenta
@@ -4230,7 +4233,9 @@ const PREGUNTAS = [
       ? ['Sí, todo es nuevo y sellado, salvo los de la sección Usados, que lo dicen en su tarjeta y en su ficha. Los de caja blanca vienen sin la caja original y también lo dice la ficha.']
       : ['Sí, nuevos. Los de caja blanca vienen sin la caja original y lo dice la ficha.']; } },
   { p: '¿Los productos tienen garantía?',
-    r: ['Sí, todos. La garantía cambia según el producto, así que preguntanos por la del que te interesa y te la confirmamos antes de que compres.'] },
+    // La regla entera, así nadie tiene que preguntarla (Benja, 02/11/2026). Antes
+    // decía "preguntanos por la del que te interesa".
+    r: [`Sí, todos: ${GARANTIA_REGLA}. La de cada producto está en su ficha.`] },
   { p: '¿Cómo hago el pedido?',
     r: ['En cualquier producto tocá «Consultar por WhatsApp»: el mensaje te sale ya escrito con el modelo.',
         'Si querés llevar varios, sumalos con el + y mandanos todo en un solo mensaje.'] },

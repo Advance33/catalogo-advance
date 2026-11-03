@@ -611,6 +611,13 @@ def r_nombre_desparejo(filas, ctx):
                            'clave': 'ram|' + d + '|' + ','.join(str(x) for x in rams)}
 
 
+# Categorias que Benja decidio aunque el prefijo del SKU diga otra cosa: la
+# regla de abajo no las vuelve a pedir. 02/11/2026: la PlayStation VR2 es
+# Consola, aunque su SKU sea ACG- (accesorio); cada CORRECCIONES-ADVAPP.json la
+# devolvia a Accesorio Gaming.
+CATEGORIA_DECIDIDA = {'CON-SON-013': 'Consola'}
+
+
 @regla('LA CATEGORIA CONTRADICE AL SKU',
        'El prefijo del SKU (DRN, CEL, TAB...) dice la clase de producto, y en todas las '
        'demas filas coincide con la Categoria.',
@@ -629,7 +636,7 @@ def r_categoria(filas, ctx):
     for f in filas:
         p = (f.get('SKU_VARIANTE') or '').strip().upper().split('-')[0]
         cat = (f.get('Categoría') or '').strip()
-        if not p or not cat or not pre[p]:
+        if not p or not cat or not pre[p] or CATEGORIA_DECIDIDA.get(f['ID']) == cat:
             continue
         mayor, n = pre[p].most_common(1)[0]
         resto = sum(pre[p].values()) - n
@@ -1256,10 +1263,29 @@ def leer_confirmadas(ruta=None):
     return lista
 
 
+# Lo que el último bloque del SKU_VARIANTE obliga a decir en el nombre, como
+# en pruebas/nombres-sku.js (Benja, 26/10/2026: el nombre dice lo que dice su
+# SKU). Las confirmadas guardan el nombre entero del día en que se anotaron:
+# las del 13/10 («7ma» → «7ª») no decían «Wifi», y el 03/11 se lo sacaban a
+# los iPad Mini 7 que ya lo tenían.
+TRAMOS_SKU = [(r'^BODY$', r'\b(body|cuerpo)\b'), (r'^WIFI$', r'\bwi-?fi\b'),
+              (r'^CELL', r'\b(cell|cellular|celular|5g|lte)\b'), (r'^DIG$', r'\bdigital\b'),
+              (r'^ESIM$', r'\be-?sim\b'), (r'^ANC$', r'\banc\b|estuche de carga inal[aá]mbrica')]
+
+
+def pierde_lo_del_sku(sku, hoy, nuevo):
+    """True si el nombre `nuevo` deja de decir algo que el SKU obliga y que el
+    nombre de `hoy` sí dice."""
+    tramo = (sku or '').strip().upper().split('-')[-1]
+    return any(re.match(t, tramo) and re.search(dice, hoy, re.I) and not re.search(dice, nuevo, re.I)
+               for t, dice in TRAMOS_SKU)
+
+
 def sumar_confirmadas(lista, filas, confirmadas):
     """Las confirmadas que ADVAPP todavía no tiene, sumadas a las de la
     auditoría (en la misma corrección si es el mismo producto). Devuelve la
-    lista y cuántas ya estaban aplicadas."""
+    lista y cuántas ya estaban aplicadas (o quedaron viejas: un nombre que le
+    sacaría al de hoy lo que su SKU obliga a decir no sale)."""
     por_id = {f['ID']: f for f in filas}
     out = collections.OrderedDict((x['id'], x) for x in lista)
     aplicadas = 0
@@ -1268,6 +1294,8 @@ def sumar_confirmadas(lista, filas, confirmadas):
         if not f:
             continue
         pend = {k: v for k, v in c['cambios'].items() if (f.get(CAMPOS_ADVAPP[k]) or '').strip() != v}
+        if 'nombre' in pend and pierde_lo_del_sku(f.get('SKU_VARIANTE'), _desc(f), pend['nombre']):
+            del pend['nombre']
         if not pend:
             aplicadas += 1
             continue
@@ -1509,6 +1537,9 @@ def probar():
     dr.append(fila('ACC', 'Drone DJI Air 3S + Fly More Combo', sv='DRN-DJI-AIR3S', cat='Accesorio Drone'))
     pts = list(r_categoria(dr, ctx))
     ok([p['id'] for p in pts] == ['ACC'] and 'Drone' in pts[0]['poner'], 'un drone cargado como accesorio se pide')
+    acg = [fila('A%d' % i, 'Joystick %d' % i, sv='ACG-SON-X%d' % i, cat='Accesorio Gaming') for i in range(4)]
+    acg.append(fila('CON-SON-013', 'PlayStation VR2', sv='ACG-SON-VR2', cat='Consola'))
+    ok(not list(r_categoria(acg, ctx)), 'la PS VR2 queda en Consola aunque su SKU sea ACG- (Benja, 02/11)')
     # 7) Colores, siglas, erratas, terminos
     cols = [fila('a', 'x', 'gray', grupo='t'), fila('b', 'x', 'Gray', grupo='t'),
             fila('c', 'x', 'negro', grupo='e'), fila('d', 'x', 'Skyblue', grupo='air'),
@@ -1596,6 +1627,15 @@ def probar():
     ok(len(lst) == 1 and len(x1) == 1 and x1[0]['cambios'] == {'codigo': 'AT-0119', 'nombre': 'Redmi Note 15 Pro 4G 8/256GB (Black)'}
        and x1[0]['antes']['nombre'] == 'Redmi Note 15 Pro 5G 8/256GB (Black)' and ya == 1,
        'las confirmadas se suman a la misma corrección, con el "antes" de hoy; la ya aplicada y la de un ID que no está no salen')
+    #      Una confirmada vieja no le saca al nombre lo que su SKU obliga
+    #      (los iPad Mini 7 del 13/10, sin «Wifi», 03/11/2026)
+    filas_w = [fila('X-5', 'iPad Mini 7ª Gen 128GB Wifi (Purple)', 'Purple', sv='TAB-APL-IPADMINI7-128-PUR-WIFI'),
+               fila('X-6', 'iPad Mini 7ma Gen 256GB Wifi (Blue)', 'Blue', sv='TAB-APL-IPADMINI7-256-BLU-WIFI')]
+    conf_w = [{'id': 'X-5', 'cambios': {'nombre': 'iPad Mini 7ª Gen 128GB (Purple)'}, 'motivo': 'prueba'},
+              {'id': 'X-6', 'cambios': {'nombre': 'iPad Mini 7ª Gen 256GB Wifi (Blue)'}, 'motivo': 'prueba'}]
+    lst_w, ya_w = sumar_confirmadas([], filas_w, conf_w)
+    ok([x['id'] for x in lst_w] == ['X-6'] and ya_w == 1,
+       'la confirmada que le sacaría «Wifi» a un SKU WIFI no sale; la que lo deja, sí')
     # 12c) El SKU (14/10/2026): sale con el SKU_VARIANTE de hoy como "antes"
     #      y deja de salir cuando ADVAPP ya lo cambió
     filas_s = [fila('X-3', 'Xiaomi Redmi 17 4/128GB (Black)', 'Black', sv='CEL-XIA-17-4G128-BLK-000'),

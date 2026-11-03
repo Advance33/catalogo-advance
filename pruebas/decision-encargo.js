@@ -6,9 +6,10 @@
 //   la portada  el bloque va entre Recien llegados y Quienes somos, con el
 //               titulo que manda ADVAPP, los pasos numerados con su plazo y
 //               cada producto con marca, nombre, detalle, garantia (si viene),
-//               precio en dolares tal cual y su codigo. El pago en un renglon
-//               (Benja 03/11: «lo mismo»), sin montos, planes ni porcentajes;
-//               nada de seña ni de demoras (eso va por WhatsApp).
+//               precio en dolares tal cual y su codigo. El pago en un renglon:
+//               con seña y el resto cuando llega (Benja 03/11: «Sí, con
+//               seña»), con las formas de siempre (Benja: «lo mismo»), sin
+//               montos, planes ni porcentajes; nada de demoras (va por WhatsApp).
 //   WhatsApp    «Hola! Me interesa … (ENC-0001), por encargo, a USD 470.» y
 //               la medicion lo anota con desde "encargo" y el codigo.
 //   la carga    si ADVAPP falla, el bloque no esta; si llega, se suma solo.
@@ -119,12 +120,12 @@ async function probarLaPortada(){
   ok(!sony.querySelector('.en-gar') && enTxt(garmin.querySelector('.en-gar')) === 'Garantía: 6 meses' && enTxt(garmin.querySelector('.en-precio')) === 'USD 1.015',
      'la garantia solo si ADVAPP la manda («Garantía: 6 meses»); vacia, sin renglon');
   const pago = sec.querySelector('.en-pago');
-  ok(enTxt(pago) === 'Se paga con las mismas formas que el resto del catálogo, también en cuotas con tarjeta.' &&
+  ok(enTxt(pago) === 'Se encarga con una seña y el resto se paga cuando llega. Las formas de pago son las mismas que en el resto del catálogo, también en cuotas con tarjeta.' &&
      pago.previousElementSibling === sec.querySelector('.en-pasos'),
-     'debajo de los pasos, el pago en un renglon (Benja 03/11: «lo mismo», cuotas incluidas)', enTxt(pago));
-  const sinPasos = enTxt(sec).replace(enTxt(sec.querySelector('.en-pasos')), '');
-  ok(!/%|\$\s?\d|recargo|inter[eé]s|\d+\s*cuotas/i.test(enTxt(sec)) && !/\bseña\b/i.test(sinPasos),
-     'sin montos de cuotas, planes ni porcentajes, y la seña solo como paso (no hay texto aprobado)', enTxt(sec).slice(0, 80));
+     'debajo de los pasos, el pago en un renglon: con seña y el resto cuando llega, con las formas de siempre (Benja 03/11)', enTxt(pago));
+  const sinPasosNiPago = enTxt(sec).replace(enTxt(sec.querySelector('.en-pasos')), '').replace(enTxt(pago), '');
+  ok(!/%|\$\s?\d|recargo|inter[eé]s|\d+\s*cuotas/i.test(enTxt(sec)) && !/\d/.test(enTxt(pago)) && !/\bseña\b/i.test(sinPasosNiPago),
+     'sin montos de cuotas, planes ni porcentajes, y la seña sin cuánto: solo en el paso y en el renglon del pago', enTxt(sec).slice(0, 80));
   if(!WHATSAPP){ info('sin WhatsApp: no hay botones'); return; }
   const a = sony.querySelector('a.en-consultar');
   const msj = a ? decodeURIComponent(a.href.split('text=')[1] || '') : '';

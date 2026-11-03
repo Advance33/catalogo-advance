@@ -11038,10 +11038,12 @@ function irDesdeNav(id){
    Nunca el link, el precio ni la foto de la tienda de origen: eso lo frena
    ADVAPP, que rechaza los textos que la nombran y las fotos de su CDN. Acá
    no se la nombra a propósito: este repo es público.
-   El pago (Benja, 03/11: «lo mismo»): las mismas formas que «¿Cómo puedo
-   pagar?», cuotas incluidas; se dice en un renglón, sin montos ni planes.
+   El pago, en un renglón y sin montos ni planes: con seña (Benja, 03/11:
+   «Sí, con seña»; nunca cuánto, porque deja deducir el precio de origen) y
+   el resto cuando llega, con las mismas formas que «¿Cómo puedo pagar?»,
+   cuotas incluidas (Benja, 03/11: «lo mismo»).
    Si no llega o se demora (Benja: «sería por wsp»): la web no promete
-   nada. De la seña todavía no hay texto: no se dice nada. */
+   nada. */
 const ENCARGO_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-encargo';
 const ENCARGO_ESPERA_MS = 8000;
 const ENCARGO_MAX = 24;
@@ -11121,7 +11123,7 @@ function htmlEncargo(){
   return `<section class="encargo" id="encargo" aria-labelledby="en-titulo">
     <div class="fp-cab"><h2 id="en-titulo">${esc(d.seccion)}</h2><span class="fp-sub">precio final en US$</span></div>
     ${pasos}
-    <p class="en-pago">Se paga con las mismas formas que el resto del catálogo, también en cuotas con tarjeta.</p>
+    <p class="en-pago">Se encarga con una seña y el resto se paga cuando llega. Las formas de pago son las mismas que en el resto del catálogo, también en cuotas con tarjeta.</p>
     <div class="en-prods">${d.productos.map(tarjeta).join('')}</div>
   </section>`;
 }

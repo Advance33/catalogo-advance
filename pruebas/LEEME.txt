@@ -274,8 +274,9 @@ si alguna falta).
                   nombre o precio entero), el bloque entre Recien llegados y
                   Quienes somos con los pasos numerados y cada producto (marca,
                   nombre, detalle, garantia si viene, precio tal cual, codigo),
-                  el pago en un renglon sin montos ni porcentajes, nada de
-                  seña ni demoras, el WhatsApp y su medicion con
+                  el pago en un renglon (con seña sin decir cuanto, el resto
+                  cuando llega, las formas de siempre) sin montos ni
+                  porcentajes, nada de demoras, el WhatsApp y su medicion con
                   desde "encargo", y que se suma o se va solo segun conteste
                   ADVAPP.
   decision-orden-lista.js

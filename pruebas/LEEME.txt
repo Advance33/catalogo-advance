@@ -267,6 +267,17 @@ si alguna falta).
                   tarjeta con la cuenta de siempre, "Efectivo / Transferencia
                   (+3%)" solo con u$, el WhatsApp con las dos cifras y otra
                   ficha que arranca en efectivo.
+  decision-encargo.js
+                  Metodologia de encargo (Benja, 03/11, datos de ADVAPP
+                  encargo/1), con datos de ejemplo: lo que no sirve no sale
+                  (otro contrato, lista vacia, sin codigo ENC-####, marca,
+                  nombre o precio entero), el bloque entre Recien llegados y
+                  Quienes somos con los pasos numerados y cada producto (marca,
+                  nombre, detalle, garantia si viene, precio tal cual, codigo),
+                  el pago en un renglon sin montos ni porcentajes, nada de
+                  seña ni demoras, el WhatsApp y su medicion con
+                  desde "encargo", y que se suma o se va solo segun conteste
+                  ADVAPP.
   decision-orden-lista.js
                   El orden de la lista y la marca 🔥 (Pedro, 03/10/2026):
                   adentro de cada marca la grilla va en el orden de la

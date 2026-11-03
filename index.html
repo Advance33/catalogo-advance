@@ -1234,6 +1234,45 @@ window.ADVAPP_TEMPRANO = (() => {
     .nosotros.sin-local .ns-caras{justify-content:flex-start}
     .nosotros.sin-local .ns-foto{width:64px;height:64px;font-size:26px}
   }
+  /* ---------- Metodología de encargo (Benja, 03/11/2026) ----------
+     El mismo recuadro blanco que Quiénes somos. Arriba los pasos con su
+     plazo, numerados; abajo los productos, con la inicial de la marca debajo
+     de la foto: si la foto falta o no carga, queda la inicial. La foto va
+     sobre blanco y sin multiply (en el iPhone de Benja multiply falla). */
+  .encargo{display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:28px;background:var(--surface);
+           border:1px solid var(--line);scroll-margin-top:calc(var(--alto-cinta,0px) + 18px)}
+  .encargo .fp-cab{margin-bottom:0}
+  .en-pasos{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:0;padding:0;list-style:none;counter-reset:en-paso}
+  .en-paso{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;row-gap:3px;
+           align-items:center;padding:12px;border-radius:14px;background:var(--surface-2)}
+  .en-paso::before{counter-increment:en-paso;content:counter(en-paso);grid-row:1 / span 2;display:grid;place-items:center;
+                   width:26px;height:26px;border-radius:50%;background:var(--acento);color:#fff;font:700 12px/1 var(--sans)}
+  .en-paso b{font:600 13.5px/1.25 var(--sans);color:var(--ink)}
+  .en-paso span{font:500 11px/1.3 var(--mono);letter-spacing:.03em;color:var(--muted)}
+  .en-pago{margin:0;font:400 13.5px/1.45 var(--sans);color:var(--muted)}
+  .en-prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+  .en-prod{display:flex;flex-direction:column;min-width:0;border-radius:var(--radius);background:var(--surface);
+           border:1px solid var(--line);overflow:hidden}
+  .en-foto{position:relative;display:grid;place-items:center;aspect-ratio:4/3;background:#fff;border-bottom:1px solid var(--line);
+           color:#C9B6F5;font:400 44px/1 var(--display)}
+  .en-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:10px;box-sizing:border-box;background:#fff}
+  .en-datos{display:flex;flex-direction:column;gap:6px;flex:1;padding:12px 14px 14px}
+  .en-marca{font:600 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+  .en-nom{margin:0;font:600 15px/1.25 var(--sans);color:var(--ink)}
+  .en-det{margin:0;font:400 13px/1.4 var(--sans);color:var(--muted)}
+  .en-gar{margin:0;font:500 12.5px/1.35 var(--sans);color:var(--ok)}
+  .en-pie{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:auto;padding-top:6px}
+  .en-precio{font:700 19px/1 var(--sans);color:var(--ink)}
+  .en-id{font:500 10.5px/1 var(--mono);letter-spacing:.06em;color:var(--faint)}
+  .en-consultar{justify-content:center}
+  @media (max-width:760px){
+    .encargo{padding:18px 16px;border-radius:22px}
+    .en-pasos{grid-template-columns:minmax(0,1fr);gap:6px}
+    .en-paso{grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:auto;padding:10px 12px}
+    .en-paso::before{grid-row:auto}
+    .en-paso span{text-align:right}
+    .en-prods{grid-template-columns:minmax(0,1fr)}
+  }
   /* La cinta (19/10): las reseñas pasan solas de costado y se frenan con el
      mouse encima, al tocarlas (toman el foco) o con una abierta en "Leer
      completa". La fila va dos veces (la copia, .rs-eco, el lector no la lee y
@@ -10685,7 +10724,9 @@ function pintarExtras(){
     // Las reseñas llegan aparte (cargarResenas): cuando llegan, el bloque se suma
     + '|' + (RESENAS ? [RESENAS.puntaje, RESENAS.cantidad, RESENAS.resenas.length].join(':') : '')
     // "¿Los productos son nuevos?" cambia con la sección de usados (14/10/2026)
-    + '|' + haySeccionUsados();
+    + '|' + haySeccionUsados()
+    // Metodología de encargo llega aparte (cargarEncargo, 03/11/2026)
+    + '|' + firmaEncargo();
   if(firma === FIRMA_EXTRAS && caja.children.length){
     // Las vidrieras se frenaron al esconderse: vuelven a girar
     arrancarNuevos();
@@ -10718,6 +10759,11 @@ function pintarExtras(){
   NV = nuevos;
   if(nvIndice >= NV.length) nvIndice = 0;
   if(NV.length) partes.push(htmlNuevos(NV));
+
+  /* 3b. Metodología de encargo (03/11/2026): lo que se trae por encargo,
+     aparte del catálogo. Sin datos de ADVAPP no hay bloque. */
+  const encargo = htmlEncargo();
+  if(encargo) partes.push(encargo);
 
   /* 6. La ayuda. Lo que el cliente se pregunta antes de escribir -cómo pagar,
      si hay envío, dónde estamos- y, si aun así no encuentra lo que busca, el
@@ -10977,6 +11023,107 @@ function irDesdeNav(id){
   const bloque = $(anclaNav(id));
   const destino = (i >= 0 && ayEnCelular() && bloque?.querySelector(`.ay-p[data-ay="${i}"]`)) || bloque;
   destino?.scrollIntoView({ behavior: quieto || lejos ? 'auto' : 'smooth', block: 'start' });
+}
+
+/* ---------- Metodología de encargo (Benja, 03/11/2026) ----------
+   Lo que se trae por encargo, aparte del catálogo. Lo arma ADVAPP (PR #223):
+   Benja marca qué va a la web, ADVAPP avisa cada 3 días cuáles revisar y lo
+   que pasa 7 días sin revisar sale solo. Llega en un recurso aparte
+   (contrato encargo/1) para que, si falla, no arrastre al catálogo: un
+   error, otro contrato o la lista vacía = no hay bloque, y se vuelve a
+   pedir con el refresco de siempre, no antes.
+   La web muestra sólo lo que manda: los pasos con sus plazos (los de
+   ⚙ Constantes) y cada producto con marca, nombre, detalle, garantía y el
+   precio final en dólares, que ya viene redondeado (la web no redondea plata).
+   Nunca el link, el precio ni la foto de la tienda de origen: eso lo frena
+   ADVAPP, que rechaza los textos que la nombran y las fotos de su CDN. Acá
+   no se la nombra a propósito: este repo es público.
+   El pago (Benja, 03/11: «lo mismo»): las mismas formas que «¿Cómo puedo
+   pagar?», cuotas incluidas; se dice en un renglón, sin montos ni planes.
+   Si no llega o se demora (Benja: «sería por wsp»): la web no promete
+   nada. De la seña todavía no hay texto: no se dice nada. */
+const ENCARGO_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-encargo';
+const ENCARGO_ESPERA_MS = 8000;
+const ENCARGO_MAX = 24;
+let ENCARGO = null;   // { seccion, pasos, productos } ya validado, o null
+
+// Sólo https; si no, sin foto (de dónde puede ser lo controla ADVAPP)
+function fotoEncargo(s){
+  try{ const u = new URL(String(s || '')); return u.protocol === 'https:' ? u.href : ''; }
+  catch{ return ''; }
+}
+
+/* Lo que manda ADVAPP, con lo que no sirve afuera. Un producto sin código
+   ENC-####, sin nombre, sin marca o sin precio entero no sale; tampoco uno
+   repetido. */
+function validarEncargo(j){
+  if(!j || j.contrato !== 'encargo/1') return null;
+  const txt = (x, n) => String(x == null ? '' : x).replace(/\s+/g, ' ').trim().slice(0, n);
+  const pasos = (Array.isArray(j.pasos) ? j.pasos : [])
+    .map(p => ({ paso: txt(p && p.paso, 40), plazo: txt(p && p.plazo, 40) }))
+    .filter(p => p.paso)
+    .slice(0, 8);
+  const vistos = new Set();
+  const productos = (Array.isArray(j.productos) ? j.productos : [])
+    .map(p => ({ id: txt(p && p.id, 12), nombre: txt(p && p.nombre, 90), marca: txt(p && p.marca, 40),
+                 detalle: txt(p && p.detalle, 200), garantia: txt(p && p.garantia, 120),
+                 precio: Number(p && p.precio_usd), foto: fotoEncargo(p && p.foto) }))
+    .filter(p => /^ENC-\d{4}$/.test(p.id) && p.nombre && p.marca && Number.isInteger(p.precio) && p.precio > 0 &&
+                 !vistos.has(p.id) && vistos.add(p.id))
+    .slice(0, ENCARGO_MAX);
+  if(!productos.length) return null;
+  return { seccion: txt(j.seccion, 60) || 'Metodología de encargo', pasos, productos };
+}
+
+const firmaEncargo = () => ENCARGO ? JSON.stringify(ENCARGO) : '';
+
+function cargarEncargo(){
+  return conTope(ENCARGO_ESPERA_MS, async senal => {
+      const r = await fetch(ENCARGO_URL, { signal: senal });
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(validarEncargo)
+    .catch(e => { console.warn('No se pudo leer ' + ENCARGO_URL + ':', e); return null; })
+    .then(e => {
+      const antes = firmaEncargo();
+      ENCARGO = e;
+      // Si la portada ya estaba dibujada, suma, cambia o saca el bloque
+      if(firmaEncargo() !== antes && MODELOS.length && enPortada()) pintarExtras();
+      return ENCARGO;
+    });
+}
+
+// El WhatsApp de cada producto, con su código: «me interesa ENC-0003»
+const mensajeEncargo = p => `Hola! Me interesa ${p.nombre} (${p.id}), por encargo, a USD ${plata(p.precio)}. ¿Me pasás info?`;
+
+function htmlEncargo(){
+  const d = ENCARGO;
+  if(!d) return '';
+  const pasos = d.pasos.length ? `<ol class="en-pasos" aria-label="Los pasos del encargo">${d.pasos.map(p =>
+      `<li class="en-paso"><b>${esc(p.paso)}</b>${p.plazo ? `<span>${esc(p.plazo)}</span>` : ''}</li>`).join('')}</ol>` : '';
+  const tarjeta = p => {
+    const link = linkWA(mensajeEncargo(p));
+    const garantia = /^garant/i.test(p.garantia) ? p.garantia : 'Garantía: ' + p.garantia;
+    return `<article class="en-prod" data-enc="${esc(p.id)}">
+      <div class="en-foto"><span aria-hidden="true">${esc(p.marca.slice(0, 1).toUpperCase())}</span>${p.foto
+        ? `<img src="${esc(p.foto)}" alt="${esc(p.nombre)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</div>
+      <div class="en-datos">
+        <span class="en-marca">${esc(p.marca)}</span>
+        <h3 class="en-nom">${esc(p.nombre)}</h3>
+        ${p.detalle ? `<p class="en-det">${esc(p.detalle)}</p>` : ''}
+        ${p.garantia ? `<p class="en-gar">${esc(garantia)}</p>` : ''}
+        <div class="en-pie"><b class="en-precio">USD ${plata(p.precio)}</b><span class="en-id">${esc(p.id)}</span></div>
+        ${link ? `<a class="nv-consultar en-consultar" href="${link}" target="_blank" rel="noopener">${ICONO_WA}Consultar</a>` : ''}
+      </div>
+    </article>`;
+  };
+  return `<section class="encargo" id="encargo" aria-labelledby="en-titulo">
+    <div class="fp-cab"><h2 id="en-titulo">${esc(d.seccion)}</h2><span class="fp-sub">precio final en US$</span></div>
+    ${pasos}
+    <p class="en-pago">Se paga con las mismas formas que el resto del catálogo, también en cuotas con tarjeta.</p>
+    <div class="en-prods">${d.productos.map(tarjeta).join('')}</div>
+  </section>`;
 }
 
 /* ---------- Quiénes somos (Benja, 13/10/2026) ----------
@@ -16879,6 +17026,11 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
 (function engancharMedicion(){
   const datos = p => p ? { id: p.id, codigo: p.codigo || '', cat: p.cat, marca: p.marca,
                            precio: p.precio, nombre: (p.desc || '').slice(0, 80) } : {};
+  const datosEncargo = a => {
+    const card = a.closest('.en-prod');
+    const p = ENCARGO && card && ENCARGO.productos.find(x => x.id === card.dataset.enc);
+    return p ? { id: p.id, marca: p.marca, precio: p.precio, nombre: p.nombre.slice(0, 80) } : {};
+  };
 
   const laFicha = abrirFicha;
   abrirFicha = function(k, historia){
@@ -16951,12 +17103,15 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
         : a.closest('#usado') ? 'usado'          // el cotizador de usados (05/10)
         : a.closest('.card') ? 'tarjeta'
         : a.closest('.nv-tarj') ? 'nuevos'
+        : a.closest('#encargo') ? 'encargo'      // Metodología de encargo (03/11)
         : a.closest('#ayuda') ? 'preguntas'
         : a.closest('#pie-id') ? 'pie' : 'otro';    // el pie (6.7 B, 29/09)
       const card = a.closest('.card, .nv-tarj');
       const p = (donde === 'ficha' || (donde === 'usado' && FICHA)) ? buscarProducto(FICHA)
               : card ? buscarModelo(card.dataset.key) : null;
       anotar('whatsapp', { desde: donde, ...datos(p),
+        // El producto de encargo: su código ENC-####, la marca, el precio y el nombre
+        ...(donde === 'encargo' ? datosEncargo(a) : {}),
         ...(donde === 'pedido' ? { unidades: unidadesPedido(), total: totalPedido() } : {}),
         /* Retiro o envío, si lo eligió (5.3 A): "retiro" o "envio", nada
            más. La localidad la escribe el cliente y no se manda nunca. */
@@ -17061,6 +17216,7 @@ cargarUsados();          // los valores de toma de usados (datos/usados.json, 05
 abrirCotizadorDelLink(); // si entraste con el link #cotizar-usado (23/10)
 addEventListener('hashchange', abrirCotizadorDelLink);
 cargarResenas();         // el puntaje y las reseñas de Google (datos/resenas.json, 13/10)
+cargarEncargo();         // Metodología de encargo, de ADVAPP (tecno-encargo, 03/11)
 document.querySelectorAll('#sello-google, #tb-sello').forEach(a => a.addEventListener('click', e => {
   if(e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   e.preventDefault();
@@ -17083,7 +17239,7 @@ addEventListener('online', () => { if(!USADOS) cargarUsados(); });
    pedidos cada 5 minutos mientras nadie miraba, igual que los carruseles que
    ya se frenan (ver el visibilitychange de las ofertas). Al volver, el de
    abajo refresca si pasó más de un minuto, así nunca se ven datos viejos. */
-function refrescoPeriodico(){ if(!document.hidden) actualizar(false); }
+function refrescoPeriodico(){ if(!document.hidden){ actualizar(false); cargarEncargo(); } }
 setInterval(refrescoPeriodico, REFRESCO_MIN * 60 * 1000);
 
 // Al volver a la pestaña refrescamos, pero no cada vez: cambiar de app en el

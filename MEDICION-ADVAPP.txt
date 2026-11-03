@@ -107,6 +107,9 @@ no hay cookies ni cartel de consentimiento.
                     ("iphone-13", "ps4-pro"), u "otro" si eligió "Otro
                     equipo" (05/10); nunca el valor ni lo que marcó del
                     estado.
+                    desde="encargo" es el "Consultar" de un producto de
+                    «Metodología de encargo» (03/11/2026): id es su código
+                    ENC-####, con marca, precio y nombre; sin codigo ni cat.
    pedilo          TOCÓ WHATSAPP desde "¿Buscás algo que no está?". q: lo que
                     escribió en ese casillero (hasta 60 caracteres, desde 3).
                     También es conversión, y es la lista de lo que vinieron a

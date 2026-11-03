@@ -60,6 +60,19 @@ function correrPruebas(){
   // Fuera de esa regla, un "1 año" suelto (el viejo "garantía oficial de 1 año") es un problema con el cliente.
   ok(!/\b(1|un|uno)\s+a[ñn]o\b/i.test(sec().textContent.split(GARANTIA_REGLA).join('')), 'ninguna promete un plazo de garantía para todo');
   ok(sec().textContent.includes(GARANTIA_REGLA), 'y la de garantía dice la regla entera');
+  /* «¿Cómo uso la garantía?» (Benja, 03/11/2026: 1-A 2-A 3-A 4-C): justo
+     después de la de garantía, por WhatsApp, con nombre o comprobante y un
+     video o fotos, sólo fallas de fábrica, y sin prometer qué se hace ni
+     cuándo: reparar, cambiar o devolver lo decide Benja en cada caso. */
+  const iGar = PREGUNTAS.findIndex(q => q.p === '¿Los productos tienen garantía?');
+  const uso = PREGUNTAS[iGar + 1];
+  ok(iGar >= 0 && uso && uso.p === '¿Cómo uso la garantía?' && uso.r.length === 2 &&
+     /^Escribinos por WhatsApp con tu nombre o el comprobante de compra, y un video o fotos de la falla\./.test(uso.r[0]) &&
+     /no tenés que ir a ningún service\.$/.test(uso.r[0]) && /^Cubre fallas de fábrica\./.test(uso.r[1]),
+     '«¿Cómo uso la garantía?» va justo después de la de garantía: por WhatsApp, con nombre o comprobante y video o fotos, sólo fallas de fábrica',
+     uso && uso.p);
+  ok(uso && !/repar|cambi|devol|reemplaz|\d+\s*(d[ií]as|horas|h\b)|plazo/i.test(uso.r.join(' ')),
+     'y no promete reparar, cambiar ni devolver, ni ningún plazo (lo decide Benja en cada caso)', uso && uso.r.join(' ').slice(0, 60));
   ok(!/últimas unidades|quedan pocas|stock limitado|por tiempo limitado/i.test(sec().textContent),
      'no inventa urgencias');
 

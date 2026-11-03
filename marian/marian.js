@@ -199,7 +199,8 @@
         .concat({ etiqueta: 'Verlo en la página', accion: 'seccion', seccion: 'donde', sec: true }),
       wa: 'Hola, quería coordinar para ir a verlos' }),
     { icono: '🛡️', etiqueta: 'Garantía y si son nuevos', sub: () => [
-      FAQ('¿Tienen garantía?', /garant/i),
+      FAQ('¿Tienen garantía?', /tienen garant/i),
+      FAQ('¿Cómo uso la garantía?', /c[oó]mo uso la garant/i),   // 03/11/2026
       FAQ('¿Son nuevos?', /nuevos/i) ] },
     FAQ('¿Cómo hago el pedido?', /c[oó]mo hago el pedido/i, { icono: '🧾' }),
   ];

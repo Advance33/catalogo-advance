@@ -4191,6 +4191,8 @@ const PREGUNTAS = [
     lista: ['Efectivo en dólares',
             'Efectivo en pesos',
             'Transferencia bancaria en pesos (sin recargo)',
+            // Benja, 02/11/2026: «3% para transferencia usd»
+            'Transferencia bancaria en dólares (+3%)',
             'Criptomonedas (+2%)',
             'PayPal, Payoneer o Prex (+10%)',
             ...renglonTarjetaPagos()] },
@@ -12693,9 +12695,11 @@ function actualizarCuotasFicha(d, v){
 
 /* ---------- Adelantar una parte (Benja, 26/10/2026) ----------
    La A de "Adelanto + cuotas": el cliente adelanta una parte (en dólares, en
-   efectivo; en pesos, en efectivo o transferencia: la transferencia en
-   dólares no existe) y el resto va con tarjeta en los planes de siempre. El
-   adelanto no lleva recargo; lo que queda, la misma cuenta que cuentaCuotas.
+   efectivo; en pesos, en efectivo o transferencia) y el resto va con tarjeta
+   en los planes de siempre. La transferencia en dólares existe desde el
+   02/11/2026 con +3% («¿Cómo puedo pagar?»), pero el adelanto en dólares
+   sigue siendo sólo en efectivo (textoAdelanto). El adelanto no lleva
+   recargo; lo que queda, la misma cuenta que cuentaCuotas.
    Los ejemplos de Benja: de $ 1.000.000 adelanta $ 300.000 y cuotifica
    $ 700.000; de u$ 1.000 adelanta u$ 400 y cuotifica u$ 600. Vive adentro de
    la etiqueta del precio, debajo de los planes, y vuelve a cero con cada

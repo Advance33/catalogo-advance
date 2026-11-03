@@ -649,16 +649,21 @@ d2c99849db2a86d9bb4190d5562faae8  AT-0470-01.jpg                     # mirada
 8925c5e8304dfa69e4a46e9af9cc69de  AT-0473-01.jpg                     # mirada
 565711eb08e622f2df80ef8049c9459b  AT-0473-02.jpg                     # mirada
 846029a8ce6ac4e256e4e1888f5c7c0f  AT-0473-03.jpg                     # mirada
+4bc865f6896edbda60956bc071032c45  AT-0473-04.jpg                     # mirada (la de AT-0471-02, iPad Air 13" M3 Purple: el M4 es igual por fuera, 03/11/2026)
 c2741865edd3ac2a7a836d6ddade1f43  AT-0474-01.jpg                     # mirada
 b4180a5ed455aa3474de539b40024f7b  AT-0474-02.jpg                     # mirada
 acb01ab72447c1c2d66485e067a726e3  AT-0474-03.jpg                     # mirada
 c2741865edd3ac2a7a836d6ddade1f43  AT-0475-01.jpg                     # mirada
+acb01ab72447c1c2d66485e067a726e3  AT-0475-02.jpg                     # mirada (la de AT-0474-03, iPad Mini 7 128GB Purple: el mismo equipo con otra memoria, 03/11/2026)
+b4180a5ed455aa3474de539b40024f7b  AT-0475-03.jpg                     # mirada (la de AT-0474-02, iPad Mini 7 128GB Starlight: el mismo equipo con otra memoria, 03/11/2026)
+df8c2b5f1128a367f9ac03ab8d6e870e  AT-0475-04.jpg                     # mirada (oficial de Apple, ipad-mini-select-wifi-blue-202410, el iPad mini A17 Pro Blue, 03/11/2026)
 56acf9f2a14130b4d7457ae94e948c46  AT-0476-01.jpg                     # mirada
 56acf9f2a14130b4d7457ae94e948c46  AT-0477-01.jpg                     # mirada
 56acf9f2a14130b4d7457ae94e948c46  AT-0478.jpg                        # mirada
 56acf9f2a14130b4d7457ae94e948c46  AT-0479-01.jpg                     # mirada
 7c7a20a73c2de42c6b8041f582fe6c2a  AT-0479-02.jpg                     # mirada
 56acf9f2a14130b4d7457ae94e948c46  AT-0480-01.jpg                     # mirada
+7c7a20a73c2de42c6b8041f582fe6c2a  AT-0480-02.jpg                     # mirada (la de AT-0479-02, iPad Pro 11" M5 256GB Silver: el mismo equipo con otra memoria, 03/11/2026)
 a16d2706f685219427563e6a9b27a3b5  AT-0481-01.jpg                     # mirada
 3ebfb5f8522317862e940a9c0dccbbc6  AT-0482-01.jpg                     # mirada
 7efb8ba79e95646a1e16530bc36cab09  AT-0483-01.jpg                     # mirada

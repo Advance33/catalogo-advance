@@ -651,16 +651,21 @@
 "AT-0473-01.jpg",
 "AT-0473-02.jpg",
 "AT-0473-03.jpg",
+"AT-0473-04.jpg",
 "AT-0474-01.jpg",
 "AT-0474-02.jpg",
 "AT-0474-03.jpg",
 "AT-0475-01.jpg",
+"AT-0475-02.jpg",
+"AT-0475-03.jpg",
+"AT-0475-04.jpg",
 "AT-0476-01.jpg",
 "AT-0477-01.jpg",
 "AT-0478.jpg",
 "AT-0479-01.jpg",
 "AT-0479-02.jpg",
 "AT-0480-01.jpg",
+"AT-0480-02.jpg",
 "AT-0481-01.jpg",
 "AT-0482-01.jpg",
 "AT-0483-01.jpg",
@@ -2252,7 +2257,8 @@
 "apple|notebook|15:1,1tb:1,24:1,air:1,m5:1"
 ],
 "AT-0432": [
-"apple|notebook|13:1,256:1,8:1,a18:1,neo:1"
+"apple|notebook|13:1,256:1,8:1,a18:1,neo:1",
+"apple|notebook|13:1,256:1,8:1,a18:1,neo:1,pro:1"
 ],
 "AT-0433": [
 "apple|notebook|13:1,256:1,8:1,a18:1,neo:1",
@@ -2383,7 +2389,8 @@
 "apple|tablet|128:1,13:1,air:1,m4:1"
 ],
 "AT-0473": [
-"apple|tablet|13:1,256:1,air:1,m4:1"
+"apple|tablet|13:1,256:1,air:1,m4:1",
+"apple|tablet|13:1,256:1,air:1,m4:1,wifi:1"
 ],
 "AT-0474": [
 "apple|tablet|128:1,7:1,mini:1",
@@ -2391,6 +2398,7 @@
 ],
 "AT-0475": [
 "apple|tablet|256:1,7:1,mini:1",
+"apple|tablet|256:1,7:1,mini:1,wifi:1",
 "apple|tablet|256:1,7ma:1,mini:1"
 ],
 "AT-0476": [
@@ -2406,7 +2414,8 @@
 "apple|tablet|11:1,256:1,m5:1,pro:1"
 ],
 "AT-0480": [
-"apple|tablet|11:1,512:1,m5:1,pro:1"
+"apple|tablet|11:1,512:1,m5:1,pro:1",
+"apple|tablet|11:1,512:1,m5:1,pro:1,wifi:1"
 ],
 "AT-0481": [
 "apple|tablet|11:1,512:1,cellular:1,m5:1,pro:1"
@@ -3784,9 +3793,12 @@
 "TAB-APL-IPADAIR11M4-512-BLU-WIFI": "AT-0470",
 "TAB-APL-IPADAIR11M4-512-PUR-WIFI": "AT-0470",
 "TAB-APL-IPADAIR11M4-512-STL-WIFI": "AT-0470",
+"TAB-APL-IPADAIR13M4-256-PUR-WIFI": "AT-0473",
+"TAB-APL-IPADMINI7-256-BLU-WIFI": "AT-0475",
 "TAB-APL-IPADMINI7-256-PUR-WIFI": "AT-0475",
 "TAB-APL-IPADMINI7-256-STL-WIFI": "AT-0475",
 "TAB-APL-IPADPRO11M5-256-SBK-CELL": "AT-0540",
+"TAB-APL-IPADPRO11M5-512-SLV-WIFI": "AT-0480",
 "TAB-APL-IPADPRO13M5-256-BLK-CELL": "AT-0650",
 "TAB-APL-IPADPRO13M5-512-SLV-WIFI": "AT-0484",
 "TAB-APP-001": "AT-0466",
@@ -6664,6 +6676,7 @@
 },
 "AT-0473": {
 "blue": "AT-0473-03",
+"purple": "AT-0473-04",
 "space gray": "AT-0473-01",
 "star": "AT-0473-02",
 "starlight": "AT-0473-02"
@@ -6675,6 +6688,7 @@
 "starlight": "AT-0474-02"
 },
 "AT-0475": {
+"blue": "AT-0475-04",
 "purple": "AT-0475-02",
 "space gray": "AT-0475-01",
 "starlight": "AT-0475-03"
@@ -6693,6 +6707,7 @@
 "space black": "AT-0479-01"
 },
 "AT-0480": {
+"silver": "AT-0480-02",
 "space black": "AT-0480-01"
 },
 "AT-0481": {
@@ -7393,5 +7408,5 @@
 }
 }
 },
-"generado": "2026-10-22T11:00:40"
+"generado": "2026-11-03T10:33:43"
 }

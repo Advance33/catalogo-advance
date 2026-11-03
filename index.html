@@ -2244,7 +2244,14 @@ window.ADVAPP_TEMPRANO = (() => {
   .fi-adelanto-moneda button{min-width:44px;height:40px;border:0;border-radius:9px;background:transparent;color:#C4B5FD;
                              font:700 14px/1 var(--sans);cursor:pointer}
   .fi-adelanto-moneda button[aria-pressed="true"]{background:var(--acento);color:#fff}
-  .fi-adelanto-abrir:focus-visible,.fi-adelanto-sin:focus-visible,.fi-adelanto-moneda button:focus-visible{outline:2px solid #C4B5FD;outline-offset:2px}
+  /* En dólares, efectivo o transferencia (+3%) (03/11/2026): el mismo par de
+     botones que la moneda, a lo ancho debajo del monto */
+  .fi-adelanto-medio{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:4px;border-radius:12px;
+                     background:rgba(255,255,255,.08)}
+  .fi-adelanto-medio button{min-height:40px;padding:0 8px;border:0;border-radius:9px;background:transparent;color:#C4B5FD;
+                            font:600 13px/1.2 var(--sans);cursor:pointer}
+  .fi-adelanto-medio button[aria-pressed="true"]{background:var(--acento);color:#fff}
+  .fi-adelanto-abrir:focus-visible,.fi-adelanto-sin:focus-visible,.fi-adelanto-moneda button:focus-visible,.fi-adelanto-medio button:focus-visible{outline:2px solid #C4B5FD;outline-offset:2px}
   .fi-adelanto-como{margin:0;font:400 12.5px/1.4 var(--sans);color:#C4B5FD}
   .fi-adelanto-queda{margin:0;padding:10px 12px;border-radius:12px;background:rgba(124,58,237,.22);
                      font:400 13px/1.4 var(--sans);color:#DDD3F5}
@@ -12695,19 +12702,28 @@ function actualizarCuotasFicha(d, v){
 
 /* ---------- Adelantar una parte (Benja, 26/10/2026) ----------
    La A de "Adelanto + cuotas": el cliente adelanta una parte (en dólares, en
-   efectivo; en pesos, en efectivo o transferencia) y el resto va con tarjeta
-   en los planes de siempre. La transferencia en dólares existe desde el
-   02/11/2026 con +3% («¿Cómo puedo pagar?»), pero el adelanto en dólares
-   sigue siendo sólo en efectivo (textoAdelanto). El adelanto no lleva
-   recargo; lo que queda, la misma cuenta que cuentaCuotas.
+   efectivo o transferencia; en pesos, en efectivo o transferencia) y el resto
+   va con tarjeta en los planes de siempre. El adelanto en efectivo o en pesos
+   no lleva recargo; lo que queda, la misma cuenta que cuentaCuotas.
+   En dólares por transferencia (Benja, 03/11/2026: «adelanto con
+   transferencia en dólares»): el mismo +3% de «¿Cómo puedo pagar?», encima
+   de lo que cubre. El cliente escribe cuánto del precio cubre, como con el
+   efectivo, y se le dice cuánto transfiere: cubre u$ 300 → transfiere
+   u$ 309, al dólar. Si cubre todo, transfiere el precio + 3% (u$ 1.000 →
+   u$ 1.030), lo mismo que pagar todo por transferencia en dólares. El bot
+   hace la misma cuenta (prompt de Tecno y calcular_cuotas).
    Los ejemplos de Benja: de $ 1.000.000 adelanta $ 300.000 y cuotifica
    $ 700.000; de u$ 1.000 adelanta u$ 400 y cuotifica u$ 600. Vive adentro de
    la etiqueta del precio, debajo de los planes, y vuelve a cero con cada
    ficha nueva (abrirFicha), como el plan. Escribir no rehace nada: sólo el
    resultado, el "quedan" y el WhatsApp. */
-let ADELANTO_FICHA = { abierto: false, moneda: 'usd', monto: 0 };
-// Lo que queda para la tarjeta: { monto, moneda, paga, usd?, ars } o null si
-// no hay adelanto. `paga`: el adelanto cubre todo. Sin cotización no hay
+let ADELANTO_FICHA = { abierto: false, moneda: 'usd', medio: 'efectivo', monto: 0 };
+// El recargo de la transferencia en dólares, el de «¿Cómo puedo pagar?»
+const RECARGO_TRANSF_USD = 3;
+// Lo que queda para la tarjeta: { monto, moneda, paga, usd?, ars, medio?,
+// cubre?, transfiere? } o null si no hay adelanto. `paga`: el adelanto cubre
+// todo. Por transferencia en dólares, `cubre` es lo del precio que paga (no
+// más que el precio) y `transfiere`, eso con el 3%. Sin cotización no hay
 // pesos: en dólares queda la cuenta sin montos y en pesos no se puede.
 function restoAdelanto(v){
   const a = ADELANTO_FICHA;
@@ -12719,7 +12735,10 @@ function restoAdelanto(v){
     return { monto, moneda: 'ars', paga: ars <= 0, ars: Math.max(0, ars) };
   }
   const usd = Math.max(0, v.precio - monto);
-  return { monto, moneda: 'usd', paga: v.precio - monto <= 0, usd, ars: TC ? Math.round(usd * TC) : null };
+  const r = { monto, moneda: 'usd', paga: v.precio - monto <= 0, usd, ars: TC ? Math.round(usd * TC) : null };
+  if(a.medio !== 'transferencia') return r;
+  const cubre = Math.min(monto, v.precio);
+  return { ...r, medio: 'transferencia', cubre, transfiere: Math.round(cubre * (1 + RECARGO_TRANSF_USD / 100)) };
 }
 // La cuenta de cuentaCuotas, sobre pesos que ya están en pesos
 function cuentaCuotasARS(ars, n){
@@ -12735,11 +12754,20 @@ function cuentaFicha(v, n){
   if(r.paga || r.ars === null) return null;
   return cuentaCuotasARS(r.ars, n);
 }
-const textoAdelanto = r => (r.moneda === 'ars' ? '$ ' : 'u$ ') + plata(r.monto) +
-  (r.moneda === 'ars' ? ' en efectivo o transferencia' : ' en efectivo');
+// El adelanto en el WhatsApp: "u$ 300 por transferencia en dólares (transfiero
+// u$ 309 con el 3%)", para que el vendedor vea las dos cifras
+const textoAdelanto = r => r.medio === 'transferencia'
+  ? `u$ ${plata(r.cubre)} por transferencia en dólares (transfiero u$ ${plata(r.transfiere)} con el ${RECARGO_TRANSF_USD}%)`
+  : (r.moneda === 'ars' ? '$ ' : 'u$ ') + plata(r.monto) +
+    (r.moneda === 'ars' ? ' en efectivo o transferencia' : ' en efectivo');
 function textoQuedaAdelanto(v){
   const r = restoAdelanto(v);
   if(!r) return 'Poné cuánto adelantás y te decimos cuánto queda en cuotas.';
+  if(r.medio === 'transferencia'){
+    const transfiere = `transferís u$ ${plata(r.transfiere)} (con el ${RECARGO_TRANSF_USD}%)`;
+    if(r.paga) return `Cubrís el precio entero: ${transfiere}.`;
+    return `Adelantás u$ ${plata(r.cubre)}: ${transfiere} y quedan u$ ${plata(r.usd)} para pagar en cuotas.`;
+  }
   const adelanto = (r.moneda === 'ars' ? '$ ' : 'u$ ') + plata(r.monto);
   if(r.paga) return `Con ${adelanto} cubrís el precio entero.`;
   return `Adelantás ${adelanto} y quedan ${r.moneda === 'ars' ? '$ ' + plata(r.ars) : 'u$ ' + plata(r.usd)} para pagar en cuotas.`;
@@ -12758,7 +12786,11 @@ function htmlAdelantoFicha(v){
           <button type="button" data-moneda="usd" aria-pressed="${!enPesos}" aria-label="En dólares">u$</button>
           <button type="button" data-moneda="ars" aria-pressed="${enPesos}" aria-label="En pesos">$</button></div>` : ''}
       </div>
-      <p class="fi-adelanto-como">${enPesos ? 'En pesos, en efectivo o transferencia.' : 'En dólares, en efectivo.'}</p>
+      ${enPesos ? '' : `<div class="fi-adelanto-medio" role="group" aria-label="Cómo pagás el adelanto en dólares">
+          <button type="button" data-medio="efectivo" aria-pressed="${a.medio !== 'transferencia'}">Efectivo</button>
+          <button type="button" data-medio="transferencia" aria-pressed="${a.medio === 'transferencia'}">Transferencia (+${RECARGO_TRANSF_USD}%)</button></div>`}
+      <p class="fi-adelanto-como">${enPesos ? 'En pesos, en efectivo o transferencia.'
+        : a.medio === 'transferencia' ? `En dólares, por transferencia: lleva ${RECARGO_TRANSF_USD}% encima de lo que adelantás.` : 'En dólares, en efectivo.'}</p>
       <p class="fi-adelanto-queda" aria-live="polite">${esc(textoQuedaAdelanto(v))}</p>
     </div>`;
 }
@@ -12780,6 +12812,12 @@ function engancharAdelantoFicha(d, v){
     ADELANTO_FICHA.moneda = b.dataset.moneda;
     ADELANTO_FICHA.monto = 0;           // u$ 400 no son $ 400
     rehacer('#fi-adelanto-monto');
+  });
+  // Efectivo o transferencia: el monto sigue (u$ 300 son u$ 300 del precio)
+  caja.querySelectorAll('.fi-adelanto-medio button').forEach(b => b.onclick = () => {
+    if(ADELANTO_FICHA.medio === b.dataset.medio) return;
+    ADELANTO_FICHA.medio = b.dataset.medio;
+    rehacer(`.fi-adelanto-medio button[data-medio="${b.dataset.medio}"]`);
   });
   const input = caja.querySelector('#fi-adelanto-monto');
   if(input) input.oninput = () => {
@@ -13499,7 +13537,7 @@ function abrirFicha(k, historia = true){
   TODAS_ABIERTA = false;     // "Ver las N versiones" arranca cerrada (4.3 C)
   DESC_ABIERTO = 'por';      // la descripción entra con "Por qué elegirlo" abierto (A2, 30/09)
   CUOTA_FICHA = 0;           // las cuotas entran sin plan marcado (2B, 30/09)
-  ADELANTO_FICHA = { abierto: false, moneda: 'usd', monto: 0 };   // y sin adelanto (26/10)
+  ADELANTO_FICHA = { abierto: false, moneda: 'usd', medio: 'efectivo', monto: 0 };   // y sin adelanto (26/10)
   if(historia !== null){ fichaEmpujada = historia === true; escribirURL(historia === true); }
 
   const d = document.createElement('div');

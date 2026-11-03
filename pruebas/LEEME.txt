@@ -258,6 +258,15 @@ si alguna falta).
                   renglon en el mensaje y en la medicion, la pregunta
                   "¿Puedo pagar en cuotas?" y ningun IVA ni factura a la
                   vista. Tambien a 360 px.
+  decision-adelanto.js
+                  Adelantar una parte (Benja, 26/10) y en dolares por
+                  transferencia (Benja, 03/11): en efectivo o en pesos sin
+                  recargo; por transferencia en dolares el +3% de "¿Como
+                  puedo pagar?" encima de lo que cubre (u$ 300 -> transfiere
+                  u$ 309, al dolar; todo -> precio + 3%), lo que queda a la
+                  tarjeta con la cuenta de siempre, "Efectivo / Transferencia
+                  (+3%)" solo con u$, el WhatsApp con las dos cifras y otra
+                  ficha que arranca en efectivo.
   decision-orden-lista.js
                   El orden de la lista y la marca 🔥 (Pedro, 03/10/2026):
                   adentro de cada marca la grilla va en el orden de la

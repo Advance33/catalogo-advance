@@ -1310,6 +1310,10 @@ window.ADVAPP_TEMPRANO = (() => {
   .en-cotizar:hover{background:rgba(255,255,255,.1)}
   .en-cotizar svg{width:17px;height:17px;flex:none}
   .encargo a:focus-visible{outline:2px solid #A78BFA;outline-offset:3px}
+  /* Mientras «Pedir cotización» pasa por debajo del WhatsApp flotante o de
+     Marian, los dos se esconden (Benja 04/11, «pasa ahora con celular»). Va
+     con !important porque la entrada del WhatsApp deja su opacidad fija. */
+  body.flotantes-ceden .wa-flotante, body.flotantes-ceden .mr-lanzar{visibility:hidden !important;opacity:0 !important}
   @media (max-width:900px){
     .encargo{grid-template-columns:minmax(0,1fr)}
   }
@@ -11230,6 +11234,35 @@ function htmlEncargo(){
       <a class="en-cotizar" href="${cotizar}" target="_blank" rel="noopener">${ICONO_WA}Pedir cotización</a></div>` : ''}
   </section>`;
 }
+
+/* Que los flotantes no tapen «Pedir cotización» (Benja 04/11: en el celular
+   «Preguntale a Marian» lo tapaba). Mientras el botón pasa por debajo del
+   WhatsApp flotante o de Marian, los dos se esconden un momento y vuelven
+   cuando pasó. Se miden las cajas de verdad (visibility no cambia la caja,
+   así no titila), por eso sirve con cualquier forma que tenga Marian. */
+let flotantesCeden = false, flotantesPendiente = 0;
+function revisarFlotantes(){
+  flotantesPendiente = 0;
+  const b = document.querySelector('#encargo .en-cotizar');
+  let tapa = false;
+  if(b){
+    const r = b.getBoundingClientRect();
+    if(r.width && r.bottom > 0 && r.top < innerHeight){
+      tapa = [document.getElementById('wa-flotante'), document.querySelector('.mr-lanzar')].some(f => {
+        if(!f || f.hidden) return false;
+        const q = f.getBoundingClientRect();
+        return q.width > 0 && r.left < q.right + 6 && r.right > q.left - 6 && r.top < q.bottom + 6 && r.bottom > q.top - 6;
+      });
+    }
+  }
+  if(tapa !== flotantesCeden){
+    flotantesCeden = tapa;
+    document.body.classList.toggle('flotantes-ceden', tapa);
+  }
+}
+const pedirRevisarFlotantes = () => { if(!flotantesPendiente) flotantesPendiente = requestAnimationFrame(revisarFlotantes); };
+addEventListener('scroll', pedirRevisarFlotantes, { passive: true });
+addEventListener('resize', pedirRevisarFlotantes);
 
 /* ---------- Quiénes somos (Benja, 13/10/2026) ----------
    El diseño D del muestrario: la foto del local a un lado, y al otro el

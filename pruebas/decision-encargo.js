@@ -16,7 +16,8 @@
 //               medios, y el monto de las cuotas por WhatsApp: las de un
 //               encargo no son las del catalogo (Benja 04/11). Sin montos,
 //               planes ni porcentajes; nada de demoras (va por WhatsApp). Y
-//               «Pedir cotizacion» para lo que no esta.
+//               «Pedir cotizacion» para lo que no esta; si pasa por debajo de
+//               un flotante (WhatsApp o Marian), los dos se esconden (04/11).
 //   WhatsApp    «Hola! Me interesa … (ENC-0001), por encargo, a USD 470.» y
 //               la medicion lo anota con desde "encargo" y el codigo.
 //   la carga    si ADVAPP falla, el bloque no esta; si llega, se suma solo.
@@ -182,6 +183,24 @@ async function probarLaPortada(){
   ok(enTxt(sec2.querySelector('.en-otro p')) === '¿Buscás otro producto? Decinos cuál y te lo cotizamos.' &&
      msjC === 'Hola! Busco un producto que no está en la web. ¿Me lo cotizan por encargo?' && c.target === '_blank',
      '«Pedir cotización» abre WhatsApp para lo que no esta en la seccion', msjC);
+  // Si un flotante queda encima de «Pedir cotización», los dos se hacen a un lado (Benja 04/11)
+  const waF = document.getElementById('wa-flotante');
+  if(waF && !waF.hidden && getComputedStyle(waF).display !== 'none'){
+    c.scrollIntoView({ block: 'center' });
+    const rc = c.getBoundingClientRect(), estilo = waF.getAttribute('style');
+    revisarFlotantes();
+    const libre = !document.body.classList.contains('flotantes-ceden');
+    waF.style.cssText = (estilo || '') + `;left:${rc.left}px;top:${rc.top}px;right:auto;bottom:auto`;
+    revisarFlotantes();
+    const cede = document.body.classList.contains('flotantes-ceden') &&
+                 getComputedStyle(waF).visibility === 'hidden' &&
+                 (!document.querySelector('.mr-lanzar') || getComputedStyle(document.querySelector('.mr-lanzar')).visibility === 'hidden');
+    if(estilo === null) waF.removeAttribute('style'); else waF.setAttribute('style', estilo);
+    revisarFlotantes();
+    ok(libre && cede && !document.body.classList.contains('flotantes-ceden'),
+       'si un flotante queda encima de «Pedir cotización», el WhatsApp y Marian se esconden; cuando pasa, vuelven',
+       [libre, cede, document.body.className].join(' '));
+  }else info('sin WhatsApp flotante: no se prueba que se haga a un lado');
 }
 
 /* ---- La carga ---- */

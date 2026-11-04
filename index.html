@@ -1235,43 +1235,88 @@ window.ADVAPP_TEMPRANO = (() => {
     .nosotros.sin-local .ns-foto{width:64px;height:64px;font-size:26px}
   }
   /* ---------- Metodología de encargo (Benja, 03/11/2026) ----------
-     El mismo recuadro blanco que Quiénes somos. Arriba los pasos con su
-     plazo, numerados; abajo los productos, con la inicial de la marca debajo
-     de la foto: si la foto falta o no carga, queda la inicial. La foto va
-     sobre blanco y sin multiply (en el iPhone de Benja multiply falla). */
-  .encargo{display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:28px;background:var(--surface);
-           border:1px solid var(--line);scroll-margin-top:calc(var(--alto-cinta,0px) + 18px)}
-  .encargo .fp-cab{margin-bottom:0}
-  .en-pasos{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:0;padding:0;list-style:none;counter-reset:en-paso}
-  .en-paso{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;row-gap:3px;
-           align-items:center;padding:12px;border-radius:14px;background:var(--surface-2)}
-  .en-paso::before{counter-increment:en-paso;content:counter(en-paso);grid-row:1 / span 2;display:grid;place-items:center;
-                   width:26px;height:26px;border-radius:50%;background:var(--acento);color:#fff;font:700 12px/1 var(--sans)}
-  .en-paso b{font:600 13.5px/1.25 var(--sans);color:var(--ink)}
-  .en-paso span{font:500 11px/1.3 var(--mono);letter-spacing:.03em;color:var(--muted)}
-  .en-pago{margin:0;font:400 13.5px/1.45 var(--sans);color:var(--muted)}
-  .en-prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
-  .en-prod{display:flex;flex-direction:column;min-width:0;border-radius:var(--radius);background:var(--surface);
-           border:1px solid var(--line);overflow:hidden}
-  .en-foto{position:relative;display:grid;place-items:center;aspect-ratio:4/3;background:#fff;border-bottom:1px solid var(--line);
-           color:#C9B6F5;font:400 44px/1 var(--display)}
-  .en-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:10px;box-sizing:border-box;background:#fff}
-  .en-datos{display:flex;flex-direction:column;gap:6px;flex:1;padding:12px 14px 14px}
-  .en-marca{font:600 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
-  .en-nom{margin:0;font:600 15px/1.25 var(--sans);color:var(--ink)}
+     La versión B del muestrario (Benja, 04/11: «B, título 1, pasos 1, botón
+     1, plazo sí»): el oscuro de Reseñas y Preguntas. Primero cómo funciona
+     -el plazo total grande y los 5 pasos de ADVAPP con su plazo, contados
+     desde la seña- y al lado los productos. Con más de 3 productos, los
+     productos pasan abajo y a lo ancho (.muchos): una columna de 24 tarjetas
+     al lado de los pasos no se termina más. La foto va sobre blanco y sin
+     multiply (en el iPhone de Benja multiply falla); sin foto, o si no carga,
+     queda la marca escrita. */
+  .encargo{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:26px 34px;align-items:start;
+           padding:32px 30px;border-radius:28px;color:#fff;
+           background:radial-gradient(90% 120% at 0% 0%, rgba(124,58,237,.35), transparent 60%), #151220;
+           scroll-margin-top:calc(var(--alto-cinta,0px) + 18px)}
+  .encargo.muchos{grid-template-columns:minmax(0,1fr)}
+  .en-info{display:flex;flex-direction:column;gap:16px;min-width:0}
+  .en-eyebrow{font:600 10.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:#C4A6FF}
+  .encargo h2{margin:0;font:400 26px/1.1 var(--display);text-transform:uppercase;color:#fff}
+  .en-total{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 14px;margin:0}
+  .en-total b{font:400 clamp(36px,5vw,50px)/.95 var(--display);text-transform:uppercase}
+  .en-total span{font:500 12px/1.3 var(--mono);letter-spacing:.04em;color:rgba(255,255,255,.62)}
+  .en-camino{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:18px;
+             background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+  .en-cab{margin:0;font:500 11.5px/1.3 var(--mono);letter-spacing:.03em;color:rgba(255,255,255,.62)}
+  .en-cab b{margin-right:4px;color:#fff;font-weight:700;text-transform:uppercase;letter-spacing:.12em}
+  /* Los pasos: el número sale del contador, el primero en violeta y el
+     último (el total) en blanco, unidos por una línea */
+  .en-pasos{margin:0;padding:0;list-style:none;counter-reset:en-paso}
+  .en-paso{position:relative;display:grid;grid-template-columns:32px minmax(0,1fr) auto;align-items:center;column-gap:12px;padding:0 0 12px}
+  .en-paso:last-child{padding-bottom:0}
+  .en-paso::before{counter-increment:en-paso;content:counter(en-paso);position:relative;z-index:1;display:grid;place-items:center;
+                   width:32px;height:32px;box-sizing:border-box;border-radius:50%;background:#1F1A2E;
+                   border:2px solid rgba(255,255,255,.22);color:#C4A6FF;font:700 12.5px/1 var(--mono)}
+  .en-paso::after{content:"";position:absolute;top:32px;left:15px;width:2px;height:calc(100% - 32px);background:rgba(255,255,255,.16)}
+  .en-paso:last-child::after{display:none}
+  .en-paso:first-child::before{background:var(--acento);border-color:var(--acento);color:#fff}
+  .en-paso:last-child:not(:first-child)::before{background:#fff;border-color:#fff;color:var(--ink)}
+  .en-paso b{font:600 14px/1.25 var(--sans);color:#fff}
+  .en-paso span{font:500 12px/1.35 var(--mono);color:rgba(255,255,255,.62);text-align:right}
+  .en-paso:last-child span{color:#C4A6FF;font-weight:700}
+  .en-gana{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+  .en-gana li{display:flex;gap:10px;align-items:flex-start;font:400 15px/1.45 var(--sans);color:rgba(255,255,255,.88)}
+  .en-gana svg{flex:none;width:20px;height:20px;margin-top:1px;color:#C4A6FF}
+  .en-pago{margin:0;font:400 13.5px/1.5 var(--sans);color:rgba(255,255,255,.62)}
+  .en-prods{display:flex;flex-direction:column;gap:12px;min-width:0}
+  .encargo.muchos .en-prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr))}
+  .en-prod{display:grid;grid-template-columns:132px minmax(0,1fr);grid-template-rows:auto 1fr;gap:10px 16px;min-width:0;
+           padding:12px;border-radius:20px;background:var(--surface);color:var(--ink)}
+  .en-foto{grid-row:1 / span 2;position:relative;display:grid;place-items:center;align-self:start;aspect-ratio:1/1;
+           box-sizing:border-box;padding:8px;border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line);
+           text-align:center;color:#C9B6F5;font:400 17px/1.05 var(--display);text-transform:uppercase;overflow-wrap:anywhere}
+  .en-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px;box-sizing:border-box;background:#fff}
+  .en-datos{display:flex;flex-direction:column;gap:6px;min-width:0;padding:4px 4px 0 0}
+  .en-marca{font:600 9.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .en-nom{margin:0;font:400 19px/1.05 var(--display);letter-spacing:.005em;text-transform:uppercase;overflow-wrap:anywhere;color:var(--ink)}
   .en-det{margin:0;font:400 13px/1.4 var(--sans);color:var(--muted)}
   .en-gar{margin:0;font:500 12.5px/1.35 var(--sans);color:var(--ok)}
-  .en-pie{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:auto;padding-top:6px}
-  .en-precio{font:700 19px/1 var(--sans);color:var(--ink)}
-  .en-id{font:500 10.5px/1 var(--mono);letter-spacing:.06em;color:var(--faint)}
-  .en-consultar{justify-content:center}
+  /* El precio en la etiqueta oscura, como en la grilla, y al lado el botón */
+  .en-fila{grid-column:2;align-self:end;display:flex;align-items:stretch;flex-wrap:wrap;gap:8px}
+  .en-pie{flex:1 1 150px;display:flex;flex-direction:column;justify-content:center;gap:5px;min-height:44px;
+          padding:9px 12px;border-radius:12px;background:var(--ink);color:#fff}
+  .en-precio{font:400 23px/.92 var(--display);letter-spacing:.01em}
+  .en-pie small{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A597C4}
+  .en-consultar{flex:1 1 150px;justify-content:center;background:var(--acento);border-color:var(--acento);color:#fff;
+                box-shadow:0 12px 24px -14px rgba(124,58,237,.9)}
+  .en-consultar:hover{background:var(--glow);border-color:var(--glow)}
+  .en-otro{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px 20px;
+           padding-top:20px;border-top:1px solid rgba(255,255,255,.12)}
+  .en-otro p{margin:0;font:600 15px/1.4 var(--sans)}
+  .en-cotizar{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;text-decoration:none;
+              border:1px solid rgba(255,255,255,.35);color:#fff;font:700 11.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+  .en-cotizar:hover{background:rgba(255,255,255,.1)}
+  .en-cotizar svg{width:17px;height:17px;flex:none}
+  .encargo a:focus-visible{outline:2px solid #A78BFA;outline-offset:3px}
+  @media (max-width:900px){
+    .encargo{grid-template-columns:minmax(0,1fr)}
+  }
   @media (max-width:760px){
-    .encargo{padding:18px 16px;border-radius:22px}
-    .en-pasos{grid-template-columns:minmax(0,1fr);gap:6px}
-    .en-paso{grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:auto;padding:10px 12px}
-    .en-paso::before{grid-row:auto}
-    .en-paso span{text-align:right}
-    .en-prods{grid-template-columns:minmax(0,1fr)}
+    .encargo{padding:22px 16px;border-radius:22px}
+  }
+  @media (max-width:560px){
+    .en-prod{grid-template-columns:96px minmax(0,1fr);gap:12px}
+    .en-foto{grid-row:auto;font-size:14px}
+    .en-fila{grid-column:1 / -1}
   }
   /* La cinta (19/10): las reseñas pasan solas de costado y se frenan con el
      mouse encima, al tocarlas (toman el foco) o con una abierta en "Leer
@@ -11040,10 +11085,18 @@ function irDesdeNav(id){
    no se la nombra a propósito: este repo es público.
    El pago, en un renglón y sin montos ni planes: con seña (Benja, 03/11:
    «Sí, con seña»; nunca cuánto, porque deja deducir el precio de origen) y
-   el resto cuando llega, con las mismas formas que «¿Cómo puedo pagar?»,
-   cuotas incluidas (Benja, 03/11: «lo mismo»).
+   el resto cuando llega. Las cuotas de un encargo NO son las del catálogo
+   (Benja, 04/11): se calculan aparte, así que la web no las calcula ni dice
+   «las mismas formas»; nombra los medios y el monto de las cuotas va por
+   WhatsApp. Como en todo el catálogo, el interés no se muestra nunca.
    Si no llega o se demora (Benja: «sería por wsp»): la web no promete
-   nada. */
+   nada.
+   Cómo se ve: la versión B del muestrario (Benja, 04/11: «B, título 1, pasos
+   1, botón 1, plazo sí»). Primero cómo funciona: el plazo total grande, que
+   es el del último paso porque los plazos se cuentan desde la seña («plazo
+   sí»), los pasos tal cual los manda ADVAPP y qué gana el cliente; al lado,
+   los productos. El código ENC-#### no se ve en la tarjeta: va en el mensaje
+   de WhatsApp. */
 const ENCARGO_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-encargo';
 const ENCARGO_ESPERA_MS = 8000;
 const ENCARGO_MAX = 24;
@@ -11099,32 +11152,68 @@ function cargarEncargo(){
 // El WhatsApp de cada producto, con su código: «me interesa ENC-0003»
 const mensajeEncargo = p => `Hola! Me interesa ${p.nombre} (${p.id}), por encargo, a USD ${plata(p.precio)}. ¿Me pasás info?`;
 
+/* Lo que gana el cliente, un renglón cada cosa (versión B, 04/11).
+   El precio final con el viaje y la aduana: Benja, 04/11, «SI, sin embargo,
+   eso puede llevar a algún incremento»: si al llegar pesa más de lo
+   cotizado, puede haber una diferencia, y el renglón lo dice. Para sacarlo,
+   ENCARGO_PRECIO_FINAL_OK a false y nada más. */
+const ENCARGO_PRECIO_FINAL_OK = true;
+const ENCARGO_GANA = [
+  'Lo compramos nosotros en EE.\u00a0UU.: no necesitás tarjeta del exterior.',
+  ...(ENCARGO_PRECIO_FINAL_OK ? ['El precio es final, con el viaje y la aduana incluidos. Si al llegar pesa más de lo cotizado, puede haber una diferencia.'] : []),
+];
+/* El pago (Benja, 04/11): las cuotas de un encargo se calculan aparte de las
+   del catálogo, así que no se dice «las mismas formas»; el monto de las
+   cuotas va por WhatsApp y el interés no se nombra nunca. */
+const ENCARGO_PAGO = 'Se encarga con una seña y el resto se paga cuando llega, en efectivo, transferencia o en cuotas con tarjeta: el monto de las cuotas te lo pasamos por WhatsApp.';
+// «¿Buscás otro producto?»: lo que no está en la sección también se cotiza
+const MENSAJE_COTIZAR_ENCARGO = 'Hola! Busco un producto que no está en la web. ¿Me lo cotizan por encargo?';
+const ICONO_TILDE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
 function htmlEncargo(){
   const d = ENCARGO;
   if(!d) return '';
-  const pasos = d.pasos.length ? `<ol class="en-pasos" aria-label="Los pasos del encargo">${d.pasos.map(p =>
-      `<li class="en-paso"><b>${esc(p.paso)}</b>${p.plazo ? `<span>${esc(p.plazo)}</span>` : ''}</li>`).join('')}</ol>` : '';
+  // Los plazos se cuentan desde la seña (Benja 04/11, «plazo sí»): el del último paso es el total
+  const ultimo = d.pasos[d.pasos.length - 1];
+  const total = ultimo && ultimo.plazo
+    ? `<p class="en-total"><b>${esc(ultimo.plazo)}</b> <span>desde la seña hasta tu puerta</span></p>` : '';
+  const pasos = d.pasos.length ? `<div class="en-camino">
+        <p class="en-cab"><b>Cómo llega</b> los días se cuentan desde la seña</p>
+        <ol class="en-pasos" aria-label="Los pasos del encargo">${d.pasos.map(p =>
+          `<li class="en-paso"><b>${esc(p.paso)}</b>${p.plazo ? `<span>${esc(p.plazo)}</span>` : ''}</li>`).join('')}</ol>
+      </div>` : '';
+  const gana = ENCARGO_GANA.length ? `<ul class="en-gana">${ENCARGO_GANA.map(t => `<li>${ICONO_TILDE}${esc(t)}</li>`).join('')}</ul>` : '';
   const tarjeta = p => {
     const link = linkWA(mensajeEncargo(p));
     const garantia = /^garant/i.test(p.garantia) ? p.garantia : 'Garantía: ' + p.garantia;
     return `<article class="en-prod" data-enc="${esc(p.id)}">
-      <div class="en-foto"><span aria-hidden="true">${esc(p.marca.slice(0, 1).toUpperCase())}</span>${p.foto
+      <div class="en-foto"><span aria-hidden="true">${esc(p.marca)}</span>${p.foto
         ? `<img src="${esc(p.foto)}" alt="${esc(p.nombre)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</div>
       <div class="en-datos">
         <span class="en-marca">${esc(p.marca)}</span>
         <h3 class="en-nom">${esc(p.nombre)}</h3>
         ${p.detalle ? `<p class="en-det">${esc(p.detalle)}</p>` : ''}
         ${p.garantia ? `<p class="en-gar">${esc(garantia)}</p>` : ''}
-        <div class="en-pie"><b class="en-precio">USD ${plata(p.precio)}</b><span class="en-id">${esc(p.id)}</span></div>
+      </div>
+      <div class="en-fila">
+        <div class="en-pie"><b class="en-precio">USD ${plata(p.precio)}</b><small>precio final</small></div>
         ${link ? `<a class="nv-consultar en-consultar" href="${link}" target="_blank" rel="noopener">${ICONO_WA}Consultar</a>` : ''}
       </div>
     </article>`;
   };
-  return `<section class="encargo" id="encargo" aria-labelledby="en-titulo">
-    <div class="fp-cab"><h2 id="en-titulo">${esc(d.seccion)}</h2><span class="fp-sub">precio final en US$</span></div>
-    ${pasos}
-    <p class="en-pago">Se encarga con una seña y el resto se paga cuando llega. Las formas de pago son las mismas que en el resto del catálogo, también en cuotas con tarjeta.</p>
+  const cotizar = linkWA(MENSAJE_COTIZAR_ENCARGO);
+  return `<section class="encargo${d.productos.length > 3 ? ' muchos' : ''}" id="encargo" aria-labelledby="en-titulo">
+    <div class="en-info">
+      <span class="en-eyebrow">Cómo funciona</span>
+      <h2 id="en-titulo">${esc(d.seccion)}</h2>
+      ${total}
+      ${pasos}
+      ${gana}
+      <p class="en-pago">${esc(ENCARGO_PAGO)}</p>
+    </div>
     <div class="en-prods">${d.productos.map(tarjeta).join('')}</div>
+    ${cotizar ? `<div class="en-otro"><p>¿Buscás otro producto? Decinos cuál y te lo cotizamos.</p>
+      <a class="en-cotizar" href="${cotizar}" target="_blank" rel="noopener">${ICONO_WA}Pedir cotización</a></div>` : ''}
   </section>`;
 }
 

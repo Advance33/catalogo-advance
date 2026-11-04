@@ -1273,6 +1273,9 @@ window.ADVAPP_TEMPRANO = (() => {
   .en-paso b{font:600 14px/1.25 var(--sans);color:#fff}
   .en-paso span{font:500 12px/1.35 var(--mono);color:rgba(255,255,255,.62);text-align:right}
   .en-paso:last-child span{color:#C4A6FF;font-weight:700}
+  /* La aclaración de un paso, en un renglón chico abajo del nombre (Benja
+     04/11: el depósito «puede variar»). Ocupa el ancho del nombre y el plazo. */
+  .en-paso-nota{grid-column:2 / -1;margin-top:3px;font:400 12px/1.35 var(--sans);color:rgba(255,255,255,.55)}
   .en-gana{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
   .en-gana li{display:flex;gap:10px;align-items:flex-start;font:400 15px/1.45 var(--sans);color:rgba(255,255,255,.88)}
   .en-gana svg{flex:none;width:20px;height:20px;margin-top:1px;color:#C4A6FF}
@@ -1290,6 +1293,10 @@ window.ADVAPP_TEMPRANO = (() => {
   .en-nom{margin:0;font:400 19px/1.05 var(--display);letter-spacing:.005em;text-transform:uppercase;overflow-wrap:anywhere;color:var(--ink)}
   .en-det{margin:0;font:400 13px/1.4 var(--sans);color:var(--muted)}
   .en-gar{margin:0;font:500 12.5px/1.35 var(--sans);color:var(--ok)}
+  /* El link a la publicación (Benja 04/11, opción A): chico y aparte del Consultar */
+  .en-publicacion{align-self:flex-start;padding:3px 0;font:600 12.5px/1.3 var(--sans);color:var(--acento);
+                  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+  .en-publicacion:hover{color:var(--glow)}
   /* El precio en la etiqueta oscura, como en la grilla, y al lado el botón */
   .en-fila{grid-column:2;align-self:end;display:flex;align-items:stretch;flex-wrap:wrap;gap:8px}
   .en-pie{flex:1 1 150px;display:flex;flex-direction:column;justify-content:center;gap:5px;min-height:44px;
@@ -11115,9 +11122,12 @@ function irDesdeNav(id){
    La web muestra sólo lo que manda: los pasos con sus plazos (los de
    ⚙ Constantes) y cada producto con marca, nombre, detalle, garantía y el
    precio final en dólares, que ya viene redondeado (la web no redondea plata).
-   Nunca el link, el precio ni la foto de la tienda de origen: eso lo frena
-   ADVAPP, que rechaza los textos que la nombran y las fotos de su CDN. Acá
-   no se la nombra a propósito: este repo es público.
+   Nunca el precio ni la foto de la tienda de origen: eso lo frena ADVAPP,
+   que rechaza los textos que la nombran y las fotos de su CDN. El link de la
+   publicación sí (Benja 04/11, opción A: «Que se ponga el link de producto,
+   así el cliente ve todo lo que incluye. Así saben qué link se compra»):
+   llega limpio de ADVAPP y va en un link chico, aparte del Consultar. Acá no
+   se nombra la tienda a propósito: este repo es público.
    El pago, en un renglón y sin montos ni planes: con seña (Benja, 03/11:
    «Sí, con seña»; nunca cuánto, porque deja deducir el precio de origen) y
    el resto cuando llega. Las cuotas de un encargo NO son las del catálogo
@@ -11151,19 +11161,25 @@ function fotoEncargo(s){
   try{ const u = new URL(String(s || '')); return u.protocol === 'https:' ? u.href : ''; }
   catch{ return ''; }
 }
+// El link de la publicación (04/11): sólo http(s); si no, no hay link
+function linkEncargo(s){
+  try{ const u = new URL(String(s || '')); return /^https?:$/.test(u.protocol) ? u.href : ''; }
+  catch{ return ''; }
+}
 
 /* Lo que manda ADVAPP, con lo que no sirve afuera. Un producto sin código
    ENC-####, sin nombre, sin marca o sin precio entero no sale; tampoco uno
    repetido. */
 function validarEncargo(j){
-  if(!j || j.contrato !== 'encargo/1') return null;
+  // encargo/1 o un 1.x que sume campos (04/11): lo que no conoce lo deja pasar de largo
+  if(!j || !/^encargo\/1(\.\d+)?$/.test(String(j.contrato))) return null;
   const txt = txtEncargo;
   const pasos = pasosDeEncargo(j);
   const vistos = new Set();
   const productos = (Array.isArray(j.productos) ? j.productos : [])
     .map(p => ({ id: txt(p && p.id, 12), nombre: txt(p && p.nombre, 90), marca: txt(p && p.marca, 40),
                  detalle: txt(p && p.detalle, 200), garantia: txt(p && p.garantia, 120),
-                 precio: Number(p && p.precio_usd), foto: fotoEncargo(p && p.foto) }))
+                 precio: Number(p && p.precio_usd), foto: fotoEncargo(p && p.foto), link: linkEncargo(p && p.link) }))
     .filter(p => /^ENC-\d{4}$/.test(p.id) && p.nombre && p.marca && Number.isInteger(p.precio) && p.precio > 0 &&
                  !vistos.has(p.id) && vistos.add(p.id))
     .slice(0, ENCARGO_MAX);
@@ -11212,6 +11228,13 @@ const ENCARGO_GANA = [
 const ENCARGO_PAGO = 'Se encarga con una seña y el resto se paga cuando llega, en efectivo, transferencia o en cuotas con tarjeta: el monto de las cuotas te lo pasamos por WhatsApp.';
 // Lo que acompaña al total: la sección y Marian dicen lo mismo
 const ENCARGO_TOTAL_TXT = 'desde la seña hasta tu puerta';
+/* Las aclaraciones de un paso (Benja 04/11: «Deposito eeuu poner que puede
+   variar según el tiempo de tardanza de la plataforma»). Van atadas al nombre
+   del paso que manda ADVAPP: allá los nombres son fijos y sólo se editan los
+   plazos. Si el paso no viene o cambia de nombre, no sale nada. Sin nombrar la
+   tienda. Marian usa lo mismo. */
+const ENCARGO_NOTAS = [[/^dep[oó]sito\b/i, 'Puede variar según lo que tarde la tienda en despacharlo']];
+function notaDelPaso(p){ const n = ENCARGO_NOTAS.find(([re]) => re.test((p && p.paso) || '')); return n ? n[1] : ''; }
 // «¿Buscás otro producto?»: lo que no está en la sección también se cotiza
 const MENSAJE_COTIZAR_ENCARGO = 'Hola! Busco un producto que no está en la web. ¿Me lo cotizan por encargo?';
 const ICONO_TILDE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
@@ -11226,7 +11249,8 @@ function htmlEncargo(){
   const pasos = d.pasos.length ? `<div class="en-camino">
         <p class="en-cab"><b>Cómo llega</b> los días se cuentan desde la seña</p>
         <ol class="en-pasos" aria-label="Los pasos del encargo">${d.pasos.map(p =>
-          `<li class="en-paso"><b>${esc(p.paso)}</b>${p.plazo ? `<span>${esc(p.plazo)}</span>` : ''}</li>`).join('')}</ol>
+          `<li class="en-paso"><b>${esc(p.paso)}</b>${p.plazo ? `<span>${esc(p.plazo)}</span>` : ''}${
+            notaDelPaso(p) ? `<small class="en-paso-nota">${esc(notaDelPaso(p))}</small>` : ''}</li>`).join('')}</ol>
       </div>` : '';
   const gana = ENCARGO_GANA.length ? `<ul class="en-gana">${ENCARGO_GANA.map(t => `<li>${ICONO_TILDE}${esc(t)}</li>`).join('')}</ul>` : '';
   const tarjeta = p => {
@@ -11245,6 +11269,7 @@ function htmlEncargo(){
         <h3 class="en-nom">${esc(p.nombre)}</h3>
         ${p.detalle ? `<p class="en-det">${esc(p.detalle)}</p>` : ''}
         ${p.garantia ? `<p class="en-gar">${esc(garantia)}</p>` : ''}
+        ${p.link ? `<a class="en-publicacion" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer nofollow">Ver la publicación ↗</a>` : ''}
       </div>
       <div class="en-fila">
         <div class="en-pie"><b class="en-precio">USD ${plata(p.precio)}</b>${ars ? `<i class="en-ars">${ars}</i>` : ''}<small>precio final</small></div>
@@ -17438,7 +17463,7 @@ addEventListener('offline', () => { if(grid.querySelector('.msg.sin-catalogo')) 
 <!-- Marian, la guía de botones (29/10/2026): el botón «Preguntale a Marian»,
      su panel y la bienvenida. Vive aparte, en marian/, y usa las funciones y
      los textos de esta página. El ?v= se cambia cada vez que se cambia Marian. -->
-<link rel="stylesheet" href="marian/marian.css?v=20261104b">
-<script src="marian/marian.js?v=20261104b" defer></script>
+<link rel="stylesheet" href="marian/marian.css?v=20261104c">
+<script src="marian/marian.js?v=20261104c" defer></script>
 </body>
 </html>

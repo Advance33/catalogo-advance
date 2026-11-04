@@ -105,6 +105,19 @@ async function correrPruebas(){
          'cuenta lo mismo que la sección: lo que gana, el total, el precio final y el pago', parrafos.join(' / ').slice(0, 160));
       ok([...tE.querySelectorAll('li')].map(li => li.textContent).join(' | ') === 'Seña: Hoy | Compramos: 24 a 48 h | En tu puerta: 7 a 14 días',
          'los pasos de ADVAPP con su plazo');
+      // El deposito con su aclaracion, la misma de la seccion (04/11)
+      ENCARGO_PASOS = [{ paso: 'Seña', plazo: 'Hoy' }, { paso: 'Depósito EEUU', plazo: '3 a 5 días' }, { paso: 'En tu puerta', plazo: '7 a 14 días' }];
+      MARIAN.inicio(); await dormir(60);
+      await tocarTexto('Metodología de encargo');
+      const lisDep = [...raiz().querySelectorAll('.mr-cuerpo .mr-texto li')];
+      ok(lisDep.map(li => li.firstChild.textContent).join(' | ') === 'Seña: Hoy | Depósito EEUU: 3 a 5 días | En tu puerta: 7 a 14 días' &&
+         lisDep.filter(li => li.querySelector('.mr-paso-nota')).length === 1 &&
+         lisDep[1].querySelector('.mr-paso-nota')?.textContent === notaDelPaso({ paso: 'Depósito EEUU' }),
+         'el deposito con la misma aclaracion que la seccion', lisDep.map(li => li.textContent).join(' | '));
+      ENCARGO_PASOS = [{ paso: 'Seña', plazo: 'Hoy' }, { paso: 'Compramos', plazo: '24 a 48 h' },
+                       { paso: 'En tu puerta', plazo: '7 a 14 días' }];
+      MARIAN.inicio(); await dormir(60);
+      await tocarTexto('Metodología de encargo');
       ok(!/%|recargo|inter[eé]s/i.test(tE.textContent), 'sin porcentajes ni interés de las cuotas');
       const botonesE = [...raiz().querySelectorAll('.mr-cuerpo .mr-btn')].map(b => b.textContent);
       ok(botonesE.join(',') === 'Pedir cotización', 'sin productos, solo «Pedir cotización»', botonesE.join(','));

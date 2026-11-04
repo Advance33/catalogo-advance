@@ -211,7 +211,13 @@
     }
     if(pasos.length){
       const ul = el('ul');
-      pasos.forEach(x => ul.appendChild(el('li', '', x.plazo ? x.paso + ': ' + x.plazo : x.paso)));
+      pasos.forEach(x => {
+        const li = el('li', '', x.plazo ? x.paso + ': ' + x.plazo : x.paso);
+        // La aclaración del paso, la misma de la sección (04/11: el depósito «puede variar»)
+        const nota = typeof notaDelPaso === 'function' ? notaDelPaso(x) : '';
+        if(nota) li.appendChild(el('small', 'mr-paso-nota', nota));
+        ul.appendChild(li);
+      });
       d.appendChild(ul);
     }
     gana.slice(1).forEach(t => d.appendChild(el('p', '', t)));

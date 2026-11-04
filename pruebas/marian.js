@@ -6,7 +6,8 @@
 // envíos muestren ENVIO_MOTO tal cual (sin el 3er cordón, 29/10), que cada
 // botón quede en la medición y que la bienvenida salga una vez y no tape una
 // ficha. correr.py marca la bienvenida como vista en todas las tandas; esta la
-// borra para probarla.
+// borra para probarla. Desde el 04/11 también «Metodología de encargo»: los
+// mismos textos que la sección, sus pasos y total, y sus dos botones.
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const dormir = ms => new Promise(r => setTimeout(r, ms));
@@ -81,6 +82,49 @@ async function correrPruebas(){
     for(const op of preguntasDelMenu()){
       const q = PREGUNTAS.find(x => op.faq.test(x.p));
       ok(!!q, '«' + op.etiqueta + '» encuentra su pregunta en PREGUNTAS', q ? q.p : String(op.faq));
+    }
+
+    /* ---- 5b. Metodología de encargo: los textos de la sección (04/11) ---- */
+    const pasosAntes = ENCARGO_PASOS, encargoAntes = ENCARGO;
+    try{
+      ENCARGO_PASOS = [{ paso: 'Seña', plazo: 'Hoy' }, { paso: 'Compramos', plazo: '24 a 48 h' },
+                       { paso: 'En tu puerta', plazo: '7 a 14 días' }];
+      ENCARGO = null;
+      MARIAN.inicio();
+      await dormir(60);
+      const opE = opciones().find(b => b.textContent.includes('Metodología de encargo'));
+      ok(!!opE && /7 a 14 días desde la seña hasta tu puerta/.test(opE.textContent),
+         'el menú tiene «Metodología de encargo», con el total desde la seña', opE && opE.textContent.replace('›', ''));
+      medidos.length = 0;
+      ok(await tocarTexto('Metodología de encargo'), 'se toca «Metodología de encargo»');
+      const tE = raiz().querySelector('.mr-cuerpo .mr-texto');
+      const parrafos = tE ? [...tE.querySelectorAll('p')].map(p => p.textContent.replace(/\s+/g, ' ').trim()) : [];
+      const gana = ENCARGO_GANA.map(t => t.replace(/\s+/g, ' '));
+      ok(titulo() === 'Metodología de encargo' && parrafos[0] === gana[0] && parrafos[1] === '7 a 14 días ' + ENCARGO_TOTAL_TXT + '.' &&
+         parrafos.slice(2, 2 + gana.length - 1).join('|') === gana.slice(1).join('|') && parrafos[parrafos.length - 1] === ENCARGO_PAGO,
+         'cuenta lo mismo que la sección: lo que gana, el total, el precio final y el pago', parrafos.join(' / ').slice(0, 160));
+      ok([...tE.querySelectorAll('li')].map(li => li.textContent).join(' | ') === 'Seña: Hoy | Compramos: 24 a 48 h | En tu puerta: 7 a 14 días',
+         'los pasos de ADVAPP con su plazo');
+      ok(!/%|recargo|inter[eé]s/i.test(tE.textContent), 'sin porcentajes ni interés de las cuotas');
+      const botonesE = [...raiz().querySelectorAll('.mr-cuerpo .mr-btn')].map(b => b.textContent);
+      ok(botonesE.join(',') === 'Pedir cotización', 'sin productos, solo «Pedir cotización»', botonesE.join(','));
+      abierta = '';
+      await tocarTexto('Pedir cotización');
+      await dormir(60);
+      ok(decodeURIComponent(abierta).includes(MENSAJE_COTIZAR_ENCARGO), '«Pedir cotización» abre WhatsApp con el mensaje de la sección',
+         decodeURIComponent(abierta).slice(0, 110));
+      ok(medidos.some(e => e.t === 'marian' && e.boton === 'Metodología de encargo') && medidos.some(e => e.t === 'whatsapp' && e.desde === 'marian'),
+         'y queda en la medición', JSON.stringify(medidos.map(e => e.boton || e.t)));
+      ENCARGO = { seccion: 'Metodología de encargo', pasos: ENCARGO_PASOS, productos: [] };
+      MARIAN.inicio();
+      await dormir(60);
+      await tocarTexto('Metodología de encargo');
+      ok([...raiz().querySelectorAll('.mr-cuerpo .mr-btn')].map(b => b.textContent).join(',') === 'Ver los productos de encargo,Pedir cotización',
+         'con productos, también «Ver los productos de encargo»');
+    }finally{
+      ENCARGO_PASOS = pasosAntes; ENCARGO = encargoAntes;
+      MARIAN.inicio();
+      await dormir(60);
     }
 
     /* ---- 6. Envíos: la tabla de ENVIO_MOTO tal cual ---- */

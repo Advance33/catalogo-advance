@@ -269,13 +269,16 @@ si alguna falta).
                   ficha que arranca en efectivo.
   decision-encargo.js
                   Metodologia de encargo (Benja, 03/11, datos de ADVAPP
-                  encargo/1), con datos de ejemplo: lo que no sirve no sale
-                  (otro contrato, lista vacia, sin codigo ENC-####, marca,
-                  nombre o precio entero), el bloque entre Recien llegados y
-                  Quienes somos con los pasos numerados y cada producto (marca,
-                  nombre, detalle, garantia si viene, precio tal cual, codigo),
-                  el pago en un renglon (con seña sin decir cuanto, el resto
-                  cuando llega, las formas de siempre) sin montos ni
+                  encargo/1; version B del muestrario, 04/11), con datos de
+                  ejemplo: lo que no sirve no sale (otro contrato, lista
+                  vacia, sin codigo ENC-####, marca, nombre o precio entero),
+                  el bloque entre Recien llegados y Quienes somos con el total
+                  contado desde la seña, los pasos numerados, lo que gana el
+                  cliente y cada producto (marca, nombre, detalle, garantia si
+                  viene, precio tal cual; el codigo va en el mensaje), con mas
+                  de 3 los productos abajo, «Pedir cotizacion», el pago en un
+                  renglon (con seña sin decir cuanto, el resto cuando llega y
+                  el monto de las cuotas por WhatsApp) sin montos ni
                   porcentajes, nada de demoras, el WhatsApp y su medicion con
                   desde "encargo", y que se suma o se va solo segun conteste
                   ADVAPP.

@@ -9,7 +9,10 @@
    que se vea. No escribe nada por su cuenta: todo sale de la configuración de
    index.html, así que si cambia una respuesta allá, cambia acá.
    Corre después de index.html (script clásico, defer) y usa directo sus
-   funciones: irDesdeNav, elegirPregunta, abrirCotizador, linkWA, anotar… */
+   funciones: irDesdeNav, elegirPregunta, abrirCotizador, linkWA, anotar…
+   04/11 (Benja: «prepara el mergeo incluyendola a Marian»): sabe de
+   «Metodología de encargo» con los textos de la sección (ENCARGO_GANA,
+   ENCARGO_PAGO, ENCARGO_TOTAL_TXT y los pasos de ADVAPP, ENCARGO_PASOS). */
 (() => {
   const ESTRELLA = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.9 5.6L19.5 9.5l-5.6 1.9L12 17l-1.9-5.6L4.5 9.5l5.6-1.9z"/><path d="M19 14l.9 2.6 2.6.9-2.6.9L19 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg>';
   const ATRAS = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
@@ -79,7 +82,7 @@
   }
   function irASeccion(id){
     cerrarVentanas();
-    if(id === 'ofertas' || id === 'nuevos'){
+    if(id === 'ofertas' || id === 'nuevos' || id === 'encargo'){
       if(!enPortada() || FICHA) irAlInicio();
       setTimeout(() => {
         const b = document.getElementById(id);
@@ -180,6 +183,49 @@
   }
   function mapa(){ try{ return PREGUNTAS.find(q => q.link)?.link || null; }catch{ return null; } }
 
+  /* Metodología de encargo (04/11): lo mismo que dice la sección, con sus
+     textos. Los pasos son los de ADVAPP (aunque hoy no haya productos) y el
+     total es el plazo del último, contado desde la seña. Si hay productos, un
+     botón lleva a la sección; siempre, «Pedir cotización» por WhatsApp. */
+  const enc = {
+    pasos: () => (typeof ENCARGO_PASOS !== 'undefined' && ENCARGO_PASOS) || [],
+    gana: () => (typeof ENCARGO_GANA !== 'undefined' && ENCARGO_GANA) || [],
+    pago: () => (typeof ENCARGO_PAGO !== 'undefined' && ENCARGO_PAGO) || '',
+    totalTxt: () => (typeof ENCARGO_TOTAL_TXT !== 'undefined' && ENCARGO_TOTAL_TXT) || 'desde la seña',
+    hoy: () => (typeof ENCARGO !== 'undefined' && ENCARGO) || null,
+    msj: () => (typeof MENSAJE_COTIZAR_ENCARGO !== 'undefined' && MENSAJE_COTIZAR_ENCARGO) || MSJ_WA,
+  };
+  function totalEncargo(){
+    const pasos = enc.pasos(), u = pasos[pasos.length - 1];
+    return u && u.plazo ? u.plazo : '';
+  }
+  function nodoEncargo(){
+    const d = el('div', 'mr-texto');
+    const gana = enc.gana(), pasos = enc.pasos();
+    if(gana[0]) d.appendChild(el('p', '', gana[0]));
+    const total = totalEncargo();
+    if(total){
+      const p = el('p');
+      p.append(el('b', '', total), document.createTextNode(' ' + enc.totalTxt() + '.'));
+      d.appendChild(p);
+    }
+    if(pasos.length){
+      const ul = el('ul');
+      pasos.forEach(x => ul.appendChild(el('li', '', x.plazo ? x.paso + ': ' + x.plazo : x.paso)));
+      d.appendChild(ul);
+    }
+    gana.slice(1).forEach(t => d.appendChild(el('p', '', t)));
+    if(enc.pago()) d.appendChild(el('p', '', enc.pago()));
+    return d;
+  }
+  function pantallaEncargo(){
+    const e = enc.hoy(), msj = enc.msj();
+    return { titulo: (e && e.seccion) || 'Metodología de encargo', nodo: nodoEncargo,
+      acc: [e && { etiqueta: 'Ver los productos de encargo', accion: 'seccion', seccion: 'encargo' },
+            { etiqueta: 'Pedir cotización', accion: 'whatsapp', mensaje: msj, sec: !!e }].filter(Boolean),
+      wa: msj };
+  }
+
   const MENU = [
     { icono: '🔎', etiqueta: 'Busco un producto', detalle: 'Por rubro, marca y precio', paso: () => pantallaMundos() },
     { icono: '💳', etiqueta: 'Pagos y cuotas', sub: () => [
@@ -194,6 +240,9 @@
       document.getElementById('ofertas') && { etiqueta: 'Ver las ofertas', accion: 'seccion', seccion: 'ofertas' },
       document.getElementById('nuevos') && { etiqueta: 'Ver lo recién llegado', accion: 'seccion', seccion: 'nuevos' },
     ].filter(Boolean) },
+    { icono: '✈️', etiqueta: 'Metodología de encargo',
+      get detalle(){ const t = totalEncargo(); return t ? t + ' ' + enc.totalTxt() : ''; },
+      paso: () => pantallaEncargo() },
     FAQ('Dónde estamos', /en persona|retirar/i, { icono: '📍', detalle: 'Dirección y horarios',
       acc: () => (mapa() ? [{ etiqueta: mapa()[0], accion: 'mapa', url: mapa()[1] }] : [])
         .concat({ etiqueta: 'Verlo en la página', accion: 'seccion', seccion: 'donde', sec: true }),

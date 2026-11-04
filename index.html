@@ -1296,6 +1296,8 @@ window.ADVAPP_TEMPRANO = (() => {
           padding:9px 12px;border-radius:12px;background:var(--ink);color:#fff}
   .en-precio{font:400 23px/.92 var(--display);letter-spacing:.01em}
   .en-pie small{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A597C4}
+  /* Los pesos, como el .ars de la tarjeta del catálogo (Benja 04/11) */
+  .en-pie .en-ars{font:500 11.5px/1 var(--mono);letter-spacing:.03em;color:#A597C4;font-style:normal}
   .en-consultar{flex:1 1 150px;justify-content:center;background:var(--acento);border-color:var(--acento);color:#fff;
                 box-shadow:0 12px 24px -14px rgba(124,58,237,.9)}
   .en-consultar:hover{background:var(--glow);border-color:var(--glow)}
@@ -11229,6 +11231,11 @@ function htmlEncargo(){
   const gana = ENCARGO_GANA.length ? `<ul class="en-gana">${ENCARGO_GANA.map(t => `<li>${ICONO_TILDE}${esc(t)}</li>`).join('')}</ul>` : '';
   const tarjeta = p => {
     const link = linkWA(mensajeEncargo(p));
+    /* Los pesos (Benja 04/11, «sumá los pesos al encargo»): los mismos que la
+       tarjeta del catálogo, con precioARS y el dólar del día (TC). Si no hay
+       dólar, no hay pesos. Cuando llega o cambia el dólar, la portada se
+       redibuja sola (TC va en la firma de pintarExtras). */
+    const ars = precioARS(p);
     const garantia = /^garant/i.test(p.garantia) ? p.garantia : 'Garantía: ' + p.garantia;
     return `<article class="en-prod" data-enc="${esc(p.id)}">
       <div class="en-foto"><span aria-hidden="true">${esc(p.marca)}</span>${p.foto
@@ -11240,7 +11247,7 @@ function htmlEncargo(){
         ${p.garantia ? `<p class="en-gar">${esc(garantia)}</p>` : ''}
       </div>
       <div class="en-fila">
-        <div class="en-pie"><b class="en-precio">USD ${plata(p.precio)}</b><small>precio final</small></div>
+        <div class="en-pie"><b class="en-precio">USD ${plata(p.precio)}</b>${ars ? `<i class="en-ars">${ars}</i>` : ''}<small>precio final</small></div>
         ${link ? `<a class="nv-consultar en-consultar" href="${link}" target="_blank" rel="noopener">${ICONO_WA}Consultar</a>` : ''}
       </div>
     </article>`;

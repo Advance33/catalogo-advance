@@ -10,7 +10,8 @@
 //               los pasos numerados con su plazo, lo que gana el cliente (el
 //               precio final con viaje y aduana, y que si pesa mas puede haber
 //               diferencia: Benja 04/11) y cada producto con marca, nombre,
-//               detalle, garantia (si viene) y precio en dolares tal cual; el
+//               detalle, garantia (si viene), precio en dolares tal cual y,
+//               abajo, los pesos del catalogo (precioARS; sin dolar, nada); el
 //               codigo no se ve, va en el mensaje. El pago en un renglon: con
 //               seña y el resto cuando llega (Benja 03/11: «Sí, con seña»), los
 //               medios, y el monto de las cuotas por WhatsApp: las de un
@@ -146,12 +147,34 @@ async function probarLaPortada(){
      'debajo de los pasos, el pago en un renglon: con seña y el resto cuando llega, y el monto de las cuotas por WhatsApp (Benja 04/11)', enTxt(pago));
   ok(!/mismas que en el resto del cat[aá]logo/i.test(enTxt(sec)) && !sec.querySelector('.cq, [data-cuotas]'),
      'las cuotas de un encargo no son las del catalogo: la seccion no dice «las mismas» ni calcula cuotas');
-  ok(!/%|\$\s?\d|recargo|inter[eé]s|\d+\s*cuotas/i.test(enTxt(sec)) && !/\d/.test(enTxt(pago)) &&
+  // Los unicos pesos de la seccion son los «≈ $» de cada tarjeta (los de abajo)
+  const sinPesos = (() => { const c = sec.cloneNode(true); c.querySelectorAll('.en-ars').forEach(x => x.remove()); return enTxt(c); })();
+  ok(!/%|\$\s?\d|recargo|inter[eé]s|\d+\s*cuotas/i.test(sinPesos) && !/\d/.test(enTxt(pago)) &&
      !/seña\s*(de\s*)?(usd|u\$s|\$|\d)/i.test(enTxt(sec)),
      'sin montos de cuotas, planes ni porcentajes, y la seña sin decir cuanto', enTxt(sec).slice(0, 80));
   const fuera = [...sec.querySelectorAll('*')].filter(el => { const r = el.getBoundingClientRect(), s = sec.getBoundingClientRect();
     return r.width && (r.right > s.right + 0.5 || r.left < s.left - 0.5); });
   ok(!fuera.length, 'nada se sale del bloque de costado (' + innerWidth + ' px)', fuera.slice(0, 3).map(el => el.className).join(', '));
+  /* Los pesos (Benja 04/11, «sumá los pesos al encargo»): abajo del precio en
+     dolares, los mismos de la tarjeta del catalogo (precioARS, con el dolar del
+     dia), y sin dolar, nada */
+  const tc0 = TC;
+  try{
+    TC = 1500; FIRMA_EXTRAS = ''; pintarExtras();
+    const s1 = document.querySelector('#encargo [data-enc="ENC-0001"]');
+    const ars = s1 && s1.querySelector('.en-pie .en-ars');
+    ok(!!ars && enTxt(ars) === '≈ $ ' + plata(470 * 1500) && ars.innerHTML === precioARS({ precio: 470 }) &&
+       ars.querySelector('.aprox')?.title === REF_PESOS && ars.previousElementSibling === s1.querySelector('.en-precio'),
+       'abajo del precio en dolares, los pesos como en el catalogo (precioARS, con el dolar del dia)', ars && enTxt(ars));
+    ok(!/%|recargo|inter[eé]s|\d+\s*cuotas/i.test(enTxt(document.getElementById('encargo'))),
+       'con los pesos, tampoco hay cuotas ni porcentajes');
+    TC = null; FIRMA_EXTRAS = ''; pintarExtras();
+    ok(!document.querySelector('#encargo .en-ars') && !/\$\s?\d/.test(enTxt(document.getElementById('encargo'))),
+       'sin el dolar, no hay pesos (nunca un numero inventado)');
+  }finally{
+    TC = tc0; FIRMA_EXTRAS = ''; pintarExtras();
+  }
+
   // Con mas de 3, los productos pasan abajo y a lo ancho
   const cuatro = enCopia();
   cuatro.productos.push({ id: 'ENC-0004', nombre: 'Otro', marca: 'Bose', detalle: '', garantia: '', precio_usd: 300, foto: '' });

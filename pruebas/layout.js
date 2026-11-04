@@ -91,6 +91,37 @@ function medir(f, w){
     ok(win.getComputedStyle(sug).display !== 'none', 'y visible de verdad');
   }
 
+  /* Lo de abajo (Benja 04/11, «Marian C»): en el celular, el WhatsApp y
+     Marian van en una barrita abajo de todo, mitad y mitad, y al final de la
+     pagina queda su lugar; con un pedido manda la barra del pedido. En la
+     compu flotan como siempre. */
+  const barra = q('.barra-abajo'), wa = q('#wa-flotante'), mar = q('.mr-lanzar');
+  if(barra && wa && !wa.hidden && mar && !mar.hidden){
+    const rb = barra.getBoundingClientRect(), rw = wa.getBoundingClientRect(), rm = mar.getBoundingClientRect();
+    const caja = r => `${Math.round(r.left)},${Math.round(r.top)} ${Math.round(r.width)}x${Math.round(r.height)}`;
+    if(w <= 760){
+      ok(cs(barra).display !== 'none' && Math.abs(rb.bottom - win.innerHeight) < 1.5 && Math.abs(rb.width - w) < 1.5,
+         'en el celular hay una barrita abajo de todo, a lo ancho', caja(rb));
+      const adentro = r => r.top >= rb.top - 0.5 && r.bottom <= rb.bottom + 0.5 && r.left >= -0.5 && r.right <= w + 0.5;
+      ok(adentro(rw) && adentro(rm) && rm.right <= rw.left && rm.width > 120 && rw.width > 120,
+         'Marian a la izquierda y el WhatsApp a la derecha, los dos adentro de la barrita', 'Marian ' + caja(rm) + ' · WhatsApp ' + caja(rw));
+      ok(/Preguntale a Marian/.test(mar.textContent) && cs(wa.querySelector('b')).display !== 'none' &&
+         mar.scrollWidth <= mar.clientWidth + 1 && wa.scrollWidth <= wa.clientWidth + 1,
+         'los dos con su nombre, sin cortarse', mar.scrollWidth + '/' + mar.clientWidth);
+      ok(parseFloat(cs(q('.pie-legal')).paddingBottom) >= rb.height, 'al final de la pagina queda el lugar de la barrita: no tapa el pie',
+         cs(q('.pie-legal')).paddingBottom + ' vs ' + Math.round(rb.height) + 'px');
+      ok(win.enBarraAbajo() === true, 'en la barrita no corre lo de esconder los flotantes');
+      d.body.classList.add('con-pedido');
+      const rm2 = mar.getBoundingClientRect();
+      ok(cs(barra).display === 'none' && cs(wa).display === 'none' && rm2.bottom < win.innerHeight - 80 && win.enBarraAbajo() === false,
+         'con un pedido, la barrita se va y Marian flota arriba de la barra del pedido, como antes', caja(rm2));
+      d.body.classList.remove('con-pedido');
+    }else{
+      ok(cs(barra).display === 'none' && rm.bottom <= rw.top + 1 && rw.right > w - 60 && win.enBarraAbajo() === false,
+         'en la compu no hay barrita: Marian flota arriba del WhatsApp, abajo a la derecha', 'Marian ' + caja(rm) + ' · WhatsApp ' + caja(rw));
+    }
+  }else R.push('       (sin WhatsApp o sin Marian: no se mide la barrita)');
+
   // Nada se desborda a lo ancho en ningun tamaño
   ok(d.documentElement.scrollWidth <= w + 1, 'la pagina no se va de ancho',
      d.documentElement.scrollWidth + ' vs ' + w);

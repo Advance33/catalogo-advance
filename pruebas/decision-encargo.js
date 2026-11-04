@@ -136,8 +136,8 @@ async function probarLaPortada(){
      'marca, nombre, detalle y precio en dolares tal cual, en la etiqueta oscura', enTxt(sony));
   ok(cards.every(c => !c.querySelector('.en-id') && !/ENC-\d/.test(enTxt(c))),
      'el codigo ENC no se ve en la tarjeta (va en el mensaje de WhatsApp)');
-  ok(sony.querySelector('.en-foto img')?.getAttribute('src') === 'https://www.sony.com/image/ejemplo.png' &&
-     !kindle.querySelector('.en-foto img') && enTxt(kindle.querySelector('.en-foto')) === 'Kindle' && !kindle.querySelector('.en-det'),
+  ok(sony.querySelector('.en-img img')?.getAttribute('src') === 'https://www.sony.com/image/ejemplo.png' &&
+     !kindle.querySelector('.en-img img') && enTxt(kindle.querySelector('.en-img')) === 'Kindle' && !kindle.querySelector('.en-det'),
      'con foto, la foto; sin foto, la marca escrita; sin detalle, sin renglon');
   ok(!sony.querySelector('.en-gar') && enTxt(garmin.querySelector('.en-gar')) === 'Garantía: 6 meses' && enTxt(garmin.querySelector('.en-precio')) === 'USD 1.015',
      'la garantia solo si ADVAPP la manda («Garantía: 6 meses»); vacia, sin renglon');

@@ -7,11 +7,13 @@
 //               version B del muestrario (Benja 04/11: «B, titulo 1, pasos 1,
 //               boton 1, plazo sí»): el titulo que manda ADVAPP, el total
 //               grande (el plazo del ultimo paso: se cuentan desde la seña),
-//               los pasos numerados con su plazo, lo que gana el cliente (el
+//               los pasos numerados con su plazo (el deposito con su «puede
+//               variar», 04/11), lo que gana el cliente (el
 //               precio final con viaje y aduana, y que si pesa mas puede haber
 //               diferencia: Benja 04/11) y cada producto con marca, nombre,
 //               detalle, garantia (si viene), precio en dolares tal cual y,
-//               abajo, los pesos del catalogo (precioARS; sin dolar, nada); el
+//               abajo, los pesos del catalogo (precioARS; sin dolar, nada), y el
+//               link a la publicacion si viene (04/11, opcion A); el
 //               codigo no se ve, va en el mensaje. El pago en un renglon: con
 //               seña y el resto cuando llega (Benja 03/11: «Sí, con seña»), los
 //               medios, y el monto de las cuotas por WhatsApp: las de un
@@ -51,9 +53,9 @@ const EN_EJEMPLO = {
           { paso: 'Vuela y aduana', plazo: '5 a 8 días' }, { paso: 'En tu puerta', plazo: '7 a 14 días' }],
   productos: [
     { id: 'ENC-0001', nombre: 'Sony WH-1000XM5', marca: 'Sony', detalle: 'Auriculares inalámbricos con cancelación de ruido · Negro',
-      garantia: '', precio_usd: 470, foto: 'https://www.sony.com/image/ejemplo.png', revisado: '2026-11-02' },
+      garantia: '', precio_usd: 470, foto: 'https://www.sony.com/image/ejemplo.png', link: 'https://tienda.example/sony-wh-1000xm5?id=7', revisado: '2026-11-02' },
     { id: 'ENC-0002', nombre: 'Kindle Paperwhite 16 GB', marca: 'Kindle', detalle: '', garantia: '', precio_usd: 265, foto: '', revisado: '2026-10-30' },
-    { id: 'ENC-0003', nombre: 'Garmin Forerunner 265', marca: 'Garmin', detalle: '', garantia: '6 meses', precio_usd: 1015, foto: 'http://no-https.example/foto.png', revisado: '2026-11-03' },
+    { id: 'ENC-0003', nombre: 'Garmin Forerunner 265', marca: 'Garmin', detalle: '', garantia: '6 meses', precio_usd: 1015, foto: 'http://no-https.example/foto.png', link: 'javascript:alert(1)', revisado: '2026-11-03' },
   ],
 };
 const enCopia = () => JSON.parse(JSON.stringify(EN_EJEMPLO));
@@ -81,6 +83,9 @@ function probarElArchivo(){
      'el ejemplo de ADVAPP pasa entero: titulo, 5 pasos y 3 productos', d && d.productos.map(p => p.id).join(','));
   ok(d && d.productos[0].precio === 470 && d.productos[0].foto === 'https://www.sony.com/image/ejemplo.png' &&
      d.productos[1].foto === '' && d.productos[2].foto === '', 'precio tal cual y foto solo https (la http se descarta, el producto queda)');
+  ok(d && d.productos[0].link === 'https://tienda.example/sony-wh-1000xm5?id=7' && d.productos[1].link === '' && d.productos[2].link === '',
+     'el link de la publicacion: solo http(s); sin link o con otro, nada (Benja 04/11, opcion A)', d && d.productos.map(p => p.link).join(' | '));
+  ok(validarEncargo({ ...enCopia(), contrato: 'encargo/1.1' }) !== null, 'un encargo/1.x que suma campos tambien sirve');
   ok(validarEncargo({ ...enCopia(), contrato: 'encargo/2' }) === null && validarEncargo(null) === null &&
      validarEncargo({ ...enCopia(), productos: [] }) === null, 'otro contrato, nada o la lista vacia = sin bloque');
   const malos = enCopia();
@@ -117,7 +122,16 @@ async function probarLaPortada(){
   ok(enTxt(sec.querySelector('.en-total')) === '7 a 14 días desde la seña hasta tu puerta' &&
      enTxt(sec.querySelector('.en-cab')) === 'Cómo llega los días se cuentan desde la seña',
      'el total grande es el plazo del ultimo paso, contado desde la seña (Benja 04/11, «plazo sí»)', enTxt(sec.querySelector('.en-total')));
-  const pasos = [...sec.querySelectorAll('.en-pasos li')].map(li => [...li.children].map(enTxt).join(' '));
+  const pasos = [...sec.querySelectorAll('.en-pasos li')].map(li => [...li.children].filter(x => !x.classList.contains('en-paso-nota')).map(enTxt).join(' '));
+  // El deposito «puede variar» (Benja 04/11): sólo en ese paso, abajo del nombre
+  const notas = [...sec.querySelectorAll('.en-pasos li')].map(li => enTxt(li.querySelector('.en-paso-nota')));
+  const liDep = sec.querySelectorAll('.en-pasos li')[2], notaDep = liDep && liDep.querySelector('.en-paso-nota');
+  ok(notas.join('|') === '||Puede variar según lo que tarde la tienda en despacharlo||' && notaDep.getBoundingClientRect().top >= liDep.querySelector('b').getBoundingClientRect().bottom - 1 &&
+     !/%|recargo|inter[eé]s|cuotas|\d/i.test(enTxt(notaDep)),
+     'en «Depósito EEUU», abajo del nombre: «Puede variar según lo que tarde la tienda en despacharlo»', notas.join('|'));
+  const sinDep = validarEncargo({ ...enCopia(), pasos: [{ paso: 'Seña', plazo: 'Hoy' }, { paso: 'En tu puerta', plazo: '7 a 14 días' }] });
+  ok(sinDep.pasos.every(p => !notaDelPaso(p)) && notaDelPaso({ paso: 'Deposito EEUU' }) === 'Puede variar según lo que tarde la tienda en despacharlo',
+     'si ese paso no viene no hay nota; sin tilde tambien la encuentra');
   ok(pasos.length === 5 && pasos.join(' | ') === 'Seña Hoy | Compramos 24 a 48 h | Depósito EEUU 3 a 5 días | Vuela y aduana 5 a 8 días | En tu puerta 7 a 14 días' &&
      sec.querySelector('.en-pasos').tagName === 'OL', 'los 5 pasos en orden, con su plazo, en una lista numerada', pasos.join(' | '));
   const gana = [...sec.querySelectorAll('.en-gana li')].map(enTxt);
@@ -134,6 +148,13 @@ async function probarLaPortada(){
      enTxt(sony.querySelector('.en-det')) === 'Auriculares inalámbricos con cancelación de ruido · Negro' &&
      enTxt(sony.querySelector('.en-precio')) === 'USD 470' && enTxt(sony.querySelector('.en-pie small')) === 'precio final',
      'marca, nombre, detalle y precio en dolares tal cual, en la etiqueta oscura', enTxt(sony));
+  const pub = sony.querySelector('a.en-publicacion');
+  ok(pub && enTxt(pub) === 'Ver la publicación ↗' && pub.getAttribute('href') === 'https://tienda.example/sony-wh-1000xm5?id=7' &&
+     pub.target === '_blank' && /\bnoopener\b/.test(pub.rel) && /\bnoreferrer\b/.test(pub.rel) && /\bnofollow\b/.test(pub.rel) &&
+     !kindle.querySelector('.en-publicacion') && !garmin.querySelector('.en-publicacion'),
+     'con link, «Ver la publicación ↗» en otra pestaña; sin link (o con uno que no sirve), nada', pub && pub.outerHTML.slice(0, 120));
+  ok(cards.every(c => c.querySelectorAll('a.en-consultar').length === (WHATSAPP ? 1 : 0) && !c.querySelector('.en-publicacion[href*="wa.me"]')),
+     'el Consultar sigue siendo uno solo por tarjeta');
   ok(cards.every(c => !c.querySelector('.en-id') && !/ENC-\d/.test(enTxt(c))),
      'el codigo ENC no se ve en la tarjeta (va en el mensaje de WhatsApp)');
   ok(sony.querySelector('.en-img img')?.getAttribute('src') === 'https://www.sony.com/image/ejemplo.png' &&

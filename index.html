@@ -1299,7 +1299,10 @@ window.ADVAPP_TEMPRANO = (() => {
   .en-consultar{flex:1 1 150px;justify-content:center;background:var(--acento);border-color:var(--acento);color:#fff;
                 box-shadow:0 12px 24px -14px rgba(124,58,237,.9)}
   .en-consultar:hover{background:var(--glow);border-color:var(--glow)}
-  .en-otro{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px 20px;
+  /* «¿Buscás otro producto?» con su botón a la izquierda (Benja 04/11: «en PC
+     se tapan un poco»): abajo a la derecha están Marian y el WhatsApp
+     flotante, así que ese rincón de la sección queda libre */
+  .en-otro{grid-column:1 / -1;display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:12px 20px;
            padding-top:20px;border-top:1px solid rgba(255,255,255,.12)}
   .en-otro p{margin:0;font:600 15px/1.4 var(--sans)}
   .en-cotizar{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;text-decoration:none;
@@ -11101,6 +11104,15 @@ const ENCARGO_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-
 const ENCARGO_ESPERA_MS = 8000;
 const ENCARGO_MAX = 24;
 let ENCARGO = null;   // { seccion, pasos, productos } ya validado, o null
+/* Los últimos pasos buenos que mandó ADVAPP, haya productos o no: Marian
+   explica el encargo aunque la sección no esté (04/11). Si ADVAPP falla, quedan
+   los de antes. */
+let ENCARGO_PASOS = [];
+const txtEncargo = (x, n) => String(x == null ? '' : x).replace(/\s+/g, ' ').trim().slice(0, n);
+const pasosDeEncargo = j => (Array.isArray(j && j.pasos) ? j.pasos : [])
+  .map(p => ({ paso: txtEncargo(p && p.paso, 40), plazo: txtEncargo(p && p.plazo, 40) }))
+  .filter(p => p.paso)
+  .slice(0, 8);
 
 // Sólo https; si no, sin foto (de dónde puede ser lo controla ADVAPP)
 function fotoEncargo(s){
@@ -11113,11 +11125,8 @@ function fotoEncargo(s){
    repetido. */
 function validarEncargo(j){
   if(!j || j.contrato !== 'encargo/1') return null;
-  const txt = (x, n) => String(x == null ? '' : x).replace(/\s+/g, ' ').trim().slice(0, n);
-  const pasos = (Array.isArray(j.pasos) ? j.pasos : [])
-    .map(p => ({ paso: txt(p && p.paso, 40), plazo: txt(p && p.plazo, 40) }))
-    .filter(p => p.paso)
-    .slice(0, 8);
+  const txt = txtEncargo;
+  const pasos = pasosDeEncargo(j);
   const vistos = new Set();
   const productos = (Array.isArray(j.productos) ? j.productos : [])
     .map(p => ({ id: txt(p && p.id, 12), nombre: txt(p && p.nombre, 90), marca: txt(p && p.marca, 40),
@@ -11138,7 +11147,10 @@ function cargarEncargo(){
       if(!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
     })
-    .then(validarEncargo)
+    .then(j => {
+      if(j && j.contrato === 'encargo/1' && pasosDeEncargo(j).length) ENCARGO_PASOS = pasosDeEncargo(j);
+      return validarEncargo(j);
+    })
     .catch(e => { console.warn('No se pudo leer ' + ENCARGO_URL + ':', e); return null; })
     .then(e => {
       const antes = firmaEncargo();
@@ -11166,6 +11178,8 @@ const ENCARGO_GANA = [
    del catálogo, así que no se dice «las mismas formas»; el monto de las
    cuotas va por WhatsApp y el interés no se nombra nunca. */
 const ENCARGO_PAGO = 'Se encarga con una seña y el resto se paga cuando llega, en efectivo, transferencia o en cuotas con tarjeta: el monto de las cuotas te lo pasamos por WhatsApp.';
+// Lo que acompaña al total: la sección y Marian dicen lo mismo
+const ENCARGO_TOTAL_TXT = 'desde la seña hasta tu puerta';
 // «¿Buscás otro producto?»: lo que no está en la sección también se cotiza
 const MENSAJE_COTIZAR_ENCARGO = 'Hola! Busco un producto que no está en la web. ¿Me lo cotizan por encargo?';
 const ICONO_TILDE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
@@ -11176,7 +11190,7 @@ function htmlEncargo(){
   // Los plazos se cuentan desde la seña (Benja 04/11, «plazo sí»): el del último paso es el total
   const ultimo = d.pasos[d.pasos.length - 1];
   const total = ultimo && ultimo.plazo
-    ? `<p class="en-total"><b>${esc(ultimo.plazo)}</b> <span>desde la seña hasta tu puerta</span></p>` : '';
+    ? `<p class="en-total"><b>${esc(ultimo.plazo)}</b> <span>${esc(ENCARGO_TOTAL_TXT)}</span></p>` : '';
   const pasos = d.pasos.length ? `<div class="en-camino">
         <p class="en-cab"><b>Cómo llega</b> los días se cuentan desde la seña</p>
         <ol class="en-pasos" aria-label="Los pasos del encargo">${d.pasos.map(p =>
@@ -17352,7 +17366,7 @@ addEventListener('offline', () => { if(grid.querySelector('.msg.sin-catalogo')) 
 <!-- Marian, la guía de botones (29/10/2026): el botón «Preguntale a Marian»,
      su panel y la bienvenida. Vive aparte, en marian/, y usa las funciones y
      los textos de esta página. El ?v= se cambia cada vez que se cambia Marian. -->
-<link rel="stylesheet" href="marian/marian.css?v=20261029">
-<script src="marian/marian.js?v=20261029" defer></script>
+<link rel="stylesheet" href="marian/marian.css?v=20261104">
+<script src="marian/marian.js?v=20261104" defer></script>
 </body>
 </html>

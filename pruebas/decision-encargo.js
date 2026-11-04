@@ -176,6 +176,8 @@ async function probarLaPortada(){
   ok(w.length === 1 && w[0].desde === 'encargo' && w[0].id === 'ENC-0001' && w[0].marca === 'Sony' && w[0].precio === 470 && !w[0].codigo,
      'la medicion anota el WhatsApp con desde «encargo» y el codigo ENC-0001', JSON.stringify(w));
   const c = sec2.querySelector('.en-otro a.en-cotizar');
+  ok(getComputedStyle(sec2.querySelector('.en-otro')).justifyContent === 'flex-start',
+     '«Pedir cotización» va a la izquierda: abajo a la derecha estan Marian y el WhatsApp flotante (Benja 04/11)');
   const msjC = c ? decodeURIComponent(c.href.split('text=')[1] || '') : '';
   ok(enTxt(sec2.querySelector('.en-otro p')) === '¿Buscás otro producto? Decinos cuál y te lo cotizamos.' &&
      msjC === 'Hola! Busco un producto que no está en la web. ¿Me lo cotizan por encargo?' && c.target === '_blank',
@@ -197,4 +199,9 @@ async function probarLaCarga(){
   responder({ ...enCopia(), productos: [] });
   await cargarEncargo();
   ok(ENCARGO === null && !document.getElementById('encargo'), 'si la lista viene vacia, tambien');
+  ok(ENCARGO_PASOS.length === 5 && ENCARGO_PASOS[4].plazo === '7 a 14 días',
+     'sin productos igual quedan los pasos de ADVAPP (Marian los cuenta, 04/11)', ENCARGO_PASOS.map(p => p.paso).join(','));
+  responder({ error: 'otra vez' }, 500);
+  await cargarEncargo();
+  ok(ENCARGO_PASOS.length === 5, 'si ADVAPP falla, quedan los ultimos pasos buenos');
 }

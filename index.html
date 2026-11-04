@@ -1941,6 +1941,28 @@ window.ADVAPP_TEMPRANO = (() => {
     .wa-flotante{right:14px;bottom:14px;padding:13px;gap:0}
     .wa-flotante b{display:none}
   }
+  /* ---------- Abajo en el celular: la barrita (Benja 04/11, «Marian C») ----------
+     Marian y el WhatsApp van juntos en una barrita abajo de todo, mitad y
+     mitad, en vez de flotar encima del contenido (la pastilla de Marian
+     ocupaba media pantalla y tapaba «Pedir cotización»). Este es el fondo y la
+     mitad del WhatsApp; la de Marian está en marian/marian.css. Cada uno pone su
+     clase en el body (con-wa, con-marian): si falta uno, el otro ocupa la
+     barrita entera. Con un pedido cargado manda la barra del pedido y queda
+     todo como antes. Al final de la página queda el lugar de la barrita, con
+     el área segura de abajo del iPhone. En la computadora no cambia nada. */
+  :root{--alto-barra-abajo:60px}
+  .barra-abajo{display:none}
+  @media (max-width:760px){
+    body:is(.con-wa,.con-marian):not(.con-pedido) .barra-abajo{display:block;position:fixed;left:0;right:0;bottom:0;z-index:499;
+      height:calc(var(--alto-barra-abajo) + env(safe-area-inset-bottom, 0px));background:var(--surface);
+      border-top:1px solid var(--line);box-shadow:0 -8px 22px rgba(24,18,38,.08)}
+    body:not(.con-pedido) .wa-flotante{left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom, 0px));
+      justify-content:center;gap:8px;min-height:44px;padding:0 12px;box-shadow:none;animation:none}
+    body.con-marian:not(.con-pedido) .wa-flotante{left:calc(50% + 4px)}
+    body:not(.con-pedido) .wa-flotante b{display:inline}
+    body:is(.con-wa,.con-marian):not(.con-pedido) .pie-legal{
+      padding-bottom:calc(var(--alto-barra-abajo) + 28px + env(safe-area-inset-bottom, 0px))}
+  }
 
   /* El pie oscuro (Benja, 19/10/2026, 4C del muestrario: el renglón chico era
      "muy chico para algo tan importante"). Grafito como la barra de arriba. */
@@ -3995,6 +4017,10 @@ window.ADVAPP_TEMPRANO = (() => {
   <div class="bp-total"><b id="bp-usd">USD 0</b><i id="bp-ars"></i><i class="aviso" id="bp-aviso" hidden><span class="dot" aria-hidden="true"></span><span id="bp-aviso-txt"></span></i></div>
   <a class="bp-enviar" id="bp-enviar" target="_blank" rel="noopener">Enviar pedido</a>
 </div>
+
+<!-- La barrita de abajo del celular (04/11, «Marian C»): sólo el fondo; los
+     botones son el WhatsApp de acá abajo y el de Marian -->
+<div class="barra-abajo" aria-hidden="true"></div>
 
 <!-- Botón flotante de WhatsApp. El link lo arma el script con el número
      de la configuración, así no hay dos lugares donde cambiarlo. -->
@@ -11240,12 +11266,17 @@ function htmlEncargo(){
    WhatsApp flotante o de Marian, los dos se esconden un momento y vuelven
    cuando pasó. Se miden las cajas de verdad (visibility no cambia la caja,
    así no titila), por eso sirve con cualquier forma que tenga Marian. */
+/* En el celular, sin pedido, el WhatsApp y Marian van en la barrita de abajo
+   («Marian C», 04/11): ahí no flotan encima de nada, así que no se esconden.
+   El ancho es el mismo de la barrita en el CSS (760). */
+const BARRA_ABAJO = matchMedia('(max-width: 760px)');
+function enBarraAbajo(){ return BARRA_ABAJO.matches && !document.body.classList.contains('con-pedido'); }
 let flotantesCeden = false, flotantesPendiente = 0;
 function revisarFlotantes(){
   flotantesPendiente = 0;
   const b = document.querySelector('#encargo .en-cotizar');
   let tapa = false;
-  if(b){
+  if(b && !enBarraAbajo()){
     const r = b.getBoundingClientRect();
     if(r.width && r.bottom > 0 && r.top < innerHeight){
       tapa = [document.getElementById('wa-flotante'), document.querySelector('.mr-lanzar')].some(f => {
@@ -16876,6 +16907,7 @@ if(WHATSAPP){
   wf.href = `https://wa.me/${WHATSAPP}?text=` +
             encodeURIComponent('Hola! Te escribo desde el catálogo de Advance Tecno.');
   wf.hidden = false;
+  document.body.classList.add('con-wa');   // la barrita del celular cuenta con él (04/11)
 }
 
 /* ---------- El pie con el contacto (19/10/2026, 4C del muestrario) ----------
@@ -17399,7 +17431,7 @@ addEventListener('offline', () => { if(grid.querySelector('.msg.sin-catalogo')) 
 <!-- Marian, la guía de botones (29/10/2026): el botón «Preguntale a Marian»,
      su panel y la bienvenida. Vive aparte, en marian/, y usa las funciones y
      los textos de esta página. El ?v= se cambia cada vez que se cambia Marian. -->
-<link rel="stylesheet" href="marian/marian.css?v=20261104">
-<script src="marian/marian.js?v=20261104" defer></script>
+<link rel="stylesheet" href="marian/marian.css?v=20261104b">
+<script src="marian/marian.js?v=20261104b" defer></script>
 </body>
 </html>

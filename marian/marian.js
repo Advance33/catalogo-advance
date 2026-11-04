@@ -316,7 +316,7 @@
   const raiz = document.createElement('div');
   raiz.className = 'mr-raiz';
   raiz.innerHTML = `
-    <button class="mr-lanzar" type="button" aria-haspopup="dialog">${ESTRELLA}<span>Preguntale a Marian</span><span class="mr-punto" hidden></span></button>
+    <button class="mr-lanzar" type="button" aria-haspopup="dialog">${ESTRELLA}<span><span class="mr-l1">Preguntale a </span>Marian</span><span class="mr-punto" hidden></span></button>
     <section class="mr-panel" role="dialog" aria-label="Marian" hidden>
       <div class="mr-cab">
         <button class="mr-atras" type="button" aria-label="Volver" hidden>${ATRAS}</button>
@@ -328,6 +328,8 @@
         <small>Para comprar te pasamos con una persona por WhatsApp.</small></div>
     </section>`;
   document.body.appendChild(raiz);
+  // La barrita de abajo del celular (04/11, «Marian C»): con Marian, el WhatsApp ocupa la mitad derecha
+  document.body.classList.add('con-marian');
   const lanzar = raiz.querySelector('.mr-lanzar'), panel = raiz.querySelector('.mr-panel');
   const cuerpo = raiz.querySelector('.mr-cuerpo'), atras = raiz.querySelector('.mr-atras');
 

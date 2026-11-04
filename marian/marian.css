@@ -143,7 +143,20 @@ body.con-pedido .mr-lanzar{bottom:96px}
 @media (max-width:760px){
   .mr-lanzar{right:14px;bottom:76px;padding:10px 14px 10px 11px;font-size:13px}
   body.con-pedido .mr-lanzar{bottom:92px}
+  /* La barrita de abajo (Benja 04/11, «Marian C»): Marian en la mitad
+     izquierda, el WhatsApp en la derecha (el fondo y el WhatsApp los pone
+     index.html). Con un pedido cargado, Marian vuelve a flotar arriba de la
+     barra del pedido, como antes. */
+  body:not(.con-pedido) .mr-lanzar{left:10px;right:calc(50% + 4px);bottom:calc(8px + env(safe-area-inset-bottom, 0px));
+    justify-content:center;gap:6px;min-height:44px;padding:0 8px;border-radius:999px;box-shadow:none;
+    white-space:nowrap;font-size:12.5px}
+  body:not(.con-pedido) .mr-lanzar svg{width:16px;height:16px}
+  body.con-marian:not(.con-wa):not(.con-pedido) .mr-lanzar{right:10px}
   .mr-panel{width:100%}
+}
+/* En 360 «Preguntale a Marian» no entra en media barrita: queda «Marian» */
+@media (max-width:374px){
+  body:not(.con-pedido) .mr-lanzar .mr-l1{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   .mr-raiz *,.mr-raiz *::before,.mr-raiz *::after{animation-duration:.01ms!important;animation-delay:0s!important;transition:none!important}

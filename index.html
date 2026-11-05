@@ -9964,15 +9964,18 @@ function pintarCabecera(texto){
   cab.hidden = fijo.hidden = false;
 
   const titulo = tituloDeLaGrilla();
-  // Las marcas van sólo adentro de un rubro: en "Todo" son veinte y pico, y
-  // filtrar por marca sin decir de qué rubro no le sirve a nadie.
-  const marcas = filtros.cat ? marcasDisponibles() : [];
+  // Las marcas van adentro de un rubro: en "Todo" son veinte y pico, y
+  // filtrar por marca sin decir de qué rubro no le sirve a nadie. Y en una
+  // búsqueda (Benja, 05/11/2026: "busqué tablets y no figuran los filtros
+  // para saber de qué marca quiero"), con las marcas de lo encontrado.
+  const marcas = filtros.cat || soloBuscando() ? marcasDisponibles(LISTA) : [];
   const conMarcas = marcas.length >= 2;
   const foto = filtros.cat ? fotoDelRubro(filtros.cat) : '';
   // Sólo lo que tiene stock (D15 B, 13/10/2026): lo agotado no muestra precio
   const precios = LISTA.filter(m => m.stock).map(m => m.precio).filter(x => x !== null && x > 0);
   const desde = precios.length ? ' · Desde USD ' + plata(Math.min(...precios)) : '';
-  const enPanel = filtrosActivos(false).length;
+  // Buscando sin rubro la marca también está en el panel (gruposDeFiltros)
+  const enPanel = filtrosActivos(soloBuscando()).length;
   // Una marca puesta que no está entre los botones se muestra con su cruz
   // (29/09): con Apple puesta en Consolas quedaban los botones sin ninguno
   // marcado, la grilla vacía y nada que dijera por qué.
@@ -10091,14 +10094,24 @@ function listaCon(cambios){
 
 function gruposDeFiltros(){
   const grupos = [{ campo: 'rango', titulo: 'Precio', opciones: RANGOS.map(([v, t]) => ({ v, t })) }];
+  /* Buscando sin rubro, la marca va primero (Benja, 05/11/2026). Adentro de
+     un rubro no: ahí están los botones de arriba. Con la puesta aunque no
+     tenga nada, para poder sacarla. */
+  if(soloBuscando()){
+    const marcas = marcasDisponibles().map(([m]) => m);
+    if(filtros.marca && !marcas.includes(filtros.marca)) marcas.push(filtros.marca);
+    if(marcas.length >= 2 || filtros.marca) grupos.unshift({ campo: 'marca', titulo: 'Marca', opciones: marcas.map(v => ({ v, t: v })) });
+  }
+  // Los propios del rubro abierto o del que nombra la búsqueda ("lentes")
+  const rubros = rubrosEnJuego().map(norm);
   const cap = valoresDe('capacidad'), ram = valoresDe('ram');
   /* "Memoria" es el almacenamiento, como en la pestaña de la ficha y en el
      cotizador, y la RAM se llama RAM, como el chip "12GB RAM" (auditoría
      19/10/2026, T-03): acá decía "Capacidad" y "Memoria" era la RAM. */
   if(cap.length) grupos.push({ campo: 'capacidad', titulo: 'Memoria', opciones: cap.map(v => ({ v, t: v })) });
   if(ram.length) grupos.push({ campo: 'ram', titulo: 'RAM', opciones: ram.map(v => ({ v, t: v })) });
-  if(norm(filtros.cat) === 'objetivo'){
-    const monturas = [...new Set(MODELOS.filter(m => m.cat === filtros.cat)
+  if(rubros.includes('objetivo')){
+    const monturas = [...new Set(MODELOS.filter(m => norm(m.cat) === 'objetivo')
                        .flatMap(m => (m.variantes || [m]).map(v => v.montura)).filter(Boolean))]
                        .sort((a, b) => a.localeCompare(b, 'es'));
     if(monturas.length > 1) grupos.push({ campo: 'montura', titulo: 'Montura', opciones: monturas.map(v => ({ v, t: v })) });
@@ -10106,7 +10119,7 @@ function gruposDeFiltros(){
                   opciones: Object.entries(TEXTO_APERTURA).map(([v, t]) => ({ v, t })) });
   }
   // Los propios del rubro abierto (13/10): ver FILTROS_RUBRO
-  FILTROS_RUBRO.filter(f => norm(f.rubro) === norm(filtros.cat)).forEach(f =>
+  FILTROS_RUBRO.filter(f => rubros.includes(norm(f.rubro))).forEach(f =>
     grupos.push({ campo: f.campo, titulo: f.titulo, opciones: f.opciones.map(([v, t]) => ({ v, t })) }));
   return grupos;
 }
@@ -10167,7 +10180,8 @@ function abrirFiltros(){
       filtros.soloStock = !filtros.soloStock;
       foco = '[data-stock]';
     }else{
-      Object.assign(filtros, { rango: '', capacidad: '', ram: '', montura: '', apertura: '', soloStock: false, ...SIN_PROPIOS });
+      Object.assign(filtros, { rango: '', capacidad: '', ram: '', montura: '', apertura: '', soloStock: false, ...SIN_PROPIOS },
+                    soloBuscando() ? { marca: '' } : {});   // buscando, la marca es del panel
     }
     // Se aplica al toque: la grilla de atrás ya muestra el resultado, y el botón
     // de abajo dice cuántos quedan. Reemplaza el link en vez de sumar historial.
@@ -12463,12 +12477,18 @@ function soltarPrecioSinResultados(cat){
 
 /* ---------- Las marcas de la sección ----------
    Los números dicen cuánto verías si tocaras esa marca: se cuentan con todos
-   los demás filtros puestos, pero sin el de marca. */
-function marcasDisponibles(){
-  const guardado = filtros.marca;
-  filtros.marca = '';
-  const base = filtrar();
-  filtros.marca = guardado;
+   los demás filtros puestos, pero sin el de marca. `sinMarca` es lo que ya
+   filtró la grilla cuando no hay marca puesta (LISTA, 05/11/2026): desde que
+   los botones salen también buscando, se arman en cada tecla, y filtrar el
+   catálogo otra vez para contar lo mismo era tiempo de más. */
+function marcasDisponibles(sinMarca){
+  let base = !filtros.marca && sinMarca;
+  if(!base){
+    const guardado = filtros.marca;
+    filtros.marca = '';
+    base = filtrar();
+    filtros.marca = guardado;
+  }
   const cuenta = new Map();
   base.forEach(p => cuenta.set(p.marca, (cuenta.get(p.marca) || 0) + 1));
   // Primero la destacada de la sección; después, la que más productos tiene,
@@ -12492,13 +12512,59 @@ function sincronizarControles(){
     b.setAttribute('aria-pressed', String((b.dataset.cat || '') === filtros.cat)));
 }
 
+/* La búsqueda que nombra un rubro (Benja, 05/11/2026: "busqué tablets y no
+   figuran los filtros para saber de qué marca quiero"). Buscar "tablets",
+   "celulares", "notebooks", "cámaras" o "lentes sony" ofrece lo mismo que
+   entrar al rubro: sus botones de marca (eso vale para cualquier búsqueda,
+   ver pintarCabecera) y en Filtrar sus filtros propios (memoria y RAM,
+   montura, tipo de cámara...). No lleva al rubro: lo encontrado sigue siendo
+   lo de la búsqueda, con la dirección ?q= y el Atrás de siempre, y
+   "tablets" sigue trayendo los iPad, que son otro rubro.
+   Nombra un rubro una palabra (o dos o tres seguidas) que es su nombre, su
+   plural o uno de sus alias (ALIAS_CAT), con o sin la "s" o el "es" del
+   plural: "tablet" y "tablets" nombran Tablet e iPad (alias "tablet"),
+   "notebooks" Notebook y MacBook. Se mira lo que de verdad se busca
+   (textoQueSeBusca), con la corrección de lo mal escrito. Los nombres salen
+   de ORDEN_CATS y de los rubros de hoy: un link con ?q=lentes&montura=… vale
+   aunque el catálogo todavía no haya llegado. */
+let NOMBRES_DE_RUBRO = null;   // { de: MODELOS, rubrosPorNombre: nombre → [rubros] }
+function rubrosDeLaBusqueda(){
+  if(filtros.cat) return [];
+  const ws = norm(textoQueSeBusca(filtros.q)).split(/\s+/).filter(Boolean);
+  if(!ws.length) return [];
+  if(!NOMBRES_DE_RUBRO || NOMBRES_DE_RUBRO.de !== MODELOS){
+    const rubrosPorNombre = new Map();
+    const sumarNombre = (n, c) => {
+      if(n.length >= 3) rubrosPorNombre.set(n, [...new Set([...(rubrosPorNombre.get(n) || []), c])]);
+    };
+    for(const c of new Set([...ORDEN_CATS, ...MODELOS.map(m => m.cat)]))
+      for(const n of [c, plural(c), ...String(ALIAS_CAT[c] || '').split(' ')].map(norm).filter(Boolean)){
+        sumarNombre(n, c); sumarNombre(n + 's', c); sumarNombre(n + 'es', c);
+      }
+    NOMBRES_DE_RUBRO = { de: MODELOS, rubrosPorNombre };
+  }
+  const out = new Set();
+  for(let k = 1; k <= 3; k++) for(let i = 0; i + k <= ws.length; i++)
+    (NOMBRES_DE_RUBRO.rubrosPorNombre.get(ws.slice(i, i + k).join(' ')) || []).forEach(c => out.add(c));
+  return [...out];
+}
+// Los rubros cuyos filtros propios valen: el abierto o, buscando sin rubro,
+// los que nombra la búsqueda
+const rubrosEnJuego = () => filtros.cat ? [filtros.cat] : rubrosDeLaBusqueda();
+// Buscando sin rubro abierto: los botones de marca salen de lo encontrado, y
+// Filtrar suma la marca (05/11/2026)
+const soloBuscando = () => !filtros.cat && !!filtros.q.trim();
+
 /* Montura y apertura aparecen solo en la categoría Objetivo. Ofrecerlas en
    "Celular" sería dar un filtro que deja la grilla vacía, y al salir de ahí
    hay que soltarlos: si no, elegís Celular con "Canon RF" puesto y no entiende
    nadie por qué no hay nada. Va aparte de sincronizarControles porque se llama
-   mientras escribís en el buscador, y ahí no se puede tocar el <input>. */
+   mientras escribís en el buscador, y ahí no se puede tocar el <input>.
+   Desde el 05/11/2026 también buscando "lentes" o "objetivos" sin rubro (ver
+   rubrosDeLaBusqueda), y se sueltan cuando la búsqueda deja de nombrarlo. */
 function sincronizarLentes(){
-  const hayLentes = norm(filtros.cat) === 'objetivo';
+  const rubros = rubrosEnJuego().map(norm);
+  const hayLentes = rubros.includes('objetivo');
   if(!hayLentes){ filtros.montura = ''; filtros.apertura = ''; }
   /* Lo mismo los propios de cada rubro (13/10): se sueltan al salir de su
      rubro, y también si el valor no es una de sus opciones (un link viejo o
@@ -12506,7 +12572,7 @@ function sincronizarLentes(){
      ningún filtro puesto). */
   FILTROS_RUBRO.forEach(f => {
     if(!filtros[f.campo]) return;
-    const vale = FILTROS_RUBRO.some(g => g.campo === f.campo && norm(g.rubro) === norm(filtros.cat)
+    const vale = FILTROS_RUBRO.some(g => g.campo === f.campo && rubros.includes(norm(g.rubro))
                                       && g.opciones.some(o => o[0] === filtros[f.campo]));
     if(!vale) filtros[f.campo] = '';
   });
@@ -12520,11 +12586,14 @@ function sincronizarLentes(){
 /* Los valores de capacidad o memoria que tiene sentido ofrecer: sólo adentro de
    un rubro con capacidad, con lo que hay en ese rubro y esa marca, y sólo si
    hay más de uno. En "Todo" se mezclarían la capacidad de un iPhone con la de
-   una MacBook y la de una consola, que no se comparan entre sí. */
+   una MacBook y la de una consola, que no se comparan entre sí. Buscando el
+   nombre de un rubro (05/11/2026), con lo de ese rubro: "tablets", lo de
+   Tablet y de iPad (rubrosDeLaBusqueda). */
 function valoresDe(id){
-  if(!filtros.cat || !CATS_CON_CAPACIDAD.includes(filtros.cat)) return [];
+  const rubros = rubrosEnJuego().filter(c => CATS_CON_CAPACIDAD.includes(c));
+  if(!rubros.length) return [];
   const saca = id === 'ram' ? ramDe : capacidadDe;
-  const enJuego = MODELOS.filter(m => m.cat === filtros.cat && (!filtros.marca || m.marca === filtros.marca));
+  const enJuego = MODELOS.filter(m => rubros.includes(m.cat) && (!filtros.marca || m.marca === filtros.marca));
   const vals = [...new Set(enJuego.flatMap(m => m.variantes.map(saca)).filter(Boolean))]
                  .sort((a, b) => enGB(a) - enGB(b));
   return vals.length > 1 ? vals : [];

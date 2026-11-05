@@ -36,12 +36,20 @@ const esperar = setInterval(() => {
     });
 }, 150);
 
-/* Un archivo tal como lo sirve el servidor local. null si no esta. */
+/* Un archivo tal como lo sirve el servidor local. null si no esta. Con dos
+   reintentos: el servidor de las pruebas atiende pocas conexiones en cola y,
+   con la Mac cargada, alguna se cae (una corrida dio 6 de 471 "que no
+   existen" y estaban todas). Un 404 no se reintenta: es que no esta. */
 async function glLeer(ruta){
-  try{
-    const r = await fetch(ruta + (ruta.includes('?') ? '&' : '?') + '_=' + Date.now(), { cache: 'no-store' });
-    return r.ok ? await r.text() : null;
-  }catch(e){ return null; }
+  for(let intento = 0; intento < 3; intento++){
+    try{
+      const r = await fetch(ruta + (ruta.includes('?') ? '&' : '?') + '_=' + Date.now(), { cache: 'no-store' });
+      if(r.ok) return await r.text();
+      if(r.status === 404) return null;
+    }catch(e){}
+    await new Promise(listo => setTimeout(listo, 300));
+  }
+  return null;
 }
 const glEj = (l, n = 4) => l.length ? l.slice(0, n).join(', ') + (l.length > n ? ' y ' + (l.length - n) + ' mas' : '') : '';
 
@@ -136,8 +144,9 @@ async function correrPruebas(){
   try{ familias = JSON.parse(await glLeer('producto/indice.json') || '{}').slugs || {}; }catch(e){}
   const deHoy = new Set(MODELOS.map(m => familias[familia(m.rep || m)]).filter(Boolean));
   const paginas = {};
-  for(let i = 0; i < slugs.length; i += 16)
-    await Promise.all(slugs.slice(i, i + 16).map(async s => { paginas[s] = await glLeer('producto/' + s + '/'); }));
+  // De a 4: el servidor de las pruebas deja 5 conexiones en cola
+  for(let i = 0; i < slugs.length; i += 4)
+    await Promise.all(slugs.slice(i, i + 4).map(async s => { paginas[s] = await glLeer('producto/' + s + '/'); }));
   const mal = { faltan: [], lang: [], otros: [], propia: [], muchos: [], ancla: [], pie: [], sinOtros: [] };
   const entrantes = new Map();
   let conOtros = 0;

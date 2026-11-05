@@ -6946,10 +6946,10 @@ function coincide(p, palabras){
    (el refresco de cada 5 minutos). Las palabras se juntan recién con la
    primera palabra escrita que no encuentra nada: buscar sin errores no paga
    nada de esto. */
-let VOCABULARIO = null;   // { de: MODELOS, palabras: [[palabra, modelos]] o null, porPalabra, porConsulta }
+let VOCABULARIO = null;   // { de: MODELOS, palabras: [[palabra, modelos]] o null, porPalabra, porConsulta, oido }
 function vocabularioDeBusqueda(){
   if(!VOCABULARIO || VOCABULARIO.de !== MODELOS)
-    VOCABULARIO = { de: MODELOS, palabras: null, porPalabra: new Map(), porConsulta: new Map() };
+    VOCABULARIO = { de: MODELOS, palabras: null, porPalabra: new Map(), porConsulta: new Map(), oido: null };
   return VOCABULARIO;
 }
 // Las palabras del catálogo (solo letras, 4 o más) y en cuántos modelos está
@@ -7038,6 +7038,115 @@ function candidatosDeTipeo(w){
   return r;
 }
 
+/* Las palabras escritas como suenan (05/11/2026). Benja preguntó qué tan
+   cubiertos estamos si alguien escribe mal, con una captura de "jaifon": la
+   web decía "no está en el catálogo" con 15 iPhone, y lo mismo "aifon",
+   "ifon" o "plei". Muchos clientes escriben las marcas como las oyen, y eso
+   no es una letra mal: está lejos de "iphone" para la corrección de tipeo.
+   Va igual que ella (manda lo escrito, aviso "Mostrando resultados de
+   “iphone”", los números no se tocan), en este orden y solo para la palabra
+   que sola no encuentra nada:
+     1. esta lista: cómo se escribe de oído → cómo lo encuentra el buscador.
+        Va primero porque es a mano: "eirpods" son AirPods, aunque a una letra
+        estén los EarPods. Dos o tres palabras pegadas también ("mac buk",
+        "ai fon", "jota be ele"), si juntas como están no encuentran nada;
+     2. la corrección de tipeo (candidatosDeTipeo);
+     3. y de respaldo, una palabra del catálogo que suena igual (claveDeOido):
+        "selular" → "celular", "konsola" → "consola", "kamara" → "cámara".
+   La lista se compara por cómo suena (claveDeOido), así "daison" alcanza
+   para "dayson", "daizon" y "daisson", y "makbuk" para "macbuk" y "macbuc".
+   Lo de la derecha tiene que ser algo que el buscador encuentra; si un día no
+   hay nada de eso, no se corrige. Para sumar una escritura, agregarla en su
+   renglón: pruebas/decision-oido.js prueba cada una con el catálogo de hoy. */
+const ESCRITO_DE_OIDO = {
+  iphone:      ['jaifon', 'jaifone', 'jaifoun', 'aifon', 'aifone', 'aifoun', 'ifon', 'ifone', 'aiphon', 'aiphone'],
+  ipad:        ['aipad', 'aipat', 'jaipad'],
+  airpods:     ['eipods', 'eipod', 'eirpods', 'eirpod', 'eirpos', 'eirpots', 'airpos', 'airpots'],
+  airtag:      ['eirtag', 'eirtac'],
+  macbook:     ['makbuk', 'macbuk', 'mecbuk', 'makbuc'],
+  magsafe:     ['magseif', 'macseif'],
+  apple:       ['epol', 'eppol', 'apol', 'apel', 'epel', 'eipol'],
+  watch:       ['guatch', 'guach', 'uatch', 'uach', 'wach'],
+  samsung:     ['sansung', 'samgsung', 'sansumg', 'sansun', 'samsong', 'sansong'],
+  galaxy:      ['galaksi', 'galacsi', 'galaxsi'],
+  poco:        ['poko'],
+  xiaomi:      ['shaomi', 'chaomi', 'xiomi', 'shiaomi', 'chiaomi', 'siaomi', 'xaomi', 'shaumi', 'chaumi'],
+  playstation: ['plei', 'pley', 'pleis', 'pleys', 'pleistation', 'pleiestation', 'pleisteishon', 'pleisteision',
+                'pleisteshon', 'pleistesion', 'pleiesteishon', 'playsteishon', 'plaisteishon'],
+  xbox:        ['equisbox', 'equisboks', 'exbox', 'eksbox'],
+  switch:      ['suich', 'suitch', 'suish', 'switsh'],
+  joystick:    ['joistic', 'joistik', 'yoistic', 'yoistik', 'yostick', 'yoystick'],
+  quest:       ['kuest', 'cuest'],
+  dyson:       ['daison', 'dayson', 'daizon', 'daisson'],
+  gopro:       ['goupro', 'gouprou', 'goprou'],
+  rayban:      ['reiban', 'raiban'],
+  auriculares: ['auris'],
+  mouse:       ['maus', 'mause'],
+  canon:       ['kanon'],
+  nikon:       ['naikon', 'naicon'],
+  sony:        ['zony', 'zoni'],
+  fuji:        ['fuyi'],
+  dji:         ['diyiai', 'diyai', 'diyei', 'dijiai'],
+  jbl:         ['yibiel', 'jibiel', 'jotabeele', 'yotabeele'],
+  logitech:    ['lojitek', 'logitek', 'lojitec'],
+  microsoft:   ['maicrosoft', 'maicrosof', 'maicrosoff'],
+};
+/* Cómo suena una palabra (ya normalizada, solo letras), con las letras que
+   en castellano suenan igual juntas: "ph" y "f"; "sh" y "ch"; "k", "c" (ca,
+   co, cu), "qu" y "ck"; "s", "z" y "c" (ce, ci); "j" y "g" (ge, gi); "b" y
+   "v"; "y", "ll" e "i"; la "h" muda; y las letras dobles como una. */
+function claveDeOido(w){
+  return w.replace(/ph/g, 'f').replace(/sh/g, 'ch').replace(/ck/g, 'k').replace(/qu/g, 'k')
+          .replace(/c(?=[ei])/g, 's').replace(/ch/g, '1').replace(/c/g, 'k').replace(/g(?=[ei])/g, 'j')
+          .replace(/z/g, 's').replace(/v/g, 'b').replace(/ll/g, 'y').replace(/y/g, 'i')
+          .replace(/h/g, '').replace(/1/g, 'ch').replace(/(.)\1+/g, '$1');
+}
+// La lista por cómo suena cada escritura: se arma una vez, con la primera
+// palabra que no encuentra nada
+let CLAVES_DE_OIDO = null;
+// Lo que la lista dice para una palabra escrita (o dos o tres pegadas), o ''.
+// En plural también: "aifons" es "aifon".
+function palabraDeOido(w){
+  if(!CLAVES_DE_OIDO){
+    CLAVES_DE_OIDO = new Map();
+    for(const [bien, escritas] of Object.entries(ESCRITO_DE_OIDO))
+      for(const e of escritas) CLAVES_DE_OIDO.set(claveDeOido(e), bien);
+  }
+  return CLAVES_DE_OIDO.get(claveDeOido(w))
+      || (w.length > 4 && w.endsWith('s') && CLAVES_DE_OIDO.get(claveDeOido(w.slice(0, -1)))) || '';
+}
+// Las palabras del catálogo que suenan igual que la escrita (el respaldo, 3
+// de arriba), las que están en más modelos primero; hasta dos. Con 5 letras
+// o más: con 4, "mate" pasaba a "matte" y, mientras se escribía "grafito",
+// "graf" a "graph" (las de 4 que hacen falta van en la lista: "zony", "maus").
+function parecidasDeOido(w){
+  if(w.length < 5) return [];
+  const V = vocabularioDeBusqueda();
+  if(!V.oido){
+    V.oido = new Map();
+    for(const [v] of [...palabrasDelCatalogo()].sort((a, b) => b[1] - a[1])){
+      const k = claveDeOido(v);
+      V.oido.set(k, [...(V.oido.get(k) || []), v]);
+    }
+  }
+  return (V.oido.get(claveDeOido(w)) || []).filter(v => v !== w).slice(0, 2);
+}
+
+/* ¿La palabra escrita (ya preparada, solo letras) empieza alguna palabra del
+   catálogo? coincide() la busca en cualquier lado, y "soni" encontraba 5
+   Panasonic por el "panaSONIc" y nunca llegaba a Sony (Atención, 05/11/2026).
+   Es coincide() con la palabra pegada al principio: el texto, el plural, las
+   compactas y los tramos del ID. */
+function alPrincipio(x){
+  const empieza = new RegExp('(?:^|[^a-z0-9])' + escRe(x.w));
+  const raices = x.raices.map(re => new RegExp('(?:^|[^a-z0-9])' + re.source));
+  return MODELOS.some(m => {
+    const b = buscableDe(m);
+    return empieza.test(b.sinId) || raices.some(re => re.test(b.sinId)) ||
+      (!!x.comp && b.comp.includes(' ' + x.comp)) || b.ids.some(id => id.startsWith(x.w) || id.includes('-' + x.w));
+  });
+}
+
 /* La búsqueda corregida, o null si no hay nada que corregir.
      q       lo que se busca (palabras del catálogo, sin tildes);
      mostrar lo que dice el aviso: lo corregido como lo escribe el catálogo y
@@ -7045,37 +7154,68 @@ function candidatosDeTipeo(w){
      hay     si encuentra algo en todo el catálogo (sin filtros).
    Con varias palabras para corregir se prueban sus candidatos en orden y va
    la primera combinación que encuentra algo. Se recuerda por texto: la
-   grilla, sus cuentas y el desplegable la piden muchas veces por tecla. */
+   grilla, sus cuentas y el desplegable la piden muchas veces por tecla.
+   Desde el 05/11/2026 también lo escrito como suena (ver ESCRITO_DE_OIDO):
+   cada palabra prueba la lista, después el tipeo y después cómo suena; y dos
+   o tres palabras de la lista pegadas ("mac buk") cuentan como una.
+   Y la palabra que encuentra algo pero solo ADENTRO de otra ("soni", en
+   "panasonic") prueba lo mismo: si la lista o la corrección encuentran una
+   palabra que empieza así ("sony"), gana eso, con el aviso; si no, se busca
+   como está. Lo que empieza una palabra no se toca: "iphon", "sams", "auri". */
 function correccionDe(q){
   const t = norm(q);
   if(!t || !MODELOS.length) return null;
   const V = vocabularioDeBusqueda();
   if(V.porConsulta.has(t)) return V.porConsulta.get(t);
   const ws = t.split(/\s+/), prep = prepararBusqueda(t);
-  const listas = ws.map((w, i) => {
-    if(w.length < 4 || !/^[a-z]+$/.test(w) || MODELOS.some(m => coincide(m, [prep[i]]))) return [w];
-    const c = candidatosDeTipeo(w);
-    return c.length ? c : [w];
-  });
+  const escritas = String(q).trim().split(/\s+/);
+  const encuentra = s => { const pal = prepararBusqueda(s); return MODELOS.some(m => coincide(m, pal)); };
+  // Lo escrito en pedazos: cada uno, una palabra (o las pegadas de la lista),
+  // con lo que se puede probar en su lugar
+  const pedazos = [];
+  for(let i = 0; i < ws.length; ){
+    let pegadas = null;
+    for(let k = Math.min(3, ws.length - i); k >= 2 && !pegadas; k--){
+      const juntas = ws.slice(i, i + k);
+      const de = juntas.every(w => /^[a-z]+$/.test(w)) && palabraDeOido(juntas.join(''));
+      if(de && !encuentra(juntas.join(' ')))
+        pegadas = { w: juntas.join(' '), escrita: escritas.slice(i, i + k).join(' '), lista: [de], k };
+    }
+    if(pegadas){ pedazos.push(pegadas); i += pegadas.k; continue; }
+    const w = ws[i];
+    let lista = [w];
+    const letras = w.length >= 4 && /^[a-z]+$/.test(w);
+    const tal = letras && MODELOS.some(m => coincide(m, [prep[i]]));
+    const adentro = tal && !alPrincipio(prep[i]);   // ver arriba: "soni"
+    if(letras && (!tal || adentro)){
+      // La lista, si encuentra algo; si no, el tipeo y cómo suena detrás
+      const de = palabraDeOido(w);
+      let c = de && encuentra(de) ? [de]
+        : [...new Set([de, ...candidatosDeTipeo(w), ...parecidasDeOido(w)].filter(Boolean))].slice(0, 3);
+      if(adentro) c = c.filter(v => alPrincipio(prepararBusqueda(v)[0]));
+      if(c.length) lista = c;
+    }
+    pedazos.push({ w, escrita: escritas[i] || w, lista });
+    i++;
+  }
   let r = null;
-  if(listas.some((l, i) => l[0] !== ws[i])){
+  if(pedazos.some(x => x.lista[0] !== x.w)){
     let primera = null, buena = null, probadas = 0;
     const probar = (i, armado) => {
       if(buena || probadas >= 27) return;
-      if(i === listas.length){
+      if(i === pedazos.length){
         probadas++;
         primera = primera || armado;
-        const pal = prepararBusqueda(armado.join(' '));
-        if(MODELOS.some(m => coincide(m, pal))) buena = armado;
+        if(encuentra(armado.join(' '))) buena = armado;
         return;
       }
-      for(const w of listas[i]) probar(i + 1, [...armado, w]);
+      for(const w of pedazos[i].lista) probar(i + 1, [...armado, w]);
     };
     probar(0, []);
     const elegida = buena || primera;
-    const escritas = String(q).trim().split(/\s+/);
     r = { q: elegida.join(' '), hay: !!buena,
-          mostrar: elegida.map((w, i) => w === ws[i] ? (escritas[i] || w) : formaDelCatalogo(w)).join(' ') };
+          mostrar: elegida.map((w, i) => w === pedazos[i].w ? pedazos[i].escrita
+                                         : w.split(' ').map(formaDelCatalogo).join(' ')).join(' ') };
   }
   if(V.porConsulta.size > 500) V.porConsulta.clear();
   V.porConsulta.set(t, r);

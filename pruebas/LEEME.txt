@@ -327,6 +327,19 @@ si alguna falta).
                   arriba, el link, el Atras, el vacio), y el panel a 390 y
                   a 1280 px. Lo que queda sin dato sale como "--" con su ID,
                   para mirarlo en ADVAPP.
+  decision-tipeo.js
+                  Los errores de tipeo en el buscador (Benja eligio la B de
+                  la auditoria del 04/11/2026, UD-03): "samsumg", "macbok",
+                  "aipods", "playstaion" e "iphnoe 17" traen lo mismo y en el
+                  mismo orden que bien escritos, con el aviso «Mostrando
+                  resultados de “samsung”» en el encabezado, arriba del
+                  desplegable, al lector de pantalla y en el vacio de un
+                  rubro; manda lo escrito (ninguna palabra del catalogo se
+                  corrige); los numeros no se tocan ("s24" no pasa a "s25");
+                  cuanto se corrige segun el largo (nada de 1 a 3 letras, con
+                  4 solo dos vecinas invertidas, la primera letra se respeta,
+                  "gamer" no es "game"); y las decisiones del buscador
+                  (DP-04, DP-05, DP-13, Enter) siguen andando con un error.
   marian.js       Marian, la guia de botones (Benja, 29/10/2026,
                   marian/): que cargue, que sea solo botones y no se
                   presente como IA, que cada pregunta de su menu encuentre

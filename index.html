@@ -711,6 +711,13 @@ window.ADVAPP_TEMPRANO = (() => {
      dos líneas, como el botón de la grilla. */
   .qs-todo .qs-txt b{white-space:normal;overflow:visible}
   .qs-todo:hover,.qs-todo.marcada{background:var(--line)}
+  /* "Mostrando resultados de “samsung”" (UD-03, 05/11/2026): lo escrito
+     tenía un error de tipeo y se buscó corregido. Arriba del desplegable y en
+     el encabezado, debajo de la cuenta, en letra de leer (no la de los
+     rótulos) para que se lea como una frase. */
+  .qs-corregida{display:block;padding:10px 11px 6px;font:500 13px/1.35 var(--sans);color:var(--ink)}
+  .rc-tit .q-corregida{margin-top:8px;font:500 14px/1.35 var(--sans);letter-spacing:0;color:var(--ink)}
+  .qs-corregida b,.q-corregida b{font-weight:700}
 
   /* Sin stock el boton no invita a comprar: invita a que le avisen */
   .cta-aviso{background:var(--muted) !important;border-color:var(--muted) !important}
@@ -5965,7 +5972,9 @@ function versionPedida(){
    dibuja la grilla sale de listaDeLaGrilla(), que los pasa a la versión
    filtrada. */
 function filtrar(){
-  const palabras = prepararBusqueda(filtros.q);
+  // Lo escrito, o lo corregido si tenía un error de tipeo (UD-03, 05/11/2026)
+  const buscado = textoQueSeBusca(filtros.q);
+  const palabras = prepararBusqueda(buscado);
   const versionOK = versionPedida();
 
   const out = MODELOS.filter(p => {
@@ -6061,7 +6070,7 @@ function filtrar(){
      puntaje (puntajeDeBusqueda): el equipo antes que sus accesorios. Sólo en
      el orden de siempre: si el cliente pidió "Menor precio" o "A-Z", manda
      lo que pidió. Lo que tiene stock sigue primero. */
-  const q = filtros.q.trim();
+  const q = buscado.trim();
   const parecido = q && filtros.orden === ORDEN_DEF ? puntajeDeBusqueda(q, out) : null;
   const puntos = parecido ? new Map(out.map(p => [p, parecido(p)])) : null;
   const porParecido = (a,b) => puntos ? puntos.get(b) - puntos.get(a) : 0;
@@ -6232,7 +6241,7 @@ function vistaDeLaGrilla(p, versionOK, deLaBusqueda){
    versiones ("playstation 5" lo dicen todas), queda como estaba. No saca
    tarjetas: eso lo sigue decidiendo coincide() sobre el modelo. */
 function versionDeLaBusqueda(){
-  const palabras = prepararBusqueda(filtros.q);
+  const palabras = prepararBusqueda(textoQueSeBusca(filtros.q));
   if(!palabras.length) return null;
   return v => coincide(v, palabras);
 }
@@ -6857,6 +6866,184 @@ function coincide(p, palabras){
     b.ids.some(id => id.startsWith(x.w) || id.includes('-' + x.w)) ||
     x.raices.some(re => re.test(b.sinId)) ||
     (!!x.comp && b.comp.includes(' ' + x.comp)));
+}
+
+/* Los errores de tipeo (Benja eligió la B de la auditoría del 04/11/2026,
+   UD-03): "samsumg", "macbok", "aipods" o "playstaion" decían "no está en el
+   catálogo" con 29 Samsung y 10 MacBook, y "iphnoe 17" ofrecía un Xiaomi 17T
+   y un objetivo Tamron 17-70mm. Ahora, si una palabra escrita no encuentra
+   NADA en todo el catálogo, se cambia por la palabra del catálogo más
+   parecida y se avisa: "Mostrando resultados de “samsung”". Las palabras son
+   las del texto de búsqueda (buscableDe: marca, modelo, nombre, rubro,
+   colores) más el rubro en plural, tal cual las escribe el catálogo.
+   Parecida es una letra de más, de menos, cambiada o dos vecinas invertidas,
+   y cuánto se acepta depende del largo de lo escrito:
+     · 1 a 3 letras, nada: "s25", "pro", "max" o "dji" no se tocan;
+     · 4 letras, solo dos vecinas invertidas ("ipda" → "ipad"): con un cambio
+       cualquiera, mientras se escribía "plata", "plat" pasaba a "play";
+     · 5 a 8 letras, un error; 9 o más, hasta dos;
+     · la primera letra se respeta, salvo que las dos primeras estén
+       invertidas ("pihone"): "bose" no pasa a "rose";
+     · una letra de más al final, solo si repite la anterior ("sonyy"):
+       "gamer" o "rapida" son otra palabra, no "game" o "rapid";
+     · nunca a una palabra de menos de 4 letras ("acer" no pasa a "ace").
+   Lo que tiene números no se corrige, ni nada se corrige a un número: "17",
+   "s25" o "512" son un modelo o una memoria, y otro número sería otro
+   producto.
+   Manda lo escrito: una palabra se corrige solo si sola no encuentra nada
+   (y entonces la búsqueda entera tampoco encontraba nada), y la corrección
+   se usa solo si encuentra algo. Si no encuentra, lo más parecido (parecidoDe)
+   prueba igual con las palabras corregidas. La usan filtrar(), el desplegable
+   y lo más parecido: si corrigieran distinto, el desplegable sugeriría cosas
+   que la grilla no muestra. */
+/* Lo que se recuerda vale para un catálogo: se rehace cuando cambia MODELOS
+   (el refresco de cada 5 minutos). Las palabras se juntan recién con la
+   primera palabra escrita que no encuentra nada: buscar sin errores no paga
+   nada de esto. */
+let VOCABULARIO = null;   // { de: MODELOS, palabras: [[palabra, modelos]] o null, porPalabra, porConsulta }
+function vocabularioDeBusqueda(){
+  if(!VOCABULARIO || VOCABULARIO.de !== MODELOS)
+    VOCABULARIO = { de: MODELOS, palabras: null, porPalabra: new Map(), porConsulta: new Map() };
+  return VOCABULARIO;
+}
+// Las palabras del catálogo (solo letras, 4 o más) y en cuántos modelos está
+// cada una. Todas las encuentra el buscador tal cual: corregir a una que no
+// encuentra no serviría de nada.
+function palabrasDelCatalogo(){
+  const V = vocabularioDeBusqueda();
+  if(V.palabras) return V.palabras;
+  const cuenta = new Map();
+  const palabras = texto => texto.split(/\s+/).flatMap(w => [compactar(w), ...w.split(/[^a-z0-9]+/)])
+                                .filter(x => x.length >= 4 && /^[a-z]+$/.test(x));
+  /* El rubro en plural, como lo nombra la web ("cámaras", "celulares"), si
+     el buscador lo encuentra: "E-Readers" compactado ("ereaders") no lo
+     encuentra (el texto dice "e-reader"). Se mira contra el primer modelo
+     del rubro, que lleva el rubro en su texto: recorrer todo el catálogo por
+     cada palabra triplicaba lo que tarda armar esta lista. */
+  const plurales = new Map();
+  const delRubro = m => {
+    if(!plurales.has(m.cat))
+      plurales.set(m.cat, palabras(norm(plural(m.cat))).filter(x => coincide(m, prepararBusqueda(x))));
+    return plurales.get(m.cat);
+  };
+  for(const m of MODELOS)
+    for(const x of new Set([...palabras(buscableDe(m).sinId), ...delRubro(m)]))
+      cuenta.set(x, (cuenta.get(x) || 0) + 1);
+  return V.palabras = [...cuenta];
+}
+// Cómo la escribe el catálogo, con sus tildes, para el aviso: "cámara" y no
+// "camara". Solo se busca para la palabra corregida.
+function formaDelCatalogo(w){
+  for(const m of MODELOS){
+    const crudo = [m.desc, m.marca, m.modelo, m.cat, plural(m.cat), m.catPlanilla, ALIAS_CAT[m.cat], m.busq, m.color]
+      .filter(Boolean).join(' ');
+    if(!norm(crudo).includes(w)) continue;
+    for(const x of crudo.toLowerCase().split(/[^\p{L}\p{N}]+/u)) if(norm(x) === w) return x;
+  }
+  return w;
+}
+
+// Cuántos errores hay entre dos palabras: letra de más, de menos, cambiada o
+// dos vecinas invertidas (Damerau-Levenshtein, la versión en que cada letra
+// se toca una sola vez)
+function distanciaDeTipeo(a, b){
+  let ante = null, prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for(let i = 1; i <= a.length; i++){
+    const fila = [i];
+    for(let j = 1; j <= b.length; j++){
+      let d = Math.min(prev[j] + 1, fila[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      if(i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d = Math.min(d, ante[j - 2] + 1);
+      fila[j] = d;
+    }
+    ante = prev; prev = fila;
+  }
+  return prev[b.length];
+}
+
+// Las palabras del catálogo a las que puede ir una palabra escrita (ya
+// normalizada), de la más parecida a la menos; hasta tres. Ver arriba.
+function candidatosDeTipeo(w){
+  const V = vocabularioDeBusqueda();
+  if(V.porPalabra.has(w)) return V.porPalabra.get(w);
+  const L = w.length, out = [];
+  if(L >= 4 && /^[a-z]+$/.test(w)){
+    const tope = L >= 9 ? 2 : 1;
+    const invertidas = (a, b) => {
+      const i = [...a].findIndex((c, k) => c !== b[k]);
+      return i >= 0 && a[i] === b[i + 1] && a[i + 1] === b[i] && a.slice(i + 2) === b.slice(i + 2);
+    };
+    const giradas = w[1] + w[0] + w.slice(2);
+    for(const [v, n] of palabrasDelCatalogo()){
+      if(v === w || Math.abs(v.length - L) > tope) continue;
+      // Otra primera letra, solo con las dos primeras invertidas y el resto
+      // dentro de lo que queda: "pihone" sí, "ereaders" → "readers" no
+      if(v[0] !== w[0] && !(v[0] === w[1] && v[1] === w[0] && distanciaDeTipeo(giradas, v) < tope)) continue;
+      if(L === 4 && !(v.length === 4 && invertidas(w, v))) continue;
+      if(v.length === L - 1 && w.startsWith(v) && w[L - 1] !== w[L - 2]) continue;
+      const d = distanciaDeTipeo(w, v);
+      if(d <= tope) out.push({ v, d, n });
+    }
+    // El de menos errores; empatados, el que está en más modelos
+    out.sort((a, b) => a.d - b.d || b.n - a.n || (a.v < b.v ? -1 : 1));
+  }
+  const r = out.slice(0, 3).map(x => x.v);
+  if(V.porPalabra.size > 500) V.porPalabra.clear();
+  V.porPalabra.set(w, r);
+  return r;
+}
+
+/* La búsqueda corregida, o null si no hay nada que corregir.
+     q       lo que se busca (palabras del catálogo, sin tildes);
+     mostrar lo que dice el aviso: lo corregido como lo escribe el catálogo y
+             el resto como lo escribió el cliente ("Samsumg S25" → "samsung S25");
+     hay     si encuentra algo en todo el catálogo (sin filtros).
+   Con varias palabras para corregir se prueban sus candidatos en orden y va
+   la primera combinación que encuentra algo. Se recuerda por texto: la
+   grilla, sus cuentas y el desplegable la piden muchas veces por tecla. */
+function correccionDe(q){
+  const t = norm(q);
+  if(!t || !MODELOS.length) return null;
+  const V = vocabularioDeBusqueda();
+  if(V.porConsulta.has(t)) return V.porConsulta.get(t);
+  const ws = t.split(/\s+/), prep = prepararBusqueda(t);
+  const listas = ws.map((w, i) => {
+    if(w.length < 4 || !/^[a-z]+$/.test(w) || MODELOS.some(m => coincide(m, [prep[i]]))) return [w];
+    const c = candidatosDeTipeo(w);
+    return c.length ? c : [w];
+  });
+  let r = null;
+  if(listas.some((l, i) => l[0] !== ws[i])){
+    let primera = null, buena = null, probadas = 0;
+    const probar = (i, armado) => {
+      if(buena || probadas >= 27) return;
+      if(i === listas.length){
+        probadas++;
+        primera = primera || armado;
+        const pal = prepararBusqueda(armado.join(' '));
+        if(MODELOS.some(m => coincide(m, pal))) buena = armado;
+        return;
+      }
+      for(const w of listas[i]) probar(i + 1, [...armado, w]);
+    };
+    probar(0, []);
+    const elegida = buena || primera;
+    const escritas = String(q).trim().split(/\s+/);
+    r = { q: elegida.join(' '), hay: !!buena,
+          mostrar: elegida.map((w, i) => w === ws[i] ? (escritas[i] || w) : formaDelCatalogo(w)).join(' ') };
+  }
+  if(V.porConsulta.size > 500) V.porConsulta.clear();
+  V.porConsulta.set(t, r);
+  return r;
+}
+// Lo que de verdad se busca: lo escrito, o lo corregido si así encuentra algo
+function textoQueSeBusca(q){
+  const c = correccionDe(q);
+  return c && c.hay ? c.q : q;
+}
+// El aviso de arriba de la grilla y del desplegable ('' si no se corrigió)
+function avisoDeCorreccion(q){
+  const c = correccionDe(q);
+  return c && c.hay ? `Mostrando resultados de “${c.mostrar}”` : '';
 }
 
 /* Lo que los mensajes dicen del producto (29/09). Lo usan los tres -la
@@ -9710,6 +9897,14 @@ function htmlOrden(){
   </div>`;
 }
 
+/* "Mostrando resultados de “samsung”" (UD-03, 05/11/2026): debajo de la
+   cuenta, cuando lo escrito tenía un error de tipeo y se buscó corregido. El
+   título sigue diciendo lo escrito, como el buscador y la dirección. */
+function htmlCorregida(){
+  const c = correccionDe(filtros.q);
+  return c && c.hay ? `<p class="q-corregida">Mostrando resultados de <b>“${esc(c.mostrar)}”</b></p>` : '';
+}
+
 function pintarCabecera(texto){
   const cab = $('rubro-cab'), fijo = $('rubro-fijo');
   if(!cab || !fijo) return;
@@ -9748,7 +9943,7 @@ function pintarCabecera(texto){
 
   cab.classList.toggle('sin-foto', !foto);
   cab.innerHTML = `
-    <div class="rc-tit"><button type="button" class="volver-menu" data-menu>${ICONO_MENU}<span>Todos los rubros</span></button><h2 tabindex="-1">${esc(titulo)}</h2><p><span id="count">${esc(texto)}</span>${desde}</p></div>
+    <div class="rc-tit"><button type="button" class="volver-menu" data-menu>${ICONO_MENU}<span>Todos los rubros</span></button><h2 tabindex="-1">${esc(titulo)}</h2><p><span id="count">${esc(texto)}</span>${desde}</p>${htmlCorregida()}</div>
     ${foto ? `<span class="rc-foto"><img src="${esc(foto)}" alt="" decoding="async" onerror="this.parentElement.remove()"></span>` : ''}
     <div class="rc-fila">${conMarcas ? `<div class="rc-marcas" role="group" aria-label="Marcas">${botonesMarca}</div>` : ''}${acciones}</div>
     ${cruces ? `<div class="rc-activos">${cruces}</div>` : ''}`;
@@ -11846,9 +12041,13 @@ const mensajeBusco = q => 'Hola! Estoy buscando: ' + q + '\n¿Lo consiguen?';
    "15", "r50": el chip o la generación), sin la última palabra, sin la
    primera, y cada vez más corto desde el final. Va lo primero que encuentra
    algo CON stock, en todo el catálogo y sin filtros, y se nombran hasta tres
-   (los primeros de esa grilla). Con una sola palabra no hay nada que sacar. */
+   (los primeros de esa grilla). Con una sola palabra no hay nada que sacar.
+   Con las palabras corregidas, si alguna tenía un error de tipeo (UD-03,
+   05/11/2026), aunque corregida la búsqueda entera tampoco encuentre: con
+   "iphnoe 17 verde" prueba "iphone 17", no "17" (un objetivo Tamron). */
 function parecidoDe(q){
-  const ws = norm(q).trim().split(/\s+/).filter(Boolean);
+  const corregida = correccionDe(q);
+  const ws = norm(corregida ? corregida.q : q).trim().split(/\s+/).filter(Boolean);
   if(ws.length < 2) return null;
   const pruebas = [];
   const sinNumeros = ws.filter(w => !/\d/.test(w));
@@ -11889,17 +12088,21 @@ const anuncioVacio = () => { const { h, p, parecido } = textosVacio(); return h 
 function textosVacio(){
   const q = filtros.q.trim();
   const s = salidaDelVacio(q);
+  // Con un error de tipeo corregido, lo que se buscó: "No hay “samsung” en
+  // Objetivos", como el aviso de arriba (UD-03, 05/11/2026)
+  const corregida = correccionDe(q);
+  const dicho = corregida && corregida.hay ? corregida.mostrar : q;
   const lugar = filtros.cat ? plural(filtros.cat) : '';
   const boton = (t, n) => `<button type="button" class="b-salida" data-salida aria-label="${esc(t)}: ${n} producto${n !== 1 ? 's' : ''}">${esc(t)} <b aria-hidden="true">${n}</b></button>`;
   let h = 'No encontramos nada', p = '', acc = '', parecido = '';
   if(s && (s.tipo === 'filtro' || s.tipo === 'filtros')){
     const que = unirConY(filtrosActivos(true).map(([c]) => fraseFiltro(c)));
-    h = `${lugar ? `En ${lugar} no hay` : 'No hay'} ${q ? `“${q}”` : 'nada'} ${que}`;
+    h = `${lugar ? `En ${lugar} no hay` : 'No hay'} ${q ? `“${dicho}”` : 'nada'} ${que}`;
     p = s.tipo === 'filtros' ? `Sin esos filtros hay ${s.n}.`
       : s.solo ? `Sin ese filtro hay ${s.n}.` : `Sin “${s.t}” hay ${s.n}.`;
     acc = boton(s.tipo === 'filtros' ? 'Quitar los filtros' : `Quitar “${s.t}”`, s.n);
   }else if(s && s.tipo === 'todo'){
-    h = `No hay “${q}” en ${lugar}`;
+    h = `No hay “${dicho}” en ${lugar}`;
     p = s.sinFiltros ? `En todo el catálogo, sin los filtros, hay ${s.n}.` : `En todo el catálogo hay ${s.n}.`;
     acc = boton(s.sinFiltros ? 'Buscar en todo el catálogo, sin filtros' : 'Buscar en todo el catálogo', s.n);
   }else if(s && s.tipo === 'consulta'){
@@ -12007,7 +12210,9 @@ function pintar(){
   pintarCabecera(texto);
   pintarSugeridos();
   const aviso = pintarAvisoRubro();
-  anunciar(LISTA.length ? (aviso ? aviso + ' ' + n : n) : anuncioVacio());
+  // Con un error de tipeo corregido, primero eso (UD-03, 05/11/2026)
+  const corregida = avisoDeCorreccion(filtros.q);
+  anunciar((corregida ? corregida + '. ' : '') + (LISTA.length ? (aviso ? aviso + ' ' + n : n) : anuncioVacio()));
 
   if(!LISTA.length){
     grid.replaceChildren();
@@ -12173,7 +12378,7 @@ function soltarMarcaAjena(){
    "No encontramos nada". Solo si queda en 0: buscar "sony" y tocar Objetivos
    para achicar la lista es válido y sigue andando. */
 function soltarBusquedaSinResultados(cat){
-  const pal = prepararBusqueda(filtros.q);
+  const pal = prepararBusqueda(textoQueSeBusca(filtros.q));
   if(!pal.length || MODELOS.some(p => p.cat === cat && coincide(p, pal))) return;
   filtros.q = ''; $('q').value = ''; $('clear').hidden = true;
   cerrarBuscador();   // después de vaciar el input: con texto escrito no hace nada
@@ -16402,8 +16607,9 @@ const SUG_MAX = 7;
 let sugIdx = -1;        // cual esta marcada con las flechas
 
 function candidatosSug(txt){
-  const q = norm(txt).trim();
-  if(q.length < 2) return {cats: [], prods: []};
+  if(norm(txt).trim().length < 2) return {cats: [], prods: []};
+  // Lo escrito, o lo corregido si tenía un error de tipeo, como la grilla (UD-03, 05/11/2026)
+  const q = norm(textoQueSeBusca(txt)).trim();
   const palabras = prepararBusqueda(q);
 
   // Con el alias también (29/09): "notebook" ofrece MacBook, "lente" Objetivo
@@ -16436,14 +16642,16 @@ function candidatosSug(txt){
   const salida = filtros.cat && !enLaGrilla.length ? salidaDelVacio(txt) : null;
   const todo = salida && salida.tipo === 'todo' ? salida : null;
 
-  return {cats, prods, todo};
+  return {cats, prods, todo, corregida: correccionDe(txt)?.hay ? correccionDe(txt).mostrar : ''};
 }
 
 function pintarSug(){
   const caja = $('q-sug');
   if(!caja) return;
-  const {cats, prods, todo} = candidatosSug($('q').value);
+  const {cats, prods, todo, corregida} = candidatosSug($('q').value);
   sugIdx = -1;
+  // Lo buscado: lo escrito, o lo corregido (UD-03, 05/11/2026)
+  const buscado = corregida || $('q').value.trim();
 
   if(!cats.length && !prods.length && !todo){ cerrarSug(); return; }
 
@@ -16452,7 +16660,11 @@ function pintarSug(){
      cada sugerencia. Los ids se regeneran con cada pintada. */
   $('q').removeAttribute('aria-activedescendant');
   const opcion = i => `role="option" id="qs-${i}" aria-selected="false" tabindex="-1"`;
+  /* Con un error de tipeo corregido, arriba de todo y como el encabezado:
+     "Mostrando resultados de “samsung”". Como el rótulo de "En … no hay",
+     no es una opción. */
   caja.innerHTML =
+    (corregida ? `<span class="qs-corregida">Mostrando resultados de <b>“${esc(corregida)}”</b></span>` : '') +
     cats.map((c, i) => `<button class="qs qs-cat" type="button" ${opcion(i)} data-cat="${esc(c)}">
         <span class="qs-ic">▸</span>
         <span class="qs-txt"><b>${esc(plural(c))}</b><i>ver el rubro completo</i></span>
@@ -16474,10 +16686,10 @@ function pintarSug(){
     /* En el rubro no hay nada y en todo el catálogo sí (3.1 B): lo mismo que
        dice la grilla, con el mismo número. El rótulo no es una opción: lo lee
        el lector como descripción del renglón. */
-    (todo ? `<span class="qs-nada" id="qs-nada">En ${esc(plural(filtros.cat))} no hay “${esc($('q').value.trim())}”</span>
+    (todo ? `<span class="qs-nada" id="qs-nada">En ${esc(plural(filtros.cat))} no hay “${esc(buscado)}”</span>
       <button class="qs qs-cat qs-todo" type="button" ${opcion(cats.length + prods.length)} data-todo aria-describedby="qs-nada">
         <span class="qs-ic">▸</span>
-        <span class="qs-txt"><b>Buscar “${esc($('q').value.trim())}” en todo el catálogo${todo.sinFiltros ? ', sin filtros' : ''}</b><i>${todo.n} producto${todo.n !== 1 ? 's' : ''}</i></span>
+        <span class="qs-txt"><b>Buscar “${esc(buscado)}” en todo el catálogo${todo.sinFiltros ? ', sin filtros' : ''}</b><i>${todo.n} producto${todo.n !== 1 ? 's' : ''}</i></span>
       </button>` : '');
 
   caja.hidden = false;

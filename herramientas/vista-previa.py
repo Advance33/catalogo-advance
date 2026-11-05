@@ -490,8 +490,9 @@ def armar_pagina(v, publica, raiz=RAIZ):
     # summary: la foto cuadrada, chica y al costado, como la dibujo la muestra.
     # La tarjeta general (1200x630) va grande, como la de la portada.
     tarjeta = 'summary' if propia else 'summary_large_image'
+    # es-AR (05/11/2026, auditoria TG-11): como index.html y producto/
     L = ['<!doctype html>',
-         '<html lang="es">',
+         '<html lang="es-AR">',
          '<head>',
          '<meta charset="utf-8">',
          '<meta name="viewport" content="width=device-width, initial-scale=1">',
@@ -791,6 +792,7 @@ def probar():
         ok(meta('og:url') == pub + 'p/CEL-APP-068.html', 'og:url es la pagina misma (Facebook la sigue)')
         ok(meta('twitter:card') == 'summary', 'foto cuadrada: summary (chica, al costado)')
         ok(meta('robots') == 'noindex', 'lleva noindex')
+        ok('<html lang="es-AR">' in h, 'TG-11 (05/11/2026): lang="es-AR", como index.html y producto/')
         ok('location.replace("../#p=CEL-APP-068")' in h and 'href="../#p=CEL-APP-068"' in h,
            'lleva a la ficha al instante y con un link visible')
         ok('http-equiv' not in h, 'sin meta refresh (el que arma la vista previa podria seguirlo)')

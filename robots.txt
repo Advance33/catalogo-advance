@@ -1,14 +1,28 @@
 # catalogo.advancetecno.com.ar/robots.txt
 #
-# Desde el 05/10/2026 el catálogo sale a Google (Benja). No se bloquea nada:
-# la portada, las páginas de cada modelo (producto/<nombre>/) y las fotos se
-# pueden leer. Las vistas previas de WhatsApp (p/) y la página de error piden
+# Desde el 05/10/2026 el catálogo sale a Google (Benja). Se pueden leer la
+# portada, las páginas de cada modelo (producto/<nombre>/ y producto/, "Todos
+# los modelos"), las fotos (fotos/), los datos que pide la portada (datos/) y
+# Marian (marian/): Google los necesita para dibujar la portada como la ve un
+# cliente. Las vistas previas de WhatsApp (p/) y la página de error piden
 # noindex en su propio HTML: un buscador tiene que poder bajarlas para verlo,
 # por eso no van con Disallow.
+#
+# Lo que NO es para Google (05/11/2026, auditoría TG-12): las herramientas de
+# trabajo, las pruebas, las muestras y los .py, .command y .txt (hoy están
+# todos en la raíz; si algún día la portada pide un .txt, sacar esa línea).
+# Se siguen pudiendo bajar: el sitio publica el repo. Esto solo le pide a los
+# buscadores que no los lean ni los muestren.
 #
 # La lista de páginas para Google es sitemap.xml (la arma
 # herramientas/paginas-producto.py en cada PUBLICAR).
 User-agent: *
-Disallow:
+Disallow: /herramientas/
+Disallow: /pruebas/
+Disallow: /muestras/
+Disallow: /*.py$
+Disallow: /*.command$
+Disallow: /*.txt$
+Allow: /robots.txt
 
 Sitemap: https://catalogo.advancetecno.com.ar/sitemap.xml

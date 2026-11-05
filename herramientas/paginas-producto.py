@@ -46,6 +46,14 @@ LO QUE NO CAMBIA NUNCA SOLO
   "samsung-galaxy-tab-a11-plus" y la vieja es un desvio a esa, con el mismo
   mecanismo de arriba (asignar_slugs y aplicar). El A11 se queda en la suya.
 
+LOS LINKS (05/11/2026, auditoria TG-05)
+Hasta el 05/11 ningun link llevaba a estas paginas: Google las conocia solo
+por el sitemap, y en Search Console figuraban 24 indexadas y 453 sin indexar.
+Ahora cada pagina trae "Otros modelos" (hasta 6 del mismo rubro o la misma
+marca, elegir_otros) y el pie lleva a producto/index.html, "Todos los
+modelos", que las lista a todas por rubro y esta linkeada desde el pie de la
+portada. Todo escrito en el HTML: Google lo ve sin correr JavaScript.
+
 EL PRECIO (13/10/2026, auditoria W3-06)
 Hasta el 13/10 el HTML llevaba el precio y el stock del dia en que se armo, y
 lo que leen Google y las vistas previas (la descripcion "Desde u$...", la tabla
@@ -390,6 +398,10 @@ td.num{white-space:nowrap;font-variant-numeric:tabular-nums}
 .ficha dt{color:var(--suave);padding-right:10px}
 footer{max-width:1080px;margin:0 auto;padding:0 16px 32px;color:var(--tenue);font-size:12.5px;display:grid;gap:4px}
 a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+.otros{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.otros a{display:block;height:100%;padding:10px 12px;border:1.5px solid var(--linea);border-radius:12px;background:var(--papel);text-decoration:none;font-weight:600;font-size:14px;line-height:1.3}
+.otros a:hover{border-color:var(--acento);color:var(--acento)}
+.todos{justify-self:start;font:600 11.5px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--acento)}
 '''
 
 # El script de la pagina: elegir version y color, y traer el precio y el stock
@@ -507,7 +519,20 @@ SCRIPT = r'''
 '''
 
 
-def armar_pagina(m, s, publica, general):
+def html_otros(otros, rubro):
+    """El bloque "Otros modelos" (05/11/2026, auditoria TG-05): links de
+    verdad a otras paginas de producto/, para que Google llegue a cada una
+    por un link y no solo por el sitemap. Al final, el indice del rubro
+    (producto/#<rubro>). Sin otros modelos para nombrar, no va."""
+    if not otros:
+        return ''
+    items = ''.join('<li><a href="../%s/">%s</a></li>' % (e(s), e(t)) for s, t in otros)
+    return ('<section class="bloque" aria-labelledby="t-otros"><h2 id="t-otros">Otros modelos</h2>'
+            '<ul class="otros">%s</ul><a class="todos" href="../#%s">Todos los modelos de %s</a></section>'
+            % (items, e(slug(rubro)), e(rubro)))
+
+
+def armar_pagina(m, s, publica, general, otros=None):
     url = '%sproducto/%s/' % (publica, s)
     desc = m.get('descripcion') or {}
     cuotas = general.get('cuotas') or 0
@@ -553,8 +578,9 @@ def armar_pagina(m, s, publica, general):
               if m.get('regalo') and m.get('incluye') else
               ('<div class="regalo">%s</div>' % e(m['incluye']) if m.get('incluye') else ''))
     precio_txt = '<b>Consultá el precio</b><i>El precio y el stock del día, por WhatsApp</i>'
+    # es-AR (05/11/2026, auditoria TG-11): como index.html y 404.html
     return '''<!doctype html>
-<html lang="es">
+<html lang="es-AR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -604,11 +630,13 @@ def armar_pagina(m, s, publica, general):
     <p>Precios en dólares, del día: se cargan del catálogo al abrir la página. Se pueden pagar en pesos con el dólar del día y con tarjeta en cuotas.</p>
   </section>
   {sec_ficha}
+  {sec_otros}
 </main>
 <footer>
   <b>Advance Tecno</b>
   <span>{direccion} · Envíos a todo el país · Atención con cita previa</span>
   {contacto}
+  <span><a href="../">Todos los modelos</a> · <a href="../../">Catálogo</a></span>
   <span>Precios sujetos a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</span>
 </footer>
 <script id="datos" type="application/json">{datos}</script>
@@ -632,6 +660,7 @@ def armar_pagina(m, s, publica, general):
         sec_venta=('<section class="bloque" aria-labelledby="t-por"><h2 id="t-por">Por qué elegirlo</h2>%s</section>' % venta) if venta else '',
         sec_puntos=('<section class="bloque" aria-labelledby="t-imp"><h2 id="t-imp">Lo más importante</h2><ul class="puntos">%s</ul></section>' % puntos) if puntos else '',
         sec_ficha=('<section class="bloque ficha" aria-labelledby="t-ficha"><h2 id="t-ficha">Ficha técnica</h2>%s</section>' % ficha) if ficha else '',
+        sec_otros=html_otros(otros, m.get('rubro') or 'Productos'),
         filas=filas, datos=json.dumps(datos, ensure_ascii=False).replace('</', '<\\/'), script=SCRIPT)
 
 
@@ -714,8 +743,15 @@ def sin_stock_en_pagina(ruta):
     except OSError:
         return False
     nuevo = t.replace('"availability": "https://schema.org/InStock"', '"availability": "https://schema.org/OutOfStock"')
-    nuevo = sin_precio_viejo(nuevo)
+    nuevo = con_lang_ar(sin_precio_viejo(nuevo))
     return escribir_si_cambio(ruta, nuevo) if nuevo != t else False
+
+
+def con_lang_ar(t):
+    """lang="es-AR" (05/11/2026, auditoria TG-11) en una pagina que no se
+    rearma: la de un modelo que hoy no esta y la de un desvio. Lo demas queda
+    como esta (G-09: la sin stock sigue diciendo "Hoy sin stock")."""
+    return re.sub(r'<html lang="es">', '<html lang="es-AR">', t or '', count=1)
 
 
 # --------------------------------------------------------------------------
@@ -803,7 +839,7 @@ def pagina_desvio(titulo, destino, publica):
     nueva = '%sproducto/%s/' % (publica, destino)
     rel = '../%s/' % destino
     return '''<!doctype html>
-<html lang="es">
+<html lang="es-AR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -829,10 +865,222 @@ def titulo_de_la_pagina(texto, por_defecto):
     return html.unescape(m.group(1)).strip() if m and m.group(1).strip() else por_defecto
 
 
+# --------------------------------------------------------------------------
+# Los links entre paginas (05/11/2026, auditoria TG-05)
+# --------------------------------------------------------------------------
+# Hasta el 05/11 ningun link llevaba a las paginas de producto/: Google las
+# conocia solo por el sitemap (24 indexadas y 453 sin indexar en Search
+# Console). Desde ahi cada pagina nombra otros modelos del mismo rubro o de la
+# misma marca, y producto/index.html ("Todos los modelos", linkeada desde el
+# pie de la portada y de cada pagina) las lista todas por rubro. Todo en el
+# HTML, sin JavaScript: Google lo lee en la primera pasada.
+
+OTROS_MAX = 6
+
+
+def sin_tildes(t):
+    t = html.unescape(str(t or '')).lower()
+    for a, b in (('á', 'a'), ('é', 'e'), ('í', 'i'), ('ó', 'o'), ('ú', 'u'), ('ü', 'u'), ('ñ', 'n')):
+        t = t.replace(a, b)
+    return t
+
+
+def orden_natural(t):
+    """'iPhone 9' antes que 'iPhone 17': los numeros se comparan como numeros."""
+    return [int(x) if x.isdigit() else x for x in re.split(r'(\d+)', sin_tildes(t))]
+
+
+def elegir_otros(modelos, slugs, maximo=OTROS_MAX):
+    """direccion -> [(direccion, titulo)]: los "Otros modelos" de cada pagina.
+
+    Primero los de la misma marca y el mismo rubro, despues los del mismo
+    rubro y despues los de la misma marca, hasta `maximo`. Dentro de cada
+    grupo, los vecinos por nombre (al iPhone 17 Pro le tocan el 17 Pro Max, el
+    17, el 16 Pro Max...). No mira precio ni stock, que cambian todos los dias:
+    si lo hiciera, cada PUBLICAR reescribiria las paginas y les cambiaria la
+    fecha en el sitemap sin que cambie el modelo. Los usados no se nombran
+    (cada uno es un equipo que se vende y su pagina deja de estar a la venta),
+    ni un modelo con el mismo nombre que este."""
+    con = [m for m in modelos if slugs.get(m.get('familia'))]
+    orden = {m['familia']: (orden_natural(m['titulo']), slugs[m['familia']]) for m in con}
+    candidatos = sorted((m for m in con if not m.get('usado')), key=lambda m: orden[m['familia']])
+    salida = {}
+    for m in con:
+        s = slugs[m['familia']]
+        rubro, marca = m.get('rubro') or '', sin_tildes(m.get('marca'))
+        clave_m = orden[m['familia']]
+        mismo_nombre = sin_tildes(m['titulo']).strip()
+        grupos = (
+            [x for x in candidatos if (x.get('rubro') or '') == rubro and sin_tildes(x.get('marca')) == marca],
+            [x for x in candidatos if (x.get('rubro') or '') == rubro and sin_tildes(x.get('marca')) != marca],
+            [x for x in candidatos if (x.get('rubro') or '') != rubro and marca and sin_tildes(x.get('marca')) == marca],
+        )
+        elegidos = []
+        for n, g in enumerate(grupos):
+            g = [x for x in g if slugs[x['familia']] != s and sin_tildes(x['titulo']).strip() != mismo_nombre]
+            # Donde iria este modelo en el grupo, y de ahi para los dos lados
+            i = sum(1 for x in g if orden[x['familia']] < clave_m)
+            a, b, tomados = i, i - 1, []
+            while len(elegidos) + len(tomados) < maximo and (a < len(g) or b >= 0):
+                if a < len(g):
+                    tomados.append(g[a])
+                    a += 1
+                if b >= 0 and len(elegidos) + len(tomados) < maximo:
+                    tomados.append(g[b])
+                    b -= 1
+            # En la pagina, cada grupo en el orden de los nombres
+            tomados.sort(key=lambda x: orden[x['familia']])
+            elegidos += [(slugs[x['familia']], x['titulo']) for x in tomados]
+            if len(elegidos) >= maximo:
+                break
+        salida[s] = elegidos
+    # Que ninguna quede sin un link desde otra pagina de modelo: con los
+    # vecinos de su marca, el JBL Charge 6 nombraba a otros parlantes pero
+    # ninguno lo nombraba a el. Si a un modelo no lo nombra nadie, lo nombra el
+    # primero de los suyos (en lugar de su ultimo, si ese ultimo tiene otro
+    # link que lo traiga). Siempre en el mismo orden: el resultado no cambia.
+    entrantes = {}
+    for v in salida.values():
+        for t, _ in v:
+            entrantes[t] = entrantes.get(t, 0) + 1
+    for m in candidatos:
+        s = slugs[m['familia']]
+        if entrantes.get(s):
+            continue
+        for t, _ in salida.get(s) or []:
+            lista = salida.get(t)
+            if lista is None or any(x == s for x, _ in lista):
+                continue
+            if len(lista) < maximo:
+                lista.append((s, m['titulo']))
+            elif entrantes.get(lista[-1][0], 0) > 1:
+                entrantes[lista[-1][0]] -= 1
+                lista[-1] = (s, m['titulo'])
+            else:
+                continue
+            entrantes[s] = 1
+            break
+    return salida
+
+
+def entrada_de_la_pagina(texto, s):
+    """Nombre y rubro de una pagina que hoy no se rearma (la de un modelo que
+    ADVAPP ya no trae, G-09), de sus datos para Google: para el indice."""
+    titulo, rubro = '', ''
+    for x in re.findall(r'<script type="application/ld\+json">(.*?)</script>', texto or '', re.S):
+        try:
+            d = json.loads(x.replace('<\\/', '</'))
+        except ValueError:
+            continue
+        if isinstance(d, dict) and d.get('@type') == 'Product':
+            titulo, rubro = str(d.get('name') or '').strip(), str(d.get('category') or '').strip()
+    return {'slug': s, 'titulo': titulo or titulo_de_la_pagina(texto, s), 'rubro': rubro or 'Productos'}
+
+
+CSS_INDICE = r'''
+.intro{margin:0;color:var(--suave);max-width:640px}
+.rubros{display:flex;flex-wrap:wrap;gap:6px}
+.rubros a{border:1.5px solid var(--linea);background:var(--tarjeta);border-radius:999px;padding:8px 13px;font:600 13px/1 var(--sans);text-decoration:none}
+.rubros a:hover{border-color:var(--acento);color:var(--acento)}
+.lista{margin:0;padding:0;list-style:none;columns:3 240px;column-gap:28px}
+.lista li{break-inside:avoid;padding:6px 0;border-top:1px solid var(--linea)}
+.lista a{text-decoration:none;font-size:14.5px}
+.lista a:hover{color:var(--acento);text-decoration:underline}
+'''
+
+
+def armar_indice(entradas, publica, general):
+    """producto/index.html: todos los modelos con pagina, por rubro (TG-05).
+    Los rubros en el orden de la barra del catalogo (general['rubros'], que
+    sale de ORDEN_CATS); los que no estan ahi, despues, del que tiene mas
+    modelos al que tiene menos. Adentro, por nombre. Cada rubro con su ancla
+    (producto/#celulares), que es adonde lleva "Todos los modelos de ..." de
+    cada pagina."""
+    url = publica + 'producto/'
+    por_rubro = {}
+    for x in entradas:
+        por_rubro.setdefault(x['rubro'] or 'Productos', []).append(x)
+    orden = [r for r in (general.get('rubros') or []) if isinstance(r, str)]
+    rubros = sorted(por_rubro, key=lambda r: (orden.index(r) if r in orden else len(orden),
+                                              -len(por_rubro[r]), orden_natural(r)))
+    # En minuscula la palabra comun ("celulares, accesorios Apple"); la marca
+    # y lo que se escribe asi ("MacBooks", "iPads") quedan como estan
+    nombres = [' '.join([p[0].lower() + p[1:] if i == 0 and p[:1].isupper() and p[1:].islower() and p.lower() not in ('dyson',)
+                         else p for i, p in enumerate(r.split(' '))]) for r in rubros[:3]]
+    meta_desc = recortar('Todos los modelos del catálogo de Advance Tecno por rubro: %s y más. '
+                         'Parque Chas, CABA. Envíos a todo el país.' % ', '.join(nombres))
+    chips = ''.join('<a href="#%s">%s</a>' % (e(slug(r)), e(r)) for r in rubros)
+    secciones = ''.join(
+        '<section class="bloque" id="%s" aria-labelledby="t-%s"><h2 id="t-%s">%s</h2><ul class="lista">%s</ul></section>' % (
+            e(slug(r)), e(slug(r)), e(slug(r)), e(r),
+            ''.join('<li><a href="%s/">%s</a></li>' % (e(x['slug']), e(x['titulo']))
+                    for x in sorted(por_rubro[r], key=lambda y: (orden_natural(y['titulo']), y['slug']))))
+        for r in rubros)
+    migas = json.dumps({
+        '@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
+            {'@type': 'ListItem', 'position': 1, 'name': 'Catálogo', 'item': publica},
+            {'@type': 'ListItem', 'position': 2, 'name': 'Todos los modelos', 'item': url}]},
+        ensure_ascii=False).replace('</', '<\\/')
+    return '''<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Todos los modelos con su pagina, por rubro (05/11/2026, auditoria TG-05).
+     La arma herramientas/paginas-producto.py en cada PUBLICAR: no editar a mano. -->
+<title>Todos los modelos | Advance Tecno</title>
+<meta name="description" content="{meta_desc}">
+<link rel="canonical" href="{url}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Advance Tecno">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="Todos los modelos | Advance Tecno">
+<meta property="og:description" content="{meta_desc}">
+<meta property="og:url" content="{url}">
+<meta property="og:image" content="{og}">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icono-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/icono-16.png">
+<link rel="apple-touch-icon" href="../assets/icono-180.png">
+<script type="application/ld+json">{migas}</script>
+<style>{css}</style>
+</head>
+<body>
+<header class="barra"><div class="in">
+  <a class="logo" href="../" aria-label="Advance Tecno: ir al catálogo"><img src="../assets/logo-mark.png" alt=""><b>Advance <span>Tecno</span></b></a>
+  <a class="cat" href="../">Ver catálogo</a>
+</div></header>
+<main>
+  <nav class="migas" aria-label="Estás en"><a href="../">Catálogo</a> › Todos los modelos</nav>
+  <div><h1>Todos los modelos</h1></div>
+  <p class="intro">Cada modelo del catálogo con su página: las versiones, los colores y la ficha técnica. El precio y el stock del día se ven al abrirla.</p>
+  <nav class="rubros" aria-label="Rubros">{chips}</nav>
+  {secciones}
+</main>
+<footer>
+  <b>Advance Tecno</b>
+  <span>{direccion} · Envíos a todo el país · Atención con cita previa</span>
+  {contacto}
+  <span><a href="../">Catálogo</a></span>
+  <span>Precios sujetos a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</span>
+</footer>
+</body>
+</html>
+'''.format(
+        meta_desc=e(meta_desc), url=e(url), og=e(publica + 'assets/preview.png'), migas=migas,
+        css=CSS.replace('../../assets/', '../assets/') + CSS_INDICE, chips=chips, secciones=secciones,
+        direccion=e(general.get('direccion') or 'Av. de los Incas 5150, 1A, CABA'),
+        contacto=' · '.join(x for x in (
+            ('<a href="https://wa.me/%s" target="_blank" rel="noopener">WhatsApp %s</a>' % (e(general['whatsapp']), e(numero_wa(general['whatsapp'])))) if general.get('whatsapp') else '',
+            ('<a href="%s" target="_blank" rel="noopener">Ver en el mapa</a>' % e(general['mapa'])) if general.get('mapa') else '') if x).join(['<span>', '</span>']) if (general.get('whatsapp') or general.get('mapa')) else '')
+
+
 def texto_sitemap(publica, indice, fuera=()):
-    """fuera: las direcciones que hoy son un desvio (no se le listan a Google)."""
+    """fuera: las direcciones que hoy son un desvio (no se le listan a Google).
+    Despues de la portada, producto/ ("Todos los modelos", TG-05)."""
     hoy = datetime.date.today().isoformat()
-    urls = ['  <url><loc>%s</loc><changefreq>daily</changefreq></url>' % e(publica)]
+    urls = ['  <url><loc>%s</loc><changefreq>daily</changefreq></url>' % e(publica),
+            '  <url><loc>%sproducto/</loc></url>' % e(publica)]
     for s in sorted(set(indice['slugs'].values()) - set(fuera)):
         urls.append('  <url><loc>%sproducto/%s/</loc><lastmod>%s</lastmod></url>' % (e(publica), e(s), indice['lastmod'].get(s, hoy)))
     return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s\n</urlset>\n' % '\n'.join(urls)
@@ -843,6 +1091,7 @@ def aplicar(datos, publica, carpeta=CARPETA, raiz=RAIZ):
     indice = leer_indice()
     modelos = datos.get('modelos') or []
     slugs = asignar_slugs(modelos, indice)
+    otros = elegir_otros(modelos, slugs)
     hoy = datetime.date.today().isoformat()
     res = {'nuevas': 0, 'cambiadas': 0, 'iguales': 0, 'sin_stock': 0, 'desvios': 0, 'desvios_nuevos': 0}
     presentes = set()
@@ -851,20 +1100,22 @@ def aplicar(datos, publica, carpeta=CARPETA, raiz=RAIZ):
         presentes.add(s)
         ruta = os.path.join(carpeta, s, 'index.html')
         existia = os.path.exists(ruta)
-        if escribir_si_cambio(ruta, armar_pagina(m, s, publica, datos)):
+        if escribir_si_cambio(ruta, armar_pagina(m, s, publica, datos, otros.get(s))):
             res['cambiadas' if existia else 'nuevas'] += 1
             indice['lastmod'][s] = hoy
         else:
             res['iguales'] += 1
     fuera = set()
+    viejas = []
     for f, s in slugs.items():
         if s in presentes:
             continue
         ruta = os.path.join(carpeta, s, 'index.html')
         texto = leer_pagina(ruta)
         # Ya es un desvio: queda como esta (si el modelo vuelve con esta
-        # familia, el for de arriba la rearma entera)
+        # familia, el for de arriba la rearma entera), salvo el lang (TG-11)
         if desvio_de(texto):
+            escribir_si_cambio(ruta, con_lang_ar(texto))
             fuera.add(s)
             res['desvios'] += 1
             continue
@@ -882,6 +1133,17 @@ def aplicar(datos, publica, carpeta=CARPETA, raiz=RAIZ):
         elif sin_stock_en_pagina(ruta):
             res['sin_stock'] += 1
             indice['lastmod'][s] = hoy
+        if s not in fuera and texto is not None:
+            viejas.append(s)
+    # "Todos los modelos" (TG-05): las de hoy y las de los modelos que hoy no
+    # estan (G-09: siguen en el sitemap, con "Hoy sin stock"); los desvios no
+    entradas = {slugs[m['familia']]: {'slug': slugs[m['familia']], 'titulo': m['titulo'], 'rubro': m.get('rubro') or 'Productos'}
+                for m in modelos}
+    for s in viejas:
+        if s not in entradas:
+            entradas[s] = entrada_de_la_pagina(leer_pagina(os.path.join(carpeta, s, 'index.html')), s)
+    res['indice'] = escribir_si_cambio(os.path.join(carpeta, 'index.html'), armar_indice(list(entradas.values()), publica, datos))
+    res['con_otros'] = sum(1 for v in otros.values() if v)
     escribir_si_cambio(os.path.join(carpeta, 'indice.json'),
                        json.dumps({'slugs': dict(sorted(slugs.items())), 'lastmod': dict(sorted(indice['lastmod'].items()))},
                                   ensure_ascii=False, indent=1) + '\n')
@@ -923,14 +1185,16 @@ def main(argv):
     if res['desvios']:
         print('  %d direccion(es) vieja(s) llevan a la de hoy del mismo modelo (%d nueva(s) en esta pasada); no van al sitemap.'
               % (res['desvios'], res['desvios_nuevos']))
+    print('  %d paginas con "Otros modelos"; producto/index.html (Todos los modelos) %s.'
+          % (res['con_otros'], 'actualizado' if res['indice'] else 'sin cambios'))
     return 0
 
 
 def probar():
     fallas = []
 
-    def ok(c, txt):
-        print(('  OK  ' if c else 'FALLA ') + txt)
+    def ok(c, txt, detalle=None):
+        print(('  OK  ' if c else 'FALLA ') + txt + ('' if c or detalle is None else '  [%s]' % (detalle,)))
         if not c:
             fallas.append(txt)
 
@@ -1106,6 +1370,92 @@ def probar():
     sm2 = texto_sitemap('https://catalogo.advancetecno.com.ar/',
                         {'slugs': {'G:x': 'sony-joystick-ps5', 'M:y': 'sony-joystick-ps5-2'}, 'lastmod': {}}, {'sony-joystick-ps5'})
     ok('/producto/sony-joystick-ps5-2/' in sm2 and '/producto/sony-joystick-ps5/' not in sm2, 'el desvio no va al sitemap')
+    # (05/11/2026, auditoria TG-11) lang="es-AR", como index.html y 404.html
+    ok('<html lang="es-AR">' in h and '<html lang="es">' not in h and '<html lang="es-AR">' in dv,
+       'TG-11: la pagina y el desvio dicen lang="es-AR"')
+    ok(con_lang_ar('<!doctype html>\n<html lang="es">\n<head>') == '<!doctype html>\n<html lang="es-AR">\n<head>'
+       and con_lang_ar(h) == h,
+       'TG-11: a la pagina que no se rearma (sin stock o desvio) solo se le cambia el lang')
+    vieja_es = vieja.replace('<meta name="description"', '<html lang="es"><meta name="description"', 1)
+    ok('<html lang="es-AR">' in con_lang_ar(sin_precio_viejo(vieja_es)) and 'Hoy sin stock' in con_lang_ar(sin_precio_viejo(vieja_es)),
+       'TG-11 / G-09: la de un modelo que hoy no esta pasa a es-AR y sigue diciendo "Hoy sin stock"')
+    # (05/11/2026, auditoria TG-05) Los links entre paginas
+    def mod(fam, titulo, marca, rubro, **k):
+        return dict({'familia': fam, 'titulo': titulo, 'marca': marca, 'rubro': rubro}, **k)
+    cel = [mod('M:I15', 'Apple iPhone 15', 'Apple', 'Celulares'), mod('M:I16', 'Apple iPhone 16', 'Apple', 'Celulares'),
+           mod('M:I16P', 'Apple iPhone 16 Pro', 'Apple', 'Celulares'), mod('M:I17', 'Apple iPhone 17', 'Apple', 'Celulares'),
+           mod('M:I17P', 'Apple iPhone 17 Pro', 'Apple', 'Celulares'), mod('M:I17PM', 'Apple iPhone 17 Pro Max', 'Apple', 'Celulares'),
+           mod('M:I9', 'Apple iPhone 9', 'Apple', 'Celulares'), mod('M:IA', 'Apple iPhone Air', 'Apple', 'Celulares'),
+           mod('M:S25', 'Samsung Galaxy S25', 'Samsung', 'Celulares'), mod('M:A17', 'Samsung Galaxy A17', 'Samsung', 'Celulares'),
+           mod('M:MBA', 'Apple MacBook Air M5', 'Apple', 'Notebooks'), mod('M:ZB', 'Lenovo Zbook', 'Lenovo', 'Notebooks'),
+           mod('U:CEL-1', 'Apple iPhone 16 usado', 'Apple', 'Celulares', usado=True),
+           mod('M:SOLO', 'Kodak Instax', 'Kodak', 'Instantáneas')]
+    sl = {m['familia']: slug(m['titulo']) for m in cel}
+    ot = elegir_otros(cel, sl)
+    o17p = [t for _, t in ot[sl['M:I17P']]]
+    ok(len(o17p) == 6 and all(t.startswith('Apple iPhone') for t in o17p)
+       and {'Apple iPhone 17 Pro Max', 'Apple iPhone 17', 'Apple iPhone Air'} <= set(o17p) and 'Apple iPhone 17 Pro' not in o17p,
+       'TG-05: el iPhone 17 Pro nombra 6 modelos, primero los vecinos de su marca y su rubro', o17p)
+    ok(o17p == sorted(o17p, key=orden_natural) and orden_natural('Apple iPhone 9') < orden_natural('Apple iPhone 17'),
+       'TG-05: en el orden de los nombres, con los numeros como numeros (9 antes que 17)', o17p)
+    oa = [t for _, t in ot[sl['M:A17']]]
+    ok(oa[:1] == ['Samsung Galaxy S25'] and len(oa) == 6 and all(not t.startswith('Apple MacBook') for t in oa),
+       'TG-05: si su marca no alcanza, sigue con su rubro (el Galaxy A17: el S25 y despues celulares de otras marcas)', oa)
+    om = [t for _, t in ot[sl['M:MBA']]]
+    ok(om[:1] == ['Lenovo Zbook'] and len(om) == 6 and 'Apple iPhone Air' in om,
+       'TG-05: y despues con su marca en otros rubros (el MacBook Air: el Zbook y despues los Apple)', om)
+    ok(not any('usado' in t for v in ot.values() for _, t in v) and ot[sl['U:CEL-1']],
+       'TG-05: un usado no se nombra en otra pagina (su pagina deja de estar a la venta), pero la suya tiene sus otros')
+    ok(ot[sl['M:SOLO']] == [], 'TG-05: un modelo solo en su rubro y su marca no inventa vecinos')
+    # Un celular solo en su marca y lejos por nombre: con los vecinos, nadie lo nombraba (el JBL Charge 6)
+    cel2 = cel + [mod('M:ALC', 'Alcatel 1', 'Alcatel', 'Celulares')]
+    sl2 = dict(sl, **{'M:ALC': 'alcatel-1'})
+    ot2 = elegir_otros(cel2, sl2)
+    nombran = {t for v in ot2.values() for t, _ in v}
+    ok('alcatel-1' in nombran and all(sl2[x['familia']] in nombran for x in cel2 if not x.get('usado') and ot2[sl2[x['familia']]]),
+       'TG-05: a todo modelo con vecinos lo nombra al menos otra pagina (tambien al que queda solo en su marca)',
+       [x['titulo'] for x in cel2 if not x.get('usado') and ot2[sl2[x['familia']]] and sl2[x['familia']] not in nombran])
+    ok(all(len(v) <= OTROS_MAX and len({t for t, _ in v}) == len(v) and k not in {t for t, _ in v} for k, v in ot2.items())
+       and elegir_otros(list(reversed(cel2)), sl2) == ot2,
+       'TG-05: nunca mas de 6, sin repetidos, ninguna se nombra a si misma, y siempre da lo mismo')
+    con_precio = [dict(m, desde=999 - i, stock=bool(i % 2)) for i, m in enumerate(cel)]
+    ok(elegir_otros(con_precio, sl) == ot and elegir_otros(list(reversed(cel)), sl) == ot,
+       'TG-05: los otros no dependen del precio, del stock ni del orden en que llegan (no reescriben las paginas cada dia)')
+    h6 = armar_pagina(m, 'apple-iphone-17-pro', 'https://catalogo.advancetecno.com.ar/', {'cuotas': 12},
+                      [('apple-iphone-17', 'Apple iPhone 17'), ('x', 'Nombre <con> "comillas"')])
+    ok('<a href="../apple-iphone-17/">Apple iPhone 17</a>' in h6 and 'Nombre &lt;con&gt; &quot;comillas&quot;' in h6
+       and '<a class="todos" href="../#celulares">Todos los modelos de Celulares</a>' in h6,
+       'TG-05: "Otros modelos" con links de verdad a producto/<nombre>/ y al rubro en "Todos los modelos"')
+    ok('aria-labelledby="t-otros"' not in h and '<a href="../">Todos los modelos</a>' in h and '<a href="../">Todos los modelos</a>' in h6,
+       'TG-05: sin otros, no va el bloque; el pie lleva siempre a "Todos los modelos"')
+    ok(h6.index('t-otros') < h6.index('</main>') and h6.count('<script') == h.count('<script'),
+       'TG-05: el bloque va en el HTML, adentro del main, sin JavaScript')
+    gen = {'cuotas': 12, 'whatsapp': '5491100000000', 'direccion': 'Av. de los Incas 5150, 1A, CABA'}
+    ent = [{'slug': sl[x['familia']], 'titulo': x['titulo'], 'rubro': x['rubro']} for x in cel]
+    hi = armar_indice(ent + [{'slug': 'viejo-<b>', 'titulo': 'Modelo <viejo>', 'rubro': 'Celulares'}],
+                      'https://catalogo.advancetecno.com.ar/', gen)
+    ok('<link rel="canonical" href="https://catalogo.advancetecno.com.ar/producto/">' in hi and '<html lang="es-AR">' in hi
+       and 'noindex' not in hi and '<title>Todos los modelos | Advance Tecno</title>' in hi,
+       'TG-05: producto/index.html, para Google, con su canonica y en es-AR')
+    ok(all('<a href="%s/">' % s in hi for s in sl.values()) and '<a href="viejo-&lt;b&gt;/">Modelo &lt;viejo&gt;</a>' in hi,
+       'TG-05: el indice linkea cada pagina (con el nombre escapado)')
+    hr = armar_indice(ent, 'https://catalogo.advancetecno.com.ar/', dict(gen, rubros=['Instantáneas', 'Notebooks']))
+    ok(hr.index('id="instantaneas"') < hr.index('id="notebooks"') < hr.index('id="celulares"'),
+       'TG-05: los rubros en el orden de la barra del catalogo (los que no estan ahi, despues)')
+    ok('... y más' not in hi and len(re.search(r'<meta name="description" content="([^"]*)"', hi).group(1)) <= 160
+       and not re.search(r'<meta name="description" content="[^"]*…"', hi),
+       'TG-05: la descripcion del indice entra entera en lo que muestra Google')
+    ok(hi.index('id="celulares"') < hi.index('id="notebooks"') < hi.index('id="instantaneas"')
+       and '<a href="#celulares">Celulares</a>' in hi
+       and hi.index('>Apple iPhone 9<') < hi.index('>Apple iPhone 15<') < hi.index('>Apple iPhone 17<'),
+       'TG-05: por rubro (el que mas tiene primero), con su ancla, y por nombre adentro')
+    ok('url(../assets/lilita-latin.woff2)' in hi and '../../assets' not in hi and 'WhatsApp +54 9 11 0000-0000' in hi,
+       'TG-05: el indice usa las rutas de producto/ (../assets) y el mismo pie')
+    ok('<url><loc>https://catalogo.advancetecno.com.ar/producto/</loc></url>' in sm, 'TG-05: el sitemap lista "Todos los modelos"')
+    ev = entrada_de_la_pagina(armar_pagina(m, 'apple-iphone-17-pro', 'https://catalogo.advancetecno.com.ar/', {'cuotas': 12}), 'apple-iphone-17-pro')
+    ok(ev == {'slug': 'apple-iphone-17-pro', 'titulo': 'Apple iPhone 17 Pro', 'rubro': 'Celulares'}
+       and entrada_de_la_pagina('<meta property="og:title" content="DJI Neo 2">', 'dji-neo-2')['titulo'] == 'DJI Neo 2',
+       'TG-05: de una pagina que hoy no se rearma, el nombre y el rubro salen de sus datos para Google')
     # De punta a punta, en una carpeta aparte
     import shutil
     import tempfile
@@ -1120,6 +1470,13 @@ def probar():
             fh.write(json.dumps({'slugs': {'G:viejo': 'sony-joystick-ps5', 'M:ACG-SON-JOYPS5': 'sony-joystick-ps5-2'}, 'lastmod': {}}))
         with io.open(os.path.join(car, 'sony-joystick-ps5', 'index.html'), 'w', encoding='utf-8') as fh:
             fh.write(vieja_con('ACC-SON-001'))
+        # Y una de un modelo que ADVAPP ya no trae (G-09): queda sin stock y en el indice
+        os.makedirs(os.path.join(car, 'dji-neo-2'))
+        with io.open(os.path.join(car, 'dji-neo-2', 'index.html'), 'w', encoding='utf-8') as fh:
+            fh.write('<html lang="es">' + vieja.replace('"name": "DJI Neo 2"', '"name": "DJI Neo 2", "category": "Drones"'))
+        with io.open(INDICE, 'w', encoding='utf-8') as fh:
+            fh.write(json.dumps({'slugs': {'G:viejo': 'sony-joystick-ps5', 'M:ACG-SON-JOYPS5': 'sony-joystick-ps5-2',
+                                           'M:DRO-DJI-NEO2': 'dji-neo-2'}, 'lastmod': {}}))
         mj = dict(m, familia='M:ACG-SON-JOYPS5', titulo='Sony Joystick PS5',
                   versiones=[dict(m['versiones'][0], clave='ACC-SON-001', sku='ACG-SON-JOYPS5-000-BLK-000')])
         pasada = lambda: aplicar({'modelos': [mj], 'cuotas': 12}, 'https://catalogo.advancetecno.com.ar/', carpeta=car, raiz=tmp)
@@ -1130,6 +1487,14 @@ def probar():
            and '/producto/sony-joystick-ps5/' not in sm3 and '/producto/sony-joystick-ps5-2/' in sm3
            and ind3['slugs'].get('G:viejo') == 'sony-joystick-ps5',
            'de punta a punta: la vieja pasa a desvio, sale del sitemap y su direccion sigue guardada')
+        ti = leer(car, 'index.html')
+        ok('<a href="sony-joystick-ps5-2/">Sony Joystick PS5</a>' in ti and 'href="sony-joystick-ps5/"' not in ti
+           and r1['indice'] and '<html lang="es-AR">' in t1,
+           'TG-05 de punta a punta: "Todos los modelos" lleva a la de hoy y no al desvio (que pasa a es-AR)')
+        tn = leer(car, 'dji-neo-2', 'index.html')
+        ok('<a href="dji-neo-2/">DJI Neo 2</a>' in ti and 'id="drones"' in ti and '<html lang="es-AR">' in tn
+           and '<b>Hoy sin stock</b>' in tn and 'Otros modelos' not in tn and '/producto/dji-neo-2/' in leer(tmp, 'sitemap.xml'),
+           'G-09 / TG-05: la de un modelo que ADVAPP ya no trae sigue sin stock, en el sitemap y en "Todos los modelos"')
         r2 = pasada()
         ok(r2['desvios'] == 1 and r2['desvios_nuevos'] == 0 and leer(car, 'sony-joystick-ps5', 'index.html') == t1
            and r2['cambiadas'] == 0 and r2['iguales'] == 1,
@@ -1145,11 +1510,15 @@ def probar():
             fh.write(json.dumps({'slugs': {'M:TAB-SAM-TABA11PLUS': 'samsung-galaxy-tab-a11',
                                            'M:TAB-SAM-TABA11': 'samsung-galaxy-tab-a11-2'}, 'lastmod': {}}))
         pub = 'https://catalogo.advancetecno.com.ar/'
-        for sl, mo in (('samsung-galaxy-tab-a11', a11p), ('samsung-galaxy-tab-a11-2', a11)):
+        # Como estaban: cada una con la otra en "Otros modelos" (TG-05)
+        for sl, mo, ot in (('samsung-galaxy-tab-a11', a11p, [('samsung-galaxy-tab-a11-2', a11['titulo'])]),
+                           ('samsung-galaxy-tab-a11-2', a11, [('samsung-galaxy-tab-a11', a11p['titulo'])])):
             os.makedirs(os.path.join(car, sl))
             with io.open(os.path.join(car, sl, 'index.html'), 'w', encoding='utf-8') as fh:
-                fh.write(armar_pagina(mo, sl, pub, {'cuotas': 12}))
-        t_a11 = leer(car, 'samsung-galaxy-tab-a11-2', 'index.html')
+                fh.write(armar_pagina(mo, sl, pub, {'cuotas': 12}, ot))
+        # El A11 queda igual, salvo su link al A11+, que pasa a la direccion nueva
+        t_a11 = leer(car, 'samsung-galaxy-tab-a11-2', 'index.html').replace(
+            '<a href="../samsung-galaxy-tab-a11/">', '<a href="../samsung-galaxy-tab-a11-plus/">')
         pasada = lambda: aplicar({'modelos': [a11p, a11], 'cuotas': 12}, pub, carpeta=car, raiz=tmp)
         r1 = pasada()
         vieja = leer(car, 'samsung-galaxy-tab-a11', 'index.html')
@@ -1162,7 +1531,7 @@ def probar():
         ok('/producto/samsung-galaxy-tab-a11-plus/' in sm4 and '/producto/samsung-galaxy-tab-a11/' not in sm4
            and '/producto/samsung-galaxy-tab-a11-2/' in sm4 and leer(car, 'samsung-galaxy-tab-a11-2', 'index.html') == t_a11
            and ind4['slugs'].get('antes:M:TAB-SAM-TABA11PLUS') == 'samsung-galaxy-tab-a11',
-           'G-08: el sitemap lleva la nueva y no la vieja, el A11 queda igual y la vieja sigue guardada en el indice')
+           'G-08: el sitemap lleva la nueva y no la vieja, el A11 queda igual (su link al A11+ va a la nueva) y la vieja sigue guardada en el indice')
         r2 = pasada()
         ok(r2['desvios'] == 1 and r2['desvios_nuevos'] == 0 and r2['nuevas'] == 0 and r2['cambiadas'] == 0
            and leer(car, 'samsung-galaxy-tab-a11', 'index.html') == vieja,

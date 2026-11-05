@@ -62,6 +62,17 @@ si alguna falta).
   links.js        Los links que se comparten: que ?cat, ?marca, ?q, ?precio,
                   ?stock y #p= abran lo que dicen, y que el ?config del
                   equipo no quede en la direccion que se comparte (29/09).
+  google-portada.js
+                  La portada lleva a las paginas de producto/ con links de
+                  verdad (auditoria del 04/11/2026, TG-05; Benja: "dale con
+                  Google", 05/11): el pie trae fijo en el HTML el link a
+                  "Todos los modelos" (producto/); el nombre de cada tarjeta
+                  es un <a href="producto/<nombre>/"> con la direccion de
+                  producto/indice.json (sin pagina todavia, sin link), se ve
+                  igual y se pone tambien en las tarjetas dibujadas antes de
+                  que llegue el indice; el clic comun abre la ficha sin salir
+                  de la pagina, Cmd/Ctrl lo deja al navegador, y Enter sobre
+                  la tarjeta sigue abriendo la ficha.
   marcas.js       La vitrina de marcas de la portada.
   menu.js         El boton para volver al menu de rubros, tambien en celular.
   miniaturas.js   Que lo chico use las fotos de 400 px de fotos/mini/ y la

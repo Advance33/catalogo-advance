@@ -1777,6 +1777,9 @@ window.ADVAPP_TEMPRANO = (() => {
        desborda de la tarjeta y el line-clamp corta a mitad de palabra. */
     overflow-wrap:anywhere;
   }
+  /* El nombre es un link a la pagina del modelo (05/11/2026, auditoria
+     TG-05, ver htmlNombreTarjeta): se ve igual que antes. */
+  .nombre a.ir-pagina{color:inherit;text-decoration:none}
 
   /* La linea tecnica (26/09, opcion B elegida con Pedro): lo que el nombre de
      ADVAPP trae ademas del modelo -- "280Hz · Curved 1500R", el armazon y el
@@ -3825,6 +3828,10 @@ window.ADVAPP_TEMPRANO = (() => {
   .pie-col a:focus-visible{outline:2px solid #A78BFA;outline-offset:3px;border-radius:4px}
   .pie-legal{padding-top:18px;padding-bottom:96px;border-top:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);
              font:11px/1.7 var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:center}
+  .pie-legal .pie-todos{color:rgba(255,255,255,.78);text-decoration:underline;text-decoration-color:rgba(196,166,255,.6);
+                        text-underline-offset:3px}
+  .pie-legal .pie-todos:hover{color:#E3D3FF}
+  .pie-legal .pie-todos:focus-visible{outline:2px solid #A78BFA;outline-offset:3px;border-radius:4px}
   @media (max-width:860px){
     .pie-id{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}
     .pie-marca{grid-column:1 / -1}
@@ -4099,7 +4106,12 @@ window.ADVAPP_TEMPRANO = (() => {
        está en la configuración. Sin nada queda escondido. -->
   <div class="wrap pie-id" id="pie-id" hidden></div>
   <div class="wrap pie-legal"><span id="pie-cotiz"></span>
-  Precios sujetos a cambio sin previo aviso · Consultá disponibilidad antes de comprar</div>
+  Precios sujetos a cambio sin previo aviso · Consultá disponibilidad antes de comprar
+  <!-- Todos los modelos, cada uno con su pagina para Google (05/11/2026,
+       auditoria TG-05). Fijo en el HTML, no lo arma el script: asi Google lo
+       ve sin correr JavaScript y llega por un link a cada pagina de
+       producto/ (antes las conocia solo por el sitemap). -->
+  <br><a class="pie-todos" href="producto/">Todos los modelos</a></div>
 </footer>
 
 <script>
@@ -9342,7 +9354,7 @@ function tarjeta(p){
     </div>` : ''}
     <div class="cuerpo">
       <span class="marca">${esc(p.marca)}${CON_FOTOS ? '' : badge}${htmlUsado(p)}${htmlDestacado(p)}</span>
-      <h3 class="nombre">${esc(p.titulo || p.desc)}</h3>
+      <h3 class="nombre">${htmlNombreTarjeta(p)}</h3>
       ${htmlTecnicaTarjeta(p)}
       <div class="pie">
         <div class="plata">
@@ -9356,6 +9368,71 @@ function tarjeta(p){
       ${abajo ? acciones : ''}
     </div>`;
   return el;
+}
+
+/* ---------- El nombre de la tarjeta lleva a la página del modelo ----------
+   (05/11/2026, auditoría del 04/11, TG-05; Benja: "dale con Google") Google
+   conocía las páginas de producto/ (las arma herramientas/paginas-producto.py
+   en cada PUBLICAR) solo por el sitemap: ningún link llevaba a ellas, y en
+   Search Console había 24 indexadas y 453 sin indexar. Desde ese día el
+   nombre de cada tarjeta es un <a href="producto/<nombre>/"> de verdad: lo
+   sigue Google, y con Cmd/Ctrl+clic o la rueda del mouse abre esa página en
+   otra pestaña. El clic común sigue abriendo la ficha, como siempre (ver el
+   escuchador de la grilla), y se ve igual que antes.
+   La dirección sale de producto/indice.json (familia -> nombre de la página).
+   Se pide una vez, con la primera tarjeta: la portada sola no lo baja.
+   Mientras no llegó, si no llega o si el modelo es nuevo y todavía no tiene
+   página, el nombre va sin link; al llegar se les pone a las ya dibujadas. */
+const PAGINAS_PRODUCTO_ESPERA_MS = 4000;   // lo más que se espera producto/indice.json
+let PAGINAS_PRODUCTO = null;               // la promesa del índice: una vez por visita
+let SLUGS_PRODUCTO = null;                 // Map familia -> nombre de la página, cuando llegó
+
+function pedirPaginasProducto(){
+  if(!PAGINAS_PRODUCTO) PAGINAS_PRODUCTO = conTope(PAGINAS_PRODUCTO_ESPERA_MS, async senal => {
+      const r = await fetch('producto/indice.json', { signal: senal });
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(j => {
+      const m = new Map();
+      const s = j && j.slugs && typeof j.slugs === 'object' ? j.slugs : {};
+      // "antes:..." es una dirección vieja que hoy es un desvío: no se usa
+      for(const [f, x] of Object.entries(s))
+        if(!f.startsWith('antes:') && typeof x === 'string' && /^[a-z0-9-]+$/.test(x)) m.set(f, x);
+      return m;
+    })
+    .catch(e => { console.warn('No se pudo leer producto/indice.json:', e); return new Map(); })
+    .then(m => { SLUGS_PRODUCTO = m; ponerLinksDePagina(); return m; });
+  return PAGINAS_PRODUCTO;
+}
+
+// "producto/apple-iphone-17-pro/", o '' si el modelo no tiene página (o no se sabe todavía)
+function hrefPaginaProducto(p){
+  if(!SLUGS_PRODUCTO || !p) return '';
+  let f = '';
+  try{ f = familia(p.rep || p); }catch(e){}
+  const s = f && SLUGS_PRODUCTO.get(f);
+  return s ? 'producto/' + s + '/' : '';
+}
+
+/* tabindex="-1": la tarjeta ya se elige con el teclado (Tab y Enter abren la
+   ficha), y el link no suma otra parada por tarjeta. */
+function htmlNombreTarjeta(p){
+  if(!PAGINAS_PRODUCTO) pedirPaginasProducto();
+  const t = esc(p.titulo || p.desc);
+  const href = hrefPaginaProducto(p);
+  return href ? `<a class="ir-pagina" href="${esc(href)}" tabindex="-1">${t}</a>` : t;
+}
+
+// A las tarjetas que se dibujaron antes de que llegara el índice
+function ponerLinksDePagina(){
+  if(!SLUGS_PRODUCTO || !SLUGS_PRODUCTO.size) return;
+  const porClave = new Map(LISTA.map(p => [clave(p), p]));
+  grid.querySelectorAll('.card').forEach(c => {
+    const h = c.querySelector('.nombre');
+    const p = porClave.get(c.dataset.key);
+    if(h && p && !h.querySelector('a.ir-pagina') && hrefPaginaProducto(p)) h.innerHTML = htmlNombreTarjeta(p);
+  });
 }
 
 /* "Hasta 12 cuotas" (1B, 30/09): sin monto, a propósito. La cuota sola, sin
@@ -17144,6 +17221,15 @@ grid.addEventListener('click', e => {
   const card = e.target.closest('.card');
   if(!card) return;
   if(e.target.closest('.mas')){ masDeLaTarjeta(card.dataset.key); return; }   // 5 A (21/10)
+  /* El nombre es un link a la página del modelo (05/11/2026, TG-05, ver
+     htmlNombreTarjeta): con Cmd, Ctrl, Shift o Alt el navegador hace lo suyo
+     (otra pestaña o ventana); el clic común abre la ficha, como siempre. */
+  if(e.target.closest('a.ir-pagina')){
+    if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
+    e.preventDefault();
+    abrirFicha(card.dataset.key);
+    return;
+  }
   if(e.target.closest('a')) return;          // el botón Consultar hace lo suyo
   abrirFicha(card.dataset.key);
 });

@@ -333,9 +333,10 @@ async function correrUW(){
   const c1 = tarjeta(m1), cn = nuevo && tarjeta(nuevo);
   ok(uwTexto(c1.querySelector('.usado-tag')) === 'Usado', '[3] la tarjeta del usado dice "Usado"', uwTexto(c1.querySelector('.usado-tag')));
   ok(!!cn && !cn.querySelector('.usado-tag'), '[3] la del nuevo no');
-  // Las partes de la tarjeta, sin lo que depende del producto (regalo, promo, "Desde", la linea tecnica)
+  // Las partes de la tarjeta, sin lo que depende del producto (regalo, promo, "Desde", la linea tecnica,
+  // y el link del nombre a su pagina de producto/, que estos usados de ejemplo no tienen: TG-05, 05/11/2026)
   const forma = el => [...el.querySelectorAll('*')].map(x => x.className && typeof x.className === 'string' ? x.className.split(' ')[0] : x.tagName)
-                       .filter(x => !/usado-tag|cinta|badge|ahorro|antes|destacado|desde|tecnica/.test(x)).join(',');
+                       .filter(x => !/usado-tag|cinta|badge|ahorro|antes|destacado|desde|tecnica|ir-pagina/.test(x)).join(',');
   ok(!!cn && forma(c1.querySelector('.cuerpo')) === forma(cn.querySelector('.cuerpo')), '[3] y es la misma tarjeta que la de un nuevo (mismas partes)',
      cn && (forma(c1.querySelector('.cuerpo')).slice(0, 60) + ' | ' + forma(cn.querySelector('.cuerpo')).slice(0, 60)));
   ok(/USD 520/.test(uwTexto(c1.querySelector('.plata'))), '[3] con su precio', uwTexto(c1.querySelector('.plata')));

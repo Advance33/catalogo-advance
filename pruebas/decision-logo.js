@@ -197,13 +197,33 @@ async function probarDesdeUnRubro(){
   ok(c2 && c2.prevenido && dlEnInicio() && dlDir() === dlInicio && scrollY === 0,
      '[logo · cinta] el triangulo de la cinta tambien lleva al inicio', dlDir() + ' y=' + scrollY);
 
-  // "Ver todo el catalogo" (sin cambio de direccion): vuelve a los rubros sin sumar historial
-  verTodoElCatalogo();
+  /* "Ver todo el catalogo" va en la direccion desde el 04/11 (?todo=1,
+     auditoria UD-04). Hasta ese dia no la cambiaba: el que llegaba de otra
+     pagina, tocaba "Ver todo" y apretaba Atras se iba de la web, y el logo
+     volvia a los rubros sin sumar una entrada (un Atras ahi no hacia nada).
+     Ahora el boton suma una entrada y el Atras vuelve a la portada; y el logo,
+     desde la grilla entera, suma otra como desde un rubro y el Atras vuelve a
+     la grilla. */
+  ok(dlEnInicio() && dlDir() === dlInicio, '[ver todo] se arranca en el inicio', dlDir());
+  const l1 = history.length;
+  $('mosaico').querySelector('.mundos-todo').click();
   const l2 = history.length;
+  ok(!enPortada() && verTodo && dlDir() === dlInicio + '?todo=1' && l2 === l1 + 1,
+     '[ver todo] el boton abre la grilla entera, con ?todo=1 en la direccion y una entrada nueva', dlDir() + ' ' + l1 + ' -> ' + l2);
+  history.back();
+  const aLaPortada = await dlEsperarA(() => enPortada() && dlDir() === dlInicio);
+  ok(aLaPortada && !verTodo && !$('mosaico').hidden && $('grid').hidden,
+     '[ver todo] y el Atras vuelve a la portada con los rubros (antes sacaba de la web)', dlDir());
+  verTodoElCatalogo();
+  const l3 = history.length;
   ok(!enPortada(), '[logo] con "Ver todo" puesto, la grilla entera');
   dlClic($('logo-inicio'));
-  ok(enPortada() && !verTodo && history.length === l2, '[logo] desde "Ver todo" vuelve a los rubros sin sumar un Atras que no haria nada',
-     l2 + ' -> ' + history.length);
+  ok(dlEnInicio() && !verTodo && dlDir() === dlInicio && history.length === l3 + 1,
+     '[logo] desde "Ver todo" vuelve a los rubros y suma una entrada, como desde un rubro', dlDir() + ' ' + l3 + ' -> ' + history.length);
+  history.back();
+  const aTodo = await dlEsperarA(() => verTodo && /[?&]todo=1/.test(location.search));
+  ok(aTodo && !enPortada(), '[logo] y con Atras vuelve a la grilla entera', dlDir());
+  dlClic($('logo-inicio'));    // de vuelta al inicio para lo que sigue
 }
 
 /* ---- Con una ventana abierta ---- */

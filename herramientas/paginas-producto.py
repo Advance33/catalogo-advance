@@ -261,7 +261,7 @@ def asignar_slugs(modelos, indice):
 # --------------------------------------------------------------------------
 
 def numero_wa(d):
-    """5491124751466 -> +54 9 11 2475-1466 (como el pie del catalogo)."""
+    """5491100000000 -> +54 9 11 0000-0000 (como el pie del catalogo)."""
     d = re.sub(r'\D', '', str(d or ''))
     if len(d) == 13 and d.startswith('549'):
         return '+54 9 %s %s-%s' % (d[3:5], d[5:9], d[9:])
@@ -1019,7 +1019,7 @@ def probar():
     # Auditoria del 06/10
     ok('"itemCondition": "https://schema.org/NewCondition"' in h, 'los datos para Google dicen que es nuevo')
     h3 = armar_pagina(dict(m, categoria='Accesorio Apple'), 'x', 'https://catalogo.advancetecno.com.ar/',
-                      {'cuotas': 12, 'whatsapp': '5491124751466', 'mapa': 'https://maps.app.goo.gl/x', 'direccion': 'Av. de los Incas 5150, 1A, CABA'})
+                      {'cuotas': 12, 'whatsapp': '5491100000000', 'mapa': 'https://maps.app.goo.gl/x', 'direccion': 'Av. de los Incas 5150, 1A, CABA'})
     ok('?cat=Accesorio%20Apple' in h3 and '?cat=Accesorio Apple' not in h3, 'la direccion del rubro va codificada (migas y datos para Google)')
     ok('<tbody id="filas">' in h3 and 'tb.innerHTML' in h3 and 'lowPrice: Math.min(...ps)' in h3, 'al abrir se rehacen la tabla y los datos para Google')
     ok('wa.href = (sin ? conPrecio(x.aviso, x.avisoPos, precio) : conPrecio(x.wa, x.waPos, precio)) || x.wa' in h3,
@@ -1039,7 +1039,7 @@ def probar():
     ok('ilustrativa' not in h.lower() and '<div class="foto"><img id="foto" src="../../fotos/sinfondo/AT-0072-03.webp" alt="Apple iPhone 17 Pro"></div>' in h
        and '"image": ["https://catalogo.advancetecno.com.ar/fotos/AT-0072-03.jpg"]' in h,
        'lo nuevo, como antes: sin cartel, con su foto en og:image y en los datos para Google')
-    ok('WhatsApp +54 9 11 2475-1466' in h3 and 'Ver en el mapa' in h3, 'el pie con el WhatsApp y el mapa')
+    ok('WhatsApp +54 9 11 0000-0000' in h3 and 'Ver en el mapa' in h3, 'el pie con el WhatsApp y el mapa (un numero de mentira)')
     d0 = descripcion_corta(dict(m, stock=False), 12)
     ok(d0 == descripcion_corta(m, 12) and d0.startswith('Apple iPhone 17 Pro: ') and '  ' not in d0,
        'W3-06: con o sin stock la descripcion es la misma (el stock cambia todos los dias), con el nombre y sin doble espacio')

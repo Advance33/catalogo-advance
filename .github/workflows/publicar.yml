@@ -1,0 +1,134 @@
+# Publicar el catálogo en GitHub Pages con la portada sin comentarios
+# (auditoría 04/11/2026, TG-04; Benja dijo que sí el 05/11).
+#
+# index.html pesa ~1 MB y el 42 % son comentarios: la documentación del
+# código, que se queda en el repo. Lo que se publica es una copia del repo
+# con index.html sin comentarios (.github/publicar/minificar.js, con terser),
+# y todo lo demás igual, byte a byte: producto/, p/, fotos/, datos/, marian/,
+# sitemap.xml, robots.txt, 404.html, CNAME… Los archivos ocultos (.gitignore,
+# .nojekyll…) no se publican: no hacen falta para el sitio.
+#
+# Antes de publicar, .github/publicar/verificar.py abre en Chrome la portada
+# del repo y la sin comentarios, con los datos de ADVAPP del momento y la
+# medición apagada, y compara. Si a la copia le falta un archivo, o la
+# portada sin comentarios tira un error de JavaScript que la otra no tira, o
+# no dibuja lo mismo, el workflow falla y NO publica: queda lo que estaba.
+#
+# Cuándo corre:
+#   - push a main (un merge o PUBLICAR): arma, verifica y publica.
+#   - un PR a main que toque index.html o .github/: arma y verifica, sin
+#     publicar. Así un cambio que rompa la copia se ve antes del merge.
+#   - a mano (Actions › Publicar el catálogo › Run workflow): igual que un
+#     push. Con "esperar_fuente" tildado, si Pages todavía publica desde la
+#     rama, espera hasta 15 minutos a que cambie y publica apenas cambia
+#     (es para el primer cambio de Settings › Pages › Source, sin que la web
+#     quede sin publicar ni un minuto).
+#
+# Mientras Settings › Pages › Source diga "Deploy from a branch", este
+# workflow arma y verifica pero NO publica: lo sigue publicando GitHub desde
+# la rama, como siempre. Publica recién cuando Source diga "GitHub Actions".
+name: Publicar el catálogo
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths: ['index.html', '.github/**']
+  workflow_dispatch:
+    inputs:
+      esperar_fuente:
+        description: 'Esperar (hasta 15 min) a que Settings › Pages › Source diga "GitHub Actions" y publicar apenas cambie'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  armar:
+    name: Armar y verificar
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: armar-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar terser (versión fija)
+        run: npm install --no-save --no-audit --no-fund --prefix "$RUNNER_TEMP/minificador" terser@5.31.6
+
+      - name: Copiar el sitio y sacar los comentarios de index.html
+        env:
+          TERSER: ${{ runner.temp }}/minificador/node_modules/terser
+        run: |
+          rsync -a --exclude='.*' ./ "$RUNNER_TEMP/sitio/"
+          node .github/publicar/minificar.js index.html "$RUNNER_TEMP/sitio/index.html"
+
+      - name: Verificar que la copia anda igual que la del repo
+        run: python3 .github/publicar/verificar.py . "$RUNNER_TEMP/sitio"
+
+      - name: Guardar la copia para publicarla
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/sitio
+          retention-days: 1
+
+  fuente:
+    name: ¿Pages publica con GitHub Actions?
+    needs: armar
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      pages: read
+    outputs:
+      publicar: ${{ steps.ver.outputs.publicar }}
+    steps:
+      - id: ver
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ESPERAR: ${{ github.event_name == 'workflow_dispatch' && inputs.esperar_fuente }}
+          ES_MAIN: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+        run: |
+          fuente() { gh api "repos/$GITHUB_REPOSITORY/pages" --jq .build_type 2>/dev/null || echo "no se pudo leer"; }
+          t=$(fuente)
+          echo "Settings › Pages › Source: $t (legacy = desde la rama; workflow = GitHub Actions)"
+          if [ "$ES_MAIN" = true ] && [ "$t" != workflow ] && [ "$ESPERAR" = true ]; then
+            echo "::notice::Esperando hasta 15 minutos a que Settings › Pages › Source pase a GitHub Actions..."
+            for i in $(seq 1 180); do
+              sleep 5
+              t=$(fuente)
+              [ "$t" = workflow ] && break
+            done
+          fi
+          if [ "$ES_MAIN" = true ] && [ "$t" = workflow ]; then
+            echo "publicar=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "publicar=false" >> "$GITHUB_OUTPUT"
+            if [ "$ES_MAIN" = true ]; then
+              echo "::notice::Pages todavía publica desde la rama main (fuente: $t). Esta copia no se publica; el sitio sigue publicándose como siempre."
+            fi
+          fi
+
+  publicar:
+    name: Publicar
+    needs: [armar, fuente]
+    if: needs.fuente.outputs.publicar == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      pages: write
+      id-token: write
+    # Una publicación a la vez y sin cortar la que está en curso (como el
+    # ejemplo de GitHub); si llegan varias, se publica la última.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

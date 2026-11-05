@@ -7132,6 +7132,21 @@ function parecidasDeOido(w){
   return (V.oido.get(claveDeOido(w)) || []).filter(v => v !== w).slice(0, 2);
 }
 
+/* ¿La palabra escrita (ya preparada, solo letras) empieza alguna palabra del
+   catálogo? coincide() la busca en cualquier lado, y "soni" encontraba 5
+   Panasonic por el "panaSONIc" y nunca llegaba a Sony (Atención, 05/11/2026).
+   Es coincide() con la palabra pegada al principio: el texto, el plural, las
+   compactas y los tramos del ID. */
+function alPrincipio(x){
+  const empieza = new RegExp('(?:^|[^a-z0-9])' + escRe(x.w));
+  const raices = x.raices.map(re => new RegExp('(?:^|[^a-z0-9])' + re.source));
+  return MODELOS.some(m => {
+    const b = buscableDe(m);
+    return empieza.test(b.sinId) || raices.some(re => re.test(b.sinId)) ||
+      (!!x.comp && b.comp.includes(' ' + x.comp)) || b.ids.some(id => id.startsWith(x.w) || id.includes('-' + x.w));
+  });
+}
+
 /* La búsqueda corregida, o null si no hay nada que corregir.
      q       lo que se busca (palabras del catálogo, sin tildes);
      mostrar lo que dice el aviso: lo corregido como lo escribe el catálogo y
@@ -7142,7 +7157,11 @@ function parecidasDeOido(w){
    grilla, sus cuentas y el desplegable la piden muchas veces por tecla.
    Desde el 05/11/2026 también lo escrito como suena (ver ESCRITO_DE_OIDO):
    cada palabra prueba la lista, después el tipeo y después cómo suena; y dos
-   o tres palabras de la lista pegadas ("mac buk") cuentan como una. */
+   o tres palabras de la lista pegadas ("mac buk") cuentan como una.
+   Y la palabra que encuentra algo pero solo ADENTRO de otra ("soni", en
+   "panasonic") prueba lo mismo: si la lista o la corrección encuentran una
+   palabra que empieza así ("sony"), gana eso, con el aviso; si no, se busca
+   como está. Lo que empieza una palabra no se toca: "iphon", "sams", "auri". */
 function correccionDe(q){
   const t = norm(q);
   if(!t || !MODELOS.length) return null;
@@ -7165,11 +7184,15 @@ function correccionDe(q){
     if(pegadas){ pedazos.push(pegadas); i += pegadas.k; continue; }
     const w = ws[i];
     let lista = [w];
-    if(w.length >= 4 && /^[a-z]+$/.test(w) && !MODELOS.some(m => coincide(m, [prep[i]]))){
+    const letras = w.length >= 4 && /^[a-z]+$/.test(w);
+    const tal = letras && MODELOS.some(m => coincide(m, [prep[i]]));
+    const adentro = tal && !alPrincipio(prep[i]);   // ver arriba: "soni"
+    if(letras && (!tal || adentro)){
       // La lista, si encuentra algo; si no, el tipeo y cómo suena detrás
       const de = palabraDeOido(w);
-      const c = de && encuentra(de) ? [de]
+      let c = de && encuentra(de) ? [de]
         : [...new Set([de, ...candidatosDeTipeo(w), ...parecidasDeOido(w)].filter(Boolean))].slice(0, 3);
+      if(adentro) c = c.filter(v => alPrincipio(prepararBusqueda(v)[0]));
       if(c.length) lista = c;
     }
     pedazos.push({ w, escrita: escritas[i] || w, lista });

@@ -12,8 +12,12 @@
 //       palabras pegadas ("mac buk", "ai fon", "jota be ele")
 //   [2] los numeros no se tocan: "jaifon 17" es "iphone 17" y "jaifon 18"
 //       nunca pasa a 17
-//   [3] manda lo escrito: lo que encuentra algo tal cual no se corrige
-//       ("iphon", "samsun", "switch", "play station", "soni")
+//   [3] manda lo escrito: lo que encuentra algo tal cual al principio de una
+//       palabra no se corrige ("iphon", "samsun", "switch", "play station",
+//       ni ningun principio de una palabra del catalogo); lo que encuentra
+//       solo ADENTRO de otra palabra ("soni", en "panasonic") va a la
+//       correccion que empieza asi ("sony"), y si no hay, queda como esta
+//       ("pods", "book")
 //   [4] la lista: cada escritura lleva a lo suyo con el catalogo de hoy, no
 //       hay dos iguales al oido que vayan a lugares distintos, ninguna es una
 //       palabra del catalogo, y va antes que el tipeo ("eirpods" son AirPods,
@@ -121,11 +125,33 @@ async function odPruebas(){
   {
     for(const q of ['iphon', 'samsun', 'airpod', 'switch', 'nintendo switch', 'play station', 'playstation', 'gopro', 'go pro',
                     'insta 360', 'rayban', 'ray ban', 'camara', 'cámara', 'auriculares', 'auri', 'cargador', 'joystick',
-                    'watch', 'dyson', 'canon', 'nikon', 'sony', 'soni', 'fujifilm', 'dji', 'motorola', 'jbl', 'iphone',
+                    'watch', 'dyson', 'canon', 'nikon', 'sony', 'pana', 'sams', 'fujifilm', 'dji', 'motorola', 'jbl', 'iphone',
                     'ipad', 'airpods', 'macbook', 'samsung', 'xiaomi', 'mac', 'air', 'iphone 17', 'ps5']){
       if(!odTalCual(q)){ info(`[3] hoy "${q}" no encuentra nada tal cual`); continue; }
       const c = correccionDe(q);
       ok(!c, `[3] "${q}" se busca tal cual`, c ? c.q : '');
+    }
+    // Ningun principio de una palabra del catalogo que encuentra algo se corrige
+    const principios = new Set();
+    for(const [v] of palabrasDelCatalogo()) for(let n = 4; n <= v.length; n++) principios.add(v.slice(0, n));
+    const tocados = [...principios].filter(p => odTalCual(p) && correccionDe(p)).map(p => p + '→' + correccionDe(p).q);
+    ok(!tocados.length, `[3] ninguno de los ${principios.size} principios de palabras del catalogo se corrige`, tocados.slice(0, 6).join(', '));
+    // Solo adentro de otra palabra: "soni" esta en "panasonic"
+    const pana = MODELOS.filter(m => /panasonic/.test(norm(m.marca + ' ' + m.desc)));
+    if(pana.length && odTalCual('sony')){
+      const ls = odLista('soni'), lb = odLista('sony');
+      ok(odClaves(ls) === odClaves(lb) && !ls.some(m => pana.includes(m)),
+         `[3] "soni" (adentro de "panasonic") trae los ${lb.length} Sony, no los ${pana.length} Panasonic`, ls.slice(0, 3).map(m => m.marca + ' ' + m.desc).join(', '));
+      ok(avisoDeCorreccion('soni') === odAviso('sony'), '[3] y avisa «Mostrando resultados de “sony”»', avisoDeCorreccion('soni') || 'sin aviso');
+      const c = correccionDe('soni a7');
+      if(odTalCual('sony a7')) ok(!!c && c.hay && c.q === 'sony a7', '[3] "soni a7" busca "sony a7"', c && c.q);
+      ok(!correccionDe('pana') && odLista('pana').some(m => pana.includes(m)), '[3] "pana" empieza "panasonic": sigue trayendo los Panasonic');
+    }else info('[3] hoy no hay Panasonic o Sony: no se prueba "soni"');
+    // Adentro de otra palabra y sin nada que empiece asi: queda como esta
+    for(const q of ['pods', 'book', 'phone', 'station']){
+      if(!odTalCual(q)){ info(`[3] hoy "${q}" no encuentra nada`); continue; }
+      const c = correccionDe(q);
+      ok(!c || !c.hay, `[3] "${q}" (adentro de otra palabra) se busca como esta`, c ? c.q : '');
     }
   }
 

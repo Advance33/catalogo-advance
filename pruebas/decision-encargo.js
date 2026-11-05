@@ -148,13 +148,23 @@ async function probarLaPortada(){
      enTxt(sony.querySelector('.en-det')) === 'Auriculares inalámbricos con cancelación de ruido · Negro' &&
      enTxt(sony.querySelector('.en-precio')) === 'USD 470' && enTxt(sony.querySelector('.en-pie small')) === 'precio final',
      'marca, nombre, detalle y precio en dolares tal cual, en la etiqueta oscura', enTxt(sony));
-  const pub = sony.querySelector('a.en-publicacion');
-  ok(pub && enTxt(pub) === 'Ver la publicación ↗' && pub.getAttribute('href') === 'https://tienda.example/sony-wh-1000xm5?id=7' &&
+  const pub = sony.querySelector('a.en-tienda');
+  ok(pub && enTxt(pub) === 'Ver en la tienda ↗' && pub.getAttribute('href') === 'https://tienda.example/sony-wh-1000xm5?id=7' &&
      pub.target === '_blank' && /\bnoopener\b/.test(pub.rel) && /\bnoreferrer\b/.test(pub.rel) && /\bnofollow\b/.test(pub.rel) &&
-     !kindle.querySelector('.en-publicacion') && !garmin.querySelector('.en-publicacion'),
-     'con link, «Ver la publicación ↗» en otra pestaña; sin link (o con uno que no sirve), nada', pub && pub.outerHTML.slice(0, 120));
-  ok(cards.every(c => c.querySelectorAll('a.en-consultar').length === (WHATSAPP ? 1 : 0) && !c.querySelector('.en-publicacion[href*="wa.me"]')),
+     pub.closest('.en-acciones') && (!WHATSAPP || pub.previousElementSibling === sony.querySelector('a.en-consultar')) &&
+     !kindle.querySelector('.en-tienda') && !garmin.querySelector('.en-tienda'),
+     'con link, «Ver en la tienda ↗» al lado del Consultar, en otra pestaña; sin link (o con uno que no sirve), nada (Benja 05/11)', pub && pub.outerHTML.slice(0, 120));
+  ok(cards.every(c => c.querySelectorAll('a.en-consultar').length === (WHATSAPP ? 1 : 0) && !c.querySelector('.en-tienda[href*="wa.me"]')),
      'el Consultar sigue siendo uno solo por tarjeta');
+  // Los botones, chicos (Benja 05/11: «el botón de consultar de WhatsApp es muy grande»)
+  const cons = sony.querySelector('a.en-consultar'), caja = sony.querySelector('.en-pie');
+  if(cons){
+    const rc = cons.getBoundingClientRect(), rt = pub.getBoundingClientRect(), rp = caja.getBoundingClientRect(), rs = sony.getBoundingClientRect();
+    ok(rc.height >= 38 && rc.height <= 46 && Math.abs(rt.height - rc.height) < 1.5 && rc.height <= rp.height &&
+       rc.width < rs.width / 2 && rt.width < rs.width / 2,
+       'Consultar y «Ver en la tienda» de alto normal (40 px) y del ancho del texto: no compiten con el precio',
+       `Consultar ${Math.round(rc.width)}x${Math.round(rc.height)} · tienda ${Math.round(rt.width)}x${Math.round(rt.height)} · precio ${Math.round(rp.height)} · tarjeta ${Math.round(rs.width)}`);
+  }
   ok(cards.every(c => !c.querySelector('.en-id') && !/ENC-\d/.test(enTxt(c))),
      'el codigo ENC no se ve en la tarjeta (va en el mensaje de WhatsApp)');
   ok(sony.querySelector('.en-img img')?.getAttribute('src') === 'https://www.sony.com/image/ejemplo.png' &&

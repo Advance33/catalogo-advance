@@ -1310,21 +1310,25 @@ window.ADVAPP_TEMPRANO = (() => {
   .en-nom{margin:0;font:400 19px/1.05 var(--display);letter-spacing:.005em;text-transform:uppercase;overflow-wrap:anywhere;color:var(--ink)}
   .en-det{margin:0;font:400 13px/1.4 var(--sans);color:var(--muted)}
   .en-gar{margin:0;font:500 12.5px/1.35 var(--sans);color:var(--ok)}
-  /* El link a la publicación (Benja 04/11, opción A): chico y aparte del Consultar */
-  .en-publicacion{align-self:flex-start;padding:3px 0;font:600 12.5px/1.3 var(--sans);color:var(--acento);
-                  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
-  .en-publicacion:hover{color:var(--glow)}
-  /* El precio en la etiqueta oscura, como en la grilla, y al lado el botón */
-  .en-fila{grid-column:2;align-self:end;display:flex;align-items:stretch;flex-wrap:wrap;gap:8px}
-  .en-pie{flex:1 1 150px;display:flex;flex-direction:column;justify-content:center;gap:5px;min-height:44px;
+  /* El precio en la etiqueta oscura, como en la grilla, a su ancho; al lado (o
+     abajo, si no entran) los dos botones, chicos y del ancho del texto (Benja
+     05/11: «el botón de consultar de WhatsApp es muy grande, no me gusta»).
+     Consultar es el de Recién llegados (contorno violeta, con el ícono) y «Ver
+     en la tienda», que antes era un link que casi no se veía, el secundario. */
+  .en-fila{grid-column:2;align-self:end;display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px}
+  .en-pie{flex:0 0 auto;min-width:150px;display:flex;flex-direction:column;justify-content:center;gap:5px;min-height:44px;
           padding:9px 12px;border-radius:12px;background:var(--ink);color:#fff}
   .en-precio{font:400 23px/.92 var(--display);letter-spacing:.01em}
   .en-pie small{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A597C4}
   /* Los pesos, como el .ars de la tarjeta del catálogo (Benja 04/11) */
   .en-pie .en-ars{font:500 11.5px/1 var(--mono);letter-spacing:.03em;color:#A597C4;font-style:normal}
-  .en-consultar{flex:1 1 150px;justify-content:center;background:var(--acento);border-color:var(--acento);color:#fff;
-                box-shadow:0 12px 24px -14px rgba(124,58,237,.9)}
-  .en-consultar:hover{background:var(--glow);border-color:var(--glow)}
+  .en-acciones{display:flex;flex-wrap:wrap;gap:8px}
+  .en-consultar{min-height:40px;padding:0 14px;font-size:11px}
+  .en-consultar svg{width:16px;height:16px}
+  .en-tienda{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;text-decoration:none;
+             background:var(--surface);border:1px solid var(--line);color:var(--ink);white-space:nowrap;
+             font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+  .en-tienda:hover{border-color:var(--acento);color:var(--acento)}
   /* «¿Buscás otro producto?» con su botón a la izquierda (Benja 04/11: «en PC
      se tapan un poco»): abajo a la derecha están Marian y el WhatsApp
      flotante, así que ese rincón de la sección queda libre */
@@ -1350,6 +1354,8 @@ window.ADVAPP_TEMPRANO = (() => {
     .en-prod{grid-template-columns:96px minmax(0,1fr);gap:12px}
     .en-img{grid-row:auto;font-size:14px}
     .en-fila{grid-column:1 / -1}
+    /* A 390 Consultar y «Ver en la tienda» entran lado a lado (05/11); en 360 o menos, uno abajo del otro */
+    .en-consultar,.en-tienda{padding:0 12px;font-size:10.5px;letter-spacing:.06em}
   }
   /* La cinta (19/10): las reseñas pasan solas de costado y se frenan con el
      mouse encima, al tocarlas (toman el foco) o con una abierta en "Leer
@@ -11750,7 +11756,8 @@ function irDesdeNav(id){
    que rechaza los textos que la nombran y las fotos de su CDN. El link de la
    publicación sí (Benja 04/11, opción A: «Que se ponga el link de producto,
    así el cliente ve todo lo que incluye. Así saben qué link se compra»):
-   llega limpio de ADVAPP y va en un link chico, aparte del Consultar. Acá no
+   llega limpio de ADVAPP y va en un botón chico «Ver en la tienda ↗», al lado
+   del Consultar (Benja 05/11: el link de antes casi no se veía). Acá no
    se nombra la tienda a propósito: este repo es público.
    El pago, en un renglón y sin montos ni planes: con seña (Benja, 03/11:
    «Sí, con seña»; nunca cuánto, porque deja deducir el precio de origen) y
@@ -11893,11 +11900,12 @@ function htmlEncargo(){
         <h3 class="en-nom">${esc(p.nombre)}</h3>
         ${p.detalle ? `<p class="en-det">${esc(p.detalle)}</p>` : ''}
         ${p.garantia ? `<p class="en-gar">${esc(garantia)}</p>` : ''}
-        ${p.link ? `<a class="en-publicacion" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer nofollow">Ver la publicación ↗</a>` : ''}
       </div>
       <div class="en-fila">
         <div class="en-pie"><b class="en-precio">USD ${plata(p.precio)}</b>${ars ? `<i class="en-ars">${ars}</i>` : ''}<small>precio final</small></div>
-        ${link ? `<a class="nv-consultar en-consultar" href="${link}" target="_blank" rel="noopener">${ICONO_WA}Consultar</a>` : ''}
+        ${link || p.link ? `<div class="en-acciones">${
+          link ? `<a class="nv-consultar en-consultar" href="${link}" target="_blank" rel="noopener">${ICONO_WA}Consultar</a>` : ''}${
+          p.link ? `<a class="en-tienda" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer nofollow">Ver en la tienda ↗</a>` : ''}</div>` : ''}
       </div>
     </article>`;
   };

@@ -109,6 +109,19 @@ si alguna falta).
                   boton con la cantidad; "Preguntanos si lo conseguimos"
                   cuando no esta en ningun lado; y el precio que no sirve en
                   el rubro nuevo se saca con aviso.
+  decision-marcas-busqueda.js
+                  Las marcas en una busqueda (Benja, 05/11/2026: "busque
+                  tablets y no figuran los filtros para saber de que marca
+                  quiero"): buscando sin rubro, con 2 marcas o mas, los
+                  botones de marca con su cuenta como en un rubro (la
+                  direccion suma &marca= sin perder el ?q= y el Atras vuelve);
+                  Filtrar suma "Marca" y se combina con Precio y Stock; la
+                  busqueda que nombra un rubro ("tablets", "celulares",
+                  "notebooks", "camaras", "lentes") ofrece sus filtros (memoria
+                  y RAM, montura, tipo de camara), que se sueltan cuando deja
+                  de nombrarlo; y lo que no cambia: una sola marca sin
+                  botones, "Todo el catalogo" sin botones, y adentro de un
+                  rubro todo como estaba.
   decision-ficha.js
                   Las decisiones 4.1, 4.3, 4.4 y 4.5 de Pedro (29/09), y la
                   parte de la web de la 4.2: el boton Compartir al lado de

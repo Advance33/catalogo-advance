@@ -4479,12 +4479,26 @@ const MUNDOS = [
 //   rubro    → el rubro donde se ofrece, como se muestra ("Objetivo", no "Lente")
 //   titulo   → el rótulo del grupo en el panel
 //   opciones → [valor, texto]. Lo que va después de " · " es la aclaración.
+//   prefijo  → (si hace falta) lo que va delante en la cruz de arriba de la
+//              grilla: "Para Canon", no "Canon", que se confunde con la marca.
 //
 // Nada de esto se carga a mano ni se inventa: sale del SKU de ADVAPP y del
 // nombre del producto (ver rasgosDe). Si de un producto no se puede saber, se
 // queda sin ese dato: no entra en ninguna opción y se ve con el filtro sacado.
 // Una opción sin productos hoy no se ofrece (como todas las del panel).
+//
+// La montura de las cámaras y los dos de los accesorios son del 04/11/2026
+// (Benja, en "Accesorios Cámara": "acá estaría bueno que puedan filtrar
+// monturas y demás"). La de las cámaras va aparte de la de los objetivos
+// (campo `montura`, ?montura=Sony%20E): esa es la del lente y sale del SKU; la
+// del cuerpo sale del nombre del modelo (monturaDelCuerpo, con las reglas de
+// MONTURAS_DEL_CUERPO), y una compacta o una instantánea no tiene ninguna. Los
+// textos son los mismos que en Objetivos, así "Sony E" dice lo mismo en los dos.
 const FILTROS_RUBRO = [
+  { campo: 'bayoneta', rubro: 'Cámara', titulo: 'Montura',
+    opciones: [['canon-ef', 'Canon EF'], ['canon-ef-m', 'Canon EF-M'], ['canon-rf', 'Canon RF'],
+               ['fujifilm-g', 'Fujifilm G'], ['fujifilm-x', 'Fujifilm X'], ['l-mount', 'L-Mount'],
+               ['micro-4-3', 'Micro 4/3'], ['nikon-f', 'Nikon F'], ['nikon-z', 'Nikon Z'], ['sony-e', 'Sony E']] },
   { campo: 'tipo',   rubro: 'Cámara',   titulo: 'Tipo de cámara',
     opciones: [['sin-espejo', 'Sin espejo'], ['reflex', 'Réflex'], ['compacta', 'Compacta'],
                ['instantanea', 'Instantánea'], ['cine', 'Cine y video']] },
@@ -4499,6 +4513,18 @@ const FILTROS_RUBRO = [
                ['tele', 'Teleobjetivo · 85 mm o más']] },
   { campo: 'combo',  rubro: 'Drone',    titulo: 'Viene con',
     opciones: [['solo', 'Sin combo'], ['combo', 'Con combo']] },
+  /* Para qué cámaras es el accesorio, por marca (no por modelo: la LP-E6P es
+     "Canon" aunque no le entre a una R10). Un micrófono o un estabilizador
+     que sirve para cualquiera, o que es para el celular, no entra en ninguna. */
+  { campo: 'para', rubro: 'Accesorio Cámara', titulo: 'Para cámaras', prefijo: 'Para ',
+    opciones: [['canon', 'Canon'], ['dji', 'DJI'], ['fujifilm', 'Fujifilm'], ['gopro', 'GoPro'],
+               ['insta360', 'Insta360'], ['instax-mini', 'Instax mini'], ['instax-square', 'Instax Square'],
+               ['instax-wide', 'Instax Wide'], ['nikon', 'Nikon'], ['sony', 'Sony']] },
+  { campo: 'accesorio', rubro: 'Accesorio Cámara', titulo: 'Tipo de accesorio',
+    opciones: [['adaptadores', 'Adaptadores'], ['baterias', 'Baterías'], ['cargadores', 'Cargadores'],
+               ['remotos', 'Controles remotos'], ['estabilizadores', 'Estabilizadores'], ['filtros', 'Filtros'],
+               ['flashes', 'Flashes'], ['grips', 'Grips'], ['memorias', 'Memorias'], ['microfonos', 'Micrófonos'],
+               ['peliculas', 'Películas'], ['tripodes', 'Trípodes']] },
 ];
 // Todos sin elegir: para arrancar `filtros` y para cada "sacar todo"
 const SIN_PROPIOS = Object.fromEntries(FILTROS_RUBRO.map(f => [f.campo, '']));
@@ -6504,9 +6530,17 @@ function rasgosDe(p){
     if(/\bcinema\b|\bvideo\b/.test(todo) || (marca === 'sony' && /\bfx\d/.test(nombre))) tipo.push('cine');
     r.tipo = tipo;
     // Solo las de objetivo intercambiable: en una compacta no hay nada que elegir
-    r.equipo = tipo.includes('compacta') || tipo.includes('instantanea') ? []
+    const fijo = tipo.includes('compacta') || tipo.includes('instantanea');
+    r.equipo = fijo ? []
              : /^BODY/.test(tramo) ? ['cuerpo'] : /^K\d/.test(tramo) ? ['kit']
              : /\bbody\b/.test(nombre) ? ['cuerpo'] : /\bkit\b/.test(nombre) ? ['kit'] : [];
+    /* La montura del cuerpo (04/11/2026): la del nombre del modelo, con las
+       reglas de MONTURAS_DEL_CUERPO. El SKU de las cámaras no la trae. */
+    const montura = fijo ? '' : monturaDelCuerpo(p);
+    r.bayoneta = montura ? [valorPropio('bayoneta', montura)].filter(Boolean) : [];
+  }else if(cat === 'accesorio camara'){
+    r.para = paraDelAccesorio(p, nombre, tramo);
+    r.accesorio = tipoDelAccesorio(p, nombre, tramo);
   }else if(cat === 'objetivo'){
     /* La distancia focal: "50mm" o "24-70mm" en el nombre. Sin "mm" (los
        teleconversores, "RF 1.4X Extender") no hay focal y no se inventa. */
@@ -6527,6 +6561,89 @@ const tieneRasgo = (p, campo, valor) => ((p.rasgos || {})[campo] || []).includes
 const textoPropio = (campo, valor) =>
   ((FILTROS_RUBRO.find(f => f.campo === campo) || { opciones: [] }).opciones.find(o => o[0] === valor) || [0, valor])[1];
 const textoPropioCorto = (campo, valor) => String(textoPropio(campo, valor)).split(' · ')[0];
+// Al revés: el valor de la opción que dice ese texto ("Sony E" → 'sony-e'), o ''
+const valorPropio = (campo, texto) =>
+  ((FILTROS_RUBRO.find(f => f.campo === campo) || { opciones: [] }).opciones.find(o => o[1] === texto) || [''])[0];
+
+/* ---- Los accesorios de cámara (04/11/2026, Benja: "filtrar monturas y demás") ----
+
+   PARA QUÉ CÁMARAS ES. De lo más firme a lo menos, y vale lo primero que
+   diga algo:
+     1. el final del SKU, cuando ADVAPP pone ahí la marca de la cámara: el
+        flash Sigma EF-630 viene para cada una ("ACM-SIG-EF630-000-000-NIK");
+     2. el nombre, cuando dice "para Canon";
+     3. la línea del accesorio en el nombre, que es de una sola marca: las
+        baterías LP-E son de Canon, las EN-EL de Nikon, las NP-FZ y NP-FW
+        (o "FZ-100", "FW-50") de Sony, las NP-W de Fujifilm, la película
+        Instax de las Instax, y lo que dice "Osmo Action" o "Hero 12", de esa
+        cámara;
+     4. el código de marca del SKU ("ACM-CAN-…"). En los de otra marca
+        (SmallRig) ADVAPP pone ahí la de la cámara ("ACM-SON-FW50USBC-…").
+   Si 3 y 4 dicen marcas distintas no va ninguna: una de las dos está mal
+   cargada en ADVAPP y la web no elige cuál. DJI no se toma del SKU: sus
+   accesorios de este rubro no son para cámaras DJI (el Osmo Mobile es un
+   estabilizador para el celular); entra solo si el nombre lo dice. Lo que es
+   para el celular, o para cualquier cámara (un micrófono inalámbrico), queda
+   sin marca. */
+const PARA_DEL_SKU = { CAN: 'canon', NIK: 'nikon', SON: 'sony', SONY: 'sony', FUJ: 'fujifilm', GPR: 'gopro' };
+const PARA_DEL_NOMBRE = [[/\bcanon\b/, 'canon'], [/\bnikon\b/, 'nikon'], [/\bsony\b/, 'sony'],
+                         [/\bfuji(?:film)?\b/, 'fujifilm'], [/\bgo\s?pro\b/, 'gopro'], [/\bdji\b/, 'dji'],
+                         [/\binsta\s?360\b/, 'insta360']];
+const PARA_DE_LA_LINEA = [[/\blp-?e\d/, 'canon'], [/\ben-?el\s?\d/, 'nikon'],
+                          [/\bnp-?f[zw]\d|\bf[zw]-?\d{2,3}\b/, 'sony'], [/\bnp-?w\d/, 'fujifilm'],
+                          [/\binstax\b/, 'fujifilm'], [/\bosmo\s+(?:pocket|action|nano|360)\b/, 'dji'],
+                          [/\bhero\s?\d{1,2}\b/, 'gopro']];
+function paraDelAccesorio(p, nombre, tramo){
+  if(/\bpara\s+(?:el\s+)?(?:celular|smartphone|telefono|iphone)\b/.test(nombre)) return [];
+  const marcasEn = (lista, t) => [...new Set(lista.filter(([re]) => re.test(t)).map(([, v]) => v))];
+  const tras = /\bpara\s+(.+)$/.exec(nombre);
+  const delNombre = tras ? marcasEn(PARA_DEL_NOMBRE, tras[1]) : [];
+  const deLaLinea = marcasEn(PARA_DE_LA_LINEA, nombre);
+  const bloque = String(p.skuVariante || '').toUpperCase().split('-')[1] || '';
+  const delSku = PARA_DEL_SKU[bloque] ? [PARA_DEL_SKU[bloque]] : [];
+  let para = PARA_DEL_SKU[tramo] ? [PARA_DEL_SKU[tramo]]
+           : delNombre.length ? delNombre
+           : deLaLinea.length && delSku.length && deLaLinea.join() !== delSku.join() ? []
+           : deLaLinea.length ? deLaLinea : delSku;
+  // La película es de su formato: la Instax mini no entra en una Instax Wide
+  const instax = /\binstax\s+(mini|square|wide)\b/.exec(nombre);
+  if(instax) para = para.map(v => v === 'fujifilm' ? 'instax-' + instax[1] : v);
+  return para;
+}
+
+/* QUÉ ES. Por el nombre que ve el cliente y, si no dice nada, por el del
+   proveedor. Puede ser dos cosas: el kit de SmallRig trae 2 baterías y el
+   cargador. Tres cuidados:
+     · "Batería Grip BG-R20" es un grip, no una batería;
+     · "Batería Cargador Sony BC-QZ1" es un cargador (battery charger): con
+       "cargador" en el nombre, es también batería solo si dice cuántas trae
+       ("2 Baterías + Cargador") o lo dicen Incluye ("+ 2 Baterías") o el
+       final del SKU ("-2BAT", "-2BATCAR");
+     · "Fujifilm" no es "film" (el \b no la agarra). */
+const TIPOS_DE_ACCESORIO = [
+  ['adaptadores',     /\badaptador(?:es)?\b|\badapter\b/],
+  ['cargadores',      /\bcargador(?:es)?\b|\bcharger\b/],
+  ['remotos',         /\bcontrol(?:es)?\s+remotos?\b|\bdisparador(?:es)?\b|\bremote\b/],
+  ['estabilizadores', /\bestabilizador(?:es)?\b|\bgimbal\b|\bosmo\s+mobile\b|\bronin\b/],
+  ['filtros',         /\bfiltros?\b/],
+  ['flashes',         /\bflash(?:es)?\b|\bspeedlite\b/],
+  ['grips',           /\bgrips?\b|\bempunadura\b/],
+  ['memorias',        /\bmemorias?\b|\b(?:micro\s?sd|sdxc|sdhc|cfexpress|xqd|cfast)\b/],
+  ['microfonos',      /\bmicrofonos?\b|\bmic\b/],
+  ['peliculas',       /\bpeliculas?\b|\brollos?\b|\bfilm\b/],
+  ['tripodes',        /\btripodes?\b|\bmonopie\b/],
+];
+function tipoDelAccesorio(p, nombre, tramo){
+  const leer = t => {
+    const tipos = TIPOS_DE_ACCESORIO.filter(([, re]) => re.test(t)).map(([v]) => v);
+    const dichas = /\d\s*(?:x\s*)?bater|\+\s*\d*\s*bater/.test(t) || /\bbater/.test(norm(p.incluye)) || /\dBAT/.test(tramo);
+    const bateria = /\bbaterias?\b/.test(t)
+      ? !tipos.includes('grips') && (!tipos.includes('cargadores') || dichas) : dichas;
+    return bateria ? ['baterias', ...tipos] : tipos;
+  };
+  const delNombre = leer(nombre);
+  return delNombre.length ? delNombre : leer(norm(p.modelo));
+}
 
 // Cómo lo identificamos en el pedido y en el link compartido. Casi todos
 // tienen ID; si alguna fila viniera sin él, usamos su posición en la planilla.
@@ -9378,21 +9495,46 @@ const MUNDO_DE_LA_MARCA = ['Celular', 'Tablet', 'E-Reader', 'Smartwatch', 'Auric
      · Canon EOS M…                    → EF-M
      · Nikon Z… (Z30, Z6 II, ZR, Z8)   → Z;   Nikon D…  → F
      · Sony Alfa, ZV-E, FX             → E
-     · PowerShot, DSC RX, Instax…      → ninguna: son de lente fijo */
+     · PowerShot, DSC RX, Instax…      → ninguna: son de lente fijo
+   Desde el 04/11/2026 cada regla dice además la montura del cuerpo, la del
+   filtro "Montura" de Cámaras (monturaDelCuerpo): un 2000D es "Canon EF"
+   aunque le entren los EF-S, y una R10 "Canon RF" aunque le entren los RF-S.
+   Ese día se sumaron las que faltaban o se conocen igual de bien:
+     · Fujifilm X-T, X-S, X-H, X-E, X-M, X-A, X-Pro → X  (las X100 y XF10
+       son de lente fijo y no entran);   GFX → G
+     · Panasonic Lumix S… → L-Mount;   Lumix G, GH, GX, GF → Micro 4/3
+     · OM System OM-…, Olympus E-M… → Micro 4/3
+   Y Sony va con el número del modelo: "Alfa 7…", "Alfa 1", "Alfa 9", "Alfa
+   6400". Con "ALFA" a secas, una Alfa 99 o una Alfa 68 (montura A, de las
+   viejas réflex de Sony) habría salido Sony E. */
 const MONTURAS_DEL_CUERPO = [
-  ['canon', /^EOS\s+R/,              ['Canon RF', 'Canon RF-S']],
-  ['canon', /^EOS\s+(?:1D|5D|6D)\b/, ['Canon EF']],
-  ['canon', /^EOS\s+\d{1,4}D\b/,     ['Canon EF-S', 'Canon EF']],
-  ['canon', /^EOS\s+M\d/,            ['Canon EF-M']],
-  ['nikon', /^Z/,                    ['Nikon Z']],
-  ['nikon', /^D\d/,                  ['Nikon F']],
-  ['sony',  /^(?:ALFA|ALPHA|ILCE|ZV-?E|FX\d)/, ['Sony E']],
+  ['canon', /^EOS\s+R/,              ['Canon RF', 'Canon RF-S'], 'Canon RF'],
+  ['canon', /^EOS\s+(?:1D|5D|6D)\b/, ['Canon EF'],               'Canon EF'],
+  ['canon', /^EOS\s+\d{1,4}D\b/,     ['Canon EF-S', 'Canon EF'], 'Canon EF'],
+  ['canon', /^EOS\s+M\d/,            ['Canon EF-M'],             'Canon EF-M'],
+  ['nikon', /^Z/,                    ['Nikon Z'],                'Nikon Z'],
+  ['nikon', /^D\d/,                  ['Nikon F'],                'Nikon F'],
+  ['sony',  /^(?:(?:ALFA|ALPHA)\s?(?:[179](?!\d)|\d{4}(?!\d))|ILCE|ZV-?E|FX\d)/, ['Sony E'], 'Sony E'],
+  ['fujifilm',  /^X-?(?:T|S|H|E|M|A|PRO)\d/, ['Fujifilm X'], 'Fujifilm X'],
+  ['fujifilm',  /^GFX/,                      ['Fujifilm G'], 'Fujifilm G'],
+  ['panasonic', /^(?:LUMIX\s+)?(?:DC-)?S\d/,              ['L-Mount'],   'L-Mount'],
+  ['panasonic', /^(?:LUMIX\s+)?(?:DC-|DMC-)?G[HXF]?\d/,   ['Micro 4/3'], 'Micro 4/3'],
+  ['om system', /^OM-\d/,                    ['Micro 4/3'], 'Micro 4/3'],
+  ['olympus',   /^(?:OM-D\s+)?E-M\d/,        ['Micro 4/3'], 'Micro 4/3'],
 ];
-function monturasDelCuerpo(m){
-  if(norm(m.cat) !== norm('Cámara')) return [];
+function reglaDelCuerpo(m){
+  if(norm(m.cat) !== norm('Cámara')) return null;
   const t = sinMarca(m.desc || '', m.marca).toUpperCase().trim();
-  const r = MONTURAS_DEL_CUERPO.find(([marca, re]) => norm(m.marca) === marca && re.test(t));
+  return MONTURAS_DEL_CUERPO.find(([marca, re]) => norm(m.marca) === marca && re.test(t)) || null;
+}
+function monturasDelCuerpo(m){
+  const r = reglaDelCuerpo(m);
   return r ? r[2] : [];
+}
+// La montura del cuerpo, una sola ("Canon RF"), o '' si no se sabe o no tiene
+function monturaDelCuerpo(m){
+  const r = reglaDelCuerpo(m);
+  return r ? r[3] : '';
 }
 
 // Para qué consola es un accesorio de gaming, por el nombre ("G29 PS5/PS4/PC")
@@ -9547,7 +9689,7 @@ function filtrosActivos(conMarca){
   if(filtros.ram)       a.push(['ram', filtros.ram + ' de RAM']);
   if(filtros.montura)   a.push(['montura', filtros.montura]);
   if(filtros.apertura)  a.push(['apertura', TEXTO_APERTURA[filtros.apertura] || filtros.apertura]);
-  FILTROS_RUBRO.forEach(f => { if(filtros[f.campo]) a.push([f.campo, textoPropio(f.campo, filtros[f.campo])]); });
+  FILTROS_RUBRO.forEach(f => { if(filtros[f.campo]) a.push([f.campo, (f.prefijo || '') + textoPropio(f.campo, filtros[f.campo])]); });
   if(filtros.soloStock) a.push(['soloStock', 'Con stock']);
   return a;
 }
@@ -11681,6 +11823,9 @@ function fraseFiltro(c){
   if(c === 'soloStock') return 'con stock';
   if(c === 'ram') return 'de ' + v + ' de RAM';
   if(c === 'montura') return 'con montura ' + v;
+  // La de las cámaras y para qué cámaras es un accesorio (04/11/2026)
+  if(c === 'bayoneta') return 'con montura ' + textoPropio(c, v);
+  if(c === 'para') return 'para cámaras ' + textoPropio(c, v);
   if(c === 'apertura'){
     const [a, b] = String(TEXTO_APERTURA[v] || v).split(' · ');
     return a.toLowerCase() + (b ? ' (' + b + ')' : '');

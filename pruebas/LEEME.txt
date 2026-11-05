@@ -316,6 +316,17 @@ si alguna falta).
                   (fotos/mini/huellas.json) no esta en dos modelos que se
                   ven distintos, salvo los grupos de PERMITIDAS, que por
                   fuera son iguales. Cada falla lleva el ID de ADVAPP.
+  filtros-foto.js Los filtros de foto que pidio Benja el 04/11/2026 ("aca
+                  estaria bueno que puedan filtrar monturas y demas", en
+                  Accesorios Camara): "Montura" en Camaras (la del cuerpo,
+                  del nombre; las compactas e instantaneas no tienen), y
+                  "Para cámaras" (la marca, del SKU o del nombre) y "Tipo de
+                  accesorio" en Accesorios Camara. Cada opcion contada por
+                  otro camino; que funcionen como los de siempre (la cuenta
+                  de cada chip, Precio y Stock juntos, Limpiar, la cruz de
+                  arriba, el link, el Atras, el vacio), y el panel a 390 y
+                  a 1280 px. Lo que queda sin dato sale como "--" con su ID,
+                  para mirarlo en ADVAPP.
   marian.js       Marian, la guia de botones (Benja, 29/10/2026,
                   marian/): que cargue, que sea solo botones y no se
                   presente como IA, que cada pregunta de su menu encuentre

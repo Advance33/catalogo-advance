@@ -141,6 +141,7 @@
 "AT-0085-02.jpg",
 "AT-0085-03.jpg",
 "AT-0085-04.jpg",
+"AT-0085-05.jpg",
 "AT-0086-01.jpg",
 "AT-0086-02.jpg",
 "AT-0086-03.jpg",
@@ -150,6 +151,7 @@
 "AT-0088-01.jpg",
 "AT-0089-01.jpg",
 "AT-0089-02.jpg",
+"AT-0089-03.jpg",
 "AT-0090-01.jpg",
 "AT-0090-02.jpg",
 "AT-0090-03.jpg",
@@ -667,6 +669,7 @@
 "AT-0480-01.jpg",
 "AT-0480-02.jpg",
 "AT-0481-01.jpg",
+"AT-0481-03.jpg",
 "AT-0482-01.jpg",
 "AT-0483-01.jpg",
 "AT-0483-02.jpg",
@@ -830,9 +833,11 @@
 "AT-0581-01.jpg",
 "AT-0582-01.jpg",
 "AT-0583-01.jpg",
+"AT-0583-02.jpg",
 "AT-0584.jpg",
 "AT-0585.jpg",
 "AT-0586.jpg",
+"AT-0587.jpg",
 "AT-0588.jpg",
 "AT-0589.jpg",
 "AT-0590.jpg",
@@ -844,6 +849,7 @@
 "AT-0596.jpg",
 "AT-0597.jpg",
 "AT-0598.jpg",
+"AT-0599.jpg",
 "AT-0600-01.jpg",
 "AT-0601-01.jpg",
 "AT-0602-01.jpg",
@@ -857,13 +863,16 @@
 "AT-0609-01.jpg",
 "AT-0610-01.jpg",
 "AT-0610-02.jpg",
+"AT-0611.jpg",
 "AT-0612-01.jpg",
 "AT-0613-01.jpg",
+"AT-0614-02.jpg",
 "AT-0615-01.jpg",
 "AT-0616-01.jpg",
 "AT-0617-01.jpg",
 "AT-0618-01.jpg",
 "AT-0619-01.jpg",
+"AT-0620.jpg",
 "AT-0621-01.jpg",
 "AT-0621-02.jpg",
 "AT-0622-01.jpg",
@@ -910,7 +919,14 @@
 "AT-0652-01.jpg",
 "AT-0653-01.jpg",
 "AT-0654.jpg",
-"AT-0655-01.jpg"
+"AT-0655-01.jpg",
+"AT-0656-01.jpg",
+"AT-0656-02.jpg",
+"AT-0657-01.jpg",
+"AT-0658.jpg",
+"AT-0659.jpg",
+"AT-0660-01.jpg",
+"AT-0661.jpg"
 ],
 "catalogo": {
 "firmas": {
@@ -2410,7 +2426,8 @@
 "apple|tablet|11:1,512:1,m4:1,pro:1"
 ],
 "AT-0479": [
-"apple|tablet|11:1,256:1,m5:1,pro:1"
+"apple|tablet|11:1,256:1,m5:1,pro:1",
+"apple|tablet|11:1,256:1,m5:1,pro:1,wifi:1"
 ],
 "AT-0480": [
 "apple|tablet|11:1,512:1,m5:1,pro:1",
@@ -2961,6 +2978,24 @@
 ],
 "AT-0655": [
 "dell|notebook|1355u:1,15:1,512:1,8:1,dc15250:1,i7:1"
+],
+"AT-0656": [
+"motorola|celular|256:1,8:1,g17:1"
+],
+"AT-0657": [
+"motorola|celular|256:1,8:1,g56:1"
+],
+"AT-0658": [
+"canon|camara|1:1,105:1,24:1,7:1,f4:1,kit:1,r6:1"
+],
+"AT-0659": [
+"canon|camara|body:1,r8:1"
+],
+"AT-0660": [
+"canon|lente|1:1,100:1,4:1,5:1,500mm:1,7:1"
+],
+"AT-0661": [
+"dell|notebook|16:1,512:1,5440:1,i7:1"
 ]
 },
 "ids": {
@@ -3103,7 +3138,9 @@
 "CAM-CAN-EOSR50V-000-000-K1430": "AT-0559",
 "CAM-CAN-EOSR5M2-000-000-K24105": "AT-0596",
 "CAM-CAN-EOSR6M2-000-000-BODY": "AT-0560",
+"CAM-CAN-EOSR6M2-000-000-K24105": "AT-0658",
 "CAM-CAN-EOSR7-000-000-BODY": "AT-0597",
+"CAM-CAN-EOSR8-000-000-BODY": "AT-0659",
 "CAM-CAN-EOSR8-000-000-K2450": "AT-0598",
 "CAM-DJI-002": "AT-0194",
 "CAM-DJI-003": "AT-0195",
@@ -3258,7 +3295,10 @@
 "CEL-MOT-EDGE70FUSION-8G256-SKY-5G": "AT-0606",
 "CEL-MOT-G06-4G256-GRN-000": "AT-0607",
 "CEL-MOT-G06POWER-4G64-BLU-000": "AT-0079",
+"CEL-MOT-G17POWER-8G256-BBY-000": "AT-0656",
+"CEL-MOT-G17POWER-8G256-SKY-000": "AT-0656",
 "CEL-MOT-G56-12G256-BLK-000": "AT-0608",
+"CEL-MOT-G56-8G256-BLK-000": "AT-0657",
 "CEL-MOT-G67-4G256-GRY-000": "AT-0609",
 "CEL-MOT-G77-8G256-BLK-000": "AT-0610",
 "CEL-MOT-G77-8G256-GRN-000": "AT-0610",
@@ -3306,12 +3346,16 @@
 "CEL-SAM-A36-6G128-BLU-000": "AT-0511",
 "CEL-SAM-A36-8G256-LAV-000": "AT-0504",
 "CEL-SAM-A37-12G256-CHR-000": "AT-0583",
+"CEL-SAM-A37-12G256-GRN-000": "AT-0583",
+"CEL-SAM-A37-8G256-WHT-000": "AT-0085",
 "CEL-SAM-A56-12G256-GRY-000": "AT-0086",
 "CEL-SAM-A56-12G256-OLV-000": "AT-0086",
 "CEL-SAM-A56-8G256-OLV-000": "AT-0087",
 "CEL-SAM-A57-8G128-DBL-000": "AT-0088",
 "CEL-SAM-A57-8G256-BLU-000": "AT-0089",
+"CEL-SAM-A57-8G256-LLC-000": "AT-0089",
 "CEL-SAM-S20PLUS-12G128-000-000": "AT-0614",
+"CEL-SAM-S20PLUS-12G128-GRY-000": "AT-0614",
 "CEL-SAM-S25-12G256-MNT-000": "AT-0615",
 "CEL-SAM-S25FE-256-WHT-000": "AT-0090",
 "CEL-SAM-S25ULT-12G1TB-BLK-000": "AT-0094",
@@ -3517,6 +3561,7 @@
 "LEN-CAN-057": "AT-0249",
 "LEN-CAN-058": "AT-0236",
 "LEN-CAN-50F18STM-000-000-CANEF": "AT-0643",
+"LEN-CAN-RF100500MMF4571LISUSM-000-WHT-000": "AT-0660",
 "LEN-CAN-RF14MMF14LVCM-000-000-000": "AT-0572",
 "LEN-CAN-RF24105MMF28ISUSMZ-000-000-000": "AT-0644",
 "LEN-NIK-001": "AT-0268",
@@ -3740,6 +3785,7 @@
 "NBK-APL-NEO13-8G256-SLV-EN": "AT-0432",
 "NBK-DEL-DC15250-16G512-CRB-EN": "AT-0647",
 "NBK-DEL-DC15250-8G512-CRB-EN": "AT-0655",
+"NBK-DEL-LAT5440-16G512-000-EN": "AT-0661",
 "PC-APP-001": "AT-0202",
 "PC-APP-002": "AT-0203",
 "PC-APP-004": "AT-0204",
@@ -3797,6 +3843,8 @@
 "TAB-APL-IPADMINI7-256-PUR-WIFI": "AT-0475",
 "TAB-APL-IPADMINI7-256-STL-WIFI": "AT-0475",
 "TAB-APL-IPADPRO11M5-256-SBK-CELL": "AT-0540",
+"TAB-APL-IPADPRO11M5-256-SLV-000": "AT-0479",
+"TAB-APL-IPADPRO11M5-512-SLV-CELL": "AT-0481",
 "TAB-APL-IPADPRO11M5-512-SLV-WIFI": "AT-0480",
 "TAB-APL-IPADPRO13M5-256-BLK-CELL": "AT-0650",
 "TAB-APL-IPADPRO13M5-512-SLV-WIFI": "AT-0484",
@@ -3958,6 +4006,7 @@
 "camara-de-accion~insta360~2-360-bater-bundle-insta-lente-stick-tapa-x5": "AT-0200",
 "camara-de-accion~insta360~360-ace-insta-pro": "AT-0199",
 "camara-de-accion~insta360~bundle-essential-insta360-x5": "AT-0593",
+"camara~canon~105-24-7.1-canon-eos-f4-ii-is-kit-mark-r6-stm~k24105": "AT-0658",
 "camara~canon~14-30mm-canon-eos-r50-v~k1430": "AT-0559",
 "camara~canon~18-150-eor-r7~body": "AT-0597",
 "camara~canon~18-150-eor-r7~kit": "AT-0138",
@@ -3973,6 +4022,7 @@
 "camara~canon~24-105-4-eos-f-iii-l-mark-r6-usm": "AT-0150",
 "camara~canon~24-105-eos-f4-7.1-iii-is-mark-r6-stm~kit": "AT-0152",
 "camara~canon~5d-eos-iv-mark~body": "AT-0141",
+"camara~canon~body-canon-eos-r8~body": "AT-0659",
 "camara~canon~body-canon-eos-r8~k2450": "AT-0598",
 "camara~canon~c-cinema-eos-r5": "AT-0148",
 "camara~canon~eos-ii-mark-r5~body": "AT-0149",
@@ -4070,11 +4120,13 @@
 "celular~motorola~5g-70-edge-fusion-motorola~12g256-5g": "AT-0605",
 "celular~motorola~5g-70-edge-fusion-motorola~8g256-5g": "AT-0606",
 "celular~motorola~5g-g56-motorola~12g256": "AT-0608",
+"celular~motorola~5g-g56-motorola~8g256": "AT-0657",
 "celular~motorola~60-edge-fusion~5g": "AT-0513",
 "celular~motorola~g06-motorola~4g256": "AT-0607",
 "celular~motorola~g06-power~4gb-256gb-concargador": "AT-0078",
 "celular~motorola~g06-power~4gb-64gb": "AT-0079",
 "celular~motorola~g06-power~4gb-64gb-sincargador": "AT-0079",
+"celular~motorola~g17-motorola-power~8g256": "AT-0656",
 "celular~motorola~g17~4gb-256gb-sincargador": "AT-0080",
 "celular~motorola~g57~8gb-256gb-5g-sincargador": "AT-0081",
 "celular~motorola~g67-motorola~4g256": "AT-0609",
@@ -4098,6 +4150,8 @@
 "celular~samsung~a36-galaxy~6gb-128gb": "AT-0511",
 "celular~samsung~a36-galaxy~8gb-256gb": "AT-0504",
 "celular~samsung~a36-galaxy~8gb-256gb-5g": "AT-0504",
+"celular~samsung~a37-galaxy~12g256": "AT-0583",
+"celular~samsung~a37-galaxy~8g256": "AT-0085",
 "celular~samsung~a37-galaxy~8gb-256gb": "AT-0085",
 "celular~samsung~a56-galaxy~12g256": "AT-0086",
 "celular~samsung~a56-galaxy~12gb-256gb": "AT-0086",
@@ -4229,6 +4283,7 @@
 "lentes-inteligentes~ray-ban~gen2-headliner-meta-rayban": "AT-0507",
 "lentes-inteligentes~ray-ban~meta-s52-skyler-t155": "AT-0415",
 "lente~canon~1.4x-extender-rf": "AT-0229",
+"lente~canon~100-4.5-500mm-7.1-canon-f-is-l-rf-usm": "AT-0660",
 "lente~canon~105mm-24-canon-f2.8-is-rf-usm-z": "AT-0644",
 "lente~canon~11l-f-rf~600-is-stm": "AT-0255",
 "lente~canon~2.0x-extender-rf": "AT-0239",
@@ -4474,6 +4529,7 @@
 "notebook~apple~m5pro-macbook-pro~16in-48gb-1tb-tecladoen": "AT-0447",
 "notebook~dell~1355u-15-dc15250-dell-i7~16g512-en": "AT-0647",
 "notebook~dell~1355u-15-dc15250-dell-i7~8g512-en": "AT-0655",
+"notebook~dell~5440-dell-i7-latitude~16g512-en": "AT-0661",
 "parlante~jbl~6-charge": "AT-0448",
 "smartwatch~apple~11-series-watch~42mm-s-gps": "AT-0453",
 "smartwatch~apple~11-series-watch~42mm-sm-gps": "AT-0453",
@@ -4537,6 +4593,8 @@
 "tablet~apple~ipad-m5-pro~11in-256gb": "AT-0479",
 "tablet~apple~ipad-m5-pro~11in-256gb-cell": "AT-0540",
 "tablet~apple~ipad-m5-pro~11in-512gb": "AT-0480",
+"tablet~apple~ipad-m5-pro~11in~256": "AT-0479",
+"tablet~apple~ipad-m5-pro~11in~512-cell": "AT-0481",
 "tablet~apple~ipad-m5-pro~13in-1tb": "AT-0506",
 "tablet~apple~ipad-m5-pro~13in-256gb": "AT-0483",
 "tablet~apple~ipad-m5-pro~13in-512gb": "AT-0484",
@@ -5078,7 +5136,8 @@
 "lavender": "AT-0085-03",
 "verde": "AT-0085-02",
 "violet": "AT-0085-03",
-"violeta": "AT-0085-03"
+"violeta": "AT-0085-03",
+"white": "AT-0085-05"
 },
 "AT-0086": {
 "awesome olive": "AT-0086-02",
@@ -5115,6 +5174,7 @@
 "AT-0089": {
 "dark blue": "AT-0089-01",
 "icyblue": "AT-0089-02",
+"lilac": "AT-0089-03",
 "navy": "AT-0089-01"
 },
 "AT-0090": {
@@ -6710,6 +6770,7 @@
 "space black": "AT-0480-01"
 },
 "AT-0481": {
+"silver": "AT-0481-03",
 "space black": "AT-0481-01",
 "space black - standard glass": "AT-0481-01"
 },
@@ -7171,7 +7232,13 @@
 "gris": "AT-0582-01"
 },
 "AT-0583": {
-"charcoal": "AT-0583-01"
+"charcoal": "AT-0583-01",
+"gray green": "AT-0583-02",
+"graygreen": "AT-0583-02",
+"gre": "AT-0583-02",
+"green": "AT-0583-02",
+"grey green": "AT-0583-02",
+"verde": "AT-0583-02"
 },
 "AT-0584": {
 "": "AT-0584"
@@ -7267,7 +7334,10 @@
 "black": "AT-0613-01"
 },
 "AT-0614": {
-"": "AT-0614"
+"black": "AT-0614-01",
+"cosmic gray": "AT-0614-02",
+"gray": "AT-0614-02",
+"grey": "AT-0614-02"
 },
 "AT-0615": {
 "mint": "AT-0615-01"
@@ -7383,6 +7453,7 @@
 "black": "AT-0648-01"
 },
 "AT-0649": {
+"black": "AT-0649-01",
 "black sb": "AT-0649-01"
 },
 "AT-0650": {
@@ -7404,8 +7475,30 @@
 },
 "AT-0655": {
 "carbon black": "AT-0655-01"
+},
+"AT-0656": {
+"arandano": "AT-0656-01",
+"blueberry": "AT-0656-01",
+"celeste": "AT-0656-02",
+"sky blue": "AT-0656-02"
+},
+"AT-0657": {
+"black": "AT-0657-01"
+},
+"AT-0658": {
+"": "AT-0658"
+},
+"AT-0659": {
+"": "AT-0659"
+},
+"AT-0660": {
+"blanco": "AT-0660-01",
+"white": "AT-0660-01"
+},
+"AT-0661": {
+"": "AT-0661"
 }
 }
 },
-"generado": "2026-11-03T10:33:43"
+"generado": "2026-11-05T10:50:32"
 }

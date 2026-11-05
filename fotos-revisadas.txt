@@ -143,6 +143,7 @@ df9e2849b928fbf2102834de945fb239  AT-0085-01.jpg                     # mirada
 25aa85f599e01c937b824bd1e28fccaa  AT-0085-02.jpg                     # mirada
 033584bcc68437bc9c27f04a1625a1ab  AT-0085-03.jpg                     # mirada
 5878cd8c4ed95044d440d7adc75a9c19  AT-0085-04.jpg                     # mirada
+11923313f6fb81764fdcd986d9a178a6  AT-0085-05.jpg                     # mirada (la de ADVAPP: Galaxy A37 Awesome White, samsung.com uk (SM-A376BZWBEUB), 05/11/2026)
 e2294510337360244100c4a7a00eb4cc  AT-0086-01.jpg                     # mirada
 3629ecdceee22f9b6c36bfddde991a24  AT-0086-02.jpg                     # mirada
 a7121b390428dd3b76314c6a6dbfef17  AT-0086-03.jpg                     # mirada
@@ -150,6 +151,7 @@ a7121b390428dd3b76314c6a6dbfef17  AT-0086-03.jpg                     # mirada
 3629ecdceee22f9b6c36bfddde991a24  AT-0087-02.jpg                     # mirada
 b7cbf65b5ccaa61b1dac1b17c17f3524  AT-0088-01.jpg                     # mirada
 01be6ab4e7686badc45f8436d17ca0d2  AT-0089-01.jpg                     # mirada
+0961400bd93d9e918e812836959e303b  AT-0089-03.jpg                     # mirada (la de ADVAPP: Galaxy A57 Awesome Lilac, samsung.com/ar (SM-A576BZVNARO), 05/11/2026)
 84250315e22f74508296ccabbe0471ba  AT-0090-01.jpg                     # mirada
 4ac86a453b5981897eff4e617633e042  AT-0090-02.jpg                     # mirada
 4e3bb7462d1d696aebbd42b6577d467b  AT-0090-03.jpg                     # mirada
@@ -665,6 +667,7 @@ df8c2b5f1128a367f9ac03ab8d6e870e  AT-0475-04.jpg                     # mirada (o
 56acf9f2a14130b4d7457ae94e948c46  AT-0480-01.jpg                     # mirada
 7c7a20a73c2de42c6b8041f582fe6c2a  AT-0480-02.jpg                     # mirada (la de AT-0479-02, iPad Pro 11" M5 256GB Silver: el mismo equipo con otra memoria, 03/11/2026)
 a16d2706f685219427563e6a9b27a3b5  AT-0481-01.jpg                     # mirada
+0cc7cbfb0146298df3318381255cb3bf  AT-0481-03.jpg                     # mirada (la de ADVAPP: render de apple.com del iPad Pro 11" Wi-Fi + Cellular Silver, 05/11/2026)
 3ebfb5f8522317862e940a9c0dccbbc6  AT-0482-01.jpg                     # mirada
 7efb8ba79e95646a1e16530bc36cab09  AT-0483-01.jpg                     # mirada
 e75c52caf4582ece8569a6eb8db6460f  AT-0483-02.jpg                     # mirada
@@ -827,10 +830,12 @@ d2c99849db2a86d9bb4190d5562faae8  AT-0578-01.jpg                     # mirada
 307c523ae916ddaf463bbd3a87e7f2a0  AT-0581-01.jpg                     # mirada
 942e7244056efe90372a174ee283564d  AT-0582-01.jpg                     # mirada
 5878cd8c4ed95044d440d7adc75a9c19  AT-0583-01.jpg                     # mirada
+6b656d6004c4a0ee83dec738fad657aa  AT-0583-02.jpg                     # mirada (la de ADVAPP: Galaxy A37 Awesome Graygreen, samsung.com/ar (SM-A376BDGFARO), 05/11/2026)
 e1492d0242c08404aae96697f8a5d6e1  AT-0584.jpg                        # mirada
 e1492d0242c08404aae96697f8a5d6e1  AT-0585.jpg                        # mirada
 cf38bf2af9bdb940e43e2e5dcf765c65  AT-0089-02.jpg                     # mirada: A57 Icyblue, foto oficial de samsung.com (galería del SM-A576U Icyblue), misma toma que el Navy AT-0089-01 (17/10)
 ea5c2237367172d328d35d7807c75977  AT-0586.jpg                        # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para ACA-APL-CABLE-000-000-USBC60W1M
+ea5c2237367172d328d35d7807c75977  AT-0587.jpg                        # mirada (la de ADVAPP: cable USB-C de apple.com (MQKJ3); el nombre no dice potencia ni largo, confianza media, 05/11/2026)
 16c6cf6ac7850b12dbeb5890b8257515  AT-0588.jpg                        # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para ACA-APL-APPLETV4K-64-000-WIFI
 16c6cf6ac7850b12dbeb5890b8257515  AT-0589.jpg                        # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para ACA-APL-APPLETV4K-128-000-ETHERNET
 57e02f2cc5059ca855d3c2b1c76fd563  AT-0590.jpg                        # mirada 20/10: oficial del fabricante (via store.storeimages.cdn-apple.com), la misma que ADVAPP tiene para AUR-APL-AIRPODS5-000-000-000
@@ -843,6 +848,7 @@ fddea26b39154b7b76e4183b818572f5  AT-0596.jpg                        # mirada 20
 5d083326c0612361df043fcdc861640b  AT-0597.jpg                        # mirada 20/10: oficial del fabricante (via www.wexphotovideo.com), la misma que ADVAPP tiene para CAM-CAN-EOSR7-000-000-BODY
 50cdcf9cdc940feabd342a86eb303d0e  AT-0598.jpg                        # mirada 20/10: oficial del fabricante (via www.wexphotovideo.com), la misma que ADVAPP tiene para CAM-CAN-EOSR8-000-000-K2450
 bac621b3d19a53553024c070bd22be30  AT-0566-02.jpg                     # mirada 20/10: oficial del fabricante (via www.nikon.co.uk), la misma que ADVAPP tiene para CAM-NIK-ZF-000-SLV-BODY
+af965ee2444807e20dbf676063b89352  AT-0599.jpg                        # mirada (la de ADVAPP: render de Sony de la a7C II con el FE 28-60mm, negra, 05/11/2026)
 8ceb6ac9ec13dc2f5898fcff55d523f0  AT-0600-01.jpg                     # mirada 20/10: oficial del fabricante (via www.wexphotovideo.com), la misma que ADVAPP tiene para CAM-SON-ZVE10II-000-BLK-K1650
 e341093a8a7b83ed6a32eaad7ffe7eae  AT-0601-01.jpg                     # mirada 20/10: copia de AT-0065-02.jpg (otra memoria del iPhone 15 Sim Blue)
 e341093a8a7b83ed6a32eaad7ffe7eae  AT-0602-01.jpg                     # mirada 20/10: copia de AT-0065-02.jpg (otra memoria del iPhone 15 Sim Blue)
@@ -856,14 +862,17 @@ a654880830ca8d8df6e24e2d24008842  AT-0608-01.jpg                     # mirada 20
 2615eca429f4064869710f17acd08afa  AT-0609-01.jpg                     # mirada 20/10: oficial del fabricante (via armoto.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-G67-4G256-GRY-000
 8800bc2a359192e47834f182a84b2327  AT-0610-01.jpg                     # mirada 20/10: oficial del fabricante (via armoto.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-G77-8G256-BLK-000
 1f2e94f9ce2c30121763b53a44585c08  AT-0610-02.jpg                     # mirada 20/10: oficial del fabricante (via armoto.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-G77-8G256-GRN-000
+38743162114982636aeb2a4fc7b90515  AT-0611.jpg                        # mirada (la de ADVAPP: galería oficial moto g86 power, Spellbound; la fila no dice color, confianza media, 05/11/2026)
 87e4d10329bfe370b72dc53644f58432  AT-0612-01.jpg                     # mirada 20/10: oficial del fabricante (via armoto.vteximg.com.br), la misma que ADVAPP tiene para CEL-MOT-EDGE60FUSION-8G256-SLP-000
 03c5983f82a08db5402c09438ad90410  AT-0613-01.jpg                     # mirada 20/10: oficial del fabricante (via images.samsung.com), la misma que ADVAPP tiene para CEL-SAM-A07-4G128-BLK-000
 4bcdcaffb2c71f2de0698d0d03578695  AT-0086-04.jpg                     # mirada 20/10: oficial del fabricante (via images.samsung.com), la misma que ADVAPP tiene para CEL-SAM-A56-12G256-GRY-000
+c174a3f0231b6e00852a996582c7814e  AT-0614-02.jpg                     # mirada (la de ADVAPP: S20+ Cosmic Gray de frente, samsung.com Paraguay; sólo se ve el marco, confianza media, 05/11/2026)
 95ed9e99765cee869fb2d880212eb283  AT-0615-01.jpg                     # mirada 20/10: oficial del fabricante (via images.samsung.com), la misma que ADVAPP tiene para CEL-SAM-S25-12G256-MNT-000
 646074a36d1cbebd687b09d2b2ca9960  AT-0616-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17-12G512-BLK-000
 67bafb514118184041e86594587ffc2e  AT-0617-01.jpg                     # mirada 20/10: oficial del fabricante (via i02.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17-4G128-BLK-000
 eea924be072cb9bf344b6726cf7c0ce6  AT-0618-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17T-12G256-BLK-000
 211645481b02e29e6ad861db44568e2a  AT-0619-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17T-12G512-VIO-000
+3ffe1303ac7deb3091693e45a08d7dbf  AT-0620.jpg                        # mirada (la de ADVAPP: Xiaomi 17T Pro Black de mi.com uk; la fila no dice color, confianza media, 05/11/2026)
 3ffe1303ac7deb3091693e45a08d7dbf  AT-0621-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17TPRO-12G512-BLK-000
 028226e909e62ad802966394a3b3f5db  AT-0621-02.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17TPRO-12G512-VIO-000
 2d3ddbe16aa5cf3a9febe1ad7cee47eb  AT-0622-01.jpg                     # mirada 20/10: oficial del fabricante (via i05.appmifile.com), la misma que ADVAPP tiene para CEL-XIA-17ULTRA-16G512-BLK-000
@@ -913,3 +922,10 @@ c9330fde1d29891aa45d98021dd435f7  AT-0649-01.jpg                     # mirada 20
 b6bbc6111b0a5ea1d42a7ab610e921df  AT-0654.jpg                        # mirada 22/10: oficial de Apple, Thunderbolt 3 (USB-C) 0,8 m (MQ4H2), la misma que ADVAPP tiene para ACA-APL-CABLE-000-000-TB308M (fuentes.tsv)
 60d5397f2cce3cad521a3c417c97fe60  AT-0655-01.jpg                     # mirada 22/10: copia de AT-0647-01, la misma notebook Dell 15 DC15250 Carbon Black con otra memoria (no se ve)
 5957c59ec081d16e5919d29b74a39435  AT-0466-04.jpg                     # mirada 22/10: copia de AT-0467-04, el mismo iPad 11 A16 Pink con otra memoria (no se ve)
+2b1277092c00e839917b6de7adf639d0  AT-0656-01.jpg                     # mirada (la de ADVAPP: galería oficial moto g17 power, Blueberry (PANTONE Evening Blue), 05/11/2026)
+3a075cb9a69eb7b7e36bce94b587c176  AT-0656-02.jpg                     # mirada (la de ADVAPP: galería oficial moto g17 power, Sky Blue (PANTONE Alaskan Blue), 05/11/2026)
+a654880830ca8d8df6e24e2d24008842  AT-0657-01.jpg                     # mirada (la de ADVAPP: moto g56 Black Oyster de motorola.com.ar, la misma de AT-0608-01 (12/256GB), 05/11/2026)
+67157216b9b705d478babbc3fb226b90  AT-0658.jpg                        # mirada (la de ADVAPP: render de Canon de la EOS R6 Mark II con el RF 24-105 F4-7.1 IS STM, 05/11/2026)
+13f6fd0f3b41b57680c5817349d8755f  AT-0659.jpg                        # mirada (la de ADVAPP: render de Canon de la EOS R8, sólo cuerpo, 05/11/2026)
+84430ccca8517eab5c61b10e7184b524  AT-0660-01.jpg                     # mirada (la de ADVAPP: canon.co.uk, RF 100-500mm blanco con su pie de trípode, 05/11/2026)
+72e7c3f0f9d71c3c8ba2a12cf17a6a25  AT-0661.jpg                        # mirada (la de ADVAPP: dell.com, Latitude 14 5440 gris (único color), 05/11/2026)

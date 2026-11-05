@@ -376,6 +376,18 @@ si alguna falta).
                   la bienvenida salga una vez y no tape una ficha.
                   correr.py marca la bienvenida como vista en todas las
                   tandas (SIN_BIENVENIDA); esta la borra para probarla.
+  google-links.js Que Google llegue por links a cada pagina de producto/
+                  (auditoria del 04/11/2026, TG-05, TG-11 y TG-12; Benja:
+                  "dale con Google", 05/11): robots.txt pide no leer
+                  herramientas/, pruebas/, muestras/ ni los .py, .command y
+                  .txt de la raiz, sin trabar nada de lo que pide la
+                  portada; "Todos los modelos" (producto/) linkea cada
+                  pagina del sitemap; cada pagina trae "Otros modelos"
+                  (hasta 6 del mismo rubro o la misma marca, a paginas que
+                  existen) y en el pie "Todos los modelos"; y todas dicen
+                  lang="es-AR". Lo que arregla el proximo PUBLICAR (un
+                  modelo que volvio y su pagina sin "Otros modelos") es
+                  AVISO.
 
 COMO SE CORREN
 --------------

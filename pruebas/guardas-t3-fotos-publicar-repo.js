@@ -214,7 +214,7 @@ async function correrPruebas(){
      'el catalogo ya no pide noindex: sale a Google', meta ? meta.content : 'sin meta');
   const robots = await leer('robots.txt');
   ok(robots !== null && !/^\s*Disallow:\s*\/\s*$/mi.test(robots),
-     'robots.txt no bloquea nada');
+     'robots.txt no bloquea el sitio entero (desde el 05/11 solo las herramientas, TG-12: ver google-links.js)');
   ok(robots !== null && /^Sitemap:\s*https:\/\/\S+\/sitemap\.xml\s*$/mi.test(robots),
      'y dice donde esta la lista de paginas (sitemap.xml)');
   const sitemap = await leer('sitemap.xml');

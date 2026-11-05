@@ -166,6 +166,9 @@ async function paginasDeProducto(){
     mapa: MAPA || '',
     cuotas: maxCuotas(),
     advapp: ADVAPP_URL,
+    // El orden de los rubros de la barra del catálogo, para "Todos los
+    // modelos" (producto/index.html, 05/11/2026, auditoría TG-05)
+    rubros: (typeof ORDEN_CATS !== 'undefined' && Array.isArray(ORDEN_CATS) ? ORDEN_CATS : []).map(c => plural(c)),
     modelos,
   };
 }

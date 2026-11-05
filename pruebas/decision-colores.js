@@ -238,7 +238,11 @@ function probarPrecios(casos){
   if(!varia) info('[C.3] hoy ninguna version tiene precio distinto por color');
   else{
     const d = dcAbrir(clave(varia.v));
-    const mal = dcTonos(d).filter((b, i) => dcTxt(b.querySelector('.pr')) !== dcPrecio(varia.lista[i]));
+    /* Solo los colores con stock (auditoria 04/11, D-04): el agotado no dice
+       precio a proposito (D15 B, 13/10; lo mira [C.2]), y con el Blue del
+       iPhone 17 Pro sin stock esta linea fallaba sin que la web hiciera nada mal. */
+    const mal = dcTonos(d).filter((b, i) => !b.classList.contains('agotada') &&
+                                            dcTxt(b.querySelector('.pr')) !== dcPrecio(varia.lista[i]));
     ok(!mal.length, '[C.3] con precio distinto, cada foto dice el suyo abajo del nombre',
        mal.map(b => b.dataset.color + ': ' + dcTxt(b.querySelector('.pr'))).join(', ') ||
        dcTonos(d).map(b => b.dataset.color + ' ' + dcTxt(b.querySelector('.pr'))).join(' / '));

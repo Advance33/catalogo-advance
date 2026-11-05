@@ -103,8 +103,11 @@ function probarMasDeLaTarjeta(){
     ok(!!d && FICHA === card.dataset.key, '[5 A] abre la ficha en la version de la tarjeta', FICHA + ' · tarjeta ' + card.dataset.key);
     const tonos = d ? d.querySelectorAll('.fi-colores .fi-tono') : [];
     ok(tonos.length > 1, '[5 A] y la ficha muestra los colores para elegir', tonos.length + ' colores');
-    // Elegir otro color y agregar: la linea lleva ESE color
-    const otro = [...tonos].find(b => !b.disabled && b.getAttribute('aria-pressed') !== 'true' && b.dataset.color);
+    // Elegir otro color y agregar: la linea lleva ESE color. Uno con stock
+    // (auditoria 04/11, D-04): el agotado pasa a "Avisame cuando entre" y no
+    // tiene "Agregar al pedido" (2.6 B); con el Blue sin stock esto fallaba.
+    const otro = [...tonos].find(b => !b.disabled && !b.classList.contains('agotada') &&
+                                      b.getAttribute('aria-pressed') !== 'true' && b.dataset.color);
     if(otro){
       otro.click();
       const elegido = COLOR_FICHA;

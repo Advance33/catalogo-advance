@@ -163,7 +163,11 @@ function probarFiltroDeVersion(){
      forma en los datos de hoy: si ADVAPP deja de traer esa fila, cualquier
      modelo cuya tarjeta con un filtro de capacidad apunte a otra version que
      sin filtro; si no hay ninguno, una linea '--' en vez de fallar. */
-  const formaDeLaMuestra = x => x.filtrada && clave(x) !== clave(buscarModelo(clave(x)).rep);
+  /* Con stock en lo filtrado (05/11, como D-04 de la auditoria del 04/11):
+     con los tres 17 Pro Max de 1TB agotados la tarjeta dice "Sin stock", sin
+     precio y sin +, que es lo que corresponde, y las lineas de abajo fallaban
+     sin que la web hiciera nada mal. Se mira el primer caso con stock. */
+  const formaDeLaMuestra = x => x.filtrada && x.stock && clave(x) !== clave(buscarModelo(clave(x)).rep);
   let f1 = { cat: 'Celular', capacidad: '1TB' };
   dtFiltrar(f1);
   let pm = LISTA.find(x => /17 Pro Max/i.test(x.desc) && x.marca === 'Apple' && formaDeLaMuestra(x));
@@ -174,7 +178,7 @@ function probarFiltroDeVersion(){
       pm = LISTA.find(formaDeLaMuestra);
       if(pm){ f1 = f; break; }
     }
-    if(pm) info('[2.1] hoy no esta el iPhone 17 Pro Max de 1TB: el caso se mira con ' + pm.desc + ' y ' + JSON.stringify(f1));
+    if(pm) info('[2.1] hoy no esta el iPhone 17 Pro Max de 1TB con stock: el caso se mira con ' + pm.desc + ' y ' + JSON.stringify(f1));
     else info('[2.1] hoy ningun modelo cambia de version con un filtro de capacidad: el caso de la muestra no se mira hoy');
   }
   const CAP = f1.capacidad;

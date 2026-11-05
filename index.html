@@ -1511,6 +1511,14 @@ window.ADVAPP_TEMPRANO = (() => {
     .ay-p{padding:9px 10px;font-size:14px}
     .ay-pedilo b{flex:1 1 100%}
   }
+  /* "¿Buscás algo que no está?" en el celular (auditoría 04/11/2026, UD-02):
+     el botón ocupa 213 px fijos y el campo quedaba de 87 px a 390 y de 57 a
+     360: no se leía lo que uno escribía. Hasta 480 px el botón va abajo, a lo
+     ancho, y el campo usa todo el renglón. */
+  @media (max-width:480px){
+    .ay-form{flex-wrap:wrap;border-radius:22px}
+    .ay-form input,.ay-form button{flex:1 1 100%}
+  }
 
   /* ---------- Filtros ---------- */
   /* La cinta de categorías se desliza: con el dedo, con la rueda del mouse,
@@ -3821,8 +3829,11 @@ window.ADVAPP_TEMPRANO = (() => {
     .of-dots button[aria-current="true"]{width:32px;background:none;border-radius:99px}
     .of-dots button[aria-current="true"]::before{width:24px;border-radius:99px;background:#F0D98C}
     /* Los rubros de la portada medían 26 px de alto, en filas separadas por 6
-       (auditoría 19/10/2026, U-08): es el camino principal y se tocaba el de al lado. */
-    .rubro{min-height:40px}
+       (auditoría 19/10/2026, U-08): es el camino principal y se tocaba el de al lado.
+       Centrados (auditoría 04/11/2026, UD-01): con align-items:baseline el
+       botón crecía a 40 pero el texto quedaba pegado arriba (5 px arriba y
+       20 abajo). En la compu no cambia: ahí el alto lo da el texto. */
+    .rubro{min-height:40px;align-items:center}
   }
 
   /* Las fotos propias vienen SIN FONDO desde el 05/10/2026, la chica y la
@@ -4113,7 +4124,7 @@ const SHEET_ID  = '18xxslIKTBnVMrLixCGlQBJGje3vKBYQHXy0qvVp8tpQ';
 const SHEET_GID = '482985525';
 
 // Tu WhatsApp con código de país, solo números
-const WHATSAPP = '5491125205232';   // +54 9 11 2520-5232 (Benja, 21/10 tarde: de momento; el 2560-4799 y el 2475-1466 quedaron restringidos)
+const WHATSAPP = '5491125205232';   // +54 9 11 2520-5232 (Benja, 21/10 tarde: de momento; los números viejos quedaron restringidos)
 
 // La dirección pública del catálogo, la que ven los clientes. El botón
 // Compartir de la ficha manda SIEMPRE esta, aunque se abra el catálogo desde
@@ -9966,10 +9977,16 @@ const enPortada = () => !verTodo && !filtros.cat && !filtros.q.trim() && !filtro
                      && !FILTROS_RUBRO.some(f => filtros[f.campo]);
 
 /* Pedir la grilla completa a proposito: lo usa el boton del final del mosaico
-   y tambien las pruebas, que necesitan los productos dibujados. */
+   y tambien las pruebas, que necesitan los productos dibujados.
+   Va en la direccion como ?todo=1 y suma una entrada al historial, como un
+   link (auditoria 04/11/2026, UD-04; la mitad que quedaba de U-03 del 19/10):
+   sin eso, el que llegaba de Instagram, tocaba "Ver todo el catalogo" y
+   apretaba Atras se iba de la web en vez de volver a la portada. Ver
+   urlActual() y leerURL(). */
 function verTodoElCatalogo(){
   if(verTodo) return;
   verTodo = true;
+  if(urlActual() !== location.pathname + location.search + location.hash) escribirURL(true);
   pintar();
 }
 
@@ -10005,9 +10022,10 @@ function irAlMenu(){
    lo de arriba era la entrada del pedido o del visor, que son ventanas y no
    direcciones, se la reemplaza: el Atrás no reabre la ventana. Y si la
    dirección ya era la del inicio no suma nada: el triángulo son 7 clics para
-   el easter egg y no pueden ser 7 Atrás, y "Ver todo el catálogo" no cambia
-   la dirección (un Atrás ahí no haría nada). Lo que no cambió no se redibuja
-   (las fotos de los rubros no vuelven a la primera). */
+   el easter egg y no pueden ser 7 Atrás. "Ver todo el catálogo" ahora sí va en
+   la dirección (?todo=1, UD-04 del 04/11/2026): desde ahí el logo suma una
+   entrada como desde un rubro, y el Atrás vuelve a la grilla entera. Lo que
+   no cambió no se redibuja (las fotos de los rubros no vuelven a la primera). */
 function urlDelInicio(){ return location.pathname; }
 
 /* Que se note la vuelta al inicio (Benja, 13/10/2026; el dibujo está en el
@@ -12783,6 +12801,10 @@ function refrescarFichaAbierta(){
    "mirá los iPhone" y le abre ya filtrado. El botón Atrás también funciona. */
 
 const ORDENES = ['modelo','sheet','cat','asc','desc','az'];
+// Lo que en la dirección es un filtro (el orden no): con alguno puesto, la
+// dirección no lleva ?todo=1 (UD-04, ver urlActual y leerURL)
+const filtrosEnURL = () => ['q', 'cat', 'marca', 'stock', 'precio', 'montura', 'apertura', 'capacidad', 'ram',
+                            ...FILTROS_RUBRO.map(f => f.campo)];
 
 function leerURL(){
   const s = new URL(location.href).searchParams;
@@ -12811,6 +12833,11 @@ function leerURL(){
   filtros.ram       = s.get('ram') || '';
   // Los propios de cada rubro (13/10). Se validan en sincronizarLentes().
   FILTROS_RUBRO.forEach(f => { filtros[f.campo] = s.get(f.campo) || ''; });
+  /* "Ver todo el catálogo" (UD-04), al revés que urlActual(): sin ningún
+     filtro en la dirección, ?todo=1 dice si es la grilla entera o la portada
+     (con el Atrás desde "Ver todo" se vuelve a los rubros). Con un filtro, la
+     dirección no lo dice y queda como estaba. */
+  if(!filtrosEnURL().some(k => s.get(k))) verTodo = s.get('todo') === '1';
 }
 
 function urlActual(){
@@ -12827,6 +12854,10 @@ function urlActual(){
   set('capacidad', filtros.capacidad);
   set('ram',       filtros.ram);
   FILTROS_RUBRO.forEach(f => set(f.campo, filtros[f.campo]));
+  /* "Ver todo el catálogo" (UD-04): solo cuando es lo único pedido. Con un
+     rubro, una búsqueda o un filtro puesto la grilla sale igual y el link
+     que se comparte queda como siempre; leerURL() hace la cuenta al revés. */
+  set('todo', verTodo && !filtrosEnURL().some(k => s.has(k)) ? '1' : '');
   const qs = s.toString();
   return u.pathname + (qs ? '?' + qs : '') + (FICHA ? '#p=' + encodeURIComponent(FICHA) : '');
 }
@@ -12914,11 +12945,12 @@ addEventListener('popstate', () => {
   }else if(delPedido && !document.getElementById('pedido')){
     try{ history.replaceState(null, '', location.href); }catch{}
   }
-  const antes = JSON.stringify(filtros);
+  // Con verTodo: el Atrás desde "Ver todo el catálogo" vuelve a los rubros (UD-04)
+  const antes = JSON.stringify([filtros, verTodo]);
   leerURL();
   soltarMarcaAjena();      // un link a mano puede traer una marca de otro rubro
   // Un rubro sin stock no está en la cinta: sin esto volvía sin chip marcado (29/09)
-  if(JSON.stringify(filtros) !== antes){
+  if(JSON.stringify([filtros, verTodo]) !== antes){
     asegurarChipDelRubro(); sincronizarControles(); pintar();
     /* La cinta sigue al historial igual que a los clics (29/09). Volviendo
        a la portada con el Atras, que en el celular es la forma normal de

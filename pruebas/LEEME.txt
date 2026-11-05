@@ -340,6 +340,20 @@ si alguna falta).
                   4 solo dos vecinas invertidas, la primera letra se respeta,
                   "gamer" no es "game"); y las decisiones del buscador
                   (DP-04, DP-05, DP-13, Enter) siguen andando con un error.
+  decision-oido.js
+                  Las palabras escritas como suenan (05/11/2026, Benja con
+                  una captura de "jaifon"): "jaifon", "aifon", "ifon",
+                  "plei", "eipods", "sansung", "shaomi", "makbuk", "daison",
+                  "guatch" y las pegadas ("mac buk", "ai fon") traen lo mismo
+                  que bien escritas, con el aviso «Mostrando resultados de
+                  “iphone”»; los numeros no se tocan ("jaifon 18" nunca pasa
+                  a 17); manda lo escrito ("iphon", "switch", "soni"); cada
+                  escritura de la lista ESCRITO_DE_OIDO lleva a lo suyo con
+                  el catalogo de hoy, sin dos que suenen igual y vayan a
+                  lugares distintos; el respaldo de como suena ("selular",
+                  "konsola", "kamara"), solo desde 5 letras; nada raro
+                  ("funda", "templado", "mate" ni lo que se esta
+                  escribiendo); y DP-04, DP-05, DP-13 y Enter escrito de oido.
   marian.js       Marian, la guia de botones (Benja, 29/10/2026,
                   marian/): que cargue, que sea solo botones y no se
                   presente como IA, que cada pregunta de su menu encuentre

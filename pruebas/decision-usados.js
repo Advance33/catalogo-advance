@@ -205,8 +205,8 @@ async function probarLaPregunta(){
      '[FAQ] y los que se toman sin lista todavia (Apple, Samsung, MacBook: Pedro, 05/10), por «Otro equipo»', USADOS_OTROS);
   // Benja, 06/11: de Samsung solo S25 Ultra y S26 Ultra completos; lentes,
   // cámaras y drones no. Lo mismo que el bot (chatsell-propio, ADR-145).
-  ok(/Samsung Galaxy S25 Ultra o S26 Ultra, con caja, cable USB-C a USB-C y cargador/.test(USADOS_OTROS) && !/y Samsung$/.test(USADOS_OTROS),
-     '[06/11] de Samsung solo el S25 Ultra y el S26 Ultra, con caja, cable USB-C a USB-C y cargador', USADOS_OTROS);
+  ok(/Samsung Galaxy S25 Ultra o S26 Ultra, con caja y cable USB-C a USB-C$/.test(USADOS_OTROS) && !/cargador/.test(USADOS_OTROS),
+     '[06/11] de Samsung solo el S25 Ultra y el S26 Ultra, con caja y cable USB-C a USB-C (el cargador no hace falta)', USADOS_OTROS);
   ok(uzTxt(r).includes('No tomamos otros modelos de Samsung, ni lentes, cámaras ni drones.'),
      '[06/11] la FAQ dice que no tomamos otros Samsung, ni lentes, cámaras ni drones', uzTxt(r.querySelector('.ay-usados p')));
   ok((USADOS_OTROS_TIPOS.find(([t]) => t === 'Samsung') || [])[1] === 'Galaxy S25 Ultra',

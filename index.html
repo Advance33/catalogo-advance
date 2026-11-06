@@ -12156,7 +12156,7 @@ function htmlAyudaUsados(){
   const n = USADOS.map(e => e.nombre);
   const lista = n.length > 1 ? n.slice(0, -1).join(', ') + ' y ' + n[n.length - 1] : n[0];
   return `<p>Hoy el cotizador tiene ${esc(lista)}.${USADOS_OTROS
-      ? ` También tomamos ${esc(USADOS_OTROS)}: elegí «Otro equipo» y te lo cotizamos por WhatsApp o Instagram.` : ''}</p>
+      ? ` También tomamos ${esc(USADOS_OTROS)}: elegí «Otro equipo» y te lo cotizamos por WhatsApp o Instagram.` : ''} ${esc(USADOS_NO_SE_TOMAN)}</p>
     <button type="button" class="ay-cotizar">Cotizar mi usado</button>`;
 }
 
@@ -15792,11 +15792,16 @@ const USADO_KEY = 'advtecno.usado';
    "Otro equipo". */
 // (auditoría 19/10/2026, T-02) Decía "MacBook, Samsung y otros equipos de
 // Apple", como si Samsung fuera de Apple. Son los botones de USADOS_OTROS_TIPOS.
-const USADOS_OTROS = 'otros equipos de Apple (MacBook, iPad, Apple Watch) y Samsung';
+// (Benja, 06/11/2026) De Samsung, solo el S25 Ultra y el S26 Ultra, con caja y
+// cable USB-C a USB-C (el cargador no hace falta: el S25 Ultra no lo trae de
+// fábrica); lentes, cámaras y drones no se toman. Lo mismo que dice el bot
+// (chatsell-propio, ADR-145).
+const USADOS_OTROS = 'otros equipos de Apple (MacBook, iPad, Apple Watch) y el Samsung Galaxy S25 Ultra o S26 Ultra, con caja y cable USB-C a USB-C';
+const USADOS_NO_SE_TOMAN = 'No tomamos otros modelos de Samsung, ni lentes, cámaras ni drones.';
 /* Los botones de "¿Qué es?" en "Otro equipo" y el ejemplo del modelo de cada
    uno (05/10). Lo demás lo escribe el cliente: modelo, memoria y cómo está. */
 const USADOS_OTROS_TIPOS = [['MacBook', 'MacBook Air M2 13"'], ['iPad', 'iPad Air M2 11"'],
-  ['Apple Watch', 'Apple Watch Series 9 45 mm'], ['Samsung', 'Galaxy S24 Ultra'], ['Otro', 'marca y modelo']];
+  ['Apple Watch', 'Apple Watch Series 9 45 mm'], ['Samsung', 'Galaxy S25 Ultra'], ['Otro', 'marca y modelo']];
 const USADO_TXT_MAX = { modelo: 80, memoria: 40, estado: 300, det: 300 };
 // Lo que escribe el cliente, de un renglón y con su tope
 // Sin caracteres invisibles: un modelo hecho de espacios de ancho cero no cuenta (06/10)
@@ -16617,7 +16622,7 @@ function abrirCotizador(desde = {}){
     if(paso === 'fuera'){
       const ej = (USADOS_OTROS_TIPOS.find(([t]) => t === f.tipo) || [, 'marca y modelo'])[1];
       return { preg: 'Otro equipo',
-        html: `<p class="us-ayuda us-intro">Todavía no están en el cotizador: completá esto y te decimos cuánto vale por WhatsApp o Instagram.</p>
+        html: `<p class="us-ayuda us-intro">Todavía no están en el cotizador: completá esto y te decimos cuánto vale por WhatsApp o Instagram. ${esc(USADOS_NO_SE_TOMAN)}</p>
           <div class="us-form">
             <div class="us-campo" role="group" aria-labelledby="us-rot-tipo"><span class="us-rot" id="us-rot-tipo">¿Qué es?</span>
               <div class="pd-chips">${USADOS_OTROS_TIPOS.map(([t]) => `<button type="button" class="pd-chip" data-tipo="${esc(t)}" aria-pressed="${f.tipo === t}">${esc(t)}</button>`).join('')}</div></div>

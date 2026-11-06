@@ -38,6 +38,12 @@ nada (Pedro eligió la G, 05/10).
    pregunta frecuente lo nombra. Pedro, 05/10: esos "los arreglan sí o sí
    con nosotros", así que pueden no tener lista nunca. Cuando llegue la lista de
    alguno, se carga acá como un equipo más y se saca de `USADOS_OTROS`.
+7. **Samsung, lentes, cámaras y drones** (Benja, 06/11/2026). De Samsung
+   solo se toman el Galaxy S25 Ultra y el S26 Ultra, con caja, cable USB-C a
+   USB-C y cargador: ningún otro (ni la línea A, ni los que no son Ultra).
+   Lentes, cámaras y drones no se toman. Va en `USADOS_OTROS` y en
+   `USADOS_NO_SE_TOMAN` de `index.html` (la pregunta frecuente y «Otro
+   equipo»), y es lo mismo que dice el bot (chatsell-propio, ADR-145).
 
 ## Cómo lo usa la web
 

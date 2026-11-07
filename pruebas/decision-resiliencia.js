@@ -136,7 +136,12 @@ async function copiaConFranja(base){
      '[1.1] la franja dice «Estás viendo los precios de las ' + h + '. No pudimos actualizarlos.» con la hora en negrita', rsFranjaTxt());
   const fr = document.getElementById('franja');
   const topbar = document.querySelector('.topbar'), header = document.querySelector('header');
-  ok(topbar.nextElementSibling === fr && fr.nextElementSibling === header,
+  /* Entre la franja y el encabezado puede ir el aviso de los precios del
+     viernes (07/11/2026): nunca se ven juntos, porque con la copia ese aviso
+     se esconde. La franja sigue pegada a la barra. */
+  const trasFranja = fr.nextElementSibling && fr.nextElementSibling.id === 'aviso-congelados'
+    ? fr.nextElementSibling.nextElementSibling : fr.nextElementSibling;
+  ok(topbar.nextElementSibling === fr && trasFranja === header,
      '[1.1] la franja va pegada abajo de la barra de arriba, antes del encabezado');
   ok(Math.abs(fr.getBoundingClientRect().width - document.documentElement.clientWidth) < 1
      && getComputedStyle(fr).backgroundColor === 'rgb(253, 244, 216)',

@@ -475,6 +475,25 @@ window.ADVAPP_TEMPRANO = (() => {
     .franja .b-reint{margin-left:17px}
   }
 
+  /* Los precios del viernes (Benja, 07/11/2026): «congelemos los del viernes
+     avisando que es probable que el lunes cambien». El sábado no sale lista
+     y el fin de semana (y los días que cerramos) la web muestra los precios
+     de la última, la del viernes. Un renglón sobrio abajo de la barra, con
+     las palabras de Benja; lo llena pintarCongelados() con el dato que manda
+     ADVAPP (precios_congelados). No es la franja ámbar: nada falló. */
+  .aviso-congelados{background:var(--surface);border-bottom:1px solid var(--line);color:var(--ink);
+                    font:500 13.5px/1.4 var(--sans)}
+  .aviso-congelados[hidden]{display:none}
+  .aviso-congelados .wrap{display:flex;align-items:center;gap:10px;padding-top:9px;padding-bottom:9px}
+  .aviso-congelados svg{width:16px;height:16px;flex:none;color:var(--acento)}
+  .aviso-congelados p{margin:0;min-width:0}
+  .aviso-congelados b{font-weight:700}
+  @media (max-width:560px){
+    .aviso-congelados{font-size:12.5px}
+    .aviso-congelados .wrap{align-items:flex-start}
+    .aviso-congelados svg{margin-top:1px}
+  }
+
   .titulo-h{
     font:400 clamp(1.9rem,4.6vw,3.1rem)/0.98 var(--display);
     text-transform:uppercase;letter-spacing:-.005em;margin:14px 0 6px;
@@ -3984,6 +4003,16 @@ window.ADVAPP_TEMPRANO = (() => {
   </div>
 </div>
 
+<!-- Los precios del viernes (07/11/2026): el fin de semana y los días que
+     cerramos, de qué día son los precios y cuándo es probable que cambien.
+     Lo llena pintarCongelados() con precios_congelados de ADVAPP. -->
+<div class="aviso-congelados" id="aviso-congelados" role="note" hidden>
+  <div class="wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+    <p id="aviso-congelados-txt"></p>
+  </div>
+</div>
+
 <header>
   <div class="wrap">
     <!-- El h1 dice qué se vende y dónde (21/10/2026, Benja, 8 A, G-03). Es el
@@ -5516,7 +5545,8 @@ async function bajarAdvapp(){
   return {
     fuente: 'advapp',
     manifiesto: { contrato: d.contrato, fuente: d.fuente, generado_en: d.generado_en,
-                  filas: Number(d.filas) || 0, verificado_hoy: d.verificado_hoy === true },
+                  filas: Number(d.filas) || 0, verificado_hoy: d.verificado_hoy === true,
+                  congelados: congeladosDe(d.precios_congelados) },
     filas: [[...columnas, 'SKUS'],
             ...productos.map(p => [...columnas.map(c => texto(p[c])),
                                    JSON.stringify(Array.isArray(p.SKUS) ? p.SKUS : [])])]
@@ -13009,6 +13039,38 @@ function fechaMasNueva(prods){
   return mejor ? diaAR(mejor) : '';
 }
 
+/* ---------- Los precios del viernes (Benja, 07/11/2026) ----------
+   ADVAPP manda en el sobre precios_congelados: { dia, cambian } los días en
+   que los precios son los de la última lista y no los de hoy (el sábado no
+   sale lista; el domingo y los días que cerramos, tampoco), o null. `dia` es
+   el de esa lista ('2026-11-06') y `cambian`, el día que sale la próxima
+   ('2026-11-09', o el martes si el lunes cerramos). El aviso va con las
+   palabras de Benja: "Precios del viernes 06/11. Es probable que cambien el
+   lunes." Sin el dato (ADVAPP viejo, la copia, la planilla) no se muestra
+   nada: la web no adivina feriados. */
+const FECHA_ISO = /^(\d{4})-(\d{2})-(\d{2})$/;
+function congeladosDe(x){
+  if(!x || !FECHA_ISO.test(String(x.dia || '')) || !FECHA_ISO.test(String(x.cambian || ''))) return null;
+  return { dia: String(x.dia), cambian: String(x.cambian) };
+}
+const NOMBRE_DIA = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+// Al mediodía UTC: el día de la semana no cambia con el huso del teléfono
+const diaSemana = iso => NOMBRE_DIA[new Date(`${iso}T12:00:00Z`).getUTCDay()];
+const ddmm = iso => { const m = FECHA_ISO.exec(iso); return m ? `${m[3]}/${m[2]}` : ''; };
+function textoCongelados(c){
+  return `<b>Precios del ${diaSemana(c.dia)} ${ddmm(c.dia)}.</b> Es probable que cambien el ${diaSemana(c.cambian)}.`;
+}
+function pintarCongelados(){
+  const el = $('aviso-congelados');
+  if(!el) return;
+  const m = FUENTE && FUENTE.fuente === 'advapp' ? FUENTE.manifiesto : null;
+  const c = m && m.congelados;
+  el.hidden = !c;
+  if(!c) return;
+  const t = $('aviso-congelados-txt'), html = textoCongelados(c);
+  if(t.innerHTML !== html) t.innerHTML = html;
+}
+
 /* Qué dice el sello después de una carga buena: [texto, vivo].
    "Actualizado hoy" con el punto verde SOLO si el manifiesto de la fuente lo
    confirma Y es de hoy (29/09). La hoja Meta de la planilla quedó congelada el
@@ -13178,6 +13240,7 @@ async function actualizar(primera){
     HORA_DATOS = esCopia ? FUENTE.hora : ULTIMA_OK;
     if(esCopia) sello(`Precios de las ${hhmm(HORA_DATOS)}`, false);
     else{ const [texto, vivo] = textoDelSello(); sello(texto, vivo); }
+    pintarCongelados();
     pintarFranja(esCopia);
     pintarPedido();          // el total con la hora, o sin ella (1.5 A)
     // Para el equipo: de dónde salió lo que se ve (pasando el mouse por el sello)

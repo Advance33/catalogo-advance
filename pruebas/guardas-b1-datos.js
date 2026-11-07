@@ -401,7 +401,8 @@ async function correrPruebas(){
        'msDeFecha entiende la fecha de la planilla y la ISO de ADVAPP (con 3 o 6 decimales)');
     ok(diaAR(msDeFecha('24/08/2026')) === '24/08/2026', 'la de la planilla sale el mismo dia', diaAR(msDeFecha('24/08/2026')));
     ok(!!fechaMasNueva(PRODUCTOS), 'con ADVAPP hay fecha de la fila mas nueva', fechaMasNueva(PRODUCTOS));
-    const con = man => b1Fetch((u, o, f) => esAdvapp(u) ? b1Json({ ...hoy, ...man }) : f(u, o), () => actualizar(false));
+    // Un día común (precios_congelados: null), sea el día que sea (07/11/2026)
+    const con = man => b1Fetch((u, o, f) => esAdvapp(u) ? b1Json({ ...hoy, precios_congelados: null, ...man }) : f(u, o), () => actualizar(false));
     await con({ verificado_hoy: true, generado_en: new Date().toISOString() });
     ok(b1Sello() === 'Actualizado hoy' && b1Verde(), 'con carga de hoy: "Actualizado hoy" en verde', b1Sello());
     await con({ verificado_hoy: true, generado_en: '2026-09-16T15:42:25' });

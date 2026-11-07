@@ -4030,7 +4030,7 @@ window.ADVAPP_TEMPRANO = (() => {
            llegar resenas.json aparecía y bajaba todo unos 50 px. Hasta
            entonces es un renglón invisible del mismo alto (sg-espera). -->
       <a class="razon sello-google sg-espera" id="sello-google" href="#resenas" tabindex="-1" aria-hidden="true"><span class="rz-ico"></span><span class="rz-txt"><b>&nbsp;</b><span>&nbsp;</span></span></a>
-      <p class="razon"><span class="rz-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="rz-txt"><b>Precios y stock de hoy</b><span>Sin listas viejas: se actualizan solos durante el día</span></span></p>
+      <p class="razon" id="razon-hoy"><span class="rz-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="rz-txt"><b>Precios y stock de hoy</b><span>Sin listas viejas: se actualizan solos durante el día</span></span></p>
       <p class="razon"><span class="rz-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z"/><path d="M9 10.5h6M9 13.5h4"/></svg></span><span class="rz-txt"><b>Consultá por WhatsApp</b><span>Elegí un producto: el mensaje sale con el modelo y el color ya escritos</span></span></p>
     </div>
   </div>
@@ -13060,15 +13060,28 @@ const ddmm = iso => { const m = FECHA_ISO.exec(iso); return m ? `${m[3]}/${m[2]}
 function textoCongelados(c){
   return `<b>Precios del ${diaSemana(c.dia)} ${ddmm(c.dia)}.</b> Es probable que cambien el ${diaSemana(c.cambian)}.`;
 }
+/* Esos días tampoco es cierto el renglón del encabezado «Precios y stock de
+   hoy · Sin listas viejas…»: dice de qué día son y hasta cuándo valen. El
+   texto de siempre queda guardado en el propio renglón y vuelve solo. El
+   título grande («Los precios de hoy. Hoy.») no se toca. */
+const RAZON_CONGELADA = 'Siguen valiendo hasta la próxima lista';
 function pintarCongelados(){
-  const el = $('aviso-congelados');
-  if(!el) return;
   const m = FUENTE && FUENTE.fuente === 'advapp' ? FUENTE.manifiesto : null;
-  const c = m && m.congelados;
-  el.hidden = !c;
-  if(!c) return;
-  const t = $('aviso-congelados-txt'), html = textoCongelados(c);
-  if(t.innerHTML !== html) t.innerHTML = html;
+  const c = (m && m.congelados) || null;
+  const el = $('aviso-congelados');
+  if(el){
+    el.hidden = !c;
+    const t = $('aviso-congelados-txt'), html = c ? textoCongelados(c) : '';
+    if(c && t.innerHTML !== html) t.innerHTML = html;
+  }
+  const r = $('razon-hoy'), b = r && r.querySelector('.rz-txt b'), s = r && r.querySelector('.rz-txt span');
+  if(b && s){
+    if(!('titulo' in r.dataset)){ r.dataset.titulo = b.textContent; r.dataset.bajada = s.textContent; }
+    const titulo = c ? `Precios del ${diaSemana(c.dia)}` : r.dataset.titulo;
+    const bajada = c ? RAZON_CONGELADA : r.dataset.bajada;
+    if(b.textContent !== titulo) b.textContent = titulo;
+    if(s.textContent !== bajada) s.textContent = bajada;
+  }
 }
 
 /* Qué dice el sello después de una carga buena: [texto, vivo].
@@ -13080,6 +13093,10 @@ function pintarCongelados(){
    Nunca más "En vivo" en verde como reserva. */
 function textoDelSello(){
   const m = FUENTE && FUENTE.manifiesto;
+  /* Los días de precios congelados (07/11/2026) no dice "Actualizado hoy":
+     dice de qué día son los precios, en ámbar y sin latir. */
+  if(m && m.congelados && FUENTE.fuente === 'advapp')
+    return [`Precios del ${diaSemana(m.congelados.dia)} ${ddmm(m.congelados.dia)}`, false];
   if(m && m.verificado_hoy === true && msDeFecha(m.generado_en)
      && diaAR(msDeFecha(m.generado_en)) === diaAR(Date.now()))
     return ['Actualizado hoy', true];

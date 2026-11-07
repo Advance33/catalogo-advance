@@ -66,6 +66,11 @@ function correrPruebas(){
   if(FUENTE && FUENTE.fuente === 'copia')
     ok(texto === 'Precios de las ' + hhmm(FUENTE.hora) && !verde,
        'con la copia de este navegador el sello dice la hora de esos precios, sin el punto verde', texto);
+  /* 07/11/2026: el fin de semana y los días que se cierra ADVAPP manda
+     precios_congelados y el sello dice de qué día son. Pasa cualquier día. */
+  else if(man && man.congelados && FUENTE.fuente === 'advapp')
+    ok(texto === 'Precios del ' + diaSemana(man.congelados.dia) + ' ' + ddmm(man.congelados.dia) && !verde,
+       'con precios congelados el sello dice de qué día son, sin el punto verde', texto);
   else if(deHoy)
     ok(texto === 'Actualizado hoy' && verde, 'con carga de hoy el sello dice "Actualizado hoy" en verde', texto);
   else

@@ -405,7 +405,11 @@ si alguna falta).
                   ADVAPP manda precios_congelados. Que se lea y se valide,
                   el texto exacto ("Precios del viernes 06/11. Es probable
                   que cambien el lunes."), que se vea solo con el dato de
-                  ADVAPP (nunca con la copia) y que a 390 y 1280 no desborde.
+                  ADVAPP (nunca con la copia), que el sello diga "Precios
+                  del viernes 06/11" y el renglon del encabezado "Precios del
+                  viernes / Siguen valiendo hasta la proxima lista" (y que
+                  vuelvan solos), que a 390 y 1280 no desborde, y una pagina
+                  de producto/ de punta a punta. Pasa cualquier dia.
 
 COMO SE CORREN
 --------------

@@ -69,7 +69,14 @@ async function correrPruebas(){
 
   /* ---- 4. El sello sale del manifiesto de ADVAPP, no de la hoja Meta ---- */
   const sello = document.getElementById('stamp').textContent.trim();
-  if(FUENTE && FUENTE.manifiesto && FUENTE.manifiesto.verificado_hoy)
+  /* El fin de semana y los días que se cierra ADVAPP manda precios_congelados
+     (07/11/2026): el sello dice de qué día son los precios. Así esta prueba
+     pasa cualquier día, con o sin el dato. */
+  const congelados = FUENTE && FUENTE.manifiesto && FUENTE.manifiesto.congelados;
+  if(congelados)
+    ok(sello === 'Precios del ' + diaSemana(congelados.dia) + ' ' + ddmm(congelados.dia),
+       'con precios congelados de ADVAPP el sello dice de qué día son', sello);
+  else if(FUENTE && FUENTE.manifiesto && FUENTE.manifiesto.verificado_hoy)
     ok(sello === 'Actualizado hoy', 'con verificado_hoy de ADVAPP el sello dice "Actualizado hoy"', sello);
   else
     ok(sello !== 'Actualizado hoy', 'sin verificado_hoy de ADVAPP el sello no dice "hoy"', sello);
@@ -126,8 +133,9 @@ async function correrPruebas(){
     const n = Math.ceil(total * 0.65), m = Math.ceil(total * 0.4);
     const ahora = Date.now();
     const g1 = new Date(ahora - 60000).toISOString(), g2 = new Date(ahora).toISOString();
-    // ADVAPP verificado y de hoy: lo que antes salia "Actualizado hoy"
-    const corto = (gen, cant = n, extra = {}) => respuesta({ ...real, ...extra, filas: cant, generado_en: gen,
+    // ADVAPP verificado y de hoy: lo que antes salia "Actualizado hoy". Un día
+    // común (precios_congelados: null), sea el día que sea (07/11/2026).
+    const corto = (gen, cant = n, extra = {}) => respuesta({ ...real, precios_congelados: null, ...extra, filas: cant, generado_en: gen,
                                                             verificado_hoy: true, productos: real.productos.slice(0, cant) });
     const copia0 = leerCopia();
     const nCopia = copia0 ? copia0.filas.length - 1 : 0;

@@ -399,6 +399,17 @@ si alguna falta).
                   lang="es-AR". Lo que arregla el proximo PUBLICAR (un
                   modelo que volvio y su pagina sin "Otros modelos") es
                   AVISO.
+  precios-congelados.js
+                  Los precios del viernes (Benja, 07/11/2026): el sabado no
+                  sale lista y el fin de semana (y los dias que se cierra)
+                  ADVAPP manda precios_congelados. Que se lea y se valide,
+                  el texto exacto ("Precios del viernes 06/11. Es probable
+                  que cambien el lunes."), que se vea solo con el dato de
+                  ADVAPP (nunca con la copia), que el sello diga "Precios
+                  del viernes 06/11" y el renglon del encabezado "Precios del
+                  viernes / Siguen valiendo hasta la proxima lista" (y que
+                  vuelvan solos), que a 390 y 1280 no desborde, y una pagina
+                  de producto/ de punta a punta. Pasa cualquier dia.
 
 COMO SE CORREN
 --------------

@@ -82,6 +82,9 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
 .otros a{display:block;height:100%;padding:10px 12px;border:1.5px solid var(--linea);border-radius:12px;background:var(--papel);text-decoration:none;font-weight:600;font-size:14px;line-height:1.3}
 .otros a:hover{border-color:var(--acento);color:var(--acento)}
 .todos{justify-self:start;font:600 11.5px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--acento)}
+.congelado{margin:0;padding:10px 12px;border-radius:12px;background:var(--tarjeta);box-shadow:inset 0 0 0 1.5px var(--linea);color:var(--tinta);font-size:13.5px;line-height:1.4}
+.congelado[hidden]{display:none}
+.congelado b{font-weight:700}
 </style>
 </head>
 <body>
@@ -99,6 +102,7 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
       <div class="eje" id="versiones"><small>Versión</small><div class="fila" id="fila-versiones"></div></div>
       <div class="eje" id="colores"><small>Color</small><div class="fila" id="fila-colores"></div></div>
       <div class="precio sin" id="precio"><b>Consultá el precio</b><i>El precio y el stock del día, por WhatsApp</i></div>
+      <p class="congelado" id="congelado" hidden></p>
       <a class="wa" href="https://wa.me/5491125205232?text=Hola!%20Me%20interesa%20el%20Pel%C3%ADcula%20Fujifilm%20INSTAX%20mini%2C%20pack%20doble%20(2%20x%2010).%20%C2%BFMe%20pas%C3%A1s%20info%3F" target="_blank" rel="noopener">Consultar por WhatsApp</a>
       <a class="ver" id="ver" href="../../#p=CAM-FUJ-008&amp;s=ACM-FUJ-INSTAXMINIFILM-000-000-2X10">Ver en el catálogo</a>
     </div>
@@ -186,6 +190,16 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
   fetch(D.advapp).then((r) => r.ok ? r.json() : null).then((j) => {
     const filas = j && Array.isArray(j.productos) ? j.productos : null;
     if(!filas) return;
+    { /* Los precios del viernes (07/11/2026): ver herramientas/paginas-producto.py */
+      const pc = j.precios_congelados, fecha = /^(\d{4})-(\d{2})-(\d{2})$/, cong = document.getElementById('congelado');
+      if(cong && pc && fecha.test(pc.dia || '') && fecha.test(pc.cambian || '')){
+        const dias = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+        const dia = (iso) => dias[new Date(iso + 'T12:00:00Z').getUTCDay()];
+        const f = fecha.exec(pc.dia);
+        cong.innerHTML = '<b>Precios del ' + dia(pc.dia) + ' ' + f[3] + '/' + f[2] + '.</b> Es probable que cambien el ' + dia(pc.cambian) + '.';
+        cong.hidden = false;
+      }
+    }
     const porId = new Map(filas.map((f) => [String(f.ID), f]));
     const porSku = new Map(filas.filter((f) => f.SKU_VARIANTE).map((f) => [String(f.SKU_VARIANTE).trim().toUpperCase(), f]));
     for(const x of D.versiones){

@@ -402,6 +402,9 @@ a:focus-visible,.chip:focus-visible{outline:2px solid var(--acento);outline-offs
 .otros a{display:block;height:100%;padding:10px 12px;border:1.5px solid var(--linea);border-radius:12px;background:var(--papel);text-decoration:none;font-weight:600;font-size:14px;line-height:1.3}
 .otros a:hover{border-color:var(--acento);color:var(--acento)}
 .todos{justify-self:start;font:600 11.5px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--acento)}
+.congelado{margin:0;padding:10px 12px;border-radius:12px;background:var(--tarjeta);box-shadow:inset 0 0 0 1.5px var(--linea);color:var(--tinta);font-size:13.5px;line-height:1.4}
+.congelado[hidden]{display:none}
+.congelado b{font-weight:700}
 '''
 
 # El script de la pagina: elegir version y color, y traer el precio y el stock
@@ -519,6 +522,53 @@ SCRIPT = r'''
 '''
 
 
+# --------------------------------------------------------------------------
+# Los precios del viernes (Benja, 07/11/2026)
+# --------------------------------------------------------------------------
+# «Congelemos los del viernes avisando que es probable que el lunes cambien».
+# El sábado no sale lista, y el fin de semana y los días que se cierra ADVAPP
+# manda en el sobre precios_congelados = {dia, cambian}. Abajo del recuadro del
+# precio la página lo dice, como la portada: "Precios del viernes 06/11. Es
+# probable que cambien el lunes." Sin el dato no se muestra nada. Va entre
+# llaves: sus nombres no chocan con los del script, tampoco con los viejos.
+ANCLA_PRECIOS = """    const filas = j && Array.isArray(j.productos) ? j.productos : null;
+    if(!filas) return;
+"""
+AVISO_JS = r"""    { /* Los precios del viernes (07/11/2026): ver herramientas/paginas-producto.py */
+      const pc = j.precios_congelados, fecha = /^(\d{4})-(\d{2})-(\d{2})$/, cong = document.getElementById('congelado');
+      if(cong && pc && fecha.test(pc.dia || '') && fecha.test(pc.cambian || '')){
+        const dias = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+        const dia = (iso) => dias[new Date(iso + 'T12:00:00Z').getUTCDay()];
+        const f = fecha.exec(pc.dia);
+        cong.innerHTML = '<b>Precios del ' + dia(pc.dia) + ' ' + f[3] + '/' + f[2] + '.</b> Es probable que cambien el ' + dia(pc.cambian) + '.';
+        cong.hidden = false;
+      }
+    }
+"""
+assert SCRIPT.count(ANCLA_PRECIOS) == 1
+SCRIPT = SCRIPT.replace(ANCLA_PRECIOS, ANCLA_PRECIOS + AVISO_JS, 1)
+CSS_CONGELADO = '\n'.join(l for l in CSS.splitlines() if l.startswith('.congelado')) + '\n'
+CONGELADO_HTML = '      <p class="congelado" id="congelado" hidden></p>\n'
+
+
+def con_aviso_congelado(t):
+    """El aviso de los precios del viernes en una pagina que no se rearma (la
+    de un modelo que hoy no esta, y las de antes del 07/11/2026): el estilo,
+    el renglon abajo del recuadro del precio y el codigo en el script, en los
+    mismos lugares en que los pone armar_pagina. Lo que ya lo tiene, un desvio
+    o lo que no reconoce, queda como esta."""
+    t = t or ''
+    if 'id="congelado"' in t or desvio_de(t) or ANCLA_PRECIOS not in t or t.count('</style>') != 1:
+        return t
+    m = re.search(r'(<div class="precio(?: sin)?" id="precio">.*?</div>\n)', t)
+    if not m:
+        return t
+    t = t[:m.end()] + CONGELADO_HTML + t[m.end():]
+    if '.congelado{' not in t:
+        t = t.replace('</style>', CSS_CONGELADO + '</style>', 1)
+    return t.replace(ANCLA_PRECIOS, ANCLA_PRECIOS + AVISO_JS, 1)
+
+
 def html_otros(otros, rubro):
     """El bloque "Otros modelos" (05/11/2026, auditoria TG-05): links de
     verdad a otras paginas de producto/, para que Google llegue a cada una
@@ -619,6 +669,7 @@ def armar_pagina(m, s, publica, general, otros=None):
       <div class="eje" id="versiones"><small>Versión</small><div class="fila" id="fila-versiones"></div></div>
       <div class="eje" id="colores"><small>Color</small><div class="fila" id="fila-colores"></div></div>
       <div class="precio sin" id="precio">{precio_txt}</div>
+      <p class="congelado" id="congelado" hidden></p>
       {wa}
       <a class="ver" id="ver" href="../../#p={clave_q}{sku_q}">Ver en el catálogo</a>
     </div>
@@ -743,7 +794,7 @@ def sin_stock_en_pagina(ruta):
     except OSError:
         return False
     nuevo = t.replace('"availability": "https://schema.org/InStock"', '"availability": "https://schema.org/OutOfStock"')
-    nuevo = con_lang_ar(sin_precio_viejo(nuevo))
+    nuevo = con_aviso_congelado(con_lang_ar(sin_precio_viejo(nuevo)))
     return escribir_si_cambio(ruta, nuevo) if nuevo != t else False
 
 
@@ -1328,6 +1379,19 @@ def probar():
     ok('770' not in sd and dd['versiones'][0]['stock'] is False and dd['versiones'][0]['clave'] == 'DYS-X' and dd['cuotas'] == 12,
        'G-01: los datos del script viejo pierden el precio y quedan sin stock (el Dyson HD16 decia USD 770)')
     ok(sin_precio_viejo(sd) == sd, 'y una segunda pasada no los vuelve a tocar')
+    # Los precios del viernes (Benja, 07/11/2026)
+    ok(CONGELADO_HTML.strip() in h and h.index('id="precio"') < h.index('id="congelado"') < h.index('class="wa"'),
+       '07/11: abajo del recuadro del precio va el renglon de los precios del viernes, escondido')
+    ok('.congelado{' in h and '.congelado[hidden]{display:none}' in h and AVISO_JS in h and 'j.precios_congelados' in h,
+       'con su estilo y el codigo que lo llena con precios_congelados de ADVAPP')
+    ok(h.count(AVISO_JS) == 1 and h.index(ANCLA_PRECIOS) < h.index(AVISO_JS), 'una sola vez, apenas llegan los productos')
+    sin_aviso = h.replace(CONGELADO_HTML, '').replace(CSS_CONGELADO, '').replace(AVISO_JS, '')
+    ok('congelado' not in sin_aviso and con_aviso_congelado(sin_aviso) == h,
+       'una pagina de antes del 07/11 queda igual que una rearmada (con_aviso_congelado)')
+    ok(con_aviso_congelado(h) == h and con_aviso_congelado(con_aviso_congelado(sin_aviso)) == h, 'y una segunda pasada no la toca')
+    desv = pagina_desvio('X', 'apple-iphone-17-pro', 'https://catalogo.advancetecno.com.ar/')
+    ok(con_aviso_congelado(desv) == desv and con_aviso_congelado('<p>otra cosa</p>') == '<p>otra cosa</p>',
+       'un desvio o algo que no reconoce queda como esta')
     # (auditoria 19/10/2026, T-01) Las versiones y los colores van escapados en los botones
     ok('data-v="${esc(v)}"' in SCRIPT and '${esc(v || \'Única\')}' in SCRIPT and 'data-c="${esc(y.color)}"' in SCRIPT,
        'T-01: una version con comillas (13" 1TB) no corta el atributo del boton')

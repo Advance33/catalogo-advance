@@ -82,10 +82,12 @@ pagina veian "Consulta el precio" y en la portada, "Cargando…". Benja eligio
   stock y los datos para Google de ese momento, con "Precio al 12/11/2026,
   13:05". Lo agotado, sin precio (D15 B). Lo corre SOLO el workflow de
   Publicar (.github/workflows/publicar.yml), sobre la copia que publica: en
-  cada publicacion y 3 veces por dia. El repo y PUBLICAR siguen sin precio,
-  asi que lo publicado en producto/ ya no es igual a main. Lo del W3-06 (a
-  las 22 h de un PUBLICAR, 119 de 715 versiones tenian otro precio) se cubre
-  con la hora escrita y rearmando cada pocas horas. Al abrir, el script trae
+  cada publicacion y a las 15 y a las 18 (Benja: «solo a las 15h y 18h»).
+  No gasta tokens ni relee listas: baja de ADVAPP lo mismo que la portada
+  (resource=tecno-web). El repo y PUBLICAR siguen sin precio, asi que lo
+  publicado en producto/ ya no es igual a main. Lo del W3-06 (a las 22 h de
+  un PUBLICAR, 119 de 715 versiones tenian otro precio) se cubre con la hora
+  escrita al lado de cada precio. Al abrir, el script trae
   lo de ADVAPP como siempre; lo escrito queda hasta que llega (o hasta que se
   toca otra version o color), y si ADVAPP no contesta se saca y queda
   "Consulta el precio": a una persona nunca se le muestra un precio viejo.

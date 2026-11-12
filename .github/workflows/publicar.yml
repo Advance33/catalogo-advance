@@ -43,9 +43,11 @@
 #     cualquier cambio dejaba las páginas sin precio hasta las 15.
 #     No va a la hora en punto: GitHub demora las programadas, sobre todo las
 #     del minuto 0, y a veces las saltea (el 12/11 la de las 15:00 no había
-#     arrancado una hora después). Unos minutos pasada la hora entra lo que
-#     se cargó hasta las 15 y hasta las 18. Además GitHub apaga lo programado
-#     si el repo pasa 60 días sin cambios (se vuelve a prender en Actions).
+#     arrancado una hora después). No hay un corte a las 15 ni a las 18: toma
+#     lo que hay en ADVAPP cuando arranca, y esa hora queda escrita en la
+#     página. Si no puede escribir el precio, no publica (ver el paso).
+#     Además GitHub apaga lo programado si el repo pasa 60 días sin cambios
+#     (se vuelve a prender en Actions).
 #
 # Después de publicar le avisa a Bing qué páginas cambiaron (IndexNow,
 # 12/11/2026, herramientas/indexnow.py): sin el aviso, Bing tarda días en
@@ -96,13 +98,22 @@ jobs:
 
       # El precio del momento (12/11/2026, ver arriba). Se arma en esta copia
       # del repo, antes de copiarla, con la portada CON comentarios (la que
-      # conoce el generador). Si no se puede (ADVAPP o Chrome no contestan),
-      # se vuelve al repo tal cual y se publica sin precio, como antes, con un
-      # aviso en el resumen de la corrida.
+      # conoce el generador). Si no se puede (ADVAPP o Chrome no contestan):
+      # - en un push hay un cambio que publicar: se vuelve al repo tal cual y
+      #   se publica sin precio, como antes, con un aviso en el resumen;
+      # - en la corrida programada no hay nada más que publicar: falla acá y
+      #   no publica. Queda lo que estaba, con el precio y su fecha, en vez de
+      #   pisarlo con páginas sin precio hasta la corrida siguiente.
       - name: Escribir el precio del momento en las páginas de cada modelo
         id: precio
+        env:
+          PROGRAMADA: ${{ github.event_name == 'schedule' }}
         run: |
           if ! python3 herramientas/paginas-producto.py --con-precio; then
+            if [ "$PROGRAMADA" = true ]; then
+              echo "::error::No se pudo escribir el precio del momento. Es la corrida programada, que solo existe para eso: no se publica y queda lo que estaba, con su fecha."
+              exit 1
+            fi
             echo "::warning::No se pudo escribir el precio del momento: se publican las páginas del repo, sin precio."
             git reset -q --hard HEAD
             git clean -fdq

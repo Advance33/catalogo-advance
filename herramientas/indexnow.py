@@ -10,8 +10,9 @@
 (.github/workflows/publicar.yml), que antes de comparar corre las pruebas.
 
 POR QUE EXISTE (12/11/2026, buscadores con IA)
-El precio escrito en producto/ se rearma a las 15 y a las 18 y en cada
-publicacion (paginas-producto.py --con-precio). Bing no se entera hasta que
+El precio escrito en producto/ se rearma a las 15:07 y a las 18:07 (el
+horario esta en publicar.yml) y en cada publicacion (paginas-producto.py
+--con-precio). Bing no se entera hasta que
 vuelve a pasar por la pagina, y puede tardar dias: mientras tanto Copilot, que
 busca en Bing, y en parte ChatGPT cuentan el precio viejo. IndexNow
 (indexnow.org) es el aviso que Bing pide para eso: la lista de direcciones que

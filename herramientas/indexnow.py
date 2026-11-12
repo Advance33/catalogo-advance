@@ -27,8 +27,9 @@ Mira cada modelo (producto/<nombre>/), "Todos los modelos" (producto/), las
 preguntas (preguntas/) y llms.txt. La portada no: se arma con JavaScript y su
 HTML no cambia con los precios.
 Si unas pocas no se pudieron bajar para comparar, se avisan igual: un aviso
-de mas no molesta y uno de menos deja el precio viejo. Si son muchas, es que
-el sitio no contesta y no se avisa ninguna de esas.
+de mas no molesta y uno de menos deja el precio viejo. Si son muchas las que
+no bajan, o muchas las que el sitio dice no tener, es el sitio que no contesta
+bien y esas no se avisan.
 
 LA CLAVE
 IndexNow pide una clave en un archivo de la raiz del sitio que se llama como
@@ -38,13 +39,17 @@ secreto: va publicada y cualquiera la puede leer. robots.txt la deja pasar
 
 NUNCA FRENA LA PUBLICACION
 Si algo falla (el sitio no contesta, IndexNow tampoco despues de tres
-intentos), queda un aviso en el resumen de la corrida y termina bien.
+intentos), queda un aviso en el resumen de la corrida y termina bien. La
+comparacion tiene dos minutos: lo que no llego a comparar cuenta como que no
+bajo.
 
 LO QUE NO CUBRE
 - Si IndexNow no recibe un aviso, esas paginas no se vuelven a avisar: la
   corrida siguiente ya compara contra lo publicado. Bing las ve cuando pasa.
 - Dos corridas pegadas (un push cerca de las 15 o de las 18) comparan contra
-  el mismo sitio y avisan lo mismo dos veces. No trae problemas.
+  el mismo sitio, el de antes de las dos. Casi siempre avisan lo mismo dos
+  veces, que no trae problemas; si justo entre una y otra cambio un precio,
+  la segunda puede publicarlo sin avisarlo.
 - Si un dia no se pudo escribir el precio y se publican las paginas del repo,
   el workflow no compara ni avisa: no hay nada bueno que contarle a Bing.
 """
@@ -63,8 +68,11 @@ RAIZ = os.path.dirname(AQUI)
 
 CLAVE = 'ba1130a96e87dc0f407811c8dd679e65'
 SERVICIO = 'https://api.indexnow.org/indexnow'
+AGENTE = 'catalogo-advance/indexnow'
 TOPE = 10000        # lo maximo que IndexNow recibe en un aviso
-ESPERAS = (5, 20)   # segundos antes del segundo y del tercer intento
+PESO = 100000       # bytes: la lista viaja al job que avisa en una variable de entorno, que admite unos 128 KB
+ESPERAS = (5, 20)   # segundos antes del segundo y del tercer intento del aviso
+TIEMPO = 120        # segundos que tiene la comparacion
 
 # La hora del precio, en las formas en que la escribe paginas-producto.py:
 # "Precio al 12/11/2026, 13:05", "Precios en dolares al 12/11/2026, 13:05",
@@ -129,10 +137,10 @@ def del_sitemap(xml, publica):
 def bajar(url, abrir=urllib.request.urlopen, dormir=time.sleep):
     """El texto publicado en url; None si no existe (404). Si no contesta,
     prueba dos veces mas; si sigue sin contestar, la excepcion."""
-    pedido = urllib.request.Request(url, headers={'User-Agent': 'catalogo-advance/indexnow'})
+    pedido = urllib.request.Request(url, headers={'User-Agent': AGENTE})
     for espera in (1, 3, None):
         try:
-            with abrir(pedido, timeout=20) as r:
+            with abrir(pedido, timeout=10) as r:
                 return r.read().decode('utf-8', 'replace')
         except urllib.error.HTTPError as e:
             if e.code == 404:
@@ -145,31 +153,49 @@ def bajar(url, abrir=urllib.request.urlopen, dormir=time.sleep):
         dormir(espera)
 
 
-def comparar(armadas, antes, publica, bajar=bajar, hilos=8):
-    """Que hay que avisar. armadas: {direccion relativa: texto recien armado};
-    antes: las direcciones relativas del sitemap publicado. Devuelve
-    (cambiadas, sin_bajar): las que dicen otra cosa, las nuevas y las que ya
-    no estan; y las que no se pudieron bajar para comparar."""
+def comparar(armadas, antes, publica, bajar=bajar, hilos=8, tiempo=TIEMPO, reloj=time.time):
+    """Compara lo armado con lo publicado. armadas: {direccion relativa: texto
+    recien armado}; antes: las direcciones relativas del sitemap publicado.
+    Devuelve cuatro listas: distintas (dicen otra cosa), nuevas (el sitio no
+    las tiene), bajas (estaban y ya no se arman) y sin_bajar (no se pudieron
+    comparar: no bajaron o se acabo el tiempo)."""
+    limite = reloj() + tiempo
+
     def una(rel):
+        if reloj() > limite:
+            return rel, None, IOError('se acabo el tiempo')
         try:
             return rel, bajar(publica + rel), None
         except Exception as e:    # una pagina que no baja no frena a las demas
             return rel, None, e
 
-    cambiadas, sin_bajar = [], []
+    distintas, nuevas, sin_bajar = [], [], []
     with concurrent.futures.ThreadPoolExecutor(max_workers=hilos) as pool:
         for rel, publicada, error in pool.map(una, sorted(armadas)):
             if error is not None:
                 sin_bajar.append(rel)
-            elif publicada is None or sin_hora(publicada) != sin_hora(armadas[rel]):
-                cambiadas.append(rel)
-    return cambiadas + sorted(r for r in antes if r not in armadas), sin_bajar
+            elif publicada is None:
+                nuevas.append(rel)
+            elif sin_hora(publicada) != sin_hora(armadas[rel]):
+                distintas.append(rel)
+    return distintas, nuevas, sorted(r for r in antes if r not in armadas), sin_bajar
 
 
-def pocas(sin_bajar, total):
-    """Si las que no se pudieron bajar son pocas (se avisan igual) o tantas que
-    es el sitio el que no contesta (no se avisan)."""
-    return len(sin_bajar) < total and len(sin_bajar) <= max(5, total // 10)
+def pocas(lista, total):
+    """Si son pocas (se avisan) o tantas que es el sitio el que no contesta
+    bien (no se avisan)."""
+    return len(lista) < total and len(lista) <= max(5, total // 10)
+
+
+def recortar(urls, tope=TOPE, peso=PESO):
+    """Las direcciones que entran en un aviso."""
+    out, total = [], 2
+    for u in urls[:tope]:
+        total += len(json.dumps(u)) + 2
+        if total > peso:
+            break
+        out.append(u)
+    return out
 
 
 def cuerpo(urls, publica, clave=CLAVE):
@@ -181,7 +207,7 @@ def cuerpo(urls, publica, clave=CLAVE):
 def avisar(urls, publica, abrir=urllib.request.urlopen):
     """Manda el aviso y devuelve el codigo con que contesto IndexNow."""
     pedido = urllib.request.Request(SERVICIO, data=json.dumps(cuerpo(urls, publica)).encode('utf-8'),
-                                    headers={'Content-Type': 'application/json; charset=utf-8'})
+                                    headers={'Content-Type': 'application/json; charset=utf-8', 'User-Agent': AGENTE})
     try:
         with abrir(pedido, timeout=30) as r:
             return r.getcode()
@@ -221,19 +247,25 @@ def main_cambios(raiz=RAIZ, entorno=os.environ, bajar=bajar):
         except Exception as e:
             print('::warning::IndexNow: no se pudo bajar el sitemap publicado (%s). Las paginas dadas de baja no se avisan.' % e)
             antes = set()
-        cambiadas, sin_bajar = comparar(armadas, antes, publica, bajar=bajar)
-        print('IndexNow: %d de %d paginas dicen otra cosa que lo publicado.' % (len(cambiadas), len(armadas)))
-        if sin_bajar and pocas(sin_bajar, len(armadas)):
+        distintas, nuevas, bajas, sin_bajar = comparar(armadas, antes, publica, bajar=bajar)
+        total = len(armadas)
+        print('IndexNow: de %d paginas, %d dicen otra cosa que lo publicado, %d son nuevas y %d ya no estan.'
+              % (total, len(distintas), len(nuevas), len(bajas)))
+        cambiadas = distintas + bajas
+        if pocas(nuevas, total):
+            cambiadas += nuevas
+        else:
+            print('::warning::IndexNow: el sitio dice no tener %d de %d paginas: no contesta bien. Esas no se avisan.' % (len(nuevas), total))
+        if sin_bajar and pocas(sin_bajar, total):
             print('::notice::IndexNow: %d paginas no se pudieron bajar para comparar; se avisan igual (%s).'
                   % (len(sin_bajar), ', '.join(sin_bajar[:4])))
             cambiadas += sin_bajar
         elif sin_bajar:
             print('::warning::IndexNow: %d de %d paginas publicadas no se pudieron bajar: el sitio no contesta. Esas no se avisan.'
-                  % (len(sin_bajar), len(armadas)))
-        urls = [publica + rel for rel in cambiadas]
-        if len(urls) > TOPE:
-            print('::warning::IndexNow: cambiaron %d paginas y un aviso lleva hasta %d. Las demas no se avisan.' % (len(urls), TOPE))
-            urls = urls[:TOPE]
+                  % (len(sin_bajar), total))
+        urls = recortar([publica + rel for rel in cambiadas])
+        if len(urls) < len(cambiadas):
+            print('::warning::IndexNow: cambiaron %d paginas y en un aviso entran %d. Las demas no se avisan.' % (len(cambiadas), len(urls)))
         for u in urls[:12]:
             print('  ' + u)
         if len(urls) > 12:
@@ -308,13 +340,26 @@ def probar():
     s1, s2 = '2026-11-12T13:05:00-03:00', '2026-11-13T09:40:00-03:00'
     ok(RE_HORA.sub('', pp.texto_sello(s1)) == '' and pp.texto_sello(s1) != pp.texto_sello(s2),
        'la hora que escribe paginas-producto.py es la que aca se saca', pp.texto_sello(s1))
+
+    def modelo(precio):
+        return {'familia': 'M:X', 'titulo': 'Apple iPhone 17 Pro', 'marca': 'Apple', 'categoria': 'Celular', 'rubro': 'Celulares',
+                'clave': 'A1', 'sku': '', 'desde': precio, 'hasta': 1570, 'stock': True, 'wa': 'https://wa.me/1?text=hola',
+                'versiones': [{'version': '256GB', 'color': 'Orange', 'precio': precio, 'stock': True, 'clave': 'A1', 'sku': '', 'wa': '', 'aviso': ''},
+                              {'version': '512GB', 'color': 'Blue', 'precio': 1570, 'stock': True, 'clave': 'A2', 'sku': '', 'wa': '', 'aviso': ''}]}
+
+    def pagina(precio, sello):
+        g = {'cuotas': 12, 'congelados': {'dia': '2026-11-06', 'cambian': '2026-11-09'}}
+        return pp.con_precio_del_dia(pp.armar_pagina(modelo(precio), 'x', pub, g), modelo(precio), g, sello, pub + 'producto/x/')
+
+    ok('Precio al 12/11/2026, 13:05' in pagina(1200, s1) and '"sello": "%s"' % s1 in pagina(1200, s1)
+       and pagina(1200, s1) != pagina(1200, s2) and sin_hora(pagina(1200, s1)) == sin_hora(pagina(1200, s2)),
+       'la pagina de un modelo armada a otra hora, con el precio escrito, es la misma pagina')
+    ok(sin_hora(pagina(1200, s1)) != sin_hora(pagina(1210, s1)), 'y con otro precio es otra')
     ent = [{'slug': 'x', 'titulo': 'X', 'rubro': 'Celulares', 'desde': 1200, 'stock': True}]
     gen = {'cuotas': 12, 'whatsapp': '5491100000000', 'direccion': 'Av. X 1, CABA', 'descripcion': 'Tienda.', 'preguntas': []}
-    ok(sin_hora(pp.armar_llms(gen, pub, ent, s1)) == sin_hora(pp.armar_llms(gen, pub, ent, s2))
-       and pp.armar_llms(gen, pub, ent, s1) != pp.armar_llms(gen, pub, ent, s2),
-       'llms.txt armado a otra hora es el mismo llms.txt')
-    ok('"sello": "%s"' % s1 in json.dumps({'sello': s1}) and RE_SELLO.sub('', json.dumps({'sello': s1})) == '{}',
-       'y el sello de los datos de la pagina tambien se saca')
+    for nombre, arma in (('llms.txt', lambda s: pp.armar_llms(gen, pub, ent, s)), ('"Todos los modelos"', lambda s: pp.armar_indice(ent, pub, gen, s))):
+        ok(pp.texto_sello(s1) in arma(s1) and arma(s1) != arma(s2) and sin_hora(arma(s1)) == sin_hora(arma(s2)),
+           '%s armado a otra hora es el mismo' % nombre)
 
     sm = ('<urlset><url><loc>%s</loc></url><url><loc>%sproducto/</loc></url><url><loc>%spreguntas/</loc></url>'
           '<url><loc>%sproducto/vieja/</loc></url><url><loc>https://otro.example/producto/x/</loc></url></urlset>') % ((pub,) * 4)
@@ -329,13 +374,21 @@ def probar():
         return publicado[url]
 
     armadas = {'producto/igual/': b, 'producto/otro-precio/': c, 'producto/': b, 'producto/nueva/': b, 'producto/se-cae/': b}
-    cambiadas, sin_bajar = comparar(armadas, {'producto/igual/', 'producto/vieja/', 'preguntas/'}, pub, bajar=baja, hilos=2)
-    ok(cambiadas == ['producto/nueva/', 'producto/otro-precio/', 'preguntas/', 'producto/vieja/'],
-       'se avisan la que cambio de precio, la nueva y las que ya no estan; la que solo cambio de hora, no', cambiadas)
-    ok(sin_bajar == ['producto/se-cae/'], 'la que no se pudo bajar queda aparte y no frena a las demas', sin_bajar)
-    ok(comparar({'producto/igual/': b}, {'producto/igual/'}, pub, bajar=baja) == ([], []), 'si no cambio nada, la lista queda vacia')
+    r = comparar(armadas, {'producto/igual/', 'producto/vieja/', 'preguntas/'}, pub, bajar=baja, hilos=2)
+    ok(r == (['producto/otro-precio/'], ['producto/nueva/'], ['preguntas/', 'producto/vieja/'], ['producto/se-cae/']),
+       'aparte: la que cambio de precio, la nueva, las que ya no estan y la que no bajo; la que solo cambio de hora, en ninguna', r)
+    ok(comparar({'producto/igual/': b}, {'producto/igual/'}, pub, bajar=baja) == ([], [], [], []), 'si no cambio nada, no hay nada que avisar')
+    reloj = iter([0, 0, 500, 500, 500, 500, 500])
+    r = comparar(armadas, set(), pub, bajar=baja, hilos=1, tiempo=120, reloj=lambda: next(reloj))
+    ok(r[3] == ['producto/igual/', 'producto/nueva/', 'producto/otro-precio/', 'producto/se-cae/'] and r[:3] == ([], [], []),
+       'cuando se acaba el tiempo no sigue bajando: lo que falta cuenta como que no bajo', r)
     ok(pocas(['a'] * 5, 20) and not pocas(['a'] * 6, 20) and pocas(['a'] * 47, 476) and not pocas(['a'] * 48, 476)
-       and not pocas(['a'] * 4, 4), 'pocas sin bajar se avisan igual; muchas, o todas, es que el sitio no contesta')
+       and not pocas(['a'] * 4, 4) and pocas([], 4), 'pocas se avisan; muchas, o todas, es que el sitio no contesta bien')
+    largas = [pub + 'producto/%s/' % ('x' * 60)] * 600
+    ok(recortar(['u'] * 5, tope=3) == ['u'] * 3 and len(recortar(largas, peso=1000)) == 10
+       and len(json.dumps(recortar(largas, peso=1000))) <= 1000
+       and len(json.dumps(recortar(largas * 3))) <= PESO < len(json.dumps(largas * 3)) and recortar(largas) == largas,
+       'en un aviso entra lo que IndexNow recibe y lo que el workflow puede pasar', len(recortar(largas, peso=1000)))
 
     class Respuesta(object):
         def __init__(self, codigo=200, texto=b''):
@@ -383,7 +436,8 @@ def probar():
     visto = {}
 
     def abre(pedido, timeout=None):
-        visto['url'], visto['datos'], visto['tipo'] = pedido.full_url, json.loads(pedido.data.decode('utf-8')), pedido.get_header('Content-type')
+        visto.update(url=pedido.full_url, datos=json.loads(pedido.data.decode('utf-8')),
+                     tipo=pedido.get_header('Content-type'), agente=pedido.get_header('User-agent'))
         return Respuesta(202)
 
     def rechaza(pedido, timeout=None):
@@ -391,7 +445,8 @@ def probar():
 
     ok(avisar([pub + 'producto/a/'], pub, abrir=abre) == 202 and visto['url'] == SERVICIO
        and visto['datos']['urlList'] == [pub + 'producto/a/'] and visto['datos']['key'] == CLAVE
-       and visto['tipo'] == 'application/json; charset=utf-8', 'el aviso sale a IndexNow en JSON', visto)
+       and visto['tipo'] == 'application/json; charset=utf-8' and visto['agente'] == AGENTE,
+       'el aviso sale a IndexNow en JSON y dice quien lo manda', visto)
     ok(avisar([pub + 'producto/a/'], pub, abrir=rechaza) == 403, 'si IndexNow lo rechaza, devuelve el codigo y no se cae')
 
     def serie(*respuestas):
@@ -437,13 +492,18 @@ def probar():
         def se_rompe(url):
             raise RuntimeError('algo raro')
 
-        sal2, sal3, sal4 = (os.path.join(d, n) for n in ('salida2', 'salida3', 'salida4'))
-        r1 = callado(main_cambios, d, {'GITHUB_OUTPUT': sal2}, bajar=baja_casi_todo)
-        ok(r1 == 0 and json.loads(leer(sal2).split('=', 1)[1]) == [pub + 'producto/vieja/', pub + 'producto/uno/'],
-           'de punta a punta: la que ya no esta y la unica que no bajo se avisan', leer(sal2))
-        ok(callado(main_cambios, d, {'GITHUB_OUTPUT': sal3}, bajar=se_rompe) == 0 and leer(sal3) == 'cambios=[]\n',
+        def nada(url):
+            return None
+
+        sal = [os.path.join(d, 'salida%d' % i) for i in range(2, 6)]
+        r1 = callado(main_cambios, d, {'GITHUB_OUTPUT': sal[0]}, bajar=baja_casi_todo)
+        ok(r1 == 0 and json.loads(leer(sal[0]).split('=', 1)[1]) == [pub + 'producto/vieja/', pub + 'producto/uno/'],
+           'de punta a punta: la que ya no esta y la unica que no bajo se avisan', leer(sal[0]))
+        ok(callado(main_cambios, d, {'GITHUB_OUTPUT': sal[1]}, bajar=se_rompe) == 0 and leer(sal[1]) == 'cambios=[]\n',
            'si el sitio no contesta nada, termina bien y la lista queda vacia')
-        ok(callado(main_cambios, os.path.join(d, 'no-hay'), {'GITHUB_OUTPUT': sal4}, bajar=se_rompe) == 0 and not os.path.exists(sal4),
+        ok(callado(main_cambios, d, {'GITHUB_OUTPUT': sal[2]}, bajar=nada) == 0 and leer(sal[2]) == 'cambios=[]\n',
+           'si el sitio dice que no tiene ninguna pagina, no las avisa como nuevas')
+        ok(callado(main_cambios, os.path.join(d, 'no-hay'), {'GITHUB_OUTPUT': sal[3]}, bajar=se_rompe) == 0 and not os.path.exists(sal[3]),
            'sin la portada no compara y termina bien')
         ok(callado(main_avisar, d, {'CAMBIOS': '[]'}) == 0 and callado(main_avisar, d, {'CAMBIOS': 'roto'}) == 0
            and callado(main_avisar, d, {}) == 0, 'sin lista, o con la lista rota, no avisa y termina bien')

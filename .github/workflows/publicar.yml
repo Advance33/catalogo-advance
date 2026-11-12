@@ -28,6 +28,9 @@
 #   - push a main (un merge o PUBLICAR): arma, verifica y publica.
 #   - un PR a main que toque index.html o .github/: arma y verifica, sin
 #     publicar. Así un cambio que rompa la copia se ve antes del merge.
+#     También si toca robots.txt, el que arma las páginas o la herramienta de
+#     IndexNow: ahí corren las pruebas de esa herramienta, y si fallan el PR
+#     queda en rojo (en main solo dejan una advertencia).
 #   - a mano (Actions › Publicar el catálogo › Run workflow): igual que un
 #     push. Con "esperar_fuente" tildado, si Pages todavía publica desde la
 #     rama, espera hasta 15 minutos a que cambie y publica apenas cambia
@@ -58,7 +61,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-    paths: ['index.html', '.github/**']
+    paths: ['index.html', '.github/**', 'robots.txt', 'herramientas/paginas-producto.py', 'herramientas/indexnow.py']
   workflow_dispatch:
     inputs:
       esperar_fuente:
@@ -108,18 +111,25 @@ jobs:
       # Solo lee; si falla, se publica igual y no se avisa nada.
       # - Primero corre las pruebas de la herramienta: si alguien cambió cómo
       #   se escribe la hora del precio, fallan y no se avisa (sin esto se
-      #   avisarían todas las páginas en cada corrida).
+      #   avisarían todas las páginas en cada corrida). En un PR, si fallan,
+      #   el PR queda en rojo; en main dejan una advertencia y se publica.
       # - Compara solo cuando se va a publicar: en un PR no hay a quién avisar.
       # - Si no se pudo escribir el precio, no compara: saldrían todas como
       #   cambiadas, y otra vez todas cuando vuelva el precio.
+      # - Tiene 4 minutos (la herramienta se da 2): si el sitio publicado no
+      #   contesta, no llega a gastar los 15 del job.
       - name: Ver qué páginas cambiaron respecto de lo publicado
         id: cambios
         if: steps.precio.outputs.sin_precio != 'true'
-        continue-on-error: true
+        timeout-minutes: 4
+        continue-on-error: ${{ github.event_name != 'pull_request' }}
         env:
           COMPARAR: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
         run: |
-          python3 herramientas/indexnow.py --probar
+          if ! python3 herramientas/indexnow.py --probar; then
+            echo "::warning::IndexNow: fallaron las pruebas de herramientas/indexnow.py. No se compara ni se avisa hasta arreglarlas."
+            exit 1
+          fi
           if [ "$COMPARAR" = true ]; then
             python3 herramientas/indexnow.py cambios
           fi
@@ -209,7 +219,14 @@ jobs:
     timeout-minutes: 5
     continue-on-error: true
     steps:
+      # Solo lo que usa: la herramienta y la portada (de donde sale la
+      # dirección del sitio). El repo entero pesa por las fotos.
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            herramientas/indexnow.py
+            index.html
+          sparse-checkout-cone-mode: false
 
       - name: Mandar la lista a IndexNow
         env:

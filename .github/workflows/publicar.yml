@@ -28,6 +28,9 @@
 #   - push a main (un merge o PUBLICAR): arma, verifica y publica.
 #   - un PR a main que toque index.html o .github/: arma y verifica, sin
 #     publicar. Así un cambio que rompa la copia se ve antes del merge.
+#     También si toca robots.txt, el que arma las páginas o la herramienta de
+#     IndexNow: ahí corren las pruebas de esa herramienta, y si fallan el PR
+#     queda en rojo (en main solo dejan una advertencia).
 #   - a mano (Actions › Publicar el catálogo › Run workflow): igual que un
 #     push. Con "esperar_fuente" tildado, si Pages todavía publica desde la
 #     rama, espera hasta 15 minutos a que cambie y publica apenas cambia
@@ -41,6 +44,13 @@
 #     puede demorarlo unos minutos, y apaga lo programado si el repo pasa 60
 #     días sin cambios (se vuelve a prender en Actions).
 #
+# Después de publicar le avisa a Bing qué páginas cambiaron (IndexNow,
+# 12/11/2026, herramientas/indexnow.py): sin el aviso, Bing tarda días en
+# volver a pasar y Copilot sigue contando el precio viejo. Antes de publicar
+# compara cada página recién armada con la publicada, sin la hora del precio;
+# si ninguna dice otra cosa, no avisa nada. Solo lee y nunca frena la
+# publicación: si la comparación o el aviso fallan, queda una advertencia.
+#
 # Mientras Settings › Pages › Source diga "Deploy from a branch", este
 # workflow arma y verifica pero NO publica: lo sigue publicando GitHub desde
 # la rama, como siempre. Publica recién cuando Source diga "GitHub Actions".
@@ -51,7 +61,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-    paths: ['index.html', '.github/**']
+    paths: ['index.html', '.github/**', 'robots.txt', 'herramientas/paginas-producto.py', 'herramientas/indexnow.py']
   workflow_dispatch:
     inputs:
       esperar_fuente:
@@ -73,6 +83,8 @@ jobs:
     concurrency:
       group: armar-${{ github.ref }}
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+    outputs:
+      cambios: ${{ steps.cambios.outputs.cambios }}
     steps:
       - uses: actions/checkout@v4
 
@@ -85,11 +97,41 @@ jobs:
       # se vuelve al repo tal cual y se publica sin precio, como antes, con un
       # aviso en el resumen de la corrida.
       - name: Escribir el precio del momento en las páginas de cada modelo
+        id: precio
         run: |
           if ! python3 herramientas/paginas-producto.py --con-precio; then
             echo "::warning::No se pudo escribir el precio del momento: se publican las páginas del repo, sin precio."
             git reset -q --hard HEAD
             git clean -fdq
+            echo "sin_precio=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # IndexNow (12/11/2026, ver arriba): qué páginas recién armadas dicen
+      # otra cosa que las publicadas. La lista queda para el job "avisar".
+      # Solo lee; si falla, se publica igual y no se avisa nada.
+      # - Primero corre las pruebas de la herramienta: si alguien cambió cómo
+      #   se escribe la hora del precio, fallan y no se avisa (sin esto se
+      #   avisarían todas las páginas en cada corrida). En un PR, si fallan,
+      #   el PR queda en rojo; en main dejan una advertencia y se publica.
+      # - Compara solo cuando se va a publicar: en un PR no hay a quién avisar.
+      # - Si no se pudo escribir el precio, no compara: saldrían todas como
+      #   cambiadas, y otra vez todas cuando vuelva el precio.
+      # - Tiene 4 minutos (la herramienta se da 2): si el sitio publicado no
+      #   contesta, no llega a gastar los 15 del job.
+      - name: Ver qué páginas cambiaron respecto de lo publicado
+        id: cambios
+        if: steps.precio.outputs.sin_precio != 'true'
+        timeout-minutes: 4
+        continue-on-error: ${{ github.event_name != 'pull_request' }}
+        env:
+          COMPARAR: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+        run: |
+          if ! python3 herramientas/indexnow.py --probar; then
+            echo "::warning::IndexNow: fallaron las pruebas de herramientas/indexnow.py. No se compara ni se avisa hasta arreglarlas."
+            exit 1
+          fi
+          if [ "$COMPARAR" = true ]; then
+            python3 herramientas/indexnow.py cambios
           fi
 
       - name: Copiar el sitio y sacar los comentarios de index.html
@@ -165,3 +207,28 @@ jobs:
       - name: Publicar en GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # IndexNow (12/11/2026, ver arriba). Corre solo si se publicó y si alguna
+  # página cambió. Si falla no rompe nada: el sitio ya está publicado y Bing
+  # lo ve cuando vuelve a pasar.
+  avisar:
+    name: Avisarle a Bing qué cambió (IndexNow)
+    needs: [armar, publicar]
+    if: needs.publicar.result == 'success' && needs.armar.outputs.cambios != '' && needs.armar.outputs.cambios != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true
+    steps:
+      # Solo lo que usa: la herramienta y la portada (de donde sale la
+      # dirección del sitio). El repo entero pesa por las fotos.
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            herramientas/indexnow.py
+            index.html
+          sparse-checkout-cone-mode: false
+
+      - name: Mandar la lista a IndexNow
+        env:
+          CAMBIOS: ${{ needs.armar.outputs.cambios }}
+        run: python3 herramientas/indexnow.py avisar

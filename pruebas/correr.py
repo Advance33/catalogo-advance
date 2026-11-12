@@ -127,6 +127,12 @@ CHROMES = [
     os.path.expandvars(r'%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe'),
     r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe',
     r'C:\Program Files\Microsoft\Edge\Application\msedge.exe',
+    # Linux: el workflow de Publicar arma las paginas de producto con el
+    # precio del momento en ubuntu-latest (12/11/2026)
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser',
 ]
 
 

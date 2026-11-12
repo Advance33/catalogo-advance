@@ -8,6 +8,13 @@
 # sitemap.xml, robots.txt, 404.html, CNAME… Los archivos ocultos (.gitignore,
 # .nojekyll…) no se publican: no hacen falta para el sitio.
 #
+# Salvo una cosa (Benja, 12/11/2026, buscadores con IA: «Sí, con fecha»): antes
+# de copiar, producto/, preguntas/, llms.txt y sitemap.xml se vuelven a armar
+# con el precio y el stock de ADVAPP de ese momento escritos, con la hora
+# (herramientas/paginas-producto.py --con-precio). Las IA que buscan en
+# internet leen el HTML sin correr el script y sin esto no veían ningún
+# precio. No se commitea nada: en main esas páginas siguen sin precio.
+#
 # Antes de publicar, .github/publicar/verificar.py abre en Chrome la portada
 # del repo y la sin comentarios, con los datos de ADVAPP del momento y la
 # medición apagada, y compara. Si a la copia le falta un archivo, o la
@@ -23,6 +30,10 @@
 #     rama, espera hasta 15 minutos a que cambie y publica apenas cambia
 #     (es para el primer cambio de Settings › Pages › Source, sin que la web
 #     quede sin publicar ni un minuto).
+#   - todos los días a las 9, 13 y 17 de Argentina (12/11/2026): igual que un
+#     push, para que el precio escrito en las páginas no tenga más de unas
+#     horas. GitHub puede demorarlo unos minutos, y apaga lo programado si el
+#     repo pasa 60 días sin cambios (se vuelve a prender en Actions).
 #
 # Mientras Settings › Pages › Source diga "Deploy from a branch", este
 # workflow arma y verifica pero NO publica: lo sigue publicando GitHub desde
@@ -41,6 +52,9 @@ on:
         description: 'Esperar (hasta 15 min) a que Settings › Pages › Source diga "GitHub Actions" y publicar apenas cambie'
         type: boolean
         default: false
+  # 12, 16 y 20 UTC = 9, 13 y 17 de Argentina
+  schedule:
+    - cron: '0 12,16,20 * * *'
 
 permissions:
   contents: read
@@ -58,6 +72,19 @@ jobs:
 
       - name: Instalar terser (versión fija)
         run: npm install --no-save --no-audit --no-fund --prefix "$RUNNER_TEMP/minificador" terser@5.31.6
+
+      # El precio del momento (12/11/2026, ver arriba). Se arma en esta copia
+      # del repo, antes de copiarla, con la portada CON comentarios (la que
+      # conoce el generador). Si no se puede (ADVAPP o Chrome no contestan),
+      # se vuelve al repo tal cual y se publica sin precio, como antes, con un
+      # aviso en el resumen de la corrida.
+      - name: Escribir el precio del momento en las páginas de cada modelo
+        run: |
+          if ! python3 herramientas/paginas-producto.py --con-precio; then
+            echo "::warning::No se pudo escribir el precio del momento: se publican las páginas del repo, sin precio."
+            git reset -q --hard HEAD
+            git clean -fdq
+          fi
 
       - name: Copiar el sitio y sacar los comentarios de index.html
         env:

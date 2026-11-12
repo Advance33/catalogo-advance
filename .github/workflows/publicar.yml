@@ -31,18 +31,32 @@
 #     También si toca robots.txt, el que arma las páginas o la herramienta de
 #     IndexNow: ahí corren las pruebas de esa herramienta, y si fallan el PR
 #     queda en rojo (en main solo dejan una advertencia).
-#   - a mano (Actions › Publicar el catálogo › Run workflow): igual que un
-#     push. Con "esperar_fuente" tildado, si Pages todavía publica desde la
-#     rama, espera hasta 15 minutos a que cambie y publica apenas cambia
-#     (es para el primer cambio de Settings › Pages › Source, sin que la web
-#     quede sin publicar ni un minuto).
-#   - todos los días a las 15 y a las 18 de Argentina (Benja, 12/11/2026:
-#     «solo a las 15h y 18h»): igual que un push, para rearmar el precio
-#     escrito en las páginas. De las 18 a las 15 del otro día queda el de las
-#     18, con su fecha. En cada push también se rearma: si no, publicar
-#     cualquier cambio dejaba las páginas sin precio hasta las 15. GitHub
-#     puede demorarlo unos minutos, y apaga lo programado si el repo pasa 60
-#     días sin cambios (se vuelve a prender en Actions).
+#   - a mano (Actions › Publicar el catálogo › Run workflow): como un push,
+#     salvo lo del precio que se explica abajo. Con "esperar_fuente" tildado,
+#     si Pages todavía publica desde la rama, espera hasta 15 minutos a que
+#     cambie y publica apenas cambia (es para el primer cambio de Settings ›
+#     Pages › Source, sin que la web quede sin publicar ni un minuto).
+#   - todos los días a las 15:07 y a las 18:07 de Argentina (Benja,
+#     12/11/2026: «solo a las 15h y 18h»), para rearmar el precio escrito en
+#     las páginas. De las 18 a las 15 del otro día queda el de las 18, con su
+#     fecha. En cada push también se rearma: si no, publicar cualquier cambio
+#     dejaba las páginas sin precio hasta las 15.
+#     No va a la hora en punto: GitHub demora las programadas, sobre todo las
+#     del minuto 0, y a veces las saltea (el 12/11 la de las 15:00 no había
+#     arrancado una hora después). No hay un corte a las 15 ni a las 18: toma
+#     lo que hay en ADVAPP cuando arranca, y esa hora queda escrita en la
+#     página. Además GitHub apaga lo programado si el repo pasa 60 días sin
+#     cambios (se vuelve a prender en Actions).
+#
+# Si no se puede escribir el precio (ADVAPP o Chrome no contestan, tampoco al
+# segundo intento, un minuto después):
+#   - en un push hay un cambio que publicar: se publican las páginas del
+#     repo, sin precio, con un aviso;
+#   - en la corrida programada y en la que se larga a mano no hay nada más
+#     que publicar. Si lo publicado tiene precio de hoy, la corrida falla y no
+#     publica: queda ese precio, con su hora, en vez de pisarlo con páginas
+#     sin precio. Si lo publicado es de otro día (o no se pudo mirar), se
+#     publica sin precio, como en un push: un precio de ayer no se deja.
 #
 # Después de publicar le avisa a Bing qué páginas cambiaron (IndexNow,
 # 12/11/2026, herramientas/indexnow.py): sin el aviso, Bing tarda días en
@@ -68,9 +82,9 @@ on:
         description: 'Esperar (hasta 15 min) a que Settings › Pages › Source diga "GitHub Actions" y publicar apenas cambie'
         type: boolean
         default: false
-  # 18 y 21 UTC = 15 y 18 de Argentina
+  # 18:07 y 21:07 UTC = 15:07 y 18:07 de Argentina (arriba dice por qué no en punto)
   schedule:
-    - cron: '0 18,21 * * *'
+    - cron: '7 18,21 * * *'
 
 permissions:
   contents: read
@@ -93,18 +107,34 @@ jobs:
 
       # El precio del momento (12/11/2026, ver arriba). Se arma en esta copia
       # del repo, antes de copiarla, con la portada CON comentarios (la que
-      # conoce el generador). Si no se puede (ADVAPP o Chrome no contestan),
-      # se vuelve al repo tal cual y se publica sin precio, como antes, con un
-      # aviso en el resumen de la corrida.
+      # conoce el generador). Si no se puede, prueba otra vez al minuto; qué
+      # pasa si tampoco, según la corrida, está arriba ("Si no se puede
+      # escribir el precio"). SOLO_PRECIO: la programada y la que se larga a
+      # mano, que no traen ningún cambio para publicar.
       - name: Escribir el precio del momento en las páginas de cada modelo
         id: precio
+        env:
+          SOLO_PRECIO: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
         run: |
-          if ! python3 herramientas/paginas-producto.py --con-precio; then
-            echo "::warning::No se pudo escribir el precio del momento: se publican las páginas del repo, sin precio."
-            git reset -q --hard HEAD
-            git clean -fdq
-            echo "sin_precio=true" >> "$GITHUB_OUTPUT"
+          armar() { python3 herramientas/paginas-producto.py --con-precio; }
+          if armar; then exit 0; fi
+          echo "::notice::No se pudo escribir el precio del momento. Se prueba otra vez en un minuto."
+          git reset -q --hard HEAD
+          git clean -fdq
+          sleep 60
+          if armar; then exit 0; fi
+          git reset -q --hard HEAD
+          git clean -fdq
+          if [ "$SOLO_PRECIO" = true ]; then
+            hoy=$(TZ=America/Argentina/Buenos_Aires date +%d/%m/%Y)
+            publicado=$(curl -fsS --max-time 20 "https://$(cat CNAME)/llms.txt" | grep -o -E 'son del [0-9]{2}/[0-9]{2}/[0-9]{4}' | head -1 | cut -d' ' -f3 || true)
+            if [ -n "$publicado" ] && [ "$publicado" = "$hoy" ]; then
+              echo "::error::No se pudo escribir el precio del momento. Esta corrida solo existe para eso y lo publicado tiene precio de hoy ($publicado): no se publica y queda como está."
+              exit 1
+            fi
           fi
+          echo "::warning::No se pudo escribir el precio del momento: se publican las páginas del repo, sin precio."
+          echo "sin_precio=true" >> "$GITHUB_OUTPUT"
 
       # IndexNow (12/11/2026, ver arriba): qué páginas recién armadas dicen
       # otra cosa que las publicadas. La lista queda para el job "avisar".

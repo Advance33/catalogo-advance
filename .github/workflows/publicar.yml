@@ -36,13 +36,16 @@
 #     rama, espera hasta 15 minutos a que cambie y publica apenas cambia
 #     (es para el primer cambio de Settings › Pages › Source, sin que la web
 #     quede sin publicar ni un minuto).
-#   - todos los días a las 15 y a las 18 de Argentina (Benja, 12/11/2026:
-#     «solo a las 15h y 18h»): igual que un push, para rearmar el precio
-#     escrito en las páginas. De las 18 a las 15 del otro día queda el de las
-#     18, con su fecha. En cada push también se rearma: si no, publicar
-#     cualquier cambio dejaba las páginas sin precio hasta las 15. GitHub
-#     puede demorarlo unos minutos, y apaga lo programado si el repo pasa 60
-#     días sin cambios (se vuelve a prender en Actions).
+#   - todos los días a las 15:07 y a las 18:07 de Argentina (Benja,
+#     12/11/2026: «solo a las 15h y 18h»): igual que un push, para rearmar el
+#     precio escrito en las páginas. De las 18 a las 15 del otro día queda el
+#     de las 18, con su fecha. En cada push también se rearma: si no, publicar
+#     cualquier cambio dejaba las páginas sin precio hasta las 15.
+#     No va a la hora en punto: GitHub demora las programadas, sobre todo las
+#     del minuto 0, y a veces las saltea (el 12/11 la de las 15:00 no había
+#     arrancado una hora después). Unos minutos pasada la hora entra lo que
+#     se cargó hasta las 15 y hasta las 18. Además GitHub apaga lo programado
+#     si el repo pasa 60 días sin cambios (se vuelve a prender en Actions).
 #
 # Después de publicar le avisa a Bing qué páginas cambiaron (IndexNow,
 # 12/11/2026, herramientas/indexnow.py): sin el aviso, Bing tarda días en
@@ -68,9 +71,9 @@ on:
         description: 'Esperar (hasta 15 min) a que Settings › Pages › Source diga "GitHub Actions" y publicar apenas cambie'
         type: boolean
         default: false
-  # 18 y 21 UTC = 15 y 18 de Argentina
+  # 18:07 y 21:07 UTC = 15:07 y 18:07 de Argentina (arriba dice por qué no en punto)
   schedule:
-    - cron: '0 18,21 * * *'
+    - cron: '7 18,21 * * *'
 
 permissions:
   contents: read

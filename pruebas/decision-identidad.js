@@ -544,7 +544,7 @@ function probarPie(){
   ok(!!pie && !pie.hidden && footer.contains(pie) && footer.firstElementChild === pie, '[6.7] el contacto, arriba en el pie');
   if(!pie) return;
   const numero = WHATSAPP ? telefonoLegible(WHATSAPP) : '';
-  ok(WHATSAPP !== '5491125205232' || numero === '+54 9 11 2520-5232', '[6.7] el numero se escribe como en la muestra (el de Tecno de momento, 21/10 tarde)', numero);
+  ok(WHATSAPP !== '5491168504211' || numero === '+54 9 11 6850-4211', '[6.7] el numero se escribe como en la muestra (el de Tecno, 12/11/2026)', numero);
   /* Una columna por dato, con su rotulo, el dato grande y su link: salen de
      DIRECCION y MAPA (las de la pregunta "¿Puedo ir a verlos?"), WHATSAPP e
      INSTAGRAM_TECNO (D16 A, 13/10/2026) */

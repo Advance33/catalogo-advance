@@ -19,9 +19,14 @@
 #
 # Los buscadores con IA (Benja, 12/11/2026): llms.txt es el resumen del
 # catálogo para ChatGPT, Perplexity, Claude y los demás (lo arma
-# herramientas/paginas-producto.py). Es el único .txt que se deja leer. Los
-# robots de las IA entran por "User-agent: *", como Google: no hay un grupo
-# aparte para ellos, porque un grupo propio dejaría de heredar estos Disallow.
+# herramientas/paginas-producto.py). Los robots de las IA entran por
+# "User-agent: *", como Google: no hay un grupo aparte para ellos, porque un
+# grupo propio dejaría de heredar estos Disallow.
+#
+# IndexNow (12/11/2026): el .txt con nombre de clave es la clave pública con
+# la que el sitio le avisa a Bing qué páginas cambiaron después de publicar
+# (herramientas/indexnow.py). Bing lo tiene que poder leer. Con llms.txt, son
+# los únicos .txt que se dejan leer.
 User-agent: *
 Disallow: /herramientas/
 Disallow: /pruebas/
@@ -31,5 +36,6 @@ Disallow: /*.command$
 Disallow: /*.txt$
 Allow: /robots.txt
 Allow: /llms.txt
+Allow: /ba1130a96e87dc0f407811c8dd679e65.txt
 
 Sitemap: https://catalogo.advancetecno.com.ar/sitemap.xml

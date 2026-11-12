@@ -92,7 +92,9 @@ async function correrPruebas(){
                   '/pruebas/', '/pruebas/LEEME.txt', '/pruebas/correr.py', '/muestras/', '/muestras/x.html',
                   '/PUBLICAR.command', '/PROBAR.command', '/validar.py', '/revision-diaria.py',
                   '/condicion-aceptada.txt', '/MEDICION-ADVAPP.txt', '/fotos-aceptadas.txt'];
-  const adentro = ['/', '/index.html', '/404.html', '/sitemap.xml', '/robots.txt', '/producto/',
+  // (12/11/2026) llms.txt y la clave de IndexNow son los unicos .txt de la raiz que se dejan leer
+  const adentro = ['/', '/index.html', '/404.html', '/sitemap.xml', '/robots.txt', '/llms.txt',
+                   '/ba1130a96e87dc0f407811c8dd679e65.txt', '/producto/',
                    '/producto/apple-iphone-17-pro/', '/producto/indice.json', '/p/indice.json', '/p/CEL-APP-068.html',
                    '/datos/descripciones.json', '/datos/resenas.json', '/fotos/indice.json', '/fotos/AT-0072-03.jpg',
                    '/fotos/mini/sinfondo/AT-0072-03.webp', '/marian/marian.js', '/marian/marian.css',

@@ -41,6 +41,13 @@
 #     puede demorarlo unos minutos, y apaga lo programado si el repo pasa 60
 #     días sin cambios (se vuelve a prender en Actions).
 #
+# Después de publicar le avisa a Bing qué páginas cambiaron (IndexNow,
+# 12/11/2026, herramientas/indexnow.py): sin el aviso, Bing tarda días en
+# volver a pasar y Copilot sigue contando el precio viejo. Antes de publicar
+# compara cada página recién armada con la publicada, sin la hora del precio;
+# si ninguna dice otra cosa, no avisa nada. Solo lee y nunca frena la
+# publicación: si la comparación o el aviso fallan, queda una advertencia.
+#
 # Mientras Settings › Pages › Source diga "Deploy from a branch", este
 # workflow arma y verifica pero NO publica: lo sigue publicando GitHub desde
 # la rama, como siempre. Publica recién cuando Source diga "GitHub Actions".
@@ -73,6 +80,8 @@ jobs:
     concurrency:
       group: armar-${{ github.ref }}
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+    outputs:
+      cambios: ${{ steps.cambios.outputs.cambios }}
     steps:
       - uses: actions/checkout@v4
 
@@ -91,6 +100,14 @@ jobs:
             git reset -q --hard HEAD
             git clean -fdq
           fi
+
+      # IndexNow (12/11/2026, ver arriba): qué páginas recién armadas dicen
+      # otra cosa que las publicadas. La lista queda para el job "avisar".
+      # Solo lee; si falla, se publica igual y no se avisa nada.
+      - name: Ver qué páginas cambiaron respecto de lo publicado
+        id: cambios
+        continue-on-error: true
+        run: python3 herramientas/indexnow.py cambios
 
       - name: Copiar el sitio y sacar los comentarios de index.html
         env:
@@ -165,3 +182,21 @@ jobs:
       - name: Publicar en GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # IndexNow (12/11/2026, ver arriba). Corre solo si se publicó y si alguna
+  # página cambió. Si falla no rompe nada: el sitio ya está publicado y Bing
+  # lo ve cuando vuelve a pasar.
+  avisar:
+    name: Avisarle a Bing qué cambió (IndexNow)
+    needs: [armar, publicar]
+    if: needs.publicar.result == 'success' && needs.armar.outputs.cambios != '' && needs.armar.outputs.cambios != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Mandar la lista a IndexNow
+        env:
+          CAMBIOS: ${{ needs.armar.outputs.cambios }}
+        run: python3 herramientas/indexnow.py avisar

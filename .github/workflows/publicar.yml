@@ -94,20 +94,35 @@ jobs:
       # se vuelve al repo tal cual y se publica sin precio, como antes, con un
       # aviso en el resumen de la corrida.
       - name: Escribir el precio del momento en las páginas de cada modelo
+        id: precio
         run: |
           if ! python3 herramientas/paginas-producto.py --con-precio; then
             echo "::warning::No se pudo escribir el precio del momento: se publican las páginas del repo, sin precio."
             git reset -q --hard HEAD
             git clean -fdq
+            echo "sin_precio=true" >> "$GITHUB_OUTPUT"
           fi
 
       # IndexNow (12/11/2026, ver arriba): qué páginas recién armadas dicen
       # otra cosa que las publicadas. La lista queda para el job "avisar".
       # Solo lee; si falla, se publica igual y no se avisa nada.
+      # - Primero corre las pruebas de la herramienta: si alguien cambió cómo
+      #   se escribe la hora del precio, fallan y no se avisa (sin esto se
+      #   avisarían todas las páginas en cada corrida).
+      # - Compara solo cuando se va a publicar: en un PR no hay a quién avisar.
+      # - Si no se pudo escribir el precio, no compara: saldrían todas como
+      #   cambiadas, y otra vez todas cuando vuelva el precio.
       - name: Ver qué páginas cambiaron respecto de lo publicado
         id: cambios
+        if: steps.precio.outputs.sin_precio != 'true'
         continue-on-error: true
-        run: python3 herramientas/indexnow.py cambios
+        env:
+          COMPARAR: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+        run: |
+          python3 herramientas/indexnow.py --probar
+          if [ "$COMPARAR" = true ]; then
+            python3 herramientas/indexnow.py cambios
+          fi
 
       - name: Copiar el sitio y sacar los comentarios de index.html
         env:

@@ -169,6 +169,35 @@ async function paginasDeProducto(){
     // El orden de los rubros de la barra del catálogo, para "Todos los
     // modelos" (producto/index.html, 05/11/2026, auditoría TG-05)
     rubros: (typeof ORDEN_CATS !== 'undefined' && Array.isArray(ORDEN_CATS) ? ORDEN_CATS : []).map(c => plural(c)),
+    // Para los buscadores con IA (12/11/2026, ver paginas-producto.py): el
+    // aviso de los precios del viernes, las preguntas frecuentes de la portada
+    // y su descripción y su Instagram, para preguntas/ y llms.txt
+    congelados: (FUENTE && FUENTE.manifiesto && FUENTE.manifiesto.congelados) || null,
+    preguntas: ppPreguntas(),
+    descripcion: ((document.querySelector('meta[name="description"]') || {}).content || '').trim(),
+    instagram: typeof INSTAGRAM_TECNO === 'string' && INSTAGRAM_TECNO ? 'https://www.instagram.com/' + INSTAGRAM_TECNO + '/' : '',
     modelos,
   };
+}
+
+/* Las preguntas frecuentes, tal cual las dibuja la portada (htmlAyuda): la
+   pregunta y el HTML de la respuesta, con la tabla de la moto y los links.
+   El botón del cotizador de usados no anda fuera de la portada: se cambia por
+   un link que lo abre ahí (#cotizar-usado). Sin la pieza, ninguna. */
+function ppPreguntas(){
+  if(typeof htmlAyuda !== 'function') return [];
+  const caja = document.createElement('div');
+  caja.innerHTML = htmlAyuda();
+  return [...caja.querySelectorAll('.ay-r')].map(r => {
+    const h = r.querySelector('h3');
+    const p = h ? h.textContent.trim() : '';
+    if(h) h.remove();
+    r.querySelectorAll('button.ay-cotizar').forEach(b => {
+      const a = document.createElement('a');
+      a.href = '#' + (typeof ANCLA_USADO === 'string' ? ANCLA_USADO : 'cotizar-usado');
+      a.textContent = b.textContent.trim();
+      b.replaceWith(a);
+    });
+    return { p, html: r.innerHTML.replace(/\s+/g, ' ').trim() };
+  }).filter(x => x.p && x.html);
 }

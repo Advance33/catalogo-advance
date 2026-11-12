@@ -318,6 +318,10 @@ def abrir_en_chrome(url):
     cmd = [chrome, '--headless', '--disable-gpu', '--window-size=1280,900',
            '--user-data-dir=' + perfil,
            '--virtual-time-budget=%d' % (SEGUNDOS_VIRTUALES * 1000), '--dump-dom', url]
+    # En Linux (el workflow de Publicar, 12/11/2026) Chrome no arranca con su
+    # sandbox en ubuntu-latest; en Mac y Windows queda como siempre
+    if sys.platform.startswith('linux'):
+        cmd.insert(1, '--no-sandbox')
     try:
         dom = CORRER.dump_dom(cmd, SEGUNDOS_REALES)
     finally:

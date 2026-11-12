@@ -3,7 +3,11 @@
 
     python3 herramientas/paginas-producto.py              las arma con lo de hoy
     python3 herramientas/paginas-producto.py --puerto N   con el servidor en ese puerto
+    python3 herramientas/paginas-producto.py --con-precio con el precio de ahora escrito
+                                                          (solo el workflow de Publicar)
     python3 herramientas/paginas-producto.py --probar     las pruebas de este archivo
+
+Ademas arma preguntas/index.html y llms.txt (ver "PARA LOS BUSCADORES CON IA").
 
 POR QUE EXISTE (Benja, 05/10/2026)
 Hasta el 05/10 el catalogo pedia noindex: era de uso interno. Desde que vive en
@@ -68,6 +72,31 @@ mismo recargo). Si ADVAPP no contesta, queda "Consulta el precio" con el
 WhatsApp: nunca un precio viejo. Lo agotado no muestra precio (D15 B).
 El resto (nombre, versiones, colores, foto, regalo, descripcion, ficha
 tecnica, migas, direccion propia) sigue igual para Google.
+
+PARA LOS BUSCADORES CON IA (Benja, 12/11/2026)
+«Advapp: web en buscadores con IA». ChatGPT, Perplexity, Claude y en parte
+Gemini y Copilot leen el HTML tal como llega, sin correr el script: en cada
+pagina veian "Consulta el precio" y en la portada, "Cargando…". Benja eligio
+"Si, con fecha": el precio del momento escrito, con la hora.
+- Con --con-precio cada pagina que se rearma lleva escrito el precio, el
+  stock y los datos para Google de ese momento, con "Precio al 12/11/2026,
+  13:05". Lo agotado, sin precio (D15 B). Lo corre SOLO el workflow de
+  Publicar (.github/workflows/publicar.yml), sobre la copia que publica: en
+  cada publicacion y a las 15 y a las 18 (Benja: «solo a las 15h y 18h»).
+  No gasta tokens ni relee listas: baja de ADVAPP lo mismo que la portada
+  (resource=tecno-web). El repo y PUBLICAR siguen sin precio, asi que lo
+  publicado en producto/ ya no es igual a main. Lo del W3-06 (a las 22 h de
+  un PUBLICAR, 119 de 715 versiones tenian otro precio) se cubre con la hora
+  escrita al lado de cada precio. Al abrir, el script trae
+  lo de ADVAPP como siempre; lo escrito queda hasta que llega (o hasta que se
+  toca otra version o color), y si ADVAPP no contesta se saca y queda
+  "Consulta el precio": a una persona nunca se le muestra un precio viejo.
+- preguntas/index.html: las preguntas frecuentes de la portada tal cual las
+  dibuja (ppPreguntas en paginas-producto.js), en una pagina fija.
+- llms.txt: un resumen para las IA (formato de llmstxt.org): quienes somos,
+  las paginas, las preguntas en texto y cada modelo con su link (con
+  --con-precio, con su "desde"). robots.txt lo deja leer.
+Nada de esto escribe texto nuevo: sale de la portada y de ADVAPP.
 
 Codigos de salida: 0 bien, 2 no se pudieron armar (producto/ queda como estaba).
 """
@@ -518,6 +547,23 @@ SCRIPT = r'''
       if(final > 0){ tc = final; pintar(); }
     }).catch(() => {});
   }
+  /* De dónde llegó (12/11/2026, buscadores con IA): la página anota UNA vez,
+     en el registro de la portada (MEDICION-ADVAPP.txt), el sitio del que vino
+     la persona, para contar cuántos llegan desde ChatGPT, Perplexity, Google...
+     Con la misma visita de la portada (sessionStorage): si después toca "Ver
+     en el catálogo", se sabe de dónde venía. Con Do Not Track, nada; si algo
+     falla, nada. Sin D.registro (la medición apagada), nada. */
+  try{
+    if(D.registro && navigator.doNotTrack !== '1' && window.doNotTrack !== '1' && navigator.sendBeacon){
+      let ref = '', visita = '';
+      try{ ref = document.referrer ? new URL(document.referrer).hostname : ''; }catch(e){}
+      try{ visita = sessionStorage.getItem('advtecno.visita') || crypto.randomUUID(); sessionStorage.setItem('advtecno.visita', visita); }
+      catch(e){ visita = String(Math.random()).slice(2) + Date.now().toString(36); }
+      const cuerpo = JSON.stringify({ v: 1, sitio: 'tecno-web', visita,
+        eventos: [{ t: 'pagina_producto', pagina: location.pathname.split('/').filter(Boolean).pop() || '', ref, ms: Math.round(performance.now()) }] });
+      navigator.sendBeacon(D.registro, new Blob([cuerpo], { type: 'text/plain;charset=UTF-8' }));
+    }
+  }catch(e){}
 })();
 '''
 
@@ -617,6 +663,10 @@ def armar_pagina(m, s, publica, general, otros=None):
     cotiz = {k: v for k, v in (general.get('cotizacion') or {}).items() if k != 'valor'}
     datos = {'versiones': versiones, 'advapp': general.get('advapp') or '', 'cuotas': cuotas,
              'cotizacion': cotiz, 'oferta': oferta_sin_precio(m, url)}
+    # Adonde anota de donde llego la persona (12/11/2026): el ANALITICA_URL
+    # de la portada; con la medicion apagada no va y la pagina no anota nada
+    if general.get('registro'):
+        datos['registro'] = general['registro']
     filas = ''.join('<tr><td>%s</td><td>%s</td><td class="num">Consultar</td><td>—</td></tr>' % (
         e(x['version'] or '—'), e(x['color'] or '—'))
         for x in sorted(m['versiones'], key=lambda y: (y['version'], y['color'])))
@@ -687,7 +737,7 @@ def armar_pagina(m, s, publica, general, otros=None):
   <b>Advance Tecno</b>
   <span>{direccion} · Envíos a todo el país · Atención con cita previa</span>
   {contacto}
-  <span><a href="../">Todos los modelos</a> · <a href="../../">Catálogo</a></span>
+  <span><a href="../">Todos los modelos</a> · <a href="../../preguntas/">Preguntas frecuentes</a> · <a href="../../">Catálogo</a></span>
   <span>Precios sujetos a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</span>
 </footer>
 <script id="datos" type="application/json">{datos}</script>
@@ -1037,23 +1087,38 @@ CSS_INDICE = r'''
 .lista li{break-inside:avoid;padding:6px 0;border-top:1px solid var(--linea)}
 .lista a{text-decoration:none;font-size:14.5px}
 .lista a:hover{color:var(--acento);text-decoration:underline}
+.lista .desde{color:var(--suave);font-size:13px;white-space:nowrap}
 '''
 
 
-def armar_indice(entradas, publica, general):
-    """producto/index.html: todos los modelos con pagina, por rubro (TG-05).
-    Los rubros en el orden de la barra del catalogo (general['rubros'], que
-    sale de ORDEN_CATS); los que no estan ahi, despues, del que tiene mas
-    modelos al que tiene menos. Adentro, por nombre. Cada rubro con su ancla
-    (producto/#celulares), que es adonde lleva "Todos los modelos de ..." de
-    cada pagina."""
-    url = publica + 'producto/'
+def por_rubro_en_orden(entradas, general):
+    """({rubro: [entradas]}, [rubros]): los rubros en el orden de la barra del
+    catalogo (general['rubros'], que sale de ORDEN_CATS); los que no estan
+    ahi, despues, del que tiene mas modelos al que tiene menos."""
     por_rubro = {}
     for x in entradas:
         por_rubro.setdefault(x['rubro'] or 'Productos', []).append(x)
     orden = [r for r in (general.get('rubros') or []) if isinstance(r, str)]
     rubros = sorted(por_rubro, key=lambda r: (orden.index(r) if r in orden else len(orden),
                                               -len(por_rubro[r]), orden_natural(r)))
+    return por_rubro, rubros
+
+
+def desde_del_dia(x):
+    """Lo que dice al lado de cada modelo con --con-precio (12/11/2026)."""
+    if x.get('stock') and isinstance(x.get('desde'), (int, float)) and x['desde'] > 0:
+        return 'desde USD %s' % plata(x['desde'])
+    return 'hoy sin stock'
+
+
+def armar_indice(entradas, publica, general, sello=None):
+    """producto/index.html: todos los modelos con pagina, por rubro (TG-05).
+    Los rubros como por_rubro_en_orden. Adentro, por nombre. Cada rubro con su
+    ancla (producto/#celulares), que es adonde lleva "Todos los modelos de ..."
+    de cada pagina. Con sello (--con-precio, 12/11/2026), cada modelo con su
+    "desde" del momento y la hora en la introduccion."""
+    url = publica + 'producto/'
+    por_rubro, rubros = por_rubro_en_orden(entradas, general)
     # En minuscula la palabra comun ("celulares, accesorios Apple"); la marca
     # y lo que se escribe asi ("MacBooks", "iPads") quedan como estan
     nombres = [' '.join([p[0].lower() + p[1:] if i == 0 and p[:1].isupper() and p[1:].islower() and p.lower() not in ('dyson',)
@@ -1064,9 +1129,13 @@ def armar_indice(entradas, publica, general):
     secciones = ''.join(
         '<section class="bloque" id="%s" aria-labelledby="t-%s"><h2 id="t-%s">%s</h2><ul class="lista">%s</ul></section>' % (
             e(slug(r)), e(slug(r)), e(slug(r)), e(r),
-            ''.join('<li><a href="%s/">%s</a></li>' % (e(x['slug']), e(x['titulo']))
+            ''.join('<li><a href="%s/">%s</a>%s</li>' % (
+                        e(x['slug']), e(x['titulo']), (' <span class="desde">%s</span>' % e(desde_del_dia(x))) if sello else '')
                     for x in sorted(por_rubro[r], key=lambda y: (orden_natural(y['titulo']), y['slug']))))
         for r in rubros)
+    intro = ('Cada modelo del catálogo con su página: las versiones, los colores y la ficha técnica. '
+             + ('Precios en dólares al %s (hora de Argentina); al abrir cada página se ven los del momento.' % texto_sello(sello)
+                if sello else 'El precio y el stock del día se ven al abrirla.'))
     migas = json.dumps({
         '@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
             {'@type': 'ListItem', 'position': 1, 'name': 'Catálogo', 'item': publica},
@@ -1104,7 +1173,7 @@ def armar_indice(entradas, publica, general):
 <main>
   <nav class="migas" aria-label="Estás en"><a href="../">Catálogo</a> › Todos los modelos</nav>
   <div><h1>Todos los modelos</h1></div>
-  <p class="intro">Cada modelo del catálogo con su página: las versiones, los colores y la ficha técnica. El precio y el stock del día se ven al abrirla.</p>
+  <p class="intro">{intro}</p>
   <nav class="rubros" aria-label="Rubros">{chips}</nav>
   {secciones}
 </main>
@@ -1112,13 +1181,13 @@ def armar_indice(entradas, publica, general):
   <b>Advance Tecno</b>
   <span>{direccion} · Envíos a todo el país · Atención con cita previa</span>
   {contacto}
-  <span><a href="../">Catálogo</a></span>
+  <span><a href="../preguntas/">Preguntas frecuentes</a> · <a href="../">Catálogo</a></span>
   <span>Precios sujetos a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</span>
 </footer>
 </body>
 </html>
 '''.format(
-        meta_desc=e(meta_desc), url=e(url), og=e(publica + 'assets/preview.png'), migas=migas,
+        meta_desc=e(meta_desc), url=e(url), og=e(publica + 'assets/preview.png'), migas=migas, intro=e(intro),
         css=CSS.replace('../../assets/', '../assets/') + CSS_INDICE, chips=chips, secciones=secciones,
         direccion=e(general.get('direccion') or 'Av. de los Incas 5150, 1A, CABA'),
         contacto=' · '.join(x for x in (
@@ -1126,18 +1195,22 @@ def armar_indice(entradas, publica, general):
             ('<a href="%s" target="_blank" rel="noopener">Ver en el mapa</a>' % e(general['mapa'])) if general.get('mapa') else '') if x).join(['<span>', '</span>']) if (general.get('whatsapp') or general.get('mapa')) else '')
 
 
-def texto_sitemap(publica, indice, fuera=()):
+def texto_sitemap(publica, indice, fuera=(), preguntas=False):
     """fuera: las direcciones que hoy son un desvio (no se le listan a Google).
-    Despues de la portada, producto/ ("Todos los modelos", TG-05)."""
+    Despues de la portada, producto/ ("Todos los modelos", TG-05) y, si se
+    armo, preguntas/ (12/11/2026)."""
     hoy = datetime.date.today().isoformat()
     urls = ['  <url><loc>%s</loc><changefreq>daily</changefreq></url>' % e(publica),
             '  <url><loc>%sproducto/</loc></url>' % e(publica)]
+    if preguntas:
+        urls.append('  <url><loc>%spreguntas/</loc></url>' % e(publica))
     for s in sorted(set(indice['slugs'].values()) - set(fuera)):
         urls.append('  <url><loc>%sproducto/%s/</loc><lastmod>%s</lastmod></url>' % (e(publica), e(s), indice['lastmod'].get(s, hoy)))
     return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s\n</urlset>\n' % '\n'.join(urls)
 
 
-def aplicar(datos, publica, carpeta=CARPETA, raiz=RAIZ):
+def aplicar(datos, publica, carpeta=CARPETA, raiz=RAIZ, sello=None):
+    """sello: la hora de --con-precio ('2026-11-12T13:05:00-03:00'), o None."""
     global INDICE, SITEMAP
     indice = leer_indice()
     modelos = datos.get('modelos') or []
@@ -1151,7 +1224,10 @@ def aplicar(datos, publica, carpeta=CARPETA, raiz=RAIZ):
         presentes.add(s)
         ruta = os.path.join(carpeta, s, 'index.html')
         existia = os.path.exists(ruta)
-        if escribir_si_cambio(ruta, armar_pagina(m, s, publica, datos, otros.get(s))):
+        pagina = armar_pagina(m, s, publica, datos, otros.get(s))
+        if sello:
+            pagina = con_precio_del_dia(pagina, m, datos, sello, '%sproducto/%s/' % (publica, s))
+        if escribir_si_cambio(ruta, pagina):
             res['cambiadas' if existia else 'nuevas'] += 1
             indice['lastmod'][s] = hoy
         else:
@@ -1188,19 +1264,316 @@ def aplicar(datos, publica, carpeta=CARPETA, raiz=RAIZ):
             viejas.append(s)
     # "Todos los modelos" (TG-05): las de hoy y las de los modelos que hoy no
     # estan (G-09: siguen en el sitemap, con "Hoy sin stock"); los desvios no
-    entradas = {slugs[m['familia']]: {'slug': slugs[m['familia']], 'titulo': m['titulo'], 'rubro': m.get('rubro') or 'Productos'}
+    # El "desde" y el stock solo los usa --con-precio (12/11/2026)
+    entradas = {slugs[m['familia']]: {'slug': slugs[m['familia']], 'titulo': m['titulo'], 'rubro': m.get('rubro') or 'Productos',
+                                      'desde': m.get('desde'), 'stock': bool(m.get('stock'))}
                 for m in modelos}
     for s in viejas:
         if s not in entradas:
             entradas[s] = entrada_de_la_pagina(leer_pagina(os.path.join(carpeta, s, 'index.html')), s)
-    res['indice'] = escribir_si_cambio(os.path.join(carpeta, 'index.html'), armar_indice(list(entradas.values()), publica, datos))
+    res['indice'] = escribir_si_cambio(os.path.join(carpeta, 'index.html'), armar_indice(list(entradas.values()), publica, datos, sello))
     res['con_otros'] = sum(1 for v in otros.values() if v)
     escribir_si_cambio(os.path.join(carpeta, 'indice.json'),
                        json.dumps({'slugs': dict(sorted(slugs.items())), 'lastmod': dict(sorted(indice['lastmod'].items()))},
                                   ensure_ascii=False, indent=1) + '\n')
+    # Para los buscadores con IA (12/11/2026): preguntas/ y llms.txt
+    preguntas = armar_preguntas(datos, publica)
+    res['preguntas'] = escribir_si_cambio(os.path.join(raiz, 'preguntas', 'index.html'), preguntas) if preguntas else False
+    res['llms'] = escribir_si_cambio(os.path.join(raiz, 'llms.txt'), armar_llms(datos, publica, list(entradas.values()), sello))
     res['sitemap'] = escribir_si_cambio(os.path.join(raiz, 'sitemap.xml'),
-                                        texto_sitemap(publica, {'slugs': slugs, 'lastmod': indice['lastmod']}, fuera))
+                                        texto_sitemap(publica, {'slugs': slugs, 'lastmod': indice['lastmod']}, fuera, bool(preguntas)))
     return res
+
+
+# --------------------------------------------------------------------------
+# Para los buscadores con IA (Benja, 12/11/2026; ver el comentario de arriba)
+# --------------------------------------------------------------------------
+
+HORA_AR = datetime.timezone(datetime.timedelta(hours=-3))
+DIAS = ('lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo')
+PRECIO_SIN_SELLO = ('<div class="precio sin" id="precio"><b>Consultá el precio</b>'
+                    '<i>El precio y el stock del día, por WhatsApp</i></div>')
+NOTA_SIN_SELLO = ('<p>Precios en dólares, del día: se cargan del catálogo al abrir la página. '
+                  'Se pueden pagar en pesos con el dólar del día y con tarjeta en cuotas.</p>')
+CONGELADO_VACIO = '<p class="congelado" id="congelado" hidden></p>'
+
+
+def texto_sello(sello):
+    """'2026-11-12T13:05:00-03:00' -> '12/11/2026, 13:05'."""
+    m = re.match(r'(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})', sello or '')
+    return '%s/%s/%s, %s:%s' % (m.group(3), m.group(2), m.group(1), m.group(4), m.group(5)) if m else ''
+
+
+def texto_congelados(c):
+    """El aviso de los precios del viernes, con las palabras de la portada
+    (textoCongelados en index.html), o '' sin el dato."""
+    try:
+        dia, cambian = datetime.date.fromisoformat(c['dia']), datetime.date.fromisoformat(c['cambian'])
+    except (TypeError, KeyError, ValueError):
+        return ''
+    return '<b>Precios del %s %s.</b> Es probable que cambien el %s.' % (
+        DIAS[dia.weekday()], dia.strftime('%d/%m'), DIAS[cambian.weekday()])
+
+
+# Lo que se le suma al script de la pagina con --con-precio: el precio escrito
+# queda hasta que llega ADVAPP o hasta que se toca otra version o color; si
+# ADVAPP no contesta, sinSello lo saca (la tabla vuelve a "Consultar" y los
+# datos para Google pierden la oferta) y queda "Consultá el precio".
+SELLO_JS = r'''  /* El precio del momento escrito en el HTML (12/11/2026, buscadores con IA;
+     ver herramientas/paginas-producto.py). Nunca queda un precio viejo a la
+     vista: si ADVAPP no contesta, se saca (W3-06). */
+  let sello = !!D.sello;
+  const NOTA = 'Precios en dólares, del día: se cargan del catálogo al abrir la página. Se pueden pagar en pesos con el dólar del día y con tarjeta en cuotas.';
+  const sinSello = () => {
+    if(!D.sello) return;
+    D.sello = null; sello = false;
+    const tb = $('filas'), n = $('nota-precios'), cg = $('congelado');
+    if(tb) tb.innerHTML = [...D.versiones].sort((a, b) => String(a.version).localeCompare(b.version) || String(a.color).localeCompare(b.color))
+      .map((x) => `<tr><td>${esc(x.version || '—')}</td><td>${esc(x.color || '—')}</td><td class="num">Consultar</td><td>—</td></tr>`).join('');
+    if(n) n.textContent = NOTA;
+    if(cg) cg.hidden = true;
+    const ld = document.querySelector('script[type="application/ld+json"]');
+    try{ const j = JSON.parse(ld.textContent); delete j.offers; ld.textContent = JSON.stringify(j).replace(/<\//g, '<\\/'); }catch(e){}
+    pintar();
+  };
+'''
+VIVO_JS = r'''    sello = false; D.sello = null;
+    { const n = $('nota-precios'), cg = $('congelado');
+      if(n) n.textContent = NOTA;
+      if(cg && !(j.precios_congelados && j.precios_congelados.dia)) cg.hidden = true; }
+'''
+
+
+def _cambiar_una(t, viejo, nuevo):
+    assert t.count(viejo) == 1, 'SCRIPT cambio: no encuentro una sola vez %r' % viejo[:60]
+    return t.replace(viejo, nuevo, 1)
+
+
+SCRIPT_SELLO = SCRIPT
+for _viejo, _nuevo in (
+        ("  let tc = null, version = null, color = null, vivo = false;\n",
+         "  let tc = null, version = null, color = null, vivo = false;\n" + SELLO_JS),
+        ("    }else{\n      caja.className = 'precio sin';\n      caja.innerHTML = '<b>Consultá el precio</b>",
+         "    }else if(!sello){\n      caja.className = 'precio sin';\n      caja.innerHTML = '<b>Consultá el precio</b>"),
+        ("b.onclick = () => { version = b.dataset.v;", "b.onclick = () => { sello = false; version = b.dataset.v;"),
+        ("b.onclick = () => { color = b.dataset.c;", "b.onclick = () => { sello = false; color = b.dataset.c;"),
+        ("    if(!filas) return;\n", "    if(!filas){ sinSello(); return; }\n"),
+        ("    vivo = true;\n", "    vivo = true;\n" + VIVO_JS),
+        ("  }).catch(() => {});\n  // Los pesos", "  }).catch(() => sinSello());\n  // Los pesos")):
+    SCRIPT_SELLO = _cambiar_una(SCRIPT_SELLO, _viejo, _nuevo)
+
+
+def con_precio_del_dia(t, m, general, sello, url):
+    """La pagina de armar_pagina con el precio del momento escrito: el
+    recuadro (la version con que arranca el script: con stock y la mas
+    barata), la tabla, la hora, el aviso de los precios del viernes, la oferta
+    en los datos para Google y el script que lo respeta. Si algo no esta donde
+    se lo espera, devuelve la pagina como vino, sin precio."""
+    cuando = texto_sello(sello)
+    vs = [x for x in (m.get('versiones') or []) if isinstance(x, dict)]
+    if not cuando or not vs:
+        return t
+
+    def precio(x):
+        p = x.get('precio')
+        return p if isinstance(p, (int, float)) and not isinstance(p, bool) and p > 0 else None
+    con = [x for x in vs if x.get('stock') and precio(x)]
+    hay = set(id(x) for x in con)
+    cuotas = general.get('cuotas') or 0
+    primera = vs[0]
+    if id(primera) in hay:
+        caja = '<div class="precio" id="precio"><b>USD %s</b><i>Precio al %s%s</i></div>' % (
+            plata(precio(primera)), e(cuando), (' · hasta %d cuotas' % cuotas) if cuotas else '')
+    else:
+        caja = ('<div class="precio sin" id="precio"><b>Hoy sin stock</b>'
+                '<i>Al %s. Escribinos y te avisamos cuando entre</i></div>' % e(cuando))
+    # El orden de la tabla del script: con stock, del mas barato al mas caro
+    orden = sorted(vs, key=lambda x: (id(x) not in hay, precio(x) or 0, str(x.get('version') or ''), str(x.get('color') or '')))
+    filas = ''.join('<tr><td>%s</td><td>%s</td><td class="num">%s</td><td>%s</td></tr>' % (
+        e(x.get('version') or '—'), e(x.get('color') or '—'),
+        ('u$' + plata(precio(x))) if id(x) in hay else '—', 'Sí' if id(x) in hay else 'Sin stock') for x in orden)
+    nota = ('<p id="nota-precios">Precios en dólares al %s (hora de Argentina): al abrir la página se cargan los del momento. '
+            'Se pueden pagar en pesos con el dólar del día y con tarjeta en cuotas.</p>' % e(cuando))
+    aviso = texto_congelados(general.get('congelados'))
+
+    def con_oferta(x):
+        try:
+            d = json.loads(x.group(2).replace('<\\/', '</'))
+        except ValueError:
+            return x.group(0)
+        if not isinstance(d, dict) or d.get('@type') != 'Product':
+            return x.group(0)
+        d.pop('offers', None)
+        if con:
+            ps = [precio(y) for y in con]
+            d['offers'] = dict(oferta_sin_precio(m, url), lowPrice=min(ps), highPrice=max(ps),
+                               offerCount=len(con), availability='https://schema.org/InStock')
+        return x.group(1) + json.dumps(d, ensure_ascii=False).replace('</', '<\\/') + x.group(3)
+
+    def con_hora(x):
+        try:
+            d = json.loads(x.group(2).replace('<\\/', '</'))
+        except ValueError:
+            return x.group(0)
+        d['sello'] = sello
+        return x.group(1) + json.dumps(d, ensure_ascii=False).replace('</', '<\\/') + x.group(3)
+
+    if (t.count(PRECIO_SIN_SELLO) != 1 or t.count(NOTA_SIN_SELLO) != 1 or t.count(CONGELADO_VACIO) != 1
+            or t.count('<script>%s</script>' % SCRIPT) != 1 or len(re.findall(r'<tbody id="filas">', t)) != 1):
+        return t
+    n = t.replace(PRECIO_SIN_SELLO, caja, 1).replace(NOTA_SIN_SELLO, nota, 1)
+    if aviso:
+        n = n.replace(CONGELADO_VACIO, '<p class="congelado" id="congelado">%s</p>' % aviso, 1)
+    n = re.sub(r'(<tbody id="filas">).*?(</tbody>)', lambda x: x.group(1) + filas + x.group(2), n, count=1, flags=re.S)
+    n = re.sub(r'(<script type="application/ld\+json">)(.*?)(</script>)', con_oferta, n, flags=re.S)
+    n = re.sub(r'(<script id="datos" type="application/json">)(.*?)(</script>)', con_hora, n, count=1, flags=re.S)
+    return n.replace('<script>%s</script>' % SCRIPT, '<script>%s</script>' % SCRIPT_SELLO, 1)
+
+
+def texto_plano(h, publica=''):
+    """El HTML de una respuesta de la portada en texto, para llms.txt y los
+    datos para Google: los renglones de la tabla de la moto y de "¿En qué
+    cordón estoy?" como "- zona: precio", los links con su direccion."""
+    t = h.replace('href="#', 'href="%s#' % publica) if publica else h
+    t = re.sub(r'<summary>(.*?)</summary>', r'\n\1\n', t, flags=re.S)
+    t = re.sub(r'<tr>\s*<th[^>]*>(.*?)</th>\s*<td>(.*?)</td>\s*</tr>', r'\n- \1: \2', t, flags=re.S)
+    t = re.sub(r'<dt>(.*?)</dt>\s*<dd>(.*?)</dd>', r'\n- \1: \2', t, flags=re.S)
+    t = re.sub(r'<li>(.*?)</li>', r'\n- \1', t, flags=re.S)
+    t = re.sub(r'<a [^>]*href="(https?://[^"]+)"[^>]*>(.*?)</a>', r'\2 (\1)', t, flags=re.S)
+    t = re.sub(r'</?(?:p|div|ul|ol|table|tbody|details|dl)\b[^>]*>', '\n', t)
+    t = html.unescape(re.sub(r'<[^>]+>', '', t))
+    return '\n'.join(x for x in (re.sub(r'[ \t]+', ' ', y).strip() for y in t.split('\n')) if x)
+
+
+CSS_PREGUNTAS = r'''
+.pregunta ul{margin:0;padding-left:18px;color:var(--suave)}
+.pregunta li{margin:3px 0}
+.pregunta a{color:var(--acento);font-weight:600}
+.pregunta .ay-tabla{width:auto;min-width:240px}
+.pregunta .ay-tabla th{font:600 13.5px/1.4 var(--sans);letter-spacing:0;text-transform:none;color:var(--tinta)}
+.pregunta .ay-zonas summary{cursor:pointer;font-weight:600;color:var(--acento)}
+.pregunta .ay-zonas dl{margin:8px 0 0;display:grid;gap:6px}
+.pregunta .ay-zonas dt{font-weight:600}
+.pregunta .ay-zonas dd{margin:0;color:var(--suave);font-size:14px}
+.otra{margin:0;color:var(--suave)}
+.otra a{color:var(--acento);font-weight:600}
+'''
+
+
+def armar_preguntas(general, publica):
+    """preguntas/index.html: las preguntas frecuentes de la portada en una
+    pagina fija (12/11/2026), con sus datos para Google (FAQPage). Sin
+    preguntas, None (no se arma)."""
+    qs = [q for q in (general.get('preguntas') or [])
+          if isinstance(q, dict) and isinstance(q.get('p'), str) and isinstance(q.get('html'), str) and q['p'] and q['html']]
+    if not qs:
+        return None
+    url = publica + 'preguntas/'
+    # Los links de la portada (#cotizar-usado) llevan a la portada
+    secciones = ''.join(
+        '<section class="bloque pregunta" aria-labelledby="q-%d"><h2 id="q-%d">%s</h2>%s</section>' % (
+            i, i, e(q['p']), q['html'].replace('href="#', 'href="../#'))
+        for i, q in enumerate(qs, 1))
+    datos = [{
+        '@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [
+            {'@type': 'Question', 'name': q['p'], 'acceptedAnswer': {'@type': 'Answer', 'text': texto_plano(q['html'], publica)}}
+            for q in qs]}, {
+        '@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
+            {'@type': 'ListItem', 'position': 1, 'name': 'Catálogo', 'item': publica},
+            {'@type': 'ListItem', 'position': 2, 'name': 'Preguntas frecuentes', 'item': url}]}]
+    ld = ''.join('<script type="application/ld+json">%s</script>\n' % json.dumps(x, ensure_ascii=False).replace('</', '<\\/')
+                 for x in datos)
+    meta_desc = recortar('Preguntas frecuentes de Advance Tecno: ' + ', '.join(q['p'].strip('¿?').lower() for q in qs) + '.')
+    wa = general.get('whatsapp') or ''
+    otra = ('<p class="otra">¿Te quedó otra duda? <a href="https://wa.me/%s" target="_blank" rel="noopener">Escribinos por WhatsApp</a></p>'
+            % e(wa)) if wa else ''
+    return '''<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Las preguntas frecuentes de la portada en una pagina fija (12/11/2026,
+     buscadores con IA). La arma herramientas/paginas-producto.py: no editar a mano. -->
+<title>Preguntas frecuentes | Advance Tecno</title>
+<meta name="description" content="{meta_desc}">
+<link rel="canonical" href="{url}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Advance Tecno">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="Preguntas frecuentes | Advance Tecno">
+<meta property="og:description" content="{meta_desc}">
+<meta property="og:url" content="{url}">
+<meta property="og:image" content="{og}">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icono-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/icono-16.png">
+<link rel="apple-touch-icon" href="../assets/icono-180.png">
+{ld}<style>{css}</style>
+</head>
+<body>
+<header class="barra"><div class="in">
+  <a class="logo" href="../" aria-label="Advance Tecno: ir al catálogo"><img src="../assets/logo-mark.png" alt=""><b>Advance <span>Tecno</span></b></a>
+  <a class="cat" href="../">Ver catálogo</a>
+</div></header>
+<main>
+  <nav class="migas" aria-label="Estás en"><a href="../">Catálogo</a> › Preguntas frecuentes</nav>
+  <div><h1>Preguntas frecuentes</h1></div>
+  {secciones}
+  {otra}
+</main>
+<footer>
+  <b>Advance Tecno</b>
+  <span>{direccion} · Envíos a todo el país · Atención con cita previa</span>
+  {contacto}
+  <span><a href="../producto/">Todos los modelos</a> · <a href="../">Catálogo</a></span>
+  <span>Precios sujetos a cambio sin previo aviso. Consultá disponibilidad antes de comprar.</span>
+</footer>
+</body>
+</html>
+'''.format(
+        meta_desc=e(meta_desc), url=e(url), og=e(publica + 'assets/preview.png'), ld=ld,
+        css=CSS.replace('../../assets/', '../assets/') + CSS_PREGUNTAS, secciones=secciones, otra=otra,
+        direccion=e(general.get('direccion') or 'Av. de los Incas 5150, 1A, CABA'),
+        contacto=' · '.join(x for x in (
+            ('<a href="https://wa.me/%s" target="_blank" rel="noopener">WhatsApp %s</a>' % (e(wa), e(numero_wa(wa)))) if wa else '',
+            ('<a href="%s" target="_blank" rel="noopener">Ver en el mapa</a>' % e(general['mapa'])) if general.get('mapa') else '') if x).join(['<span>', '</span>']) if (wa or general.get('mapa')) else '')
+
+
+def armar_llms(general, publica, entradas, sello=None):
+    """llms.txt (12/11/2026): lo que una IA necesita para hablar de Advance
+    Tecno sin abrir la portada, en el formato de llmstxt.org. Con sello
+    (--con-precio), cada modelo con su "desde" y la hora."""
+    cuando = texto_sello(sello)
+    wa = general.get('whatsapp') or ''
+    l = ['# Advance Tecno', '']
+    if general.get('descripcion'):
+        l += ['> ' + general['descripcion'], '']
+    l += [x for x in (
+        '- Catálogo: ' + publica,
+        ('- Dirección: %s. Atención con cita previa.' % general['direccion']) if general.get('direccion') else '',
+        ('- WhatsApp: %s (https://wa.me/%s)' % (numero_wa(wa), wa)) if wa else '',
+        ('- Instagram: ' + general['instagram']) if general.get('instagram') else '',
+        ('- Mapa: ' + general['mapa']) if general.get('mapa') else '') if x]
+    l.append('')
+    if cuando:
+        l += ['Todos los precios están en dólares. Los de este archivo son del %s (hora de Argentina); el del momento está '
+              'en la página de cada modelo. Precios sujetos a cambio sin previo aviso. Consultá disponibilidad antes de comprar.' % cuando, '']
+    l += ['## Páginas', '',
+          '- [Catálogo](%s): todos los productos, con el precio y el stock del momento.' % publica,
+          '- [Todos los modelos](%sproducto/): cada modelo con su página, por rubro.' % publica]
+    qs = [q for q in (general.get('preguntas') or []) if isinstance(q, dict) and q.get('p') and q.get('html')]
+    if qs:
+        l.append('- [Preguntas frecuentes](%spreguntas/): %s' % (publica, ' '.join(q['p'] for q in qs)))
+        l += ['', '## Preguntas frecuentes']
+        for q in qs:
+            l += ['', '### ' + q['p'], '', texto_plano(q['html'], publica)]
+    l += ['', '## Modelos']
+    por_rubro, rubros = por_rubro_en_orden(entradas, general)
+    for r in rubros:
+        l += ['', '### ' + r, '']
+        for x in sorted(por_rubro[r], key=lambda y: (orden_natural(y['titulo']), y['slug'])):
+            l.append('- [%s](%sproducto/%s/)%s' % (x['titulo'], publica, x['slug'], (': ' + desde_del_dia(x)) if sello else ''))
+    return '\n'.join(l) + '\n'
 
 
 def main(argv):
@@ -1229,7 +1602,16 @@ def main(argv):
     if len(datos.get('modelos') or []) < 50:
         print('NO SE ARMARON: la pagina armo %d modelos, demasiado pocos para ser una carga normal.' % len(datos.get('modelos') or []))
         return 2
-    res = aplicar(datos, publica)
+    # El registro de la portada (12/11/2026): la pagina de trabajo lo apaga
+    # (pagina_de_trabajo), asi que se lee del index.html
+    registro = re.search(r"^let ANALITICA_URL = '(https://[^'\r\n]+)';", src, re.M)
+    if registro:
+        datos['registro'] = registro.group(1)
+    sello = None
+    if '--con-precio' in argv:
+        sello = datetime.datetime.now(HORA_AR).replace(second=0, microsecond=0).isoformat()
+        print('  Con el precio de ahora escrito: "Precio al %s" (solo para la copia que se publica).' % texto_sello(sello))
+    res = aplicar(datos, publica, sello=sello)
     print('  %d modelos: %d nuevas, %d cambiadas, %d sin cambios; %d de modelos que hoy no estan, pasadas a sin stock.%s'
           % (len(datos['modelos']), res['nuevas'], res['cambiadas'], res['iguales'], res['sin_stock'],
              ' sitemap.xml actualizado.' if res['sitemap'] else ''))
@@ -1238,6 +1620,9 @@ def main(argv):
               % (res['desvios'], res['desvios_nuevos']))
     print('  %d paginas con "Otros modelos"; producto/index.html (Todos los modelos) %s.'
           % (res['con_otros'], 'actualizado' if res['indice'] else 'sin cambios'))
+    print('  preguntas/index.html %s; llms.txt %s.' % (
+        'actualizada' if res['preguntas'] else ('sin cambios' if datos.get('preguntas') else 'NO SE ARMO (la portada no dio preguntas)'),
+        'actualizado' if res['llms'] else 'sin cambios'))
     return 0
 
 
@@ -1603,6 +1988,63 @@ def probar():
     finally:
         INDICE = antes
         shutil.rmtree(tmp, ignore_errors=True)
+
+    # Para los buscadores con IA (12/11/2026): el precio del momento escrito, preguntas/ y llms.txt
+    pub = 'https://catalogo.advancetecno.com.ar/'
+    mp = {'familia': 'M:X', 'titulo': 'Apple iPhone 17 Pro', 'marca': 'Apple', 'categoria': 'Celular', 'rubro': 'Celulares',
+          'clave': 'A1', 'sku': '', 'desde': 1200, 'hasta': 1570, 'stock': True, 'wa': 'https://wa.me/1?text=hola',
+          'versiones': [{'version': '256GB', 'color': 'Orange', 'precio': 1200, 'stock': True, 'clave': 'A1', 'sku': '', 'wa': '', 'aviso': ''},
+                        {'version': '512GB', 'color': 'Blue', 'precio': 1570, 'stock': True, 'clave': 'A2', 'sku': '', 'wa': '', 'aviso': ''},
+                        {'version': '1TB', 'color': 'Blue', 'precio': 1900, 'stock': False, 'clave': 'A3', 'sku': '', 'wa': '', 'aviso': ''}]}
+    sello = '2026-11-12T13:05:00-03:00'
+    gen = {'cuotas': 12, 'congelados': {'dia': '2026-11-06', 'cambian': '2026-11-09'}}
+    base = armar_pagina(mp, 'apple-iphone-17-pro', pub, gen)
+    cp = con_precio_del_dia(base, mp, gen, sello, pub + 'producto/apple-iphone-17-pro/')
+    antes_js = cp.split('<script id="datos"')[0]
+    ok('<b>USD 1.200</b><i>Precio al 12/11/2026, 13:05 · hasta 12 cuotas</i>' in cp, 'IA: el recuadro con el precio de la version con que abre y la hora')
+    ok(antes_js.count('u$1.200') == 1 and 'u$1.570' in antes_js and 'u$1.900' not in antes_js
+       and '<td>1TB</td><td>Blue</td><td class="num">—</td><td>Sin stock</td>' in antes_js,
+       'IA: la tabla con precio en lo que tiene stock; lo agotado sin precio (D15 B)')
+    ok('"lowPrice": 1200, "highPrice": 1570, "offerCount": 2, "availability": "https://schema.org/InStock"' in antes_js,
+       'IA: la oferta en los datos para Google, sin lo agotado')
+    ok('<b>Precios del viernes 06/11.</b> Es probable que cambien el lunes.' in cp and CONGELADO_VACIO not in cp,
+       'IA: el aviso de los precios del viernes, con las palabras de la portada')
+    ok('"sello": "%s"' % sello in cp and SCRIPT_SELLO in cp and '<script>%s</script>' % SCRIPT not in cp,
+       'IA: los datos con la hora y el script que la respeta')
+    ok('Precio al' not in base and 'lowPrice' not in base.split('<script id="datos"')[0] and 'sello' not in base,
+       'IA: sin --con-precio la pagina sigue sin precio (W3-06)')
+    agot = dict(mp, versiones=[dict(x, stock=False) for x in mp['versiones']], stock=False)
+    ca = con_precio_del_dia(armar_pagina(agot, 's', pub, {'cuotas': 12}), agot, {'cuotas': 12}, sello, pub)
+    ok('<b>Hoy sin stock</b><i>Al 12/11/2026, 13:05.' in ca and '"offers"' not in ca.split('<script id="datos"')[0]
+       and 'u$' not in ca.split('<script id="datos"')[0], 'IA: todo agotado, "Hoy sin stock" y sin oferta ni precios')
+    rara = base.replace('Consultá el precio', 'Otro texto', 1)
+    ok(con_precio_del_dia(rara, mp, gen, sello, pub) == rara, 'IA: si algo no esta donde se lo espera, la pagina queda sin precio')
+    ok(texto_congelados({'dia': '2026-11-06'}) == '' and texto_congelados(None) == '', 'IA: sin el dato completo, sin aviso')
+    con_reg = armar_pagina(mp, 's', pub, dict(gen, registro='https://advapp.example/api?resource=eventos-web'))
+    ok('"registro": "https://advapp.example/api?resource=eventos-web"' in con_reg and '"registro"' not in base
+       and "t: 'pagina_producto'" in SCRIPT and 'D.registro &&' in SCRIPT,
+       'IA: la pagina anota de donde llego solo con el registro de la portada prendido')
+    pg = {'cuotas': 12, 'whatsapp': '5491100000000', 'direccion': 'Av. X 1, CABA', 'descripcion': 'Tienda de prueba.',
+          'preguntas': [{'p': '¿Hacen envíos?', 'html': '<p>En moto:</p> <table class="ay-tabla"><tbody><tr><th scope="row">CABA</th>'
+                                                        '<td>$15.000</td></tr></tbody></table>'},
+                        {'p': '¿Toman mi usado?', 'html': '<p>Sí.</p> <a href="#cotizar-usado">Cotizar mi usado</a>'},
+                        {'p': '', 'html': '<p>sin pregunta</p>'}]}
+    hp = armar_preguntas(pg, pub)
+    ok(hp and hp.count('class="bloque pregunta"') == 2 and 'href="../#cotizar-usado"' in hp and '"@type": "FAQPage"' in hp
+       and '- CABA: $15.000' in hp, 'IA: preguntas/ con las de la portada, el cotizador en la portada y los datos FAQPage')
+    ok(armar_preguntas({'preguntas': []}, pub) is None, 'IA: sin preguntas no se arma la pagina')
+    ent = [{'slug': 'apple-iphone-17-pro', 'titulo': 'Apple iPhone 17 Pro', 'rubro': 'Celulares', 'desde': 1200, 'stock': True},
+           {'slug': 'vieja', 'titulo': 'Vieja', 'rubro': 'Celulares'}]
+    l1, l2 = armar_llms(pg, pub, ent, sello), armar_llms(pg, pub, ent)
+    ok(l1.startswith('# Advance Tecno\n\n> Tienda de prueba.')
+       and '- [Apple iPhone 17 Pro](%sproducto/apple-iphone-17-pro/): desde USD 1.200' % pub in l1
+       and '- [Vieja](%sproducto/vieja/): hoy sin stock' % pub in l1 and 'del 12/11/2026, 13:05' in l1
+       and 'Cotizar mi usado (%s#cotizar-usado)' % pub in l1 and '+54 9 11 0000-0000' in l1,
+       'IA: llms.txt con la tienda, las preguntas en texto y cada modelo con su "desde" y la hora')
+    ok('USD' not in l2 and 'sin stock' not in l2 and '- [Apple iPhone 17 Pro](%sproducto/apple-iphone-17-pro/)\n' % pub in l2,
+       'IA: sin --con-precio, llms.txt sin precios')
+    ok('<loc>%spreguntas/</loc>' % pub in texto_sitemap(pub, {'slugs': {}, 'lastmod': {}}, (), True)
+       and 'preguntas' not in texto_sitemap(pub, {'slugs': {}, 'lastmod': {}}), 'IA: preguntas/ en el sitemap solo si se armo')
     print('\n%d falla(s)' % len(fallas) if fallas else '\nTODO OK')
     return 1 if fallas else 0
 

@@ -16,6 +16,12 @@
 #
 # La lista de páginas para Google es sitemap.xml (la arma
 # herramientas/paginas-producto.py en cada PUBLICAR).
+#
+# Los buscadores con IA (Benja, 12/11/2026): llms.txt es el resumen del
+# catálogo para ChatGPT, Perplexity, Claude y los demás (lo arma
+# herramientas/paginas-producto.py). Es el único .txt que se deja leer. Los
+# robots de las IA entran por "User-agent: *", como Google: no hay un grupo
+# aparte para ellos, porque un grupo propio dejaría de heredar estos Disallow.
 User-agent: *
 Disallow: /herramientas/
 Disallow: /pruebas/
@@ -24,5 +30,6 @@ Disallow: /*.py$
 Disallow: /*.command$
 Disallow: /*.txt$
 Allow: /robots.txt
+Allow: /llms.txt
 
 Sitemap: https://catalogo.advancetecno.com.ar/sitemap.xml

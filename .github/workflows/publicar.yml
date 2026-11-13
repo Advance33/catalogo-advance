@@ -30,7 +30,10 @@
 #     publicar. Así un cambio que rompa la copia se ve antes del merge.
 #     También si toca robots.txt, el que arma las páginas o la herramienta de
 #     IndexNow: ahí corren las pruebas de esa herramienta, y si fallan el PR
-#     queda en rojo (en main solo dejan una advertencia).
+#     queda en rojo (en main solo dejan una advertencia). Y en todo PR se
+#     abre en Chrome la página de un modelo de mentira para ver qué anota en
+#     la medición (herramientas/probar-pagina-modelo.py, 13/11/2026); en una
+#     publicación eso no corre.
 #   - a mano (Actions › Publicar el catálogo › Run workflow): como un push,
 #     salvo lo del precio que se explica abajo. Con "esperar_fuente" tildado,
 #     si Pages todavía publica desde la rama, espera hasta 15 minutos a que
@@ -75,7 +78,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-    paths: ['index.html', '.github/**', 'robots.txt', 'herramientas/paginas-producto.py', 'herramientas/indexnow.py']
+    paths: ['index.html', '.github/**', 'robots.txt', 'herramientas/paginas-producto.py', 'herramientas/probar-pagina-modelo.py', 'herramientas/indexnow.py']
   workflow_dispatch:
     inputs:
       esperar_fuente:
@@ -163,6 +166,15 @@ jobs:
           if [ "$COMPARAR" = true ]; then
             python3 herramientas/indexnow.py cambios
           fi
+
+      # Lo que anotan las páginas de cada modelo (13/11/2026): la pauta con la
+      # que se llegó y cada toque a WhatsApp. Abre en Chrome una página armada
+      # con un modelo de mentira, sin salir a la red. Solo en los PR, que es
+      # donde cambia el script: en una publicación no corre y nunca la frena.
+      - name: Probar lo que anotan las páginas de cada modelo
+        if: github.event_name == 'pull_request'
+        timeout-minutes: 5
+        run: python3 herramientas/probar-pagina-modelo.py
 
       - name: Copiar el sitio y sacar los comentarios de index.html
         env:

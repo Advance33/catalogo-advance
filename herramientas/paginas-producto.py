@@ -105,7 +105,10 @@ misma visita: que se abrio y desde donde (pagina_producto, con ref), si llego
 tocando un aviso pago (pauta y campania: Benja, 13/11, «dale con la
 medicion», antes de prender avisos en Google) y el toque a WhatsApp (whatsapp
 desde "pagina" o "pagina-pie"). Con la medicion apagada en index.html, o con
-Do Not Track, nada.
+Do Not Track, nada. Leida, la pauta sale de la direccion. Lo que hace de
+verdad el script con todo esto se prueba en Chrome sin ventana:
+    python3 herramientas/probar-pagina-modelo.py
+(el workflow de Publicar lo corre en cada PR; --probar solo mira el texto).
 
 Codigos de salida: 0 bien, 2 no se pudieron armar (producto/ queda como estaba).
 """

@@ -235,8 +235,31 @@ async function correrPruebas(){
   ok(!JSON.stringify(pautaDe('?gclid=CLIC-SECRETO-123&utm_campaign=a')).includes('SECRETO'), 'el código del clic no se guarda');
   const larga = pautaDe('?utm_medium=cpc&utm_source=' + 'x'.repeat(200) + '&utm_campaign=' + 'y'.repeat(200));
   ok(larga.pauta.length === 30 && larga.campania.length === 40, 'lo que se anota va recortado', larga.pauta.length + ' y ' + larga.campania.length);
-  ok(JSON.stringify(PAUTA_ENTRADA) === JSON.stringify(pautaDe(location.search)), 'la pauta de esta visita se leyó al cargar', JSON.stringify(PAUTA_ENTRADA));
-  // El evento "visita" sale una sola vez y antes de que corra esta tanda: se mira el código
+  // (revisión del PR) Un medio pago se reconoce aunque no empiece con "cpc" o "paid"...
+  const esPaga = medio => pautaDe('?utm_source=meta&utm_medium=' + encodeURIComponent(medio)).pauta === 'meta';
+  const noVio = ['cpc', 'CPC', 'ppc', 'cpm', 'cpv', 'paid', 'paid_social', 'social_paid', 'paidsocial', 'Paid Social',
+                 'display', 'ads', 'ad', 'pago', 'pauta', 'retargeting'].filter(m => !esPaga(m));
+  ok(noVio.length === 0, 'cualquier medio pago cuenta como pauta (cpc, cpm, social_paid, display, ads…)', noVio.join(' | '));
+  // ...y lo que no es pago no se confunde por parecerse
+  const deMas = ['historia', 'social', 'organic', 'email', 'referral', 'whatsapp', 'bio', 'qr', 'link', 'cpanel', 'roads', 'pagina'].filter(esPaga);
+  ok(deMas.length === 0, 'y un medio que no es pago, no (historia, social, email, bio…)', deMas.join(' | '));
+  pautaEs('?gclid=x&gad_campaignid=77&utm_campaign=%F0%9F%94%A5%F0%9F%94%A5', { pauta: 'google', campania: '77' },
+          'un nombre de campaña que queda vacío al limpiarlo no tapa el número de Google');
+
+  /* Leída, la pauta sale de la dirección (revisión del PR), como ?config:
+     urlActual() conserva los parámetros que no conoce, y el link de la barra
+     reenviado o guardado volvía a contar como un clic pago. */
+  ok(sinPauta('https://x.test/?cat=Celular&gclid=a&gad_source=1&utm_source=g&utm_medium=cpc&utm_term=ps5#p=ID') === '/?cat=Celular#p=ID',
+     'de la dirección sale lo del aviso y queda lo demás: el rubro y la ficha',
+     sinPauta('https://x.test/?cat=Celular&gclid=a&gad_source=1&utm_source=g&utm_medium=cpc&utm_term=ps5#p=ID'));
+  ok(sinPauta('https://x.test/?gclid=a&gbraid=b&wbraid=c&gad_campaignid=7&utm_campaign=x&utm_content=y&utm_id=z') === '/',
+     'si era lo único, la dirección queda pelada', sinPauta('https://x.test/?gclid=a&gbraid=b&wbraid=c&gad_campaignid=7&utm_campaign=x&utm_content=y&utm_id=z'));
+  ok(CLAVES_DE_PAUTA.every(k => !sinPauta('https://x.test/?' + k + '=1&q=ps5').includes(k)) && sinPauta('https://x.test/?q=ps5&marca=Sony') === '/?q=ps5&marca=Sony',
+     'ningún parámetro de aviso sobrevive, y una dirección sin aviso queda igual');
+  // Lo que pasa al cargar corre una sola vez y antes que esta tanda: se mira el código
   const codigo = [...document.scripts].map(s => s.textContent).join('\n');
-  ok(/anotar\('visita', \{[^;]*\.\.\.PAUTA_ENTRADA \}\)/.test(codigo), 'y va en el evento "visita"');
+  ok(/const PAUTA_ENTRADA = pautaDe\(location\.search\);[\s\S]{0,700}if\(PAUTA_ENTRADA\.pauta\)\{\s*try\{ history\.replaceState\(history\.state, '', sinPauta\(location\.href\)\); \}/.test(codigo),
+     'la pauta se lee al cargar y enseguida sale de la dirección');
+  ok(/anotar\('visita', \{[^;]*\.\.\.PAUTA_ENTRADA \}\)/.test(codigo), 'va en el evento "visita"');
+  ok(/anotar\('carga_fallida', \{[^;]*\.\.\.PAUTA_ENTRADA \}\)/.test(codigo), 'y en "carga_fallida": un clic pago que cayó en una página que no cargó');
 }

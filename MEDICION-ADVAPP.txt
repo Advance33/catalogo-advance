@@ -73,13 +73,17 @@ no hay cookies ni cartel de consentimiento.
                     pauta: de quién es. "google" cuando la dirección de
                     entrada trae gclid, gbraid, wbraid o gad_source (los
                     agrega Google solo); cualquier otra se marca a mano en el
-                    link del aviso con utm_medium=cpc (o ppc, paid…) y
+                    link del aviso con utm_medium=cpc (o cualquier medio
+                    pago: ppc, cpm, paid_social, display, ads…) y
                     utm_source=<de quién es> ("meta", "instagram"; sin
                     utm_source, "otra"). Y campania: utm_campaign, o el número
                     que pone Google en gad_campaignid (hasta 40 caracteres,
                     en minúsculas y sin tildes). El código del clic (gclid) no
                     se guarda. Sin pauta no viene ninguno de los dos: un
                     clic pago de Google y uno gratis traían el mismo ref.
+                    Leída, la pauta sale de la dirección (gclid, gad_* y
+                    utm_*): el link de la barra reenviado o guardado no
+                    vuelve a contar como un clic pago.
    pagina_producto  abrió la página de un modelo, producto/<nombre>/
                     (12/11/2026, herramientas/paginas-producto.py). Una por
                     carga, con la misma visita de la portada. pagina: el
@@ -89,7 +93,9 @@ no hay cookies ni cartel de consentimiento.
                     motivo (hasta 120 caracteres, con lo que dijo ADVAPP y la
                     planilla) y ancho. Si después carga, llega también la
                     visita. Si el cliente se quedó sin conexión no llega:
-                    sirve para las caídas del servidor o del código.
+                    sirve para las caídas del servidor o del código. Con
+                    pauta y campania, como visita, si llegó por un aviso
+                    pago (13/11/2026): un clic que se pagó y cayó acá.
    rubro            entró a un rubro. rubro: "Celular".
    menu             volvió al menú de rubros.
    ver_todo         pidió el catálogo entero.
@@ -128,9 +134,10 @@ no hay cookies ni cartel de consentimiento.
                     ENC-####, con marca, precio y nombre; sin codigo ni cat.
                     desde="pagina" es el botón de la página de un modelo
                     (13/11/2026): pagina (su nombre), id, color y version de
-                    lo elegido, precio (el del momento, si ya llegó y hay
-                    stock) y sin_stock: true si el botón decía "Avisame
-                    cuando entre". Sin codigo, cat, marca ni nombre.
+                    lo elegido, precio (el del momento, si ADVAPP ya
+                    contestó y hay stock) y sin_stock: true si el botón
+                    decía "Avisame cuando entre". Sin codigo, cat, marca ni
+                    nombre. También si se abre con el botón del medio.
                     desde="pagina-pie" es el número escrito en el pie de esa
                     página: sólo pagina.
    pedilo          TOCÓ WHATSAPP desde "¿Buscás algo que no está?". q: lo que

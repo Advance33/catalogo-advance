@@ -565,7 +565,8 @@ SCRIPT = r'''
      Con la misma visita de la portada (sessionStorage): si después toca "Ver
      en el catálogo", se sabe de dónde venía. Con Do Not Track, nada; si algo
      falla, nada. Sin D.registro (la medición apagada), nada. */
-  const pagina = location.pathname.split('/').filter(Boolean).pop() || '';
+  // El nombre de la página: el último tramo de la dirección, sin el index.html
+  const pagina = location.pathname.split('/').filter((x) => x && x !== 'index.html').pop() || '';
   let visita = '';
   const anotar = (evento) => {
     try{
@@ -587,18 +588,19 @@ SCRIPT = r'''
      "www.google.com". Google le agrega a la dirección gclid (gbraid o wbraid
      en iPhone) y gad_source; cualquier otra pauta se marca a mano en el link
      del aviso, con utm_medium=cpc (o cualquier medio pago: paid_social, cpm,
-     display, ads…) y utm_source=<de quién es>. Se anota de quién es la pauta
-     y la campaña (utm_campaign, o el número que pone Google en
-     gad_campaignid); el código del clic no se guarda. Es la misma función
-     que la de la portada (index.html, MEDICIÓN): si cambia una, cambia la
-     otra (--probar las compara). */
+     display, ads…; la lista está en la función) y utm_source=<de quién es>.
+     Se anota de quién es la pauta y la campaña (utm_campaign, o el número
+     que pone Google en gad_campaignid); el código del clic no se guarda. Es
+     la misma función que la de la portada (index.html, MEDICIÓN): si cambia
+     una, cambia la otra (--probar y probar-pagina-modelo.py las comparan). */
   const pautaDe = (busqueda) => {
     try{
       const s = new URLSearchParams(busqueda);
       const limpio = (v, largo) => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
         .replace(/[^a-z0-9 ._-]+/g, ' ').trim().slice(0, largo);
-      const paga = /(^|[^a-z])(cp[a-z]|ppc|ads?)([^a-z]|$)|paid|pago|paga|pauta|display|retargeting|remarketing/
-        .test(limpio(s.get('utm_medium'), 30));
+      // Un medio es pago si alguna de sus palabras es de avisos (paid_social son dos)
+      const paga = limpio(s.get('utm_medium'), 30).split(/[^a-z0-9]+/).some((m) =>
+        /^(cp[a-z]|ppc|ads?|display|banner|sponsored|pago|paga|pauta|retargeting|remarketing|paid[a-z]*)$/.test(m));
       const pauta = ['gclid', 'gbraid', 'wbraid', 'gad_source'].some((k) => s.get(k)) ? 'google'
         : paga ? (limpio(s.get('utm_source'), 30) || 'otra') : '';
       if(!pauta) return {};
@@ -614,8 +616,9 @@ SCRIPT = r'''
   }
   /* Leída, la pauta sale de la dirección (como en la portada): el link de la
      barra mandado a un amigo o guardado en favoritos volvía a contar como un
-     clic pago cada vez que alguien lo abría. */
-  if(entrada.pauta){
+     clic pago cada vez que alguien lo abría. Con la medición apagada no se
+     toca nada. */
+  if(entrada.pauta && D.registro){
     try{
       const u = new URL(location.href);
       ['gclid', 'gbraid', 'wbraid', 'gad_source', 'gad_campaignid',
@@ -627,13 +630,14 @@ SCRIPT = r'''
      desde acá no se anotaba (en la portada sí). desde: "pagina" es el botón
      de la versión elegida, con el producto, el precio del momento si ADVAPP
      ya contestó (lo agotado va sin precio, como en la página) y sin_stock si
-     era "Avisame cuando entre"; "pagina-pie", el número escrito en el pie. */
+     era "Avisame cuando entre"; "pagina-pie", el número escrito en el pie;
+     "pagina-otro", cualquier otro link a WhatsApp que se sume a la página. */
   const toque = (ev) => {
     try{
       const a = ev.target.closest && ev.target.closest('a[href*="wa.me/"]');
       if(!a) return;
       const x = elegida() || {};
-      anotar(!a.classList.contains('wa') ? { t: 'whatsapp', desde: 'pagina-pie' }
+      anotar(!a.classList.contains('wa') ? { t: 'whatsapp', desde: a.closest('footer') ? 'pagina-pie' : 'pagina-otro' }
         : Object.assign({ t: 'whatsapp', desde: 'pagina', id: x.clave, color: x.color, version: x.version },
                         vivo && x.stock && x.precio ? { precio: x.precio } : {}, vivo && !x.stock ? { sin_stock: true } : {}));
     }catch(e){}
@@ -845,6 +849,35 @@ def armar_pagina(m, s, publica, general, otros=None):
 # --------------------------------------------------------------------------
 # Escribir
 # --------------------------------------------------------------------------
+
+def _cuerpo_pauta(t, cabecera):
+    i = t.find(cabecera)
+    j = t.find('catch(e){ return {}; }', i)
+    return re.sub(r'\((\w+)\) =>', r'\1 =>', re.sub(r'\s+', ' ', t[i + len(cabecera):j])) if 0 <= i < j else None
+
+
+def _claves_pauta(t):
+    m = re.search(r"\['gclid', 'gbraid', 'wbraid', 'gad_source', 'gad_campaignid',\s*'utm_source'[^\]]*\]", t)
+    return re.sub(r'\s+', ' ', m.group(0)) if m else None
+
+
+def pauta_distinta_de_la_portada(portada=None):
+    """La funcion que dice si la visita llego por un aviso pago (pautaDe) y la
+    lista de parametros que se sacan de la direccion estan escritas dos veces:
+    en SCRIPT y en la portada (index.html, MEDICION). None si siguen iguales;
+    si no, que es lo que difiere. Lo miran --probar y probar-pagina-modelo.py,
+    que corre en cada PR. portada: el texto de index.html (por defecto, el del
+    repo)."""
+    if portada is None:
+        with io.open(os.path.join(RAIZ, 'index.html'), encoding='utf-8') as fh:
+            portada = fh.read()
+    aca, alla = _cuerpo_pauta(SCRIPT, 'const pautaDe = (busqueda) => {'), _cuerpo_pauta(portada, 'function pautaDe(busqueda){')
+    if not aca or aca != alla:
+        return 'pautaDe no es igual en SCRIPT y en index.html'
+    if not _claves_pauta(SCRIPT) or _claves_pauta(SCRIPT) != _claves_pauta(portada):
+        return 'los parametros que se sacan de la direccion no son los mismos en SCRIPT y en index.html'
+    return None
+
 
 def escribir_si_cambio(ruta, texto):
     try:
@@ -2106,23 +2139,12 @@ def probar():
     # prueba en Chrome con herramientas/probar-pagina-modelo.py; aca se mira lo
     # que eso no ve: que las dos copias de pautaDe (esta y la de la portada)
     # sigan iguales, y que nada se caiga del script al escribir el precio.
-    def cuerpo_pauta(t, cabecera):
-        i = t.find(cabecera)
-        j = t.find('catch(e){ return {}; }', i)
-        return re.sub(r'\((\w+)\) =>', r'\1 =>', re.sub(r'\s+', ' ', t[i + len(cabecera):j])) if 0 <= i < j else None
-
-    def claves_pauta(t):
-        m = re.search(r"\['gclid', 'gbraid', 'wbraid', 'gad_source', 'gad_campaignid',\s*'utm_source'[^\]]*\]", t)
-        return re.sub(r'\s+', ' ', m.group(0)) if m else None
-    with io.open(os.path.join(RAIZ, 'index.html'), encoding='utf-8') as fh:
-        portada = fh.read()
-    en_pagina = cuerpo_pauta(SCRIPT, 'const pautaDe = (busqueda) => {')
-    ok(en_pagina and "'gclid', 'gbraid', 'wbraid', 'gad_source'" in en_pagina and '\\u0300-\\u036f' in en_pagina
-       and en_pagina == cuerpo_pauta(portada, 'function pautaDe(busqueda){'),
-       'pauta: la pagina y la portada deciden igual si la visita llego por un aviso pago')
-    ok(claves_pauta(SCRIPT) and claves_pauta(SCRIPT) == claves_pauta(portada),
-       'pauta: y sacan de la direccion los mismos parametros')
-    ok(all(x in SCRIPT_SELLO for x in ("t: 'pagina_producto'", "desde: 'pagina',", "desde: 'pagina-pie'", 'const entrada = pautaDe(location.search);',
+    distinto = pauta_distinta_de_la_portada()
+    ok(distinto is None and "'gclid', 'gbraid', 'wbraid', 'gad_source'" in SCRIPT and '\\u0300-\\u036f' in SCRIPT,
+       'pauta: la pagina y la portada deciden igual si la visita llego por un aviso pago, y sacan lo mismo de la direccion', distinto)
+    ok(pauta_distinta_de_la_portada('function pautaDe(busqueda){ try{ return { pauta: 1 }; }catch(e){ return {}; } }') is not None,
+       'pauta: y si una de las dos copias cambia sola, se nota')
+    ok(all(x in SCRIPT_SELLO for x in ("t: 'pagina_producto'", "desde: 'pagina',", "'pagina-pie'", 'const entrada = pautaDe(location.search);',
                                        "document.addEventListener('click', toque, true);"))
        and con_reg.count('<a class="wa" ') == 1,
        'pauta: la visita y el toque a WhatsApp siguen en el script con el precio escrito')

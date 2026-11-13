@@ -9,7 +9,7 @@ anote la visita con la pauta con la que se llego (Benja, 13/11/2026: «dale
 con la medicion», antes de prender avisos en Google), que la saque de la
 direccion y que anote cada toque a WhatsApp. Cada vez que se toque el final
 de SCRIPT en paginas-producto.py hay que correr esto. El workflow de Publicar
-lo corre en cada PR.
+lo corre en los PR.
 
 Nada sale a la red: la pagina se arma con un modelo de mentira, ADVAPP es un
 archivo local y lo que la pagina manda al registro se intercepta. Hace falta
@@ -78,8 +78,9 @@ window.__m = []; window.__cuerpo = '';
 </script>
 '''
 # Va DESPUES: cuando ADVAPP ya contesto, toca el boton, elige la version
-# agotada y lo toca de nuevo, toca el numero del pie, el boton con el boton del
-# medio y con el derecho, y algo que no es WhatsApp. Deja todo en el RESULTADO.
+# agotada y lo toca de nuevo, toca el numero del pie, un link a WhatsApp que no
+# es ni el boton ni el pie, el boton con el boton del medio y con el derecho, y
+# algo que no es WhatsApp. Deja todo en el RESULTADO.
 DESPUES = '''<script>
 setTimeout(() => {
   const frenar = (e) => e.preventDefault();      // que no abra WhatsApp
@@ -93,6 +94,10 @@ setTimeout(() => {
     out.textoAgotada = boton().textContent;
     boton().click();
     document.querySelector('footer a[href*="wa.me/"]').click();
+    const suelto = document.createElement('a');
+    suelto.href = 'https://wa.me/1?text=otro';
+    document.getElementById('precio').parentNode.appendChild(suelto);
+    suelto.click();
     boton().dispatchEvent(new MouseEvent('auxclick', { bubbles: true, cancelable: true, button: 1 }));
     boton().dispatchEvent(new MouseEvent('auxclick', { bubbles: true, cancelable: true, button: 2 }));
     document.getElementById('precio').click();
@@ -107,6 +112,9 @@ setTimeout(() => {
 }, 1500);
 </script>
 '''
+# Lo que tiene que mandar una pagina con la medicion prendida: la visita y los
+# cinco toques (boton, agotada, pie, otro link, boton del medio)
+ENVIOS = 6
 
 
 def cargar_generador():
@@ -137,6 +145,10 @@ def main():
         if not c:
             fallas.append(txt)
 
+    print('--- Las dos copias de la regla')
+    distinto = PP.pauta_distinta_de_la_portada()
+    ok(distinto is None, 'la pagina y la portada deciden igual que es una pauta y que se saca de la direccion', distinto)
+
     raiz = tempfile.mkdtemp(prefix='pagina-modelo-')
     srv = http.server.ThreadingHTTPServer(('127.0.0.1', 0), functools.partial(Callado, directory=raiz))
     threading.Thread(target=srv.serve_forever, daemon=True).start()
@@ -146,10 +158,11 @@ def main():
                    'advapp': base_url + '/advapp.json', 'registro': REGISTRO}
         sin_precio = PP.armar_pagina(MODELO, SLUG, PUBLICA, general)
         con_precio = PP.con_precio_del_dia(sin_precio, MODELO, general, '2026-11-12T13:05:00-03:00', PUBLICA)
+        apagada = PP.armar_pagina(MODELO, SLUG, PUBLICA, {k: v for k, v in general.items() if k != 'registro'})
         if con_precio == sin_precio or PP.SCRIPT_SELLO not in con_precio:
             print('NO SE PUDO CORRER: no se armo la pagina con el precio escrito.')
             return 2
-        for variante, pagina in (('sin-precio', sin_precio), ('con-precio', con_precio)):
+        for variante, pagina in (('sin-precio', sin_precio), ('con-precio', con_precio), ('apagada', apagada)):
             carpeta = os.path.join(raiz, variante, 'producto', SLUG)
             os.makedirs(carpeta)
             with io.open(os.path.join(carpeta, 'index.html'), 'w', encoding='utf-8') as fh:
@@ -157,30 +170,40 @@ def main():
         with io.open(os.path.join(raiz, 'advapp.json'), 'w', encoding='utf-8') as fh:
             json.dump(ADVAPP, fh)
 
-        def visita(variante, consulta):
+        def abrir(variante, consulta):
             dom, motivo = VP.abrir_en_chrome('%s/%s/producto/%s/%s' % (base_url, variante, SLUG, consulta))
             m = re.search(r'<pre id="RESULTADO">(.*?)</pre>', dom, re.S) if dom else None
             if not m:
                 return None, motivo or 'la pagina no dejo su RESULTADO'
             return json.loads(html.unescape(m.group(1))), None
 
-        primera, motivo = visita('sin-precio', '')
+        primera, motivo = abrir('sin-precio', '')
         if primera is None:
             print('NO SE PUDO CORRER: %s.' % motivo)
             return 2
 
+        def visita(variante, consulta):
+            """Lo que dejo la pagina. Si Chrome no llego, queda como una
+            falla de esa visita (y no revienta las que siguen)."""
+            r, motivo = abrir(variante, consulta)
+            if r is None:
+                ok(False, 'abrir %s/%s' % (variante, consulta or '(sin nada)'), motivo)
+                return {'errores': [motivo], 'mandados': [], 'direccion': None, 'visitaGuardada': None}
+            return r
+
         def eventos(r):
-            return [m['cuerpo']['eventos'][0] for m in r['mandados']]
+            """El evento de cada envio; relleno hasta ENVIOS para poder mirar
+            cualquiera sin que un envio de menos corte la corrida."""
+            ev = [m['cuerpo']['eventos'][0] for m in r['mandados']]
+            return ev + [{}] * (ENVIOS - len(ev))
 
         for variante in ('sin-precio', 'con-precio'):
             print('--- La pagina %s, llegando por un aviso de Google' % ('sin precio escrito' if variante == 'sin-precio' else 'con el precio escrito'))
-            r, motivo = visita(variante, '?gclid=CLIC-SECRETO-123&gad_source=1&gad_campaignid=998877')
-            ok(r is not None and not r['errores'], 'la pagina abre y se la puede tocar', motivo or (r and r['errores']))
-            if not r:
-                continue
+            r = visita(variante, '?gclid=CLIC-SECRETO-123&gad_source=1&gad_campaignid=998877')
             ev = eventos(r)
-            ok(len(ev) == 5 and all(len(m['cuerpo']['eventos']) == 1 and m['via'] == 'beacon' for m in r['mandados']),
-               'cinco envios: la visita y cuatro toques a WhatsApp', ev)
+            ok(not r['errores'], 'la pagina abre y se la puede tocar', r['errores'])
+            ok(len(r['mandados']) == ENVIOS and all(len(m['cuerpo']['eventos']) == 1 and m['via'] == 'beacon' for m in r['mandados']),
+               'seis envios: la visita y cinco toques a WhatsApp', ev)
             ok(all(m['url'] == REGISTRO and m['cuerpo']['v'] == 1 and m['cuerpo']['sitio'] == 'tecno-web' for m in r['mandados']),
                'todos al registro de la portada, con el formato de siempre')
             ok(len({m['cuerpo']['visita'] for m in r['mandados']}) == 1 and r['mandados'][0]['cuerpo']['visita'] == r['visitaGuardada'],
@@ -198,42 +221,53 @@ def main():
                'la agotada: "Avisame cuando entre" va con sin_stock y sin precio', ev[2])
             ok(ev[3].get('t') == 'whatsapp' and ev[3].get('desde') == 'pagina-pie' and 'id' not in ev[3] and ev[3].get('pagina') == SLUG,
                'el numero del pie: desde "pagina-pie", sin producto', ev[3])
-            ok(ev[4].get('t') == 'whatsapp' and ev[4].get('desde') == 'pagina' and ev[4].get('id') == 'A3',
-               'el boton del medio tambien se anota; el derecho y lo que no es WhatsApp, no', ev[4:])
-            ok(all(isinstance(x.get('ms'), int) for x in ev), 'cada evento con su momento')
+            ok(ev[4].get('t') == 'whatsapp' and ev[4].get('desde') == 'pagina-otro' and 'id' not in ev[4],
+               'otro link a WhatsApp que no es ni el boton ni el pie: "pagina-otro"', ev[4])
+            ok(ev[5].get('t') == 'whatsapp' and ev[5].get('desde') == 'pagina' and ev[5].get('id') == 'A3',
+               'el boton del medio tambien se anota; el derecho y lo que no es WhatsApp, no', ev[5:])
+            ok(all(isinstance(m['cuerpo']['eventos'][0].get('ms'), int) for m in r['mandados']), 'cada evento con su momento')
 
         print('--- Otras formas de llegar')
-        r, _ = visita('sin-precio', '?utm_source=Meta&utm_medium=paid_social&utm_campaign=' + urllib.parse.quote('Consolas Nov 🔥'))
+        r = visita('sin-precio', '?utm_source=Meta&utm_medium=paid_social&utm_campaign=' + urllib.parse.quote('Consolas Nov 🔥'))
         e0 = eventos(r)[0]
         ok(e0.get('pauta') == 'meta' and e0.get('campania') == 'consolas nov' and r['direccion'] == '',
            'una pauta marcada a mano: de quien es y la campania, sin tildes ni simbolos', [e0, r['direccion']])
-        r, _ = visita('sin-precio', '?utm_source=instagram&utm_medium=social_paid')
+        r = visita('sin-precio', '?utm_source=instagram&utm_medium=social_paid')
         ok(eventos(r)[0].get('pauta') == 'instagram', 'el medio pago se reconoce aunque "paid" no vaya adelante', eventos(r)[0])
-        r, _ = visita('sin-precio', '?gclid=x&gad_campaignid=77&utm_campaign=' + urllib.parse.quote('🔥🔥'))
+        r = visita('sin-precio', '?utm_source=instagram&utm_medium=unpaid&utm_campaign=ps5')
+        ok(eventos(r)[0].get('t') == 'pagina_producto' and 'pauta' not in eventos(r)[0], 'y "unpaid" no es pago por parecerse', eventos(r)[0])
+        r = visita('sin-precio', '?gclid=x&gad_campaignid=77&utm_campaign=' + urllib.parse.quote('🔥🔥'))
         ok(eventos(r)[0].get('campania') == '77', 'un nombre de campania que queda vacio no tapa el numero de Google', eventos(r)[0])
-        r, _ = visita('sin-precio', '?utm_source=instagram&utm_medium=historia&utm_campaign=ps5')
+        r = visita('sin-precio', '?utm_source=instagram&utm_medium=historia&utm_campaign=ps5')
         e0 = eventos(r)[0]
-        ok('pauta' not in e0 and 'campania' not in e0 and len(r['mandados']) == 5 and 'utm_medium=historia' in r['direccion'],
+        ok(e0.get('t') == 'pagina_producto' and 'pauta' not in e0 and 'campania' not in e0 and len(r['mandados']) == ENVIOS
+           and 'utm_medium=historia' in (r['direccion'] or ''),
            'un link marcado que no es pago: sin pauta, y la direccion queda como vino', [e0, r['direccion']])
         e0 = eventos(primera)[0]
-        ok(e0.get('t') == 'pagina_producto' and 'pauta' not in e0 and len(primera['mandados']) == 5 and primera['direccion'] == '',
+        ok(e0.get('t') == 'pagina_producto' and 'pauta' not in e0 and len(primera['mandados']) == ENVIOS and primera['direccion'] == '',
            'sin nada en la direccion: como siempre, sin pauta', e0)
-        r, _ = visita('sin-precio', '?color=azul&gclid=x&utm_term=ps5#ficha')
+        r = visita('sin-precio', '?color=azul&gclid=x&utm_term=ps5#ficha')
         ok(r['direccion'] == '?color=azul#ficha', 'de la direccion sale solo lo del aviso: lo demas queda', r['direccion'])
+        r = visita('sin-precio', 'index.html?gclid=x')
+        ok(eventos(r)[0].get('pagina') == SLUG and eventos(r)[1].get('pagina') == SLUG and eventos(r)[0].get('pauta') == 'google',
+           'con /index.html al final, la pagina sigue siendo la del modelo', eventos(r)[:2])
 
-        print('--- Cuando el navegador no ayuda')
-        r, _ = visita('sin-precio', '?gclid=x&dnt=1')
+        print('--- Cuando el navegador no ayuda, o la medicion esta apagada')
+        r = visita('sin-precio', '?gclid=x&dnt=1')
         ok(not r['errores'] and r['mandados'] == [] and r['direccion'] == '?dnt=1',
            'con Do Not Track no se manda nada, ni la visita ni los toques', r['mandados'])
-        r, _ = visita('sin-precio', '?gclid=x&sinstorage=1')
-        ok(not r['errores'] and len(r['mandados']) == 5 and len({m['cuerpo']['visita'] for m in r['mandados']}) == 1,
+        r = visita('sin-precio', '?gclid=x&sinstorage=1')
+        ok(not r['errores'] and len(r['mandados']) == ENVIOS and len({m['cuerpo']['visita'] for m in r['mandados']}) == 1,
            'sin sessionStorage igual anota, y todo con la misma visita', [m['cuerpo']['visita'] for m in r['mandados']])
         for modo, que in (('no', 'si sendBeacon no lo toma'), ('falta', 'si sendBeacon no existe')):
-            r, _ = visita('sin-precio', '?gclid=x&beacon=' + modo)
-            ok(not r['errores'] and len(r['mandados']) == 5
+            r = visita('sin-precio', '?gclid=x&beacon=' + modo)
+            ok(not r['errores'] and len(r['mandados']) == ENVIOS
                and all(m['via'] == 'fetch' and m['keepalive'] and m['tipo'] == 'text/plain;charset=UTF-8' and m['url'] == REGISTRO for m in r['mandados'])
                and eventos(r)[0].get('pauta') == 'google' and eventos(r)[1].get('desde') == 'pagina',
                '%s, se manda con fetch (keepalive, text/plain)' % que, r['mandados'][:2])
+        r = visita('apagada', '?gclid=x&utm_campaign=ps5')
+        ok(not r['errores'] and r['mandados'] == [] and r['direccion'] == '?gclid=x&utm_campaign=ps5',
+           'con la medicion apagada no se manda nada y la direccion queda como vino', [r['mandados'], r['direccion']])
     finally:
         srv.shutdown()
         shutil.rmtree(raiz, ignore_errors=True)

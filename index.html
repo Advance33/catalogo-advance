@@ -18042,18 +18042,20 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
    "www.google.com". Google le agrega a la dirección gclid (gbraid o wbraid en
    iPhone) y gad_source; cualquier otra pauta se marca a mano en el link del
    aviso, con utm_medium=cpc (o cualquier medio pago: paid_social, cpm,
-   display, ads…) y utm_source=<de quién es>. Se anota de quién es la pauta y
-   la campaña (utm_campaign, o el número que pone Google en gad_campaignid);
-   el código del clic no se guarda. Es la misma función que la de las páginas
-   de cada modelo (herramientas/paginas-producto.py, SCRIPT): si cambia una,
-   cambia la otra (paginas-producto.py --probar las compara). */
+   display, ads…; la lista está en la función) y utm_source=<de quién es>.
+   Se anota de quién es la pauta y la campaña (utm_campaign, o el número que
+   pone Google en gad_campaignid); el código del clic no se guarda. Es la
+   misma función que la de las páginas de cada modelo
+   (herramientas/paginas-producto.py, SCRIPT): si cambia una, cambia la otra
+   (paginas-producto.py --probar y probar-pagina-modelo.py las comparan). */
 function pautaDe(busqueda){
   try{
     const s = new URLSearchParams(busqueda);
     const limpio = (v, largo) => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
       .replace(/[^a-z0-9 ._-]+/g, ' ').trim().slice(0, largo);
-    const paga = /(^|[^a-z])(cp[a-z]|ppc|ads?)([^a-z]|$)|paid|pago|paga|pauta|display|retargeting|remarketing/
-      .test(limpio(s.get('utm_medium'), 30));
+    // Un medio es pago si alguna de sus palabras es de avisos (paid_social son dos)
+    const paga = limpio(s.get('utm_medium'), 30).split(/[^a-z0-9]+/).some(m =>
+      /^(cp[a-z]|ppc|ads?|display|banner|sponsored|pago|paga|pauta|retargeting|remarketing|paid[a-z]*)$/.test(m));
     const pauta = ['gclid', 'gbraid', 'wbraid', 'gad_source'].some(k => s.get(k)) ? 'google'
       : paga ? (limpio(s.get('utm_source'), 30) || 'otra') : '';
     if(!pauta) return {};
@@ -18076,9 +18078,10 @@ const PAUTA_ENTRADA = pautaDe(location.search);
    urlActual() conserva los parámetros que no conoce, y el link de la barra
    mandado a un amigo o guardado en favoritos volvía a contar como un clic
    pago cada vez que alguien lo abría. Va acá, antes de que leerURL() y
-   escribirURL() corran por primera vez. (Si algún día se suma una etiqueta de
+   escribirURL() corran por primera vez. Con la medición apagada no se toca
+   nada: la dirección queda como vino. (Si algún día se suma una etiqueta de
    Google a la página, tiene que leer la dirección antes que esto.) */
-if(PAUTA_ENTRADA.pauta){
+if(PAUTA_ENTRADA.pauta && ANALITICA_URL){
   try{ history.replaceState(history.state, '', sinPauta(location.href)); }catch(e){}
 }
 

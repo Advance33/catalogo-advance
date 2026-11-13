@@ -99,6 +99,14 @@ pagina veian "Consulta el precio" y en la portada, "Cargando…". Benja eligio
   --con-precio, con su "desde"). robots.txt lo deja leer.
 Nada de esto escribe texto nuevo: sale de la portada y de ADVAPP.
 
+LA MEDICION (12 y 13/11/2026)
+Cada pagina anota en el registro de la portada (MEDICION-ADVAPP.txt), con la
+misma visita: que se abrio y desde donde (pagina_producto, con ref), si llego
+tocando un aviso pago (pauta y campania: Benja, 13/11, «dale con la
+medicion», antes de prender avisos en Google) y el toque a WhatsApp (whatsapp
+desde "pagina" o "pagina-pie"). Con la medicion apagada en index.html, o con
+Do Not Track, nada.
+
 Codigos de salida: 0 bien, 2 no se pudieron armar (producto/ queda como estaba).
 """
 import datetime

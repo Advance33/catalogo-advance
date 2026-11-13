@@ -18041,26 +18041,46 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
    medición»): un clic pago de Google y uno gratis llegaban los dos como
    "www.google.com". Google le agrega a la dirección gclid (gbraid o wbraid en
    iPhone) y gad_source; cualquier otra pauta se marca a mano en el link del
-   aviso, con utm_medium=cpc y utm_source=<de quién es>. Se anota de quién es
-   la pauta y la campaña (utm_campaign, o el número que pone Google en
-   gad_campaignid); el código del clic no se guarda. Es la misma función que
-   la de las páginas de cada modelo (herramientas/paginas-producto.py, SCRIPT):
-   si cambia una, cambia la otra. */
+   aviso, con utm_medium=cpc (o cualquier medio pago: paid_social, cpm,
+   display, ads…) y utm_source=<de quién es>. Se anota de quién es la pauta y
+   la campaña (utm_campaign, o el número que pone Google en gad_campaignid);
+   el código del clic no se guarda. Es la misma función que la de las páginas
+   de cada modelo (herramientas/paginas-producto.py, SCRIPT): si cambia una,
+   cambia la otra (paginas-producto.py --probar las compara). */
 function pautaDe(busqueda){
   try{
     const s = new URLSearchParams(busqueda);
-    const limpio = (v, largo) => String(v || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+    const limpio = (v, largo) => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
       .replace(/[^a-z0-9 ._-]+/g, ' ').trim().slice(0, largo);
-    const paga = /^(cpc|ppc|paid|pago|pauta)/.test(limpio(s.get('utm_medium'), 20));
+    const paga = /(^|[^a-z])(cp[a-z]|ppc|ads?)([^a-z]|$)|paid|pago|paga|pauta|display|retargeting|remarketing/
+      .test(limpio(s.get('utm_medium'), 30));
     const pauta = ['gclid', 'gbraid', 'wbraid', 'gad_source'].some(k => s.get(k)) ? 'google'
       : paga ? (limpio(s.get('utm_source'), 30) || 'otra') : '';
     if(!pauta) return {};
-    const campania = limpio(s.get('utm_campaign') || s.get('gad_campaignid'), 40);
+    const campania = limpio(s.get('utm_campaign'), 40) || limpio(s.get('gad_campaignid'), 40);
     return campania ? { pauta, campania } : { pauta };
   }catch(e){ return {}; }
 }
+// Los parámetros de un aviso: los que lee pautaDe() y los que suelen venir con ellos
+const CLAVES_DE_PAUTA = ['gclid', 'gbraid', 'wbraid', 'gad_source', 'gad_campaignid',
+                         'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id'];
+// La dirección sin esos parámetros; lo demás (el rubro, la búsqueda, el #p=) queda
+function sinPauta(direccion){
+  const u = new URL(direccion);
+  CLAVES_DE_PAUTA.forEach(k => u.searchParams.delete(k));
+  return u.pathname + u.search + u.hash;
+}
 // Se lee al cargar: después la dirección cambia con cada filtro
 const PAUTA_ENTRADA = pautaDe(location.search);
+/* Leída, la pauta sale de la dirección, como ?config (ver MODO_CONFIG):
+   urlActual() conserva los parámetros que no conoce, y el link de la barra
+   mandado a un amigo o guardado en favoritos volvía a contar como un clic
+   pago cada vez que alguien lo abría. Va acá, antes de que leerURL() y
+   escribirURL() corran por primera vez. (Si algún día se suma una etiqueta de
+   Google a la página, tiene que leer la dirección antes que esto.) */
+if(PAUTA_ENTRADA.pauta){
+  try{ history.replaceState(history.state, '', sinPauta(location.href)); }catch(e){}
+}
 
 /* Los enganches. Se envuelven las funciones que ya existen en vez de meter
    una llamada adentro de cada una: así lo que hace la página y lo que se mide
@@ -18241,7 +18261,7 @@ const PAUTA_ENTRADA = pautaDe(location.search);
            error no dejaba rastro. Si el cliente no tiene conexión este aviso
            tampoco sale: sirve para las caídas del servidor o del código. */
         fallaAnotada = true;
-        anotar('carga_fallida', { motivo: ULTIMO_FALLO.slice(0, 120), ancho: innerWidth });
+        anotar('carga_fallida', { motivo: ULTIMO_FALLO.slice(0, 120), ancho: innerWidth, ...PAUTA_ENTRADA });
       }
     }catch(e){}
     return r;

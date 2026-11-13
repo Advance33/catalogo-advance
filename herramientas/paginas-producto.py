@@ -566,48 +566,66 @@ SCRIPT = r'''
   let visita = '';
   const anotar = (evento) => {
     try{
-      if(!D.registro || navigator.doNotTrack === '1' || window.doNotTrack === '1' || !navigator.sendBeacon) return;
+      if(!D.registro || navigator.doNotTrack === '1' || window.doNotTrack === '1') return;
       if(!visita){
         try{ visita = sessionStorage.getItem('advtecno.visita') || crypto.randomUUID(); sessionStorage.setItem('advtecno.visita', visita); }
         catch(e){ visita = String(Math.random()).slice(2) + Date.now().toString(36); }
       }
       const cuerpo = JSON.stringify({ v: 1, sitio: 'tecno-web', visita,
         eventos: [Object.assign({}, evento, { pagina, ms: Math.round(performance.now()) })] });
-      navigator.sendBeacon(D.registro, new Blob([cuerpo], { type: 'text/plain;charset=UTF-8' }));
+      // Como la portada: sendBeacon y, si no está o no lo toma, fetch con keepalive
+      if(navigator.sendBeacon && navigator.sendBeacon(D.registro, new Blob([cuerpo], { type: 'text/plain;charset=UTF-8' }))) return;
+      fetch(D.registro, { method: 'POST', body: cuerpo, keepalive: true,
+                          headers: { 'Content-Type': 'text/plain;charset=UTF-8' } }).catch(() => {});
     }catch(e){}
   };
   /* Si llegó tocando un aviso pago (13/11/2026, Benja: «dale con la
      medición»): un clic pago de Google y uno gratis llegaban los dos como
      "www.google.com". Google le agrega a la dirección gclid (gbraid o wbraid
      en iPhone) y gad_source; cualquier otra pauta se marca a mano en el link
-     del aviso, con utm_medium=cpc y utm_source=<de quién es>. Se anota de
-     quién es la pauta y la campaña (utm_campaign, o el número que pone Google
-     en gad_campaignid); el código del clic no se guarda. Es la misma función
-     que la de la portada (index.html, MEDICIÓN): si cambia una, cambia la otra. */
+     del aviso, con utm_medium=cpc (o cualquier medio pago: paid_social, cpm,
+     display, ads…) y utm_source=<de quién es>. Se anota de quién es la pauta
+     y la campaña (utm_campaign, o el número que pone Google en
+     gad_campaignid); el código del clic no se guarda. Es la misma función
+     que la de la portada (index.html, MEDICIÓN): si cambia una, cambia la
+     otra (--probar las compara). */
   const pautaDe = (busqueda) => {
     try{
       const s = new URLSearchParams(busqueda);
-      const limpio = (v, largo) => String(v || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+      const limpio = (v, largo) => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
         .replace(/[^a-z0-9 ._-]+/g, ' ').trim().slice(0, largo);
-      const paga = /^(cpc|ppc|paid|pago|pauta)/.test(limpio(s.get('utm_medium'), 20));
+      const paga = /(^|[^a-z])(cp[a-z]|ppc|ads?)([^a-z]|$)|paid|pago|paga|pauta|display|retargeting|remarketing/
+        .test(limpio(s.get('utm_medium'), 30));
       const pauta = ['gclid', 'gbraid', 'wbraid', 'gad_source'].some((k) => s.get(k)) ? 'google'
         : paga ? (limpio(s.get('utm_source'), 30) || 'otra') : '';
       if(!pauta) return {};
-      const campania = limpio(s.get('utm_campaign') || s.get('gad_campaignid'), 40);
+      const campania = limpio(s.get('utm_campaign'), 40) || limpio(s.get('gad_campaignid'), 40);
       return campania ? { pauta, campania } : { pauta };
     }catch(e){ return {}; }
   };
+  const entrada = pautaDe(location.search);
   {
     let ref = '';
     try{ ref = document.referrer ? new URL(document.referrer).hostname : ''; }catch(e){}
-    anotar(Object.assign({ t: 'pagina_producto', ref }, pautaDe(location.search)));
+    anotar(Object.assign({ t: 'pagina_producto', ref }, entrada));
+  }
+  /* Leída, la pauta sale de la dirección (como en la portada): el link de la
+     barra mandado a un amigo o guardado en favoritos volvía a contar como un
+     clic pago cada vez que alguien lo abría. */
+  if(entrada.pauta){
+    try{
+      const u = new URL(location.href);
+      ['gclid', 'gbraid', 'wbraid', 'gad_source', 'gad_campaignid',
+       'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id'].forEach((k) => u.searchParams.delete(k));
+      history.replaceState(history.state, '', u.pathname + u.search + u.hash);
+    }catch(e){}
   }
   /* El toque a WhatsApp (13/11/2026): es lo que dice si la página sirvió, y
      desde acá no se anotaba (en la portada sí). desde: "pagina" es el botón
-     de la versión elegida, con el producto, el precio del momento si ya llegó
-     (el que se ve: lo agotado va sin precio) y sin_stock si era "Avisame
-     cuando entre"; "pagina-pie", el número escrito en el pie. */
-  document.addEventListener('click', (ev) => {
+     de la versión elegida, con el producto, el precio del momento si ADVAPP
+     ya contestó (lo agotado va sin precio, como en la página) y sin_stock si
+     era "Avisame cuando entre"; "pagina-pie", el número escrito en el pie. */
+  const toque = (ev) => {
     try{
       const a = ev.target.closest && ev.target.closest('a[href*="wa.me/"]');
       if(!a) return;
@@ -616,7 +634,10 @@ SCRIPT = r'''
         : Object.assign({ t: 'whatsapp', desde: 'pagina', id: x.clave, color: x.color, version: x.version },
                         vivo && x.stock && x.precio ? { precio: x.precio } : {}, vivo && !x.stock ? { sin_stock: true } : {}));
     }catch(e){}
-  }, true);
+  };
+  document.addEventListener('click', toque, true);
+  // Con el botón del medio WhatsApp se abre en otra pestaña y no es un "click"
+  document.addEventListener('auxclick', (ev) => { if(ev.button === 1) toque(ev); }, true);
 })();
 '''
 
@@ -2075,28 +2096,33 @@ def probar():
     ok(texto_congelados({'dia': '2026-11-06'}) == '' and texto_congelados(None) == '', 'IA: sin el dato completo, sin aviso')
     con_reg = armar_pagina(mp, 's', pub, dict(gen, registro='https://advapp.example/api?resource=eventos-web'))
     ok('"registro": "https://advapp.example/api?resource=eventos-web"' in con_reg and '"registro"' not in base
-       and "anotar(Object.assign({ t: 'pagina_producto', ref }, pautaDe(location.search)));" in SCRIPT
-       and "if(!D.registro || navigator.doNotTrack === '1' || window.doNotTrack === '1' || !navigator.sendBeacon) return;" in SCRIPT,
+       and "anotar(Object.assign({ t: 'pagina_producto', ref }, entrada));" in SCRIPT
+       and "if(!D.registro || navigator.doNotTrack === '1' || window.doNotTrack === '1') return;" in SCRIPT,
        'IA: la pagina anota de donde llego solo con el registro de la portada prendido')
-    # La pauta y el toque a WhatsApp (13/11/2026): la funcion que dice si la
-    # visita llego por un aviso pago esta dos veces, aca y en la portada
+    # La pauta y el toque a WhatsApp (13/11/2026). Lo que hace la pagina se
+    # prueba en Chrome con herramientas/probar-pagina-modelo.py; aca se mira lo
+    # que eso no ve: que las dos copias de pautaDe (esta y la de la portada)
+    # sigan iguales, y que nada se caiga del script al escribir el precio.
     def cuerpo_pauta(t, cabecera):
         i = t.find(cabecera)
         j = t.find('catch(e){ return {}; }', i)
         return re.sub(r'\((\w+)\) =>', r'\1 =>', re.sub(r'\s+', ' ', t[i + len(cabecera):j])) if 0 <= i < j else None
+
+    def claves_pauta(t):
+        m = re.search(r"\['gclid', 'gbraid', 'wbraid', 'gad_source', 'gad_campaignid',\s*'utm_source'[^\]]*\]", t)
+        return re.sub(r'\s+', ' ', m.group(0)) if m else None
     with io.open(os.path.join(RAIZ, 'index.html'), encoding='utf-8') as fh:
         portada = fh.read()
     en_pagina = cuerpo_pauta(SCRIPT, 'const pautaDe = (busqueda) => {')
-    ok(en_pagina and "'gclid', 'gbraid', 'wbraid', 'gad_source'" in en_pagina
+    ok(en_pagina and "'gclid', 'gbraid', 'wbraid', 'gad_source'" in en_pagina and '\\u0300-\\u036f' in en_pagina
        and en_pagina == cuerpo_pauta(portada, 'function pautaDe(busqueda){'),
        'pauta: la pagina y la portada deciden igual si la visita llego por un aviso pago')
-    ok(SCRIPT.count("t: 'whatsapp'") == 2 and "desde: 'pagina'," in SCRIPT and "desde: 'pagina-pie'" in SCRIPT
-       and "ev.target.closest('a[href*=\"wa.me/\"]')" in SCRIPT and "a.classList.contains('wa')" in SCRIPT
+    ok(claves_pauta(SCRIPT) and claves_pauta(SCRIPT) == claves_pauta(portada),
+       'pauta: y sacan de la direccion los mismos parametros')
+    ok(all(x in SCRIPT_SELLO for x in ("t: 'pagina_producto'", "desde: 'pagina',", "desde: 'pagina-pie'", 'const entrada = pautaDe(location.search);',
+                                       "document.addEventListener('click', toque, true);"))
        and con_reg.count('<a class="wa" ') == 1,
-       'pauta: el toque a WhatsApp se anota, el del boton de la version y el del pie')
-    ok(all(x in SCRIPT_SELLO for x in ("t: 'pagina_producto'", "t: 'whatsapp'", 'pautaDe(location.search)'))
-       and 'return campania ? { pauta, campania } : { pauta };' in SCRIPT,
-       'pauta: tambien con el precio escrito, y solo se anota de quien es y la campania (nunca el codigo del clic)')
+       'pauta: la visita y el toque a WhatsApp siguen en el script con el precio escrito')
     pg = {'cuotas': 12, 'whatsapp': '5491100000000', 'direccion': 'Av. X 1, CABA', 'descripcion': 'Tienda de prueba.',
           'preguntas': [{'p': '¿Hacen envíos?', 'html': '<p>En moto:</p> <table class="ay-tabla"><tbody><tr><th scope="row">CABA</th>'
                                                         '<td>$15.000</td></tr></tbody></table>'},

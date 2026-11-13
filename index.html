@@ -18037,6 +18037,31 @@ const ANALITICA = (() => {
 // la misma pagina son un error de sintaxis y esas pruebas no corrian.
 const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
 
+/* Si la visita llegó tocando un aviso pago (13/11/2026, Benja: «dale con la
+   medición»): un clic pago de Google y uno gratis llegaban los dos como
+   "www.google.com". Google le agrega a la dirección gclid (gbraid o wbraid en
+   iPhone) y gad_source; cualquier otra pauta se marca a mano en el link del
+   aviso, con utm_medium=cpc y utm_source=<de quién es>. Se anota de quién es
+   la pauta y la campaña (utm_campaign, o el número que pone Google en
+   gad_campaignid); el código del clic no se guarda. Es la misma función que
+   la de las páginas de cada modelo (herramientas/paginas-producto.py, SCRIPT):
+   si cambia una, cambia la otra. */
+function pautaDe(busqueda){
+  try{
+    const s = new URLSearchParams(busqueda);
+    const limpio = (v, largo) => String(v || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+      .replace(/[^a-z0-9 ._-]+/g, ' ').trim().slice(0, largo);
+    const paga = /^(cpc|ppc|paid|pago|pauta)/.test(limpio(s.get('utm_medium'), 20));
+    const pauta = ['gclid', 'gbraid', 'wbraid', 'gad_source'].some(k => s.get(k)) ? 'google'
+      : paga ? (limpio(s.get('utm_source'), 30) || 'otra') : '';
+    if(!pauta) return {};
+    const campania = limpio(s.get('utm_campaign') || s.get('gad_campaignid'), 40);
+    return campania ? { pauta, campania } : { pauta };
+  }catch(e){ return {}; }
+}
+// Se lee al cargar: después la dirección cambia con cada filtro
+const PAUTA_ENTRADA = pautaDe(location.search);
+
 /* Los enganches. Se envuelven las funciones que ya existen en vez de meter
    una llamada adentro de cada una: así lo que hace la página y lo que se mide
    quedan separados, y el día que alguien toque una de esas funciones no tiene
@@ -18207,7 +18232,8 @@ const anotar = (tipo, datos) => ANALITICA.medir(tipo, datos);
         try{ ref = document.referrer ? new URL(document.referrer).hostname : ''; }catch(e){}
         anotar('visita', { ancho: innerWidth, productos: PRODUCTOS.length,
                           fuente: (FUENTE && FUENTE.fuente) || '',
-                          motivo: ((FUENTE && FUENTE.motivo) || '').slice(0, 120), ref });
+                          motivo: ((FUENTE && FUENTE.motivo) || '').slice(0, 120), ref,
+                          ...PAUTA_ENTRADA });   // pauta y campania, si llegó por un aviso pago
       }else if(!contada && ULTIMO_FALLO && !fallaAnotada){
         /* La visita que no pudo cargar, una sola vez: los reintentos de cada
            5 minutos no la repiten, y si después carga se cuenta la visita

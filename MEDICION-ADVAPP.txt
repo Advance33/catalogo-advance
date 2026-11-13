@@ -69,6 +69,22 @@ no hay cookies ni cartel de consentimiento.
                     qué no se usó ADVAPP: "tardo mas de 8 s", "HTTP 500"...;
                     vacío si se usó), ref (el dominio de donde vino, vacío si
                     entró directo).
+                    Si llegó tocando un aviso pago (13/11/2026) trae además
+                    pauta: de quién es. "google" cuando la dirección de
+                    entrada trae gclid, gbraid, wbraid o gad_source (los
+                    agrega Google solo); cualquier otra se marca a mano en el
+                    link del aviso con utm_medium=cpc (o ppc, paid…) y
+                    utm_source=<de quién es> ("meta", "instagram"; sin
+                    utm_source, "otra"). Y campania: utm_campaign, o el número
+                    que pone Google en gad_campaignid (hasta 40 caracteres,
+                    en minúsculas y sin tildes). El código del clic (gclid) no
+                    se guarda. Sin pauta no viene ninguno de los dos: un
+                    clic pago de Google y uno gratis traían el mismo ref.
+   pagina_producto  abrió la página de un modelo, producto/<nombre>/
+                    (12/11/2026, herramientas/paginas-producto.py). Una por
+                    carga, con la misma visita de la portada. pagina: el
+                    nombre de la dirección ("sony-playstation-5"), ref, y
+                    pauta y campania como en visita.
    carga_fallida    la visita que no pudo cargar el catálogo, una por pestaña.
                     motivo (hasta 120 caracteres, con lo que dijo ADVAPP y la
                     planilla) y ancho. Si después carga, llega también la
@@ -110,6 +126,13 @@ no hay cookies ni cartel de consentimiento.
                     desde="encargo" es el "Consultar" de un producto de
                     «Metodología de encargo» (03/11/2026): id es su código
                     ENC-####, con marca, precio y nombre; sin codigo ni cat.
+                    desde="pagina" es el botón de la página de un modelo
+                    (13/11/2026): pagina (su nombre), id, color y version de
+                    lo elegido, precio (el del momento, si ya llegó y hay
+                    stock) y sin_stock: true si el botón decía "Avisame
+                    cuando entre". Sin codigo, cat, marca ni nombre.
+                    desde="pagina-pie" es el número escrito en el pie de esa
+                    página: sólo pagina.
    pedilo          TOCÓ WHATSAPP desde "¿Buscás algo que no está?". q: lo que
                     escribió en ese casillero (hasta 60 caracteres, desde 3).
                     También es conversión, y es la lista de lo que vinieron a

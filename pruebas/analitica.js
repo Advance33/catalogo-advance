@@ -207,4 +207,36 @@ async function correrPruebas(){
 
   ok(ANALITICA_URL === original && ANALITICA.apagada() === !original,
      'al terminar la prueba queda como estaba', JSON.stringify(ANALITICA_URL));
+
+  /* ---- 8. La pauta (13/11/2026): si la visita llegó tocando un aviso pago ----
+     Un clic pago de Google y uno gratis llegaban los dos como "www.google.com".
+     pautaDe() lee la dirección de entrada y dice de quién es la pauta y la
+     campaña; va en el evento "visita". La misma función está en las páginas de
+     cada modelo (herramientas/paginas-producto.py --probar mira que sean iguales). */
+  const pautaEs = (consulta, esperado, t) => {
+    const dio = JSON.stringify(pautaDe(consulta));
+    ok(dio === JSON.stringify(esperado), t, dio);
+  };
+  pautaEs('?gclid=EAIaIQobChMI', { pauta: 'google' }, 'un clic a un aviso de Google (gclid) es pauta de google');
+  pautaEs('?gbraid=0AAAAA', { pauta: 'google' }, 'también con lo que manda en iPhone (gbraid)');
+  pautaEs('?wbraid=0AAAAA', { pauta: 'google' }, 'o wbraid');
+  pautaEs('?gad_source=1', { pauta: 'google' }, 'y cuando el navegador le sacó el gclid (queda gad_source)');
+  pautaEs('?gclid=x&gad_source=1&gad_campaignid=22334455', { pauta: 'google', campania: '22334455' },
+          'la campaña sale del número que pone Google');
+  pautaEs('?gclid=x&gad_campaignid=1&utm_campaign=PS5+B%C3%BAsqueda', { pauta: 'google', campania: 'ps5 busqueda' },
+          'y si el aviso trae un nombre escrito a mano, ese le gana al número (sin tildes ni mayúsculas)');
+  pautaEs('?utm_source=Meta&utm_medium=CPC&utm_campaign=Consolas%20Nov%20%F0%9F%94%A5', { pauta: 'meta', campania: 'consolas nov' },
+          'otra pauta se marca a mano: utm_medium=cpc y de quién es');
+  pautaEs('?utm_medium=paid_social&utm_source=instagram', { pauta: 'instagram' }, 'paid_social también es pauta');
+  pautaEs('?utm_medium=cpc', { pauta: 'otra' }, 'una pauta que no dice de quién es queda como "otra"');
+  pautaEs('?utm_source=instagram&utm_medium=historia&utm_campaign=ps5', {}, 'un link marcado que no es pago no es pauta');
+  pautaEs('?q=iphone&cat=Celular', {}, 'un link filtrado tampoco');
+  pautaEs('', {}, 'ni entrar sin nada en la dirección');
+  ok(!JSON.stringify(pautaDe('?gclid=CLIC-SECRETO-123&utm_campaign=a')).includes('SECRETO'), 'el código del clic no se guarda');
+  const larga = pautaDe('?utm_medium=cpc&utm_source=' + 'x'.repeat(200) + '&utm_campaign=' + 'y'.repeat(200));
+  ok(larga.pauta.length === 30 && larga.campania.length === 40, 'lo que se anota va recortado', larga.pauta.length + ' y ' + larga.campania.length);
+  ok(JSON.stringify(PAUTA_ENTRADA) === JSON.stringify(pautaDe(location.search)), 'la pauta de esta visita se leyó al cargar', JSON.stringify(PAUTA_ENTRADA));
+  // El evento "visita" sale una sola vez y antes de que corra esta tanda: se mira el código
+  const codigo = [...document.scripts].map(s => s.textContent).join('\n');
+  ok(/anotar\('visita', \{[^;]*\.\.\.PAUTA_ENTRADA \}\)/.test(codigo), 'y va en el evento "visita"');
 }

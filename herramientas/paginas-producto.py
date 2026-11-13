@@ -597,8 +597,8 @@ SCRIPT = r'''
   /* El toque a WhatsApp (13/11/2026): es lo que dice si la página sirvió, y
      desde acá no se anotaba (en la portada sí). desde: "pagina" es el botón
      de la versión elegida, con el producto, el precio del momento si ya llegó
-     y sin_stock si era "Avisame cuando entre"; "pagina-pie", el número
-     escrito en el pie. */
+     (el que se ve: lo agotado va sin precio) y sin_stock si era "Avisame
+     cuando entre"; "pagina-pie", el número escrito en el pie. */
   document.addEventListener('click', (ev) => {
     try{
       const a = ev.target.closest && ev.target.closest('a[href*="wa.me/"]');
@@ -606,7 +606,7 @@ SCRIPT = r'''
       const x = elegida() || {};
       anotar(!a.classList.contains('wa') ? { t: 'whatsapp', desde: 'pagina-pie' }
         : Object.assign({ t: 'whatsapp', desde: 'pagina', id: x.clave, color: x.color, version: x.version },
-                        vivo && x.precio ? { precio: x.precio } : {}, vivo && !x.stock ? { sin_stock: true } : {}));
+                        vivo && x.stock && x.precio ? { precio: x.precio } : {}, vivo && !x.stock ? { sin_stock: true } : {}));
     }catch(e){}
   }, true);
 })();

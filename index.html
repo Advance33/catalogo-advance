@@ -13141,6 +13141,11 @@ function dibujarDatos(prods, conFotos){
   if(firma === FIRMA_DATOS) return;
   FIRMA_DATOS = firma;
   document.body.classList.remove('sin-catalogo', 'primera-carga');
+  /* El índice de las páginas p/ (16/11/2026): la consulta por WhatsApp de la
+     tarjeta de la grilla suma el link de la tarjeta si esa fila tiene página
+     (sumarTarjetaALaConsulta), y ahí no hay ficha abierta que lo haya pedido.
+     Una vez por visita y un rato después de dibujar: no frena la primera pantalla. */
+  if(!habiaDatos) setTimeout(paginasDeVistaPrevia, 1500);
   const mundosAntes = habiaDatos && enPortada() ? firmaMundos() : '';
   PRODUCTOS = prods;
   MODELOS   = agrupar(prods);   // las variantes del mismo modelo van a una sola tarjeta
@@ -15449,6 +15454,54 @@ function linkParaCompartir(k, conPagina, ahora = new Date()){
   const id = encodeURIComponent(k);
   return conPagina && conPagina.has(k) ? `${URL_PUBLICA}p/${id}.html?v=${selloDelLink(ahora)}` : `${URL_PUBLICA}#p=${id}`;
 }
+
+/* ---------- La tarjeta en la consulta (Benja, 16/11/2026: «agregalo») ----------
+   El mensaje de «Consultar por WhatsApp» lleva al final, en un renglón aparte,
+   el mismo link que manda Compartir (p/<ID>.html?v=…): así a Advance le llega
+   la consulta con la tarjeta de ese producto (la foto, el modelo, el precio y
+   la hora). Va en las consultas de UN producto: la tarjeta de la grilla, la de
+   Recién llegados, la ficha (la consulta y «Avisame cuando entre») y el
+   cotizador de usados abierto desde una ficha. No en las generales: el
+   flotante, el pedido, «¿Buscás algo que no está?», el encargo, las preguntas.
+   Sólo si esa fila tiene página (p/indice.json): el #p= no arma tarjeta.
+
+   Se suma en el momento del toque, no al dibujar el botón: el ?v= es el de
+   ese minuto (la tarjeta trae el precio de ese momento), el índice de páginas
+   ya llegó aunque la tarjeta se haya dibujado antes, y los mensajes de siempre
+   (mensajeWA, mensajeAviso, mensajeUsado) quedan como están, con su precio en
+   USD. Si el índice todavía no llegó, el mensaje sale como antes. */
+const TARJETA_EN_MENSAJE = /\n+https:\/\/[^\s]+\/p\/[^\s/]+\.html\?v=\d{12}(?=\n|$)/;
+function mensajeConTarjeta(texto, link){
+  // Si ya la traía (segundo toque al mismo botón), va la de ahora en su lugar
+  const t = String(texto || '').replace(TARJETA_EN_MENSAJE, '');
+  // En el del usado va después del primer párrafo: al final quedaría pegado a
+  // «Te paso fotos y los detalles:», como si el link fueran las fotos
+  const usado = t.indexOf('\n\nMi usado');
+  return usado === -1 ? t + '\n\n' + link : t.slice(0, usado) + '\n' + link + t.slice(usado);
+}
+// La fila por la que consulta ese botón de WhatsApp; '' si no es la consulta de un producto
+function filaDeLaConsulta(a){
+  if(a.closest('#usado')) return a.matches('#us-wa, #us-enviar') ? FICHA || '' : '';
+  if(a.closest('#ficha')) return a.matches('.fi-botones > a.cta') ? FICHA || '' : '';
+  const tarjeta = a.closest('.card, .nv-tarj');
+  return tarjeta && a.matches('.wa, .nv-consultar') ? tarjeta.dataset.key || '' : '';
+}
+function sumarTarjetaALaConsulta(a){
+  const k = filaDeLaConsulta(a);
+  if(!k || !PAGINAS_P_LEIDAS || !PAGINAS_P_LEIDAS.has(k)) return;
+  let texto = '';
+  try{ texto = new URL(a.href).searchParams.get('text') || ''; }catch(e){ return; }
+  // Del cotizador, sólo el mensaje que nombra el producto (abierto desde una ficha)
+  if(!texto || (a.closest('#usado') && !texto.startsWith('Hola! Me interesa '))) return;
+  a.href = linkWA(mensajeConTarjeta(texto, linkParaCompartir(k, PAGINAS_P_LEIDAS)));
+}
+// En la bajada del toque, antes de que el navegador siga el link
+document.addEventListener('click', e => {
+  try{
+    const a = e.target.closest && e.target.closest('a[href*="wa.me/"]');
+    if(a) sumarTarjetaALaConsulta(a);
+  }catch(err){}
+}, true);
 
 // "Apple iPhone 17 Pro 256GB E-Sim (Orange)": el nombre del mensaje de
 // WhatsApp (partesMensaje), con el color entre paréntesis como en el pedido

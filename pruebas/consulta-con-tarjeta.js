@@ -149,8 +149,14 @@ async function ctPruebas(){
       ok(otros.every(x => { const t0 = ctTexto(x); return ctTocar(x) === t0; }), '[3] los otros links a WhatsApp de la ficha no lo suman', otros.length + ' links');
 
       /* ---- [5] el cotizador de usados, con una ficha abierta ---- */
+      // Los mensajes de verdad del cotizador siguen teniendo el parrafo "Mi usado": de el depende donde va el link
+      const abreElUsado = f => String(f).includes("'" + String.raw`\n\nMi usado`);
+      ok(abreElUsado(mensajeUsado) && abreElUsado(mensajeFuera),
+         '[5] mensajeUsado y mensajeFuera abren el parrafo del usado con "Mi usado" (ahi se mete el link)');
+      ok(/d\.dataset\.key = clave\(prod\)/.test(String(abrirCotizador)), '[5] el cotizador anota en #usado la fila con la que se abrio');
       const u = document.createElement('div');
       u.id = 'usado';
+      u.dataset.key = FICHA;
       u.innerHTML = '<a id="us-wa" target="_blank" rel="noopener"></a><a id="us-enviar" target="_blank" rel="noopener"></a><a class="otro" target="_blank" rel="noopener"></a>';
       document.body.appendChild(u);
       try{
@@ -165,7 +171,9 @@ async function ctPruebas(){
         ok(/parte de pago\.\nhttps:\/\/\S+\/p\/\S+\.html\?v=\d{12}\n\nMi usado \(no está/.test(ctTocar(f)), '[5] y «Otro equipo» igual');
         const solo = 'Hola! Quiero entregar mi usado como parte de pago.\n\nMi usado: iPhone 13 128GB: USD 300';
         w.href = linkWA(solo);
+        delete u.dataset.key;
         ok(ctTocar(w) === solo, '[5] el cotizador sin producto (desde el pedido) no lleva link: no hay de que');
+        u.dataset.key = FICHA;
         o.href = linkWA(usado);
         ok(ctTocar(o) === usado, '[5] ni otro link del cotizador');
       } finally { u.remove(); }
@@ -181,6 +189,40 @@ async function ctPruebas(){
      generales.length + ' links' + (tocadas.length ? ' · mal: ' + tocadas.map(a => a.id || a.className).join(', ') : ''));
   const flotante = document.getElementById('wa-flotante');
   if(flotante) ok(generales.includes(flotante), '[7] el flotante esta entre los que se miraron');
+
+  /* ---- [6] si el indice fallo, se vuelve a pedir ---- */
+  {
+    const guardado = [PAGINAS_P, PAGINAS_P_LEIDAS], traer = window.fetch;
+    try{
+      PAGINAS_P = null; PAGINAS_P_LEIDAS = null;
+      window.fetch = async (u, o) => { if(String(u).includes('p/indice.json')) throw new Error('sin red'); return traer(u, o); };
+      const vacio = await paginasDeVistaPrevia();
+      ok(vacio instanceof Set && vacio.size === 0 && PAGINAS_P === null, '[6] si p/indice.json no se pudo leer, no queda un indice vacio para toda la visita');
+      window.fetch = traer;
+      if(conStock){
+        const a = conStock.querySelector('a.wa'), k = conStock.dataset.key, limpio = ctTexto(a).replace(CT_LINK, '');
+        a.href = linkWA(limpio);
+        ok(ctTocar(a) === limpio && PAGINAS_P !== null, '[6] el toque sale como antes y vuelve a pedir el indice');
+        await PAGINAS_P;
+        ok(ctConLink(limpio, ctTocar(a), k), '[6] y el toque siguiente ya lleva el link');
+        a.href = linkWA(limpio);
+      }
+    } finally { window.fetch = traer; if(!PAGINAS_P_LEIDAS || !PAGINAS_P_LEIDAS.size){ PAGINAS_P = guardado[0]; PAGINAS_P_LEIDAS = guardado[1]; } }
+  }
+
+  /* ---- [5b] apoyar el dedo y el menu del link ---- */
+  if(conStock){
+    const a = conStock.querySelector('a.wa'), k = conStock.dataset.key, limpio = ctTexto(a).replace(CT_LINK, '');
+    for(const cuando of ['pointerdown', 'contextmenu']){
+      a.href = linkWA(limpio);
+      const frenar = e => e.preventDefault();
+      a.addEventListener(cuando, frenar);
+      a.dispatchEvent(new MouseEvent(cuando, { bubbles: true, cancelable: true }));
+      a.removeEventListener(cuando, frenar);
+      ok(ctConLink(limpio, ctTexto(a), k), '[2] tambien al ' + (cuando === 'pointerdown' ? 'apoyar el dedo o el mouse' : 'abrir el menu del link') + ' (abrir en otra pestana, copiar el link)');
+    }
+    a.href = linkWA(limpio);
+  }
 
   /* ---- [8] el toque sigue su camino ---- */
   if(conStock){

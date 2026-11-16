@@ -104,6 +104,12 @@ si alguna falta).
                   29/09): las paginas p/<ID>.html que arma
                   herramientas/vista-previa.py, con la foto de la ficha, el
                   modelo y la version, sin precio, y que esten al dia.
+  consulta-con-tarjeta.js
+                  La tarjeta en la consulta por WhatsApp (Benja, 16/11/2026):
+                  al tocar "Consultar por WhatsApp" o "Avisame cuando entre"
+                  de UN producto, el mensaje suma el link de su pagina p/ (el
+                  de Compartir, con ?v=). No en las consultas generales, ni
+                  si la fila no tiene pagina.
   decision-tarjeta.js
                   Las decisiones 2.1 a 2.8 de Pedro (29/09): la tarjeta con
                   un filtro de version (precio, foto, ficha y + de esa

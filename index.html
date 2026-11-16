@@ -15434,7 +15434,10 @@ function paginasDeVistaPrevia(){
       return r.json();
     })
     .then(j => new Set(Array.isArray(j && j.ids) ? j.ids.filter(x => typeof x === 'string' && x) : []))
-    .catch(e => { console.warn('No se pudo leer p/indice.json:', e); return new Set(); })
+    /* Si no se pudo leer, la próxima vez que haga falta se pide de nuevo
+       (16/11/2026): quedaba un índice vacío para toda la visita, y ahora de
+       él depende también el link de la tarjeta en cada consulta por WhatsApp. */
+    .catch(e => { console.warn('No se pudo leer p/indice.json:', e); PAGINAS_P = null; return new Set(); })
     .then(s => (PAGINAS_P_LEIDAS = s));
   return PAGINAS_P;
 }
@@ -15479,29 +15482,44 @@ function mensajeConTarjeta(texto, link){
   const usado = t.indexOf('\n\nMi usado');
   return usado === -1 ? t + '\n\n' + link : t.slice(0, usado) + '\n' + link + t.slice(usado);
 }
-// La fila por la que consulta ese botón de WhatsApp; '' si no es la consulta de un producto
+/* La fila por la que consulta ese botón de WhatsApp; '' si no es la consulta
+   de un producto. Son los mismos botones que clasifica la medición (el oyente
+   de «whatsapp», más abajo): si cambia un selector acá, mirar allá.
+   - el cotizador: la fila con la que se abrió (abrirCotizador la anota en
+     #usado); vacía si se abrió desde el pedido o suelto;
+   - la ficha: la fila que se mira, la misma que manda Compartir;
+   - la tarjeta: la fila que abre al tocarla. En un modelo con varias
+     versiones es la más barata con stock, la del «desde». */
 function filaDeLaConsulta(a){
-  if(a.closest('#usado')) return a.matches('#us-wa, #us-enviar') ? FICHA || '' : '';
+  const usado = a.closest('#usado');
+  if(usado) return a.matches('#us-wa, #us-enviar') ? usado.dataset.key || '' : '';
   if(a.closest('#ficha')) return a.matches('.fi-botones > a.cta') ? FICHA || '' : '';
   const tarjeta = a.closest('.card, .nv-tarj');
   return tarjeta && a.matches('.wa, .nv-consultar') ? tarjeta.dataset.key || '' : '';
 }
 function sumarTarjetaALaConsulta(a){
   const k = filaDeLaConsulta(a);
-  if(!k || !PAGINAS_P_LEIDAS || !PAGINAS_P_LEIDAS.has(k)) return;
+  if(!k) return;
+  // Sin el índice (no llegó, o falló): se pide para el próximo toque, y este sale como antes
+  if(!PAGINAS_P) paginasDeVistaPrevia();
+  if(!PAGINAS_P_LEIDAS || !PAGINAS_P_LEIDAS.has(k)) return;
   let texto = '';
   try{ texto = new URL(a.href).searchParams.get('text') || ''; }catch(e){ return; }
-  // Del cotizador, sólo el mensaje que nombra el producto (abierto desde una ficha)
-  if(!texto || (a.closest('#usado') && !texto.startsWith('Hola! Me interesa '))) return;
+  if(!texto) return;
   a.href = linkWA(mensajeConTarjeta(texto, linkParaCompartir(k, PAGINAS_P_LEIDAS)));
 }
-// En la bajada del toque, antes de que el navegador siga el link
-document.addEventListener('click', e => {
-  try{
-    const a = e.target.closest && e.target.closest('a[href*="wa.me/"]');
-    if(a) sumarTarjetaALaConsulta(a);
-  }catch(err){}
-}, true);
+/* En la bajada, antes de que el navegador siga el link. No sólo el toque: al
+   apoyar el dedo o el mouse (pointerdown) y al abrir el menú del link, así
+   «Abrir en una pestaña nueva», el clic del medio o «Copiar el link» también
+   salen con la tarjeta. El clic queda por el teclado (Enter sobre el botón). */
+for(const cuando of ['pointerdown', 'click', 'contextmenu']){
+  document.addEventListener(cuando, e => {
+    try{
+      const a = e.target.closest && e.target.closest('a[href*="wa.me/"]');
+      if(a) sumarTarjetaALaConsulta(a);
+    }catch(err){}
+  }, true);
+}
 
 // "Apple iPhone 17 Pro 256GB E-Sim (Orange)": el nombre del mensaje de
 // WhatsApp (partesMensaje), con el color entre paréntesis como en el pedido
@@ -16744,6 +16762,8 @@ function abrirCotizador(desde = {}){
   d.id = 'usado'; d.className = 'modal';
   const delPedido = !!desde.pedido;
   const prod = desde.k ? buscarProducto(desde.k) : null;
+  // La fila que nombra el mensaje, para sumarle el link de su tarjeta (filaDeLaConsulta, 16/11/2026)
+  if(prod) d.dataset.key = clave(prod);
   const color = desde.color || '';
   let b = USADO ? JSON.parse(JSON.stringify(USADO)) : { e: '', m: '', o: '', bat: '', cond: {} };
   if(!b.e && USADOS.length === 1) b.e = USADOS[0].id;
@@ -18221,7 +18241,9 @@ if(PAUTA_ENTRADA.pauta && ANALITICA_URL){
 
   /* El clic a WhatsApp es la conversión: lo único que de verdad dice si el
      catálogo sirvió. Se escucha uno solo para todos los botones -tarjeta,
-     ficha, pedido y el flotante- y se anota de cuál vino. */
+     ficha, pedido y el flotante- y se anota de cuál vino.
+     (16/11/2026) filaDeLaConsulta mira estos mismos botones para sumar el
+     link de la tarjeta: si cambia un selector acá, mirar allá. */
   document.addEventListener('click', e => {
     try{
       const a = e.target.closest && e.target.closest('a[href*="wa.me/"]');

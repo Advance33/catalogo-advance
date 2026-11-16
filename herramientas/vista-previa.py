@@ -468,16 +468,19 @@ def medidas(ruta):
         return None
 
 
-def imagen_para(foto, raiz=RAIZ):
+def imagen_para(foto, raiz=RAIZ, pesada=False):
     """La imagen de la vista previa de una fila: (ruta del sitio, ancho, alto,
     propia). `foto` es la foto propia que muestra la ficha
     ("fotos/AT-0071-03.jpg") o vacio. Sin foto propia, la tarjeta general.
     La carpeta y la extension son las de index.html (CARPETA_FOTOS y
-    EXT_FOTOS; la de las copias chicas, CARPETA_FOTOS + 'mini/', como alla)."""
+    EXT_FOTOS; la de las copias chicas, CARPETA_FOTOS + 'mini/', como alla).
+    `pesada`: no cambiarla por su copia chica aunque pese mas que el tope de
+    WhatsApp (16/11/2026: con la tarjeta con precio la foto no va a WhatsApp,
+    la lee ADVAPP para dibujar, y con la copia de 400 px saldria borrosa)."""
     if foto and re.fullmatch(re.escape(CARPETA_FOTOS) + r'[^/]+' + re.escape(EXT_FOTOS), foto):
         ruta = os.path.join(raiz, foto)
         if os.path.isfile(ruta):
-            if os.path.getsize(ruta) > PESO_MAXIMO:
+            if os.path.getsize(ruta) > PESO_MAXIMO and not pesada:
                 mini = os.path.join(raiz, CARPETA_FOTOS, 'mini', os.path.basename(foto))
                 if os.path.isfile(mini) and os.path.getsize(mini) <= PESO_MAXIMO:
                     foto, ruta = CARPETA_FOTOS + 'mini/' + os.path.basename(foto), mini
@@ -520,7 +523,13 @@ def armar_pagina(v, publica, raiz=RAIZ, tarjeta=''):
     precio de ADVAPP; vacia, la foto (o la tarjeta general), como antes."""
     ide, destino = v['id'], v.get('destino') or v['id']
     titulo, linea = str(v['titulo']).strip(), str(v.get('linea') or '').strip()
-    foto, ancho, alto, propia = imagen_para(v.get('foto') or '', raiz)
+    # La tarjeta con precio es solo para la pagina de la fila misma. La de una
+    # fila escondida por repetida muestra el texto de su gemela y lleva a la
+    # ficha de la gemela: con el precio de la escondida, la tarjeta diria un
+    # precio y la ficha otro. Esa va con la foto, como antes.
+    if ide != destino:
+        tarjeta = ''
+    foto, ancho, alto, propia = imagen_para(v.get('foto') or '', raiz, pesada=bool(tarjeta))
     url_pagina = publica + 'p/' + ide + '.html'
     # (16/11/2026) La tarjeta con el precio y la hora la dibuja ADVAPP en el
     # momento: un JPEG de 1200x630 para todas las filas, tengan o no foto
@@ -559,6 +568,13 @@ def armar_pagina(v, publica, raiz=RAIZ, tarjeta=''):
         # que le pone el boton Compartir justamente para que la armen de nuevo.
         L += ['<meta property="og:image" content="%s">' % e(url_imagen),
               '<meta property="og:image:type" content="image/jpeg">']
+        # El SKU de la fila cuando se armo la pagina. ADVAPP lo compara con el
+        # de esa fila hoy: si entre dos PUBLICAR el ID paso a ser otra version
+        # u otro producto (los IDs rotan), la tarjeta sale sin precio en vez
+        # de ponerle a este titulo el precio de otro.
+        sku = str(v.get('sku') or '').strip()
+        if RE_ID.fullmatch(sku):
+            L.append('<meta name="advance:sku" content="%s">' % e(sku))
     else:
         L += ['<meta property="og:url" content="%s">' % e(url_pagina),
               '<meta property="og:image" content="%s">' % e(url_imagen)]
@@ -779,8 +795,13 @@ def main(argv):
         print('NO SE ARMARON: %s. p/ quedo como estaba.' % ex)
         return 2
     propias = sum(1 for v in vistas if imagen_para(v.get('foto') or '')[3])
-    print('  %d filas de ADVAPP (generado_en %s): %d con su foto propia y %d con la tarjeta general'
-          % (len(vistas), manifiesto.get('generado_en'), propias, len(vistas) - propias))
+    if tarjeta:
+        print('  %d filas de ADVAPP (generado_en %s): la imagen de todas es la tarjeta con precio que '
+              'dibuja ADVAPP; %d con su foto propia y %d sin foto'
+              % (len(vistas), manifiesto.get('generado_en'), propias, len(vistas) - propias))
+    else:
+        print('  %d filas de ADVAPP (generado_en %s): %d con su foto propia y %d con la tarjeta general'
+              % (len(vistas), manifiesto.get('generado_en'), propias, len(vistas) - propias))
     if len(vistas) != propias:
         print('  (esas son las filas cuya ficha muestra la foto de ADVAPP o ninguna).')
     print('  %d nuevas, %d cambiadas, %d sin cambios, %d borradas (filas que ADVAPP ya no trae).%s'
@@ -912,10 +933,25 @@ def probar():
            and meta('robots') == 'noindex' and 'location.replace("../#p=CEL-APP-068")' in h,
            'el titulo, la version, el noindex y el destino, igual que antes')
         ok(not re.search(r'USD|\$\s*\d', h), 'y la pagina sigue sin decir un precio (lo dice la imagen)')
+        ok(meta('advance:sku') is None, 'sin SKU de ADVAPP en la fila, la pagina no declara ninguno')
+        h = armar_pagina(dict(caso, sku='CEL-APL-17P-256-ORG-ESIM'), pub, tmp, tj)
+        ok(meta('advance:sku') == 'CEL-APL-17P-256-ORG-ESIM',
+           'la pagina dice el SKU de su fila: ADVAPP no le pone el precio si ese ID paso a ser otra cosa')
+        h = armar_pagina(dict(caso, sku='CEL APL/17P"'), pub, tmp, tj)
+        ok(meta('advance:sku') is None, 'un SKU que no sirve no va')
         h = armar_pagina(sin, pub, tmp, tj)
         ok(html.unescape(meta('og:image')) == tj + 'GAF-RAY-049' and '<img' not in h and GENERAL not in h
            and meta('og:image:alt') == 'Apple iPhone 17 Pro',
            'la fila sin foto propia tambien lleva la tarjeta con precio, y la pagina sigue sin imagen')
+        h = armar_pagina(dict(gem, sku='TAB-X-000'), pub, tmp, tj)
+        ok(meta('og:image') == pub + 'fotos/AT-0072-03.jpg' and meta('og:url') == pub + 'p/TAB-X-WIFIPEN.html'
+           and meta('twitter:card') == 'summary' and meta('advance:sku') is None,
+           'la fila escondida por repetida no lleva la tarjeta con precio (diria el suyo y la ficha, el de su gemela): va la foto')
+        h = armar_pagina(dict(caso, foto='fotos/AT-0160.jpg'), pub, tmp, tj)
+        ok('<img src="../fotos/AT-0160.jpg" alt="Apple iPhone 17 Pro · 256GB · E-Sim · Orange" width="1500" height="1500">' in h,
+           'con la tarjeta, la foto pesada va entera en el cuerpo (la lee ADVAPP), no su copia chica')
+        h = armar_pagina(dict(caso, foto='fotos/AT-0160.jpg'), pub, tmp)
+        ok(meta('og:image') == pub + 'fotos/mini/AT-0160.jpg', 'y sin la tarjeta, la copia chica, como siempre')
 
         # p/: solo se reescribe lo que cambio, y las bajas con tope
         carpeta = os.path.join(tmp, 'p')

@@ -206,6 +206,7 @@ async function correrPruebas(){
   // interruptor TARJETA_CON_PRECIO de vista-previa.py: si esta prendido y las
   // paginas salieron con la foto, el generador cayo solo al modo de antes.
   const RE_TARJETA = /^https:\/\/[A-Za-z0-9.-]+\/api\/catalog\?resource=tecno-tarjeta&id=/;
+  const SKU_OK = /^[A-Za-z0-9][A-Za-z0-9_-]{0,80}$/;      // RE_ID de vista-previa.py
   let TARJETA = '';
   for(const t of paginas.values()){
     const og = new DOMParser().parseFromString(t, 'text/html').querySelector('meta[property="og:image"]');
@@ -235,13 +236,19 @@ async function correrPruebas(){
     leidas.set(id, pag);
     if(!pag.titulo || !pag.titulo.trim()) mal.titulo.push(id);
     const va = (/location\.replace\("\.\.\/#p=([^"]+)"\)/.exec(t) || [])[1];
-    // La pagina de una fila escondida por repetida (lleva a su gemela) va con
-    // la foto aunque haya tarjeta: con el precio de la escondida, la tarjeta
-    // diria un precio y la ficha de la gemela, otro
-    pag.conTarjeta = !!TARJETA && !!va && va.split('&')[0] === id;
+    // Con tarjeta o con la foto, segun lo que dice la pagina. No la llevan
+    // (tarjeta_de en vista-previa.py) la fila escondida por repetida, que
+    // lleva a su gemela (la tarjeta diria su precio y la ficha, el de la
+    // gemela), ni la fila sin SKU (ADVAPP no podria ver que el ID cambio de
+    // producto). Que cada fila de hoy vaya como le toca lo mira `difiere`.
+    pag.conTarjeta = !!TARJETA && pag.imagen.startsWith(TARJETA);
     if(pag.conTarjeta){
       if(pag.imagen !== TARJETA + id) mal.imagen.push(id + ': ' + pag.imagen);
-      if(pag.foto && !(pag.foto.startsWith(CARPETA_FOTOS) && pag.foto.endsWith(EXT_FOTOS))) mal.imagen.push(id + ': foto ' + pag.foto);
+      if(!va || va.split('&')[0] !== id) mal.imagen.push(id + ': lleva la tarjeta y va a otra fila');
+      if(!SKU_OK.test(pag.sku)) mal.imagen.push(id + ': lleva la tarjeta sin el SKU de su fila');
+      // La foto entera: la lee ADVAPP para dibujar, y la copia chica saldria borrosa
+      if(pag.foto && (!(pag.foto.startsWith(CARPETA_FOTOS) && pag.foto.endsWith(EXT_FOTOS)) || pag.foto.startsWith(CARPETA_MINIS)))
+        mal.imagen.push(id + ': foto ' + pag.foto);
       if(meta('og:image:width') !== '1200' || meta('og:image:height') !== '630') mal.medidas.push(id);
       if(meta('og:url') !== null) mal.url.push(id + ': ' + meta('og:url'));
       if(meta('twitter:card') !== 'summary_large_image' || meta('twitter:image') !== pag.imagen)
@@ -273,11 +280,11 @@ async function correrPruebas(){
   ok(!mal.titulo.length, 'cada pagina tiene og:title', ejemplos(mal.titulo));
   if(TARJETA){
     const gemelas = [...leidas.values()].filter(x => !x.conTarjeta).length;
-    ok(!mal.imagen.length, 'og:image es la tarjeta con precio de ADVAPP para ESE ID, y la foto del cuerpo es una foto propia', ejemplos(mal.imagen));
+    ok(!mal.imagen.length, 'og:image es la tarjeta con precio de ADVAPP para ESE ID, con el SKU de su fila, y la foto del cuerpo es la propia, entera', ejemplos(mal.imagen));
     ok(!mal.medidas.length, 'de 1200 x 630', ejemplos(mal.medidas));
     ok(!mal.url.length, 'sin og:url (con el, Instagram reusa la tarjeta guardada aunque el link traiga ?v=)', ejemplos(mal.url));
     ok(!mal.card.length, 'twitter:card: summary_large_image, con la misma imagen', ejemplos(mal.card));
-    if(gemelas) info(gemelas + ' pagina(s) de filas escondidas por repetidas: van con la foto, sin la tarjeta con precio');
+    if(gemelas) info(gemelas + ' pagina(s) van con la foto, sin la tarjeta con precio (filas escondidas por repetidas o sin SKU)');
   } else {
     info('las paginas van con la foto en el og:image, sin la tarjeta con precio (TARJETA_CON_PRECIO de vista-previa.py)');
     ok(!mal.imagen.length, 'og:image es una direccion completa: la foto propia o la tarjeta general', ejemplos(mal.imagen));
@@ -299,18 +306,20 @@ async function correrPruebas(){
      imagen que no sale (pasa si se publica la web antes de que ADVAPP tenga
      resource=tecno-tarjeta). Si ni contesta (sin red), AVISO. */
   if(TARJETA){
-    let c = null, contesto = [];
-    for(const id of ids.slice(0, 3)){
+    // Las tres a la vez; vale la primera que traiga la cotizacion
+    const contesto = [];
+    const respuestas = await Promise.all(ids.slice(0, 3).map(async id => {
       try{
         const r = await conTope(8000, senal => fetch(TARJETA + encodeURIComponent(id) + '&datos=1', { signal: senal, cache: 'no-store' }));
         contesto.push(r.status);
-        c = r.ok ? ((await r.json()) || {}).cotizacion || null : null;
-      }catch(e){ c = null; }
-      if(c) break;
-    }
-    if(!c && !contesto.length) aviso('ADVAPP no contesto por la tarjeta (resource=tecno-tarjeta&datos=1): no se compara su cotizacion con la de la web');
-    else if(!c) ok(false, 'ADVAPP arma la tarjeta con precio que nombran las paginas (resource=tecno-tarjeta)',
-                   'contesto ' + contesto.join(', ') + ': si es 400, a ADVAPP en produccion todavia le falta la tarjeta');
+        return r.ok ? ((await r.json()) || {}).cotizacion || null : null;
+      }catch(e){ return null; }
+    }));
+    const c = respuestas.find(Boolean) || null;
+    // 404 = fila nueva, sin pagina publicada todavia: no dice nada de ADVAPP
+    if(!c && !contesto.some(s => s !== 404))
+      aviso('ADVAPP no dijo con que cotizacion arma la tarjeta (resource=tecno-tarjeta&datos=1; contesto: ' + (contesto.join(', ') || 'nada') + '): no se compara con la de la web');
+    else if(!c) ok(false, 'ADVAPP arma la tarjeta con precio que nombran las paginas (resource=tecno-tarjeta)', 'contesto ' + contesto.join(', '));
     else ok(COTIZACION === 'auto' && c.tipo === COTIZACION_TIPO && c.recargo_pct === RECARGO_PCT && c.recargo_fijo === RECARGO_FIJO,
             'ADVAPP hace los pesos de la tarjeta con la misma cotizacion que la web',
             'web: ' + [COTIZACION, COTIZACION_TIPO, RECARGO_PCT, RECARGO_FIJO].join(' / ') + ' · ADVAPP: ' + [c.tipo, c.recargo_pct, c.recargo_fijo].join(' / '));
@@ -318,18 +327,23 @@ async function correrPruebas(){
 
   /* ---- 5a. Las paginas son lo que calculo la herramienta ---- */
   // "x" es una vista ({titulo, linea, foto}); devuelve que difiere, o ''
-  const difiere = (pag, x) => {
+  const difiere = (pag, x, id) => {
     const nombre = x.foto ? x.foto.slice(CARPETA_FOTOS.length) : '';
-    // Con la tarjeta de ADVAPP en el og:image, la foto es la del cuerpo
+    // Con la tarjeta de ADVAPP en el og:image, la foto es la del cuerpo (entera
+    // si la pagina lleva la tarjeta; si no, tambien puede ser su copia chica)
     const imagenBien = TARJETA
-      ? (x.foto ? (pag.foto === x.foto || pag.foto === CARPETA_MINIS + nombre) : pag.foto === '')
+      ? (x.foto ? (pag.foto === x.foto || (!pag.conTarjeta && pag.foto === CARPETA_MINIS + nombre)) : pag.foto === '')
       : (x.foto ? (pag.imagen === PUBLICA + x.foto || pag.imagen === PUBLICA + CARPETA_MINIS + nombre) : pag.imagen === general);
-    // El SKU que declara la pagina (16/11/2026): si el de la fila cambio, ADVAPP
-    // dibuja esa tarjeta sin precio hasta el proximo PUBLICAR. `x.sku` solo
-    // viene en las vistas de hoy (5b), no en _generado.json
-    const skuBien = !pag.conTarjeta || x.sku === undefined || pag.sku === (/^[A-Za-z0-9][A-Za-z0-9_-]{0,80}$/.test(x.sku || '') ? x.sku : '');
-    if(imagenBien && !skuBien && pag.titulo === x.titulo && pag.linea === (x.linea || ''))
-      return 'SKU ' + (pag.sku || '(ninguno)') + ' -> ' + (x.sku || '(ninguno)');
+    // (16/11/2026) Si a esa fila le toca la tarjeta (la regla de tarjeta_de en
+    // vista-previa.py) y con que SKU. Un _generado.json de antes no trae el
+    // SKU: ahi no se mira. Si el SKU de la fila cambio, ADVAPP dibuja esa
+    // tarjeta sin precio hasta el proximo PUBLICAR
+    if(TARJETA && x.sku !== undefined && pag.titulo === x.titulo && pag.linea === (x.linea || '') && imagenBien){
+      const sku = String(x.sku || '').trim();
+      const leToca = (x.destino || id) === id && SKU_OK.test(sku);
+      if(pag.conTarjeta !== leToca) return leToca ? 'le toca la tarjeta con precio y va con la foto' : 'va con la tarjeta con precio y no le toca';
+      if(leToca && pag.sku !== sku) return 'SKU ' + (pag.sku || '(ninguno)') + ' -> ' + sku;
+    }
     return (pag.titulo !== x.titulo || pag.linea !== (x.linea || '') || !imagenBien)
       ? '"' + pag.titulo + ' / ' + pag.linea + '" -> "' + x.titulo + ' / ' + (x.linea || '') + '"' + (imagenBien ? '' : ' (foto)') : '';
   };
@@ -341,7 +355,7 @@ async function correrPruebas(){
       const x = gen.vistas[id], pag = leidas.get(id);
       if(!x){ malHechas.push(id + ': no esta en _generado.json'); continue; }
       if(!pag) continue;          // sin archivo: ya lo dice "cada ID de p/indice.json tiene su p/<ID>.html"
-      const d = difiere(pag, x);
+      const d = difiere(pag, x, id);
       if(d) malHechas.push(id + ': ' + d);
       // El link entero, con sus respaldos (13/10/2026: _generado.json trae "ir")
       else if(x.ir && pag.ir && pag.ir !== x.ir) malHechas.push(id + ': lleva a ' + pag.ir + ' y no a ' + x.ir);
@@ -360,7 +374,7 @@ async function correrPruebas(){
     for(const x of hoyTodo.vistas){
       const pag = leidas.get(x.id);
       if(!pag){ nuevas.push(x.id); continue; }
-      const d = difiere(pag, x);
+      const d = difiere(pag, x, x.id);
       if(d) cambiadas.push(x.id + ': ' + d);
     }
     const total = nuevas.length + cambiadas.length + bajas.length;

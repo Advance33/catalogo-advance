@@ -516,6 +516,20 @@ def destino_del_link(v):
     return ir
 
 
+def tarjeta_de(v, tarjeta):
+    """`tarjeta` si la pagina de esa fila lleva la tarjeta con precio; '' si va
+    con la foto, como antes. Sin tarjeta:
+    - la fila escondida por repetida: muestra el texto de su gemela y lleva a
+      la ficha de la gemela; con el precio de la escondida, la tarjeta diria
+      un precio y la ficha otro;
+    - la fila sin un SKU de ADVAPP que sirva: la pagina no podria anotarlo, y
+      ADVAPP no tendria como darse cuenta de que ese ID paso a ser otra
+      version u otro producto (los IDs rotan)."""
+    if not tarjeta or v['id'] != (v.get('destino') or v['id']):
+        return ''
+    return tarjeta if RE_ID.fullmatch(str(v.get('sku') or '').strip()) else ''
+
+
 def armar_pagina(v, publica, raiz=RAIZ, tarjeta=''):
     """El HTML de p/<ID>.html. Siempre igual para los mismos datos: sin
     fecha ni nada que cambie solo, asi no se reescribe si no cambio.
@@ -523,12 +537,7 @@ def armar_pagina(v, publica, raiz=RAIZ, tarjeta=''):
     precio de ADVAPP; vacia, la foto (o la tarjeta general), como antes."""
     ide, destino = v['id'], v.get('destino') or v['id']
     titulo, linea = str(v['titulo']).strip(), str(v.get('linea') or '').strip()
-    # La tarjeta con precio es solo para la pagina de la fila misma. La de una
-    # fila escondida por repetida muestra el texto de su gemela y lleva a la
-    # ficha de la gemela: con el precio de la escondida, la tarjeta diria un
-    # precio y la ficha otro. Esa va con la foto, como antes.
-    if ide != destino:
-        tarjeta = ''
+    tarjeta = tarjeta_de(v, tarjeta)
     foto, ancho, alto, propia = imagen_para(v.get('foto') or '', raiz, pesada=bool(tarjeta))
     url_pagina = publica + 'p/' + ide + '.html'
     # (16/11/2026) La tarjeta con el precio y la hora la dibuja ADVAPP en el
@@ -572,9 +581,7 @@ def armar_pagina(v, publica, raiz=RAIZ, tarjeta=''):
         # de esa fila hoy: si entre dos PUBLICAR el ID paso a ser otra version
         # u otro producto (los IDs rotan), la tarjeta sale sin precio en vez
         # de ponerle a este titulo el precio de otro.
-        sku = str(v.get('sku') or '').strip()
-        if RE_ID.fullmatch(sku):
-            L.append('<meta name="advance:sku" content="%s">' % e(sku))
+        L.append('<meta name="advance:sku" content="%s">' % e(str(v.get('sku') or '').strip()))
     else:
         L += ['<meta property="og:url" content="%s">' % e(url_pagina),
               '<meta property="og:image" content="%s">' % e(url_imagen)]
@@ -678,6 +685,8 @@ def texto_generado(vistas, generado_en):
                        'vistas': {v['id']: {'titulo': v.get('titulo'), 'linea': v.get('linea') or '',
                                             'foto': v.get('foto') or '',
                                             'destino': v.get('destino') or v['id'],
+                                            # (16/11/2026) decide si la pagina lleva la tarjeta con precio
+                                            'sku': str(v.get('sku') or '').strip(),
                                             # el #p= entero que arma la pagina (13/10/2026)
                                             'ir': destino_del_link(v)}
                                   for v in vistas}},
@@ -796,9 +805,12 @@ def main(argv):
         return 2
     propias = sum(1 for v in vistas if imagen_para(v.get('foto') or '')[3])
     if tarjeta:
-        print('  %d filas de ADVAPP (generado_en %s): la imagen de todas es la tarjeta con precio que '
-              'dibuja ADVAPP; %d con su foto propia y %d sin foto'
-              % (len(vistas), manifiesto.get('generado_en'), propias, len(vistas) - propias))
+        con = sum(1 for v in vistas if tarjeta_de(v, tarjeta))
+        print('  %d filas de ADVAPP (generado_en %s): %d con su foto propia y %d sin foto. La imagen de %d '
+              'es la tarjeta con precio que dibuja ADVAPP%s'
+              % (len(vistas), manifiesto.get('generado_en'), propias, len(vistas) - propias, con,
+                 '' if con == len(vistas) else '; %d van con la foto (filas escondidas por repetidas o sin SKU)'
+                 % (len(vistas) - con)))
     else:
         print('  %d filas de ADVAPP (generado_en %s): %d con su foto propia y %d con la tarjeta general'
               % (len(vistas), manifiesto.get('generado_en'), propias, len(vistas) - propias))
@@ -919,7 +931,8 @@ def probar():
                'el interruptor: con TARJETA_CON_PRECIO en False no hay tarjeta aunque ADVAPP_URL sea la del feed')
         finally:
             TARJETA_CON_PRECIO = prendida
-        h = armar_pagina(caso, pub, tmp, tj)
+        caso_sku = dict(caso, sku='CEL-APL-17P-256-ORG-ESIM')
+        h = armar_pagina(caso_sku, pub, tmp, tj)
         ok(html.unescape(meta('og:image')) == tj + 'CEL-APP-068' and '&amp;id=CEL-APP-068"' in h,
            'con ADVAPP, og:image es la tarjeta de ESA fila (con el & escapado)')
         ok(meta('og:image:width') == '1200' and meta('og:image:height') == '630' and meta('og:image:type') == 'image/jpeg',
@@ -930,16 +943,16 @@ def probar():
         ok('<img src="../fotos/AT-0072-03.jpg" alt="Apple iPhone 17 Pro · 256GB · E-Sim · Orange" width="900" height="900">' in h,
            'la foto propia sigue en el cuerpo: de ahi la lee ADVAPP')
         ok(meta('og:title') == 'Apple iPhone 17 Pro' and meta('og:description') == '256GB · E-Sim · Orange'
-           and meta('robots') == 'noindex' and 'location.replace("../#p=CEL-APP-068")' in h,
-           'el titulo, la version, el noindex y el destino, igual que antes')
+           and meta('robots') == 'noindex' and 'location.replace("../#p=CEL-APP-068&s=CEL-APL-17P-256-ORG-ESIM")' in h,
+           'el titulo, la version, el noindex y el destino (con su SKU de respaldo), igual que antes')
         ok(not re.search(r'USD|\$\s*\d', h), 'y la pagina sigue sin decir un precio (lo dice la imagen)')
-        ok(meta('advance:sku') is None, 'sin SKU de ADVAPP en la fila, la pagina no declara ninguno')
-        h = armar_pagina(dict(caso, sku='CEL-APL-17P-256-ORG-ESIM'), pub, tmp, tj)
         ok(meta('advance:sku') == 'CEL-APL-17P-256-ORG-ESIM',
            'la pagina dice el SKU de su fila: ADVAPP no le pone el precio si ese ID paso a ser otra cosa')
-        h = armar_pagina(dict(caso, sku='CEL APL/17P"'), pub, tmp, tj)
-        ok(meta('advance:sku') is None, 'un SKU que no sirve no va')
-        h = armar_pagina(sin, pub, tmp, tj)
+        for malo in ('', None, 'CEL APL/17P"'):
+            h = armar_pagina(dict(caso, sku=malo), pub, tmp, tj)
+            ok(meta('og:image') == pub + 'fotos/AT-0072-03.jpg' and meta('advance:sku') is None and meta('twitter:card') == 'summary',
+               'sin un SKU que sirva (%r) la fila no lleva la tarjeta con precio: va la foto' % (malo,))
+        h = armar_pagina(dict(sin, sku='GAF-RAY-049-SKU'), pub, tmp, tj)
         ok(html.unescape(meta('og:image')) == tj + 'GAF-RAY-049' and '<img' not in h and GENERAL not in h
            and meta('og:image:alt') == 'Apple iPhone 17 Pro',
            'la fila sin foto propia tambien lleva la tarjeta con precio, y la pagina sigue sin imagen')
@@ -947,7 +960,7 @@ def probar():
         ok(meta('og:image') == pub + 'fotos/AT-0072-03.jpg' and meta('og:url') == pub + 'p/TAB-X-WIFIPEN.html'
            and meta('twitter:card') == 'summary' and meta('advance:sku') is None,
            'la fila escondida por repetida no lleva la tarjeta con precio (diria el suyo y la ficha, el de su gemela): va la foto')
-        h = armar_pagina(dict(caso, foto='fotos/AT-0160.jpg'), pub, tmp, tj)
+        h = armar_pagina(dict(caso_sku, foto='fotos/AT-0160.jpg'), pub, tmp, tj)
         ok('<img src="../fotos/AT-0160.jpg" alt="Apple iPhone 17 Pro · 256GB · E-Sim · Orange" width="1500" height="1500">' in h,
            'con la tarjeta, la foto pesada va entera en el cuerpo (la lee ADVAPP), no su copia chica')
         h = armar_pagina(dict(caso, foto='fotos/AT-0160.jpg'), pub, tmp)
@@ -1068,9 +1081,9 @@ def probar():
             gen = json.load(fh)
         ok(gen == {'generado_en': '2026-09-29T19:22:20.026Z',
                    'vistas': {'F-000': {'titulo': 'Apple iPhone 17 Pro', 'linea': '256GB · E-Sim · Orange',
-                                        'foto': 'fotos/AT-0072-03.jpg', 'destino': 'F-000', 'ir': '#p=F-000'},
+                                        'foto': 'fotos/AT-0072-03.jpg', 'destino': 'F-000', 'sku': '', 'ir': '#p=F-000'},
                               'F-001': {'titulo': 'Apple iPhone 17 Pro', 'linea': '512GB · Sim · Blue',
-                                        'foto': 'fotos/AT-0072-03.jpg', 'destino': 'F-001', 'ir': '#p=F-001'}}},
+                                        'foto': 'fotos/AT-0072-03.jpg', 'destino': 'F-001', 'sku': '', 'ir': '#p=F-001'}}},
            'p/_generado.json tiene el generado_en y los valores de cada vista con que se armo cada pagina')
         r = aplicar(vistas[:2], pub, c3, tmp, generado_en='2026-09-29T19:25:00.000Z')
         with io.open(os.path.join(c3, GENERADO), encoding='utf-8') as fh:
@@ -1083,7 +1096,7 @@ def probar():
         aplicar([sin], pub, c3, tmp, confirmar_bajas=True)
         with io.open(os.path.join(c3, GENERADO), encoding='utf-8') as fh:
             gen = json.load(fh)
-        ok(gen['vistas'] == {'G-1': {'titulo': 'Apple iPhone 17 Pro', 'linea': '', 'foto': '', 'destino': 'G-1', 'ir': '#p=G-1'}}
+        ok(gen['vistas'] == {'G-1': {'titulo': 'Apple iPhone 17 Pro', 'linea': '', 'foto': '', 'destino': 'G-1', 'sku': '', 'ir': '#p=G-1'}}
            and gen['generado_en'] is None,
            'sin foto propia la foto va vacia, y el destino es el ID si la vista no trae otro')
 

@@ -4,6 +4,12 @@
 // sin precio. Hasta ese dia todos los links llegaban con la misma tarjeta
 // ("Stock y precios en tiempo real").
 //
+// Desde el 16/11/2026 (Benja: "hermoso, si" a la muestra) la IMAGEN de la
+// tarjeta lleva ademas el precio y la hora: el og:image de cada pagina es la
+// tarjeta que dibuja ADVAPP en el momento (resource=tecno-tarjeta&id=<ID>).
+// La pagina sigue sin decir un precio, y la foto propia queda en el <img> del
+// cuerpo, que es de donde la lee ADVAPP.
+//
 // Cada fila tiene su pagina chica p/<ID>.html, que arma herramientas/vista-previa.py
 // en cada PUBLICAR con los textos y la foto que calcula la web misma
 // (herramientas/vista-previa.js). Esta tanda mira:
@@ -14,10 +20,12 @@
 //   3. la foto: abre la ficha de verdad (todas las filas sin foto propia y una de
 //      cada cinco de las demas) y tiene que ser la misma; y que este en
 //      fotos/indice.json;
-//   4. cada pagina publicada: og:title, og:image absoluta (la propia o la tarjeta
-//      general), og:url, twitter:card acorde a la imagen, noindex, redireccion y
-//      link iguales hacia una ficha que abre, sin precio; y cada ID de
-//      p/indice.json con su archivo;
+//   4. cada pagina publicada: og:title, og:image absoluta (la tarjeta con precio
+//      de ADVAPP, de 1200 x 630 y sin og:url; con ADVAPP_URL vacia, la foto
+//      propia o la tarjeta general, con og:url), twitter:card acorde a la
+//      imagen, noindex, redireccion y link iguales hacia una ficha que abre,
+//      sin precio; cada ID de p/indice.json con su archivo; y que ADVAPP haga
+//      los pesos de la tarjeta con la misma cotizacion que la web;
 //   5. las paginas contra lo que calculo la herramienta al armarlas
 //      (p/_generado.json, local, no se publica): cualquier diferencia es un error
 //      del generador (FALLA). Y contra lo que la web muestra hoy: las filas
@@ -191,21 +199,37 @@ async function correrPruebas(){
   for(let i = 0; i < ids.length; i += 8) await Promise.all(ids.slice(i, i + 8).map(leerPagina));
   ok(!faltan.length, 'cada ID de p/indice.json tiene su p/<ID>.html', ejemplos(faltan) || ids.length + ' paginas');
   const general = PUBLICA + 'assets/preview.png';
+  // (16/11/2026) La imagen de la tarjeta con precio, sin el ID: la misma cuenta
+  // que url_de_la_tarjeta() de herramientas/vista-previa.py. Vacia = sin ADVAPP
+  const TARJETA = /^https:\/\/[A-Za-z0-9.-]+\/api\/catalog\?resource=tecno-web$/.test(ADVAPP_URL)
+    ? ADVAPP_URL.replace(/tecno-web$/, 'tecno-tarjeta&id=') : '';
   const mal = { titulo: [], imagen: [], url: [], card: [], robots: [], ir: [], abre: [], precio: [], medidas: [] };
   const leidas = new Map();
   for(const [id, t] of paginas){
     const d = new DOMParser().parseFromString(t, 'text/html');
     const meta = k => { const e = d.querySelector(`meta[property="${k}"], meta[name="${k}"]`); return e ? e.getAttribute('content') : null; };
+    // `foto`: la foto propia del cuerpo ("fotos/AT-0136.jpg"), de donde la lee ADVAPP
+    const cuerpo = d.querySelector('main > img');
     const pag = { titulo: meta('og:title'), linea: meta('og:description') || '', imagen: meta('og:image') || '',
+                  foto: cuerpo ? String(cuerpo.getAttribute('src') || '').replace(/^\.\.\//, '') : '',
                   ir: '#' + ((/location\.replace\("\.\.\/#([^"]+)"\)/.exec(t) || [])[1] || '') };
     leidas.set(id, pag);
     if(!pag.titulo || !pag.titulo.trim()) mal.titulo.push(id);
-    const propia = pag.imagen.startsWith(PUBLICA + CARPETA_FOTOS) && pag.imagen.endsWith(EXT_FOTOS);
-    if(!propia && pag.imagen !== general) mal.imagen.push(id + ': ' + pag.imagen);
-    if(!(Number(meta('og:image:width')) > 0 && Number(meta('og:image:height')) > 0)) mal.medidas.push(id);
-    if(meta('og:url') !== PUBLICA + 'p/' + id + '.html') mal.url.push(id + ': ' + meta('og:url'));
-    if(meta('twitter:card') !== (propia ? 'summary' : 'summary_large_image') || meta('twitter:image') !== pag.imagen)
-      mal.card.push(id + ': ' + meta('twitter:card'));
+    if(TARJETA){
+      if(pag.imagen !== TARJETA + id) mal.imagen.push(id + ': ' + pag.imagen);
+      if(pag.foto && !(pag.foto.startsWith(CARPETA_FOTOS) && pag.foto.endsWith(EXT_FOTOS))) mal.imagen.push(id + ': foto ' + pag.foto);
+      if(meta('og:image:width') !== '1200' || meta('og:image:height') !== '630') mal.medidas.push(id);
+      if(meta('og:url') !== null) mal.url.push(id + ': ' + meta('og:url'));
+      if(meta('twitter:card') !== 'summary_large_image' || meta('twitter:image') !== pag.imagen)
+        mal.card.push(id + ': ' + meta('twitter:card'));
+    } else {
+      const propia = pag.imagen.startsWith(PUBLICA + CARPETA_FOTOS) && pag.imagen.endsWith(EXT_FOTOS);
+      if(!propia && pag.imagen !== general) mal.imagen.push(id + ': ' + pag.imagen);
+      if(!(Number(meta('og:image:width')) > 0 && Number(meta('og:image:height')) > 0)) mal.medidas.push(id);
+      if(meta('og:url') !== PUBLICA + 'p/' + id + '.html') mal.url.push(id + ': ' + meta('og:url'));
+      if(meta('twitter:card') !== (propia ? 'summary' : 'summary_large_image') || meta('twitter:image') !== pag.imagen)
+        mal.card.push(id + ': ' + meta('twitter:card'));
+    }
     if(!/noindex/.test(meta('robots') || '')) mal.robots.push(id);
     const va = (/location\.replace\("\.\.\/#p=([^"]+)"\)/.exec(t) || [])[1];
     const link = d.querySelector('a[href^="../#p="]');
@@ -224,21 +248,47 @@ async function correrPruebas(){
     if(conPrecio(d.body ? d.body.textContent : '') || conPrecio(pag.titulo) || conPrecio(pag.linea)) mal.precio.push(id);
   }
   ok(!mal.titulo.length, 'cada pagina tiene og:title', ejemplos(mal.titulo));
-  ok(!mal.imagen.length, 'og:image es una direccion completa: la foto propia o la tarjeta general', ejemplos(mal.imagen));
-  ok(!mal.medidas.length, 'con su ancho y alto', ejemplos(mal.medidas));
-  ok(!mal.url.length, 'og:url es la pagina misma', ejemplos(mal.url));
-  ok(!mal.card.length, 'twitter:card: summary con la foto cuadrada, summary_large_image con la general', ejemplos(mal.card));
+  if(TARJETA){
+    ok(!mal.imagen.length, 'og:image es la tarjeta con precio de ADVAPP para ESE ID, y la foto del cuerpo es una foto propia', ejemplos(mal.imagen));
+    ok(!mal.medidas.length, 'de 1200 x 630', ejemplos(mal.medidas));
+    ok(!mal.url.length, 'sin og:url (con el, Instagram reusa la tarjeta guardada aunque el link traiga ?v=)', ejemplos(mal.url));
+    ok(!mal.card.length, 'twitter:card: summary_large_image, con la misma imagen', ejemplos(mal.card));
+  } else {
+    info('ADVAPP_URL no es la del feed: las paginas van con la foto en el og:image, sin la tarjeta con precio');
+    ok(!mal.imagen.length, 'og:image es una direccion completa: la foto propia o la tarjeta general', ejemplos(mal.imagen));
+    ok(!mal.medidas.length, 'con su ancho y alto', ejemplos(mal.medidas));
+    ok(!mal.url.length, 'og:url es la pagina misma', ejemplos(mal.url));
+    ok(!mal.card.length, 'twitter:card: summary con la foto cuadrada, summary_large_image con la general', ejemplos(mal.card));
+  }
   ok(!mal.robots.length, 'todas piden noindex', ejemplos(mal.robots));
   ok(!mal.ir.length, 'la redireccion y el link visible llevan al mismo #p=', ejemplos(mal.ir));
   ok(!mal.abre.length, 'y ese #p= abre la ficha del modelo de esa fila (con el ID y el SKU de respaldo, W3-03)', ejemplos(mal.abre));
   ok(!mal.precio.length, 'ninguna pagina dice un precio', ejemplos(mal.precio));
 
+  /* ---- 4b. Los pesos de la tarjeta, como los de la web (16/11/2026) ----
+     ADVAPP repite COTIZACION_TIPO, RECARGO_PCT y RECARGO_FIJO de index.html
+     (api/_lib/tecno-tarjeta-handler.js). Si aca cambian y alla no, la tarjeta
+     dice otros pesos que la ficha. Si ADVAPP no contesta, es un AVISO. */
+  if(TARJETA){
+    let c = null;
+    try{
+      const r = await conTope(8000, senal => fetch(TARJETA + encodeURIComponent(ids[0]) + '&datos=1', { signal: senal, cache: 'no-store' }));
+      c = r.ok ? ((await r.json()) || {}).cotizacion || null : null;
+    }catch(e){ c = null; }
+    if(!c) aviso('ADVAPP no dijo con que cotizacion arma la tarjeta (resource=tecno-tarjeta&datos=1): no se compara con la de la web');
+    else ok(COTIZACION === 'auto' && c.tipo === COTIZACION_TIPO && c.recargo_pct === RECARGO_PCT && c.recargo_fijo === RECARGO_FIJO,
+            'ADVAPP hace los pesos de la tarjeta con la misma cotizacion que la web',
+            'web: ' + [COTIZACION, COTIZACION_TIPO, RECARGO_PCT, RECARGO_FIJO].join(' / ') + ' · ADVAPP: ' + [c.tipo, c.recargo_pct, c.recargo_fijo].join(' / '));
+  }
+
   /* ---- 5a. Las paginas son lo que calculo la herramienta ---- */
   // "x" es una vista ({titulo, linea, foto}); devuelve que difiere, o ''
   const difiere = (pag, x) => {
     const nombre = x.foto ? x.foto.slice(CARPETA_FOTOS.length) : '';
-    const imagenBien = x.foto ? (pag.imagen === PUBLICA + x.foto || pag.imagen === PUBLICA + CARPETA_MINIS + nombre)
-                              : pag.imagen === general;
+    // Con la tarjeta de ADVAPP en el og:image, la foto es la del cuerpo
+    const imagenBien = TARJETA
+      ? (x.foto ? (pag.foto === x.foto || pag.foto === CARPETA_MINIS + nombre) : pag.foto === '')
+      : (x.foto ? (pag.imagen === PUBLICA + x.foto || pag.imagen === PUBLICA + CARPETA_MINIS + nombre) : pag.imagen === general);
     return (pag.titulo !== x.titulo || pag.linea !== (x.linea || '') || !imagenBien)
       ? '"' + pag.titulo + ' / ' + pag.linea + '" -> "' + x.titulo + ' / ' + (x.linea || '') + '"' + (imagenBien ? '' : ' (foto)') : '';
   };

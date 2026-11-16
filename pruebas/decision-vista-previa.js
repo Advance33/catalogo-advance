@@ -21,8 +21,9 @@
 //      cada cinco de las demas) y tiene que ser la misma; y que este en
 //      fotos/indice.json;
 //   4. cada pagina publicada: og:title, og:image absoluta (la tarjeta con precio
-//      de ADVAPP, de 1200 x 630 y sin og:url; con ADVAPP_URL vacia, la foto
-//      propia o la tarjeta general, con og:url), twitter:card acorde a la
+//      de ADVAPP, de 1200 x 630 y sin og:url; con TARJETA_CON_PRECIO apagado
+//      en vista-previa.py, la foto propia o la tarjeta general, con og:url),
+//      twitter:card acorde a la
 //      imagen, noindex, redireccion y link iguales hacia una ficha que abre,
 //      sin precio; cada ID de p/indice.json con su archivo; y que ADVAPP haga
 //      los pesos de la tarjeta con la misma cotizacion que la web;
@@ -199,10 +200,17 @@ async function correrPruebas(){
   for(let i = 0; i < ids.length; i += 8) await Promise.all(ids.slice(i, i + 8).map(leerPagina));
   ok(!faltan.length, 'cada ID de p/indice.json tiene su p/<ID>.html', ejemplos(faltan) || ids.length + ' paginas');
   const general = PUBLICA + 'assets/preview.png';
-  // (16/11/2026) La imagen de la tarjeta con precio, sin el ID: la misma cuenta
-  // que url_de_la_tarjeta() de herramientas/vista-previa.py. Vacia = sin ADVAPP
-  const TARJETA = /^https:\/\/[A-Za-z0-9.-]+\/api\/catalog\?resource=tecno-web$/.test(ADVAPP_URL)
-    ? ADVAPP_URL.replace(/tecno-web$/, 'tecno-tarjeta&id=') : '';
+  // (16/11/2026) La direccion de la tarjeta con precio, sin el ID, tal como la
+  // escribio el generador (se lee de la primera pagina; no se vuelve a calcular
+  // aca). Vacia = paginas con la foto: TARJETA_CON_PRECIO en False en
+  // vista-previa.py. Todas las paginas tienen que ir igual que la primera.
+  const og0 = new DOMParser().parseFromString(paginas.get(ids[0]) || '', 'text/html').querySelector('meta[property="og:image"]');
+  const TARJETA = (/^https:\/\/[A-Za-z0-9.-]+\/api\/catalog\?resource=tecno-tarjeta&id=/.exec(og0 ? og0.getAttribute('content') || '' : '') || [''])[0];
+  if(TARJETA){
+    let mismo = false;
+    try{ mismo = new URL(TARJETA).origin === new URL(ADVAPP_URL).origin; }catch(e){}
+    ok(mismo, 'la tarjeta con precio se le pide al mismo ADVAPP que los productos', TARJETA);
+  }
   const mal = { titulo: [], imagen: [], url: [], card: [], robots: [], ir: [], abre: [], precio: [], medidas: [] };
   const leidas = new Map();
   for(const [id, t] of paginas){
@@ -254,7 +262,7 @@ async function correrPruebas(){
     ok(!mal.url.length, 'sin og:url (con el, Instagram reusa la tarjeta guardada aunque el link traiga ?v=)', ejemplos(mal.url));
     ok(!mal.card.length, 'twitter:card: summary_large_image, con la misma imagen', ejemplos(mal.card));
   } else {
-    info('ADVAPP_URL no es la del feed: las paginas van con la foto en el og:image, sin la tarjeta con precio');
+    info('las paginas van con la foto en el og:image, sin la tarjeta con precio (TARJETA_CON_PRECIO de vista-previa.py)');
     ok(!mal.imagen.length, 'og:image es una direccion completa: la foto propia o la tarjeta general', ejemplos(mal.imagen));
     ok(!mal.medidas.length, 'con su ancho y alto', ejemplos(mal.medidas));
     ok(!mal.url.length, 'og:url es la pagina misma', ejemplos(mal.url));
@@ -268,13 +276,18 @@ async function correrPruebas(){
   /* ---- 4b. Los pesos de la tarjeta, como los de la web (16/11/2026) ----
      ADVAPP repite COTIZACION_TIPO, RECARGO_PCT y RECARGO_FIJO de index.html
      (api/_lib/tecno-tarjeta-handler.js). Si aca cambian y alla no, la tarjeta
-     dice otros pesos que la ficha. Si ADVAPP no contesta, es un AVISO. */
+     dice otros pesos que la ficha. Se pregunta por hasta tres filas: ADVAPP lee
+     la pagina publicada, y una fila nueva todavia no la tiene (404). Si ninguna
+     contesta (ADVAPP caido, o sin la tarjeta todavia), es un AVISO. */
   if(TARJETA){
     let c = null;
-    try{
-      const r = await conTope(8000, senal => fetch(TARJETA + encodeURIComponent(ids[0]) + '&datos=1', { signal: senal, cache: 'no-store' }));
-      c = r.ok ? ((await r.json()) || {}).cotizacion || null : null;
-    }catch(e){ c = null; }
+    for(const id of ids.slice(0, 3)){
+      try{
+        const r = await conTope(8000, senal => fetch(TARJETA + encodeURIComponent(id) + '&datos=1', { signal: senal, cache: 'no-store' }));
+        c = r.ok ? ((await r.json()) || {}).cotizacion || null : null;
+      }catch(e){ c = null; }
+      if(c) break;
+    }
     if(!c) aviso('ADVAPP no dijo con que cotizacion arma la tarjeta (resource=tecno-tarjeta&datos=1): no se compara con la de la web');
     else ok(COTIZACION === 'auto' && c.tipo === COTIZACION_TIPO && c.recargo_pct === RECARGO_PCT && c.recargo_fijo === RECARGO_FIJO,
             'ADVAPP hace los pesos de la tarjeta con la misma cotizacion que la web',

@@ -17,9 +17,10 @@ apunta a ADVAPP (catalog?resource=tecno-tarjeta&id=<ID>), que dibuja la imagen
 en el momento. ADVAPP saca el titulo, la version y la foto de ESTA pagina
 (og:title, og:description y el <img> del cuerpo) y el precio, del feed. Por
 eso esas tres cosas no se cambian de forma sin mirar
-api/_lib/tecno-tarjeta-handler.js de ADVAPP. Si ADVAPP no puede dibujarla,
-manda a la foto sola, que es la tarjeta de antes. Con ADVAPP_URL vacio en
-index.html las paginas vuelven a salir con la foto en el og:image.
+api/_lib/tecno-tarjeta-handler.js de ADVAPP. Si ADVAPP no tiene un precio que
+mostrar, la dibuja igual, sin precio (la foto, el modelo y la version, lo que
+decia la tarjeta de antes). Para volver a la foto sola en el og:image:
+TARJETA_CON_PRECIO = False (aca abajo) y PUBLICAR.
 
 WhatsApp no corre JavaScript: lee las etiquetas og: del HTML que le devuelve
 la direccion. El catalogo es una sola pagina (index.html) que arma todo con
@@ -97,6 +98,12 @@ CARPETA = os.path.join(RAIZ, 'p')
 # propia (muestra la de ADVAPP, o ninguna). Nunca la de otro color.
 GENERAL = 'assets/preview.png'
 
+# (16/11/2026) La imagen de cada pagina es la tarjeta con el precio y la hora
+# que dibuja ADVAPP. Es el interruptor: con False, el proximo PUBLICAR deja
+# todas las paginas con la foto propia (o la tarjeta general) en el og:image,
+# como antes, sin tocar nada mas.
+TARJETA_CON_PRECIO = True
+
 # Mas que esto WhatsApp no lo muestra en la vista previa (el limite que se
 # conoce es de unos 300 KB). Una foto mas pesada va con su copia de 400 px de
 # fotos/mini/, que es la misma imagen.
@@ -154,8 +161,11 @@ def url_de_advapp(src):
 def url_de_la_tarjeta(src):
     """La direccion de la imagen de la tarjeta con precio, sin el ID: la de
     ADVAPP_URL con resource=tecno-tarjeta&id= en lugar de resource=tecno-web
-    (16/11/2026). Vacia si ADVAPP_URL esta vacia o no es la del feed: ahi las
-    paginas salen con la foto en el og:image, como antes."""
+    (16/11/2026). Vacia si TARJETA_CON_PRECIO esta en False o si ADVAPP_URL no
+    es la del feed: ahi las paginas salen con la foto en el og:image, como
+    antes."""
+    if not TARJETA_CON_PRECIO:
+        return ''
     url = url_de_advapp(src)
     if not re.fullmatch(r'https://[A-Za-z0-9.-]+/api/catalog\?resource=tecno-web', url):
         return ''
@@ -759,8 +769,9 @@ def main(argv):
     vistas = datos['vistas']
     tarjeta = url_de_la_tarjeta(src)
     if not tarjeta:
-        print('  AVISO: ADVAPP_URL de index.html no es la del feed: las paginas salen con la foto en la '
-              'imagen, sin la tarjeta con precio.')
+        print('  AVISO: las paginas salen con la foto en la imagen, sin la tarjeta con precio (%s).'
+              % ('TARJETA_CON_PRECIO esta en False' if not TARJETA_CON_PRECIO
+                 else 'ADVAPP_URL de index.html no es la del feed'))
     try:
         res = aplicar(vistas, publica, confirmar_bajas='--confirmar-bajas' in argv,
                       generado_en=manifiesto.get('generado_en'), tarjeta=tarjeta)
@@ -792,6 +803,7 @@ def main(argv):
 
 def probar():
     global CARPETA_FOTOS, EXT_FOTOS         # el caso de las fotos las cambia y las devuelve
+    global TARJETA_CON_PRECIO               # el caso del interruptor lo apaga y lo devuelve
     fallas = []
 
     def ok(c, txt):
@@ -878,9 +890,14 @@ def probar():
         ok(url_de_la_tarjeta("const ADVAPP_URL = '';\n") == '' and url_de_la_tarjeta('nada') == ''
            and url_de_la_tarjeta("const ADVAPP_URL = 'https://otro.sitio/hoja.csv';\n") == ''
            and url_de_la_tarjeta("const ADVAPP_URL = 'http://x/api/catalog?resource=tecno-web';\n") == '',
-           'con ADVAPP_URL vacia, o que no es la del feed, no hay tarjeta (las paginas salen con la foto)')
-        ok(url_de_la_tarjeta(leer_index()).endswith('/api/catalog?resource=tecno-tarjeta&id='),
-           'index.html de hoy tiene la ADVAPP_URL del feed: las paginas salen con la tarjeta')
+           'con una ADVAPP_URL que no es la del feed no hay tarjeta (las paginas salen con la foto)')
+        prendida = TARJETA_CON_PRECIO
+        try:
+            TARJETA_CON_PRECIO = False
+            ok(url_de_la_tarjeta("const ADVAPP_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web';\n") == '',
+               'el interruptor: con TARJETA_CON_PRECIO en False no hay tarjeta aunque ADVAPP_URL sea la del feed')
+        finally:
+            TARJETA_CON_PRECIO = prendida
         h = armar_pagina(caso, pub, tmp, tj)
         ok(html.unescape(meta('og:image')) == tj + 'CEL-APP-068' and '&amp;id=CEL-APP-068"' in h,
            'con ADVAPP, og:image es la tarjeta de ESA fila (con el & escapado)')

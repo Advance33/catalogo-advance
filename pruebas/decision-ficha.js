@@ -30,6 +30,10 @@
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const info = t => R.push('  --  ' + t);
+// (16/11/2026) El link de p/ sale con ?v=<fecha y hora al minuto> (selloDelLink).
+// Para comparar links: sin el sello, que cambia de un minuto al otro
+const CON_V = /\?v=\d{12}$/;
+const sinV = u => String(u || '').replace(CON_V, '');
 
 const esperaDF = setInterval(() => {
   if(!MODELOS.length || !FUENTE || !document.querySelectorAll('#cats .chip').length) return;
@@ -235,7 +239,7 @@ async function probarCompartirEnLaCompu(){
   const esperado = textoParaCompartir(p, COLOR_FICHA) + '\n' + URL_PUBLICA +
     (ids.has(FICHA) ? 'p/' + encodeURIComponent(FICHA) + '.html' : '#p=' + encodeURIComponent(FICHA));
   // Sin el ?v=<fecha y hora> del link de p/ (16/11/2026): cambia con el minuto; lo mira [4.2]
-  ok(String(dfCopiado || '').replace(/\?v=\d{12}$/, '') === esperado, '[4.1] copia el nombre y el link de la fila que se mira', JSON.stringify(dfCopiado));
+  ok(sinV(dfCopiado) === esperado, '[4.1] copia el nombre y el link de la fila que se mira', JSON.stringify(dfCopiado));
   const b = document.getElementById('brindis');
   const rb = b && b.getBoundingClientRect();
   ok(!!b && dfTxt(b) === 'Link copiado' && b.classList.contains('ver') && b.getAttribute('role') === 'status'
@@ -255,7 +259,7 @@ async function probarCompartirEnLaCompu(){
   // 4.2: el link de la pagina existe y lleva a esa ficha
   if(ids.has(FICHA)){
     // (16/11/2026) Con ?v=<fecha y hora>: la tarjeta lleva el precio del momento y no tiene que salir una guardada
-    ok(link.replace(/\?v=\d{12}$/, '') === URL_PUBLICA + 'p/' + encodeURIComponent(FICHA) + '.html' && /\?v=\d{12}$/.test(link),
+    ok(sinV(link) === URL_PUBLICA + 'p/' + encodeURIComponent(FICHA) + '.html' && CON_V.test(link),
        '[4.2] con pagina de vista previa, el link es p/<ID>.html?v=<fecha y hora>', link);
     let html = '';
     try{ const r = await fetch('p/' + encodeURIComponent(FICHA) + '.html', { cache: 'no-store' }); html = r.ok ? await r.text() : ''; }catch(e){}
@@ -278,7 +282,7 @@ async function probarCompartirEnLaCompu(){
     dfCopiado = null;
     d.querySelector('.caja > .fi-compartir').click();
     await dfEsperarA(() => dfCopiado !== null, 5000);
-    ok(String(dfCopiado).replace(/\?v=\d{12}$/, '').endsWith(ids.has(FICHA) ? 'p/' + encodeURIComponent(FICHA) + '.html' : '#p=' + encodeURIComponent(FICHA))
+    ok(sinV(dfCopiado).endsWith(ids.has(FICHA) ? 'p/' + encodeURIComponent(FICHA) + '.html' : '#p=' + encodeURIComponent(FICHA))
        && !String(dfCopiado).includes(k0 + '.html') && FICHA !== k0,
        '[4.1] al elegir otra version, se comparte esa', FICHA + ' · ' + String(dfCopiado).split('\n')[1]);
   } else info('[4.1] el modelo no tiene otra pestana con stock');
@@ -298,7 +302,6 @@ async function probarCompartirEnElCelular(){
   await dfEsperarA(() => datos !== null, 5000);
   const ids = await paginasDeVistaPrevia();
   // Sin el ?v=: entre el toque y esta linea puede haber cambiado el minuto
-  const sinV = u => String(u || '').replace(/\?v=\d{12}$/, '');
   const link = sinV(linkParaCompartir(FICHA, ids));
   ok(!!datos && sinV(datos.url) === link && datos.text === textoParaCompartir(buscarProducto(FICHA), COLOR_FICHA),
      '[4.1] en el celular abre el menu Compartir con el nombre y el link', JSON.stringify(datos));

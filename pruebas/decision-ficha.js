@@ -234,7 +234,8 @@ async function probarCompartirEnLaCompu(){
   await dfEsperarA(() => dfCopiado !== null && document.getElementById('brindis')?.classList.contains('ver'), 5000);
   const esperado = textoParaCompartir(p, COLOR_FICHA) + '\n' + URL_PUBLICA +
     (ids.has(FICHA) ? 'p/' + encodeURIComponent(FICHA) + '.html' : '#p=' + encodeURIComponent(FICHA));
-  ok(dfCopiado === esperado, '[4.1] copia el nombre y el link de la fila que se mira', JSON.stringify(dfCopiado));
+  // Sin el ?v=<fecha y hora> del link de p/ (16/11/2026): cambia con el minuto; lo mira [4.2]
+  ok(String(dfCopiado || '').replace(/\?v=\d{12}$/, '') === esperado, '[4.1] copia el nombre y el link de la fila que se mira', JSON.stringify(dfCopiado));
   const b = document.getElementById('brindis');
   const rb = b && b.getBoundingClientRect();
   ok(!!b && dfTxt(b) === 'Link copiado' && b.classList.contains('ver') && b.getAttribute('role') === 'status'

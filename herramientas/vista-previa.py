@@ -19,8 +19,8 @@ en el momento. ADVAPP saca el titulo, la version y la foto de ESTA pagina
 eso esas tres cosas no se cambian de forma sin mirar
 api/_lib/tecno-tarjeta-handler.js de ADVAPP. Si ADVAPP no tiene un precio que
 mostrar, la dibuja igual, sin precio (la foto, el modelo y la version, lo que
-decia la tarjeta de antes). Para volver a la foto sola en el og:image:
-TARJETA_CON_PRECIO = False (aca abajo) y PUBLICAR.
+decia la tarjeta de antes). Para volver a la foto sola en el og:image hay
+que poner TARJETA_CON_PRECIO en False (aca abajo) y PUBLICAR.
 
 WhatsApp no corre JavaScript: lee las etiquetas og: del HTML que le devuelve
 la direccion. El catalogo es una sola pagina (index.html) que arma todo con

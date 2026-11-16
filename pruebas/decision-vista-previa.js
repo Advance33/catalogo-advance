@@ -212,7 +212,7 @@ async function correrPruebas(){
     TARJETA = (RE_TARJETA.exec(og ? og.getAttribute('content') || '' : '') || [''])[0];
     if(TARJETA) break;
   }
-  const interruptor = /^TARJETA_CON_PRECIO = (True|False)\b/m.exec(await leerVP('herramientas/vista-previa.py') || '');
+  const interruptor = /^TARJETA_CON_PRECIO = (True|False)[ \t]*$/m.exec(await leerVP('herramientas/vista-previa.py') || '');
   ok(!!interruptor && (interruptor[1] === 'True') === !!TARJETA,
      'las paginas van como dice TARJETA_CON_PRECIO de vista-previa.py (' + (interruptor ? interruptor[1] : 'no se pudo leer') + ')',
      TARJETA || 'con la foto');

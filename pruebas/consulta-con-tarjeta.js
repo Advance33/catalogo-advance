@@ -37,7 +37,8 @@ function ctTocar(a){
   a.removeEventListener('click', frenar);
   return ctTexto(a);
 }
-const CT_LINK = /\n\n(https:\/\/catalogo\.advancetecno\.com\.ar\/p\/([^\/?\s]+)\.html\?v=\d{12})$/;
+const ctEsc = s => s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&');
+const CT_LINK = new RegExp('\\n\\n(' + ctEsc(URL_PUBLICA) + 'p\\/([^\\/?\\s]+)\\.html\\?v=\\d{12})$');
 // "antes" + dos saltos + el link de la fila k, y nada mas
 const ctConLink = (antes, despues, k) => {
   const m = CT_LINK.exec(despues);
@@ -78,10 +79,11 @@ async function ctPruebas(){
   const usado = 'Hola! Me interesa el iPhone 17 Pro 256GB E-Sim en Orange y quiero entregar mi usado como parte de pago.'
               + '\n\nMi usado: iPhone 13 128GB, batería 86%: USD 300\niPhone 17 Pro 256GB E-Sim: USD 1.400\nMe queda: USD 1.100'
               + '\n\nTe paso fotos y los detalles:';
-  const usadoCon = mensajeConTarjeta(usado, L1);
+  const usadoCon = mensajeConTarjeta(usado, L1, true);
   ok(usadoCon === usado.replace('\n\nMi usado', '\n' + L1 + '\n\nMi usado') && usadoCon.endsWith('Te paso fotos y los detalles:'),
      '[1] en el del usado va despues del primer parrafo (al final quedaria como si fueran las fotos)', usadoCon.split('\n').slice(0, 2).join(' / '));
-  ok(mensajeConTarjeta(usadoCon, L2) === usado.replace('\n\nMi usado', '\n' + L2 + '\n\nMi usado'), '[1] y ahi tambien se cambia, no se suma');
+  ok(mensajeConTarjeta(usadoCon, L2, true) === usado.replace('\n\nMi usado', '\n' + L2 + '\n\nMi usado'), '[1] y ahi tambien se cambia, no se suma');
+  ok(mensajeConTarjeta(consulta, L1, true) === consulta + '\n\n' + L1, '[1] si el mensaje es un solo parrafo, al final');
   ok(mensajeConTarjeta('', L1) === '\n\n' + L1 && mensajeConTarjeta(consulta + '\n\nhttps://otro.sitio/x', L1) === consulta + '\n\nhttps://otro.sitio/x\n\n' + L1,
      '[1] solo saca un link de pagina p/ con su ?v=: otro link que escribio el cliente se queda');
 
@@ -149,10 +151,6 @@ async function ctPruebas(){
       ok(otros.every(x => { const t0 = ctTexto(x); return ctTocar(x) === t0; }), '[3] los otros links a WhatsApp de la ficha no lo suman', otros.length + ' links');
 
       /* ---- [5] el cotizador de usados, con una ficha abierta ---- */
-      // Los mensajes de verdad del cotizador siguen teniendo el parrafo "Mi usado": de el depende donde va el link
-      const abreElUsado = f => String(f).includes("'" + String.raw`\n\nMi usado`);
-      ok(abreElUsado(mensajeUsado) && abreElUsado(mensajeFuera),
-         '[5] mensajeUsado y mensajeFuera abren el parrafo del usado con "Mi usado" (ahi se mete el link)');
       ok(/d\.dataset\.key = clave\(prod\)/.test(String(abrirCotizador)), '[5] el cotizador anota en #usado la fila con la que se abrio');
       const u = document.createElement('div');
       u.id = 'usado';
@@ -163,7 +161,7 @@ async function ctPruebas(){
         const [w, f, o] = u.querySelectorAll('a');
         w.href = linkWA(usado);
         const con = ctTocar(w);
-        ok(con.startsWith('Hola! Me interesa') && new RegExp('parte de pago\\.\\nhttps://catalogo\\.advancetecno\\.com\\.ar/p/' + encodeURIComponent(FICHA).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\.html\\?v=\\d{12}\\n\\nMi usado').test(con)
+        ok(con.startsWith('Hola! Me interesa') && new RegExp('parte de pago\\.\\n' + ctEsc(URL_PUBLICA) + 'p\\/' + ctEsc(encodeURIComponent(FICHA)) + '\\.html\\?v=\\d{12}\\n\\nMi usado').test(con)
            && con.endsWith('Te paso fotos y los detalles:'),
            '[5] el cotizador abierto desde una ficha: el link de esa fila, despues del primer parrafo', con.split('\n').slice(0, 2).join(' / '));
         const fuera = 'Hola! Me interesa el iPhone 17 Pro (USD 1.400) y quiero entregar mi usado como parte de pago.\n\nMi usado (no está en el cotizador):\nQué es: Celular\n\n¿Cuánto me lo toman?';
@@ -196,18 +194,24 @@ async function ctPruebas(){
     try{
       PAGINAS_P = null; PAGINAS_P_LEIDAS = null;
       window.fetch = async (u, o) => { if(String(u).includes('p/indice.json')) throw new Error('sin red'); return traer(u, o); };
+      let pedidos = 0;
+      window.fetch = async (u, o) => { if(String(u).includes('p/indice.json')){ pedidos++; throw new Error('sin red'); } return traer(u, o); };
       const vacio = await paginasDeVistaPrevia();
-      ok(vacio instanceof Set && vacio.size === 0 && PAGINAS_P === null, '[6] si p/indice.json no se pudo leer, no queda un indice vacio para toda la visita');
-      window.fetch = traer;
+      ok(vacio instanceof Set && vacio.size === 0 && PAGINAS_P === null && PAGINAS_P_LEIDAS === null,
+         '[6] si p/indice.json no se pudo leer, no queda un indice vacio para toda la visita');
       if(conStock){
         const a = conStock.querySelector('a.wa'), k = conStock.dataset.key, limpio = ctTexto(a).replace(CT_LINK, '');
         a.href = linkWA(limpio);
-        ok(ctTocar(a) === limpio && PAGINAS_P !== null, '[6] el toque sale como antes y vuelve a pedir el indice');
+        const antes = pedidos;
+        ok(ctTocar(a) === limpio && ctTocar(a) === limpio && pedidos === antes, '[6] recien fallo: los toques salen como antes y no insisten con otro pedido cada uno');
+        window.fetch = traer;
+        PAGINAS_P_FALLO = Date.now() - PAGINAS_P_REINTENTO_MS - 1;      // paso el rato de espera
+        ok(ctTocar(a) === limpio && PAGINAS_P !== null, '[6] pasado el rato, el toque vuelve a pedir el indice');
         await PAGINAS_P;
         ok(ctConLink(limpio, ctTocar(a), k), '[6] y el toque siguiente ya lleva el link');
         a.href = linkWA(limpio);
       }
-    } finally { window.fetch = traer; if(!PAGINAS_P_LEIDAS || !PAGINAS_P_LEIDAS.size){ PAGINAS_P = guardado[0]; PAGINAS_P_LEIDAS = guardado[1]; } }
+    } finally { window.fetch = traer; if(!PAGINAS_P_LEIDAS || !PAGINAS_P_LEIDAS.size){ PAGINAS_P = guardado[0]; PAGINAS_P_LEIDAS = guardado[1]; } PAGINAS_P_FALLO = 0; }
   }
 
   /* ---- [5b] apoyar el dedo y el menu del link ---- */

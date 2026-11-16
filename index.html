@@ -15425,20 +15425,26 @@ const ICONO_COMPARTIR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentCol
 const PAGINAS_P_ESPERA_MS = 4000;   // lo más que se espera p/indice.json
 const COMPARTIR_ESPERA_MS = 800;    // si todavía no llegó cuando se toca Compartir
 let PAGINAS_P = null;               // la promesa del índice: se pide una vez por visita
-let PAGINAS_P_LEIDAS = null;        // el Set de IDs con página, cuando llegó (vacío si falló)
+let PAGINAS_P_LEIDAS = null;        // el Set de IDs con página, cuando llegó (null mientras no se pudo leer)
+let PAGINAS_P_FALLO = 0;            // cuándo falló por última vez
+const PAGINAS_P_REINTENTO_MS = 30000;
 
 function paginasDeVistaPrevia(){
+  // Recién falló: no se insiste con cada toque (sin conexión serían dos pedidos por toque)
+  if(!PAGINAS_P && Date.now() - PAGINAS_P_FALLO < PAGINAS_P_REINTENTO_MS) return Promise.resolve(PAGINAS_P_LEIDAS || new Set());
   if(!PAGINAS_P) PAGINAS_P = conTope(PAGINAS_P_ESPERA_MS, async senal => {
       const r = await fetch('p/indice.json', { signal: senal });
       if(!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
     })
     .then(j => new Set(Array.isArray(j && j.ids) ? j.ids.filter(x => typeof x === 'string' && x) : []))
-    /* Si no se pudo leer, la próxima vez que haga falta se pide de nuevo
-       (16/11/2026): quedaba un índice vacío para toda la visita, y ahora de
-       él depende también el link de la tarjeta en cada consulta por WhatsApp. */
-    .catch(e => { console.warn('No se pudo leer p/indice.json:', e); PAGINAS_P = null; return new Set(); })
-    .then(s => (PAGINAS_P_LEIDAS = s));
+    .then(s => (PAGINAS_P_LEIDAS = s))
+    /* Si no se pudo leer, se pide de nuevo la próxima vez que haga falta,
+       pasado PAGINAS_P_REINTENTO_MS (16/11/2026): quedaba un índice vacío
+       para toda la visita, y ahora de él depende también el link de la
+       tarjeta en cada consulta por WhatsApp. PAGINAS_P_LEIDAS no se pisa con
+       un índice vacío: Compartir espera al reintento, como la primera vez. */
+    .catch(e => { console.warn('No se pudo leer p/indice.json:', e); PAGINAS_P = null; PAGINAS_P_FALLO = Date.now(); return PAGINAS_P_LEIDAS || new Set(); });
   return PAGINAS_P;
 }
 
@@ -15474,13 +15480,14 @@ function linkParaCompartir(k, conPagina, ahora = new Date()){
    (mensajeWA, mensajeAviso, mensajeUsado) quedan como están, con su precio en
    USD. Si el índice todavía no llegó, el mensaje sale como antes. */
 const TARJETA_EN_MENSAJE = /\n+https:\/\/[^\s]+\/p\/[^\s/]+\.html\?v=\d{12}(?=\n|$)/;
-function mensajeConTarjeta(texto, link){
+/* `arriba`: después del primer párrafo y no al final. Es para el cotizador de
+   usados: su mensaje arranca nombrando el producto y termina en «Te paso
+   fotos y los detalles:», y ahí el link quedaría como si fueran las fotos. */
+function mensajeConTarjeta(texto, link, arriba = false){
   // Si ya la traía (segundo toque al mismo botón), va la de ahora en su lugar
   const t = String(texto || '').replace(TARJETA_EN_MENSAJE, '');
-  // En el del usado va después del primer párrafo: al final quedaría pegado a
-  // «Te paso fotos y los detalles:», como si el link fueran las fotos
-  const usado = t.indexOf('\n\nMi usado');
-  return usado === -1 ? t + '\n\n' + link : t.slice(0, usado) + '\n' + link + t.slice(usado);
+  const corte = arriba ? t.indexOf('\n\n') : -1;
+  return corte === -1 ? t + '\n\n' + link : t.slice(0, corte) + '\n' + link + t.slice(corte);
 }
 /* La fila por la que consulta ese botón de WhatsApp; '' si no es la consulta
    de un producto. Son los mismos botones que clasifica la medición (el oyente
@@ -15506,7 +15513,7 @@ function sumarTarjetaALaConsulta(a){
   let texto = '';
   try{ texto = new URL(a.href).searchParams.get('text') || ''; }catch(e){ return; }
   if(!texto) return;
-  a.href = linkWA(mensajeConTarjeta(texto, linkParaCompartir(k, PAGINAS_P_LEIDAS)));
+  a.href = linkWA(mensajeConTarjeta(texto, linkParaCompartir(k, PAGINAS_P_LEIDAS), !!a.closest('#usado')));
 }
 /* En la bajada, antes de que el navegador siga el link. No sólo el toque: al
    apoyar el dedo o el mouse (pointerdown) y al abrir el menú del link, así

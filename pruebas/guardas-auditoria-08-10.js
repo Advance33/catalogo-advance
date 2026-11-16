@@ -226,7 +226,10 @@ async function paginasP(){
   const imagenes = new Map();
   for(const [id, t] of paginas){
     if(!t) continue;
-    const img = (/<meta property="og:image" content="https:\/\/[^\/]+\/([^"]+)">/.exec(t) || [])[1];
+    // (16/11/2026) El og:image ahora es la tarjeta con precio que dibuja ADVAPP
+    // (…/api/catalog?…): la foto de la pagina es la del <img> del cuerpo
+    const og = (/<meta property="og:image" content="https:\/\/[^\/]+\/([^"]+)">/.exec(t) || [])[1];
+    const img = og && !og.startsWith('api/') ? og : (/<img src="\.\.\/([^"]+)"/.exec(t) || [])[1];
     if(img) imagenes.set(id, img);
     const va = (/location\.replace\("\.\.\/(#p=[^"]+)"\)/.exec(t) || [])[1] || '';
     const k = (/^#p=([^&]+)/.exec(va) || [])[1] || '';

@@ -15409,6 +15409,9 @@ function avisarYaNoEsta(){
    herramientas/vista-previa.py en cada PUBLICAR), que en WhatsApp llega con
    la foto, el modelo y la versión; si esa fila todavía no tiene página
    (p/indice.json no la nombra, o no se pudo leer), el #p= de siempre.
+   Desde el 16/11/2026 la imagen de esa tarjeta trae además el precio y la
+   hora del momento (la dibuja ADVAPP), y el link de la página sale con
+   ?v=<fecha y hora> (selloDelLink).
    Como en la muestra: en el celular abre el menú Compartir del teléfono, y en
    la compu copia el texto con el link y lo avisa. Chrome y Safari de la compu
    también tienen navigator.share, pero su menú no es lo que se eligió, y para
@@ -15431,9 +15434,20 @@ function paginasDeVistaPrevia(){
   return PAGINAS_P;
 }
 
-function linkParaCompartir(k, conPagina){
+/* El ?v= del link de la página p/ (16/11/2026): "202611161203", la fecha y la
+   hora de este dispositivo, al minuto. La tarjeta ahora lleva el precio del
+   momento, y WhatsApp e Instagram guardan la tarjeta de cada dirección que ya
+   vieron: con una dirección distinta la arman de nuevo en vez de mostrar la
+   de la vez anterior, con el precio viejo. GitHub Pages ignora lo que viene
+   después del «?» y abre la misma página. */
+function selloDelLink(d = new Date()){
+  const n = x => String(x).padStart(2, '0');
+  return `${d.getFullYear()}${n(d.getMonth() + 1)}${n(d.getDate())}${n(d.getHours())}${n(d.getMinutes())}`;
+}
+
+function linkParaCompartir(k, conPagina, ahora = new Date()){
   const id = encodeURIComponent(k);
-  return conPagina && conPagina.has(k) ? `${URL_PUBLICA}p/${id}.html` : `${URL_PUBLICA}#p=${id}`;
+  return conPagina && conPagina.has(k) ? `${URL_PUBLICA}p/${id}.html?v=${selloDelLink(ahora)}` : `${URL_PUBLICA}#p=${id}`;
 }
 
 // "Apple iPhone 17 Pro 256GB E-Sim (Orange)": el nombre del mensaje de

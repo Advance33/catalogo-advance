@@ -5,20 +5,32 @@ Las vistas previas para WhatsApp: una pagina chica por fila de ADVAPP.
 Pedro eligio el 29/09 la opcion B de la decision 4.2 (muestra
 muestras/auditoria/ficha.html, "La vista previa en WhatsApp"): el link que
 se manda de un producto tiene que llegar con la foto propia de ESE producto,
-el modelo de titulo y, debajo, la version y el color de esa fila. Sin precio:
-los precios cambian todos los dias y la tarjeta de WhatsApp queda guardada en
-el chat. Hasta ese dia todos los links llegaban con la misma tarjeta
-("Stock y precios en tiempo real") y el cliente no sabia que le mandaron
-hasta abrirlo.
+el modelo de titulo y, debajo, la version y el color de esa fila. Hasta ese
+dia todos los links llegaban con la misma tarjeta ("Stock y precios en tiempo
+real") y el cliente no sabia que le mandaron hasta abrirlo.
+
+Desde el 16/11/2026 (Benja: "hermoso, si" a la muestra del link con precio) la
+imagen de la tarjeta lleva ademas el precio y la hora: "USD 915", "$ 1.464.000"
+y "Precio del lun 16/11 · 12:03 hs". La pagina sigue sin decir ningun precio
+(cambia todos los dias y la pagina se arma en cada PUBLICAR): su og:image
+apunta a ADVAPP (catalog?resource=tecno-tarjeta&id=<ID>), que dibuja la imagen
+en el momento. ADVAPP saca el titulo, la version y la foto de ESTA pagina
+(og:title, og:description y el <img> del cuerpo) y el precio, del feed. Por
+eso esas tres cosas no se cambian de forma sin mirar
+api/_lib/tecno-tarjeta-handler.js de ADVAPP. Si ADVAPP no tiene un precio que
+mostrar, la dibuja igual, sin precio (la foto, el modelo y la version, lo que
+decia la tarjeta de antes). Para volver a la foto sola en el og:image hay
+que poner TARJETA_CON_PRECIO en False (aca abajo) y PUBLICAR.
 
 WhatsApp no corre JavaScript: lee las etiquetas og: del HTML que le devuelve
 la direccion. El catalogo es una sola pagina (index.html) que arma todo con
 JavaScript, asi que la vista previa de cada producto necesita su propio
 archivo. Esta herramienta escribe uno por fila:
 
-    p/<ID>.html     og:title, og:description, og:image (la foto propia, con
-                    direccion absoluta y sus medidas reales), twitter:card,
-                    noindex, y lleva al cliente a la ficha (../#p=<ID>, como
+    p/<ID>.html     og:title, og:description, og:image (la tarjeta con precio
+                    de ADVAPP; sin ADVAPP, la foto propia con sus medidas
+                    reales), twitter:card, noindex, la foto propia en el
+                    cuerpo, y lleva al cliente a la ficha (../#p=<ID>, como
                     los links de la web) al instante, con un link a la vista
                     por si el navegador no corre JavaScript.
     p/indice.json   {"ids": [...]}: los IDs que tienen pagina. Lo lee el
@@ -86,6 +98,12 @@ CARPETA = os.path.join(RAIZ, 'p')
 # propia (muestra la de ADVAPP, o ninguna). Nunca la de otro color.
 GENERAL = 'assets/preview.png'
 
+# (16/11/2026) La imagen de cada pagina es la tarjeta con el precio y la hora
+# que dibuja ADVAPP. Es el interruptor: con False, el proximo PUBLICAR deja
+# todas las paginas con la foto propia (o la tarjeta general) en el og:image,
+# como antes, sin tocar nada mas.
+TARJETA_CON_PRECIO = True
+
 # Mas que esto WhatsApp no lo muestra en la vista previa (el limite que se
 # conoce es de unos 300 KB). Una foto mas pesada va con su copia de 400 px de
 # fotos/mini/, que es la misma imagen.
@@ -138,6 +156,20 @@ def direccion_publica(src):
 def url_de_advapp(src):
     m = re.search(r"^const ADVAPP_URL = '([^'\r\n]+)';", src, re.M)
     return m.group(1) if m else ''
+
+
+def url_de_la_tarjeta(src):
+    """La direccion de la imagen de la tarjeta con precio, sin el ID: la de
+    ADVAPP_URL con resource=tecno-tarjeta&id= en lugar de resource=tecno-web
+    (16/11/2026). Vacia si TARJETA_CON_PRECIO esta en False o si ADVAPP_URL no
+    es la del feed: ahi las paginas salen con la foto en el og:image, como
+    antes."""
+    if not TARJETA_CON_PRECIO:
+        return ''
+    url = url_de_advapp(src)
+    if not re.fullmatch(r'https://[A-Za-z0-9.-]+/api/catalog\?resource=tecno-web', url):
+        return ''
+    return url[:-len('tecno-web')] + 'tecno-tarjeta&id='
 
 
 def fotos_de_index(src):
@@ -436,16 +468,19 @@ def medidas(ruta):
         return None
 
 
-def imagen_para(foto, raiz=RAIZ):
+def imagen_para(foto, raiz=RAIZ, pesada=False):
     """La imagen de la vista previa de una fila: (ruta del sitio, ancho, alto,
     propia). `foto` es la foto propia que muestra la ficha
     ("fotos/AT-0071-03.jpg") o vacio. Sin foto propia, la tarjeta general.
     La carpeta y la extension son las de index.html (CARPETA_FOTOS y
-    EXT_FOTOS; la de las copias chicas, CARPETA_FOTOS + 'mini/', como alla)."""
+    EXT_FOTOS; la de las copias chicas, CARPETA_FOTOS + 'mini/', como alla).
+    `pesada`: no cambiarla por su copia chica aunque pese mas que el tope de
+    WhatsApp (16/11/2026: con la tarjeta con precio la foto no va a WhatsApp,
+    la lee ADVAPP para dibujar, y con la copia de 400 px saldria borrosa)."""
     if foto and re.fullmatch(re.escape(CARPETA_FOTOS) + r'[^/]+' + re.escape(EXT_FOTOS), foto):
         ruta = os.path.join(raiz, foto)
         if os.path.isfile(ruta):
-            if os.path.getsize(ruta) > PESO_MAXIMO:
+            if os.path.getsize(ruta) > PESO_MAXIMO and not pesada:
                 mini = os.path.join(raiz, CARPETA_FOTOS, 'mini', os.path.basename(foto))
                 if os.path.isfile(mini) and os.path.getsize(mini) <= PESO_MAXIMO:
                     foto, ruta = CARPETA_FOTOS + 'mini/' + os.path.basename(foto), mini
@@ -481,19 +516,42 @@ def destino_del_link(v):
     return ir
 
 
-def armar_pagina(v, publica, raiz=RAIZ):
+def tarjeta_de(v, tarjeta):
+    """`tarjeta` si la pagina de esa fila lleva la tarjeta con precio; '' si va
+    con la foto, como antes. Sin tarjeta:
+    - la fila escondida por repetida: muestra el texto de su gemela y lleva a
+      la ficha de la gemela; con el precio de la escondida, la tarjeta diria
+      un precio y la ficha otro;
+    - la fila sin un SKU de ADVAPP que sirva: la pagina no podria anotarlo, y
+      ADVAPP no tendria como darse cuenta de que ese ID paso a ser otra
+      version u otro producto (los IDs rotan)."""
+    if not tarjeta or v['id'] != (v.get('destino') or v['id']):
+        return ''
+    return tarjeta if RE_ID.fullmatch(str(v.get('sku') or '').strip()) else ''
+
+
+def armar_pagina(v, publica, raiz=RAIZ, tarjeta=''):
     """El HTML de p/<ID>.html. Siempre igual para los mismos datos: sin
-    fecha ni nada que cambie solo, asi no se reescribe si no cambio."""
+    fecha ni nada que cambie solo, asi no se reescribe si no cambio.
+    `tarjeta` es url_de_la_tarjeta(): con ella, la imagen es la tarjeta con
+    precio de ADVAPP; vacia, la foto (o la tarjeta general), como antes."""
     ide, destino = v['id'], v.get('destino') or v['id']
     titulo, linea = str(v['titulo']).strip(), str(v.get('linea') or '').strip()
-    foto, ancho, alto, propia = imagen_para(v.get('foto') or '', raiz)
+    tarjeta = tarjeta_de(v, tarjeta)
+    foto, ancho, alto, propia = imagen_para(v.get('foto') or '', raiz, pesada=bool(tarjeta))
     url_pagina = publica + 'p/' + ide + '.html'
-    url_foto = publica + foto
+    # (16/11/2026) La tarjeta con el precio y la hora la dibuja ADVAPP en el
+    # momento: un JPEG de 1200x630 para todas las filas, tengan o no foto
+    # propia. La foto propia sigue en el <img> del cuerpo: de ahi la lee ADVAPP.
+    if tarjeta:
+        url_imagen, ancho_imagen, alto_imagen = tarjeta + ide, 1200, 630
+    else:
+        url_imagen, ancho_imagen, alto_imagen = publica + foto, ancho, alto
     completo = titulo + (' · ' + linea if linea else '')
     ir = '../' + destino_del_link(v)
     # summary: la foto cuadrada, chica y al costado, como la dibujo la muestra.
-    # La tarjeta general (1200x630) va grande, como la de la portada.
-    tarjeta = 'summary' if propia else 'summary_large_image'
+    # La tarjeta general y la tarjeta con precio (1200x630) van grandes.
+    card = 'summary' if propia and not tarjeta else 'summary_large_image'
     # es-AR (05/11/2026, auditoria TG-11): como index.html y producto/
     L = ['<!doctype html>',
          '<html lang="es-AR">',
@@ -512,16 +570,29 @@ def armar_pagina(v, publica, raiz=RAIZ):
           '<meta property="og:title" content="%s">' % e(titulo)]
     if linea:
         L.append('<meta property="og:description" content="%s">' % e(linea))
-    L += ['<meta property="og:url" content="%s">' % e(url_pagina),
-          '<meta property="og:image" content="%s">' % e(url_foto),
-          '<meta property="og:image:width" content="%d">' % ancho,
-          '<meta property="og:image:height" content="%d">' % alto,
-          '<meta property="og:image:alt" content="%s">' % e(completo if propia else 'Catálogo Advance Tecno'),
-          '<meta name="twitter:card" content="%s">' % tarjeta,
+    if tarjeta:
+        # Sin og:url (16/11/2026): Facebook e Instagram lo toman como la
+        # direccion "de verdad" de la pagina y muestran la tarjeta que ya
+        # tienen guardada de esa direccion, aunque el link venga con el ?v=
+        # que le pone el boton Compartir justamente para que la armen de nuevo.
+        L += ['<meta property="og:image" content="%s">' % e(url_imagen),
+              '<meta property="og:image:type" content="image/jpeg">']
+        # El SKU de la fila cuando se armo la pagina. ADVAPP lo compara con el
+        # de esa fila hoy: si entre dos PUBLICAR el ID paso a ser otra version
+        # u otro producto (los IDs rotan), la tarjeta sale sin precio en vez
+        # de ponerle a este titulo el precio de otro.
+        L.append('<meta name="advance:sku" content="%s">' % e(str(v.get('sku') or '').strip()))
+    else:
+        L += ['<meta property="og:url" content="%s">' % e(url_pagina),
+              '<meta property="og:image" content="%s">' % e(url_imagen)]
+    L += ['<meta property="og:image:width" content="%d">' % ancho_imagen,
+          '<meta property="og:image:height" content="%d">' % alto_imagen,
+          '<meta property="og:image:alt" content="%s">' % e(completo if propia or tarjeta else 'Catálogo Advance Tecno'),
+          '<meta name="twitter:card" content="%s">' % card,
           '<meta name="twitter:title" content="%s">' % e(titulo)]
     if linea:
         L.append('<meta name="twitter:description" content="%s">' % e(linea))
-    L += ['<meta name="twitter:image" content="%s">' % e(url_foto)] + ICONOS + [
+    L += ['<meta name="twitter:image" content="%s">' % e(url_imagen)] + ICONOS + [
           # El cliente no se queda aca: va derecho a la ficha. WhatsApp no
           # corre JavaScript, asi que igual lee las etiquetas de arriba.
           # (29/09, revision) Con el "<" escapado: un "</script>" en el
@@ -614,6 +685,8 @@ def texto_generado(vistas, generado_en):
                        'vistas': {v['id']: {'titulo': v.get('titulo'), 'linea': v.get('linea') or '',
                                             'foto': v.get('foto') or '',
                                             'destino': v.get('destino') or v['id'],
+                                            # (16/11/2026) decide si la pagina lleva la tarjeta con precio
+                                            'sku': str(v.get('sku') or '').strip(),
                                             # el #p= entero que arma la pagina (13/10/2026)
                                             'ir': destino_del_link(v)}
                                   for v in vistas}},
@@ -638,7 +711,7 @@ def leer_indice(carpeta=CARPETA):
         return set()
 
 
-def aplicar(vistas, publica, carpeta=CARPETA, raiz=RAIZ, confirmar_bajas=False, generado_en=None):
+def aplicar(vistas, publica, carpeta=CARPETA, raiz=RAIZ, confirmar_bajas=False, generado_en=None, tarjeta=''):
     """Escribe p/ y devuelve cuantas paginas quedaron nuevas, cambiadas,
     iguales y borradas, si se freno el borrado y si cambio el indice.
     Un ID o un destino que no sirve de nombre de archivo levanta ValueError
@@ -653,7 +726,7 @@ def aplicar(vistas, publica, carpeta=CARPETA, raiz=RAIZ, confirmar_bajas=False, 
     os.makedirs(carpeta, exist_ok=True)
     limpiar_temporales(carpeta)
     antes = {f[:-5] for f in os.listdir(carpeta) if f.endswith('.html')}
-    hoy = {v['id']: armar_pagina(v, publica, raiz) for v in vistas}
+    hoy = {v['id']: armar_pagina(v, publica, raiz, tarjeta) for v in vistas}
     res = {'nuevas': 0, 'cambiadas': 0, 'iguales': 0, 'borradas': 0, 'frenadas': [], 'indice': False}
     for ide in sorted(hoy):
         if escribir_si_cambio(os.path.join(carpeta, ide + '.html'), hoy[ide]):
@@ -719,15 +792,28 @@ def main(argv):
         print('NO SE ARMARON: %s. p/ quedo como estaba.' % motivo)
         return 2
     vistas = datos['vistas']
+    tarjeta = url_de_la_tarjeta(src)
+    if not tarjeta:
+        print('  AVISO: las paginas salen con la foto en la imagen, sin la tarjeta con precio (%s).'
+              % ('TARJETA_CON_PRECIO esta en False' if not TARJETA_CON_PRECIO
+                 else 'ADVAPP_URL de index.html no es la del feed'))
     try:
         res = aplicar(vistas, publica, confirmar_bajas='--confirmar-bajas' in argv,
-                      generado_en=manifiesto.get('generado_en'))
+                      generado_en=manifiesto.get('generado_en'), tarjeta=tarjeta)
     except ValueError as ex:
         print('NO SE ARMARON: %s. p/ quedo como estaba.' % ex)
         return 2
     propias = sum(1 for v in vistas if imagen_para(v.get('foto') or '')[3])
-    print('  %d filas de ADVAPP (generado_en %s): %d con su foto propia y %d con la tarjeta general'
-          % (len(vistas), manifiesto.get('generado_en'), propias, len(vistas) - propias))
+    if tarjeta:
+        con = sum(1 for v in vistas if tarjeta_de(v, tarjeta))
+        print('  %d filas de ADVAPP (generado_en %s): %d con su foto propia y %d sin foto. La imagen de %d '
+              'es la tarjeta con precio que dibuja ADVAPP%s'
+              % (len(vistas), manifiesto.get('generado_en'), propias, len(vistas) - propias, con,
+                 '' if con == len(vistas) else '; %d van con la foto (filas escondidas por repetidas o sin SKU)'
+                 % (len(vistas) - con)))
+    else:
+        print('  %d filas de ADVAPP (generado_en %s): %d con su foto propia y %d con la tarjeta general'
+              % (len(vistas), manifiesto.get('generado_en'), propias, len(vistas) - propias))
     if len(vistas) != propias:
         print('  (esas son las filas cuya ficha muestra la foto de ADVAPP o ninguna).')
     print('  %d nuevas, %d cambiadas, %d sin cambios, %d borradas (filas que ADVAPP ya no trae).%s'
@@ -750,6 +836,7 @@ def main(argv):
 
 def probar():
     global CARPETA_FOTOS, EXT_FOTOS         # el caso de las fotos las cambia y las devuelve
+    global TARJETA_CON_PRECIO               # el caso del interruptor lo apaga y lo devuelve
     fallas = []
 
     def ok(c, txt):
@@ -828,6 +915,56 @@ def probar():
         h = armar_pagina(comillas, pub, tmp)
         ok('content="Apple MacBook Pro M5 14&quot;"' in h and '&lt;b&gt;' in h and '<b>' not in h,
            'las comillas de las pulgadas y los < no rompen el HTML')
+
+        # ---- (16/11/2026) La imagen es la tarjeta con el precio y la hora, de ADVAPP
+        tj = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-tarjeta&id='
+        ok(url_de_la_tarjeta("const ADVAPP_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web';\n") == tj,
+           'la direccion de la tarjeta sale de ADVAPP_URL: resource=tecno-tarjeta&id=')
+        ok(url_de_la_tarjeta("const ADVAPP_URL = '';\n") == '' and url_de_la_tarjeta('nada') == ''
+           and url_de_la_tarjeta("const ADVAPP_URL = 'https://otro.sitio/hoja.csv';\n") == ''
+           and url_de_la_tarjeta("const ADVAPP_URL = 'http://x/api/catalog?resource=tecno-web';\n") == '',
+           'con una ADVAPP_URL que no es la del feed no hay tarjeta (las paginas salen con la foto)')
+        prendida = TARJETA_CON_PRECIO
+        try:
+            TARJETA_CON_PRECIO = False
+            ok(url_de_la_tarjeta("const ADVAPP_URL = 'https://advapp-blond.vercel.app/api/catalog?resource=tecno-web';\n") == '',
+               'el interruptor: con TARJETA_CON_PRECIO en False no hay tarjeta aunque ADVAPP_URL sea la del feed')
+        finally:
+            TARJETA_CON_PRECIO = prendida
+        caso_sku = dict(caso, sku='CEL-APL-17P-256-ORG-ESIM')
+        h = armar_pagina(caso_sku, pub, tmp, tj)
+        ok(html.unescape(meta('og:image')) == tj + 'CEL-APP-068' and '&amp;id=CEL-APP-068"' in h,
+           'con ADVAPP, og:image es la tarjeta de ESA fila (con el & escapado)')
+        ok(meta('og:image:width') == '1200' and meta('og:image:height') == '630' and meta('og:image:type') == 'image/jpeg',
+           'de 1200 x 630, JPEG')
+        ok(meta('twitter:card') == 'summary_large_image' and meta('twitter:image') == meta('og:image'),
+           'grande, y la misma en twitter:image')
+        ok(meta('og:url') is None, 'sin og:url: con el, Instagram reusa la tarjeta guardada aunque el link traiga ?v=')
+        ok('<img src="../fotos/AT-0072-03.jpg" alt="Apple iPhone 17 Pro · 256GB · E-Sim · Orange" width="900" height="900">' in h,
+           'la foto propia sigue en el cuerpo: de ahi la lee ADVAPP')
+        ok(meta('og:title') == 'Apple iPhone 17 Pro' and meta('og:description') == '256GB · E-Sim · Orange'
+           and meta('robots') == 'noindex' and 'location.replace("../#p=CEL-APP-068&s=CEL-APL-17P-256-ORG-ESIM")' in h,
+           'el titulo, la version, el noindex y el destino (con su SKU de respaldo), igual que antes')
+        ok(not re.search(r'USD|\$\s*\d', h), 'y la pagina sigue sin decir un precio (lo dice la imagen)')
+        ok(meta('advance:sku') == 'CEL-APL-17P-256-ORG-ESIM',
+           'la pagina dice el SKU de su fila: ADVAPP no le pone el precio si ese ID paso a ser otra cosa')
+        for malo in ('', None, 'CEL APL/17P"'):
+            h = armar_pagina(dict(caso, sku=malo), pub, tmp, tj)
+            ok(meta('og:image') == pub + 'fotos/AT-0072-03.jpg' and meta('advance:sku') is None and meta('twitter:card') == 'summary',
+               'sin un SKU que sirva (%r) la fila no lleva la tarjeta con precio: va la foto' % (malo,))
+        h = armar_pagina(dict(sin, sku='GAF-RAY-049-SKU'), pub, tmp, tj)
+        ok(html.unescape(meta('og:image')) == tj + 'GAF-RAY-049' and '<img' not in h and GENERAL not in h
+           and meta('og:image:alt') == 'Apple iPhone 17 Pro',
+           'la fila sin foto propia tambien lleva la tarjeta con precio, y la pagina sigue sin imagen')
+        h = armar_pagina(dict(gem, sku='TAB-X-000'), pub, tmp, tj)
+        ok(meta('og:image') == pub + 'fotos/AT-0072-03.jpg' and meta('og:url') == pub + 'p/TAB-X-WIFIPEN.html'
+           and meta('twitter:card') == 'summary' and meta('advance:sku') is None,
+           'la fila escondida por repetida no lleva la tarjeta con precio (diria el suyo y la ficha, el de su gemela): va la foto')
+        h = armar_pagina(dict(caso_sku, foto='fotos/AT-0160.jpg'), pub, tmp, tj)
+        ok('<img src="../fotos/AT-0160.jpg" alt="Apple iPhone 17 Pro · 256GB · E-Sim · Orange" width="1500" height="1500">' in h,
+           'con la tarjeta, la foto pesada va entera en el cuerpo (la lee ADVAPP), no su copia chica')
+        h = armar_pagina(dict(caso, foto='fotos/AT-0160.jpg'), pub, tmp)
+        ok(meta('og:image') == pub + 'fotos/mini/AT-0160.jpg', 'y sin la tarjeta, la copia chica, como siempre')
 
         # p/: solo se reescribe lo que cambio, y las bajas con tope
         carpeta = os.path.join(tmp, 'p')
@@ -944,9 +1081,9 @@ def probar():
             gen = json.load(fh)
         ok(gen == {'generado_en': '2026-09-29T19:22:20.026Z',
                    'vistas': {'F-000': {'titulo': 'Apple iPhone 17 Pro', 'linea': '256GB · E-Sim · Orange',
-                                        'foto': 'fotos/AT-0072-03.jpg', 'destino': 'F-000', 'ir': '#p=F-000'},
+                                        'foto': 'fotos/AT-0072-03.jpg', 'destino': 'F-000', 'sku': '', 'ir': '#p=F-000'},
                               'F-001': {'titulo': 'Apple iPhone 17 Pro', 'linea': '512GB · Sim · Blue',
-                                        'foto': 'fotos/AT-0072-03.jpg', 'destino': 'F-001', 'ir': '#p=F-001'}}},
+                                        'foto': 'fotos/AT-0072-03.jpg', 'destino': 'F-001', 'sku': '', 'ir': '#p=F-001'}}},
            'p/_generado.json tiene el generado_en y los valores de cada vista con que se armo cada pagina')
         r = aplicar(vistas[:2], pub, c3, tmp, generado_en='2026-09-29T19:25:00.000Z')
         with io.open(os.path.join(c3, GENERADO), encoding='utf-8') as fh:
@@ -959,7 +1096,7 @@ def probar():
         aplicar([sin], pub, c3, tmp, confirmar_bajas=True)
         with io.open(os.path.join(c3, GENERADO), encoding='utf-8') as fh:
             gen = json.load(fh)
-        ok(gen['vistas'] == {'G-1': {'titulo': 'Apple iPhone 17 Pro', 'linea': '', 'foto': '', 'destino': 'G-1', 'ir': '#p=G-1'}}
+        ok(gen['vistas'] == {'G-1': {'titulo': 'Apple iPhone 17 Pro', 'linea': '', 'foto': '', 'destino': 'G-1', 'sku': '', 'ir': '#p=G-1'}}
            and gen['generado_en'] is None,
            'sin foto propia la foto va vacia, y el destino es el ID si la vista no trae otro')
 

@@ -21,8 +21,9 @@
 //      cada cinco de las demas) y tiene que ser la misma; y que este en
 //      fotos/indice.json;
 //   4. cada pagina publicada: og:title, og:image absoluta (la tarjeta con precio
-//      de ADVAPP, de 1200 x 630 y sin og:url; con TARJETA_CON_PRECIO apagado
-//      en vista-previa.py, la foto propia o la tarjeta general, con og:url),
+//      de ADVAPP, de 1200 x 630; con TARJETA_CON_PRECIO apagado en
+//      vista-previa.py, la foto propia o la tarjeta general), og:url y
+//      og:description siempre (WhatsApp las pide para armar la vista previa),
 //      twitter:card acorde a la
 //      imagen, noindex, redireccion y link iguales hacia una ficha que abre,
 //      sin precio; cada ID de p/indice.json con su archivo; y que ADVAPP haga
@@ -222,14 +223,20 @@ async function correrPruebas(){
     try{ mismo = new URL(TARJETA).origin === new URL(ADVAPP_URL).origin; }catch(e){}
     ok(mismo, 'la tarjeta con precio se le pide al mismo ADVAPP que los productos', TARJETA);
   }
-  const mal = { titulo: [], imagen: [], url: [], card: [], robots: [], ir: [], abre: [], precio: [], medidas: [] };
+  const mal = { titulo: [], imagen: [], url: [], card: [], robots: [], ir: [], abre: [], precio: [], medidas: [], whatsapp: [] };
   const leidas = new Map();
   for(const [id, t] of paginas){
     const d = new DOMParser().parseFromString(t, 'text/html');
     const meta = k => { const e = d.querySelector(`meta[property="${k}"], meta[name="${k}"]`); return e ? e.getAttribute('content') : null; };
     // `foto`: la foto propia del cuerpo ("fotos/AT-0136.jpg"), de donde la lee ADVAPP
     const cuerpo = d.querySelector('main > img');
-    const pag = { titulo: meta('og:title'), linea: meta('og:description') || '', imagen: meta('og:image') || '',
+    // La linea: la de advance:linea si la pagina la trae (16/11/2026: el
+    // og:description de una fila sin version ni color es un relleno, WhatsApp
+    // la pide no vacia); si no, el og:description, salvo que sea el relleno
+    const SIN_LINEA = 'Catálogo Advance Tecno';
+    const lineaDe = () => meta('advance:linea') !== null ? meta('advance:linea') : (meta('og:description') === SIN_LINEA ? '' : meta('og:description') || '');
+    if(!meta('og:description') || !meta('og:url')) mal.whatsapp.push(id);
+    const pag = { titulo: meta('og:title'), linea: lineaDe(), imagen: meta('og:image') || '',
                   foto: cuerpo ? String(cuerpo.getAttribute('src') || '').replace(/^\.\.\//, '') : '',
                   sku: meta('advance:sku') || '',
                   ir: '#' + ((/location\.replace\("\.\.\/#([^"]+)"\)/.exec(t) || [])[1] || '') };
@@ -250,7 +257,7 @@ async function correrPruebas(){
       if(pag.foto && (!(pag.foto.startsWith(CARPETA_FOTOS) && pag.foto.endsWith(EXT_FOTOS)) || pag.foto.startsWith(CARPETA_MINIS)))
         mal.imagen.push(id + ': foto ' + pag.foto);
       if(meta('og:image:width') !== '1200' || meta('og:image:height') !== '630') mal.medidas.push(id);
-      if(meta('og:url') !== null) mal.url.push(id + ': ' + meta('og:url'));
+      if(meta('og:url') !== PUBLICA + 'p/' + id + '.html') mal.url.push(id + ': ' + meta('og:url'));
       if(meta('twitter:card') !== 'summary_large_image' || meta('twitter:image') !== pag.imagen)
         mal.card.push(id + ': ' + meta('twitter:card'));
     } else {
@@ -278,11 +285,12 @@ async function correrPruebas(){
     if(conPrecio(d.body ? d.body.textContent : '') || conPrecio(pag.titulo) || conPrecio(pag.linea)) mal.precio.push(id);
   }
   ok(!mal.titulo.length, 'cada pagina tiene og:title', ejemplos(mal.titulo));
+  ok(!mal.whatsapp.length, 'y og:description y og:url, no vacias: WhatsApp las pide para armar la vista previa (16/11/2026: sin og:url el link llego sin nada)', ejemplos(mal.whatsapp));
   if(TARJETA){
     const gemelas = [...leidas.values()].filter(x => !x.conTarjeta).length;
     ok(!mal.imagen.length, 'og:image es la tarjeta con precio de ADVAPP para ESE ID, con el SKU de su fila, y la foto del cuerpo es la propia, entera', ejemplos(mal.imagen));
     ok(!mal.medidas.length, 'de 1200 x 630', ejemplos(mal.medidas));
-    ok(!mal.url.length, 'sin og:url (con el, Instagram reusa la tarjeta guardada aunque el link traiga ?v=)', ejemplos(mal.url));
+    ok(!mal.url.length, 'og:url es la pagina misma, sin el ?v=', ejemplos(mal.url));
     ok(!mal.card.length, 'twitter:card: summary_large_image, con la misma imagen', ejemplos(mal.card));
     if(gemelas) info(gemelas + ' pagina(s) van con la foto, sin la tarjeta con precio (filas escondidas por repetidas o sin SKU)');
   } else {

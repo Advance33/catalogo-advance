@@ -590,9 +590,10 @@ def armar_pagina(v, publica, raiz=RAIZ, tarjeta=''):
         # u otro producto (los IDs rotan), la tarjeta sale sin precio en vez
         # de ponerle a este titulo el precio de otro.
         L.append('<meta name="advance:sku" content="%s">' % e(str(v.get('sku') or '').strip()))
-        # La version y el color de verdad, vacia si la fila no tiene: es la
-        # que ADVAPP escribe en el dibujo (el og:description puede ser el relleno)
-        L.append('<meta name="advance:linea" content="%s">' % e(linea))
+    # La version y el color de verdad, vacia si la fila no tiene. Va en todas:
+    # quien lee la pagina (ADVAPP para el dibujo, las pruebas) no tiene que
+    # adivinar si el og:description es la linea o el relleno
+    L.append('<meta name="advance:linea" content="%s">' % e(linea))
     L += ['<meta property="og:image:width" content="%d">' % ancho_imagen,
           '<meta property="og:image:height" content="%d">' % alto_imagen,
           '<meta property="og:image:alt" content="%s">' % e(completo if propia or tarjeta else 'Catálogo Advance Tecno'),
@@ -901,7 +902,7 @@ def probar():
         ok('og:image" content="%s%s"' % (pub, GENERAL) in h and 'summary_large_image' in h and '<img' not in h,
            'sin foto propia: la tarjeta general, grande, y la pagina sin imagen')
         ok(meta('og:description') == SIN_LINEA and meta('twitter:description') == SIN_LINEA
-           and meta('description') is None and '<p>' not in h,
+           and meta('advance:linea') == '' and meta('description') is None and '<p>' not in h,
            'sin linea, og:description lleva el relleno (WhatsApp la pide), y nada a la vista ni en la descripcion de la pagina')
 
         gem = dict(caso, id='TAB-X-WIFIPEN', destino='TAB-X-CELLPEN')

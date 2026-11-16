@@ -230,13 +230,11 @@ async function correrPruebas(){
     const meta = k => { const e = d.querySelector(`meta[property="${k}"], meta[name="${k}"]`); return e ? e.getAttribute('content') : null; };
     // `foto`: la foto propia del cuerpo ("fotos/AT-0136.jpg"), de donde la lee ADVAPP
     const cuerpo = d.querySelector('main > img');
-    // La linea: la de advance:linea si la pagina la trae (16/11/2026: el
-    // og:description de una fila sin version ni color es un relleno, WhatsApp
-    // la pide no vacia); si no, el og:description, salvo que sea el relleno
-    const SIN_LINEA = 'Catálogo Advance Tecno';
-    const lineaDe = () => meta('advance:linea') !== null ? meta('advance:linea') : (meta('og:description') === SIN_LINEA ? '' : meta('og:description') || '');
-    if(!meta('og:description') || !meta('og:url')) mal.whatsapp.push(id);
-    const pag = { titulo: meta('og:title'), linea: lineaDe(), imagen: meta('og:image') || '',
+    // La linea es la de advance:linea (16/11/2026): el og:description de una
+    // fila sin version ni color es un relleno, porque WhatsApp la pide no vacia
+    if(!meta('og:description') || meta('advance:linea') === null) mal.whatsapp.push(id);
+    if(meta('og:url') !== PUBLICA + 'p/' + id + '.html') mal.url.push(id + ': ' + meta('og:url'));
+    const pag = { titulo: meta('og:title'), linea: meta('advance:linea') !== null ? meta('advance:linea') : meta('og:description') || '', imagen: meta('og:image') || '',
                   foto: cuerpo ? String(cuerpo.getAttribute('src') || '').replace(/^\.\.\//, '') : '',
                   sku: meta('advance:sku') || '',
                   ir: '#' + ((/location\.replace\("\.\.\/#([^"]+)"\)/.exec(t) || [])[1] || '') };
@@ -257,14 +255,12 @@ async function correrPruebas(){
       if(pag.foto && (!(pag.foto.startsWith(CARPETA_FOTOS) && pag.foto.endsWith(EXT_FOTOS)) || pag.foto.startsWith(CARPETA_MINIS)))
         mal.imagen.push(id + ': foto ' + pag.foto);
       if(meta('og:image:width') !== '1200' || meta('og:image:height') !== '630') mal.medidas.push(id);
-      if(meta('og:url') !== PUBLICA + 'p/' + id + '.html') mal.url.push(id + ': ' + meta('og:url'));
       if(meta('twitter:card') !== 'summary_large_image' || meta('twitter:image') !== pag.imagen)
         mal.card.push(id + ': ' + meta('twitter:card'));
     } else {
       const propia = pag.imagen.startsWith(PUBLICA + CARPETA_FOTOS) && pag.imagen.endsWith(EXT_FOTOS);
       if(!propia && pag.imagen !== general) mal.imagen.push(id + ': ' + pag.imagen);
       if(!(Number(meta('og:image:width')) > 0 && Number(meta('og:image:height')) > 0)) mal.medidas.push(id);
-      if(meta('og:url') !== PUBLICA + 'p/' + id + '.html') mal.url.push(id + ': ' + meta('og:url'));
       if(meta('twitter:card') !== (propia ? 'summary' : 'summary_large_image') || meta('twitter:image') !== pag.imagen)
         mal.card.push(id + ': ' + meta('twitter:card'));
     }
@@ -285,19 +281,18 @@ async function correrPruebas(){
     if(conPrecio(d.body ? d.body.textContent : '') || conPrecio(pag.titulo) || conPrecio(pag.linea)) mal.precio.push(id);
   }
   ok(!mal.titulo.length, 'cada pagina tiene og:title', ejemplos(mal.titulo));
-  ok(!mal.whatsapp.length, 'y og:description y og:url, no vacias: WhatsApp las pide para armar la vista previa (16/11/2026: sin og:url el link llego sin nada)', ejemplos(mal.whatsapp));
+  ok(!mal.whatsapp.length, 'y og:description, no vacia (WhatsApp la pide para armar la vista previa), con la linea de verdad en advance:linea', ejemplos(mal.whatsapp));
+  ok(!mal.url.length, 'og:url es la pagina misma, sin el ?v= (WhatsApp lo pide: el 16/11, sin el, el link llego sin nada)', ejemplos(mal.url));
   if(TARJETA){
     const gemelas = [...leidas.values()].filter(x => !x.conTarjeta).length;
     ok(!mal.imagen.length, 'og:image es la tarjeta con precio de ADVAPP para ESE ID, con el SKU de su fila, y la foto del cuerpo es la propia, entera', ejemplos(mal.imagen));
     ok(!mal.medidas.length, 'de 1200 x 630', ejemplos(mal.medidas));
-    ok(!mal.url.length, 'og:url es la pagina misma, sin el ?v=', ejemplos(mal.url));
     ok(!mal.card.length, 'twitter:card: summary_large_image, con la misma imagen', ejemplos(mal.card));
     if(gemelas) info(gemelas + ' pagina(s) van con la foto, sin la tarjeta con precio (filas escondidas por repetidas o sin SKU)');
   } else {
     info('las paginas van con la foto en el og:image, sin la tarjeta con precio (TARJETA_CON_PRECIO de vista-previa.py)');
     ok(!mal.imagen.length, 'og:image es una direccion completa: la foto propia o la tarjeta general', ejemplos(mal.imagen));
     ok(!mal.medidas.length, 'con su ancho y alto', ejemplos(mal.medidas));
-    ok(!mal.url.length, 'og:url es la pagina misma', ejemplos(mal.url));
     ok(!mal.card.length, 'twitter:card: summary con la foto cuadrada, summary_large_image con la general', ejemplos(mal.card));
   }
   ok(!mal.robots.length, 'todas piden noindex', ejemplos(mal.robots));

@@ -21,6 +21,11 @@
 //               planes ni porcentajes; nada de demoras (va por WhatsApp). Y
 //               «Pedir cotizacion» para lo que no esta; si pasa por debajo de
 //               un flotante (WhatsApp o Marian), los dos se esconden (04/11).
+//               Las tarjetas son como las del catalogo (Benja 16/11: «es muy
+//               grande… no entra en la pantalla de la Mac. Imaginate alguien
+//               en un celu»): la foto arriba, angostas y en grilla, siempre al
+//               lado de los pasos; cuatro por fila en la compu y dos en el
+//               celular, sin salirse de costado a ningun ancho.
 //   WhatsApp    «Hola! Me interesa … (ENC-0001), por encargo, a USD 470.» y
 //               la medicion lo anota con desde "encargo" y el codigo.
 //   la carga    si ADVAPP falla, el bloque no esta; si llega, se suma solo.
@@ -70,6 +75,7 @@ async function correrPruebas(){
     probarElArchivo();
     await probarLaPortada();
     await probarLaCarga();
+    await probarLosAnchos();
   } finally {
     window.fetch = f0;
     ENCARGO = e0; FIRMA_EXTRAS = ''; pintarExtras();
@@ -100,6 +106,49 @@ function probarElArchivo(){
   ok(dm && dm.productos.map(p => p.id).join(',') === 'ENC-0001,ENC-0002,ENC-0003' && dm.productos[0].nombre === 'Sony WH-1000XM5',
      'sin codigo ENC-####, sin marca, sin nombre, sin precio entero o repetido: ese producto no sale', dm && dm.productos.map(p => p.id).join(','));
   ok(validarEncargo({ ...enCopia(), seccion: '' }).seccion === 'Metodología de encargo', 'sin titulo, «Metodología de encargo»');
+}
+
+/* ---- El celular y las pantallas mas chicas (Benja 16/11/2026: «Imaginate alguien en un celu») ----
+   La pagina de verdad en un marco de ese ancho, con cuatro productos de
+   ejemplo: nada se sale de costado y las tarjetas van de a varias por fila. */
+async function enMarco(ancho, alto){
+  const f = document.createElement('iframe');
+  f.style.cssText = `width:${ancho}px;height:${alto}px;border:0;position:absolute;left:-9999px;top:0`;
+  f.src = 'index.html';
+  document.body.appendChild(f);
+  for(let i = 0; i < 400; i++){
+    try{ if(f.contentWindow.eval('typeof MODELOS !== "undefined" && MODELOS.length && FUENTE && typeof pintarExtras === "function"')) break; }catch(e){}
+    await enDormir(100);
+  }
+  return f;
+}
+async function probarLosAnchos(){
+  const cuatro = enCopia();
+  cuatro.productos.push({ id: 'ENC-0004', nombre: 'Pioneer DJ DDJ-FLX4 Controlador de DJ de 2 canales', marca: 'Pioneer', detalle: '', garantia: '', precio_usd: 680, foto: '', link: 'https://tienda.example/ddj' });
+  // Un solo marco, que se va cambiando de ancho (cargar la pagina cuatro veces no entra en el tiempo de la tanda)
+  const f = await enMarco(390, 900);
+  const w = f.contentWindow, doc = f.contentDocument;
+  try{
+    w.eval('ENCARGO = validarEncargo(' + JSON.stringify(cuatro) + '); FIRMA_EXTRAS = ""; if(!enPortada()) irAlMenu(); pintarExtras();');
+    // [ancho, cuantas por fila]
+    for(const [ancho, porFila] of [[390, 2], [360, 2], [768, 4], [1280, 4]]){
+      f.style.width = ancho + 'px';
+      await enDormir(250);
+      const s = doc.getElementById('encargo');
+      if(!s || w.innerWidth !== ancho){ ok(false, 'a ' + ancho + ' px la seccion esta', 'marco de ' + w.innerWidth); continue; }
+      const rs = s.getBoundingClientRect(), cs = [...s.querySelectorAll('.en-prod')].map(c => c.getBoundingClientRect());
+      const fuera = [...s.querySelectorAll('*')].filter(el => { const r = el.getBoundingClientRect(); return r.width && (r.right > rs.right + 0.5 || r.left < rs.left - 0.5); });
+      const enLaPrimera = cs.filter(r => Math.abs(r.top - cs[0].top) < 1).length;
+      ok(doc.documentElement.scrollWidth <= ancho && rs.right <= ancho && !fuera.length,
+         'a ' + ancho + ' px nada se sale de costado: ni la pagina, ni la seccion, ni lo de adentro',
+         'pagina ' + doc.documentElement.scrollWidth + ' · seccion hasta ' + Math.round(rs.right) + (fuera.length ? ' · se sale: ' + fuera.slice(0, 3).map(el => el.className).join(', ') : ''));
+      ok(cs.length === 4 && enLaPrimera === porFila && cs.every(r => r.width >= 130 && r.width <= 280),
+         'a ' + ancho + ' px las tarjetas van de a ' + porFila + ' por fila', enLaPrimera + ' por fila, de ' + Math.round(cs[0].width) + ' px · seccion de ' + Math.round(rs.height) + ' px de alto');
+      // Los botones de cada tarjeta entran enteros en su tarjeta
+      const cortados = [...s.querySelectorAll('.en-prod')].filter(c => [...c.querySelectorAll('.en-consultar, .en-tienda, .en-precio')].some(b => b.scrollWidth > b.clientWidth + 1));
+      ok(!cortados.length, 'a ' + ancho + ' px el precio y los dos botones entran enteros en la tarjeta', cortados.map(c => c.dataset.enc).join(','));
+    }
+  } finally { f.remove(); }
 }
 
 /* ---- La portada ---- */
@@ -141,9 +190,23 @@ async function probarLaPortada(){
        : gana.length === 1 && !/aduana incluid/i.test(enTxt(sec))),
      'lo que gana el cliente; el precio final con viaje y aduana siempre con la aclaracion del peso (Benja 04/11)', gana.join(' / '));
   const cards = [...sec.querySelectorAll('.en-prod')];
-  ok(cards.map(c => c.dataset.enc).join(',') === 'ENC-0001,ENC-0002,ENC-0003' && !sec.classList.contains('muchos'),
+  ok(cards.map(c => c.dataset.enc).join(',') === 'ENC-0001,ENC-0002,ENC-0003' &&
+     sec.querySelector('.en-prods').getBoundingClientRect().left >= sec.querySelector('.en-info').getBoundingClientRect().right,
      'una tarjeta por producto, en el orden de ADVAPP, al lado de los pasos');
   const [sony, kindle, garmin] = cards;
+  /* Las tarjetas, como las del catalogo (Benja 16/11/2026: «es muy grande… se
+     fue a horizontal y es súper grande, no entra en la pantalla de la Mac»):
+     la foto arriba, angostas y en una fila; antes eran acostadas y de 420 px */
+  {
+    const ri = sony.querySelector('.en-img').getBoundingClientRect(), rd = sony.querySelector('.en-datos').getBoundingClientRect();
+    const cajas = cards.map(c => c.getBoundingClientRect());
+    ok(ri.bottom <= rd.top + 1 && Math.abs(ri.left - rd.left) < 12 &&
+       cajas.every(r => r.width >= 150 && r.width <= 280 && Math.abs(r.top - cajas[0].top) < 1 && Math.abs(r.height - cajas[0].height) < 1),
+       'las tarjetas son como las del catalogo: la foto arriba, angostas, en una fila y parejas de alto (Benja 16/11)',
+       cajas.map(r => Math.round(r.width) + 'x' + Math.round(r.height)).join(' · '));
+    const filas = cards.map(c => c.querySelector('.en-pie').getBoundingClientRect().top);
+    ok(filas.every(y => Math.abs(y - filas[0]) < 1), 'y el precio queda a la misma altura en todas, tengan o no detalle', filas.map(Math.round).join(' · '));
+  }
   ok(enTxt(sony.querySelector('.en-marca')) === 'Sony' && enTxt(sony.querySelector('.en-nom')) === 'Sony WH-1000XM5' &&
      enTxt(sony.querySelector('.en-det')) === 'Auriculares inalámbricos con cancelación de ruido · Negro' &&
      enTxt(sony.querySelector('.en-precio')) === 'USD 470' && enTxt(sony.querySelector('.en-pie small')) === 'precio final',
@@ -153,16 +216,16 @@ async function probarLaPortada(){
      pub.target === '_blank' && /\bnoopener\b/.test(pub.rel) && /\bnoreferrer\b/.test(pub.rel) && /\bnofollow\b/.test(pub.rel) &&
      pub.closest('.en-acciones') && (!WHATSAPP || pub.previousElementSibling === sony.querySelector('a.en-consultar')) &&
      !kindle.querySelector('.en-tienda') && !garmin.querySelector('.en-tienda'),
-     'con link, «Ver en la tienda ↗» al lado del Consultar, en otra pestaña; sin link (o con uno que no sirve), nada (Benja 05/11)', pub && pub.outerHTML.slice(0, 120));
+     'con link, «Ver en la tienda ↗» junto al Consultar, en otra pestaña; sin link (o con uno que no sirve), nada (Benja 05/11)', pub && pub.outerHTML.slice(0, 120));
   ok(cards.every(c => c.querySelectorAll('a.en-consultar').length === (WHATSAPP ? 1 : 0) && !c.querySelector('.en-tienda[href*="wa.me"]')),
      'el Consultar sigue siendo uno solo por tarjeta');
   // Los botones, chicos (Benja 05/11: «el botón de consultar de WhatsApp es muy grande»)
   const cons = sony.querySelector('a.en-consultar'), caja = sony.querySelector('.en-pie');
   if(cons){
     const rc = cons.getBoundingClientRect(), rt = pub.getBoundingClientRect(), rp = caja.getBoundingClientRect(), rs = sony.getBoundingClientRect();
-    ok(rc.height >= 38 && rc.height <= 46 && Math.abs(rt.height - rc.height) < 1.5 && rc.height <= rp.height &&
-       rc.width < rs.width / 2 && rt.width < rs.width / 2,
-       'Consultar y «Ver en la tienda» de alto normal (40 px) y del ancho del texto: no compiten con el precio',
+    ok(rc.height >= 32 && rc.height <= 40 && Math.abs(rt.height - rc.height) < 1.5 && rc.height <= rp.height &&
+       rt.top >= rc.bottom && Math.abs(rc.width - rt.width) < 1.5 && rc.right <= rs.right && rt.right <= rs.right,
+       'Consultar y «Ver en la tienda», bajitos (34 px) y uno debajo del otro, del ancho de la tarjeta: no compiten con el precio',
        `Consultar ${Math.round(rc.width)}x${Math.round(rc.height)} · tienda ${Math.round(rt.width)}x${Math.round(rt.height)} · precio ${Math.round(rp.height)} · tarjeta ${Math.round(rs.width)}`);
   }
   ok(cards.every(c => !c.querySelector('.en-id') && !/ENC-\d/.test(enTxt(c))),
@@ -206,12 +269,20 @@ async function probarLaPortada(){
     TC = tc0; FIRMA_EXTRAS = ''; pintarExtras();
   }
 
-  // Con mas de 3, los productos pasan abajo y a lo ancho
-  const cuatro = enCopia();
-  cuatro.productos.push({ id: 'ENC-0004', nombre: 'Otro', marca: 'Bose', detalle: '', garantia: '', precio_usd: 300, foto: '' });
-  ENCARGO = validarEncargo(cuatro); FIRMA_EXTRAS = ''; pintarExtras();
-  ok(document.getElementById('encargo')?.classList.contains('muchos') && document.querySelectorAll('#encargo .en-prod').length === 4,
-     'con mas de 3 productos, el bloque los pone abajo y a lo ancho (.muchos)');
+  /* Con mas productos, lo mismo: al lado de los pasos y en grilla (16/11/2026;
+     antes, con mas de 3, pasaban abajo, acostados y a todo el ancho) */
+  const mas = n => { const d = enCopia(); for(let i = 4; i <= n; i++) d.productos.push({ id: 'ENC-00' + String(i).padStart(2, '0'),
+    nombre: i % 2 ? 'Pioneer DJ DDJ-FLX4 Controlador de DJ de 2 canales' : 'Otro', marca: i % 2 ? 'Pioneer' : 'Bose', detalle: '', garantia: '', precio_usd: 300 + i, foto: '' }); return d; };
+  for(const n of [4, 12]){
+    ENCARGO = validarEncargo(mas(n)); FIRMA_EXTRAS = ''; pintarExtras();
+    const s = document.getElementById('encargo'), cs = [...s.querySelectorAll('.en-prod')].map(c => c.getBoundingClientRect());
+    const filas = new Set(cs.map(r => Math.round(r.top))).size, rs = s.getBoundingClientRect();
+    ok(cs.length === n && !s.classList.contains('muchos') && cs.every(r => r.width >= 150 && r.width <= 280 && r.right <= rs.right + 0.5) &&
+       s.querySelector('.en-prods').getBoundingClientRect().left >= s.querySelector('.en-info').getBoundingClientRect().right &&
+       (n === 4 ? filas === 1 : filas > 1 && filas <= 4) && document.documentElement.scrollWidth <= innerWidth,
+       'con ' + n + ' productos siguen al lado de los pasos, angostas y en grilla (' + filas + ' fila' + (filas > 1 ? 's' : '') + '), sin salirse de costado',
+       cs.length + ' tarjetas de ' + Math.round(cs[0].width) + ' px · seccion de ' + Math.round(rs.height) + ' px de alto');
+  }
   ENCARGO = validarEncargo(enCopia()); FIRMA_EXTRAS = ''; pintarExtras();
   if(!WHATSAPP){ info('sin WhatsApp: no hay botones'); return; }
   const sec2 = document.getElementById('encargo');

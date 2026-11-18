@@ -398,6 +398,9 @@ async function correrPruebas(){
   ok(fotoDeAdvapp({ color: 'Black/White', codigoVar: '', codigo: '',
                     fotosAdvapp: fotosDeLosSkus('[{"sku":"A","fotos":["https://x/a.jpg"]},{"sku":"B","fotos":["https://x/b.jpg"]}]') }, 'White') === '',
      'con dos SKUs sin codigo AT no elige ninguna foto');
+  ok(fotoDeAdvapp({ color: 'Black', codigoVar: '', codigo: '',
+                    fotosAdvapp: fotosDeLosSkus('[{"sku":"A","at":"AT-0001-01","fotos":["https://x/a.jpg"]},{"sku":"B","at":null,"fotos":["https://x/b.jpg"]}]') }, 'Black') === 'https://x/a.jpg',
+     'una fila con un SKU con codigo y otro sin codigo sigue con la foto del que lo tiene');
   ok(fotosDeLosSkus('[{"sku":"X","at":"at-0001-01","fotos":["javascript:alert(1)","https://x/y"]}]')['AT-0001-01'] === undefined,
      'solo se aceptan links http(s) en la primera foto de cada SKU');
 }

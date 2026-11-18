@@ -1268,7 +1268,8 @@ def variante_de_la_columna(fila, codigo, color, idx, propios):
 def foto_de_advapp(fila, propios):
     """La foto de ADVAPP que la web usa de respaldo para la portada. Copia de
     fotoDeAdvapp() en index.html: el color se ubica por su posicion en
-    CODIGO_VAR y esa variante por el `at` de la columna SKUS. '' si no hay.
+    CODIGO_VAR y esa variante por el `at` de la columna SKUS (sin `at`, la fila
+    de un unico SKU va por ese SKU). '' si no hay.
     Sirve para separar, en los informes, la ficha que el cliente ve con el
     logo de la que ve con una foto que nadie de aca miro."""
     try:
@@ -1276,8 +1277,11 @@ def foto_de_advapp(fila, propios):
     except ValueError:
         return ''
     fotos = {}
-    for s in skus if isinstance(skus, list) else []:
+    lista = skus if isinstance(skus, list) else []
+    for s in lista:
         at = str((s or {}).get('at') or '').strip().upper() if isinstance(s, dict) else ''
+        if not at and isinstance(s, dict) and len(lista) == 1:
+            at = str(s.get('sku') or '').strip().upper()
         lst = (s or {}).get('fotos') if isinstance(s, dict) else None
         url = str(lst[0] or '') if isinstance(lst, list) and lst else ''
         if at and url.startswith('http') and at not in fotos:

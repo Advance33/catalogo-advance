@@ -8168,16 +8168,18 @@ function monturaDeLosSkus(txt){
 /* Las fotos de ADVAPP de una fila, por codigo de variante:
    { 'AT-0065-02': 'https://lh3.googleusercontent.com/…' }. Solo la primera de
    cada SKU: galeria todavia no hay.
-   Lo que nace con el OK de ADVAPP no tiene codigo AT y va por su SKU (18/11/2026:
-   el iPhone Duo y 86 productos mas salian "sin imagen" con la foto cargada).
-   fotoDeAdvapp sigue sin adivinar: sin codigo, solo una fila de un unico SKU. */
+   Lo que nace con el OK de ADVAPP no tiene codigo AT: si la fila trae un unico
+   SKU, la foto va por ese SKU (18/11/2026: el iPhone Duo y 86 productos mas
+   salian "sin imagen" con la foto cargada). Con varios SKU sin codigo no se
+   sabe cual es cual y no va ninguna. */
 function fotosDeLosSkus(txt){
   const salida = {};
   let lista;
   try{ lista = JSON.parse(txt || '[]'); }catch{ return salida; }
   if(!Array.isArray(lista)) return salida;
   for(const s of lista){
-    const at  = String((s && (s.at || s.sku)) || '').trim().toUpperCase();
+    const at  = String((s && s.at) || '').trim().toUpperCase()
+             || (lista.length === 1 ? String((s && s.sku) || '').trim().toUpperCase() : '');
     const url = urlFoto(Array.isArray(s && s.fotos) ? String(s.fotos[0] || '') : '');
     if(at && url && !salida[at]) salida[at] = url;
   }
@@ -8188,7 +8190,8 @@ function fotosDeLosSkus(txt){
    Un usado de la sección se carga en ADVAPP con las fotos del equipo (frente,
    dorso, batería...) y llega sin código AT: no hay un archivo en fotos/ por
    cada equipo, que se vende una sola vez. fotosDeLosSkus se queda sólo con
-   las que tienen `at` y una por SKU, que es lo que sirve para lo nuevo; acá
+   una por SKU, con `at` o de una fila de un único SKU, que es lo que sirve
+   para lo nuevo; acá
    van todas, sin pedir `at`. Sólo para una fila usada (pareceUsado, la misma
    regla que rubroDelUsado): en lo nuevo devuelve [] y sus fotos se resuelven
    igual que siempre. La primera es la de la tarjeta (si no tiene archivo

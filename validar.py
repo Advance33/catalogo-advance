@@ -970,10 +970,12 @@ def foto_de_advapp_del_color(f, color, propios):
     except ValueError:
         return ''
     fotos = {}
-    for s in skus if isinstance(skus, list) else []:
+    lista = skus if isinstance(skus, list) else []
+    for s in lista:
         if not isinstance(s, dict):
             continue
-        at = str(s.get('at') or '').strip().upper()
+        # Sin codigo AT, la fila de un unico SKU va por ese SKU (fotosDeLosSkus).
+        at = str(s.get('at') or '').strip().upper() or (str(s.get('sku') or '').strip().upper() if len(lista) == 1 else '')
         lst = s.get('fotos')
         url = str(lst[0] or '') if isinstance(lst, list) and lst else ''
         if at and url.startswith('http') and at not in fotos:

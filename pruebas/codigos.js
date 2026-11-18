@@ -116,7 +116,8 @@ function correrPruebas(){
     const porCodigo = [...INDICE_FOTOS].filter(n => /^AT-\d{4}(-\d{2})?\./.test(n));
     ok(porCodigo.length > 0, 'hay fotos con nombre de codigo en la carpeta', porCodigo.length);
     if(porCodigo.length){
-      const conFoto = PRODUCTOS.filter(p => p.imagen);
+      // Lo que no tiene codigo AT muestra la foto de su SKU en ADVAPP (18/11/2026).
+      const conFoto = PRODUCTOS.filter(p => p.imagen && p.codigo);
       const viejas = conFoto.filter(p => !/AT-\d{4}/.test(decodeURIComponent(p.imagen)));
       ok(viejas.length === 0, 'y todas las portadas usan una de esas',
          viejas.slice(0, 3).map(p => p.id + ' -> ' + p.imagen.split('/').pop()).join(' | ')
@@ -138,6 +139,8 @@ function correrPruebas(){
       for(const u of fotosDeColor(p, c)){
         revisados++;
         const n = decodeURIComponent(u.split('/').pop().split('?')[0]).replace(EXT_FOTOS, '');
+        // La foto de ADVAPP de una fila de un unico SKU es la de ese color, aunque el archivo se llame como el SKU.
+        if(Object.values(p.fotosAdvapp || {}).includes(u)) continue;
         if(/^AT-\d{4}$/.test(n) || n === p.sku || n === p.id) generales.push(p.id + ' -> ' + n);
       }
     }

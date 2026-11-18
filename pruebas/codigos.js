@@ -116,9 +116,11 @@ function correrPruebas(){
     const porCodigo = [...INDICE_FOTOS].filter(n => /^AT-\d{4}(-\d{2})?\./.test(n));
     ok(porCodigo.length > 0, 'hay fotos con nombre de codigo en la carpeta', porCodigo.length);
     if(porCodigo.length){
-      // La foto de ADVAPP de una fila de un unico SKU no lleva el codigo en el nombre (18/11/2026).
-      const deAdvapp = p => Object.values(p.fotosAdvapp || {}).some(u => fotoChica(u) === p.imagen);
-      const conFoto = PRODUCTOS.filter(p => p.imagen && !deAdvapp(p));
+      // La foto de ADVAPP de un SKU sin codigo AT no lleva el codigo en el nombre (18/11/2026);
+      // la puede heredar una hermana, por eso se miran las de todas las filas.
+      const porSku = new Set(PRODUCTOS.flatMap(p => Object.entries(p.fotosAdvapp || {})
+        .filter(([k]) => !/^AT-/.test(k)).map(([, u]) => fotoChica(u))));
+      const conFoto = PRODUCTOS.filter(p => p.imagen && !porSku.has(p.imagen));
       const viejas = conFoto.filter(p => !/AT-\d{4}/.test(decodeURIComponent(p.imagen)));
       ok(viejas.length === 0, 'y todas las portadas usan una de esas',
          viejas.slice(0, 3).map(p => p.id + ' -> ' + p.imagen.split('/').pop()).join(' | ')
@@ -140,8 +142,8 @@ function correrPruebas(){
       for(const u of fotosDeColor(p, c)){
         revisados++;
         const n = decodeURIComponent(u.split('/').pop().split('?')[0]).replace(EXT_FOTOS, '');
-        // La foto de ADVAPP de una fila de un unico SKU es la de ese color, aunque el archivo se llame como el SKU.
-        if(Object.values(p.fotosAdvapp || {}).includes(u)) continue;
+        // La foto de un SKU sin codigo AT es la de ese color, aunque el archivo se llame como el SKU.
+        if(Object.entries(p.fotosAdvapp || {}).some(([k, x]) => !/^AT-/.test(k) && x === u)) continue;
         if(/^AT-\d{4}$/.test(n) || n === p.sku || n === p.id) generales.push(p.id + ' -> ' + n);
       }
     }

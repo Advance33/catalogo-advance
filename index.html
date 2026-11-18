@@ -8220,6 +8220,9 @@ function fotoDeAdvapp(p, color){
   const ats = fotos ? Object.keys(fotos) : [];
   if(!ats.length) return '';
   const todos = partirColores(p.color || '');
+  /* La foto de una fila sin color y sin codigo AT no sirve para un color pedido:
+     fotosDeColor pregunta tambien a las hermanas. */
+  if(!todos.length && color && ats.length === 1 && !/^AT-/.test(ats[0])) return '';
   if(!todos.length)
     return fotos[String(p.codigo || '').trim().toUpperCase()] || (ats.length === 1 ? fotos[ats[0]] : '');
   const pedidos = color ? partirColores(color) : todos;

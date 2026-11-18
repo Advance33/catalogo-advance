@@ -395,6 +395,8 @@ async function correrPruebas(){
      'un SKU sin codigo AT muestra su foto');
   ok(fotoDeAdvapp({ color: '', codigoVar: '', codigo: '', fotosAdvapp: sinAt }) === 'https://x/duo.jpg',
      'y tambien en una fila sin color');
+  ok(fotoDeAdvapp({ color: '', codigoVar: '', codigo: '', fotosAdvapp: sinAt }, 'White') === '',
+     'la foto de una fila sin color no sirve para un color pedido');
   ok(fotoDeAdvapp({ color: 'Black/White', codigoVar: '', codigo: '',
                     fotosAdvapp: fotosDeLosSkus('[{"sku":"A","fotos":["https://x/a.jpg"]},{"sku":"B","fotos":["https://x/b.jpg"]}]') }, 'White') === '',
      'con dos SKUs sin codigo AT no elige ninguna foto');

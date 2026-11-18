@@ -389,6 +389,20 @@ async function correrPruebas(){
   ok(fotoDeAdvapp({ color: '', codigoVar: '', codigo: 'AT-9999',
                     fotosAdvapp: { 'AT-9999': u(4) } }) === u(4),
      'sin colores, la foto del producto');
+  // Sin codigo AT (lo que nace con el OK de ADVAPP), la foto va por el SKU (18/11/2026)
+  const sinAt = fotosDeLosSkus('[{"sku":"CEL-APL-IPHONEDUO-256-NGH-000","at":null,"fotos":["https://x/duo.jpg"]}]');
+  ok(fotoDeAdvapp({ color: 'Night Sky', codigoVar: '', codigo: '', fotosAdvapp: sinAt }, 'Night Sky') === 'https://x/duo.jpg',
+     'un SKU sin codigo AT muestra su foto');
+  ok(fotoDeAdvapp({ color: '', codigoVar: '', codigo: '', fotosAdvapp: sinAt }) === 'https://x/duo.jpg',
+     'y tambien en una fila sin color');
+  ok(fotoDeAdvapp({ color: '', codigoVar: '', codigo: '', fotosAdvapp: sinAt }, 'White') === '',
+     'la foto de una fila sin color no sirve para un color pedido');
+  ok(fotoDeAdvapp({ color: 'Black/White', codigoVar: '', codigo: '',
+                    fotosAdvapp: fotosDeLosSkus('[{"sku":"A","fotos":["https://x/a.jpg"]},{"sku":"B","fotos":["https://x/b.jpg"]}]') }, 'White') === '',
+     'con dos SKUs sin codigo AT no elige ninguna foto');
+  ok(fotoDeAdvapp({ color: 'Black', codigoVar: '', codigo: '',
+                    fotosAdvapp: fotosDeLosSkus('[{"sku":"A","at":"AT-0001-01","fotos":["https://x/a.jpg"]},{"sku":"B","at":null,"fotos":["https://x/b.jpg"]}]') }, 'Black') === 'https://x/a.jpg',
+     'una fila con un SKU con codigo y otro sin codigo sigue con la foto del que lo tiene');
   ok(fotosDeLosSkus('[{"sku":"X","at":"at-0001-01","fotos":["javascript:alert(1)","https://x/y"]}]')['AT-0001-01'] === undefined,
      'solo se aceptan links http(s) en la primera foto de cada SKU');
 }

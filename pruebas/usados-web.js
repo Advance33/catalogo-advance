@@ -428,9 +428,10 @@ async function correrUW(){
   ok(!malNuevas.length, '[10] las fotos de lo nuevo son exactamente las mismas que sin usados',
      malNuevas.slice(0, 3).map(clave).join(' ') || PRODUCTOS.filter(p => !esUsado(p)).length + ' filas');
   const sinAt = JSON.stringify([{ sku: 'X', at: null, fotos: ['https://x.invalid/a.jpg', 'https://x.invalid/b.jpg'] }]);
+  const dosSinAt = JSON.stringify([{ sku: 'X', at: null, fotos: ['https://x.invalid/a.jpg'] }, { sku: 'Y', at: null, fotos: ['https://x.invalid/b.jpg'] }]);
   ok(!fotosDelUsado(sinAt, '', 'Celular').length && fotosDelUsado(sinAt, 'Usado', 'Celular').length === 2
-     && fotosDelUsado(sinAt, '', 'Celular Usado').length === 2 && !Object.keys(fotosDeLosSkus(sinAt)).length,
-     '[10] una foto sin `at` la toma solo un usado: para lo nuevo sigue sin servir');
+     && fotosDelUsado(sinAt, '', 'Celular Usado').length === 2 && !Object.keys(fotosDeLosSkus(dosSinAt)).length,
+     '[10] todas las fotos sin `at` las toma solo un usado: en lo nuevo, una y de una fila de un unico SKU');
   abrirFicha('UW-USADO-6', false);
   d = document.getElementById('ficha');
   const fes = d ? [...d.querySelectorAll('.fi-equipo .fi-fe')] : [];

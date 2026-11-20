@@ -56,6 +56,8 @@ nada (Pedro eligió la G, 05/10).
   memoria de la lista, la cotización guardada deja de valer sola.
 - El mensaje de WhatsApp dice el modelo, la memoria (o la caja), la
   batería, si cumple todo o qué no cumple, y el valor.
+- Una cotización guardada antes de que existiera la pregunta de la caja no
+  la tiene: deja de valer y el cliente vuelve a cotizar (20/11/2026).
 
 ## El formato
 
@@ -69,6 +71,7 @@ nada (Pedro eligió la G, 05/10).
       "nombre": "iPhone",
       "pregunta_opcion": "¿Cuánta memoria tiene?",
       "bateria": { "umbral": 80, "resta": 20 },
+      "caja": { "suma": 10 },
       "condiciones": [ { "id": "pantalla", "texto": "Pantalla y vidrios sin roturas" } ],
       "grupos": [
         { "nombre": "iPhone 13", "modelos": [
@@ -83,6 +86,12 @@ nada (Pedro eligió la G, 05/10).
 - `equipos`: uno por botón del primer paso (hoy iPhone y PlayStation).
 - `pregunta_opcion`: la pregunta del paso de las opciones (memoria, caja).
 - `bateria`: opcional. Sin ella no hay paso de batería.
+- `caja`: opcional, `{ "suma": 10 }` (Benja, 20/11/2026: iPhone «con caja
+  +$10»). Con ella, después de la batería va «¿Tenés la caja?» y el Sí suma
+  eso al valor. La caja queda en el nombre («iPhone 13 128GB con caja» /
+  «sin caja»): así la dicen el resultado, el pedido y el mensaje. El bot
+  (`cotizar_usado`) lee el mismo campo. La PS4 no la usa: ahí la caja es la
+  opción, con su propio valor.
 - `condiciones`: cada una se contesta Sí / No. Con un No, sin número.
 - `grupos`: los renglones del paso del modelo, en el orden en que se
   muestran (el más nuevo arriba).

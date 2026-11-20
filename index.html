@@ -15970,6 +15970,8 @@ function indiceUsados(j){
     const b = e.bateria;
     const bateria = b && valor(b.umbral) && b.umbral <= 100 && typeof b.resta === 'number' && b.resta >= 0
       ? { umbral: b.umbral, resta: b.resta } : null;
+    // Con la caja suma (Benja, 20/11/2026: iPhone "con caja +$10")
+    const caja = e.caja && valor(e.caja.suma) ? { suma: e.caja.suma } : null;
     const condiciones = (Array.isArray(e.condiciones) ? e.condiciones : [])
       .filter(c => c && texto(c.id) && texto(c.texto)).map(c => ({ id: texto(c.id), texto: texto(c.texto) }));
     const grupos = e.grupos.map(g => ({
@@ -15982,7 +15984,7 @@ function indiceUsados(j){
     })).filter(g => g.modelos.length);
     if(!grupos.length) return null;
     return { id: texto(e.id), nombre: texto(e.nombre), pregunta: texto(e.pregunta_opcion) || '¿Cuál es?',
-             bateria, condiciones, grupos };
+             bateria, caja, condiciones, grupos };
   }).filter(Boolean);
   return equipos.length ? equipos : null;
 }
@@ -16005,13 +16007,17 @@ function cotizacionUsado(u = USADO){
   const m = modeloUsado(e, u.m); if(!m) return null;
   const o = m.opciones.find(x => x.nombre === u.o); if(!o) return null;
   if(e.bateria && !['si', 'no', 'nose'].includes(u.bat)) return null;
+  if(e.caja && !['si', 'no'].includes(u.caja)) return null;
   const cond = u.cond || {};
   if(e.condiciones.some(c => typeof cond[c.id] !== 'boolean')) return null;
   const fallan = e.condiciones.filter(c => cond[c.id] === false);
   const resta = e.bateria && u.bat === 'no' ? e.bateria.resta : 0;
-  return { e, m, o, nombre: nombreUsado(m, o), bat: e.bateria ? u.bat : '', fallan,
+  const suma = e.caja && u.caja === 'si' ? e.caja.suma : 0;
+  // "iPhone 13 128GB con caja": la caja va en el nombre, así la dicen el resultado, el pedido y el mensaje
+  const nombre = nombreUsado(m, o) + (e.caja ? (u.caja === 'si' ? ' con caja' : ' sin caja') : '');
+  return { e, m, o, nombre, bat: e.bateria ? u.bat : '', caja: e.caja ? u.caja : '', fallan,
            det: limpiarTxtUsado(u.det, USADO_TXT_MAX.det),
-           valor: fallan.length ? null : Math.max(0, o.usd - resta) };
+           valor: fallan.length ? null : Math.max(0, o.usd + suma - resta) };
 }
 /* "Otro equipo" completo (05/10): qué es, el modelo y cómo está; la memoria
    es opcional. Sin valor: se cotiza por WhatsApp con lo que escribió. */
@@ -16036,8 +16042,8 @@ function leerUsado(){
     const u = g.e === 'otro'
       ? { e: 'otro', tipo: String(g.tipo || ''), modelo: txt('modelo', USADO_TXT_MAX.modelo),
           memoria: txt('memoria', USADO_TXT_MAX.memoria), estado: txt('estado', USADO_TXT_MAX.estado) }
-      : { e: String(g.e || ''), m: String(g.m || ''), o: String(g.o || ''), bat: String(g.bat || ''), cond,
-          det: txt('det', USADO_TXT_MAX.det) };
+      : { e: String(g.e || ''), m: String(g.m || ''), o: String(g.o || ''), bat: String(g.bat || ''),
+          caja: String(g.caja || ''), cond, det: txt('det', USADO_TXT_MAX.det) };
     return cotizacionUsado(u) ? u : null;
   }catch{ return null; }
 }
@@ -16054,7 +16060,7 @@ function releerUsado(){
   // Se compara con la misma forma que se lee (un USADO sin det no es distinto)
   const forma = u => u ? JSON.stringify(u.e === 'otro'
     ? { e: 'otro', tipo: u.tipo || '', modelo: u.modelo || '', memoria: u.memoria || '', estado: u.estado || '' }
-    : { e: u.e, m: u.m || '', o: u.o || '', bat: u.bat || '', cond: u.cond || {}, det: u.det || '' }) : 'null';
+    : { e: u.e, m: u.m || '', o: u.o || '', bat: u.bat || '', caja: u.caja || '', cond: u.cond || {}, det: u.det || '' }) : 'null';
   if(forma(g) === forma(USADO)) return;
   USADO = g;
   pintarPedido();
@@ -16661,6 +16667,8 @@ function pasosUsado(b){
   l.push('modelo');
   if(!m || m.opciones.length > 1) l.push('opcion');
   if(!e || e.bateria) l.push('bateria');
+  // La caja (20/11), sólo en los equipos que la suman; sin equipo elegido, si alguno la suma
+  if(e ? e.caja : USADOS.some(x => x.caja)) l.push('caja');
   if(!e || e.condiciones.length) l.push('estado');
   return l;
 }
@@ -16722,11 +16730,11 @@ function abrirCotizador(desde = {}){
   const delPedido = !!desde.pedido;
   const prod = desde.k ? buscarProducto(desde.k) : null;
   const color = desde.color || '';
-  let b = USADO ? JSON.parse(JSON.stringify(USADO)) : { e: '', m: '', o: '', bat: '', cond: {} };
+  let b = USADO ? JSON.parse(JSON.stringify(USADO)) : { e: '', m: '', o: '', bat: '', caja: '', cond: {} };
   if(!b.e && USADOS.length === 1) b.e = USADOS[0].id;
   // "Otro equipo" (05/10): su formulario, aparte del borrador de la lista
   let f = b.e === 'otro' ? { ...b } : { e: 'otro', tipo: '', modelo: '', memoria: '', estado: '' };
-  if(b.e === 'otro') b = { e: '', m: '', o: '', bat: '', cond: {} };
+  if(b.e === 'otro') b = { e: '', m: '', o: '', bat: '', caja: '', cond: {} };
   let paso = desde.empezar ? pasosUsado(b)[0] : USADO && USADO.e === 'otro' ? 'fuera'
     : cotizacionUsado(b) ? 'resultado' : pasosUsado(b)[0];
 
@@ -16779,6 +16787,9 @@ function abrirCotizador(desde = {}){
         html: `<div class="us-ops">${op('bat', 'si', `${u} % o más`, b.bat === 'si')}${op('bat', 'no', `Menos de ${u} %`, b.bat === 'no')}${op('bat', 'nose', 'No sé', b.bat === 'nose')}</div>
           <p class="us-ayuda">La ves en Ajustes › Batería.</p>` };
     }
+    if(paso === 'caja') return { preg: '¿Tenés la caja?',
+      html: `<div class="us-ops us-ops-2">${op('caja', 'si', 'Sí', b.caja === 'si')}${op('caja', 'no', 'No', b.caja === 'no')}</div>
+        <p class="us-ayuda">Con la caja te lo tomamos USD ${plata(e.caja.suma)} más.</p>` };
     if(paso === 'estado'){
       const faltan = e.condiciones.filter(c => typeof b.cond[c.id] !== 'boolean').length;
       return { preg: '¿Cumple todo esto?',
@@ -16800,11 +16811,13 @@ function abrirCotizador(desde = {}){
     const bat = c.e.bateria;
     let html;
     if(c.valor !== null){
-      let nota = '';
-      if(bat && c.bat === 'no' && bat.resta) nota = `Ya le restamos USD ${plata(bat.resta)} por la batería.`;
-      if(bat && c.bat === 'nose' && bat.resta) nota = `Si la batería está por debajo del ${bat.umbral} %, son USD ${plata(bat.resta)} menos.`;
+      const notas = [];
+      if(c.e.caja && c.caja === 'si') notas.push(`Incluye USD ${plata(c.e.caja.suma)} por la caja.`);
+      if(c.e.caja && c.caja === 'no') notas.push(`Con la caja serían USD ${plata(c.e.caja.suma)} más.`);
+      if(bat && c.bat === 'no' && bat.resta) notas.push(`Ya le restamos USD ${plata(bat.resta)} por la batería.`);
+      if(bat && c.bat === 'nose' && bat.resta) notas.push(`Si la batería está por debajo del ${bat.umbral} %, son USD ${plata(bat.resta)} menos.`);
       html = `<div class="us-res"><small>Te lo tomamos a</small><b>USD ${plata(c.valor)}</b>
-          <span>si cumple todas las condiciones.</span>${nota ? `<span>${esc(nota)}</span>` : ''}</div>`;
+          <span>si cumple todas las condiciones.</span>${notas.map(t => `<span>${esc(t)}</span>`).join('')}</div>`;
       // La cuenta: lo que mira (o el pedido), menos el usado
       let base = null, rot = '', masRot = '';
       if(delPedido && itemsPedido().length && !soloSinStockPedido()){
@@ -16886,7 +16899,7 @@ function abrirCotizador(desde = {}){
      resultado (auditoría 06/10). */
   const soltarSiCambio = () => {
     if(!USADO || USADO.e === 'otro') return;
-    const igual = ['e', 'm', 'o', 'bat'].every(k => (b[k] || '') === (USADO[k] || '')) &&
+    const igual = ['e', 'm', 'o', 'bat', 'caja'].every(k => (b[k] || '') === (USADO[k] || '')) &&
       JSON.stringify(b.cond || {}) === JSON.stringify(USADO.cond || {});
     if(!igual){ USADO = null; guardarUsado(); pintarPedido(); }
   };
@@ -17022,7 +17035,7 @@ function abrirCotizador(desde = {}){
     engancharIG();
     d.querySelectorAll('.us-op[data-e]').forEach(x => x.onclick = () => {
       // Otro equipo: lo demás era del anterior
-      if(b.e !== x.dataset.e) b = { e: x.dataset.e, m: '', o: '', bat: '', cond: {} };
+      if(b.e !== x.dataset.e) b = { e: x.dataset.e, m: '', o: '', bat: '', caja: '', cond: {} };
       if(USADO && USADO.e === 'otro'){ USADO = null; guardarUsado(); pintarPedido(); }
       soltarSiCambio();
       siguiente();
@@ -17038,6 +17051,7 @@ function abrirCotizador(desde = {}){
     });
     d.querySelectorAll('.us-op[data-o]').forEach(x => x.onclick = () => { if(b.o !== x.dataset.o) b.det = ''; b.o = x.dataset.o; soltarSiCambio(); siguiente(); });
     d.querySelectorAll('.us-op[data-bat]').forEach(x => x.onclick = () => { b.bat = x.dataset.bat; soltarSiCambio(); siguiente(); });
+    d.querySelectorAll('.us-op[data-caja]').forEach(x => x.onclick = () => { b.caja = x.dataset.caja; soltarSiCambio(); siguiente(); });
     d.querySelectorAll('.pd-chip[data-cond]').forEach(x => x.onclick = () => {
       b.cond[x.dataset.cond] = x.dataset.v === '1';
       soltarSiCambio();
@@ -17052,7 +17066,7 @@ function abrirCotizador(desde = {}){
     if(listo) listo.onclick = () => cerrar();
     const otro = d.querySelector('#us-otro');
     if(otro) otro.onclick = () => {
-      b = { e: USADOS.length === 1 ? USADOS[0].id : '', m: '', o: '', bat: '', cond: {} };
+      b = { e: USADOS.length === 1 ? USADOS[0].id : '', m: '', o: '', bat: '', caja: '', cond: {} };
       soltarSiCambio();
       ir(pasosUsado(b)[0]);
     };

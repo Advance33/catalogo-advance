@@ -104,6 +104,10 @@ GENERAL = 'assets/preview.png'
 # como antes, sin tocar nada mas.
 TARJETA_CON_PRECIO = True
 
+# La descripcion de la tarjeta (og:description) de la fila que no tiene version
+# ni color. WhatsApp la pide: sin ella puede no armar la vista previa.
+SIN_LINEA = 'Catálogo Advance Tecno'
+
 # Mas que esto WhatsApp no lo muestra en la vista previa (el limite que se
 # conoce es de unos 300 KB). Una foto mas pesada va con su copia de 400 px de
 # fotos/mini/, que es la misma imagen.
@@ -568,30 +572,34 @@ def armar_pagina(v, publica, raiz=RAIZ, tarjeta=''):
           '<meta property="og:site_name" content="Advance Tecno">',
           '<meta property="og:locale" content="es_AR">',
           '<meta property="og:title" content="%s">' % e(titulo)]
-    if linea:
-        L.append('<meta property="og:description" content="%s">' % e(linea))
+    # (16/11/2026, a la tarde) WhatsApp pide og:title, og:description y og:url
+    # en el <head> y que no esten vacias; si falta una, puede no armar la
+    # vista previa (developers.facebook.com/docs/whatsapp/link-previews). Las
+    # paginas con la tarjeta salieron unas horas sin og:url (para que
+    # Instagram no reusara la tarjeta guardada) y a Benja el link le llego sin
+    # nada: ni imagen ni titulo. Por eso el og:url va SIEMPRE, y la fila sin
+    # version ni color lleva una descripcion de relleno (SIN_LINEA): no se
+    # sacan. No va en <meta name="description"> ni a la vista.
+    L += ['<meta property="og:description" content="%s">' % e(linea or SIN_LINEA),
+          '<meta property="og:url" content="%s">' % e(url_pagina),
+          '<meta property="og:image" content="%s">' % e(url_imagen)]
     if tarjeta:
-        # Sin og:url (16/11/2026): Facebook e Instagram lo toman como la
-        # direccion "de verdad" de la pagina y muestran la tarjeta que ya
-        # tienen guardada de esa direccion, aunque el link venga con el ?v=
-        # que le pone el boton Compartir justamente para que la armen de nuevo.
-        L += ['<meta property="og:image" content="%s">' % e(url_imagen),
-              '<meta property="og:image:type" content="image/jpeg">']
+        L.append('<meta property="og:image:type" content="image/jpeg">')
         # El SKU de la fila cuando se armo la pagina. ADVAPP lo compara con el
         # de esa fila hoy: si entre dos PUBLICAR el ID paso a ser otra version
         # u otro producto (los IDs rotan), la tarjeta sale sin precio en vez
         # de ponerle a este titulo el precio de otro.
         L.append('<meta name="advance:sku" content="%s">' % e(str(v.get('sku') or '').strip()))
-    else:
-        L += ['<meta property="og:url" content="%s">' % e(url_pagina),
-              '<meta property="og:image" content="%s">' % e(url_imagen)]
+    # La version y el color de verdad, vacia si la fila no tiene. Va en todas:
+    # quien lee la pagina (ADVAPP para el dibujo, las pruebas) no tiene que
+    # adivinar si el og:description es la linea o el relleno
+    L.append('<meta name="advance:linea" content="%s">' % e(linea))
     L += ['<meta property="og:image:width" content="%d">' % ancho_imagen,
           '<meta property="og:image:height" content="%d">' % alto_imagen,
           '<meta property="og:image:alt" content="%s">' % e(completo if propia or tarjeta else 'Catálogo Advance Tecno'),
           '<meta name="twitter:card" content="%s">' % card,
           '<meta name="twitter:title" content="%s">' % e(titulo)]
-    if linea:
-        L.append('<meta name="twitter:description" content="%s">' % e(linea))
+    L.append('<meta name="twitter:description" content="%s">' % e(linea or SIN_LINEA))
     L += ['<meta name="twitter:image" content="%s">' % e(url_imagen)] + ICONOS + [
           # El cliente no se queda aca: va derecho a la ficha. WhatsApp no
           # corre JavaScript, asi que igual lee las etiquetas de arriba.
@@ -893,8 +901,9 @@ def probar():
         h = armar_pagina(sin, pub, tmp)
         ok('og:image" content="%s%s"' % (pub, GENERAL) in h and 'summary_large_image' in h and '<img' not in h,
            'sin foto propia: la tarjeta general, grande, y la pagina sin imagen')
-        ok('og:description' not in h and 'twitter:description' not in h and '<p>' not in h,
-           'sin linea no se inventa una descripcion')
+        ok(meta('og:description') == SIN_LINEA and meta('twitter:description') == SIN_LINEA
+           and meta('advance:linea') == '' and meta('description') is None and '<p>' not in h,
+           'sin linea, og:description lleva el relleno (WhatsApp la pide), y nada a la vista ni en la descripcion de la pagina')
 
         gem = dict(caso, id='TAB-X-WIFIPEN', destino='TAB-X-CELLPEN')
         h = armar_pagina(gem, pub, tmp)
@@ -939,7 +948,9 @@ def probar():
            'de 1200 x 630, JPEG')
         ok(meta('twitter:card') == 'summary_large_image' and meta('twitter:image') == meta('og:image'),
            'grande, y la misma en twitter:image')
-        ok(meta('og:url') is None, 'sin og:url: con el, Instagram reusa la tarjeta guardada aunque el link traiga ?v=')
+        ok(meta('og:url') == pub + 'p/CEL-APP-068.html',
+           'con og:url (la pagina, sin el ?v=): WhatsApp lo pide, y sin el no armaba la vista previa (16/11)')
+        ok(meta('advance:linea') == '256GB · E-Sim · Orange', 'la version y el color van tambien en advance:linea, para el dibujo de ADVAPP')
         ok('<img src="../fotos/AT-0072-03.jpg" alt="Apple iPhone 17 Pro · 256GB · E-Sim · Orange" width="900" height="900">' in h,
            'la foto propia sigue en el cuerpo: de ahi la lee ADVAPP')
         ok(meta('og:title') == 'Apple iPhone 17 Pro' and meta('og:description') == '256GB · E-Sim · Orange'
@@ -953,6 +964,8 @@ def probar():
             ok(meta('og:image') == pub + 'fotos/AT-0072-03.jpg' and meta('advance:sku') is None and meta('twitter:card') == 'summary',
                'sin un SKU que sirva (%r) la fila no lleva la tarjeta con precio: va la foto' % (malo,))
         h = armar_pagina(dict(sin, sku='GAF-RAY-049-SKU'), pub, tmp, tj)
+        ok(meta('og:description') == SIN_LINEA and meta('advance:linea') == '' and meta('og:url') == pub + 'p/GAF-RAY-049.html',
+           'la fila sin linea con tarjeta: el relleno en og:description, advance:linea vacia (ADVAPP no dibuja el relleno) y su og:url')
         ok(html.unescape(meta('og:image')) == tj + 'GAF-RAY-049' and '<img' not in h and GENERAL not in h
            and meta('og:image:alt') == 'Apple iPhone 17 Pro',
            'la fila sin foto propia tambien lleva la tarjeta con precio, y la pagina sigue sin imagen')

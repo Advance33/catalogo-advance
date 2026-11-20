@@ -177,6 +177,9 @@ function probarLosDatos(j){
   const ip = equipoUsado('iphone');
   ok(ip && ip.bateria && ip.bateria.umbral > 0 && ip.bateria.umbral <= 100 && ip.bateria.resta >= 0, 'iPhone: la bateria tiene umbral y lo que resta', ip && JSON.stringify(ip.bateria));
   ok(ip && ip.condiciones.length > 0, 'iPhone: con condiciones', ip && ip.condiciones.map(c => c.texto).join(' | '));
+  // La caja (Benja, 20/11): un entero en USD, como los valores; si no, la web deja de preguntarla sin aviso
+  const cajasMal = (j.equipos || []).filter(e => e.caja !== undefined && !(e.caja && Number.isInteger(e.caja.suma) && e.caja.suma > 0)).map(e => e.id + ': ' + JSON.stringify(e.caja));
+  ok(!cajasMal.length && ip && ip.caja, 'la caja suma un entero en USD (iPhone: con caja +10)', cajasMal.join(' | ') || (ip && JSON.stringify(ip.caja)));
   // Los de hoy, para leerlos en la salida (Pedro, 05/10: 13 128GB 220, 17 Pro Max 2TB 1220, PS4 Pro sin caja 130, bateria 80 % / USD 20)
   info(`valores de hoy: iPhone 13 128GB ${V13} · 17 Pro Max 2TB ${MAX} · PS4 Pro sin caja ${PSP} · bateria ${BAT.umbral} % / USD ${BAT.resta}`);
   const ps = equipoUsado('playstation');
@@ -438,6 +441,11 @@ async function probarLaFicha(){
   ok(uzPreg() === '¿Qué equipo entregás?', '[3A] «Cotizar otro equipo» vuelve al principio');
   uzTocar('.us-op[data-e="playstation"]');
   ok(uzPaso() === 'Paso 2 de 4', '[2A] la PlayStation tiene 4 pasos (sin bateria)', uzPaso());
+  // Un Atrás del historial a un paso del iPhone, ya con la PlayStation elegida: al primero, sin romper (20/11)
+  let rompio = '';
+  // (con el n de ahora: si no, el cotizador cuenta mal sus entradas del historial al cerrarse)
+  try{ irUsadoDesdeHistorial({ usado: true, paso: 'caja', n: usadoEmpujado }); }catch(e){ rompio = String(e); }
+  ok(!rompio && uzPreg() === '¿Qué equipo entregás?', '[caja] un Atrás a la caja con la PlayStation elegida vuelve al primer paso', rompio || uzPreg());
   await uzCotizar('playstation', 'ps4-pro', 'Sin caja', '', uzTodoSi('playstation'));
   ok(uzPreg() === 'Tu PS4 Pro sin caja' && uzTxt(uzCot().querySelector('.us-res')).includes('USD ' + uzPlata(PSP) + ' '), '[3A] PS4 Pro sin caja: su valor de la lista', uzPreg());
 

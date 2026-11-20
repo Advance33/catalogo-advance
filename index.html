@@ -16916,6 +16916,9 @@ function abrirCotizador(desde = {}){
     if(saltarPop > 0){ saltarPop--; return; }
     let p = st && st.paso;
     if(p === 'resultado' && !cotizacionUsado(b)) p = pasosUsado(b)[0];
+    // Un paso que este equipo no tiene (la batería o la caja de un iPhone, ya
+    // con la PlayStation elegida): al primero, en vez de romper el cotizador (20/11)
+    if(p && p !== 'resultado' && p !== 'fuera' && !pasosUsado(b).includes(p)) p = pasosUsado(b)[0];
     if(p) ir(p, true);
   };
   const siguiente = () => {

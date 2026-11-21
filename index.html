@@ -2421,6 +2421,9 @@ window.ADVAPP_TEMPRANO = (() => {
   .fi-cuotas-res span{font:500 11px/1.35 var(--mono);color:#A597C4}
   .fi-cuotas-res .nada{font:400 12.5px/1.4 var(--sans);color:#C4B5FD}
   .fi-cuotas-nota{margin:-4px 0 0;font:400 11.5px/1.45 var(--sans);color:var(--faint)}
+  /* Los precios del viernes, también en la ficha (21/11/2026) */
+  .fi-congelados{margin:-4px 0 0;font:400 12px/1.45 var(--sans);color:var(--ink)}
+  .fi-congelados b{font-weight:700}
   /* Adelantar una parte (Benja, 26/10/2026, la A de "Adelanto + cuotas"):
      adentro de la etiqueta, debajo de los planes y con sus colores */
   .fi-adelanto{display:grid;gap:10px}
@@ -13095,9 +13098,33 @@ function textoCongelados(c){
    texto de siempre queda guardado en el propio renglón y vuelve solo. El
    título grande («Los precios de hoy. Hoy.») no se toca. */
 const RAZON_CONGELADA = 'Siguen valiendo hasta la próxima lista';
+/* También en la ficha, debajo del precio (Benja, 21/11/2026: «que el aviso de
+   que el martes se actualizan los precios esté en todos lados»): al abrir un
+   producto la franja de arriba queda tapada, y el que llega por un link de
+   WhatsApp entra directo a la ficha. Mismo texto que la franja; sólo con
+   precio (sin stock no hay precio del que avisar). */
+// El dato vale sólo si vino de ADVAPP (ni la copia ni la planilla lo prenden)
+const congeladosVigentes = () => (FUENTE && FUENTE.fuente === 'advapp' && FUENTE.manifiesto && FUENTE.manifiesto.congelados) || null;
+function htmlCongeladosFicha(v){
+  const c = congeladosVigentes();
+  return c && v.stock && typeof v.precio === 'number' ? `<p class="fi-congelados" role="note">${textoCongelados(c)}</p>` : '';
+}
+/* La ficha abierta sigue al dato: si llega (o se va) con la ficha ya abierta,
+   la ficha no se redibuja, porque la firma de los datos no lo incluye. Con la
+   ficha dada de baja («ya no está», el precio escondido) no va. */
+function ponerCongeladosEnFicha(){
+  const d = document.getElementById('ficha');
+  if(!d || !FICHA) return;
+  const precio = d.querySelector('.fi-precio'), p = buscarProducto(FICHA);
+  const html = p && precio && precio.style.display !== 'none' ? htmlCongeladosFicha(p) : '';
+  const ya = d.querySelector('.fi-congelados');
+  if(ya && ya.outerHTML === html) return;
+  if(ya) ya.remove();
+  if(html) (d.querySelector('.fi-cuotas-nota') || precio).insertAdjacentHTML('afterend', html);
+}
 function pintarCongelados(){
-  const m = FUENTE && FUENTE.fuente === 'advapp' ? FUENTE.manifiesto : null;
-  const c = (m && m.congelados) || null;
+  const c = congeladosVigentes();
+  ponerCongeladosEnFicha();
   const el = $('aviso-congelados');
   if(el){
     el.hidden = !c;
@@ -13125,8 +13152,8 @@ function textoDelSello(){
   const m = FUENTE && FUENTE.manifiesto;
   /* Los días de precios congelados (07/11/2026) no dice "Actualizado hoy":
      dice de qué día son los precios, en ámbar y sin latir. */
-  if(m && m.congelados && FUENTE.fuente === 'advapp')
-    return [`Precios del ${diaSemana(m.congelados.dia)} ${ddmm(m.congelados.dia)}`, false];
+  const cv = congeladosVigentes();
+  if(cv) return [`Precios del ${diaSemana(cv.dia)} ${ddmm(cv.dia)}`, false];
   if(m && m.verificado_hoy === true && msDeFecha(m.generado_en)
      && diaAR(msDeFecha(m.generado_en)) === diaAR(Date.now()))
     return ['Actualizado hoy', true];
@@ -13421,6 +13448,7 @@ function refrescarFichaAbierta(){
     if(botones) botones.innerHTML = '<p class="fi-nota">Este producto ya no está en el catálogo.</p>';
     const precio = d.querySelector('.fi-precio');
     if(precio) precio.style.display = 'none';      // es el de antes: mejor ninguno
+    d.querySelector('.fi-congelados')?.remove();     // y su aviso de precios, tampoco
     // También los renglones de "Ver las N versiones" y Compartir (29/09):
     // mandar el link de algo que ya no está lleva a "Ya no está"
     d.querySelectorAll('.fi-tono, .fi-op, .fi-fila, .fi-compartir').forEach(b => { b.disabled = true; });
@@ -13817,6 +13845,7 @@ function htmlDatosFicha(m, v){
       ${htmlCuotasFicha(v)}
     </div>
     ${conCuotas(v) ? `<p class="fi-cuotas-nota">${esc(LETRA_CHICA_CUOTAS)}</p>` : ''}
+    ${htmlCongeladosFicha(v)}
     ${htmlPromosFicha(v)}
     ${ejes}
     ${htmlTodasFicha(m, v)}

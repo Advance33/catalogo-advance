@@ -71,6 +71,17 @@ function pintadoPC(){
     FUENTE = { fuente: 'planilla', manifiesto: { congelados: VIERNES_LUNES } };
     pintarCongelados();
     ok(!vistoPC(), 'sólo ADVAPP lo puede prender');
+    // La ficha (Benja, 21/11/2026: «en todos lados»): debajo del precio, el mismo texto
+    const conPrecio = { stock: true, precio: 1200 }, fichaPC = h => { const d = document.createElement('div'); d.innerHTML = h; return d.textContent; };
+    FUENTE = { fuente: 'advapp', manifiesto: { congelados: VIERNES_LUNES } };
+    ok(fichaPC(htmlCongeladosFicha(conPrecio)) === 'Precios del viernes 06/11. Es probable que cambien el lunes.' && /class="fi-congelados" role="note"/.test(htmlCongeladosFicha(conPrecio)),
+       '[ficha] con precios congelados, la ficha lo dice debajo del precio', htmlCongeladosFicha(conPrecio));
+    ok(htmlCongeladosFicha({ stock: false, precio: 1200 }) === '' && htmlCongeladosFicha({ stock: true, precio: null }) === '',
+       '[ficha] sin stock o sin precio, no');
+    FUENTE = { fuente: 'advapp', manifiesto: { congelados: null } };
+    ok(htmlCongeladosFicha(conPrecio) === '', '[ficha] un día común, no');
+    FUENTE = { fuente: 'planilla', manifiesto: { congelados: VIERNES_LUNES } };
+    ok(htmlCongeladosFicha(conPrecio) === '', '[ficha] sólo con el dato de ADVAPP');
   }finally{
     FUENTE = antes;
     pintarCongelados();

@@ -2421,6 +2421,9 @@ window.ADVAPP_TEMPRANO = (() => {
   .fi-cuotas-res span{font:500 11px/1.35 var(--mono);color:#A597C4}
   .fi-cuotas-res .nada{font:400 12.5px/1.4 var(--sans);color:#C4B5FD}
   .fi-cuotas-nota{margin:-4px 0 0;font:400 11.5px/1.45 var(--sans);color:var(--faint)}
+  /* Los precios del viernes, también en la ficha (21/11/2026) */
+  .fi-congelados{margin:-4px 0 0;font:400 12px/1.45 var(--sans);color:var(--ink)}
+  .fi-congelados b{font-weight:700}
   /* Adelantar una parte (Benja, 26/10/2026, la A de "Adelanto + cuotas"):
      adentro de la etiqueta, debajo de los planes y con sus colores */
   .fi-adelanto{display:grid;gap:10px}
@@ -13095,6 +13098,16 @@ function textoCongelados(c){
    texto de siempre queda guardado en el propio renglón y vuelve solo. El
    título grande («Los precios de hoy. Hoy.») no se toca. */
 const RAZON_CONGELADA = 'Siguen valiendo hasta la próxima lista';
+/* También en la ficha, debajo del precio (Benja, 21/11/2026: «que el aviso de
+   que el martes se actualizan los precios esté en todos lados»): al abrir un
+   producto la franja de arriba queda tapada, y el que llega por un link de
+   WhatsApp entra directo a la ficha. Mismo texto que la franja; sólo con
+   precio (sin stock no hay precio del que avisar). */
+function htmlCongeladosFicha(v){
+  const m = FUENTE && FUENTE.fuente === 'advapp' ? FUENTE.manifiesto : null;
+  const c = (m && m.congelados) || null;
+  return c && v.stock && typeof v.precio === 'number' ? `<p class="fi-congelados" role="note">${textoCongelados(c)}</p>` : '';
+}
 function pintarCongelados(){
   const m = FUENTE && FUENTE.fuente === 'advapp' ? FUENTE.manifiesto : null;
   const c = (m && m.congelados) || null;
@@ -13817,6 +13830,7 @@ function htmlDatosFicha(m, v){
       ${htmlCuotasFicha(v)}
     </div>
     ${conCuotas(v) ? `<p class="fi-cuotas-nota">${esc(LETRA_CHICA_CUOTAS)}</p>` : ''}
+    ${htmlCongeladosFicha(v)}
     ${htmlPromosFicha(v)}
     ${ejes}
     ${htmlTodasFicha(m, v)}

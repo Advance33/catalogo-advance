@@ -82,6 +82,24 @@ function pintadoPC(){
     ok(htmlCongeladosFicha(conPrecio) === '', '[ficha] un día común, no');
     FUENTE = { fuente: 'planilla', manifiesto: { congelados: VIERNES_LUNES } };
     ok(htmlCongeladosFicha(conPrecio) === '', '[ficha] sólo con el dato de ADVAPP');
+    // Una ficha ya abierta sigue al dato, sin redibujarse (la revisión del PR)
+    const conStock = PRODUCTOS.find(p => p.stock && typeof p.precio === 'number' && buscarModelo(clave(p)));
+    if(conStock){
+      FUENTE = { fuente: 'advapp', manifiesto: { congelados: null } };
+      abrirFicha(clave(conStock), true);
+      const fi = () => document.querySelector('#ficha .fi-congelados');
+      ok(!!document.getElementById('ficha') && !fi(), '[ficha] abierta un día común, sin aviso');
+      FUENTE = { fuente: 'advapp', manifiesto: { congelados: VIERNES_LUNES } };
+      pintarCongelados();
+      ok(fi() && fi().textContent === 'Precios del viernes 06/11. Es probable que cambien el lunes.',
+         '[ficha] si el dato llega con la ficha abierta, aparece debajo del precio', fi() && fi().textContent);
+      pintarCongelados();
+      ok(document.querySelectorAll('#ficha .fi-congelados').length === 1, '[ficha] refrescar no lo repite');
+      FUENTE = { fuente: 'advapp', manifiesto: { congelados: null } };
+      pintarCongelados();
+      ok(!fi(), '[ficha] y si el dato se va, se va');
+      quitarFicha();
+    }
   }finally{
     FUENTE = antes;
     pintarCongelados();

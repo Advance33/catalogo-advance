@@ -467,6 +467,21 @@ SCRIPT = r'''
       return link.slice(0, i + 6) + encodeURIComponent(t.slice(0, pos) + ' (USD ' + plata(precio) + ')' + t.slice(pos));
     }catch(e){ return link; }
   };
+  // «Te vi en Google» (Benja, 24/11/2026, prueba de avisos de diciembre): al que
+  // llegó por un aviso de Google el mensaje le dice que nos vio ahí, así el
+  // vendedor sabe qué ventas trajo el aviso. Va después del precio (el lugar del
+  // precio se cuenta sobre el mensaje sin marca). deGoogle se decide abajo, con
+  // la pauta; el bot saca la frase antes de buscar el producto (chatsell ADR-161).
+  let deGoogle = false;
+  const conMarca = (link) => {
+    const i = String(link || '').indexOf('?text=');
+    if(!deGoogle || i < 0) return link;
+    try{
+      const t = decodeURIComponent(link.slice(i + 6));
+      if(/te vi en google/i.test(t)) return link;
+      return link.slice(0, i + 6) + encodeURIComponent(/^Hola!\s*/.test(t) ? t.replace(/^Hola!\s*/, 'Hola! Te vi en Google. ') : 'Te vi en Google. ' + t);
+    }catch(e){ return link; }
+  };
   // vivo: ya llegó lo de ADVAPP; antes (o si no llega) no se dice precio ni stock
   let tc = null, version = null, color = null, vivo = false;
   // Arranca en la primera versión (vienen ordenadas: con stock y más barata primero, el día que se armó)
@@ -492,7 +507,7 @@ SCRIPT = r'''
     const wa = document.querySelector('a.wa');
     const sin = vivo && !x.stock;
     const precio = vivo ? x.precio : null;
-    if(wa && (x.wa || x.aviso)){ wa.href = (sin ? conPrecio(x.aviso, x.avisoPos, precio) : conPrecio(x.wa, x.waPos, precio)) || x.wa; wa.textContent = sin ? 'Avisame cuando entre' : 'Consultar por WhatsApp'; }
+    if(wa && (x.wa || x.aviso)){ wa.href = conMarca((sin ? conPrecio(x.aviso, x.avisoPos, precio) : conPrecio(x.wa, x.waPos, precio)) || x.wa); wa.textContent = sin ? 'Avisame cuando entre' : 'Consultar por WhatsApp'; }
     const caja = $('precio');
     if(vivo && x.stock && x.precio){
       caja.className = 'precio';
@@ -614,6 +629,21 @@ SCRIPT = r'''
     try{ ref = document.referrer ? new URL(document.referrer).hostname : ''; }catch(e){}
     anotar(Object.assign({ t: 'pagina_producto', ref }, entrada));
   }
+  /* «Te vi en Google»: con las mismas reglas que lo que se anota (medición
+     prendida y sin Do Not Track). Queda en la pestaña (sessionStorage): si
+     recarga, o pasa a otro modelo, el mensaje sigue marcado; sin
+     sessionStorage, vale para esta página. */
+  try{
+    if(D.registro && navigator.doNotTrack !== '1' && window.doNotTrack !== '1'){
+      if(entrada.pauta === 'google'){
+        deGoogle = true;
+        try{ sessionStorage.setItem('advtecno.google', '1'); }catch(e){}
+      }else{
+        try{ deGoogle = sessionStorage.getItem('advtecno.google') === '1'; }catch(e){}
+      }
+      if(deGoogle) pintar();
+    }
+  }catch(e){}
   /* Leída, la pauta sale de la dirección (como en la portada): el link de la
      barra mandado a un amigo o guardado en favoritos volvía a contar como un
      clic pago cada vez que alguien lo abría. Con la medición apagada no se
@@ -1832,8 +1862,10 @@ def probar():
                       {'cuotas': 12, 'whatsapp': '5491100000000', 'mapa': 'https://maps.app.goo.gl/x', 'direccion': 'Av. de los Incas 5150, 1A, CABA'})
     ok('?cat=Accesorio%20Apple' in h3 and '?cat=Accesorio Apple' not in h3, 'la direccion del rubro va codificada (migas y datos para Google)')
     ok('<tbody id="filas">' in h3 and 'tb.innerHTML' in h3 and 'lowPrice: Math.min(...ps)' in h3, 'al abrir se rehacen la tabla y los datos para Google')
-    ok('wa.href = (sin ? conPrecio(x.aviso, x.avisoPos, precio) : conPrecio(x.wa, x.waPos, precio)) || x.wa' in h3,
+    ok('wa.href = conMarca((sin ? conPrecio(x.aviso, x.avisoPos, precio) : conPrecio(x.wa, x.waPos, precio)) || x.wa)' in h3,
        'el WhatsApp sigue a la version elegida y al stock del momento')
+    ok("'Hola! Te vi en Google. '" in h3 and "sessionStorage.setItem('advtecno.google', '1')" in h3,
+       'Te vi en Google: el que llego por un aviso de Google lo dice en el mensaje (24/11)')
     ok('const precio = vivo ? x.precio : null;' in h3 and "' (USD ' + plata(precio) + ')'" in h3,
        'el mensaje lleva el precio de ADVAPP del momento, nunca uno escrito al armar la pagina (26/10)')
     ok('"waPos": null' in h3 and '%28USD' not in h3 and '(USD%20' not in h3,

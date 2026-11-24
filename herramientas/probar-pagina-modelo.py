@@ -39,7 +39,7 @@ REGISTRO = 'https://registro.invalid/api?resource=eventos-web'
 MODELO = {'familia': 'M:X', 'titulo': 'Apple iPhone 17 Pro', 'marca': 'Apple', 'categoria': 'Celular', 'rubro': 'Celulares',
           'clave': 'A1', 'sku': '', 'desde': 1200, 'hasta': 1900, 'stock': True, 'wa': 'https://wa.me/1?text=hola',
           'versiones': [{'version': '256GB', 'color': 'Orange', 'precio': 1200, 'stock': True, 'clave': 'A1', 'sku': '',
-                         'wa': 'https://wa.me/1?text=a1', 'aviso': 'https://wa.me/1?text=aviso1'},
+                         'wa': 'https://wa.me/1?text=Hola!%20a1', 'aviso': 'https://wa.me/1?text=aviso1'},
                         {'version': '512GB', 'color': 'Blue', 'precio': 1570, 'stock': True, 'clave': 'A2', 'sku': '',
                          'wa': 'https://wa.me/1?text=a2', 'aviso': 'https://wa.me/1?text=aviso2'},
                         {'version': '1TB', 'color': 'Blue', 'precio': 1900, 'stock': False, 'clave': 'A3', 'sku': '',
@@ -51,7 +51,8 @@ ADVAPP = {'productos': [{'ID': 'A1', 'Precio USD': '1200', 'Stock': 'Si'}, {'ID'
 # Va ANTES del script de la pagina: lo que se manda al registro queda en __m y
 # no sale. Con ?beacon=no sendBeacon contesta que no; con ?beacon=falta no
 # existe; con ?dnt=1 el navegador pide no ser seguido; con ?sinstorage=1 no hay
-# sessionStorage (incognito estricto).
+# sessionStorage (incognito estricto); con ?yagoogle=1 la pestaña ya habia
+# llegado antes por un aviso de Google (recargo, u otro modelo).
 ANTES = '''<script>
 window.__m = []; window.__cuerpo = '';
 (() => {
@@ -72,6 +73,7 @@ window.__m = []; window.__cuerpo = '';
     return Promise.resolve(new Response(''));
   };
   if(pide.get('dnt') === '1') Object.defineProperty(navigator, 'doNotTrack', { configurable: true, value: '1' });
+  if(pide.get('yagoogle') === '1') sessionStorage.setItem('advtecno.google', '1');
   if(pide.get('sinstorage') === '1')
     Object.defineProperty(window, 'sessionStorage', { configurable: true, get(){ throw new Error('bloqueado'); } });
 })();
@@ -89,9 +91,12 @@ setTimeout(() => {
   const out = { errores: [] };
   try{
     const boton = () => document.querySelector('a.wa');
+    const mensaje = () => decodeURIComponent(boton().href.split('?text=')[1] || '');
+    out.mensaje = mensaje();
     boton().click();
     [...document.querySelectorAll('[data-v]')].find((b) => b.dataset.v === '1TB').click();
     out.textoAgotada = boton().textContent;
+    out.mensajeAgotada = mensaje();
     boton().click();
     document.querySelector('footer a[href*="wa.me/"]').click();
     const suelto = document.createElement('a');
@@ -226,6 +231,8 @@ def main():
             ok(ev[5].get('t') == 'whatsapp' and ev[5].get('desde') == 'pagina' and ev[5].get('id') == 'A3',
                'el boton del medio tambien se anota; el derecho y lo que no es WhatsApp, no', ev[5:])
             ok(all(isinstance(m['cuerpo']['eventos'][0].get('ms'), int) for m in r['mandados']), 'cada evento con su momento')
+            ok(r.get('mensaje') == 'Hola! Te vi en Google. a1' and r.get('mensajeAgotada') == 'Te vi en Google. aviso3',
+               'el mensaje de WhatsApp dice "Te vi en Google", tambien el de la agotada', [r.get('mensaje'), r.get('mensajeAgotada')])
 
         print('--- Otras formas de llegar')
         r = visita('sin-precio', '?utm_source=Meta&utm_medium=paid_social&utm_campaign=' + urllib.parse.quote('Consolas Nov 🔥'))
@@ -246,6 +253,12 @@ def main():
         e0 = eventos(primera)[0]
         ok(e0.get('t') == 'pagina_producto' and 'pauta' not in e0 and len(primera['mandados']) == ENVIOS and primera['direccion'] == '',
            'sin nada en la direccion: como siempre, sin pauta', e0)
+        ok(primera.get('mensaje') == 'Hola! a1', 'y el mensaje de WhatsApp sin marca', primera.get('mensaje'))
+        r = visita('sin-precio', '?utm_source=Meta&utm_medium=paid_social')
+        ok(r.get('mensaje') == 'Hola! a1', 'otra pauta que no es Google: el mensaje sin marca', r.get('mensaje'))
+        r = visita('sin-precio', '?yagoogle=1')
+        ok(r.get('mensaje') == 'Hola! Te vi en Google. a1' and eventos(r)[0].get('t') == 'pagina_producto' and 'pauta' not in eventos(r)[0],
+           'si la pestaña ya llego por un aviso de Google, el mensaje sigue marcado (y no cuenta otra llegada paga)', [r.get('mensaje'), eventos(r)[0]])
         r = visita('sin-precio', '?color=azul&gclid=x&utm_term=ps5#ficha')
         ok(r['direccion'] == '?color=azul#ficha', 'de la direccion sale solo lo del aviso: lo demas queda', r['direccion'])
         r = visita('sin-precio', 'index.html?gclid=x')
@@ -256,9 +269,11 @@ def main():
         r = visita('sin-precio', '?gclid=x&dnt=1')
         ok(not r['errores'] and r['mandados'] == [] and r['direccion'] == '?dnt=1',
            'con Do Not Track no se manda nada, ni la visita ni los toques', r['mandados'])
+        ok(r.get('mensaje') == 'Hola! a1', 'y el mensaje de WhatsApp va sin marca', r.get('mensaje'))
         r = visita('sin-precio', '?gclid=x&sinstorage=1')
         ok(not r['errores'] and len(r['mandados']) == ENVIOS and len({m['cuerpo']['visita'] for m in r['mandados']}) == 1,
            'sin sessionStorage igual anota, y todo con la misma visita', [m['cuerpo']['visita'] for m in r['mandados']])
+        ok(r.get('mensaje') == 'Hola! Te vi en Google. a1', 'y el mensaje igual dice "Te vi en Google"', r.get('mensaje'))
         for modo, que in (('no', 'si sendBeacon no lo toma'), ('falta', 'si sendBeacon no existe')):
             r = visita('sin-precio', '?gclid=x&beacon=' + modo)
             ok(not r['errores'] and len(r['mandados']) == ENVIOS
@@ -268,6 +283,7 @@ def main():
         r = visita('apagada', '?gclid=x&utm_campaign=ps5')
         ok(not r['errores'] and r['mandados'] == [] and r['direccion'] == '?gclid=x&utm_campaign=ps5',
            'con la medicion apagada no se manda nada y la direccion queda como vino', [r['mandados'], r['direccion']])
+        ok(r.get('mensaje') == 'Hola! a1', 'y el mensaje de WhatsApp va sin marca', r.get('mensaje'))
     finally:
         srv.shutdown()
         shutil.rmtree(raiz, ignore_errors=True)

@@ -199,7 +199,7 @@ function probarLaTarjeta(){
      '[MP] el simbolo de Mercado Pago esta una sola vez en la pagina', simbolos.length);
   const conCq = cards.map(el => el.querySelector('.cq:not(.vacio)')).filter(Boolean);
   ok(conCq.length > 0 && conCq.every(cq => { const sv = cq.querySelector('svg.mp');
-       return sv && sv.getAttribute('aria-label') === 'Mercado Pago' && sv.querySelector('use')?.getAttribute('href') === '#ico-mp' && !sv.querySelector('path'); }),
+       return sv && sv.getAttribute('aria-hidden') === 'true' && sv.querySelector('use')?.getAttribute('href') === '#ico-mp' && !sv.querySelector('path'); }),
      '[MP] «Hasta ' + maxCuotas() + ' cuotas» lleva el simbolo de Mercado Pago, sin copiar el dibujo en cada tarjeta', conCq.length);
   const rmp = conCq[0] && conCq[0].querySelector('svg.mp')?.getBoundingClientRect();
   ok(rmp && rmp.width >= 18 && rmp.height >= 12, '[MP] y se ve (no queda en cero)', rmp && Math.round(rmp.width) + 'x' + Math.round(rmp.height));

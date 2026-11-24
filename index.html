@@ -4307,8 +4307,11 @@ const CUOTAS = [
    óvalo celeste de la marca (#00B1EA), como el logo de la app: sólo con el
    contorno celeste, a 20 px no se distinguía. Las cuotas se cobran por Mercado Pago: con el símbolo
    se ve sin leer la letra chica. El dibujo está UNA vez, al principio del
-   <body> (#ico-mp), y cada lugar lo usa: son 4 KB y hay cientos de tarjetas. */
-const ICONO_MP = '<svg class="mp" role="img" aria-label="Mercado Pago"><use href="#ico-mp"/></svg>';
+   <body> (#ico-mp), y cada lugar lo usa: son 4 KB y hay cientos de tarjetas.
+   Es decorativo, como el ícono de tarjeta que reemplaza: al lado ya dice
+   «Mercado Pago» o «Por Mercado Pago», y el lector de pantalla lo leía dos
+   veces (en la grilla, una vez por tarjeta). */
+const ICONO_MP = '<svg class="mp" width="20" height="14" aria-hidden="true" focusable="false"><use href="#ico-mp"/></svg>';
 
 // ---------- FOTOS ----------
 //

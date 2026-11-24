@@ -1853,6 +1853,7 @@ window.ADVAPP_TEMPRANO = (() => {
   .cq{display:flex;gap:6px;align-items:flex-start;margin:-2px 0 0;font:500 12px/1.3 var(--sans);color:var(--muted)}
   .cq svg{flex:none;width:15px;height:15px;color:var(--acento)}
   .cq.vacio{visibility:hidden}
+  .cq svg.mp{width:20px;height:14px;margin-top:1px}
   /* WhatsApp en la tarjeta queda como ícono: el logo se reconoce sin leer, y
      el texto lo necesita más el otro botón, que es el que arma el pedido.
      Ninguno de los dos va lleno de morado. Con quince tarjetas en pantalla,
@@ -2408,6 +2409,9 @@ window.ADVAPP_TEMPRANO = (() => {
      al precio para que no se lean como otra versión del producto */
   .fi-cuotas{flex:1 1 100%;display:grid;gap:9px;margin-top:4px;padding-top:12px;border-top:1px solid rgba(196,181,253,.22)}
   .fi-cuotas-rot{font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A597C4}
+  .fi-cuotas-cab{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .fi-mp{display:inline-flex;align-items:center;gap:5px;font:600 11.5px/1 var(--sans);color:#E6F6FD;white-space:nowrap}
+  .fi-mp svg{width:24px;height:17px;flex:none}
   .fi-cuotas-ops{display:grid;grid-template-columns:repeat(auto-fit,minmax(44px,1fr));gap:6px}
   .fi-cuota{padding:8px 0;border-radius:9px;cursor:pointer;border:1px solid rgba(196,181,253,.3);background:rgba(255,255,255,.04);
             color:#DDD3F5;font:600 13px/1 var(--mono);text-align:center}
@@ -2473,6 +2477,7 @@ window.ADVAPP_TEMPRANO = (() => {
   .fi-promo{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-height:118px;padding:13px 14px;
             border-radius:16px;cursor:pointer;text-align:left;font:inherit;animation:fi-promo-entrar .5s ease-out both}
   .fi-promo svg{width:24px;height:24px;margin-bottom:2px;flex:none}
+  .fi-promo svg.mp{width:34px;height:24px}
   .fi-promo b{font:700 15.5px/1.2 var(--sans)}
   .fi-promo span{font:400 13px/1.3 var(--sans)}
   .fi-promo .fi-promo-ir{margin-top:auto;padding-top:4px;font-weight:700;font-size:14px}
@@ -3077,6 +3082,11 @@ window.ADVAPP_TEMPRANO = (() => {
   .pd-ayuda b{color:var(--ink);font-weight:600}
   .pd-rot{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
   .pd-rot i{font-style:normal;color:var(--faint);letter-spacing:.06em;text-transform:none;font-weight:500;margin-left:1px}
+  /* Sólo el símbolo: con el nombre al lado bajaba a otro renglón a 390 px, y la
+     ayuda de abajo ya dice "Por Mercado Pago" */
+  .pd-cuotas-cab{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .pd-mp{display:inline-flex;flex:none}
+  .pd-mp svg{width:24px;height:17px}
   .pd-chips{display:flex;flex-wrap:wrap;gap:8px}
   .pd-chip{flex:none;padding:8px 15px;border-radius:999px;cursor:pointer;font:600 10.5px/1.6 var(--mono);letter-spacing:.12em;
            text-transform:uppercase;background:#fff;color:var(--muted);border:1px solid var(--line);white-space:nowrap}
@@ -3944,6 +3954,9 @@ window.ADVAPP_TEMPRANO = (() => {
 </head>
 <body class="primera-carga">
 
+<!-- El símbolo de Mercado Pago de las cuotas (ICONO_MP lo usa): uno solo para todas las tarjetas -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="ico-mp" viewBox="0 3.6 24 16.8"><ellipse cx="12" cy="12" rx="11.7" ry="7.9" fill="#00B1EA"/><path fill="#0A0080" d="M11.115 16.479a.93.927 0 0 1-.939-.886c-.002-.042-.006-.155-.103-.155-.04 0-.074.023-.113.059-.112.103-.254.206-.46.206a.816.814 0 0 1-.305-.066c-.535-.214-.542-.578-.521-.725.006-.038.007-.08-.02-.11l-.032-.03h-.034c-.027 0-.055.012-.093.039a.788.786 0 0 1-.454.16.7.699 0 0 1-.253-.05c-.708-.27-.65-.928-.617-1.126.005-.041-.005-.072-.03-.092l-.05-.04-.047.043a.728.726 0 0 1-.505.203.73.728 0 0 1-.732-.725c0-.4.328-.722.732-.722.364 0 .675.27.721.63l.026.195.11-.165c.01-.018.307-.46.852-.46.102 0 .21.016.316.05.434.13.508.52.519.68.008.094.075.1.09.1.037 0 .064-.024.083-.045a.746.744 0 0 1 .54-.225c.128 0 .263.03.402.09.69.293.379 1.158.374 1.167-.058.144-.061.207-.005.244l.027.013h.02c.03 0 .07-.014.134-.035.093-.032.235-.08.367-.08a.944.942 0 0 1 .94.93.936.934 0 0 1-.94.928zm7.302-4.171c-1.138-.98-3.768-3.24-4.481-3.77-.406-.302-.685-.462-.928-.533a1.559 1.554 0 0 0-.456-.07c-.182 0-.376.032-.58.095-.46.145-.918.505-1.362.854l-.023.018c-.414.324-.84.66-1.164.73a1.986 1.98 0 0 1-.43.049c-.362 0-.687-.104-.81-.258-.02-.025-.007-.066.04-.125l.008-.008 1-1.067c.783-.774 1.525-1.506 3.23-1.545h.085c1.062 0 2.12.469 2.24.524a7.03 7.03 0 0 0 3.056.724c1.076 0 2.188-.263 3.354-.795a9.135 9.11 0 0 0-.405-.317c-1.025.44-2.003.66-2.946.66-.962 0-1.925-.229-2.858-.68-.05-.022-1.22-.567-2.44-.57-.032 0-.065 0-.096.002-1.434.033-2.24.536-2.782.976-.528.013-.982.138-1.388.25-.361.1-.673.186-.979.185-.125 0-.35-.01-.37-.012-.35-.01-2.115-.437-3.518-.962-.143.1-.28.203-.415.31 1.466.593 3.25 1.053 3.812 1.089.157.01.323.027.491.027.372 0 .744-.103 1.104-.203.213-.059.446-.123.692-.17l-.196.194-1.017 1.087c-.08.08-.254.294-.14.557a.705.703 0 0 0 .268.292c.243.162.677.27 1.08.271.152 0 .297-.015.43-.044.427-.095.874-.448 1.349-.82.377-.296.913-.672 1.323-.782a1.494 1.49 0 0 1 .37-.05.611.61 0 0 1 .095.005c.27.034.533.125 1.003.472.835.62 4.531 3.815 4.566 3.846.002.002.238.203.22.537-.007.186-.11.352-.294.466a.902.9 0 0 1-.484.15.804.802 0 0 1-.428-.124c-.014-.01-1.28-1.157-1.746-1.543-.074-.06-.146-.115-.22-.115a.122.122 0 0 0-.096.045c-.073.09.01.212.105.294l1.48 1.47c.002 0 .184.17.204.395.012.244-.106.447-.35.606a.957.955 0 0 1-.526.171.766.764 0 0 1-.42-.127l-.214-.206a21.035 20.978 0 0 0-1.08-1.009c-.072-.058-.148-.112-.221-.112a.127.127 0 0 0-.094.038c-.033.037-.056.103.028.212a.698.696 0 0 0 .075.083l1.078 1.198c.01.01.222.26.024.511l-.038.048a1.18 1.178 0 0 1-.1.096c-.184.15-.43.164-.527.164a.8.798 0 0 1-.147-.012c-.106-.018-.178-.048-.212-.089l-.013-.013c-.06-.06-.602-.609-1.054-.98-.059-.05-.133-.11-.21-.11a.128.128 0 0 0-.096.042c-.09.096.044.24.1.293l.92 1.003a.204.204 0 0 1-.033.062c-.033.044-.144.155-.479.196a.91.907 0 0 1-.122.007c-.345 0-.712-.164-.902-.264a1.343 1.34 0 0 0 .13-.576 1.368 1.365 0 0 0-1.42-1.357c.024-.342-.025-.99-.697-1.274a1.455 1.452 0 0 0-.575-.125c-.146 0-.287.025-.42.075a1.153 1.15 0 0 0-.671-.564 1.52 1.515 0 0 0-.494-.085c-.28 0-.537.08-.767.242a1.168 1.165 0 0 0-.903-.43 1.173 1.17 0 0 0-.82.335c-.287-.217-1.425-.93-4.467-1.613a17.39 17.344 0 0 1-.692-.189 4.822 4.82 0 0 0-.077.494l.67.157c3.108.682 4.136 1.391 4.309 1.525a1.145 1.142 0 0 0-.09.442 1.16 1.158 0 0 0 1.378 1.132c.096.467.406.821.879 1.003a1.165 1.162 0 0 0 .415.08c.09 0 .179-.012.266-.034.086.22.282.493.722.668a1.233 1.23 0 0 0 .457.094c.122 0 .241-.022.355-.063a1.373 1.37 0 0 0 1.269.841c.37.002.726-.147.985-.41.221.121.688.341 1.163.341.06 0 .118-.002.175-.01.47-.059.689-.24.789-.382a.571.57 0 0 0 .048-.078c.11.032.234.058.373.058.255 0 .501-.086.75-.265.244-.174.418-.424.444-.637v-.01c.083.017.167.026.251.026.265 0 .527-.082.773-.242.48-.31.562-.715.554-.98a1.28 1.279 0 0 0 .978-.194 1.04 1.04 0 0 0 .502-.808 1.088 1.085 0 0 0-.16-.653c.804-.342 2.636-1.003 4.795-1.483a4.734 4.721 0 0 0-.067-.492 27.742 27.667 0 0 0-5.049 1.62zm5.123-.763c0 4.027-5.166 7.293-11.537 7.293-6.372 0-11.538-3.266-11.538-7.293 0-4.028 5.165-7.293 11.539-7.293 6.371 0 11.537 3.265 11.537 7.293zm.46.004c0-4.272-5.374-7.755-12-7.755S.002 7.277.002 11.55L0 12.004c0 4.533 4.695 8.203 11.999 8.203 7.347 0 12-3.67 12-8.204z"/></symbol></svg>
+
 <!-- Para el que usa el teclado o un lector de pantalla: se ve solo al
      tabular (ver .saltar). Lleva al <main>, que en la portada arranca en
      "Elegí un rubro" y adentro de un rubro en su encabezado: #grid no sirve,
@@ -4287,6 +4300,15 @@ const CUOTAS = [
   { cuotas: 9,  recargo: 63.5 },
   { cuotas: 12, recargo: 83.5 },
 ];
+
+/* El símbolo de Mercado Pago al lado de las cuotas (Benja, 24/11/2026): la
+   tarjeta ("Hasta 12 cuotas"), el botón de cuotas de la ficha, el recuadro de
+   los planes y el pedido. Es el dibujo de Simple Icons (CC0) en azul sobre el
+   óvalo celeste de la marca (#00B1EA), como el logo de la app: sólo con el
+   contorno celeste, a 20 px no se distinguía. Las cuotas se cobran por Mercado Pago: con el símbolo
+   se ve sin leer la letra chica. El dibujo está UNA vez, al principio del
+   <body> (#ico-mp), y cada lugar lo usa: son 4 KB y hay cientos de tarjetas. */
+const ICONO_MP = '<svg class="mp" role="img" aria-label="Mercado Pago"><use href="#ico-mp"/></svg>';
 
 // ---------- FOTOS ----------
 //
@@ -9512,8 +9534,8 @@ function htmlCuotasTarjeta(p){
   const max = maxCuotas();
   if(!max) return '';
   return conCuotas(p)
-    ? `<p class="cq">${ICONOS_SERVICIO.pago}<span>Hasta ${max} cuotas</span></p>`
-    : `<p class="cq vacio" aria-hidden="true">${ICONOS_SERVICIO.pago}<span>Hasta ${max} cuotas</span></p>`;
+    ? `<p class="cq">${ICONO_MP}<span>Hasta ${max} cuotas</span></p>`
+    : `<p class="cq vacio" aria-hidden="true">${ICONO_MP}<span>Hasta ${max} cuotas</span></p>`;
 }
 
 /* Se dibuja de a tandas. Con 483 productos, armar las 483 tarjetas en cada
@@ -13877,7 +13899,7 @@ let CUOTA_FICHA = 0;
 function htmlCuotasFicha(v){
   if(!conCuotas(v)) return '';
   return `<div class="fi-cuotas" role="group" aria-labelledby="fi-cuotas-rot">
-      <span class="fi-cuotas-rot" id="fi-cuotas-rot">Con tarjeta, en cuotas</span>
+      <div class="fi-cuotas-cab"><span class="fi-cuotas-rot" id="fi-cuotas-rot">Con tarjeta, en cuotas</span><span class="fi-mp">${ICONO_MP}Mercado Pago</span></div>
       <div class="fi-cuotas-ops">${CUOTAS.map(c => `<button type="button" class="fi-cuota" data-cuotas="${c.cuotas}" aria-pressed="${c.cuotas === CUOTA_FICHA}">${c.cuotas} <small>${c.cuotas === 1 ? 'pago' : 'cuotas'}</small></button>`).join('')}</div>
       <div class="fi-cuotas-res" aria-live="polite">${textoCuotasFicha(v)}</div>
       <div class="fi-adelanto">${htmlAdelantoFicha(v)}</div>
@@ -15063,7 +15085,7 @@ function htmlPromosFicha(v){
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>
       <b>¿Tenés un usado?</b><span>Te lo tomamos como parte de pago</span>${ir('Cotizalo')}</button>` : ''}
     ${cuotas ? `<button type="button" class="fi-promo fi-promo-cuotas" id="fi-promo-cuotas">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg>
+      ${ICONO_MP}
       <b>Hasta ${maxCuotas()} cuotas</b><span>Con tarjeta, o adelantá una parte y cuotificá el resto</span>${ir('Ver cuánto queda')}</button>` : ''}
   </div>`;
 }
@@ -15910,7 +15932,7 @@ function htmlCuotasPedido(){
     : `<b>${c.cuotas} cuotas de $ ${plata(x.cuota)}</b>`;       // sin el total (D13 A, 13/10/2026)
   else if(c) ayuda = `<b>${esc(nombreCuotas(c.cuotas))}</b> (el monto te lo pasamos por WhatsApp)`;
   return `<div class="pd-cuotas" role="group" aria-labelledby="pd-rot-cuotas">
-      <span class="pd-rot" id="pd-rot-cuotas">¿Pagás con tarjeta? <i>opcional</i></span>
+      <div class="pd-cuotas-cab"><span class="pd-rot" id="pd-rot-cuotas">¿Pagás con tarjeta? <i>opcional</i></span><span class="pd-mp">${ICONO_MP}</span></div>
       <div class="pd-chips">${CUOTAS.map(q => `<button type="button" class="pd-chip" data-cuotas="${q.cuotas}" aria-pressed="${q.cuotas === CUOTAS_PEDIDO}">${esc(nombreCuotas(q.cuotas))}</button>`).join('')}</div>
       <p class="pd-ayuda">${ayuda}</p>
     </div>`;

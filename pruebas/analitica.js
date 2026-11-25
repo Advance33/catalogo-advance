@@ -264,4 +264,63 @@ async function correrPruebas(){
      'la pauta se lee al cargar y enseguida sale de la dirección (con la medición apagada, la dirección no se toca)');
   ok(/anotar\('visita', \{[^;]*\.\.\.PAUTA_ENTRADA \}\)/.test(codigo), 'va en el evento "visita"');
   ok(/anotar\('carga_fallida', \{[^;]*\.\.\.PAUTA_ENTRADA \}\)/.test(codigo), 'y en "carga_fallida": un clic pago que cayó en una página que no cargó');
+
+  /* ---- 9. «Te vi en Google» (25/11/2026) ----
+     El que llegó por un aviso de Google lo dice en el WhatsApp, como en la
+     página de cada modelo (PR #108): con las mismas reglas que la medición y
+     la misma clave en sessionStorage. Se prueba la decisión con cada entrada y
+     después el mensaje, prendiendo DE_GOOGLE un rato. */
+  const CLAVE_G = 'advtecno.google';
+  const guardada = (() => { try{ return sessionStorage.getItem(CLAVE_G); }catch(e){ return null; } })();
+  const borrarClave = () => { try{ sessionStorage.removeItem(CLAVE_G); }catch(e){} };
+  const urlAntes = ANALITICA_URL, deGoogleAntes = DE_GOOGLE;
+  try{
+    ok(DE_GOOGLE === false, 'en la prueba (sin aviso y con la medición apagada) nadie sale marcado');
+    ANALITICA_URL = '';
+    borrarClave();
+    ok(marcaDeGoogle('?gclid=x') === false, 'con la medición apagada no marca, aunque venga de un aviso');
+    ANALITICA_URL = 'https://ejemplo.invalid/api/eventos';
+    ok(marcaDeGoogle('') === false && marcaDeGoogle('?q=iphone') === false, 'sin aviso, no marca');
+    ok(marcaDeGoogle('?utm_source=meta&utm_medium=cpc') === false, 'un aviso de otro (Meta), tampoco');
+    ok(marcaDeGoogle('?gclid=x') === true, 'un clic a un aviso de Google, sí');
+    ok((() => { try{ return sessionStorage.getItem(CLAVE_G) === '1'; }catch(e){ return true; } })(),
+       'y queda guardado en la pestaña, con la misma clave que la página de cada modelo');
+    ok(marcaDeGoogle('') === true, 'después, aunque la dirección ya no tenga el aviso, sigue marcado (vino de un modelo o recargó)');
+    ok(marcaDeGoogle('?gbraid=0A') === true && marcaDeGoogle('?gad_source=1') === true, 'también con gbraid o gad_source');
+    borrarClave();
+    Object.defineProperty(window, 'doNotTrack', { configurable: true, value: '1' });
+    try{
+      ok(marcaDeGoogle('?gclid=x') === false, 'con Do Not Track no marca');
+      ok((() => { try{ return sessionStorage.getItem(CLAVE_G) === null; }catch(e){ return true; } })(), 'ni guarda nada');
+    }finally{ delete window.doNotTrack; }
+
+    // El mensaje
+    DE_GOOGLE = false;
+    const msj = 'Hola! Me interesa el iPhone 17 Pro 256GB (USD 1.345). ¿Me pasás info?';
+    ok(conMarcaGoogle(msj) === msj, 'sin aviso el mensaje queda igual');
+    DE_GOOGLE = true;
+    ok(conMarcaGoogle(msj) === 'Hola! Te vi en Google. Me interesa el iPhone 17 Pro 256GB (USD 1.345). ¿Me pasás info?',
+       'con aviso, «Te vi en Google.» va después del saludo', conMarcaGoogle(msj));
+    ok(conMarcaGoogle('Hola, quería hacer una consulta') === 'Hola! Te vi en Google. Quería hacer una consulta',
+       'el de Marian («Hola,») también', conMarcaGoogle('Hola, quería hacer una consulta'));
+    ok(conMarcaGoogle('Consulta suelta') === 'Te vi en Google. Consulta suelta', 'uno que no saluda la lleva adelante');
+    ok(conMarcaGoogle('Hola! Te vi en Google. Ya está') === 'Hola! Te vi en Google. Ya está', 'nunca dos veces');
+    ok(conMarcaGoogle(mensajePedido()).startsWith('Hola! Te vi en Google. Te paso mi pedido:'), 'el pedido la lleva', conMarcaGoogle(mensajePedido()).slice(0, 50));
+    ok(conMarcaGoogle(MENSAJE_COTIZAR_ENCARGO) === 'Hola! Te vi en Google. Busco un producto que no está en la web. ¿Me lo cotizan por encargo?',
+       'y el encargo');
+    const link = linkWA(msj);
+    ok(decodeURIComponent(link.split('?text=')[1] || '') === conMarcaGoogle(msj), 'linkWA la pone en el link', link.slice(0, 80));
+    // Todos los botones pasan por linkWA: en el código no hay otro armado de wa.me
+    const armados = (codigo.match(/https:\/\/wa\.me\//g) || []).length;
+    ok(armados === 1, 'todos los WhatsApp de la portada salen de linkWA (un solo armado de wa.me en el código de la página)', armados);
+    ok(/wf\.href = linkWA\(/.test(codigo), 'también el flotante, y con él el pie y los avisos que copian su link');
+    ok(/let DE_GOOGLE = marcaDeGoogle\(location\.search\);/.test(codigo) &&
+       codigo.indexOf('let DE_GOOGLE = marcaDeGoogle(location.search);') < codigo.indexOf('const PAUTA_ENTRADA = pautaDe(location.search);'),
+       'se decide al cargar, antes de que la pauta salga de la dirección');
+  }finally{
+    ANALITICA_URL = urlAntes;
+    DE_GOOGLE = deGoogleAntes;
+    borrarClave();
+    if(guardada !== null){ try{ sessionStorage.setItem(CLAVE_G, guardada); }catch(e){} }
+  }
 }

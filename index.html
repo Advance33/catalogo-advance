@@ -7416,7 +7416,44 @@ const codificarWA = texto => {
   try{ return encodeURIComponent(t); }
   catch{ return encodeURIComponent(typeof t.toWellFormed === 'function' ? t.toWellFormed() : t.replace(/[\uD800-\uDFFF]/g, '')); }
 };
-const linkWA = texto => WHATSAPP ? `https://wa.me/${WHATSAPP}?text=${codificarWA(texto)}` : '';
+/* «Te vi en Google» (Benja, 24/11/2026, prueba de avisos de diciembre; en la
+   portada desde el 25/11, para los vínculos del aviso que llevan acá y al
+   cotizador, #cotizar-usado): al que llegó por un aviso de Google, el mensaje de WhatsApp le dice
+   que nos vio ahí, así el vendedor sabe qué ventas trajo el aviso. Pasa por
+   linkWA, así que vale para todos los botones: tarjeta, ficha, pedido, usado,
+   encargo, «¿Buscás algo que no está?», Marian, el flotante y lo que copia su
+   link (el pie, el aviso sin catálogo, «Ya no está»).
+   Las mismas reglas que lo que se anota (ANALITICA_URL y sin Do Not Track) y
+   la misma clave que la página de cada modelo (herramientas/paginas-producto.py):
+   queda en la pestaña (sessionStorage), así que el que entró por el aviso a un
+   modelo y después pasó a la portada, o al revés, sigue marcado; sin
+   sessionStorage vale para esta carga. Se decide acá, al cargar: después la
+   pauta sale de la dirección (ver PAUTA_ENTRADA; pautaDe() está más abajo y
+   sirve igual porque es una función declarada). El bot saca la frase antes de
+   buscar el producto (chatsell ADR-161). DE_GOOGLE es let y no const: las
+   pruebas la prenden un rato (analitica.js). */
+function marcaDeGoogle(busqueda){
+  try{
+    if(!ANALITICA_URL || navigator.doNotTrack === '1' || window.doNotTrack === '1') return false;
+    if(pautaDe(busqueda).pauta === 'google'){
+      try{ sessionStorage.setItem('advtecno.google', '1'); }catch(e){}
+      return true;
+    }
+    try{ return sessionStorage.getItem('advtecno.google') === '1'; }catch(e){ return false; }
+  }catch(e){ return false; }
+}
+let DE_GOOGLE = marcaDeGoogle(location.search);
+// Los mensajes de la portada arrancan con «Hola!» (el de Marian, con «Hola,»):
+// la marca va después del saludo. Si alguno no saluda, va adelante.
+const conMarcaGoogle = texto => {
+  const t = String(texto == null ? '' : texto);
+  if(!DE_GOOGLE || !t || /te vi en google/i.test(t)) return t;
+  const hola = t.match(/^Hola[!,][ \t]*/);
+  if(!hola) return 'Te vi en Google. ' + t;
+  const resto = t.slice(hola[0].length);
+  return 'Hola! Te vi en Google. ' + resto.charAt(0).toUpperCase() + resto.slice(1);
+};
+const linkWA = texto => WHATSAPP ? `https://wa.me/${WHATSAPP}?text=${codificarWA(conMarcaGoogle(texto))}` : '';
 
 /* Especificaciones deducidas del nombre del producto.
    La planilla no tiene columnas de specs, pero la descripción sí las trae
@@ -17842,8 +17879,9 @@ const sincronizarCinta   = activarCinta('cats-wrap',   'cats',   'cats-izq',   '
    la constante, el botón no queda apuntando a la nada: directamente no aparece. */
 if(WHATSAPP){
   const wf = $('wa-flotante');
-  wf.href = `https://wa.me/${WHATSAPP}?text=` +
-            encodeURIComponent('Hola! Te escribo desde el catálogo de Advance Tecno.');
+  // Por linkWA, como todos: así lleva «Te vi en Google» si llegó por un aviso
+  // (25/11/2026). El pie y los avisos que copian este link la heredan.
+  wf.href = linkWA('Hola! Te escribo desde el catálogo de Advance Tecno.');
   wf.hidden = false;
   document.body.classList.add('con-wa');   // la barrita del celular cuenta con él (04/11)
 }

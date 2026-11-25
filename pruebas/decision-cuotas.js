@@ -19,6 +19,10 @@
 //       se ve en ningún lado (Pedro): ni el porcentaje ni una mención; los
 //       recargos de cripto y PayPal sí.
 //   Sin factura: ni la pregunta del IVA ni ningun "IVA" o "factura" a la vista.
+//   MP  el simbolo de Mercado Pago (Benja, 24/11/2026) en la tarjeta, en el
+//       boton de cuotas y en el recuadro de los planes de la ficha (con
+//       «Mercado Pago» escrito) y en el pedido. El dibujo esta una vez en la
+//       pagina (#ico-mp) y cada lugar lo usa: son 4 KB y hay cientos de tarjetas.
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const info = t => R.push('  --  ' + t);
@@ -190,6 +194,15 @@ function probarLaTarjeta(){
   ok(!malas.length, '[1B] cada tarjeta con stock y precio dice «Hasta ' + maxCuotas() + ' cuotas» debajo de la etiqueta; las demas lo tienen invisible',
      malas.slice(0, 3).join(' | ') || con + ' con, ' + sin + ' sin');
   ok(!cards.some(el => /\$\s*[\d.]+\s*$/.test(cuTxt(el.querySelector('.cq')))), '[1B] sin monto: no dice cuanto es la cuota');
+  const simbolos = document.querySelectorAll('symbol#ico-mp');
+  ok(simbolos.length === 1 && !!simbolos[0].querySelector('path') && !!simbolos[0].querySelector('ellipse'),
+     '[MP] el simbolo de Mercado Pago esta una sola vez en la pagina', simbolos.length);
+  const conCq = cards.map(el => el.querySelector('.cq:not(.vacio)')).filter(Boolean);
+  ok(conCq.length > 0 && conCq.every(cq => { const sv = cq.querySelector('svg.mp');
+       return sv && sv.getAttribute('aria-hidden') === 'true' && sv.querySelector('use')?.getAttribute('href') === '#ico-mp' && !sv.querySelector('path'); }),
+     '[MP] «Hasta ' + maxCuotas() + ' cuotas» lleva el simbolo de Mercado Pago, sin copiar el dibujo en cada tarjeta', conCq.length);
+  const rmp = conCq[0] && conCq[0].querySelector('svg.mp')?.getBoundingClientRect();
+  ok(rmp && rmp.width >= 18 && rmp.height >= 12, '[MP] y se ve (no queda en cero)', rmp && Math.round(rmp.width) + 'x' + Math.round(rmp.height));
   // Las etiquetas de una misma fila, a la misma altura
   const filas = {};
   cards.slice(0, 40).forEach(el => { const r = el.getBoundingClientRect(); if(r.height) (filas[Math.round(r.top)] ||= []).push(el.querySelector('.pie').getBoundingClientRect().top); });
@@ -213,6 +226,11 @@ async function probarLaFicha(){
   const rot = box.querySelector('.fi-cuotas-rot');
   ok(cuTxt(rot) === 'Con tarjeta, en cuotas' && box.getAttribute('role') === 'group' && document.getElementById(box.getAttribute('aria-labelledby')) === rot,
      '[2B] con el rotulo «Con tarjeta, en cuotas», leido como grupo');
+  const fmp = box.querySelector('.fi-cuotas-cab .fi-mp');
+  ok(fmp && cuTxt(fmp) === 'Mercado Pago' && !!fmp.querySelector('svg.mp use[href="#ico-mp"]'),
+     '[MP] al lado del rotulo, el simbolo y «Mercado Pago»', cuTxt(fmp));
+  const promo = d.querySelector('#fi-promo-cuotas');
+  if(promo) ok(!!promo.querySelector('svg.mp use[href="#ico-mp"]'), '[MP] el boton «Hasta ' + maxCuotas() + ' cuotas» de la ficha tambien lleva el simbolo');
   let bs = [...box.querySelectorAll('.fi-cuota')];
   ok(bs.length === CUOTAS.length && bs.every((b, i) => Number(b.dataset.cuotas) === CUOTAS[i].cuotas && b.tagName === 'BUTTON' && b.type === 'button'),
      '[2B] un boton por plan', bs.map(cuTxt).join(' | '));
@@ -316,6 +334,9 @@ async function probarElPedido(){
     const rot = box.querySelector('.pd-rot');
     ok(cuTxt(rot) === '¿Pagás con tarjeta? opcional' && box.getAttribute('role') === 'group' && document.getElementById(box.getAttribute('aria-labelledby')) === rot,
        '[3C] el rotulo, con «opcional», leido como grupo', cuTxt(rot));
+    const cab = box.querySelector('.pd-cuotas-cab');
+    ok(!!(cab && cab.querySelector('.pd-mp svg.mp use[href="#ico-mp"]')) && cab.getBoundingClientRect().height < 26,
+       '[MP] y el simbolo de Mercado Pago a la derecha, en el mismo renglon', cab && Math.round(cab.getBoundingClientRect().height));
     ok(getComputedStyle(box).backgroundColor === getComputedStyle(ent).backgroundColor, '[3C] en el mismo recuadro lila que la entrega');
     const chip = n => box.querySelector(`.pd-chip[data-cuotas="${n}"]`);
     const chips = [...box.querySelectorAll('.pd-chip')];

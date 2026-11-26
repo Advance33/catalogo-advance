@@ -154,4 +154,14 @@ function correrPruebas(){
   ok(ORDEN_CATS.includes('Dyson'), 'y su lugar en la barra');
   ok(plural('Dyson') === 'Dyson', 'el plural de Dyson es Dyson', plural('Dyson'));
   ok(/secador/.test(ALIAS_CAT['Dyson'] || '') && /aspiradora/.test(ALIAS_CAT['Dyson'] || ''), '"secador" y "aspiradora" llegan a Dyson');
+
+  /* ---- 11. Las teles tienen dónde caer (Benja, 26/11/2026) ----
+     "Televisor" entra como categoría nueva desde ADVAPP: su mundo, su lugar
+     en la barra al lado de los monitores, "Televisores" en plural, "tele" en
+     el buscador y algo para sumarle en "Te puede servir". */
+  ok(MUNDOS.some(m => m.rubros.includes('Televisor')), 'las teles tienen su mundo en la portada');
+  ok(ORDEN_CATS.indexOf('Televisor') === ORDEN_CATS.indexOf('Monitor') + 1, 'y su lugar en la barra, al lado de los monitores', ORDEN_CATS.indexOf('Televisor'));
+  ok(plural('Televisor') === 'Televisores', 'el plural es Televisores', plural('Televisor'));
+  ok(/\btele\b/.test(ALIAS_CAT['Televisor'] || '') && /\btv\b/.test(ALIAS_CAT['Televisor'] || ''), '"tele" y "tv" llegan a las teles');
+  ok((COMPLEMENTOS['Televisor'] || []).length > 0, 'y tienen "Te puede servir"', COMPLEMENTOS['Televisor']);
 }

@@ -231,7 +231,7 @@ def main():
             ok(ev[5].get('t') == 'whatsapp' and ev[5].get('desde') == 'pagina' and ev[5].get('id') == 'A3',
                'el boton del medio tambien se anota; el derecho y lo que no es WhatsApp, no', ev[5:])
             ok(all(isinstance(m['cuerpo']['eventos'][0].get('ms'), int) for m in r['mandados']), 'cada evento con su momento')
-            ok(r.get('mensaje') == 'Hola! Te vi en Google. a1' and r.get('mensajeAgotada') == 'Te vi en Google. aviso3',
+            ok(r.get('mensaje') == 'Hola! *Te vi en Google.* a1' and r.get('mensajeAgotada') == '*Te vi en Google.* aviso3',
                'el mensaje de WhatsApp dice "Te vi en Google", tambien el de la agotada', [r.get('mensaje'), r.get('mensajeAgotada')])
 
         print('--- Otras formas de llegar')
@@ -257,7 +257,7 @@ def main():
         r = visita('sin-precio', '?utm_source=Meta&utm_medium=paid_social')
         ok(r.get('mensaje') == 'Hola! a1', 'otra pauta que no es Google: el mensaje sin marca', r.get('mensaje'))
         r = visita('sin-precio', '?yagoogle=1')
-        ok(r.get('mensaje') == 'Hola! Te vi en Google. a1' and eventos(r)[0].get('t') == 'pagina_producto' and 'pauta' not in eventos(r)[0],
+        ok(r.get('mensaje') == 'Hola! *Te vi en Google.* a1' and eventos(r)[0].get('t') == 'pagina_producto' and 'pauta' not in eventos(r)[0],
            'si la pestaña ya llego por un aviso de Google, el mensaje sigue marcado (y no cuenta otra llegada paga)', [r.get('mensaje'), eventos(r)[0]])
         r = visita('sin-precio', '?color=azul&gclid=x&utm_term=ps5#ficha')
         ok(r['direccion'] == '?color=azul#ficha', 'de la direccion sale solo lo del aviso: lo demas queda', r['direccion'])
@@ -273,7 +273,7 @@ def main():
         r = visita('sin-precio', '?gclid=x&sinstorage=1')
         ok(not r['errores'] and len(r['mandados']) == ENVIOS and len({m['cuerpo']['visita'] for m in r['mandados']}) == 1,
            'sin sessionStorage igual anota, y todo con la misma visita', [m['cuerpo']['visita'] for m in r['mandados']])
-        ok(r.get('mensaje') == 'Hola! Te vi en Google. a1', 'y el mensaje igual dice "Te vi en Google"', r.get('mensaje'))
+        ok(r.get('mensaje') == 'Hola! *Te vi en Google.* a1', 'y el mensaje igual dice "Te vi en Google"', r.get('mensaje'))
         for modo, que in (('no', 'si sendBeacon no lo toma'), ('falta', 'si sendBeacon no existe')):
             r = visita('sin-precio', '?gclid=x&beacon=' + modo)
             ok(not r['errores'] and len(r['mandados']) == ENVIOS

@@ -197,6 +197,11 @@ function probarLaTarjeta(){
   const simbolos = document.querySelectorAll('symbol#ico-mp');
   ok(simbolos.length === 1 && !!simbolos[0].querySelector('path') && !!simbolos[0].querySelector('ellipse'),
      '[MP] el simbolo de Mercado Pago esta una sola vez en la pagina', simbolos.length);
+  // Benja 26/11: «se ve azul el logo». Las manos son blancas: ovalo blanco, celeste arriba y abajo
+  // del apreton y el contorno azul encima (en ese orden: lo ultimo se pinta arriba).
+  const capas = simbolos[0] ? [...simbolos[0].children].map(el => (el.getAttribute('fill') || '').toLowerCase()) : [];
+  ok(capas.join(' ') === '#fff #00b1ea #0a0080',
+     '[MP] las manos del simbolo son blancas, como el logo de la marca', capas.join(' '));
   const conCq = cards.map(el => el.querySelector('.cq:not(.vacio)')).filter(Boolean);
   ok(conCq.length > 0 && conCq.every(cq => { const sv = cq.querySelector('svg.mp');
        return sv && sv.getAttribute('aria-hidden') === 'true' && sv.querySelector('use')?.getAttribute('href') === '#ico-mp' && !sv.querySelector('path'); }),

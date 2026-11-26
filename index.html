@@ -4611,6 +4611,11 @@ const MUNDOS = [
      Airwrap, planchitas, aspiradoras. Mundo propio: no es gaming ni relojes. */
   { nombre: 'Dyson',                foto: 'Dyson',       tamano: '',
     rubros: ['Dyson'] },
+  /* Las teles, desde el 26/11/2026 (Benja): mundo propio, como Dyson. Las
+     mandan uno o dos proveedores un par de veces por semana: el día que no
+     hay ninguna con stock el mundo no se muestra, como cualquier otro. */
+  { nombre: 'Televisores',          foto: 'Televisor',   tamano: '',
+    rubros: ['Televisor'] },
   /* Los usados (Benja, 13-14/10/2026): un mundo propio, al final y del
      tamaño normal. Son pocos equipos (iPhone usados de un solo proveedor):
      con 'grande' o 'alto' pesarían en la portada como los rubros con cientos
@@ -6469,6 +6474,9 @@ const ALIAS_CAT = {
   // El proveedor escribe "Dyson HD16 Nural": el que busca "secador" o
   // "aspiradora" también tiene que llegar (07/10/2026).
   'Dyson':              'secador secadores aspiradora aspiradoras airwrap planchita purificador',
+  // Las teles (26/11/2026): se buscan como "tele", "teles" o "tv". El
+  // proveedor escribe "Smart TV Samsung 55" y "Televisor" no lo dice nadie.
+  'Televisor':          'tele teles televisores tv tvs',
   // Los usados (14/10/2026): el rubro ya dice "usado"; esto es por cómo se
   // busca. La categoría de ADVAPP ("Celular") sigue en el texto (catPlanilla).
   'Usado':              'usados seminuevo seminuevos',
@@ -6497,7 +6505,8 @@ const ORDEN_CATS = [
   // Computación y pantallas
   // "Notebook" no aparece mientras todas sean Apple (se convierten en MacBook),
   // pero el día que entre una Asus tiene que caer acá y no al final de la barra.
-  'MacBook', 'Notebook', 'iPad', 'Monitor', 'Desktop', 'Apple Watch', 'Smartwatch', 'Tablet',
+  // Las teles, al lado de los monitores (26/11/2026)
+  'MacBook', 'Notebook', 'iPad', 'Monitor', 'Televisor', 'Desktop', 'Apple Watch', 'Smartwatch', 'Tablet',
   // Foto y video: cada cosa al lado de su accesorio
   'Filmadora', 'Cámara de Acción', 'Cámara', 'Accesorio Cámara',
   'Objetivo', 'Gafas Inteligentes',
@@ -6575,7 +6584,7 @@ const CATS_PLURAL = {
   'Notebook':'Notebooks', 'Parlante':'Parlantes', 'Smartwatch':'Smartwatches',
   'Accesorio Apple':'Accesorios Apple', 'Accesorio Cámara':'Accesorios Cámara',
   'Accesorio Drone':'Accesorios Drone', 'Accesorio Gaming':'Accesorios Gaming',
-  'Monitor':'Monitores', 'E-Reader':'E-Readers',
+  'Monitor':'Monitores', 'E-Reader':'E-Readers', 'Televisor':'Televisores',
   // Estas ya funcionan como plural: "Apple Watchs" y "Auricularess" no existen
   'Apple Watch':'Apple Watch', 'Auriculares':'Auriculares',
   'Gafas Inteligentes':'Gafas Inteligentes', 'Dyson':'Dyson',
@@ -10041,7 +10050,10 @@ const COMPLEMENTOS = {
   /* Dyson entro como categoria el 07/10/2026 y a la web el 13/10. No hay un
      accesorio suyo en el catalogo: se ofrece lo que se regala o se suma a un
      gusto asi, y que entra debajo del techo de precio. */
-  'Dyson':               ['Auriculares', 'Apple Watch', 'E-Reader']
+  'Dyson':               ['Auriculares', 'Apple Watch', 'E-Reader'],
+  /* Las teles (26/11/2026): lo que se suma a una tele en el living, sonido y
+     una consola. Entran debajo del techo de precio de casi todas. */
+  'Televisor':           ['Parlante', 'Consola', 'Auriculares']
 };
 
 const CUANTOS_SUGERIDOS = 3;

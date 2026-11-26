@@ -472,6 +472,8 @@ SCRIPT = r'''
   // vendedor sabe qué ventas trajo el aviso. Va después del precio (el lugar del
   // precio se cuenta sobre el mensaje sin marca). deGoogle se decide abajo, con
   // la pauta; el bot saca la frase antes de buscar el producto (chatsell ADR-161).
+  // Desde el 26/11 va en negrita de WhatsApp (*…*) para que resalte: el bot la saca
+  // igual (ADR-162) y ADVAPP la muestra en negrita.
   let deGoogle = false;
   const conMarca = (link) => {
     const i = String(link || '').indexOf('?text=');
@@ -479,7 +481,7 @@ SCRIPT = r'''
     try{
       const t = decodeURIComponent(link.slice(i + 6));
       if(/te vi en google/i.test(t)) return link;
-      return link.slice(0, i + 6) + encodeURIComponent(/^Hola!\s*/.test(t) ? t.replace(/^Hola!\s*/, 'Hola! Te vi en Google. ') : 'Te vi en Google. ' + t);
+      return link.slice(0, i + 6) + encodeURIComponent(/^Hola!\s*/.test(t) ? t.replace(/^Hola!\s*/, 'Hola! *Te vi en Google.* ') : '*Te vi en Google.* ' + t);
     }catch(e){ return link; }
   };
   // vivo: ya llegó lo de ADVAPP; antes (o si no llega) no se dice precio ni stock
@@ -1864,7 +1866,7 @@ def probar():
     ok('<tbody id="filas">' in h3 and 'tb.innerHTML' in h3 and 'lowPrice: Math.min(...ps)' in h3, 'al abrir se rehacen la tabla y los datos para Google')
     ok('wa.href = conMarca((sin ? conPrecio(x.aviso, x.avisoPos, precio) : conPrecio(x.wa, x.waPos, precio)) || x.wa)' in h3,
        'el WhatsApp sigue a la version elegida y al stock del momento')
-    ok("'Hola! Te vi en Google. '" in h3 and "sessionStorage.setItem('advtecno.google', '1')" in h3,
+    ok("'Hola! *Te vi en Google.* '" in h3 and "sessionStorage.setItem('advtecno.google', '1')" in h3,
        'Te vi en Google: el que llego por un aviso de Google lo dice en el mensaje (24/11)')
     ok('const precio = vivo ? x.precio : null;' in h3 and "' (USD ' + plata(precio) + ')'" in h3,
        'el mensaje lleva el precio de ADVAPP del momento, nunca uno escrito al armar la pagina (26/10)')

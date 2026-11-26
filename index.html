@@ -7458,7 +7458,9 @@ const codificarWA = texto => {
    pauta sale de la dirección (ver PAUTA_ENTRADA; pautaDe() está más abajo y
    sirve igual porque es una función declarada). El bot saca la frase antes de
    buscar el producto (chatsell ADR-161). DE_GOOGLE es let y no const: las
-   pruebas la prenden un rato (analitica.js). */
+   pruebas la prenden un rato (analitica.js). Desde el 26/11 la frase va en
+   negrita de WhatsApp (*…*) para que resalte: el bot la saca igual (ADR-162)
+   y ADVAPP la muestra en negrita. */
 function marcaDeGoogle(busqueda){
   try{
     if(!ANALITICA_URL || navigator.doNotTrack === '1' || window.doNotTrack === '1') return false;
@@ -7476,9 +7478,9 @@ const conMarcaGoogle = texto => {
   const t = String(texto == null ? '' : texto);
   if(!DE_GOOGLE || !t || /te vi en google/i.test(t)) return t;
   const hola = t.match(/^Hola[!,][ \t]*/);
-  if(!hola) return 'Te vi en Google. ' + t;
+  if(!hola) return '*Te vi en Google.* ' + t;
   const resto = t.slice(hola[0].length);
-  return 'Hola! Te vi en Google. ' + resto.charAt(0).toUpperCase() + resto.slice(1);
+  return 'Hola! *Te vi en Google.* ' + resto.charAt(0).toUpperCase() + resto.slice(1);
 };
 const linkWA = texto => WHATSAPP ? `https://wa.me/${WHATSAPP}?text=${codificarWA(conMarcaGoogle(texto))}` : '';
 

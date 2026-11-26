@@ -299,14 +299,15 @@ async function correrPruebas(){
     const msj = 'Hola! Me interesa el iPhone 17 Pro 256GB (USD 1.345). ¿Me pasás info?';
     ok(conMarcaGoogle(msj) === msj, 'sin aviso el mensaje queda igual');
     DE_GOOGLE = true;
-    ok(conMarcaGoogle(msj) === 'Hola! Te vi en Google. Me interesa el iPhone 17 Pro 256GB (USD 1.345). ¿Me pasás info?',
-       'con aviso, «Te vi en Google.» va después del saludo', conMarcaGoogle(msj));
-    ok(conMarcaGoogle('Hola, quería hacer una consulta') === 'Hola! Te vi en Google. Quería hacer una consulta',
+    ok(conMarcaGoogle(msj) === 'Hola! *Te vi en Google.* Me interesa el iPhone 17 Pro 256GB (USD 1.345). ¿Me pasás info?',
+       'con aviso, «*Te vi en Google.*» (en negrita de WhatsApp) va después del saludo', conMarcaGoogle(msj));
+    ok(conMarcaGoogle('Hola, quería hacer una consulta') === 'Hola! *Te vi en Google.* Quería hacer una consulta',
        'el de Marian («Hola,») también', conMarcaGoogle('Hola, quería hacer una consulta'));
-    ok(conMarcaGoogle('Consulta suelta') === 'Te vi en Google. Consulta suelta', 'uno que no saluda la lleva adelante');
+    ok(conMarcaGoogle('Consulta suelta') === '*Te vi en Google.* Consulta suelta', 'uno que no saluda la lleva adelante');
     ok(conMarcaGoogle('Hola! Te vi en Google. Ya está') === 'Hola! Te vi en Google. Ya está', 'nunca dos veces');
-    ok(conMarcaGoogle(mensajePedido()).startsWith('Hola! Te vi en Google. Te paso mi pedido:'), 'el pedido la lleva', conMarcaGoogle(mensajePedido()).slice(0, 50));
-    ok(conMarcaGoogle(MENSAJE_COTIZAR_ENCARGO) === 'Hola! Te vi en Google. Busco un producto que no está en la web. ¿Me lo cotizan por encargo?',
+    ok(conMarcaGoogle('Hola! *Te vi en Google.* Ya está') === 'Hola! *Te vi en Google.* Ya está', 'ni en negrita');
+    ok(conMarcaGoogle(mensajePedido()).startsWith('Hola! *Te vi en Google.* Te paso mi pedido:'), 'el pedido la lleva', conMarcaGoogle(mensajePedido()).slice(0, 50));
+    ok(conMarcaGoogle(MENSAJE_COTIZAR_ENCARGO) === 'Hola! *Te vi en Google.* Busco un producto que no está en la web. ¿Me lo cotizan por encargo?',
        'y el encargo');
     const link = linkWA(msj);
     ok(decodeURIComponent(link.split('?text=')[1] || '') === conMarcaGoogle(msj), 'linkWA la pone en el link', link.slice(0, 80));

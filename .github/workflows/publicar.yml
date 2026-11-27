@@ -51,16 +51,40 @@
 #     lo que hay en ADVAPP cuando arranca, y esa hora queda escrita en la
 #     página. Además GitHub apaga lo programado si el repo pasa 60 días sin
 #     cambios (se vuelve a prender en Actions).
+#     Medido del 12/11 al 26/11 (issue #301 de ADVAPP): GitHub crea UNA
+#     programada por día, no dos, entre 1 y 7 horas tarde (casi siempre sale
+#     entre las 20 y las 23). Se dejó así: el precio escrito dice su hora y el
+#     que abre la página ve el del momento.
+#
+# Lo que el repo no tiene (27/11/2026, issue #302 de ADVAPP): antes de armar,
+# herramientas/traer-publicado.py faltantes baja de lo publicado las páginas
+# de producto/ que no están en el repo (las de los modelos que entraron
+# después de la última vez que alguien guardó producto/), con su dirección.
+# Sin eso, si el modelo salía de ADVAPP su página quedaba en 404 en vez de
+# "Hoy sin stock" (producto/xiaomi-pocophone-c71/, Search Console 26/11).
+# Nunca frena: si el sitio no contesta, se arma con lo del repo, con un aviso.
 #
 # Si no se puede escribir el precio (ADVAPP o Chrome no contestan, tampoco al
-# segundo intento, un minuto después):
-#   - en un push hay un cambio que publicar: se publican las páginas del
-#     repo, sin precio, con un aviso;
+# segundo intento, un minuto después; o ADVAPP contesta con los modelos y sin
+# los precios: paginas-producto.py lo cuenta antes de escribir y no escribe):
 #   - en la corrida programada y en la que se larga a mano no hay nada más
 #     que publicar. Si lo publicado tiene precio de hoy, la corrida falla y no
 #     publica: queda ese precio, con su hora, en vez de pisarlo con páginas
-#     sin precio. Si lo publicado es de otro día (o no se pudo mirar), se
-#     publica sin precio, como en un push: un precio de ayer no se deja.
+#     sin precio;
+#   - en un push hay un cambio que publicar. Si lo publicado tiene precio de
+#     hoy, se publica el cambio con producto/, preguntas/, llms.txt y
+#     sitemap.xml tal cual están publicados (traer-publicado.py todo), con un
+#     aviso. Salvo que el push toque alguno de esos o algo de lo que salen
+#     (el generador, index.html, datos/, fotos/): ahí lo publicado taparía el
+#     cambio, y se sigue como abajo. Si no se pudo traer entero, también;
+#   - si lo publicado es de otro día (o no se pudo mirar), se publican las
+#     páginas del repo, sin precio, con un aviso: un precio de ayer no se deja.
+#     Las que solo estaban publicadas se traen igual, sin precio
+#     (traer-publicado.py faltantes --sin-precio). preguntas/, llms.txt,
+#     producto/index.html y sitemap.xml también están en el repo, sin precio,
+#     para que en ese caso no queden en 404; son una foto del día en que
+#     alguien los guardó (el 27/11/2026, la última vez) y nada los pone al día
+#     solo: ese día sale la lista de modelos de esa foto.
 #
 # Después de publicar le avisa a Bing qué páginas cambiaron (IndexNow,
 # 12/11/2026, herramientas/indexnow.py): sin el aviso, Bing tarda días en
@@ -80,7 +104,8 @@ on:
   pull_request:
     branches: [main]
     paths: ['index.html', '.github/**', 'robots.txt', 'herramientas/paginas-producto.py', 'herramientas/indexnow.py',
-            'herramientas/probar-pagina-modelo.py', 'herramientas/vista-previa.py', 'pruebas/correr.py']
+            'herramientas/traer-publicado.py', 'herramientas/probar-pagina-modelo.py', 'herramientas/vista-previa.py',
+            'pruebas/correr.py']
   workflow_dispatch:
     inputs:
       esperar_fuente:
@@ -98,7 +123,11 @@ jobs:
   armar:
     name: Armar y verificar
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # 25 (era 15, hasta el 27/11/2026): si ADVAPP no contesta, el paso del
+    # precio prueba dos veces, espera un minuto y trae de lo publicado (hasta
+    # 90 s cada "faltantes" y 4 minutos "todo", más lo que tarde en cortar la
+    # bajada que estaba en curso: hasta ~34 s)
+    timeout-minutes: 25
     concurrency:
       group: armar-${{ github.ref }}
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -110,35 +139,63 @@ jobs:
       - name: Instalar terser (versión fija)
         run: npm install --no-save --no-audit --no-fund --prefix "$RUNNER_TEMP/minificador" terser@5.31.6
 
+      # Las pruebas de lo que arma y trae las páginas (27/11/2026): solo en
+      # los PR, donde cambian. Si fallan, el PR queda en rojo.
+      - name: Probar el armador de páginas y lo que trae de lo publicado
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 herramientas/paginas-producto.py --probar
+          python3 herramientas/traer-publicado.py --probar
+
       # El precio del momento (12/11/2026, ver arriba). Se arma en esta copia
       # del repo, antes de copiarla, con la portada CON comentarios (la que
-      # conoce el generador). Si no se puede, prueba otra vez al minuto; qué
-      # pasa si tampoco, según la corrida, está arriba ("Si no se puede
-      # escribir el precio"). SOLO_PRECIO: la programada y la que se larga a
-      # mano, que no traen ningún cambio para publicar.
+      # conoce el generador), después de traer de lo publicado las páginas
+      # que el repo no tiene (27/11/2026). Si no se puede, prueba otra vez al
+      # minuto; qué pasa si tampoco, según la corrida, está arriba ("Si no se
+      # puede escribir el precio"). SOLO_PRECIO: la programada y la que se
+      # larga a mano, que no traen ningún cambio para publicar.
       - name: Escribir el precio del momento en las páginas de cada modelo
         id: precio
         env:
           SOLO_PRECIO: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+          ANTES: ${{ github.event.before }}
         run: |
-          armar() { python3 herramientas/paginas-producto.py --con-precio; }
+          armar() {
+            python3 herramientas/traer-publicado.py faltantes || echo "::warning::Traer lo publicado falló: se arma con lo del repo."
+            python3 herramientas/paginas-producto.py --con-precio
+          }
+          limpiar() { git reset -q --hard HEAD; git clean -fdq; }
+          # El push toca lo que "todo" pisaría con lo publicado, o algo de lo
+          # que salen esas páginas (el generador, la portada, los datos, las
+          # fotos), o no se puede saber: entonces no se trae, para no tapar
+          # el cambio del merge.
+          toca_lo_armado() {
+            [ -n "$ANTES" ] && git fetch -q --depth=1 origin "$ANTES" 2>/dev/null \
+              && git diff --quiet "$ANTES" HEAD -- producto preguntas llms.txt sitemap.xml index.html herramientas datos fotos \
+              && return 1
+            return 0
+          }
           if armar; then exit 0; fi
           echo "::notice::No se pudo escribir el precio del momento. Se prueba otra vez en un minuto."
-          git reset -q --hard HEAD
-          git clean -fdq
+          limpiar
           sleep 60
           if armar; then exit 0; fi
-          git reset -q --hard HEAD
-          git clean -fdq
-          if [ "$SOLO_PRECIO" = true ]; then
-            hoy=$(TZ=America/Argentina/Buenos_Aires date +%d/%m/%Y)
-            publicado=$(curl -fsS --max-time 20 "https://$(cat CNAME)/llms.txt" | grep -o -E 'son del [0-9]{2}/[0-9]{2}/[0-9]{4}' | head -1 | cut -d' ' -f3 || true)
-            if [ -n "$publicado" ] && [ "$publicado" = "$hoy" ]; then
+          limpiar
+          hoy=$(TZ=America/Argentina/Buenos_Aires date +%d/%m/%Y)
+          publicado=$(curl -fsS --max-time 20 "https://$(cat CNAME)/llms.txt" | grep -o -E 'son del [0-9]{2}/[0-9]{2}/[0-9]{4}' | head -1 | cut -d' ' -f3 || true)
+          if [ -n "$publicado" ] && [ "$publicado" = "$hoy" ]; then
+            if [ "$SOLO_PRECIO" = true ]; then
               echo "::error::No se pudo escribir el precio del momento. Esta corrida solo existe para eso y lo publicado tiene precio de hoy ($publicado): no se publica y queda como está."
               exit 1
             fi
+            if ! toca_lo_armado && python3 herramientas/traer-publicado.py todo; then
+              echo "::warning::No se pudo escribir el precio del momento: se publica el cambio con las páginas que ya estaban publicadas hoy, con su precio y su hora."
+              exit 0
+            fi
+            limpiar
           fi
-          echo "::warning::No se pudo escribir el precio del momento: se publican las páginas del repo, sin precio."
+          python3 herramientas/traer-publicado.py faltantes --sin-precio || echo "::warning::Traer lo publicado falló: van solo las páginas del repo."
+          echo "::warning::No se pudo escribir el precio del momento: se publican las páginas del repo (y las que solo estaban publicadas), sin precio."
           echo "sin_precio=true" >> "$GITHUB_OUTPUT"
 
       # IndexNow (12/11/2026, ver arriba): qué páginas recién armadas dicen

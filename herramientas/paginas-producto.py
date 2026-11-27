@@ -32,6 +32,12 @@ LO QUE NO CAMBIA NUNCA SOLO
 - Las paginas no se borran. La de un modelo que hoy no esta queda, marcada sin
   stock en los datos para Google; al abrirla, el script trae los precios del
   momento de ADVAPP y dice que hoy no hay.
+  Eso vale para las que estan en el repo. La publicacion arma sin commitear
+  (publicar.yml), asi que la de un modelo que entro despues de la ultima vez
+  que se guardo producto/ vive solo en lo publicado: desde el 27/11/2026
+  (issue #302 de ADVAPP) herramientas/traer-publicado.py la baja de ahi antes
+  de armar, con su direccion, y aca corre como si estuviera en el repo. Si
+  traia el precio escrito, sin_precio_viejo se lo saca junto con la hora.
 - Salvo que ese modelo siga a la venta con OTRA direccion (19/10/2026,
   chequeo de la web): ADVAPP le cambio el SKU madre o el grupo antes de que
   existiera la herencia de asignar_slugs (W3-05, 13/10), y quedaron dos
@@ -959,18 +965,30 @@ def sin_precio_viejo(t):
     # Dyson HD16, de antes del W3-06, guardaba "precio": 770, "stock": true, y
     # su script viejo pintaba "USD 770 · hasta 12 cuotas" hasta que contestaba
     # ADVAPP, y para siempre si ADVAPP no contestaba.
+    # Y la de una pagina con el precio del momento escrito (--con-precio,
+    # 12/11/2026) traida de lo publicado (traer-publicado.py, 27/11/2026): la
+    # hora sale del recuadro y de la nota, el aviso de los precios del viernes
+    # se esconde y los datos pierden el "sello" (sin el, el script arranca
+    # como el de una pagina sin precio).
+    t = re.sub(r'(<div class="precio sin" id="precio"><b>Hoy sin stock</b><i>)Al [^<]*?\. (Escribinos y te avisamos cuando entre</i></div>)',
+               r'\1\2', t)
+    t = re.sub(r'<p id="nota-precios">Precios en dólares al [^<]*</p>', lambda x: NOTA_SIN_SELLO, t)
+    t = re.sub(r'<p class="congelado" id="congelado">.*?</p>', lambda x: CONGELADO_VACIO, t, flags=re.S)
+
     def sin_precio_en_datos(x):
         try:
             d = json.loads(x.group(2).replace('<\\/', '</'))
         except ValueError:
             return x.group(0)
         vs = d.get('versiones') if isinstance(d, dict) else None
-        if not isinstance(vs, list) or not any(isinstance(v, dict) and ('precio' in v or v.get('stock')) for v in vs):
+        con_precio = isinstance(vs, list) and any(isinstance(v, dict) and ('precio' in v or v.get('stock')) for v in vs)
+        if not con_precio and not (isinstance(d, dict) and 'sello' in d):
             return x.group(0)
-        for v in vs:
+        for v in vs if con_precio else ():
             if isinstance(v, dict):
                 v.pop('precio', None)
                 v['stock'] = False
+        d.pop('sello', None)
         return x.group(1) + json.dumps(d, ensure_ascii=False).replace('</', '<\\/') + x.group(3)
     t = re.sub(r'(<script id="datos" type="application/json">)(.*?)(</script>)', sin_precio_en_datos, t, flags=re.S)
     return t
@@ -1572,6 +1590,49 @@ def con_precio_del_dia(t, m, general, sello, url):
     return n.replace('<script>%s</script>' % SCRIPT, '<script>%s</script>' % SCRIPT_SELLO, 1)
 
 
+def sin_precio_del_dia(t):
+    """Lo contrario de con_precio_del_dia: la pagina como la arma
+    armar_pagina, sin precio ni hora (27/11/2026, issue #302 de ADVAPP). Es
+    para las paginas que traer-publicado.py baja de lo publicado cuando no se
+    pudo escribir el precio y lo publicado es de otro dia: se publican asi, con
+    "Consultá el precio" como las del repo. Si algo no esta donde se lo espera
+    devuelve None: esa pagina no se publica con un precio viejo."""
+    datos = re.search(r'<script id="datos" type="application/json">(.*?)</script>', t or '', re.S)
+    try:
+        d = json.loads(datos.group(1).replace('<\\/', '</')) if datos else None
+    except ValueError:
+        d = None
+    if (not isinstance(d, dict) or not isinstance(d.get('versiones'), list) or desvio_de(t)
+            or t.count('<script>%s</script>' % SCRIPT_SELLO) != 1 or len(re.findall(r'<tbody id="filas">', t)) != 1
+            or len(re.findall(r'<div class="precio(?: sin)?" id="precio">', t)) != 1):
+        return None
+    vs = [v for v in d['versiones'] if isinstance(v, dict)]
+    filas = ''.join('<tr><td>%s</td><td>%s</td><td class="num">Consultar</td><td>—</td></tr>' % (
+        e(x.get('version') or '—'), e(x.get('color') or '—'))
+        for x in sorted(vs, key=lambda y: (y.get('version') or '', y.get('color') or '')))
+
+    def sin_oferta(x):
+        try:
+            j = json.loads(x.group(2).replace('<\\/', '</'))
+        except ValueError:
+            return x.group(0)
+        if not isinstance(j, dict) or j.get('@type') != 'Product' or 'offers' not in j:
+            return x.group(0)
+        j.pop('offers', None)
+        return x.group(1) + json.dumps(j, ensure_ascii=False).replace('</', '<\\/') + x.group(3)
+
+    d.pop('sello', None)
+    n = re.sub(r'<div class="precio(?: sin)?" id="precio">.*?</div>', lambda x: PRECIO_SIN_SELLO, t, count=1, flags=re.S)
+    n = re.sub(r'<p id="nota-precios">[^<]*</p>', lambda x: NOTA_SIN_SELLO, n, count=1)
+    n = re.sub(r'<p class="congelado" id="congelado">.*?</p>', lambda x: CONGELADO_VACIO, n, count=1, flags=re.S)
+    n = re.sub(r'(<tbody id="filas">).*?(</tbody>)', lambda x: x.group(1) + filas + x.group(2), n, count=1, flags=re.S)
+    n = re.sub(r'(<script type="application/ld\+json">)(.*?)(</script>)', sin_oferta, n, flags=re.S)
+    n = re.sub(r'(<script id="datos" type="application/json">)(.*?)(</script>)',
+               lambda x: x.group(1) + json.dumps(d, ensure_ascii=False).replace('</', '<\\/') + x.group(3), n, count=1, flags=re.S)
+    n = n.replace('<script>%s</script>' % SCRIPT_SELLO, '<script>%s</script>' % SCRIPT, 1)
+    return n
+
+
 def texto_plano(h, publica=''):
     """El HTML de una respuesta de la portada en texto, para llms.txt y los
     datos para Google: los renglones de la tabla de la moto y de "¿En qué
@@ -1718,6 +1779,25 @@ def armar_llms(general, publica, entradas, sello=None):
     return '\n'.join(l) + '\n'
 
 
+def datos_a_medias(modelos):
+    """Por que no escribir el precio del momento con estos datos, o '' si se
+    puede (27/11/2026, issue #302 de ADVAPP). Si ADVAPP contesta con los
+    modelos pero sin los precios, el generador termina bien y cada pagina
+    diria "Hoy sin stock". El 27/11 eran 474 modelos, 401 con stock y los 401
+    con precio: las vallas dejan mucho margen para los lunes."""
+    def precio(v):
+        p = v.get('precio')
+        return isinstance(p, (int, float)) and not isinstance(p, bool) and p > 0
+    vs = [[v for v in (m.get('versiones') or []) if isinstance(v, dict)] for m in modelos]
+    con_stock = [x for x in vs if any(v.get('stock') for v in x)]
+    con_precio = [x for x in con_stock if any(v.get('stock') and precio(v) for v in x)]
+    if len(con_stock) < 0.3 * len(modelos):
+        return 'ADVAPP dio con stock solo %d de %d modelos' % (len(con_stock), len(modelos))
+    if len(con_precio) < 0.9 * len(con_stock):
+        return 'ADVAPP dio %d modelos con stock y sin precio (de %d con stock)' % (len(con_stock) - len(con_precio), len(con_stock))
+    return ''
+
+
 def main(argv):
     if '--probar' in argv:
         return probar()
@@ -1751,6 +1831,10 @@ def main(argv):
         datos['registro'] = registro.group(1)
     sello = None
     if '--con-precio' in argv:
+        a_medias = datos_a_medias(datos['modelos'])
+        if a_medias:
+            print('NO SE ARMARON: %s. producto/ quedo como estaba.' % a_medias)
+            return 2
         sello = datetime.datetime.now(HORA_AR).replace(second=0, microsecond=0).isoformat()
         print('  Con el precio de ahora escrito: "Precio al %s" (solo para la copia que se publica).' % texto_sello(sello))
     res = aplicar(datos, publica, sello=sello)
@@ -2163,6 +2247,39 @@ def probar():
        and 'u$' not in ca.split('<script id="datos"')[0], 'IA: todo agotado, "Hoy sin stock" y sin oferta ni precios')
     rara = base.replace('Consultá el precio', 'Otro texto', 1)
     ok(con_precio_del_dia(rara, mp, gen, sello, pub) == rara, 'IA: si algo no esta donde se lo espera, la pagina queda sin precio')
+    # (27/11/2026, #302) La pagina publicada con el precio escrito de un modelo
+    # que se fue (traer-publicado.py la trajo): sin precio, sin la hora y sin aviso
+    ida = sin_precio_viejo(cp)
+    ida_html = ida.split('<script id="datos"')[0]
+    ida_datos = json.loads(re.search(r'<script id="datos" type="application/json">(.*?)</script>', ida, re.S).group(1))
+    ok('<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entre</i>' in ida and 'u$' not in ida_html
+       and '"offers"' not in ida_html and '12/11/2026' not in ida_html and '13:05' not in ida,
+       '#302: la publicada de un modelo que se fue queda sin precio y sin la hora en el recuadro, la tabla y los datos para Google')
+    ok(NOTA_SIN_SELLO in ida and 'id="nota-precios"' not in ida and CONGELADO_VACIO in ida and 'Precios del viernes 06/11' not in ida,
+       '#302: la nota vuelve a la de sin precio y el aviso de los precios del viernes se esconde')
+    ok('sello' not in ida_datos and not any(v.get('stock') or 'precio' in v for v in ida_datos['versiones']),
+       '#302: los datos del script sin la hora ni los precios (el script arranca como sin precio)')
+    ok(sin_precio_viejo(ida) == ida, '#302: una segunda pasada no la vuelve a tocar')
+    ca_ida = sin_precio_viejo(ca)
+    ok('<b>Hoy sin stock</b><i>Escribinos y te avisamos cuando entre</i>' in ca_ida and 'Al 12/11/2026' not in ca_ida
+       and '"sello"' not in ca_ida, '#302: la que ya decia "Hoy sin stock" con la hora la pierde')
+    # (27/11/2026, #302) Lo contrario: la publicada con precio, como la arma armar_pagina
+    base_ag = armar_pagina(agot, 's', pub, {'cuotas': 12})
+    base_reg = armar_pagina(mp, 's', pub, dict(gen, registro='https://advapp.example/api?resource=eventos-web'))
+    cp_reg = con_precio_del_dia(base_reg, mp, gen, sello, pub + 'producto/s/')
+    ok(sin_precio_del_dia(cp) == base and sin_precio_del_dia(ca) == base_ag and sin_precio_del_dia(cp_reg) == base_reg,
+       '#302: sin_precio_del_dia deja la pagina igual a la de armar_pagina (con stock, agotada y con el registro)')
+    ok(sin_precio_del_dia(base) is None and sin_precio_del_dia(cp.replace('<tbody id="filas">', '<tbody>', 1)) is None
+       and sin_precio_del_dia(pagina_desvio('X', 'y', pub)) is None,
+       '#302: lo que no reconoce (una sin precio, una rara o un desvio) devuelve None')
+    # (27/11/2026, #302) Datos a medias: no se escribe el precio
+    def mods(n_stock, n_precio, n_total):
+        return [{'versiones': [{'stock': i < n_stock, 'precio': 100 if i < n_precio else None}]} for i in range(n_total)]
+    ok(datos_a_medias(mods(401, 401, 474)) == '', '#302: como el 27/11 (474 modelos, 401 con stock y precio), se escribe')
+    ok('sin precio' in datos_a_medias(mods(401, 0, 474)) and 'sin precio' in datos_a_medias(mods(401, 300, 474)),
+       '#302: ADVAPP con los modelos pero sin los precios, no')
+    ok('con stock solo' in datos_a_medias(mods(100, 100, 474)), '#302: casi todo sin stock, tampoco')
+    ok(datos_a_medias([{'versiones': [{'stock': True, 'precio': True}]}] * 10) != '', '#302: un precio que no es numero no cuenta')
     ok(texto_congelados({'dia': '2026-11-06'}) == '' and texto_congelados(None) == '', 'IA: sin el dato completo, sin aviso')
     con_reg = armar_pagina(mp, 's', pub, dict(gen, registro='https://advapp.example/api?resource=eventos-web'))
     ok('"registro": "https://advapp.example/api?resource=eventos-web"' in con_reg and '"registro"' not in base

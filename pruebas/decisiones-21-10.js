@@ -294,6 +294,7 @@ function probarPortadaParaGoogle(){
   ok(g['@type'] === 'GeoCoordinates' && Math.abs(g.latitude - (-34.5866172)) < 1e-6 && Math.abs(g.longitude - (-58.481116)) < 1e-6,
      '[8 A] las coordenadas son las del link de Maps (@-34.5866172,-58.481116)', g.latitude + ', ' + g.longitude);
   ok((tienda.sameAs || []).includes('https://www.instagram.com/' + INSTAGRAM_TECNO + '/'), '[8 A] con el Instagram de la pagina', (tienda.sameAs || []).join(' '));
+  ok((tienda.sameAs || []).includes('https://advancetecno.com.ar/'), '[8 A] con el sitio de Tecno (27/11/2026: el sitio ya nombraba al catalogo; ahora tambien al reves)', (tienda.sameAs || []).join(' '));
   const horario = Object.keys(tienda).filter(k => /opening|hours/i.test(k));
   ok(!horario.length, '[8 A] sin horario (se atiende con cita previa)', horario.join(',') || 'sin horario');
   ok(!/%|recargo|inter[eé]s|garant/i.test(JSON.stringify(tienda)), '[8 A] sin porcentajes ni garantias en el JSON-LD');

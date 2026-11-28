@@ -1,6 +1,6 @@
 {
   "formato": "usados/1",
-  "actualizado": "2026-11-20",
+  "actualizado": "2026-11-28",
   "equipos": [
     {
       "id": "iphone",
@@ -35,7 +35,7 @@
           { "id": "iphone-16-pro", "nombre": "iPhone 16 Pro", "opciones": [
             { "nombre": "128GB", "usd": 570 }, { "nombre": "256GB", "usd": 600 }, { "nombre": "512GB", "usd": 630 }, { "nombre": "1TB", "usd": 650 } ] },
           { "id": "iphone-16-pro-max", "nombre": "iPhone 16 Pro Max", "opciones": [
-            { "nombre": "256GB", "usd": 700 }, { "nombre": "512GB", "usd": 750 }, { "nombre": "1TB", "usd": 800 } ] }
+            { "nombre": "256GB", "usd": 600, "caja_no_suma": true }, { "nombre": "512GB", "usd": 750 }, { "nombre": "1TB", "usd": 800 } ] }
         ] },
         { "nombre": "iPhone 15", "modelos": [
           { "id": "iphone-15", "nombre": "iPhone 15", "opciones": [
@@ -45,7 +45,7 @@
           { "id": "iphone-15-pro", "nombre": "iPhone 15 Pro", "opciones": [
             { "nombre": "128GB", "usd": 420 }, { "nombre": "256GB", "usd": 450 }, { "nombre": "512GB", "usd": 480 }, { "nombre": "1TB", "usd": 480 } ] },
           { "id": "iphone-15-pro-max", "nombre": "iPhone 15 Pro Max", "opciones": [
-            { "nombre": "256GB", "usd": 500 }, { "nombre": "512GB", "usd": 530 }, { "nombre": "1TB", "usd": 550 } ] }
+            { "nombre": "256GB", "usd": 450, "caja_no_suma": true }, { "nombre": "512GB", "usd": 530 }, { "nombre": "1TB", "usd": 550 } ] }
         ] },
         { "nombre": "iPhone 14", "modelos": [
           { "id": "iphone-14", "nombre": "iPhone 14", "opciones": [

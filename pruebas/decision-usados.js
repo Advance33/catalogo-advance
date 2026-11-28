@@ -31,6 +31,9 @@
 //          barra y el mensaje; "No" lo borra; sin usado el mensaje es el de
 //          siempre. Si el usado paga todo, no se ofrecen cuotas.
 //   360    en el celular los dos botones entran lado a lado en un renglon.
+//   nocaja una opcion con "caja_no_suma" (Benja, 28/11: 15 Pro Max y 16 Pro
+//          Max 256GB) vale lo mismo con o sin caja: no pregunta la caja, no
+//          va en el nombre y la bateria sigue restando.
 const R = []; let fallas = 0;
 const ok = (c,t,x) => { R.push((c?'  OK  ':'FALLA ')+t+(x!==undefined?('  ['+x+']'):'')); if(!c) fallas++; };
 const info = t => R.push('  --  ' + t);
@@ -152,6 +155,7 @@ async function correrPruebas(){
   await probarLaFicha();
   await probarElPedido();
   await probarArreglos();
+  await probarCajaNoSuma();
   await probarCelular();
 }
 
@@ -180,6 +184,14 @@ function probarLosDatos(j){
   // La caja (Benja, 20/11): un entero en USD, como los valores; si no, la web deja de preguntarla sin aviso
   const cajasMal = (j.equipos || []).filter(e => e.caja !== undefined && !(e.caja && Number.isInteger(e.caja.suma) && e.caja.suma > 0)).map(e => e.id + ': ' + JSON.stringify(e.caja));
   ok(!cajasMal.length && ip && ip.caja, 'la caja suma un entero en USD (iPhone: con caja +10)', cajasMal.join(' | ') || (ip && JSON.stringify(ip.caja)));
+  // caja_no_suma (Benja, 28/11): sólo true, y sólo en un equipo que suma la caja (si no, no dice nada)
+  const noSuman = [], noSumanMal = [];
+  (j.equipos || []).forEach(e => (e.grupos || []).forEach(g => (g.modelos || []).forEach(m => (m.opciones || []).forEach(o => {
+    if(o.caja_no_suma === undefined) return;
+    if(o.caja_no_suma === true && e.caja) noSuman.push(m.nombre + ' ' + o.nombre + ' ' + o.usd);
+    else noSumanMal.push(m.id + ' ' + o.nombre + ': ' + JSON.stringify(o.caja_no_suma));
+  }))));
+  ok(!noSumanMal.length, '«caja_no_suma» es true y va en un equipo que suma la caja', noSumanMal.join(' | ') || noSuman.join(' · ') || 'ninguna');
   // Los de hoy, para leerlos en la salida (Pedro, 05/10: 13 128GB 220, 17 Pro Max 2TB 1220, PS4 Pro sin caja 130, bateria 80 % / USD 20)
   info(`valores de hoy: iPhone 13 128GB ${V13} · 17 Pro Max 2TB ${MAX} · PS4 Pro sin caja ${PSP} · bateria ${BAT.umbral} % / USD ${BAT.resta}`);
   const ps = equipoUsado('playstation');
@@ -690,6 +702,62 @@ async function probarArreglos(){
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     await uzEsperarA(() => !uzCot() && !(history.state && history.state.usado), 3000);
     ok(!uzCot() && !(history.state && history.state.usado), '[arreglos] cerrar desde un paso avanzado vuelve todas sus entradas del historial');
+  } finally {
+    uzCerrarTodo();
+    PEDIDO = antes.pedido; guardarPedido(); USADO = antes.usado; guardarUsado(); pintarPedido();
+  }
+}
+
+/* ---- La caja que no suma (Benja, 28/11/2026) ----
+   "En estos casos no suma si tiene la caja, pero sí se resta si están menos
+   del 80 %": la opción con caja_no_suma no pregunta la caja y vale lo mismo. */
+async function probarCajaNoSuma(){
+  const antes = { pedido: PEDIDO.map(l => ({ ...l })), usado: USADO };
+  try{
+    // Sin depender de la lista de hoy: una lista de mentira con las dos opciones
+    const fake = indiceUsados({ formato: 'usados/1', equipos: [{ id: 'iphone', nombre: 'iPhone', bateria: { umbral: 80, resta: 20 }, caja: { suma: 10 },
+      condiciones: [{ id: 'pantalla', texto: 'Pantalla' }], grupos: [{ nombre: '', modelos: [{ id: 'x', nombre: 'iPhone X', opciones: [
+        { nombre: '256GB', usd: 600, caja_no_suma: true }, { nombre: '512GB', usd: 750 }, { nombre: '1TB', usd: 800, caja_no_suma: 'si' }] }] }] }] });
+    const u0 = USADOS; USADOS = fake;
+    try{
+      const ops = fake[0].grupos[0].modelos[0].opciones;
+      ok(ops[0].cajaNoSuma === true && !ops[1].cajaNoSuma && !ops[2].cajaNoSuma, '[nocaja] se lee sólo «caja_no_suma: true» (un texto no cuenta)');
+      const cot = (o, bat, caja) => cotizacionUsado({ e: 'iphone', m: 'x', o, bat, caja, cond: { pantalla: true } });
+      const a = cot('256GB', 'si', ''), b = cot('256GB', 'si', 'si'), c = cot('256GB', 'no', 'si'), d = cot('512GB', 'si', 'si'), e = cot('512GB', 'si', '');
+      ok(a && a.valor === 600 && a.nombre === 'iPhone X 256GB' && b && b.valor === 600 && b.nombre === 'iPhone X 256GB',
+         '[nocaja] sin preguntar la caja vale lo de la lista, y una caja guardada de antes no suma ni va en el nombre', [a && a.valor, b && b.valor, b && b.nombre].join(' · '));
+      ok(c && c.valor === 580, '[nocaja] la batería por debajo del 80 % sí resta', c && c.valor);
+      ok(d && d.valor === 760 && d.nombre === 'iPhone X 512GB con caja' && e === null, '[nocaja] la otra memoria sigue igual: pide la caja y suma', [d && d.valor, d && d.nombre, e].join(' · '));
+      ok(!pasosUsado({ e: 'iphone', m: 'x', o: '256GB', cond: {} }).includes('caja') && pasosUsado({ e: 'iphone', m: 'x', o: '512GB', cond: {} }).includes('caja') &&
+         pasosUsado({ e: 'iphone', m: 'x', o: '', cond: {} }).includes('caja'),
+         '[nocaja] el paso de la caja no está en esa opción (sí en las otras y antes de elegir)');
+    } finally { USADOS = u0; }
+
+    // Con la lista de hoy, por los botones
+    let ns = null;
+    for(const g of equipoUsado('iphone').grupos) for(const m of g.modelos) for(const o of m.opciones) if(!ns && o.cajaNoSuma) ns = { m, o };
+    if(!ns){ info('[nocaja] la lista de hoy no tiene ninguna opción con caja_no_suma: no se probó en pantalla'); return; }
+    USADO = null; guardarUsado(); pintarPedido();
+    await uzEsperarA(() => !(history.state && history.state.usado), 3000);
+    abrirCotizador(); await uzDormir(40);
+    uzTocar('.us-op[data-e="iphone"]'); uzTocar(`.us-op[data-m="${ns.m.id}"]`);
+    if(uzCot().querySelector('.us-op[data-o]')) uzTocar(`.us-op[data-o="${ns.o.nombre}"]`);
+    uzTocar('.us-op[data-bat="si"]');
+    ok(uzPreg() === '¿Cumple todo esto?' && /^Paso (\d+) de \1$/.test(uzPaso()),
+       `[nocaja] ${ns.m.nombre} ${ns.o.nombre}: de la batería pasa al estado, sin la caja`, uzPreg() + ' · ' + uzPaso());
+    for(const id of Object.keys(uzTodoSi('iphone'))) uzTocar(`.pd-chip[data-cond="${id}"][data-v="1"]`);
+    uzTocar('#us-ver'); await uzDormir(30);
+    const res = uzTxt(uzCot().querySelector('.us-res')), msj = uzWA(uzCot().querySelector('.botones a.pri'));
+    ok(uzPreg() === `Tu ${ns.m.nombre} ${ns.o.nombre}` && res.includes('USD ' + uzPlata(ns.o.usd) + ' ') && !/caja/i.test(res) &&
+       msj.includes(`Mi usado: ${ns.m.nombre} ${ns.o.nombre}, batería`) && msj.includes(`: USD ${uzPlata(ns.o.usd)}`) && !/con caja|sin caja/.test(msj),
+       '[nocaja] el valor de la lista, sin «con/sin caja» en el resultado ni en el mensaje', res.slice(0, 90));
+    ok(USADO && USADO.o === ns.o.nombre && USADO.caja === '', '[nocaja] la cotización guardada no lleva caja', USADO && JSON.stringify({ o: USADO.o, caja: USADO.caja }));
+    await uzAtras(); await uzAtras();
+    uzTocar('.us-op[data-bat="no"]');
+    for(const id of Object.keys(uzTodoSi('iphone'))) uzTocar(`.pd-chip[data-cond="${id}"][data-v="1"]`);
+    uzTocar('#us-ver'); await uzDormir(30);
+    ok(uzTxt(uzCot().querySelector('.us-res')).includes('USD ' + uzPlata(ns.o.usd - BAT.resta) + ' ') && uzTxt(uzCot()).includes(`Ya le restamos USD ${uzPlata(BAT.resta)} por la batería`),
+       '[nocaja] con la batería por debajo, resta igual', uzTxt(uzCot().querySelector('.us-res')).slice(0, 80));
   } finally {
     uzCerrarTodo();
     PEDIDO = antes.pedido; guardarPedido(); USADO = antes.usado; guardarUsado(); pintarPedido();

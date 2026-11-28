@@ -92,6 +92,13 @@ nada (Pedro eligió la G, 05/10).
   «sin caja»): así la dicen el resultado, el pedido y el mensaje. El bot
   (`cotizar_usado`) lee el mismo campo. La PS4 no la usa: ahí la caja es la
   opción, con su propio valor.
+- `caja_no_suma`: opcional, en una opción, sólo `true` (Benja, 28/11/2026:
+  iPhone 15 Pro Max y 16 Pro Max 256GB, «no suma si tiene la caja, pero sí se
+  resta si están menos del 80%»). Esa opción vale lo mismo con o sin caja: el
+  cotizador no pregunta la caja, no va en el nombre y no suma; la batería
+  resta igual. Las otras memorias del mismo modelo siguen sumando. Lo leen
+  también el bot (ADR-163) y ADVAPP (lo que se le paga a Yisus): cualquier
+  campo nuevo se publica primero en el bot y en ADVAPP, y después acá.
 - `condiciones`: cada una se contesta Sí / No. Con un No, sin número.
 - `grupos`: los renglones del paso del modelo, en el orden en que se
   muestran (el más nuevo arriba).
@@ -104,6 +111,9 @@ nada (Pedro eligió la G, 05/10).
 ## Para cambiar un valor
 
 1. Pedro pasa la lista nueva (una foto o el texto, como el 05/10).
-2. Se cambia el número en este archivo y `actualizado` con la fecha.
+2. Se cambia el número en este archivo, `actualizado` con la fecha y
+   `vigente_desde` con la fecha y hora en que queda en la web
+   (`"2026-11-28T15:00:00-03:00"`): ADVAPP le paga a Yisus cada usado con la
+   lista del día en que se tomó, y sin la hora la hace regir desde que la ve.
 3. Se corre `python3 pruebas/correr.py` (la tanda `decision-usados` revisa
    el archivo) y se publica.

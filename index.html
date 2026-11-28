@@ -16088,7 +16088,9 @@ function indiceUsados(j){
       modelos: (g && Array.isArray(g.modelos) ? g.modelos : [])
         .filter(m => m && texto(m.id) && texto(m.nombre) && Array.isArray(m.opciones))
         .map(m => ({ id: texto(m.id), nombre: texto(m.nombre),
-          opciones: m.opciones.filter(o => o && texto(o.nombre) && valor(o.usd)).map(o => ({ nombre: texto(o.nombre), usd: o.usd })) }))
+          // "caja_no_suma" (Benja, 28/11/2026: 15 Pro Max y 16 Pro Max 256GB): con o sin caja vale lo mismo
+          opciones: m.opciones.filter(o => o && texto(o.nombre) && valor(o.usd))
+            .map(o => ({ nombre: texto(o.nombre), usd: o.usd, ...(o.caja_no_suma === true ? { cajaNoSuma: true } : {}) })) }))
         .filter(m => m.opciones.length)
     })).filter(g => g.modelos.length);
     if(!grupos.length) return null;
@@ -16103,6 +16105,10 @@ function modeloUsado(e, id){
   for(const g of (e ? e.grupos : [])){ const m = g.modelos.find(x => x.id === id); if(m) return m; }
   return null;
 }
+/* Lo que suma la caja en esa opción, o null. Una opción con caja_no_suma
+   vale lo mismo con o sin caja (Benja, 28/11/2026): no se pregunta, no va en
+   el nombre y no suma. Sin opción elegida todavía, lo del equipo. */
+const cajaUsado = (e, o) => e && e.caja && !(o && o.cajaNoSuma) ? e.caja : null;
 // "iPhone 13 128GB"; si la opción no es la memoria, "PS4 Pro con caja"
 const esMemoria = t => /^\d+\s?(GB|TB)$/i.test(t);
 const nombreUsado = (m, o) => m.nombre + ' ' + (esMemoria(o.nombre) ? o.nombre : o.nombre.toLowerCase());
@@ -16116,15 +16122,16 @@ function cotizacionUsado(u = USADO){
   const m = modeloUsado(e, u.m); if(!m) return null;
   const o = m.opciones.find(x => x.nombre === u.o); if(!o) return null;
   if(e.bateria && !['si', 'no', 'nose'].includes(u.bat)) return null;
-  if(e.caja && !['si', 'no'].includes(u.caja)) return null;
+  const cj = cajaUsado(e, o);
+  if(cj && !['si', 'no'].includes(u.caja)) return null;
   const cond = u.cond || {};
   if(e.condiciones.some(c => typeof cond[c.id] !== 'boolean')) return null;
   const fallan = e.condiciones.filter(c => cond[c.id] === false);
   const resta = e.bateria && u.bat === 'no' ? e.bateria.resta : 0;
-  const suma = e.caja && u.caja === 'si' ? e.caja.suma : 0;
+  const suma = cj && u.caja === 'si' ? cj.suma : 0;
   // "iPhone 13 128GB con caja": la caja va en el nombre, así la dicen el resultado, el pedido y el mensaje
-  const nombre = nombreUsado(m, o) + (e.caja ? (u.caja === 'si' ? ' con caja' : ' sin caja') : '');
-  return { e, m, o, nombre, bat: e.bateria ? u.bat : '', caja: e.caja ? u.caja : '', fallan,
+  const nombre = nombreUsado(m, o) + (cj ? (u.caja === 'si' ? ' con caja' : ' sin caja') : '');
+  return { e, m, o, cj, nombre, bat: e.bateria ? u.bat : '', caja: cj ? u.caja : '', fallan,
            det: limpiarTxtUsado(u.det, USADO_TXT_MAX.det),
            valor: fallan.length ? null : Math.max(0, o.usd + suma - resta) };
 }
@@ -16770,14 +16777,16 @@ function abrirCotizadorDelLink(){
 function pasosUsado(b){
   const e = equipoUsado(b.e);
   const m = e && modeloUsado(e, b.m);
+  const o = m && m.opciones.find(x => x.nombre === b.o);
   const l = [];
   // Siempre, aunque la lista tenga un solo equipo: está "Otro equipo" (05/10)
   l.push('equipo');
   l.push('modelo');
   if(!m || m.opciones.length > 1) l.push('opcion');
   if(!e || e.bateria) l.push('bateria');
-  // La caja (20/11), sólo en los equipos que la suman; sin equipo elegido, si alguno la suma
-  if(e ? e.caja : USADOS.some(x => x.caja)) l.push('caja');
+  // La caja (20/11), sólo en los equipos que la suman; sin equipo elegido, si alguno la suma.
+  // Una opción con caja_no_suma (28/11) no la pregunta.
+  if(e ? cajaUsado(e, o) : USADOS.some(x => x.caja)) l.push('caja');
   if(!e || e.condiciones.length) l.push('estado');
   return l;
 }
@@ -16898,7 +16907,7 @@ function abrirCotizador(desde = {}){
     }
     if(paso === 'caja') return { preg: '¿Tenés la caja?',
       html: `<div class="us-ops us-ops-2">${op('caja', 'si', 'Sí', b.caja === 'si')}${op('caja', 'no', 'No', b.caja === 'no')}</div>
-        <p class="us-ayuda">Con la caja te lo tomamos USD ${plata(e.caja.suma)} más.</p>` };
+        <p class="us-ayuda">Con la caja te lo tomamos USD ${plata((cajaUsado(e, m && m.opciones.find(x => x.nombre === b.o)) || e.caja).suma)} más.</p>` };
     if(paso === 'estado'){
       const faltan = e.condiciones.filter(c => typeof b.cond[c.id] !== 'boolean').length;
       return { preg: '¿Cumple todo esto?',
@@ -16921,8 +16930,8 @@ function abrirCotizador(desde = {}){
     let html;
     if(c.valor !== null){
       const notas = [];
-      if(c.e.caja && c.caja === 'si') notas.push(`Incluye USD ${plata(c.e.caja.suma)} por la caja.`);
-      if(c.e.caja && c.caja === 'no') notas.push(`Con la caja serían USD ${plata(c.e.caja.suma)} más.`);
+      if(c.cj && c.caja === 'si') notas.push(`Incluye USD ${plata(c.cj.suma)} por la caja.`);
+      if(c.cj && c.caja === 'no') notas.push(`Con la caja serían USD ${plata(c.cj.suma)} más.`);
       if(bat && c.bat === 'no' && bat.resta) notas.push(`Ya le restamos USD ${plata(bat.resta)} por la batería.`);
       if(bat && c.bat === 'nose' && bat.resta) notas.push(`Si la batería está por debajo del ${bat.umbral} %, son USD ${plata(bat.resta)} menos.`);
       html = `<div class="us-res"><small>Te lo tomamos a</small><b>USD ${plata(c.valor)}</b>
@@ -17038,7 +17047,10 @@ function abrirCotizador(desde = {}){
   };
   // Llegar al resultado: el borrador pasa a ser la cotización del cliente
   const llegar = () => {
-    if(!cotizacionUsado(b)) return;
+    const c = cotizacionUsado(b);
+    if(!c) return;
+    // Una opción que no pregunta la caja (28/11) no guarda la que se eligió para otra memoria
+    if(!c.cj) b.caja = '';
     USADO = JSON.parse(JSON.stringify(b));
     USADO_DIJO_NO = false;
     guardarUsado();

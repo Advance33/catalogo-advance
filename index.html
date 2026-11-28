@@ -16907,7 +16907,7 @@ function abrirCotizador(desde = {}){
     }
     if(paso === 'caja') return { preg: '¿Tenés la caja?',
       html: `<div class="us-ops us-ops-2">${op('caja', 'si', 'Sí', b.caja === 'si')}${op('caja', 'no', 'No', b.caja === 'no')}</div>
-        <p class="us-ayuda">Con la caja te lo tomamos USD ${plata(e.caja.suma)} más.</p>` };
+        <p class="us-ayuda">Con la caja te lo tomamos USD ${plata((cajaUsado(e, m && m.opciones.find(x => x.nombre === b.o)) || e.caja).suma)} más.</p>` };
     if(paso === 'estado'){
       const faltan = e.condiciones.filter(c => typeof b.cond[c.id] !== 'boolean').length;
       return { preg: '¿Cumple todo esto?',
@@ -17047,7 +17047,10 @@ function abrirCotizador(desde = {}){
   };
   // Llegar al resultado: el borrador pasa a ser la cotización del cliente
   const llegar = () => {
-    if(!cotizacionUsado(b)) return;
+    const c = cotizacionUsado(b);
+    if(!c) return;
+    // Una opción que no pregunta la caja (28/11) no guarda la que se eligió para otra memoria
+    if(!c.cj) b.caja = '';
     USADO = JSON.parse(JSON.stringify(b));
     USADO_DIJO_NO = false;
     guardarUsado();

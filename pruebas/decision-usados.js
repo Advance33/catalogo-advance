@@ -751,6 +751,7 @@ async function probarCajaNoSuma(){
     ok(uzPreg() === `Tu ${ns.m.nombre} ${ns.o.nombre}` && res.includes('USD ' + uzPlata(ns.o.usd) + ' ') && !/caja/i.test(res) &&
        msj.includes(`Mi usado: ${ns.m.nombre} ${ns.o.nombre}, batería`) && msj.includes(`: USD ${uzPlata(ns.o.usd)}`) && !/con caja|sin caja/.test(msj),
        '[nocaja] el valor de la lista, sin «con/sin caja» en el resultado ni en el mensaje', res.slice(0, 90));
+    ok(USADO && USADO.o === ns.o.nombre && USADO.caja === '', '[nocaja] la cotización guardada no lleva caja', USADO && JSON.stringify({ o: USADO.o, caja: USADO.caja }));
     await uzAtras(); await uzAtras();
     uzTocar('.us-op[data-bat="no"]');
     for(const id of Object.keys(uzTodoSi('iphone'))) uzTocar(`.pd-chip[data-cond="${id}"][data-v="1"]`);
